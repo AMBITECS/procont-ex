@@ -42,7 +42,7 @@ private:
 
 private:
     QHash<const QModelIndex, QWidget*> m_hWidgets;
-    QTableView * m_pVarTable = nullptr;
+    QHash<QWidget*, QTableView*> m_hTables;
 
 };
 

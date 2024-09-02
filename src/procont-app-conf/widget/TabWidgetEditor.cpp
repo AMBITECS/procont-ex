@@ -79,17 +79,17 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
         action = toolbar->addAction(QIcon(":/icon/images/delete.png"), tr("Remove"));
         connect(action, &QAction::triggered, this, &TabWidgetEditor::slot_delVariable);
         toolbar->setIconSize(QSize(16,16));
-        m_pVarTable = new QTableView;
-        m_pVarTable->setModel(proxy_var());
-        m_pVarTable->setRootIndex(p_index(m_index(index), proxy_var()));
-        m_pVarTable->setColumnHidden(0, true);
-        m_pVarTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-        m_pVarTable->setSelectionMode(QAbstractItemView::SingleSelection);
-        m_pVarTable->horizontalHeader()->setHighlightSections(false);
+        auto table = new QTableView;
+        table->setModel(proxy_var());
+        table->setRootIndex(p_index(m_index(index), proxy_var()));
+        table->setColumnHidden(0, true);
+        table->setSelectionBehavior(QAbstractItemView::SelectRows);
+        table->setSelectionMode(QAbstractItemView::SingleSelection);
+        table->horizontalHeader()->setHighlightSections(false);
         // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
         // m_pVarTable->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
         layout->addWidget(toolbar);
-        layout->addWidget(m_pVarTable);
+        layout->addWidget(table);
         container->setLayout(layout);
         vSplitter->addWidget(container);
         auto text = new QPlainTextEdit();
@@ -98,6 +98,7 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
         vSplitter->addWidget(text);
 
         m_hWidgets.insert(index, vSplitter);
+        m_hTables.insert(vSplitter, table);
     }
     break;
     default:
@@ -121,6 +122,7 @@ void TabWidgetEditor::slot_currentTabChanged(int index)
 
 void TabWidgetEditor::slot_closeTab(int index)
 {
+    m_hTables.remove(widget(index));
     m_hWidgets.remove(m_hWidgets.key(widget(index)));
 
     delete widget(index);
@@ -130,8 +132,8 @@ void TabWidgetEditor::slot_closeTab(int index)
 
 void TabWidgetEditor::slot_addVariable()
 {
-    auto index = m_index(m_pVarTable->rootIndex());
-    auto parentItem = item(m_pVarTable->rootIndex());
+    auto index = m_index(m_hTables.value(currentWidget())->rootIndex());
+    auto parentItem = item(m_hTables.value(currentWidget())->rootIndex());
 
     // add node
     parentItem->addEmptyNode();
@@ -144,15 +146,15 @@ void TabWidgetEditor::slot_delVariable()
 {
     // for every selected rows
     // !!! don't work for multiselection
-    for(auto index : m_pVarTable->selectionModel()->selectedRows())
+    for(auto index : m_hTables.value(currentWidget())->selectionModel()->selectedRows())
     {
         // delete node
         auto childNode = item(index)->node();
-        auto parentItem = item(m_pVarTable->rootIndex());
+        auto parentItem = item(m_hTables.value(currentWidget())->rootIndex());
         parentItem->removeChild(m_index(index).row(), 0, childNode);
 
         // delete item
         proxy_var()->sourceModel()->
-            removeRow(m_index(index).row(), m_index(m_pVarTable->rootIndex()));
+            removeRow(m_index(index).row(), m_index(m_hTables.value(currentWidget())->rootIndex()));
     }
 }

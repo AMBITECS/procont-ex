@@ -1,0 +1,49 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+
+QT_FORWARD_DECLARE_CLASS(QTreeView)
+QT_FORWARD_DECLARE_CLASS(QDockWidget)
+
+QT_FORWARD_DECLARE_CLASS(DomModel)
+QT_FORWARD_DECLARE_CLASS(ProxyModelTree_pou)
+QT_FORWARD_DECLARE_CLASS(ProxyModelTree_dev)
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow() = default;
+
+private:
+    void open(const QString & filePath);
+    void save(const QString & filePath);
+
+private:
+    void createWidgets();
+    void createMenu();
+
+private slots:
+    void slot_open();
+    void slot_save();
+
+    void slot_currentViewChanged(const QModelIndex &index);
+
+private:
+
+    QDockWidget * dockPou = nullptr;
+    QDockWidget * dockDev = nullptr;
+
+    QTreeView * view = nullptr;
+    QTreeView * viewDev = nullptr;
+    QTreeView * viewPou = nullptr;
+
+    DomModel * model = nullptr;
+    ProxyModelTree_pou * proxy_pou = nullptr;
+    ProxyModelTree_dev * proxy_dev = nullptr;
+};
+
+#endif // MAINWINDOW_H

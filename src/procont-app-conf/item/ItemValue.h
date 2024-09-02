@@ -141,11 +141,13 @@ public:
     void set(const QString &value) override;
 
     void setNodeName(const QString &name);
-    void setAttrName(const QString &name);
+    void setChNodeName(const QString &name);
+    void setChAttrName(const QString &name);
 
 private:
     QString m_nodeName = QString();
-    QString m_attrName = QString();
+    QString m_chNodeName = QString();
+    QString m_chAttrName = QString();
 };
 // ----------------------------------------------------------------------------
 

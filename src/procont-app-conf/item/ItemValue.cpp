@@ -137,19 +137,36 @@ void ItemValue_Attr::setName(const QString &name)
 ItemValue_SubNodeAttr::ItemValue_SubNodeAttr(const QDomNode &node, const QDomNode &parent) :
     ItemValue(node, parent)
 {
-    qDebug() << __PRETTY_FUNCTION__;
 }
 
 QString ItemValue_SubNodeAttr::get() const
 {
-    qDebug() << __PRETTY_FUNCTION__ << m_nodeName << m_attrName << node().nodeName();
+    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << node().toElement().namedItem(m_nodeName).toElement().attribute(m_chAttrName);
 
-    return node().toElement().namedItem(m_nodeName).toElement().attribute(m_attrName);
+    return node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 }
 
 void ItemValue_SubNodeAttr::set(const QString &value)
 {
+    qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
 
+    parent().removeChild(node());
+    m_node = QDomNode();
+
+    qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
+
+    if(!value.isEmpty())
+    {
+        qDebug() << __PRETTY_FUNCTION__;
+
+        QDomNode new_node = parent().ownerDocument().createElement(m_nodeName);
+        QDomNode new_child = parent().ownerDocument().createElement(m_chNodeName);
+        new_child.toElement().setAttribute(m_chAttrName, value);
+        m_node = parent().appendChild(new_node);
+        node().appendChild(new_child);
+    }
+
+    qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 }
 
 void ItemValue_SubNodeAttr::setNodeName(const QString &name)
@@ -157,9 +174,14 @@ void ItemValue_SubNodeAttr::setNodeName(const QString &name)
     m_nodeName = name;
 }
 
-void ItemValue_SubNodeAttr::setAttrName(const QString &name)
+void ItemValue_SubNodeAttr::setChNodeName(const QString &name)
 {
-    m_attrName = name;
+    m_chNodeName = name;
+}
+
+void ItemValue_SubNodeAttr::setChAttrName(const QString &name)
+{
+    m_chAttrName = name;
 }
 // ----------------------------------------------------------------------------
 

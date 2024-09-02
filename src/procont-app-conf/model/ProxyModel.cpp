@@ -194,7 +194,7 @@ bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &valu
 
     Q_ASSERT(item);
 
-    qDebug() << __PRETTY_FUNCTION__ << item->data(Qt::DisplayRole) << item->parentItem()->data(Qt::DisplayRole);
+    // qDebug() << __PRETTY_FUNCTION__ << item->data(Qt::DisplayRole) << item->parentItem()->data(Qt::DisplayRole);
 
     item->setData(value, role);
 

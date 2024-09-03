@@ -61,6 +61,46 @@ void CComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOption
     editor->setGeometry(option.rect);
 }
 
+// *** CTextEditDelegate ***
+
+#include <QPlainTextEdit>
+
+CTextEditDelegate::CTextEditDelegate( QObject *parent) : QStyledItemDelegate(parent)
+{
+}
+
+QWidget *CTextEditDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(option)
+    Q_UNUSED(index)
+
+    auto *editor = new QPlainTextEdit(parent);
+
+    return editor;
+}
+
+void CTextEditDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    QString current = index.model()->data(index, Qt::EditRole).toString();
+
+    auto * texteditor = static_cast<QPlainTextEdit*>(editor);
+    texteditor->setPlainText(current);
+}
+
+void CTextEditDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    auto * texteditor = static_cast<QPlainTextEdit*>(editor);
+
+    model->setData(index, texteditor->toPlainText(), Qt::EditRole);
+}
+
+void CTextEditDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+
+    editor->setGeometry(option.rect);
+}
+
 // *** CSpinBoxDelegate ***
 
 #include "SpinBoxMultiRange.h"

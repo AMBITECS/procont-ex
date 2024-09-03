@@ -8,13 +8,11 @@
 // *** DomItem ***
 
 QScopedPointer<DomItem_builder> DomItem::m_ItemBuilder = QScopedPointer<DomItem_builder>(new DomItem_builder);
-QScopedPointer<ItemValue_builder> DomItem::m_ValueBuilder = QScopedPointer<ItemValue_builder>(new ItemValue_builder);
 QStringList DomItem::m_discard = { "types", "pous", "instances", "configurations" };
 
 DomItem::DomItem(const QDomNode &node, const QDomNode &parent) :
     m_itemType(assignType(node)),
-    m_valueType(assignValueType(node)),
-    m_value(valueBuilder()->build(node, parent, m_valueType))
+    m_value(new ItemValue_Default(node, parent))
 {
 }
 
@@ -30,26 +28,6 @@ DomItem::ItemType DomItem::assignType(const QDomNode &node)
         return DomItem::typeVar;
 
     return DomItem::typeItem;
-}
-
-DomItem::ValueType DomItem::assignValueType(const QDomNode &node)
-{
-    if(node.parentNode().nodeName() == "type" && node.nodeName() != "derived")
-        return valueNodeName;
-
-    if(node.nodeName() == "name")
-        return valueNodeValue;
-
-    if(node.nodeName() == "address")
-        return valueAttr_optional;
-
-    if(node.firstChild().nodeName() == "simpleValue")
-        return valueSubNodeAttr;
-
-    if(node.parentNode().nodeName() == "type" && node.nodeName() == "derived")
-        return valueAttr;
-
-    return DomItem::valueDefault;
 }
 
 QDomNode DomItem::node() const
@@ -235,31 +213,31 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     // name
     childNode = node.attributes().namedItem("name");
     childItem = itemBuilder()->build(childNode);
+    childItem->setItemValue(new ItemValue_Name(childNode));
     setChild(row, 3, childItem);
     // address
     childNode = node.attributes().namedItem("address");
     childItem = itemBuilder()->build(childNode, node);
-    ItemValue_Attr_optional * vl1 = new ItemValue_Attr_optional(childNode, node);
-    vl1->setName("address");
-    childItem->setItemValue(vl1);
+    childItem->setItemValue(new ItemValue_Address(childNode, node));
     setChild(row, 4, childItem);
     // data type
     childNode = node.toElement().elementsByTagName("type").at(0).toElement().firstChild();
     childItem = itemBuilder()->build(childNode, node.toElement().elementsByTagName("type").at(0));
-    if(dynamic_cast<ItemValue_Attr*>(childItem->itemValue()))
-        dynamic_cast<ItemValue_Attr*>(childItem->itemValue())->setName("name");
+    if(dynamic_cast<ItemValue_Attr_opt*>(childItem->itemValue()))
+        dynamic_cast<ItemValue_Attr_opt*>(childItem->itemValue())->setName("name");
     setChild(row, 5, childItem);
     // initial value
-    childItem = itemBuilder()->build(node.namedItem("initialValue"), node);
-    ItemValue_SubNodeAttr *vl2 = nullptr;
-    if(dynamic_cast<ItemValue_SubNodeAttr*>(childItem->itemValue()))
-        vl2 = dynamic_cast<ItemValue_SubNodeAttr*>(childItem->itemValue());
-    else
-        vl2 = new ItemValue_SubNodeAttr(QDomNode(), node);
-    vl2->setNodeName("initialValue");
-    vl2->setChNodeName("simpleValue");
-    vl2->setChAttrName("value");
-    childItem->setItemValue(vl2);
+    childNode = node.namedItem("initialValue");
+    childItem = itemBuilder()->build(childNode, node);
+    // ItemValue_SubNodeAttr *vl2 = ItemValue_SimpleValue(childNode, node);
+    // if(dynamic_cast<ItemValue_SubNodeAttr*>(childItem->itemValue()))
+    //     vl2 = dynamic_cast<ItemValue_SubNodeAttr*>(childItem->itemValue());
+    // else
+    //     vl2 = new ItemValue_SubNodeAttr(QDomNode(), node);
+    // vl2->setNodeName("initialValue");
+    // vl2->setChNodeName("simpleValue");
+    // vl2->setChAttrName("value");
+    childItem->setItemValue(new ItemValue_SimpleValue(childNode, node));
     setChild(row, 6, childItem);
     // doc
     childNode = QDomNode();

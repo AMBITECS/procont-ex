@@ -75,19 +75,19 @@ void ItemValue_NodeValue::set(const QString &value)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** ItemValue_Attr_optional ***
+// *** ItemValue_Attr_opt ***
 
-ItemValue_Attr_optional::ItemValue_Attr_optional(const QDomNode &node, const QDomNode &parent) :
+ItemValue_Attr_opt::ItemValue_Attr_opt(const QDomNode &node, const QDomNode &parent) :
     ItemValue(node, parent)
 {
 }
 
-QString ItemValue_Attr_optional::get() const
+QString ItemValue_Attr_opt::get() const
 {
     return node().nodeValue();
 }
 
-void ItemValue_Attr_optional::set(const QString &value)
+void ItemValue_Attr_opt::set(const QString &value)
 {
     if(value.isEmpty())
     {
@@ -101,31 +101,31 @@ void ItemValue_Attr_optional::set(const QString &value)
     }
 }
 
-void ItemValue_Attr_optional::setName(const QString &name)
+void ItemValue_Attr_opt::setName(const QString &name)
 {
     m_name = name;
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** ItemValue_Attr ***
+// *** ItemValue_Attr_req ***
 
-ItemValue_Attr::ItemValue_Attr(const QDomNode &node, const QDomNode &parent) :
+ItemValue_Attr_req::ItemValue_Attr_req(const QDomNode &node, const QDomNode &parent) :
     ItemValue(node, parent)
 {
 }
 
-QString ItemValue_Attr::get() const
+QString ItemValue_Attr_req::get() const
 {
     return node().toElement().attribute(m_name);
 }
 
-void ItemValue_Attr::set(const QString &value)
+void ItemValue_Attr_req::set(const QString &value)
 {
     node().toElement().setAttribute(m_name, value);
 }
 
-void ItemValue_Attr::setName(const QString &name)
+void ItemValue_Attr_req::setName(const QString &name)
 {
     m_name = name;
 }
@@ -186,83 +186,30 @@ void ItemValue_SubNodeAttr::setChAttrName(const QString &name)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** ItemValue_NodeNameNodeValue_creator ***
-
-ItemValue * ItemValue_Default_creator::create(const QDomNode &node, const QDomNode &parent)
-{
-    return new ItemValue_Default(node, parent);
-}
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** ItemValue_NodeName_creator ***
-
-ItemValue * ItemValue_NodeName_creator::create(const QDomNode &node, const QDomNode &parent)
-{
-    return new ItemValue_NodeName(node, parent);
-}
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** ItemValue_NodeValue_creator ***
-
-ItemValue * ItemValue_NodeValue_creator::create(const QDomNode &node, const QDomNode &parent)
-{
-    return new ItemValue_NodeValue(node, parent);
-}
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** ItemValue_Attr_optional_creator ***
-
-ItemValue * ItemValue_Attr_optional_creator::create(const QDomNode &node, const QDomNode &parent)
-{
-    return new ItemValue_Attr_optional(node, parent);
-}
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** ItemValue_Attr_creator ***
-
-ItemValue * ItemValue_Attr_creator::create(const QDomNode &node, const QDomNode &parent)
-{
-    return new ItemValue_Attr(node, parent);
-}
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** ItemValue_SubNodeAttr_creator ***
-
-ItemValue * ItemValue_SubNodeAttr_creator::create(const QDomNode &node, const QDomNode &parent)
-{
-    return new ItemValue_SubNodeAttr(node, parent);
-}
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
 // *** ItemValue_builder ***
 
-ItemValue_builder::ItemValue_builder()
+ItemValue::ItemValue::ValueType ItemValue_builder::getValueType(const QDomNode &node, const QDomNode &parent)
 {
-    m_creators.insert(DomItem::valueDefault, new ItemValue_Default_creator);
-    m_creators.insert(DomItem::valueNodeName, new ItemValue_NodeName_creator);
-    m_creators.insert(DomItem::valueNodeValue, new ItemValue_NodeValue_creator);
-    m_creators.insert(DomItem::valueAttr_optional, new ItemValue_Attr_optional_creator);
-    m_creators.insert(DomItem::valueAttr, new ItemValue_Attr_creator);
-    m_creators.insert(DomItem::valueSubNodeAttr, new ItemValue_SubNodeAttr_creator);
+    Q_UNUSED(parent);
+
+    if(node.nodeName() == "name")
+        return ItemValue::valueName;
+    if(node.nodeName() == "address")
+        return ItemValue::valueAddress;
+    if(node.parentNode().nodeName() == "type" && node.nodeName() != "derived")
+        return ItemValue::valueDataSimple;
+    if(node.parentNode().nodeName() == "type" && node.nodeName() == "derived")
+        return ItemValue::valueDataDerived;
+    if(node.firstChild().nodeName() == "simpleValue")
+        return ItemValue::valueInitSimple;
+    if(node.firstChild().nodeName() == "structValue")
+        return ItemValue::valueInitStruct;
+
+    return ItemValue::valueDefault;
 }
 
-ItemValue_builder::~ItemValue_builder()
+ItemValue * ItemValue_builder::build(const QDomNode &node, const QDomNode &parent)
 {
-    for(const auto & creator : std::as_const(m_creators))
-        delete creator;
-}
-
-ItemValue * ItemValue_builder::build(const QDomNode &node, const QDomNode &parent, DomItem::ValueType valueType)
-{
-    if(m_creators.contains(valueType))
-        return m_creators.value(valueType)->create(node, parent);
-
     return nullptr;
 }
 // ----------------------------------------------------------------------------

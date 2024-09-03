@@ -205,7 +205,7 @@
     <message>
         <location filename="../model/ProxyModel.cpp" line="137"/>
         <source>Initial Value</source>
-        <translation>Начальное значение</translation>
+        <translation>Инициализация</translation>
     </message>
     <message>
         <location filename="../model/ProxyModel.cpp" line="139"/>

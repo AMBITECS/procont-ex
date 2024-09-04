@@ -25,6 +25,7 @@ public:
         valueInitSimple = 6,
         valueInitStruct = 7,
         valueInitArray = 8,
+        valueDocumentation = 9
     };
 
 public:
@@ -76,6 +77,8 @@ public:
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
 };
+
+typedef ItemValue_NodeName ItemValue_TypeSimple;
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -95,8 +98,39 @@ public:
 };
 
 typedef ItemValue_NodeValue ItemValue_Name;
-typedef ItemValue_NodeValue ItemValue_TypeSimple;
 
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_SubNodeValue ***
+
+/*!
+ * \brief The ItemValue_SubNodeValue class
+ */
+
+class ItemValue_SubNodeValue: public ItemValue
+{
+public:
+    ItemValue_SubNodeValue(const QDomNode &node, const QDomNode &parent = QDomNode());
+
+    [[nodiscard]] QString get() const override;
+    void set(const QString &value) override;
+
+    void setName(const QString &name);
+
+private:
+    QString m_name = QString();
+};
+
+class ItemValue_Documentation : public ItemValue_SubNodeValue
+{
+public:
+    ItemValue_Documentation(const QDomNode &node, const QDomNode &parent = QDomNode()) :
+        ItemValue_SubNodeValue(node, parent)
+    {
+        setName("xhtml;xhtml:p");
+    }
+};
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -201,17 +235,189 @@ public:
 };
 
 // ----------------------------------------------------------------------------
+// *** ItemValue_StructValue ***
+
+/*!
+ * \brief The ItemValue_StructValue class
+ */
+
+class ItemValue_StructValue: public ItemValue
+{
+public:
+    ItemValue_StructValue(const QDomNode &node, const QDomNode &parent = QDomNode());
+
+    [[nodiscard]] QString get() const override;
+    void set(const QString &value) override;
+};
+// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** ItemValue_creator
 
+/*!
+ * \brief The ItemValue_creator interface
+ */
+
+class ItemValue_creator
+{
+public:
+    ItemValue_creator() = default;
+    virtual ~ItemValue_creator() = default;
+    [[nodiscard]] virtual ItemValue * create(const QDomNode &node, const QDomNode &parent = QDomNode()) = 0;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_Default_creator
+
+class ItemValue_Default_creator : public ItemValue_creator
+{
+public:
+    [[nodiscard]] virtual ItemValue * create(const QDomNode &node, const QDomNode &parent = QDomNode())
+    {
+        return new ItemValue_Default(node, parent);
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_Name_creator
+
+class ItemValue_Name_creator : public ItemValue_creator
+{
+public:
+    [[nodiscard]] virtual ItemValue * create(const QDomNode &node, const QDomNode &parent = QDomNode())
+    {
+        return new ItemValue_Name(node, parent);
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_Address_creator
+
+class ItemValue_Address_creator : public ItemValue_creator
+{
+public:
+    [[nodiscard]] virtual ItemValue * create(const QDomNode &node, const QDomNode &parent = QDomNode())
+    {
+        return new ItemValue_Address(node, parent);
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_TypeSimple_creator
+
+class ItemValue_TypeSimple_creator : public ItemValue_creator
+{
+public:
+    [[nodiscard]] virtual ItemValue * create(const QDomNode &node, const QDomNode &parent = QDomNode())
+    {
+        return new ItemValue_TypeSimple(node, parent);
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_TypeDerived_creator
+
+class ItemValue_TypeDerived_creator : public ItemValue_creator
+{
+public:
+    [[nodiscard]] virtual ItemValue * create(const QDomNode &node, const QDomNode &parent = QDomNode())
+    {
+        return new ItemValue_TypeDerived(node, parent);
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_SimpleValue_creator
+
+class ItemValue_SimpleValue_creator : public ItemValue_creator
+{
+public:
+    [[nodiscard]] virtual ItemValue * create(const QDomNode &node, const QDomNode &parent = QDomNode())
+    {
+        return new ItemValue_SimpleValue(node, parent);
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_Documentation_creator
+
+class ItemValue_Documentation_creator : public ItemValue_creator
+{
+public:
+    [[nodiscard]] virtual ItemValue * create(const QDomNode &node, const QDomNode &parent = QDomNode())
+    {
+        return new ItemValue_Documentation(node, parent);
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_builder
+
 class ItemValue_builder
 {
 public:
-    ItemValue_builder() = default;
+    ItemValue_builder()
+    {
+        m_creators.insert(ItemValue::valueDefault, new ItemValue_Default_creator);
+        m_creators.insert(ItemValue::valueName, new ItemValue_Name_creator);
+        m_creators.insert(ItemValue::valueAddress, new ItemValue_Address_creator);
+        m_creators.insert(ItemValue::valueDataSimple, new ItemValue_TypeSimple_creator);
+        m_creators.insert(ItemValue::valueDataDerived, new ItemValue_TypeDerived_creator);
+        m_creators.insert(ItemValue::valueInitSimple, new ItemValue_SimpleValue_creator);
+        m_creators.insert(ItemValue::valueDocumentation, new ItemValue_Documentation_creator);
+    }
 
-    [[nodsicard]] static ItemValue::ValueType getValueType(const QDomNode &node, const QDomNode &parent = QDomNode());
-    [[nodiscard]] static ItemValue * build(const QDomNode &node, const QDomNode &parent);
+    ~ItemValue_builder()
+    {
+        for(auto creator : std::as_const(m_creators))
+            delete creator;
+
+    }
+
+    [[nodsicard]] static ItemValue::ValueType getValueType(const QDomNode &node, const QDomNode &parent = QDomNode())
+    {
+        Q_UNUSED(parent);
+
+        if(node.nodeName() == "name")
+            return ItemValue::valueName;
+        if(node.nodeName() == "address")
+            return ItemValue::valueAddress;
+        if(node.parentNode().nodeName() == "type" && node.nodeName() != "derived")
+            return ItemValue::valueDataSimple;
+        if(node.parentNode().nodeName() == "type" && node.nodeName() == "derived")
+            return ItemValue::valueDataDerived;
+        if(node.firstChild().nodeName() == "simpleValue")
+            return ItemValue::valueInitSimple;
+        // if(node.firstChild().nodeName() == "structValue")
+        //     return ItemValue::valueInitStruct;
+        if(node.nodeName() == "documentation")
+            return ItemValue::valueDocumentation;
+
+        return ItemValue::valueDefault;
+    }
+
+    [[nodiscard]] ItemValue * build(const QDomNode &node, const QDomNode &parent)
+    {
+        ItemValue::ValueType type = getValueType(node, parent);
+
+        qDebug() << getValueType(node, parent) << node.nodeName() << parent.nodeName() << m_creators.contains(type);
+
+        if(m_creators.contains(type))
+            return m_creators.value(type)->create(node, parent);
+
+        return nullptr;
+    }
+
+private:
+    QHash<ItemValue::ValueType, ItemValue_creator*> m_creators;
 };
 // ----------------------------------------------------------------------------
 

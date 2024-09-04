@@ -75,6 +75,64 @@ void ItemValue_NodeValue::set(const QString &value)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** ItemValue_SubNodeValue ***
+
+ItemValue_SubNodeValue::ItemValue_SubNodeValue(const QDomNode &node, const QDomNode &parent) :
+    ItemValue(node, parent)
+{
+}
+
+QString ItemValue_SubNodeValue::get() const
+{
+    QString doc = QString();
+    for(auto name : m_name.split(';'))
+    {
+        if(!node().namedItem(name).isNull())
+        {
+            doc = name;
+            break;
+        }
+    }
+
+    return node().namedItem(doc).toElement().text();
+}
+
+void ItemValue_SubNodeValue::set(const QString &value)
+{
+    QString doc = QString();
+    for(auto name : m_name.split(';'))
+    {
+        if(!node().namedItem(name).isNull())
+        {
+            doc = name;
+            break;
+        }
+    }
+
+    qDebug() << __PRETTY_FUNCTION__ << value.toUtf8() << parent().nodeName() << node().nodeName() << node().namedItem(doc).toElement().text();
+
+    parent().removeChild(node());
+
+    if(!value.isEmpty())
+    {
+        QDomText text = parent().ownerDocument().createCDATASection(value); text.setData(value);
+        QDomNode xhtml = parent().ownerDocument().createElement("xhtml:p");
+        xhtml.appendChild(text);
+        QDomNode doc = parent().ownerDocument().createElement("documentation");
+        doc.appendChild(xhtml);
+        m_node = parent().appendChild(doc);
+    }
+    qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << node().namedItem(doc).toElement().text();
+
+}
+
+void ItemValue_SubNodeValue::setName(const QString &name)
+{
+    m_name = name;
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** ItemValue_Attr_opt ***
 
 ItemValue_Attr_opt::ItemValue_Attr_opt(const QDomNode &node, const QDomNode &parent) :
@@ -186,30 +244,20 @@ void ItemValue_SubNodeAttr::setChAttrName(const QString &name)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** ItemValue_builder ***
+// *** ItemValue_NodeValue ***
 
-ItemValue::ItemValue::ValueType ItemValue_builder::getValueType(const QDomNode &node, const QDomNode &parent)
+ItemValue_StructValue::ItemValue_StructValue(const QDomNode &node, const QDomNode &parent) :
+    ItemValue(node, parent)
 {
-    Q_UNUSED(parent);
-
-    if(node.nodeName() == "name")
-        return ItemValue::valueName;
-    if(node.nodeName() == "address")
-        return ItemValue::valueAddress;
-    if(node.parentNode().nodeName() == "type" && node.nodeName() != "derived")
-        return ItemValue::valueDataSimple;
-    if(node.parentNode().nodeName() == "type" && node.nodeName() == "derived")
-        return ItemValue::valueDataDerived;
-    if(node.firstChild().nodeName() == "simpleValue")
-        return ItemValue::valueInitSimple;
-    if(node.firstChild().nodeName() == "structValue")
-        return ItemValue::valueInitStruct;
-
-    return ItemValue::valueDefault;
 }
 
-ItemValue * ItemValue_builder::build(const QDomNode &node, const QDomNode &parent)
+QString ItemValue_StructValue::get() const
 {
-    return nullptr;
+    return node().nodeValue();
+}
+
+void ItemValue_StructValue::set(const QString &value)
+{
+    node().setNodeValue(value);
 }
 // ----------------------------------------------------------------------------

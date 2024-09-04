@@ -59,7 +59,8 @@ QVariant DomModel::headerData(int section, Qt::Orientation orientation, int role
             break;
         }
     }
-    return QVariant{};
+
+    return QAbstractItemModel::headerData(section, orientation, role);
 }
 
 QModelIndex DomModel::index(int row, int column, const QModelIndex &parent) const

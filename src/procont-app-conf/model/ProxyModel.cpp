@@ -112,7 +112,7 @@ Qt::ItemFlags ProxyModelTable_var::flags(const QModelIndex &index) const
 
     Qt::ItemFlags flg = QAbstractItemModel::flags(index);
 
-    if(index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6)
+    if(index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
         return Qt::ItemIsEditable | flg;
 
     return flg;
@@ -143,7 +143,8 @@ QVariant ProxyModelTable_var::headerData(int section, Qt::Orientation orientatio
             break;
         }
     }
-    return QVariant{};
+
+    return sourceModel()->headerData(section, orientation, role);
 }
 
 QVariant ProxyModelTable_var::data(const QModelIndex &index, int role) const
@@ -174,7 +175,7 @@ QVariant ProxyModelTable_var::data(const QModelIndex &index, int role) const
     case 6:
         return item->data(role);
     case 7:
-        return item->node().nodeValue();
+        return item->data(role);
     case 8:
         return QVariant{};
     default:

@@ -12,6 +12,7 @@
 
 class DomItem_builder;
 class ItemValue;
+class ItemValue_builder;
 
 class DomItem : public QStandardItem
 {
@@ -55,6 +56,8 @@ protected:
 protected:
     static QScopedPointer<DomItem_builder> m_ItemBuilder;
     DomItem_builder * itemBuilder() { return m_ItemBuilder.get(); }
+    static QScopedPointer<ItemValue_builder> m_ValueBuilder;
+    ItemValue_builder * valueBuilder() { return m_ValueBuilder.get(); }
 
 private:
     ItemType m_itemType;

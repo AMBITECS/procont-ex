@@ -8,6 +8,7 @@
 // *** DomItem ***
 
 QScopedPointer<DomItem_builder> DomItem::m_ItemBuilder = QScopedPointer<DomItem_builder>(new DomItem_builder);
+QScopedPointer<ItemValue_builder> DomItem::m_ValueBuilder = QScopedPointer<ItemValue_builder>(new ItemValue_builder);
 QStringList DomItem::m_discard = { "types", "pous", "instances", "configurations" };
 
 DomItem::DomItem(const QDomNode &node, const QDomNode &parent) :
@@ -122,7 +123,6 @@ QVariant DomItem::data(int role) const
 {
     Q_UNUSED(role);
 
-    // return node().nodeName();
     return m_value->get();
 }
 
@@ -130,9 +130,8 @@ void DomItem::setData(const QVariant &value, int role)
 {
     Q_UNUSED(role);
 
-    // qDebug() << __PRETTY_FUNCTION__ << dynamic_cast<DomItem *>(parentItem()->child(row(), 6))->node().nodeName();
+    qDebug() << __PRETTY_FUNCTION__ << dynamic_cast<DomItem *>(parentItem()->child(row(), 6))->node().nodeName();
 
-    // node().setNodeValue(value.toString());
     m_value->set(value.toString());
 }
 
@@ -223,27 +222,17 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     // data type
     childNode = node.toElement().elementsByTagName("type").at(0).toElement().firstChild();
     childItem = itemBuilder()->build(childNode, node.toElement().elementsByTagName("type").at(0));
-    if(dynamic_cast<ItemValue_Attr_opt*>(childItem->itemValue()))
-        dynamic_cast<ItemValue_Attr_opt*>(childItem->itemValue())->setName("name");
+    childItem->setItemValue(valueBuilder()->build(childNode, node.toElement().elementsByTagName("type").at(0)));
     setChild(row, 5, childItem);
     // initial value
     childNode = node.namedItem("initialValue");
     childItem = itemBuilder()->build(childNode, node);
-    // ItemValue_SubNodeAttr *vl2 = ItemValue_SimpleValue(childNode, node);
-    // if(dynamic_cast<ItemValue_SubNodeAttr*>(childItem->itemValue()))
-    //     vl2 = dynamic_cast<ItemValue_SubNodeAttr*>(childItem->itemValue());
-    // else
-    //     vl2 = new ItemValue_SubNodeAttr(QDomNode(), node);
-    // vl2->setNodeName("initialValue");
-    // vl2->setChNodeName("simpleValue");
-    // vl2->setChAttrName("value");
     childItem->setItemValue(new ItemValue_SimpleValue(childNode, node));
     setChild(row, 6, childItem);
     // doc
-    childNode = QDomNode();
-    if(node.toElement().elementsByTagName("documentation").count() > 0)
-        childNode = node.toElement().elementsByTagName("documentation").at(0).toElement().firstChild();
-    childItem = itemBuilder()->build(childNode);
+    childNode = node.namedItem("documentation");
+    childItem = itemBuilder()->build(childNode, node);
+    childItem->setItemValue(valueBuilder()->build(childNode, node));
     setChild(row, 7, childItem);
     // attributes
     childItem = itemBuilder()->build(QDomNode());

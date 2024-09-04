@@ -86,8 +86,9 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
         table->setSelectionBehavior(QAbstractItemView::SelectRows);
         table->setSelectionMode(QAbstractItemView::SingleSelection);
         table->horizontalHeader()->setHighlightSections(false);
+        table->setItemDelegateForColumn(7, new CTextEditDelegate);
         // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
-        // m_pVarTable->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
+        // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
         layout->addWidget(toolbar);
         layout->addWidget(table);
         container->setLayout(layout);

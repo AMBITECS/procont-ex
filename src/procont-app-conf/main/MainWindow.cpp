@@ -159,7 +159,7 @@ void MainWindow::save(const QString & filePath)
         QFile file(filePath);
         if (file.open(QIODevice::WriteOnly))
         {
-            file.write(model->document().toString().toLatin1());
+            file.write(model->document().toByteArray());
             file.close();
         }
     }

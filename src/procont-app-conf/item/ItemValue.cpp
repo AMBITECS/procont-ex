@@ -2,6 +2,8 @@
 
 #include <QtXml>
 
+QScopedPointer<ItemValue_builder> ItemValue_builder::m_instance = QScopedPointer<ItemValue_builder>(nullptr);
+
 // ----------------------------------------------------------------------------
 // *** ItemValue interface ***
 
@@ -9,6 +11,49 @@ ItemValue::ItemValue(const QDomNode &node, const QDomNode &parent) :
     m_node(node),
     m_parent(parent)
 {
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_composite ***
+
+ItemValue_Composite::ItemValue_Composite(const QDomNode &node, const QDomNode &parent) :
+    ItemValue(node, parent)
+{
+    QDomNodeList values = node.firstChild().toElement().elementsByTagName("value");
+    for(auto i=0;i<values.count();i++)
+    {
+        QDomNode child = values.at(i);
+        m_values.insert
+            (
+            child.toElement().attribute("member"),
+            QSharedPointer<ItemValue>(ItemValue_builder::instance()->build(child, node.firstChild()))
+            );
+    }
+}
+
+QString ItemValue_Composite::get() const
+{
+    QString value = "(";
+    for(const auto & i : m_values)
+        value += QString("%1, ").arg(i->get());
+    if(value.size() > 2)
+        value = value.left(value.size() - 2);
+    value += ')';
+
+    return value;
+}
+
+void ItemValue_Composite::set(const QString &value)
+{
+    static QRegularExpression re = QRegularExpression("\\s+\\:.*");
+    QString key = {};
+    for(const auto & i : QString(value).remove('(').remove(')').split(", "))
+    {
+        key = QString(i).remove(re);
+        if(m_values.contains(key))
+            m_values.value(key)->set(i);
+    }
 }
 // ----------------------------------------------------------------------------
 
@@ -112,7 +157,7 @@ void ItemValue_SubNodeValue::set(const QString &value)
     qDebug() << __PRETTY_FUNCTION__ << value.toUtf8() << parent().nodeName() << node().nodeName() << node().namedItem(doc).toElement().text();
 
     parent().removeChild(node());
-
+    m_node = {};
     if(!value.isEmpty())
     {
         QDomText text = parent().ownerDocument().createCDATASection(value); text.setData(value);
@@ -150,7 +195,7 @@ void ItemValue_Attr_opt::set(const QString &value)
     if(value.isEmpty())
     {
         parent().toElement().removeAttributeNode(node().toAttr());
-        m_node = QDomNode();
+        m_node = {};
     }
     else
     {
@@ -209,7 +254,7 @@ void ItemValue_SubNodeAttr::set(const QString &value)
     qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
 
     parent().removeChild(node());
-    m_node = QDomNode();
+    m_node = {};
 
     qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 
@@ -240,6 +285,47 @@ void ItemValue_SubNodeAttr::setChNodeName(const QString &name)
 void ItemValue_SubNodeAttr::setChAttrName(const QString &name)
 {
     m_chAttrName = name;
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_SimpleValue_derived ***
+
+QString ItemValue_SimpleValue_derived::get() const
+{
+    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << node().toElement().namedItem(m_nodeName).toElement().attribute(m_chAttrName);
+
+    return QString("%1 := %2")
+        .arg(node().toElement().attribute("member"))
+        .arg(node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName));
+}
+
+void ItemValue_SimpleValue_derived::set(const QString &value)
+{
+    qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
+
+    parent().removeChild(node());
+    m_node = {};
+
+    qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
+
+    static QRegularExpression re = QRegularExpression("\\s+\\:\\=\\s+");
+    QStringList key_value = QString(value).split(re);
+    qDebug() << key_value;
+
+    if(!key_value.at(1).isEmpty())
+    {
+        qDebug() << __PRETTY_FUNCTION__;
+
+        QDomNode new_node = parent().ownerDocument().createElement(m_nodeName);
+        QDomNode new_child = parent().ownerDocument().createElement(m_chNodeName);
+        new_child.toElement().setAttribute(m_chAttrName, key_value.at(1));
+        m_node = parent().appendChild(new_node);
+        m_node.toElement().setAttribute("member", key_value.at(0));
+        node().appendChild(new_child);
+    }
+
+    qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 }
 // ----------------------------------------------------------------------------
 

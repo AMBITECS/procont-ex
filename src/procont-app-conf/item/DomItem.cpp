@@ -8,7 +8,6 @@
 // *** DomItem ***
 
 QScopedPointer<DomItem_builder> DomItem::m_ItemBuilder = QScopedPointer<DomItem_builder>(new DomItem_builder);
-QScopedPointer<ItemValue_builder> DomItem::m_ValueBuilder = QScopedPointer<ItemValue_builder>(new ItemValue_builder);
 QStringList DomItem::m_discard = { "types", "pous", "instances", "configurations" };
 
 DomItem::DomItem(const QDomNode &node, const QDomNode &parent) :
@@ -204,7 +203,7 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     auto childItem = itemBuilder()->build(childNode);
     setChild(row, 0, childItem);
     // number
-    childItem = itemBuilder()->build(QDomNode());
+    childItem = itemBuilder()->build({});
     setChild(row, 1, childItem);
     // var type
     childItem = itemBuilder()->build(node.parentNode());
@@ -212,12 +211,12 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     // name
     childNode = node.attributes().namedItem("name");
     childItem = itemBuilder()->build(childNode);
-    childItem->setItemValue(new ItemValue_Name(childNode));
+    childItem->setItemValue(valueBuilder()->build(childNode, node));
     setChild(row, 3, childItem);
     // address
     childNode = node.attributes().namedItem("address");
     childItem = itemBuilder()->build(childNode, node);
-    childItem->setItemValue(new ItemValue_Address(childNode, node));
+    childItem->setItemValue(valueBuilder()->build(childNode, node));
     setChild(row, 4, childItem);
     // data type
     childNode = node.toElement().elementsByTagName("type").at(0).toElement().firstChild();
@@ -227,7 +226,7 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     // initial value
     childNode = node.namedItem("initialValue");
     childItem = itemBuilder()->build(childNode, node);
-    childItem->setItemValue(new ItemValue_SimpleValue(childNode, node));
+    childItem->setItemValue(valueBuilder()->build(childNode, node));
     setChild(row, 6, childItem);
     // doc
     childNode = node.namedItem("documentation");
@@ -235,7 +234,7 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     childItem->setItemValue(valueBuilder()->build(childNode, node));
     setChild(row, 7, childItem);
     // attributes
-    childItem = itemBuilder()->build(QDomNode());
+    childItem = itemBuilder()->build({});
     setChild(row, 8, childItem);
 }
 // ----------------------------------------------------------------------------
@@ -283,21 +282,29 @@ void DomItemPou::setupChildren(const QDomNode & node)
     if(ifaces.count())
     {
         auto vars = ifaces.at(0).toElement().elementsByTagName("inputVars");
-        setupChild(vars.at(0), "variable");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
         vars = ifaces.at(0).toElement().elementsByTagName("outputVars");
-        setupChild(vars.at(0), "variable");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
         vars = ifaces.at(0).toElement().elementsByTagName("localVars");
-        setupChild(vars.at(0), "variable");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
         vars = ifaces.at(0).toElement().elementsByTagName("tempVars");
-        setupChild(vars.at(0), "variable");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
         vars = ifaces.at(0).toElement().elementsByTagName("inOutVars");
-        setupChild(vars.at(0), "variable");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
         vars = ifaces.at(0).toElement().elementsByTagName("externalVars");
-        setupChild(vars.at(0), "variable");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
         vars = ifaces.at(0).toElement().elementsByTagName("globalVars");
-        setupChild(vars.at(0), "variable");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
         vars = ifaces.at(0).toElement().elementsByTagName("accessVars");
-        setupChild(vars.at(0), "variable");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
     }
 }
 // ----------------------------------------------------------------------------

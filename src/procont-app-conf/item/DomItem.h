@@ -3,16 +3,15 @@
 
 #include <QStandardItem>
 #include <QDomNode>
-#include <QHash>
 
 #include <utility>
+
+#include "ItemValue.h"
 
 // ----------------------------------------------------------------------------
 // *** DomItem ***
 
 class DomItem_builder;
-class ItemValue;
-class ItemValue_builder;
 
 class DomItem : public QStandardItem
 {
@@ -24,7 +23,7 @@ public:
         typePou     = QStandardItem::UserType + 3
     };
 public:
-    DomItem(const QDomNode &node, const QDomNode &parent = QDomNode());
+    DomItem(const QDomNode &node, const QDomNode &parent = {});
     virtual ~DomItem();
 
     [[nodiscard]] std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
@@ -56,8 +55,7 @@ protected:
 protected:
     static QScopedPointer<DomItem_builder> m_ItemBuilder;
     DomItem_builder * itemBuilder() { return m_ItemBuilder.get(); }
-    static QScopedPointer<ItemValue_builder> m_ValueBuilder;
-    ItemValue_builder * valueBuilder() { return m_ValueBuilder.get(); }
+    ItemValue_builder * valueBuilder() { return ItemValue_builder::instance(); }
 
 private:
     ItemType m_itemType;
@@ -77,7 +75,7 @@ private:
 class DomItemVar : public DomItem
 {
 public:
-    DomItemVar(const QDomNode &node, const QDomNode &parent = QDomNode());
+    DomItemVar(const QDomNode &node, const QDomNode &parent = {});
 
     virtual void addEmptyNode() override;
 
@@ -94,7 +92,7 @@ protected:
 class DomItemPou : public DomItemVar
 {
 public:
-    DomItemPou(const QDomNode &node, const QDomNode &parent = QDomNode());
+    DomItemPou(const QDomNode &node, const QDomNode &parent = {});
 
     [[nodiscard]] virtual QVariant data(int role) const override;
     virtual void addEmptyNode() override;
@@ -112,7 +110,7 @@ private:
 class DomItem_creator
 {
 public:
-    [[nodiscard]] virtual DomItem * create(const QDomNode &node, const QDomNode &parent = QDomNode());
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node, const QDomNode &parent = {});
 };
 // ----------------------------------------------------------------------------
 
@@ -121,7 +119,7 @@ public:
 class DomItemVar_creator : public DomItem_creator
 {
 public:
-    [[nodiscard]] virtual DomItem * create(const QDomNode &node, const QDomNode &parent = QDomNode());
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node, const QDomNode &parent = {});
 };
 // ----------------------------------------------------------------------------
 
@@ -130,7 +128,7 @@ public:
 class DomItemPou_creator : public DomItem_creator
 {
 public:
-    [[nodiscard]] virtual DomItem * create(const QDomNode &node, const QDomNode &parent = QDomNode());
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node, const QDomNode &parent = {});
 };
 // ----------------------------------------------------------------------------
 
@@ -142,7 +140,7 @@ public:
     DomItem_builder();
     ~DomItem_builder();
 
-    [[nodiscard]] DomItem * build(const QDomNode &node, const QDomNode &parent = QDomNode());
+    [[nodiscard]] DomItem * build(const QDomNode &node, const QDomNode &parent = {});
 
 private:
     QHash<DomItem::ItemType, DomItem_creator*> m_creators;

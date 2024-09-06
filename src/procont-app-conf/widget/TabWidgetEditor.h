@@ -15,9 +15,11 @@ Q_OBJECT
 public:
     TabWidgetEditor();
 
+    void closeTabs();
+
 public:
     static TabWidgetEditor * instance();
-    static ProxyModelTable_var * proxy_var();
+    static void setModel(QAbstractItemModel *);
 
 public slots:
     void slot_addTabWidget(const QModelIndex &index);
@@ -37,12 +39,15 @@ Q_SIGNALS:
     void signal_currentTabChanged(const QModelIndex &index);
 
 private:
-    static QScopedPointer<TabWidgetEditor> m_instance;
-    static ProxyModelTable_var * m_proxy_var;
+    static ProxyModelTable_var * proxyModel();
 
 private:
-    QHash<const QModelIndex, QWidget*> m_hWidgets;
-    QHash<QWidget*, QTableView*> m_hTables;
+    static TabWidgetEditor * _instance;
+    static ProxyModelTable_var * _pProxyModel;
+
+private:
+    QHash<const QModelIndex, QWidget*> _hWidgets;
+    QHash<QWidget*, QTableView*> _hTables;
 
 };
 

@@ -103,13 +103,15 @@ void MainWindow::slot_open()
     if(filePath.isEmpty())
         return;
 
-    info(QString(tr("open file %1")).arg(filePath));
-
     open(filePath);
 }
 
 void MainWindow::open(const QString & filePath)
 {
+    TabWidgetEditor::instance()->closeTabs();
+
+    info(QString(tr("open file %1")).arg(filePath));
+
     if (!filePath.isEmpty())
     {
         QFile file(filePath);
@@ -130,7 +132,7 @@ void MainWindow::open(const QString & filePath)
                 viewDev->setModel(proxy_dev);
                 connect(viewDev, &QTreeView::doubleClicked, TabWidgetEditor::instance(), &TabWidgetEditor::slot_addTabWidget);
 
-                TabWidgetEditor::proxy_var()->setSourceModel(newModel);
+                TabWidgetEditor::setModel(newModel);
 
                 delete model; model = newModel;
                 viewPou->expandAll();

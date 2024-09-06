@@ -2,7 +2,8 @@
 
 #include "item/DomItem.h"
 #include "model/ProxyModel.h"
-#include <view/ItemDelegate.h>
+#include "view/ItemDelegate.h"
+#include "view/TableView.h"
 
 #include <QLabel>
 #include <QTableView>
@@ -12,8 +13,8 @@
 #include <QToolBar>
 #include <QHeaderView>
 
-QScopedPointer<TabWidgetEditor> TabWidgetEditor::m_instance = QScopedPointer<TabWidgetEditor>(nullptr);
-ProxyModelTable_var * TabWidgetEditor::m_proxy_var = nullptr;
+TabWidgetEditor * TabWidgetEditor::_instance = nullptr;
+ProxyModelTable_var * TabWidgetEditor::_pProxyModel = nullptr;
 
 TabWidgetEditor::TabWidgetEditor()
 {
@@ -25,18 +26,23 @@ TabWidgetEditor::TabWidgetEditor()
 
 TabWidgetEditor * TabWidgetEditor::instance()
 {
-    if(!m_instance)
-        m_instance.reset(new TabWidgetEditor);
+    if(_instance == nullptr)
+        _instance = new TabWidgetEditor;
 
-    return m_instance.get();
+    return _instance;
 }
 
-ProxyModelTable_var * TabWidgetEditor::proxy_var()
+void TabWidgetEditor::setModel(QAbstractItemModel *model_)
 {
-    if(!m_proxy_var)
-        m_proxy_var = new ProxyModelTable_var;
+    proxyModel()->setSourceModel(model_);
+}
 
-    return m_proxy_var;
+ProxyModelTable_var * TabWidgetEditor::proxyModel()
+{
+    if(_pProxyModel == nullptr)
+        _pProxyModel = new ProxyModelTable_var;
+
+    return _pProxyModel;
 }
 
 QModelIndex TabWidgetEditor::m_index(const QModelIndex &index, QAbstractItemModel * proxy)
@@ -59,9 +65,9 @@ DomItem * TabWidgetEditor::item(const QModelIndex &index, QAbstractItemModel * p
 
 void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
 {
-    if(m_hWidgets.contains(index))
+    if(_hWidgets.contains(index))
     {
-        setCurrentWidget(m_hWidgets.value(index));
+        setCurrentWidget(_hWidgets.value(index));
         return;
     }
 
@@ -79,9 +85,9 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
         action = toolbar->addAction(QIcon(":/icon/images/delete.png"), tr("Remove"));
         connect(action, &QAction::triggered, this, &TabWidgetEditor::slot_delVariable);
         toolbar->setIconSize(QSize(16,16));
-        auto table = new QTableView;
-        table->setModel(proxy_var());
-        table->setRootIndex(p_index(m_index(index), proxy_var()));
+        auto table = new TableView;
+        table->setModel(proxyModel());
+        table->setRootIndex(p_index(m_index(index), proxyModel()));
         table->setColumnHidden(0, true);
         table->setSelectionBehavior(QAbstractItemView::SelectRows);
         table->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -98,64 +104,72 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
         text->appendPlainText("PROGRAM TEXT");
         vSplitter->addWidget(text);
 
-        m_hWidgets.insert(index, vSplitter);
-        m_hTables.insert(vSplitter, table);
+        _hWidgets.insert(index, vSplitter);
+        _hTables.insert(vSplitter, table);
     }
     break;
     default:
     {
-        m_hWidgets.insert(index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
+        _hWidgets.insert(index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
     }
     break;
     }
 
-    addTab(m_hWidgets.value(index), index.data().toString());
-    setCurrentWidget(m_hWidgets.value(index));
+    addTab(_hWidgets.value(index), index.data().toString());
+    setCurrentWidget(_hWidgets.value(index));
 }
 
 void TabWidgetEditor::slot_currentTabChanged(int index)
 {
-    if(std::find(std::begin(m_hWidgets), std::end(m_hWidgets), widget(index)) != std::end(m_hWidgets))
-        emit signal_currentTabChanged(m_hWidgets.key(widget(index)));
+    if(std::find(std::begin(_hWidgets), std::end(_hWidgets), widget(index)) != std::end(_hWidgets))
+        emit signal_currentTabChanged(_hWidgets.key(widget(index)));
     else
         emit signal_currentTabChanged(QModelIndex());
 }
 
 void TabWidgetEditor::slot_closeTab(int index)
 {
-    m_hTables.remove(widget(index));
-    m_hWidgets.remove(m_hWidgets.key(widget(index)));
+    _hTables.remove(widget(index));
+    _hWidgets.remove(_hWidgets.key(widget(index)));
 
     delete widget(index);
 
     setCurrentIndex((index == count()) ? index-1 : index);
 }
 
+void TabWidgetEditor::closeTabs()
+{
+    while(count())
+        delete widget(currentIndex());
+
+    _hWidgets.clear();
+}
+
 void TabWidgetEditor::slot_addVariable()
 {
-    auto index = m_index(m_hTables.value(currentWidget())->rootIndex());
-    auto parentItem = item(m_hTables.value(currentWidget())->rootIndex());
+    auto index = m_index(_hTables.value(currentWidget())->rootIndex());
+    auto parentItem = item(_hTables.value(currentWidget())->rootIndex());
 
     // add node
     parentItem->addEmptyNode();
 
     // add item
-    proxy_var()->sourceModel()->insertRow(parentItem->rowCount(), index);
+    proxyModel()->sourceModel()->insertRow(parentItem->rowCount(), index);
 }
 
 void TabWidgetEditor::slot_delVariable()
 {
     // for every selected rows
     // !!! don't work for multiselection
-    for(auto index : m_hTables.value(currentWidget())->selectionModel()->selectedRows())
+    for(auto index : _hTables.value(currentWidget())->selectionModel()->selectedRows())
     {
         // delete node
         auto childNode = item(index)->node();
-        auto parentItem = item(m_hTables.value(currentWidget())->rootIndex());
+        auto parentItem = item(_hTables.value(currentWidget())->rootIndex());
         parentItem->removeChild(m_index(index).row(), 0, childNode);
 
         // delete item
-        proxy_var()->sourceModel()->
-            removeRow(m_index(index).row(), m_index(m_hTables.value(currentWidget())->rootIndex()));
+        proxyModel()->sourceModel()->
+            removeRow(m_index(index).row(), m_index(_hTables.value(currentWidget())->rootIndex()));
     }
 }

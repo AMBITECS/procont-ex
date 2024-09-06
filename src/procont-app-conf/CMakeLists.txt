@@ -30,6 +30,8 @@ set(PROJECT_SOURCES
     log/Logger.h log/Logger.cpp log/Message.h log/Message.cpp
     view/ItemDelegate.h view/ItemDelegate.cpp
     view/SpinBoxMultiRange.h view/SpinBoxMultiRange.cpp
+    item/ItemValue.cpp item/ItemValue.h
+    view/TableView.h view/TableView.cpp
     resources/procont-app-conf.qrc
 )
 
@@ -43,7 +45,6 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-        item/ItemValue.cpp item/ItemValue.h
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

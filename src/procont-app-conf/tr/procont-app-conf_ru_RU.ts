@@ -160,17 +160,17 @@
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="102"/>
-        <location filename="../main/MainWindow.cpp" line="150"/>
+        <location filename="../main/MainWindow.cpp" line="152"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="106"/>
+        <location filename="../main/MainWindow.cpp" line="113"/>
         <source>open file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="150"/>
+        <location filename="../main/MainWindow.cpp" line="152"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -232,12 +232,12 @@
 <context>
     <name>TabWidgetEditor</name>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="77"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="83"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="79"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="85"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>

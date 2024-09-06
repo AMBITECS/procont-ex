@@ -31,6 +31,8 @@ set(PROJECT_SOURCES
     view/ItemDelegate.h view/ItemDelegate.cpp
     view/SpinBoxMultiRange.h view/SpinBoxMultiRange.cpp
     item/ItemValue.cpp item/ItemValue.h
+    item/ItemValueVariableTable.h item/ItemValueVariableTable.cpp
+    item/ItemValueCreator.h item/ItemValueCreator.cpp
     view/TableView.h view/TableView.cpp
     resources/procont-app-conf.qrc
 )

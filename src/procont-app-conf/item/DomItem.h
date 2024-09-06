@@ -7,6 +7,7 @@
 #include <utility>
 
 #include "ItemValue.h"
+#include "ItemValueCreator.h"
 
 // ----------------------------------------------------------------------------
 // *** DomItem ***
@@ -37,7 +38,7 @@ public:
     [[nodiscard]] int columnCount();
 
     [[nodiscard]] virtual QVariant data(int role) const override;
-    void setData(const QVariant &value, int role) override;
+    virtual void setData(const QVariant &value, int role) override;
     [[nodiscard]] int type() const override { return m_itemType; }
 
 public:
@@ -100,8 +101,6 @@ public:
 protected:
     [[nodiscard]] virtual QDomNodeList filterChildren(const QDomNode &node) const override;
     virtual void setupChildren(const QDomNode &) override;
-
-private:
 };
 // ----------------------------------------------------------------------------
 

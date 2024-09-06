@@ -112,7 +112,7 @@ Qt::ItemFlags ProxyModelTable_var::flags(const QModelIndex &index) const
 
     Qt::ItemFlags flg = QAbstractItemModel::flags(index);
 
-    if(index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
+    if(index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
         return Qt::ItemIsEditable | flg;
 
     return flg;
@@ -195,7 +195,23 @@ bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &valu
 
     Q_ASSERT(item);
 
-    // qDebug() << __PRETTY_FUNCTION__ << item->data(Qt::DisplayRole) << item->parentItem()->data(Qt::DisplayRole);
+    if(index.column() == 2)
+    {
+        if(item->data(role) != value)
+        {
+            qDebug() << item->parentItem()->node().namedItem("interface").namedItem(value.toString()).isNull();
+
+            //                             .namedItem("interface").namedItem("localVars");
+            // if(el_localVars.isNull())
+            // {
+            //     el_localVars = parentNode.ownerDocument().createElement("localVars");
+            //     parentNode.namedItem("interface").appendChild(el_localVars);
+            // }
+            // el_localVars.appendChild(el_variable);
+
+        }
+
+    }
 
     item->setData(value, role);
 

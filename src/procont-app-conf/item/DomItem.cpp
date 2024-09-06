@@ -129,8 +129,6 @@ void DomItem::setData(const QVariant &value, int role)
 {
     Q_UNUSED(role);
 
-    qDebug() << __PRETTY_FUNCTION__ << dynamic_cast<DomItem *>(parentItem()->child(row(), 6))->node().nodeName();
-
     m_value->set(value.toString());
 }
 

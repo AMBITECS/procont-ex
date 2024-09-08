@@ -21,7 +21,7 @@ class ItemValue
 {
 public:
 
-    ItemValue(const QDomNode &node, const QDomNode &parent = {});
+    ItemValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
 
     [[nodiscard]] virtual QString get() const = 0;
     virtual void set(const QString &value) = 0;
@@ -47,7 +47,7 @@ protected:
 class ItemValue_Default : public ItemValue
 {
 public:
-    ItemValue_Default(const QDomNode &node, const QDomNode &parent = {});
+    ItemValue_Default(const QDomNode &node/*, const QDomNode &parent*/);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -64,7 +64,7 @@ public:
 class ItemValue_NodeName: public ItemValue
 {
 public:
-    ItemValue_NodeName(const QDomNode &node, const QDomNode &parent = {});
+    ItemValue_NodeName(const QDomNode &node/*, const QDomNode &parent*/);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -81,7 +81,7 @@ public:
 class ItemValue_NodeValue: public ItemValue
 {
 public:
-    ItemValue_NodeValue(const QDomNode &node, const QDomNode &parent = {});
+    ItemValue_NodeValue(const QDomNode &node/*, const QDomNode &parent*/);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -98,7 +98,7 @@ public:
 class ItemValue_SubNodeValue: public ItemValue
 {
 public:
-    ItemValue_SubNodeValue(const QDomNode &node, const QDomNode &parent = {});
+    ItemValue_SubNodeValue(const QDomNode &node/*, const QDomNode &parent*/);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -120,7 +120,7 @@ private:
 class ItemValue_Attr_opt: public ItemValue
 {
 public:
-    ItemValue_Attr_opt(const QDomNode &node, const QDomNode &parent = {});
+    ItemValue_Attr_opt(const QDomNode &node/*, const QDomNode &parent*/);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -142,7 +142,7 @@ private:
 class ItemValue_Attr_req: public ItemValue
 {
 public:
-    ItemValue_Attr_req(const QDomNode &node, const QDomNode &parent = {});
+    ItemValue_Attr_req(const QDomNode &node/*, const QDomNode &parent*/);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -164,7 +164,7 @@ private:
 class ItemValue_SubNodeAttr: public ItemValue
 {
 public:
-    ItemValue_SubNodeAttr(const QDomNode &node, const QDomNode &parent = {});
+    ItemValue_SubNodeAttr(const QDomNode &node/*, const QDomNode &parent*/);
 
     [[nodiscard]] virtual QString get() const override;
     virtual void set(const QString &value) override;

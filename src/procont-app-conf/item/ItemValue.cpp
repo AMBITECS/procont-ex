@@ -5,9 +5,9 @@
 // ----------------------------------------------------------------------------
 // *** ItemValue interface ***
 
-ItemValue::ItemValue(const QDomNode &node, const QDomNode &parent) :
+ItemValue::ItemValue(const QDomNode &node/*, const QDomNode &parent*/) :
     m_node(node),
-    m_parent(parent)
+    m_parent(node.parentNode())
 {
 }
 // ----------------------------------------------------------------------------
@@ -15,8 +15,8 @@ ItemValue::ItemValue(const QDomNode &node, const QDomNode &parent) :
 // ----------------------------------------------------------------------------
 // *** ItemValue_Default ***
 
-ItemValue_Default::ItemValue_Default(const QDomNode &node, const QDomNode &parent) :
-    ItemValue(node, parent)
+ItemValue_Default::ItemValue_Default(const QDomNode &node/*, const QDomNode &parent*/) :
+    ItemValue(node/*, parent*/)
 {
 }
 
@@ -33,8 +33,8 @@ void ItemValue_Default::set(const QString &)
 // ----------------------------------------------------------------------------
 // *** ItemValue_NodeName ***
 
-ItemValue_NodeName::ItemValue_NodeName(const QDomNode &node, const QDomNode &parent) :
-    ItemValue(node, parent)
+ItemValue_NodeName::ItemValue_NodeName(const QDomNode &node/*, const QDomNode &parent*/) :
+    ItemValue(node/*, parent*/)
 {
 }
 
@@ -58,8 +58,8 @@ void ItemValue_NodeName::set(const QString &value)
 // ----------------------------------------------------------------------------
 // *** ItemValue_NodeValue ***
 
-ItemValue_NodeValue::ItemValue_NodeValue(const QDomNode &node, const QDomNode &parent) :
-    ItemValue(node, parent)
+ItemValue_NodeValue::ItemValue_NodeValue(const QDomNode &node/*, const QDomNode &parent*/) :
+    ItemValue(node/*, parent*/)
 {
 }
 
@@ -77,8 +77,8 @@ void ItemValue_NodeValue::set(const QString &value)
 // ----------------------------------------------------------------------------
 // *** ItemValue_SubNodeValue ***
 
-ItemValue_SubNodeValue::ItemValue_SubNodeValue(const QDomNode &node, const QDomNode &parent) :
-    ItemValue(node, parent)
+ItemValue_SubNodeValue::ItemValue_SubNodeValue(const QDomNode &node/*, const QDomNode &parent*/) :
+    ItemValue(node/*, parent*/)
 {
 }
 
@@ -135,8 +135,8 @@ void ItemValue_SubNodeValue::setName(const QString &name)
 // ----------------------------------------------------------------------------
 // *** ItemValue_Attr_opt ***
 
-ItemValue_Attr_opt::ItemValue_Attr_opt(const QDomNode &node, const QDomNode &parent) :
-    ItemValue(node, parent)
+ItemValue_Attr_opt::ItemValue_Attr_opt(const QDomNode &node/*, const QDomNode &parent*/) :
+    ItemValue(node/*, parent*/)
 {
 }
 
@@ -149,7 +149,7 @@ void ItemValue_Attr_opt::set(const QString &value)
 {
     if(value.isEmpty())
     {
-        parent().toElement().removeAttributeNode(node().toAttr());
+        if(!node().isNull()) parent().toElement().removeAttributeNode(node().toAttr());
         m_node = {};
     }
     else
@@ -168,8 +168,8 @@ void ItemValue_Attr_opt::setName(const QString &name)
 // ----------------------------------------------------------------------------
 // *** ItemValue_Attr_req ***
 
-ItemValue_Attr_req::ItemValue_Attr_req(const QDomNode &node, const QDomNode &parent) :
-    ItemValue(node, parent)
+ItemValue_Attr_req::ItemValue_Attr_req(const QDomNode &node/*, const QDomNode &parent*/) :
+    ItemValue(node/*, parent*/)
 {
 }
 
@@ -192,8 +192,8 @@ void ItemValue_Attr_req::setName(const QString &name)
 // ----------------------------------------------------------------------------
 // *** ItemValue_SubNodeAttr ***
 
-ItemValue_SubNodeAttr::ItemValue_SubNodeAttr(const QDomNode &node, const QDomNode &parent) :
-    ItemValue(node, parent)
+ItemValue_SubNodeAttr::ItemValue_SubNodeAttr(const QDomNode &node/*, const QDomNode &parent*/) :
+    ItemValue(node/*, parent*/)
 {
 }
 

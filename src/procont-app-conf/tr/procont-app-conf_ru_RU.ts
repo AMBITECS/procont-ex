@@ -232,12 +232,12 @@
 <context>
     <name>TabWidgetEditor</name>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="83"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="95"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="85"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="97"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>

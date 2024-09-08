@@ -51,4 +51,14 @@ public:
     [[nodiscard]] QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 };
 
+class ProxyModelTable_global : public ProxyModelTable_var
+{
+    Q_OBJECT
+public:
+    explicit ProxyModelTable_global(QObject *parent = nullptr);
+
+public:
+    [[nodiscard]] Qt::ItemFlags flags(const QModelIndex &index) const override;
+};
+
 #endif // PROXYMODEL_H

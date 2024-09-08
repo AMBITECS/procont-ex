@@ -165,7 +165,7 @@ QVariant ProxyModelTable_var::data(const QModelIndex &index, int role) const
     case 1:
         return QString::number(index.row()+1);
     case 2:
-        return item->node().nodeName();
+        return item->data(role);
     case 3:
         return item->data(role);
     case 4:
@@ -195,27 +195,30 @@ bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &valu
 
     Q_ASSERT(item);
 
-    if(index.column() == 2)
-    {
-        if(item->data(role) != value)
-        {
-            qDebug() << item->parentItem()->node().namedItem("interface").namedItem(value.toString()).isNull();
-
-            //                             .namedItem("interface").namedItem("localVars");
-            // if(el_localVars.isNull())
-            // {
-            //     el_localVars = parentNode.ownerDocument().createElement("localVars");
-            //     parentNode.namedItem("interface").appendChild(el_localVars);
-            // }
-            // el_localVars.appendChild(el_variable);
-
-        }
-
-    }
-
     item->setData(value, role);
 
     emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
 
     return true;
+}
+
+ProxyModelTable_global::ProxyModelTable_global(QObject *parent)
+    : ProxyModelTable_var(parent)
+{
+}
+
+Qt::ItemFlags ProxyModelTable_global::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::NoItemFlags;
+
+    if (!index.isValid())
+        return Qt::NoItemFlags;
+
+    Qt::ItemFlags flg = QAbstractItemModel::flags(index);
+
+    if(index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
+        return Qt::ItemIsEditable | flg;
+
+    return flg;
 }

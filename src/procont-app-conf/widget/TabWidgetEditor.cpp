@@ -14,11 +14,17 @@
 #include <QHeaderView>
 
 TabWidgetEditor * TabWidgetEditor::_instance = nullptr;
-ProxyModelTable_var * TabWidgetEditor::_pProxyModel = nullptr;
+QHash<DomItem::ItemType, QAbstractProxyModel*> TabWidgetEditor::_hProxyModels;
 
 TabWidgetEditor::TabWidgetEditor()
 {
     setTabsClosable(true);
+
+    if(_hProxyModels.size() == 0)
+    {
+        _hProxyModels.insert(DomItem::typePou, new ProxyModelTable_var);
+        _hProxyModels.insert(DomItem::typeVar, new ProxyModelTable_global);
+    }
 
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slot_closeTab(int)));
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(slot_currentTabChanged(int)));
@@ -34,15 +40,16 @@ TabWidgetEditor * TabWidgetEditor::instance()
 
 void TabWidgetEditor::setModel(QAbstractItemModel *model_)
 {
-    proxyModel()->setSourceModel(model_);
+    for(auto i : _hProxyModels)
+        i->setSourceModel(model_);
 }
 
-ProxyModelTable_var * TabWidgetEditor::proxyModel()
+QAbstractProxyModel * TabWidgetEditor::proxyModel(DomItem::ItemType type)
 {
-    if(_pProxyModel == nullptr)
-        _pProxyModel = new ProxyModelTable_var;
+    if(_hProxyModels.contains(type))
+        return _hProxyModels.value(type);
 
-    return _pProxyModel;
+    return nullptr;
 }
 
 QModelIndex TabWidgetEditor::m_index(const QModelIndex &index, QAbstractItemModel * proxy)
@@ -56,6 +63,11 @@ QModelIndex TabWidgetEditor::m_index(const QModelIndex &index, QAbstractItemMode
 QModelIndex TabWidgetEditor::p_index(const QModelIndex &index, QAbstractItemModel * proxy)
 {
     return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapFromSource(index);
+}
+
+QAbstractProxyModel * TabWidgetEditor::proxy(QAbstractItemModel *model)
+{
+    return reinterpret_cast<QAbstractProxyModel*>(model);
 }
 
 DomItem * TabWidgetEditor::item(const QModelIndex &index, QAbstractItemModel * proxy)
@@ -86,8 +98,8 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
         connect(action, &QAction::triggered, this, &TabWidgetEditor::slot_delVariable);
         toolbar->setIconSize(QSize(16,16));
         auto table = new TableView;
-        table->setModel(proxyModel());
-        table->setRootIndex(p_index(m_index(index), proxyModel()));
+        table->setModel(proxyModel(static_cast<DomItem::ItemType>(item(index)->type())));
+        table->setRootIndex(p_index(m_index(index), proxyModel(static_cast<DomItem::ItemType>(item(index)->type()))));
         table->setColumnHidden(0, true);
         table->setSelectionBehavior(QAbstractItemView::SelectRows);
         table->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -154,7 +166,7 @@ void TabWidgetEditor::slot_addVariable()
     parentItem->addEmptyNode();
 
     // add item
-    proxyModel()->sourceModel()->insertRow(parentItem->rowCount(), index);
+    proxy(_hTables.value(widget(currentIndex()))->model())->sourceModel()->insertRow(parentItem->rowCount(), index);
 }
 
 void TabWidgetEditor::slot_delVariable()
@@ -169,7 +181,7 @@ void TabWidgetEditor::slot_delVariable()
         parentItem->removeChild(m_index(index).row(), 0, childNode);
 
         // delete item
-        proxyModel()->sourceModel()->
+        proxy(_hTables.value(widget(currentIndex()))->model())->sourceModel()->
             removeRow(m_index(index).row(), m_index(_hTables.value(currentWidget())->rootIndex()));
     }
 }

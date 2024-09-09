@@ -115,7 +115,22 @@ private:
 // ----------------------------------------------------------------------------
 
 
-typedef ItemValue_NodeName ItemValue_TypeSimple;
+// ----------------------------------------------------------------------------
+// *** ItemValue_TypeSimple***
+
+/*!
+ * \brief The ItemValue_TypeSimple
+ */
+
+class ItemValue_TypeSimple : public ItemValue
+{
+public:
+    ItemValue_TypeSimple(const QDomNode &node/*, const QDomNode &parent = {}*/);
+
+    [[nodiscard]] QString get() const override;
+    void set(const QString &value) override;
+};
+// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** ItemValue_TypeDerived ***
@@ -165,13 +180,26 @@ private:
 class ItemValue_InitialValue : public ItemValue
 {
 public:
+    enum class ValueType
+    {
+        valueEmpty,
+        valueSimple,
+        valueSimple_struct,
+        valueSimple_array,
+        valueStruct,
+        valueArray
+    };
+public:
     ItemValue_InitialValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
 
 public:
-    [[nodiscard]] static ItemValue * create(const QDomNode &node/*, const QDomNode &parent*/);
+    [[nodiscard]] static ValueType type(const QDomNode &node);
+    [[nodiscard]] static ValueType type(const QString &value, ItemValue_InitialValue::ValueType parentType = ValueType::valueEmpty);
+    [[nodiscard]] static ItemValue * create(const QDomNode &node);
+    [[nodiscard]] static ItemValue * create(const QDomNode &node, ValueType type);
 
 private:
     QSharedPointer<ItemValue> m_value;

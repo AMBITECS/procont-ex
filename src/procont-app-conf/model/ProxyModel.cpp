@@ -15,8 +15,9 @@ bool ProxyModelTree_pou::filterAcceptsRow(int sourceRow, const QModelIndex &sour
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
     DomItem *item = static_cast<DomItem*>(index.internalPointer());
-    // Q_ASSERT(item);
+
     if(!item) return false;
+
     QDomNode node = item->node();
 
     return
@@ -61,8 +62,9 @@ bool ProxyModelTree_dev::filterAcceptsRow(int sourceRow, const QModelIndex &sour
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
     DomItem *item = static_cast<DomItem*>(index.internalPointer());
-    // Q_ASSERT(item);
+
     if(!item) return false;
+
     QDomNode node = item->node();
 
     return
@@ -143,6 +145,9 @@ QVariant ProxyModelTable_var::headerData(int section, Qt::Orientation orientatio
             break;
         }
     }
+
+    if (orientation == Qt::Vertical && role == Qt::DisplayRole)
+        return QString("   ");
 
     return sourceModel()->headerData(section, orientation, role);
 }

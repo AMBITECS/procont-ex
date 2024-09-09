@@ -178,42 +178,42 @@
 <context>
     <name>ProxyModelTable_var</name>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="127"/>
+        <location filename="../model/ProxyModel.cpp" line="129"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="131"/>
+        <location filename="../model/ProxyModel.cpp" line="133"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="129"/>
+        <location filename="../model/ProxyModel.cpp" line="131"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="133"/>
+        <location filename="../model/ProxyModel.cpp" line="135"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="135"/>
+        <location filename="../model/ProxyModel.cpp" line="137"/>
         <source>Data type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="137"/>
+        <location filename="../model/ProxyModel.cpp" line="139"/>
         <source>Initial Value</source>
         <translation>Инициализация</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="139"/>
+        <location filename="../model/ProxyModel.cpp" line="141"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="141"/>
+        <location filename="../model/ProxyModel.cpp" line="143"/>
         <source>Attributes</source>
         <translation>Атрибуты</translation>
     </message>

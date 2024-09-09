@@ -9,7 +9,7 @@
 
 QHash<QString, QString> ItemValue_Type::m_types = {
     {"localVars", "VAR"}, {"inputVars", "VAR_INPUT"}, {"outputVars", "VAR_OUTPUT"},
-    {"inOutVars", "VAR_IN_OUT"}, {"tempVars", "VAR_TEMP"}, {"externalVars", "VAR_EXTERNAL"}};
+    {"inOutVars", "VAR_IN_OUT"}, {"tempVars", "VAR_TEMP"}, {"externalVars", "VAR_EXTERNAL"}, {"globalVars", "VAR_GLOBAL"} };
 
 QHash<QString, QString> ItemValue_Type::m_modifiers_i = {
     {"constant", "CONSTANT"}, {"persistent", "PERSISTENT"}, {"nonpersistent", "PERSISTENT"},
@@ -150,8 +150,6 @@ ItemValue_DataType::ItemValue_DataType(const QDomNode &node/*, const QDomNode &p
 
 ItemValue_DataType::ValueType ItemValue_DataType::type(const QDomNode &node)
 {
-    qDebug() << __PRETTY_FUNCTION__ << node.nodeName();
-
     if(node.firstChild().nodeName() == "derived")
         return ValueType::valueDerived;
 
@@ -163,10 +161,9 @@ ItemValue_DataType::ValueType ItemValue_DataType::type(const QDomNode &node)
 
 ItemValue_DataType::ValueType ItemValue_DataType::type(const QString &value)
 {
-    qDebug() << __PRETTY_FUNCTION__ << value;
-
     static QRegularExpression re_array("ARRAY\\s+\\[\\d+\.\.\\d+\\]\\s+OF\\s+");
-    if(re_array.match(value).hasMatch())
+    QRegularExpressionMatch match = re_array.match(value);
+    if(match.hasMatch() && match.capturedStart() == 0)
         return ValueType::valueArray;
 
     if(m_simpleTypes.contains(value))
@@ -198,7 +195,34 @@ QString ItemValue_DataType::get() const
 
 void ItemValue_DataType::set(const QString &value)
 {
+    ValueType type_old = type(node());
+    ValueType type_new = type(value);
+
+    if(type_new != type_old)
+        m_value.reset(create(node(), type_new));
+
     m_value->set(value);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ItemValue_TypeSimple ***
+
+ItemValue_TypeSimple::ItemValue_TypeSimple(const QDomNode &node/*, const QDomNode &parent*/) :
+    ItemValue(node/*, parent*/)
+{
+}
+
+QString ItemValue_TypeSimple::get() const
+{
+    return node().firstChild().nodeName();
+}
+
+void ItemValue_TypeSimple::set(const QString &value)
+{
+    node().removeChild(node().firstChild());
+    QDomNode new_node = node().ownerDocument().createElement(value);
+    node().appendChild(new_node);
 }
 // ----------------------------------------------------------------------------
 
@@ -217,8 +241,6 @@ QString ItemValue_TypeDerived::get() const
 
 void ItemValue_TypeDerived::set(const QString &value)
 {
-    qDebug() << __PRETTY_FUNCTION__ << value;
-
     node().removeChild(node().firstChild());
     QDomNode new_node = node().ownerDocument().createElement("derived");
     new_node.toElement().setAttribute("name", value);
@@ -250,8 +272,6 @@ QString ItemValue_TypeArray::get() const
 
 void ItemValue_TypeArray::set(const QString &value)
 {
-    qDebug() << __PRETTY_FUNCTION__ << node().nodeName();
-
     node().removeChild(node().firstChild());
 
     static QRegularExpression re_array("ARRAY\\s+\\[\\d+\.\.\\d+\\]\\s+OF\\s+");
@@ -277,7 +297,6 @@ void ItemValue_TypeArray::set(const QString &value)
     }
 
     match_array = re_array.match(value_current);
-    qDebug() << __PRETTY_FUNCTION__ << static_cast<int>(ItemValue_DataType::type(value_current));
     if(match_array.hasMatch())
         m_value.reset(new ItemValue_TypeArray(node().firstChild().namedItem("baseType"), value_current));
     else
@@ -295,20 +314,59 @@ ItemValue_InitialValue::ItemValue_InitialValue(const QDomNode &node/*, const QDo
 {
 }
 
-ItemValue * ItemValue_InitialValue::create(const QDomNode &node/*, const QDomNode &parent*/)
+ItemValue_InitialValue::ValueType ItemValue_InitialValue::type(const QDomNode &node)
 {
     if(node.firstChild().nodeName() == "structValue")
-        return new ItemValue_StructValue(node/*, parent*/);
+        return ValueType::valueStruct;
 
     if(node.firstChild().nodeName() == "arrayValue")
-        return new ItemValue_ArrayValue(node/*, parent*/);
+        return ValueType::valueArray;
 
     if(node.firstChild().nodeName() == "simpleValue" && node.toElement().hasAttribute("member"))
-        return new ItemValue_SimpleValue_struct(node/*, parent*/);
+        return ValueType::valueSimple_struct;
     if(node.firstChild().nodeName() == "simpleValue" && !node.toElement().hasAttribute("member"))
-        return new ItemValue_SimpleValue_array(node/*, parent*/);
+        return ValueType::valueSimple_array;
 
-    return new ItemValue_SimpleValue(node/*, parent*/);
+    return ValueType::valueSimple;
+}
+
+ItemValue_InitialValue::ValueType ItemValue_InitialValue::type(const QString &value, ItemValue_InitialValue::ValueType parentType)
+{
+    static QRegularExpression re_repeat("\\d+[\\(|\\[]");
+
+    if(value.at(0) == '[')
+        return ValueType::valueArray;
+
+    if(value.at(0) == '(')
+        return ValueType::valueStruct;
+
+    static QRegularExpression re_struct = QRegularExpression("\\s+\\:\\=\\s+");
+    if(re_struct.match(value).hasMatch())
+        return ValueType::valueSimple_struct;
+
+    return ValueType::valueSimple;
+}
+
+ItemValue * ItemValue_InitialValue::create(const QDomNode &node, ItemValue_InitialValue::ValueType type)
+{
+    if(type == ValueType::valueStruct)
+        return new ItemValue_StructValue(node);
+
+    if(type == ValueType::valueArray)
+        return new ItemValue_ArrayValue(node);
+
+    if(type == ValueType::valueSimple_struct)
+        return new ItemValue_SimpleValue_struct(node);
+
+    if(type == ValueType::valueSimple_array)
+        return new ItemValue_SimpleValue_array(node);
+
+    return new ItemValue_SimpleValue(node);
+}
+
+ItemValue * ItemValue_InitialValue::create(const QDomNode &node)
+{
+    return create(node, type(node));
 }
 
 QString ItemValue_InitialValue::get() const
@@ -318,6 +376,11 @@ QString ItemValue_InitialValue::get() const
 
 void ItemValue_InitialValue::set(const QString &value)
 {
+    ValueType type_old = type(node());
+    ValueType type_new = type(value);
+
+    qDebug() << __PRETTY_FUNCTION__ << static_cast<int>(type_old) << static_cast<int>(type_new);
+
     m_value->set(value);
 }
 // ----------------------------------------------------------------------------
@@ -446,19 +509,21 @@ QString ItemValue_StructValue::get() const
 
 void ItemValue_StructValue::set(const QString &value)
 {
-    // for(auto & i : m_values)
-    //     i->set(QString());
-    // m_values.clear();
+    for(auto & i : m_values)
+        i->set(QString());
+    m_values.clear();
 
     // ItemValue * item = nullptr;
-    // for(const auto & i : QString(value).remove('(').remove(')').split(", "))
-    // {
-    //     qDebug() << __PRETTY_FUNCTION__ << node().nodeName() << parent().nodeName();
+    for(const auto & i : QString(value).remove('(').remove(')').split(", "))
+    {
+        qDebug() << static_cast<int>(ItemValue_InitialValue::type(i));
 
-    //     item = new ItemValue_SimpleValue_struct(QDomNode(), node().firstChild());
-    //     item->set(i);
-    //     m_values.append(QSharedPointer<ItemValue>(item));
-    // }
+        // qDebug() << __PRETTY_FUNCTION__ << node().nodeName() << parent().nodeName();
+
+        // item = new ItemValue_SimpleValue_struct(QDomNode(), node().firstChild());
+        // item->set(i);
+        // m_values.append(QSharedPointer<ItemValue>(item));
+    }
 }
 // ----------------------------------------------------------------------------
 

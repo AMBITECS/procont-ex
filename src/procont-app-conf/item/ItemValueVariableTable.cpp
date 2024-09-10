@@ -406,26 +406,26 @@ void ItemValue_SimpleValue_struct::set(const QString &value)
 {
     // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
 
-    // parent().removeChild(node());
-    // m_node = {};
+    parent().removeChild(node());
+    m_node = {};
 
     // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 
-    // if(!value.size())
-    //     return;
+    if(!value.size())
+        return;
 
-    // static QRegularExpression re = QRegularExpression("\\s+\\:\\=\\s+");
-    // QStringList key_value = QString(value).split(re);
+    static QRegularExpression re = QRegularExpression("\\s+\\:\\=\\s+");
+    QStringList key_value = QString(value).split(re);
 
-    // if(key_value.size() > 1 && !key_value.at(1).isEmpty())
-    // {
-    //     QDomNode new_node = parent().ownerDocument().createElement(m_nodeName);
-    //     QDomNode new_child = parent().ownerDocument().createElement(m_chNodeName);
-    //     new_child.toElement().setAttribute(m_chAttrName, key_value.at(1));
-    //     m_node = parent().appendChild(new_node);
-    //     m_node.toElement().setAttribute("member", key_value.at(0));
-    //     node().appendChild(new_child);
-    // }
+    if(key_value.size() > 1 && !key_value.at(1).isEmpty())
+    {
+        QDomNode new_node = parent().ownerDocument().createElement(m_nodeName);
+        QDomNode new_child = parent().ownerDocument().createElement(m_chNodeName);
+        new_child.toElement().setAttribute(m_chAttrName, key_value.at(1));
+        m_node = parent().appendChild(new_node);
+        m_node.toElement().setAttribute("member", key_value.at(0));
+        node().appendChild(new_child);
+    }
 
     // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 }
@@ -509,18 +509,28 @@ QString ItemValue_StructValue::get() const
 
 void ItemValue_StructValue::set(const QString &value)
 {
-    for(auto & i : m_values)
-        i->set(QString());
+    // for(auto & i : m_values)
+    //     i->set(QString());
     m_values.clear();
+    node().removeChild(node().firstChild());
+
+    // qDebug() << node().nodeName() << parent().nodeName();
+    // QStringList values = QString(value).remove('(').remove(')').split(", ");
+    // if(values.size())
+    // {
+    //     QDomNode new_node = parent().ownerDocument().createElement("structValue");
+    //     node().appendChild(new_node);
+    // }
 
     // ItemValue * item = nullptr;
     for(const auto & i : QString(value).remove('(').remove(')').split(", "))
     {
-        qDebug() << static_cast<int>(ItemValue_InitialValue::type(i));
+        qDebug() << i << static_cast<int>(ItemValue_InitialValue::type(i));
 
-        // qDebug() << __PRETTY_FUNCTION__ << node().nodeName() << parent().nodeName();
+        // QDomNode new_child = parent().ownerDocument().createElement("value");
+        // node.firstChild().appendChild(new_child);
 
-        // item = new ItemValue_SimpleValue_struct(QDomNode(), node().firstChild());
+        // item = ItemValue_InitialValue::create(node().firstChild());
         // item->set(i);
         // m_values.append(QSharedPointer<ItemValue>(item));
     }
@@ -561,13 +571,14 @@ void ItemValue_ArrayValue::set(const QString &value)
     // m_values.clear();
 
     // ItemValue * item = nullptr;
-    // for(const auto & i : QString(value).remove('[').remove(']').split(", "))
-    // {
+    for(const auto & i : QString(value).remove('[').remove(']').split(", "))
+    {
+        qDebug() << i << static_cast<int>(ItemValue_InitialValue::type(i));
     //     qDebug() << __PRETTY_FUNCTION__ << node().nodeName() << parent().nodeName();
 
     //     item = new ItemValue_SimpleValue_array(QDomNode(), node().firstChild());
     //     item->set(i);
     //     m_values.append(QSharedPointer<ItemValue>(item));
-    // }
+    }
 }
 // ----------------------------------------------------------------------------

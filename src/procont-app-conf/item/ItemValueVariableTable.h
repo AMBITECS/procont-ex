@@ -191,6 +191,7 @@ public:
     };
 public:
     ItemValue_InitialValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_InitialValue(const QDomNode &node, const QString &);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;

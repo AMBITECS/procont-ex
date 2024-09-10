@@ -6,8 +6,8 @@
 // *** ItemValue interface ***
 
 ItemValue::ItemValue(const QDomNode &node/*, const QDomNode &parent*/) :
-    m_node(node),
-    m_parent(node.parentNode())
+    m_node(node)/*,
+    m_parent(node.parentNode())*/
 {
 }
 // ----------------------------------------------------------------------------

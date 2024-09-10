@@ -193,19 +193,6 @@ public:
         valueArray
     };
 public:
-    ItemValue_InitialValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
-    ItemValue_InitialValue(const QDomNode &node, const QString &);
-
-    [[nodiscard]] QString get() const override;
-    void set(const QString &value) override;
-
-public:
-    [[nodiscard]] static ValueType type(const QDomNode &node);
-    [[nodiscard]] static ValueType type(const QString &value, ItemValue_InitialValue::ValueType parentType = ValueType::valueEmpty);
-    [[nodiscard]] static ItemValue * create(const QDomNode &node);
-    [[nodiscard]] static ItemValue * create(const QDomNode &node, ValueType type);
-
-private:
     struct InitialValue
     {
         int repeate = 1;
@@ -224,6 +211,22 @@ private:
         }
 
     };
+public:
+    ItemValue_InitialValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_InitialValue(const QDomNode &node, const QString &);
+
+    [[nodiscard]] QString get() const override;
+    void set(const QString &value) override;
+
+public:
+    [[nodiscard]] static ValueType type(const QDomNode &node);
+    [[nodiscard]] static ValueType type(const QString &value, ItemValue_InitialValue::ValueType parentType = ValueType::valueEmpty);
+    [[nodiscard]] static ItemValue * create(const QDomNode &node);
+    [[nodiscard]] static ItemValue * create(const QDomNode &node, ValueType type);
+    [[nodiscard]] static ItemValue * create(QDomNode &node, ValueType type, ItemValue_InitialValue::InitialValue values);
+
+public:
+
     class InitialValue_parser
     {
     public:
@@ -477,13 +480,29 @@ public:
 class ItemValue_SimpleValue_struct : public ItemValue_SubNodeAttr
 {
 public:
-    ItemValue_SimpleValue_struct(const QDomNode &node/*, const QDomNode &parent = {}*/) :
+    ItemValue_SimpleValue_struct(const QDomNode & node/*, const QDomNode &parent = {}*/) :
         ItemValue_SubNodeAttr(node/*, parent*/)
     {
         setNodeName("value");
         setChNodeName("simpleValue");
         setChAttrName("value");
     }
+    ItemValue_SimpleValue_struct(QDomNode & node, const ItemValue_InitialValue::InitialValue & values) :
+        ItemValue_SubNodeAttr(node)
+    {
+        setNodeName("value");
+        setChNodeName("simpleValue");
+        setChAttrName("value");
+
+        qDebug() << __PRETTY_FUNCTION__ << node.nodeName() << node.ownerDocument().nodeName();
+
+        // QDomNode new_node = node.ownerDocument().createElement("value");
+        // QDomNode new_child = node.ownerDocument().createElement("simpleValue");
+        // new_node.appendChild(new_child);
+        // node.appendChild(new_node);
+        set(values.value);
+    }
+
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
 };
@@ -523,6 +542,7 @@ class ItemValue_StructValue : public ItemValue
 public:
 
     ItemValue_StructValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_StructValue(QDomNode &node, ItemValue_InitialValue::InitialValue & values);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;

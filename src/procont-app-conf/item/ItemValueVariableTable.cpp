@@ -267,7 +267,7 @@ QString ItemValue_TypeArray::get() const
 {
     auto dim = node().firstChild().namedItem("dimension").toElement();
 
-    return QString("ARRAY [%1..%2] OF %3").arg(dim.attribute("lower"), dim.attribute("upper")).arg(m_value->get());
+    return QString("ARRAY [%1..%2] OF %3").arg(dim.attribute("lower"), dim.attribute("upper"), m_value->get());
 }
 
 void ItemValue_TypeArray::set(const QString &value)
@@ -332,15 +332,13 @@ ItemValue_InitialValue::ValueType ItemValue_InitialValue::type(const QDomNode &n
 
 ItemValue_InitialValue::ValueType ItemValue_InitialValue::type(const QString &value, ItemValue_InitialValue::ValueType parentType)
 {
-    static QRegularExpression re_repeat("\\d+[\\(|\\[]");
-
     if(value.at(0) == '[')
         return ValueType::valueArray;
 
     if(value.at(0) == '(')
         return ValueType::valueStruct;
 
-    static QRegularExpression re_struct = QRegularExpression("\\s+\\:\\=\\s+");
+    static QRegularExpression re_struct = QRegularExpression("\\:\\=");
     if(re_struct.match(value).hasMatch())
         return ValueType::valueSimple_struct;
 
@@ -379,9 +377,17 @@ void ItemValue_InitialValue::set(const QString &value)
     ValueType type_old = type(node());
     ValueType type_new = type(value);
 
+    InitialValue v;
+    qDebug() << __PRETTY_FUNCTION__ << InitialValue_parser::parse(value, ItemValue_InitialValue::ValueType::valueEmpty, v);
+    qDebug() << v.print();
+
+    qDebug() << __PRETTY_FUNCTION__ << node().nodeName() << parent().nodeName();
     qDebug() << __PRETTY_FUNCTION__ << static_cast<int>(type_old) << static_cast<int>(type_new);
 
-    m_value->set(value);
+    node().removeChild(node().firstChild());
+
+
+    // m_value->set(value);
 }
 // ----------------------------------------------------------------------------
 

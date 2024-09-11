@@ -40,7 +40,7 @@ TabWidgetEditor * TabWidgetEditor::instance()
 
 void TabWidgetEditor::setModel(QAbstractItemModel *model_)
 {
-    for(auto i : _hProxyModels)
+    for(auto i : std::as_const(_hProxyModels))
         i->setSourceModel(model_);
 }
 

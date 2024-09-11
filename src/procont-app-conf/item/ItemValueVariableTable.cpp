@@ -1,7 +1,5 @@
 #include "ItemValueVariableTable.h"
 
-#include "ItemValueCreator.h"
-
 #include <QRegularExpression>
 
 // ----------------------------------------------------------------------------
@@ -26,8 +24,8 @@ QHash<QString, QString> ItemValue_Type::m_modifiers_values_o = {
     {"constant", "true"}, {"persistent", "true"}, {"retain", "true"}};
 
 
-ItemValue_Type::ItemValue_Type(const QDomNode &node/*, const QDomNode &parent*/) :
-    ItemValue(node/*, parent*/)
+ItemValue_Type::ItemValue_Type(const QDomNode &node) :
+    ItemValue(node)
 {
 }
 
@@ -38,8 +36,8 @@ QString ItemValue_Type::type(const QString &value)
 
     QString type = {};
     for(const auto & i : list)
-    {
-        if(m_types.values().contains(i) && type.isEmpty())
+    {     
+        if(std::find(m_types.cbegin(), m_types.cend(), i) != m_types.cend() && type.isEmpty())
             type = m_types.key(i);
     }
 
@@ -142,9 +140,9 @@ QStringList ItemValue_DataType::m_simpleTypes = {
     "BOOL", "BYTE", "WORD", "DWORD", "LWORD", "SINT", "INT", "DINT", "LINT",
     "USINT", "UINT", "UDINT", "ULINT", "REAL", "LREAL", "TIME", "DATE", "DT", "TOD", "string", "wstring" };
 
-ItemValue_DataType::ItemValue_DataType(const QDomNode &node/*, const QDomNode &parent*/) :
-    ItemValue(node/*, parent*/),
-    m_value(create(node/*, parent*/))
+ItemValue_DataType::ItemValue_DataType(const QDomNode &node) :
+    ItemValue(node),
+    m_value(create(node))
 {
 }
 
@@ -161,7 +159,7 @@ ItemValue_DataType::ValueType ItemValue_DataType::type(const QDomNode &node)
 
 ItemValue_DataType::ValueType ItemValue_DataType::type(const QString &value)
 {
-    static QRegularExpression re_array("ARRAY\\s+\\[\\d+\.\.\\d+\\]\\s+OF\\s+");
+    static QRegularExpression re_array("ARRAY\\s+\\[\\d+\\.\\.\\d+\\]\\s+OF\\s+");
     QRegularExpressionMatch match = re_array.match(value);
     if(match.hasMatch() && match.capturedStart() == 0)
         return ValueType::valueArray;
@@ -208,8 +206,8 @@ void ItemValue_DataType::set(const QString &value)
 // ----------------------------------------------------------------------------
 // *** ItemValue_TypeSimple ***
 
-ItemValue_TypeSimple::ItemValue_TypeSimple(const QDomNode &node/*, const QDomNode &parent*/) :
-    ItemValue(node/*, parent*/)
+ItemValue_TypeSimple::ItemValue_TypeSimple(const QDomNode &node) :
+    ItemValue(node)
 {
 }
 
@@ -229,8 +227,8 @@ void ItemValue_TypeSimple::set(const QString &value)
 // ----------------------------------------------------------------------------
 // *** ItemValue_TypeDerived ***
 
-ItemValue_TypeDerived::ItemValue_TypeDerived(const QDomNode &node/*, const QDomNode &parent*/) :
-    ItemValue(node/*, parent*/)
+ItemValue_TypeDerived::ItemValue_TypeDerived(const QDomNode &node) :
+    ItemValue(node)
 {
 }
 
@@ -251,14 +249,14 @@ void ItemValue_TypeDerived::set(const QString &value)
 // ----------------------------------------------------------------------------
 // *** ItemValue_TypeArray ***
 
-ItemValue_TypeArray::ItemValue_TypeArray(const QDomNode &node/*, const QDomNode &parent*/) :
-    ItemValue(node/*, parent*/),
+ItemValue_TypeArray::ItemValue_TypeArray(const QDomNode &node) :
+    ItemValue(node),
     m_value(ItemValue_DataType::create(node.firstChild().namedItem("baseType")))
 {
 }
 
 ItemValue_TypeArray::ItemValue_TypeArray(const QDomNode &node, const QString &value) :
-    ItemValue(node/*, parent*/),
+    ItemValue(node),
     m_value(ItemValue_DataType::create(node.firstChild().namedItem("baseType"), ItemValue_DataType::type(value)))
 {
 }
@@ -274,7 +272,7 @@ void ItemValue_TypeArray::set(const QString &value)
 {
     node().removeChild(node().firstChild());
 
-    static QRegularExpression re_array("ARRAY\\s+\\[\\d+\.\.\\d+\\]\\s+OF\\s+");
+    static QRegularExpression re_array("ARRAY\\s+\\[\\d+\\.\\.\\d+\\]\\s+OF\\s+");
     static QRegularExpression re_digit("\\d+");
     static QRegularExpression space("\\s+$");
     auto value_current = QString(value);
@@ -308,9 +306,9 @@ void ItemValue_TypeArray::set(const QString &value)
 // ----------------------------------------------------------------------------
 // *** ItemValue_InitialValue ***
 
-ItemValue_InitialValue::ItemValue_InitialValue(const QDomNode &node/*, const QDomNode &parent*/) :
-    ItemValue(node/*, parent*/),
-    m_value(create(node/*, parent*/))
+ItemValue_InitialValue::ItemValue_InitialValue(const QDomNode &node) :
+    ItemValue(node),
+    m_value(create(node))
 {
 }
 
@@ -411,8 +409,6 @@ void ItemValue_InitialValue::set(const QString &value)
 
 QString ItemValue_SimpleValue_struct::get() const
 {
-    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << node().toElement().namedItem(m_nodeName).toElement().attribute(m_chAttrName);
-
     QString value = QString("%1 := %2")
                         .arg(node().toElement().attribute("member"))
                         .arg(node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName));
@@ -425,17 +421,11 @@ QString ItemValue_SimpleValue_struct::get() const
 
 void ItemValue_SimpleValue_struct::set(const QString &value)
 {
-    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
-
     parent().removeChild(node());
     m_node = {};
 
-    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
-
     if(!value.size())
         return;
-
-    qDebug() << __PRETTY_FUNCTION__;
 
     QString repetition = {}, value_set = {};
     int i = value.indexOf("(");
@@ -463,8 +453,6 @@ void ItemValue_SimpleValue_struct::set(const QString &value)
         m_node.toElement().setAttribute("member", key_value.at(0));
         node().appendChild(new_child);
     }
-
-    // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 }
 // ----------------------------------------------------------------------------
 
@@ -473,8 +461,6 @@ void ItemValue_SimpleValue_struct::set(const QString &value)
 
 QString ItemValue_SimpleValue_array::get() const
 {
-    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << node().toElement().namedItem(m_nodeName).toElement().attribute(m_chAttrName);
-
     QString value = node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
     if(node().toElement().hasAttribute("repetitionValue"))
         value = QString("%1(%2)").arg(node().toElement().attribute("repetitionValue")).arg(value);
@@ -484,17 +470,11 @@ QString ItemValue_SimpleValue_array::get() const
 
 void ItemValue_SimpleValue_array::set(const QString &value)
 {
-    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
-
     parent().removeChild(node());
     m_node = {};
 
-    // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
-
     if(!value.isEmpty())
     {
-        qDebug() << __PRETTY_FUNCTION__;
-
         QString repetition = {}, value_set = {};
         int i = value.indexOf("(");
         if(i != -1)
@@ -514,21 +494,19 @@ void ItemValue_SimpleValue_array::set(const QString &value)
         m_node = parent().appendChild(new_node);
         node().appendChild(new_child);
     }
-
-    // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** ItemValue_StructValue ***
 
-ItemValue_StructValue::ItemValue_StructValue(const QDomNode &node/*, const QDomNode &parent*/) :
-    ItemValue(node/*, parent*/)
+ItemValue_StructValue::ItemValue_StructValue(const QDomNode &node) :
+    ItemValue(node)
 {
     QDomNodeList values = node.firstChild().toElement().childNodes();
     for(auto i=0;i<values.count();i++)
         if(values.at(i).nodeName() == "value")
-            m_values.append(QSharedPointer<ItemValue>(ItemValue_InitialValue::create(values.at(i)/*, node.firstChild()*/)));
+            m_values.append(QSharedPointer<ItemValue>(ItemValue_InitialValue::create(values.at(i))));
 }
 
 ItemValue_StructValue::ItemValue_StructValue(QDomNode & node, ItemValue_InitialValue::InitialValue & value) :
@@ -536,7 +514,6 @@ ItemValue_StructValue::ItemValue_StructValue(QDomNode & node, ItemValue_InitialV
 {
     QDomNode node_new = node.ownerDocument().createElement("structValue");
     node_new = node.appendChild(node_new);
-    // m_parent = node;
 
     ItemValue * item = nullptr;
     for(auto & i : value.values)
@@ -576,13 +553,13 @@ void ItemValue_StructValue::set(const QString &)
 // ----------------------------------------------------------------------------
 // *** ItemValue_ArrayValue ***
 
-ItemValue_ArrayValue::ItemValue_ArrayValue(const QDomNode &node/*, const QDomNode &parent*/) :
-    ItemValue(node/*, parent*/)
+ItemValue_ArrayValue::ItemValue_ArrayValue(const QDomNode &node) :
+    ItemValue(node)
 {
     QDomNodeList values = node.firstChild().toElement().childNodes();
     for(auto i=0;i<values.count();i++)
         if(values.at(i).nodeName() == "value")
-            m_values.append(QSharedPointer<ItemValue>(ItemValue_InitialValue::create(values.at(i)/*, node.firstChild()*/)));
+            m_values.append(QSharedPointer<ItemValue>(ItemValue_InitialValue::create(values.at(i))));
 }
 
 ItemValue_ArrayValue::ItemValue_ArrayValue(QDomNode & node, ItemValue_InitialValue::InitialValue & value) :
@@ -590,7 +567,6 @@ ItemValue_ArrayValue::ItemValue_ArrayValue(QDomNode & node, ItemValue_InitialVal
 {
     QDomNode node_new = node.ownerDocument().createElement("arrayValue");
     node_new = node.appendChild(node_new);
-    // m_parent = node;
 
     ItemValue * item = nullptr;
     for(auto & i : value.values)
@@ -622,12 +598,7 @@ QString ItemValue_ArrayValue::get() const
 
 void ItemValue_ArrayValue::set(const QString &)
 {
-    qDebug() << __PRETTY_FUNCTION__ << node().nodeName();
-
     for(auto i : m_initial.keys())
-    {
-        qDebug() << __PRETTY_FUNCTION__ << m_initial.value(i).value;
         i->set(m_initial.value(i).value);
-    }
 }
 // ----------------------------------------------------------------------------

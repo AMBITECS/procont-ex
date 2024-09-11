@@ -4,7 +4,6 @@
 #include <QTabWidget>
 
 QT_FORWARD_DECLARE_CLASS(DomItem)
-// QT_FORWARD_DECLARE_CLASS(ProxyModelTable_var)
 QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
 QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
 
@@ -48,7 +47,6 @@ private:
 
 private:
     static TabWidgetEditor * _instance;
-    // static ProxyModelTable_var * _pProxyModel;
     static QHash<DomItem::ItemType, QAbstractProxyModel*> _hProxyModels;
 
 private:

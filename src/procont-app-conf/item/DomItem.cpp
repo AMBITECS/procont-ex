@@ -1,6 +1,7 @@
 #include "DomItem.h"
 
 #include "ItemValue.h"
+#include "ItemValueVariableTable.h"
 
 #include <QtXml>
 
@@ -10,13 +11,9 @@
 QScopedPointer<DomItem_builder> DomItem::m_ItemBuilder = QScopedPointer<DomItem_builder>(new DomItem_builder);
 QStringList DomItem::m_discard = { "types", "pous", "instances", "configurations" };
 
-DomItem::DomItem(const QDomNode &node/*, const QDomNode &parent*/) :
+DomItem::DomItem(const QDomNode &node) :
     m_itemType(assignType(node)),
-    m_value(new ItemValue_Default(node/*, node.parentNode()*/))
-{
-}
-
-DomItem::~DomItem()
+    m_value(new ItemValue_Default(node))
 {
 }
 
@@ -132,11 +129,6 @@ void DomItem::setData(const QVariant &value, int role)
     m_value->set(value.toString());
 }
 
-// ItemValue * DomItem::itemValue() const
-// {
-//     return m_value.get();
-// }
-
 void DomItem::setItemValue(ItemValue *pointer)
 {
     m_value.reset(pointer);
@@ -144,50 +136,9 @@ void DomItem::setItemValue(ItemValue *pointer)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** DomItemType ***
-// DomItemType::DomItemType(const QDomNode &node, const QDomNode &parent) :
-//     DomItem(node, parent)
-// {
-// }
-
-// void DomItemType::setData(const QVariant &value, int role)
-// {
-//  /*   if(data(role) != value)
-//     {
-//         QString type_old = reinterpret_cast<ItemValue_Type*>(m_value.get())->type(data(role).toString());
-//         QString type_new = reinterpret_cast<ItemValue_Type*>(m_value.get())->type(value.toString());
-
-//         if(!type_new.isEmpty() && type_old != type_new)
-//         {
-//             QDomNode interface = parentItem()->node().toElement().elementsByTagName("interface").at(0);
-//             QDomNode vars_old = interface.namedItem(type_old);
-//             QDomNode vars_new = interface.namedItem(type_new);
-
-//             QHash<QString, QString> modifiers_old = reinterpret_cast<ItemValue_Type*>(m_value.get())->modifiers(value.toString());
-//             QHash<QString, QString> modifiers_new = reinterpret_cast<ItemValue_Type*>(m_value.get())->modifiers(vars_new);
-
-//             if(vars_new.isNull() || modifiers_old != modifiers_new)
-//             {
-//                 vars_new = interface.ownerDocument().createElement(type_new);
-//                 vars_new = interface.appendChild(vars_new);
-//                 for(const auto & i : modifiers_old.keys())
-//                     vars_new.toElement().setAttribute(i, modifiers_old.value(i));
-//             }
-//             QDomNode node_new = vars_new.appendChild(node().cloneNode());
-//             vars_old.removeChild(node());
-//             if(vars_old.childNodes().count() == 0)
-//                 interface.removeChild(vars_old);
-//             setItemValue(new ItemValue_Type(node_new, node_new.parentNode()));
-//         }
-//         else*/ m_value->set(value.toString());
-//    // }
-// }
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
 // *** DomItemVar ***
-DomItemVar::DomItemVar(const QDomNode &node/*, const QDomNode &parent*/) :
-    DomItem(node/*, node.parentNode()*/)
+DomItemVar::DomItemVar(const QDomNode &node) :
+    DomItem(node)
 {
 }
 
@@ -245,33 +196,33 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     childItem = itemBuilder()->build({});
     setChild(row, 1, childItem);
     // var type
-    childItem = itemBuilder()->build(node/*, node.parentNode()*/);
-    childItem->setItemValue(new ItemValue_Type(node/*, node.parentNode()*/));
+    childItem = itemBuilder()->build(node);
+    childItem->setItemValue(new ItemValue_Type(node));
     setChild(row, 2, childItem);
     // name
     childNode = node.attributes().namedItem("name");
     childItem = itemBuilder()->build(childNode);
-    childItem->setItemValue(new ItemValue_Name(childNode/*, node*/));
+    childItem->setItemValue(new ItemValue_Name(childNode));
     setChild(row, 3, childItem);
     // address
     childNode = node.attributes().namedItem("address");
-    childItem = itemBuilder()->build(childNode/*, node*/);
-    childItem->setItemValue(new ItemValue_Address(childNode/*, node*/));
+    childItem = itemBuilder()->build(childNode);
+    childItem->setItemValue(new ItemValue_Address(childNode));
     setChild(row, 4, childItem);
     // data type
     childNode = node.namedItem("type");
-    childItem = itemBuilder()->build(childNode/*, childNode.parentNode()*/);
-    childItem->setItemValue(new ItemValue_DataType(childNode/*, childNode.parentNode()*/));
+    childItem = itemBuilder()->build(childNode);
+    childItem->setItemValue(new ItemValue_DataType(childNode));
     setChild(row, 5, childItem);
     // initial value
     childNode = node.namedItem("initialValue");
-    childItem = itemBuilder()->build(childNode/*, node*/);
-    childItem->setItemValue(new ItemValue_InitialValue(childNode/*, node*/));
+    childItem = itemBuilder()->build(childNode);
+    childItem->setItemValue(new ItemValue_InitialValue(childNode));
     setChild(row, 6, childItem);
     // doc
     childNode = node.namedItem("documentation");
-    childItem = itemBuilder()->build(childNode/*, node*/);
-    childItem->setItemValue(new ItemValue_Documentation(childNode/*, node*/));
+    childItem = itemBuilder()->build(childNode);
+    childItem->setItemValue(new ItemValue_Documentation(childNode));
     setChild(row, 7, childItem);
     // attributes
     childItem = itemBuilder()->build({});
@@ -281,8 +232,8 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
 
 // ----------------------------------------------------------------------------
 // *** DomItemPou ***
-DomItemPou::DomItemPou(const QDomNode &node/*, const QDomNode &parent*/) :
-    DomItemVar(node/*, node.parentNode()*/)
+DomItemPou::DomItemPou(const QDomNode &node) :
+    DomItemVar(node)
 {
 }
 
@@ -351,25 +302,25 @@ void DomItemPou::setupChildren(const QDomNode & node)
 
 // ----------------------------------------------------------------------------
 // *** DomItem_creator ***
-DomItem * DomItem_creator::create(const QDomNode &node/*, const QDomNode &parent*/)
+DomItem * DomItem_creator::create(const QDomNode &node)
 {
-    return new DomItem(node/*, parent*/);
+    return new DomItem(node);
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** DomItemVar_creator ***
-DomItem * DomItemVar_creator::create(const QDomNode &node/*, const QDomNode &parent*/)
+DomItem * DomItemVar_creator::create(const QDomNode &node)
 {
-    return new DomItemVar(node/*, parent*/);
+    return new DomItemVar(node);
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** DomItemPou_creator ***
-DomItem * DomItemPou_creator::create(const QDomNode &node/*, const QDomNode &parent*/)
+DomItem * DomItemPou_creator::create(const QDomNode &node)
 {
-    return new DomItemPou(node/*, parent*/);
+    return new DomItemPou(node);
 }
 // ----------------------------------------------------------------------------
 
@@ -388,11 +339,11 @@ DomItem_builder::~DomItem_builder()
         delete creator;
 }
 
-DomItem * DomItem_builder::build(const QDomNode &node/*, const QDomNode &parent*/)
+DomItem * DomItem_builder::build(const QDomNode &node)
 {
     auto type = DomItem::assignType(node);
     if(m_creators.contains(type))
-        return m_creators.value(type)->create(node/*, parent*/);
+        return m_creators.value(type)->create(node);
 
     return nullptr;
 }

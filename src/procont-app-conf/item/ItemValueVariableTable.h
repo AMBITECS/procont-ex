@@ -3,30 +3,6 @@
 
 #include "ItemValue.h"
 
-// ----------------------------------------------------------------------------
-// *** ItemValueVariableTable ***
-
-/*!
- * \brief The ItemValueVariableTable
- */
-
-class ItemValueVariableTable
-{
-public:
-    // enum ValueType
-    // {
-    //     valueName = 101,
-    //     valueType = 102,
-    //     valueAddress = 103,
-    //     valueDataType = 103,
-    //     valueDataInit = 105,
-    //     valueDocumentation = 106
-    // };
-private:
-    ItemValueVariableTable() = default;
-};
-// ----------------------------------------------------------------------------
-
 typedef ItemValue_NodeValue ItemValue_Name;
 
 // ----------------------------------------------------------------------------
@@ -39,7 +15,7 @@ typedef ItemValue_NodeValue ItemValue_Name;
 class ItemValue_Type : public ItemValue
 {
 public:
-    ItemValue_Type(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_Type(const QDomNode &node);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -68,8 +44,8 @@ protected:
 class ItemValue_Address : public ItemValue_Attr_opt
 {
 public:
-    ItemValue_Address(const QDomNode &node/*, const QDomNode &parent = {}*/) :
-        ItemValue_Attr_opt(node/*, parent*/)
+    ItemValue_Address(const QDomNode &node) :
+        ItemValue_Attr_opt(node)
     {
         setName("address");
     }
@@ -93,7 +69,7 @@ public:
         valueArray
     };
 public:
-    ItemValue_DataType(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_DataType(const QDomNode &node);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -125,7 +101,7 @@ private:
 class ItemValue_TypeSimple : public ItemValue
 {
 public:
-    ItemValue_TypeSimple(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_TypeSimple(const QDomNode &node);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -142,7 +118,7 @@ public:
 class ItemValue_TypeDerived : public ItemValue
 {
 public:
-    ItemValue_TypeDerived(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_TypeDerived(const QDomNode &node);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -159,7 +135,7 @@ public:
 class ItemValue_TypeArray : public ItemValue
 {
 public:
-    ItemValue_TypeArray(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_TypeArray(const QDomNode &node);
     ItemValue_TypeArray(const QDomNode &node, const QString &value);
 
     [[nodiscard]] QString get() const override;
@@ -204,7 +180,7 @@ public:
         {
             QStringList str; str << QString("%1, %2, %3").arg(static_cast<int>(type)).arg(repeate).arg(value);
 
-            for(auto i : values)
+            for(const auto & i : values)
                 str << i.print();
 
             return str;
@@ -474,23 +450,12 @@ private:
 class ItemValue_SimpleValue: public ItemValue_SubNodeAttr
 {
 public:
-    ItemValue_SimpleValue(const QDomNode &node/*, const QDomNode &parent = {}*/) :
-        ItemValue_SubNodeAttr(node/*, parent*/)
-    {
-        setNodeName("initialValue");
-        setChNodeName("simpleValue");
-        setChAttrName("value");
-    }
-    ItemValue_SimpleValue(QDomNode & node/*, const ItemValue_InitialValue::InitialValue & value*/) :
+    ItemValue_SimpleValue(const QDomNode &node) :
         ItemValue_SubNodeAttr(node)
     {
         setNodeName("initialValue");
         setChNodeName("simpleValue");
         setChAttrName("value");
-
-        // qDebug() << __PRETTY_FUNCTION__ << node.nodeName();
-        // QDomNode new_child = node.ownerDocument().createElement("simpleValue");
-        // m_node = node.appendChild(new_child); m_parent = node;
     }
 };
 // ----------------------------------------------------------------------------
@@ -505,32 +470,12 @@ public:
 class ItemValue_SimpleValue_struct : public ItemValue_SubNodeAttr
 {
 public:
-    ItemValue_SimpleValue_struct(const QDomNode & node/*, const QDomNode &parent = {}*/) :
-        ItemValue_SubNodeAttr(node/*, parent*/)
-    {
-        setNodeName("value");
-        setChNodeName("simpleValue");
-        setChAttrName("value");
-    }
-    ItemValue_SimpleValue_struct(QDomNode & node/*, const ItemValue_InitialValue::InitialValue & value*/) :
+    ItemValue_SimpleValue_struct(const QDomNode & node) :
         ItemValue_SubNodeAttr(node)
     {
         setNodeName("value");
         setChNodeName("simpleValue");
         setChAttrName("value");
-
-        // qDebug() << __PRETTY_FUNCTION__ << node.nodeName() << node.ownerDocument().nodeName();
-
-        // QDomNode new_node = node.ownerDocument().createElement("value");
-        // QDomNode new_child = node.ownerDocument().createElement("simpleValue");
-
-        // qDebug() << __PRETTY_FUNCTION__ << new_node.nodeName() << new_node.ownerDocument().nodeName();
-        // qDebug() << __PRETTY_FUNCTION__ << new_child.nodeName() << new_child.ownerDocument().nodeName();
-        // new_node.appendChild(new_child);
-        // qDebug() << __PRETTY_FUNCTION__ << new_child.nodeName() << new_child.ownerDocument().nodeName();
-        // m_node = node.appendChild(new_node); m_parent = node;
-        // qDebug() << __PRETTY_FUNCTION__ << new_node.nodeName() << new_node.ownerDocument().nodeName();
-        // set(values.value);
     }
 
     [[nodiscard]] QString get() const override;
@@ -548,33 +493,14 @@ public:
 class ItemValue_SimpleValue_array : public ItemValue_SubNodeAttr
 {
 public:
-    ItemValue_SimpleValue_array(const QDomNode &node/*, const QDomNode &parent = {}*/) :
-        ItemValue_SubNodeAttr(node/*, parent*/)
-    {
-        setNodeName("value");
-        setChNodeName("simpleValue");
-        setChAttrName("value");
-    }
-    ItemValue_SimpleValue_array(QDomNode & node/*, const ItemValue_InitialValue::InitialValue & value*/) :
+    ItemValue_SimpleValue_array(const QDomNode &node) :
         ItemValue_SubNodeAttr(node)
     {
         setNodeName("value");
         setChNodeName("simpleValue");
         setChAttrName("value");
-
-        // qDebug() << __PRETTY_FUNCTION__ << node.nodeName() << node.ownerDocument().nodeName();
-
-        // QDomNode new_node = node.ownerDocument().createElement("value");
-        // QDomNode new_child = node.ownerDocument().createElement("simpleValue");
-
-        // qDebug() << __PRETTY_FUNCTION__ << new_node.nodeName() << new_node.ownerDocument().nodeName();
-        // qDebug() << __PRETTY_FUNCTION__ << new_child.nodeName() << new_child.ownerDocument().nodeName();
-        // new_node.appendChild(new_child);
-        // qDebug() << __PRETTY_FUNCTION__ << new_child.nodeName() << new_child.ownerDocument().nodeName();
-        // m_node = node.appendChild(new_node); m_parent = node;
-        // qDebug() << __PRETTY_FUNCTION__ << new_node.nodeName() << new_node.ownerDocument().nodeName();
-        // set(values.value);
     }
+
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
 };
@@ -591,7 +517,7 @@ class ItemValue_StructValue : public ItemValue
 {
 public:
 
-    ItemValue_StructValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_StructValue(const QDomNode &node);
     ItemValue_StructValue(QDomNode &node, ItemValue_InitialValue::InitialValue & values);
 
     [[nodiscard]] QString get() const override;
@@ -613,7 +539,7 @@ protected:
 class ItemValue_ArrayValue: public ItemValue
 {
 public:
-    ItemValue_ArrayValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_ArrayValue(const QDomNode &node);
     ItemValue_ArrayValue(QDomNode &node, ItemValue_InitialValue::InitialValue & values);
 
     [[nodiscard]] QString get() const override;
@@ -635,8 +561,8 @@ protected:
 class ItemValue_Documentation : public ItemValue_SubNodeValue
 {
 public:
-    ItemValue_Documentation(const QDomNode &node/*, const QDomNode &parent = {}*/) :
-        ItemValue_SubNodeValue(node/*, parent*/)
+    ItemValue_Documentation(const QDomNode &node) :
+        ItemValue_SubNodeValue(node)
     {
         setName("xhtml;xhtml:p");
     }

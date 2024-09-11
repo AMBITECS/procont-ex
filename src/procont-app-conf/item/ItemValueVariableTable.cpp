@@ -130,7 +130,7 @@ void ItemValue_Type::set(const QString &value_new)
         if(vars_old.childNodes().count() == 0)
             interface.removeChild(vars_old);
 
-        m_node = node_new; /*m_parent = vars_new;*/
+        m_node = node_new; m_parent = vars_new;
     }
 }
 // ----------------------------------------------------------------------------
@@ -338,9 +338,11 @@ ItemValue_InitialValue::ValueType ItemValue_InitialValue::type(const QString &va
     if(value.at(0) == '(')
         return ValueType::valueStruct;
 
-    static QRegularExpression re_struct = QRegularExpression("\\:\\=");
-    if(re_struct.match(value).hasMatch())
+    if(parentType == ValueType::valueStruct)
         return ValueType::valueSimple_struct;
+
+    if(parentType == ValueType::valueArray)
+        return ValueType::valueSimple_array;
 
     return ValueType::valueSimple;
 }
@@ -362,22 +364,21 @@ ItemValue * ItemValue_InitialValue::create(const QDomNode &node, ItemValue_Initi
     return new ItemValue_SimpleValue(node);
 }
 
-ItemValue * ItemValue_InitialValue::create(QDomNode & node, ItemValue_InitialValue::ValueType type, ItemValue_InitialValue::InitialValue values)
+ItemValue * ItemValue_InitialValue::create(QDomNode & node, ItemValue_InitialValue::InitialValue value)
 {
-    qDebug() << __PRETTY_FUNCTION__ << node.nodeName();
+    if(value.type == ValueType::valueStruct)
+        return new ItemValue_StructValue(node, value);
 
-    if(type == ValueType::valueStruct)
-    {
-        node.removeChild(node.firstChild());
-        QDomNode node_new = node.ownerDocument().createElement("structValue");
-        node_new = node.appendChild(node_new);
-        return new ItemValue_StructValue(node_new, values);
-    }
+    if(value.type == ValueType::valueArray)
+        return new ItemValue_ArrayValue(node, value);
 
-    if(type == ValueType::valueSimple_struct)
-        return new ItemValue_SimpleValue_struct(node, values);
+    if(value.type == ValueType::valueSimple_struct)
+        return new ItemValue_SimpleValue_struct(node);
 
-    return nullptr;
+    if(value.type == ValueType::valueSimple_array)
+        return new ItemValue_SimpleValue_array(node);
+
+    return new ItemValue_SimpleValue(node);
 }
 
 ItemValue * ItemValue_InitialValue::create(const QDomNode &node)
@@ -392,20 +393,16 @@ QString ItemValue_InitialValue::get() const
 
 void ItemValue_InitialValue::set(const QString &value)
 {
-    ValueType type_old = type(node());
-    ValueType type_new = type(value);
-
     InitialValue v;
     qDebug() << __PRETTY_FUNCTION__ << InitialValue_parser::parse(value, ItemValue_InitialValue::ValueType::valueEmpty, v);
     qDebug() << v.print();
 
-    qDebug() << __PRETTY_FUNCTION__ << node().nodeName() << parent().nodeName();
-    qDebug() << __PRETTY_FUNCTION__ << static_cast<int>(type_old) << static_cast<int>(type_new);
+    parent().removeChild(node());
+    m_node = parent().ownerDocument().createElement("initialValue");
+    m_node = parent().appendChild(m_node);
 
-    node().removeChild(node().firstChild());
-    m_value.reset(create(m_node, v.type, v));
-
-    // m_value->set(value);
+    m_value.reset(create(m_node, v));
+    m_value->set({});
 }
 // ----------------------------------------------------------------------------
 
@@ -433,17 +430,33 @@ void ItemValue_SimpleValue_struct::set(const QString &value)
     parent().removeChild(node());
     m_node = {};
 
-    // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
+    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 
     if(!value.size())
         return;
 
+    qDebug() << __PRETTY_FUNCTION__;
+
+    QString repetition = {}, value_set = {};
+    int i = value.indexOf("(");
+    if(i != -1)
+    {
+        repetition = value.left(i);
+        value_set = value.right(value.size()-i-1);
+        value_set = value_set.left(value_set.size()-1);
+    }
+    else
+        value_set = value;
+
+
     static QRegularExpression re = QRegularExpression("\\:\\=");
-    QStringList key_value = QString(value).split(re);
+    QStringList key_value = QString(value_set).split(re);
 
     if(key_value.size() > 1 && !key_value.at(1).isEmpty())
     {
         QDomNode new_node = parent().ownerDocument().createElement(m_nodeName);
+        if(repetition.size())
+            new_node.toElement().setAttribute("repetitionValue", repetition);
         QDomNode new_child = parent().ownerDocument().createElement(m_chNodeName);
         new_child.toElement().setAttribute(m_chAttrName, key_value.at(1));
         m_node = parent().appendChild(new_node);
@@ -473,32 +486,34 @@ void ItemValue_SimpleValue_array::set(const QString &value)
 {
     // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
 
-    // parent().removeChild(node());
-    // m_node = {};
+    parent().removeChild(node());
+    m_node = {};
 
     // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 
-    // if(!value.isEmpty())
-    // {
-    //     QString repetition = {}, value_set = {};
-    //     int i = value.indexOf("(");
-    //     if(i != -1)
-    //     {
-    //         repetition = value.left(i);
-    //         value_set = value.right(value.size()-i-1);
-    //         value_set = value_set.left(value_set.size()-1);
-    //     }
-    //     else
-    //         value_set = value;
+    if(!value.isEmpty())
+    {
+        qDebug() << __PRETTY_FUNCTION__;
 
-    //     QDomNode new_node = parent().ownerDocument().createElement(m_nodeName);
-    //     if(repetition.size())
-    //         new_node.toElement().setAttribute("repetitionValue", repetition);
-    //     QDomNode new_child = parent().ownerDocument().createElement(m_chNodeName);
-    //     new_child.toElement().setAttribute(m_chAttrName, value_set);
-    //     m_node = parent().appendChild(new_node);
-    //     node().appendChild(new_child);
-    // }
+        QString repetition = {}, value_set = {};
+        int i = value.indexOf("(");
+        if(i != -1)
+        {
+            repetition = value.left(i);
+            value_set = value.right(value.size()-i-1);
+            value_set = value_set.left(value_set.size()-1);
+        }
+        else
+            value_set = value;
+
+        QDomNode new_node = parent().ownerDocument().createElement(m_nodeName);
+        if(repetition.size())
+            new_node.toElement().setAttribute("repetitionValue", repetition);
+        QDomNode new_child = parent().ownerDocument().createElement(m_chNodeName);
+        new_child.toElement().setAttribute(m_chAttrName, value_set);
+        m_node = parent().appendChild(new_node);
+        node().appendChild(new_child);
+    }
 
     // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 }
@@ -516,16 +531,23 @@ ItemValue_StructValue::ItemValue_StructValue(const QDomNode &node/*, const QDomN
             m_values.append(QSharedPointer<ItemValue>(ItemValue_InitialValue::create(values.at(i)/*, node.firstChild()*/)));
 }
 
-ItemValue_StructValue::ItemValue_StructValue(QDomNode & node, ItemValue_InitialValue::InitialValue & values) :
+ItemValue_StructValue::ItemValue_StructValue(QDomNode & node, ItemValue_InitialValue::InitialValue & value) :
     ItemValue(node)
 {
-    qDebug() << __PRETTY_FUNCTION__ << node.nodeName() << node.ownerDocument().nodeName();
+    QDomNode node_new = node.ownerDocument().createElement("structValue");
+    node_new = node.appendChild(node_new);
+    // m_parent = node;
 
-    for(auto & i : values.values)
+    ItemValue * item = nullptr;
+    for(auto & i : value.values)
     {
-        QDomNode node_new = node.ownerDocument().createElement("value");
-        node_new = m_node.appendChild(node_new);
-        m_values.append(QSharedPointer<ItemValue>(ItemValue_InitialValue::create(node_new, i.type, i)));
+        QDomNode node_child = node.ownerDocument().createElement("value");
+        if(i.repeate > 1)
+            node_child.toElement().setAttribute("repetitionValue", QString::number(i.repeate));
+        node_child = node_new.appendChild(node_child);
+        item = ItemValue_InitialValue::create(node_child, i);
+        m_values.append(QSharedPointer<ItemValue>(item));
+        m_initial.insert(item, i);
     }
 }
 
@@ -544,33 +566,10 @@ QString ItemValue_StructValue::get() const
     return value;
 }
 
-void ItemValue_StructValue::set(const QString &value)
+void ItemValue_StructValue::set(const QString &)
 {
-    // for(auto & i : m_values)
-    //     i->set(QString());
-    m_values.clear();
-    node().removeChild(node().firstChild());
-
-    // qDebug() << node().nodeName() << parent().nodeName();
-    // QStringList values = QString(value).remove('(').remove(')').split(", ");
-    // if(values.size())
-    // {
-    //     QDomNode new_node = parent().ownerDocument().createElement("structValue");
-    //     node().appendChild(new_node);
-    // }
-
-    // ItemValue * item = nullptr;
-    for(const auto & i : QString(value).remove('(').remove(')').split(", "))
-    {
-        qDebug() << i << static_cast<int>(ItemValue_InitialValue::type(i));
-
-        // QDomNode new_child = parent().ownerDocument().createElement("value");
-        // node.firstChild().appendChild(new_child);
-
-        // item = ItemValue_InitialValue::create(node().firstChild());
-        // item->set(i);
-        // m_values.append(QSharedPointer<ItemValue>(item));
-    }
+    for(auto i : m_initial.keys())
+        i->set(m_initial.value(i).value);
 }
 // ----------------------------------------------------------------------------
 
@@ -584,6 +583,26 @@ ItemValue_ArrayValue::ItemValue_ArrayValue(const QDomNode &node/*, const QDomNod
     for(auto i=0;i<values.count();i++)
         if(values.at(i).nodeName() == "value")
             m_values.append(QSharedPointer<ItemValue>(ItemValue_InitialValue::create(values.at(i)/*, node.firstChild()*/)));
+}
+
+ItemValue_ArrayValue::ItemValue_ArrayValue(QDomNode & node, ItemValue_InitialValue::InitialValue & value) :
+    ItemValue(node)
+{
+    QDomNode node_new = node.ownerDocument().createElement("arrayValue");
+    node_new = node.appendChild(node_new);
+    // m_parent = node;
+
+    ItemValue * item = nullptr;
+    for(auto & i : value.values)
+    {
+        QDomNode node_child = node.ownerDocument().createElement("value");
+        if(i.repeate > 1)
+            node_child.toElement().setAttribute("repetitionValue", QString::number(i.repeate));
+        node_child = node_new.appendChild(node_child);
+        item = ItemValue_InitialValue::create(node_child, i);
+        m_values.append(QSharedPointer<ItemValue>(item));
+        m_initial.insert(item, i);
+    }
 }
 
 QString ItemValue_ArrayValue::get() const
@@ -601,21 +620,14 @@ QString ItemValue_ArrayValue::get() const
     return value;
 }
 
-void ItemValue_ArrayValue::set(const QString &value)
+void ItemValue_ArrayValue::set(const QString &)
 {
-    // for(auto & i : m_values)
-    //     i->set(QString());
-    // m_values.clear();
+    qDebug() << __PRETTY_FUNCTION__ << node().nodeName();
 
-    // ItemValue * item = nullptr;
-    for(const auto & i : QString(value).remove('[').remove(']').split(", "))
+    for(auto i : m_initial.keys())
     {
-        qDebug() << i << static_cast<int>(ItemValue_InitialValue::type(i));
-    //     qDebug() << __PRETTY_FUNCTION__ << node().nodeName() << parent().nodeName();
-
-    //     item = new ItemValue_SimpleValue_array(QDomNode(), node().firstChild());
-    //     item->set(i);
-    //     m_values.append(QSharedPointer<ItemValue>(item));
+        qDebug() << __PRETTY_FUNCTION__ << m_initial.value(i).value;
+        i->set(m_initial.value(i).value);
     }
 }
 // ----------------------------------------------------------------------------

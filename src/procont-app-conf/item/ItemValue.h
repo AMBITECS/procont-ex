@@ -28,11 +28,11 @@ public:
 
 public:
     [[nodiscard]] inline QDomNode node() const { return m_node; }
-    [[nodiscard]] inline QDomNode parent() const { return m_node.parentNode(); }
+    [[nodiscard]] inline QDomNode parent() const { return m_parent; }
 
 protected:
-    QDomNode m_node;/*
-    QDomNode m_parent;*/
+    QDomNode m_node;
+    QDomNode m_parent;
 };
 // ----------------------------------------------------------------------------
 

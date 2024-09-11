@@ -223,7 +223,7 @@ public:
     [[nodiscard]] static ValueType type(const QString &value, ItemValue_InitialValue::ValueType parentType = ValueType::valueEmpty);
     [[nodiscard]] static ItemValue * create(const QDomNode &node);
     [[nodiscard]] static ItemValue * create(const QDomNode &node, ValueType type);
-    [[nodiscard]] static ItemValue * create(QDomNode &node, ValueType type, ItemValue_InitialValue::InitialValue values);
+    [[nodiscard]] static ItemValue * create(QDomNode &node, ItemValue_InitialValue::InitialValue value);
 
 public:
 
@@ -237,6 +237,14 @@ public:
             // remove blanks
             static QRegularExpression blank("\\s+");
             QString value = expression; value = value.remove(blank);
+
+            if(expression.size() < 1)
+            {
+                v.type = ItemValue_InitialValue::ValueType::valueSimple;
+                v.repeate = 1;
+                v.value = QString();
+                return 0;
+            }
 
             // bracket error
             if(!is_bracket_balanced(value))
@@ -252,9 +260,10 @@ public:
                 if(!repeate.match(value).hasMatch())
                     return 3;
                 count = value.left(value.indexOf('(')).toInt();
-                if(value.indexOf('(')+1 >= value.lastIndexOf(')'))
+                qDebug() << __PRETTY_FUNCTION__ << value.indexOf('(') << value.lastIndexOf(')');
+                if((value.indexOf(')') - value.lastIndexOf('(')) <= 0)
                     return 4;
-                value = value.mid(value.indexOf('(')+1, value.lastIndexOf(')'));
+                value = value.mid(value.indexOf('(')+1, value.lastIndexOf(')')-value.indexOf('(')-1);
             }
 
             QChar c = value.at(0);
@@ -262,6 +271,8 @@ public:
             {
                 v.type = type(value);
                 v.repeate = count;
+                if(count > 1)
+                    v.value = QString("%1()").arg(count);
             }
             else
             {
@@ -270,7 +281,10 @@ public:
                 v.repeate = count;
                 if(!is_simple_format(value, parentType))
                     return 5;
-                v.value = value;
+                if(count > 1)
+                    v.value = QString("%1(%2)").arg(count).arg(value);
+                else
+                    v.value = value;
                 return 0;
             }
 
@@ -439,10 +453,10 @@ public:
                         return true;
                 }
             }
-            else
-                return is_identifier(value);
+            // else
+            //     return is_identifier(value);
 
-            return false;
+            return true;
         }
     };
 private:
@@ -467,6 +481,17 @@ public:
         setChNodeName("simpleValue");
         setChAttrName("value");
     }
+    ItemValue_SimpleValue(QDomNode & node/*, const ItemValue_InitialValue::InitialValue & value*/) :
+        ItemValue_SubNodeAttr(node)
+    {
+        setNodeName("initialValue");
+        setChNodeName("simpleValue");
+        setChAttrName("value");
+
+        // qDebug() << __PRETTY_FUNCTION__ << node.nodeName();
+        // QDomNode new_child = node.ownerDocument().createElement("simpleValue");
+        // m_node = node.appendChild(new_child); m_parent = node;
+    }
 };
 // ----------------------------------------------------------------------------
 
@@ -487,20 +512,25 @@ public:
         setChNodeName("simpleValue");
         setChAttrName("value");
     }
-    ItemValue_SimpleValue_struct(QDomNode & node, const ItemValue_InitialValue::InitialValue & values) :
+    ItemValue_SimpleValue_struct(QDomNode & node/*, const ItemValue_InitialValue::InitialValue & value*/) :
         ItemValue_SubNodeAttr(node)
     {
         setNodeName("value");
         setChNodeName("simpleValue");
         setChAttrName("value");
 
-        qDebug() << __PRETTY_FUNCTION__ << node.nodeName() << node.ownerDocument().nodeName();
+        // qDebug() << __PRETTY_FUNCTION__ << node.nodeName() << node.ownerDocument().nodeName();
 
         // QDomNode new_node = node.ownerDocument().createElement("value");
         // QDomNode new_child = node.ownerDocument().createElement("simpleValue");
+
+        // qDebug() << __PRETTY_FUNCTION__ << new_node.nodeName() << new_node.ownerDocument().nodeName();
+        // qDebug() << __PRETTY_FUNCTION__ << new_child.nodeName() << new_child.ownerDocument().nodeName();
         // new_node.appendChild(new_child);
-        // node.appendChild(new_node);
-        set(values.value);
+        // qDebug() << __PRETTY_FUNCTION__ << new_child.nodeName() << new_child.ownerDocument().nodeName();
+        // m_node = node.appendChild(new_node); m_parent = node;
+        // qDebug() << __PRETTY_FUNCTION__ << new_node.nodeName() << new_node.ownerDocument().nodeName();
+        // set(values.value);
     }
 
     [[nodiscard]] QString get() const override;
@@ -524,6 +554,26 @@ public:
         setNodeName("value");
         setChNodeName("simpleValue");
         setChAttrName("value");
+    }
+    ItemValue_SimpleValue_array(QDomNode & node/*, const ItemValue_InitialValue::InitialValue & value*/) :
+        ItemValue_SubNodeAttr(node)
+    {
+        setNodeName("value");
+        setChNodeName("simpleValue");
+        setChAttrName("value");
+
+        // qDebug() << __PRETTY_FUNCTION__ << node.nodeName() << node.ownerDocument().nodeName();
+
+        // QDomNode new_node = node.ownerDocument().createElement("value");
+        // QDomNode new_child = node.ownerDocument().createElement("simpleValue");
+
+        // qDebug() << __PRETTY_FUNCTION__ << new_node.nodeName() << new_node.ownerDocument().nodeName();
+        // qDebug() << __PRETTY_FUNCTION__ << new_child.nodeName() << new_child.ownerDocument().nodeName();
+        // new_node.appendChild(new_child);
+        // qDebug() << __PRETTY_FUNCTION__ << new_child.nodeName() << new_child.ownerDocument().nodeName();
+        // m_node = node.appendChild(new_node); m_parent = node;
+        // qDebug() << __PRETTY_FUNCTION__ << new_node.nodeName() << new_node.ownerDocument().nodeName();
+        // set(values.value);
     }
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
@@ -549,6 +599,7 @@ public:
 
 protected:
     QList<QSharedPointer<ItemValue>> m_values;
+    QHash<ItemValue*, ItemValue_InitialValue::InitialValue> m_initial;
 };
 // ----------------------------------------------------------------------------
 
@@ -563,12 +614,14 @@ class ItemValue_ArrayValue: public ItemValue
 {
 public:
     ItemValue_ArrayValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_ArrayValue(QDomNode &node, ItemValue_InitialValue::InitialValue & values);
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;
 
 protected:
     QList<QSharedPointer<ItemValue>> m_values;
+    QHash<ItemValue*, ItemValue_InitialValue::InitialValue> m_initial;
 };
 // ----------------------------------------------------------------------------
 

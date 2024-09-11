@@ -6,8 +6,8 @@
 // *** ItemValue interface ***
 
 ItemValue::ItemValue(const QDomNode &node/*, const QDomNode &parent*/) :
-    m_node(node)/*,
-    m_parent(node.parentNode())*/
+    m_node(node),
+    m_parent(node.parentNode())
 {
 }
 // ----------------------------------------------------------------------------
@@ -206,12 +206,12 @@ QString ItemValue_SubNodeAttr::get() const
 
 void ItemValue_SubNodeAttr::set(const QString &value)
 {
-    // qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
+    qDebug() << __PRETTY_FUNCTION__ << parent().nodeName() << node().nodeName() << m_nodeName << m_chNodeName << m_chAttrName << value;
 
     parent().removeChild(node());
     m_node = {};
 
-    // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
+    qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 
     if(!value.isEmpty())
     {
@@ -224,7 +224,7 @@ void ItemValue_SubNodeAttr::set(const QString &value)
         node().appendChild(new_child);
     }
 
-    // qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
+    qDebug() << __PRETTY_FUNCTION__ << node().toElement().namedItem(m_chNodeName).toElement().attribute(m_chAttrName);
 }
 
 void ItemValue_SubNodeAttr::setNodeName(const QString &name)

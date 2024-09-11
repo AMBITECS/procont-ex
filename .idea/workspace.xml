@@ -3,9 +3,9 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="CMakePresetLoader"><![CDATA[{
-  "useNewFormat": true
-}]]></component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
   <component name="CMakeReloadState">
     <option name="reloaded" value="true" />
   </component>
@@ -14,6 +14,7 @@
       <config projectName="procont" targetName="procont-conf-app-RESOURCE-LANG" />
       <config projectName="procont" targetName="procont-conf-app" />
       <config projectName="procont" targetName="procont-conf-app-TRANSLATE" />
+      <config projectName="procont" targetName="-threads" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -22,7 +23,24 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b0c1f409-d6d4-44aa-acbe-46b0d73f08fd" name="Changes" comment="" />
+    <list default="true" id="b0c1f409-d6d4-44aa-acbe-46b0d73f08fd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/cmake/PROJ-helpers.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/PoolClient.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/PoolClient.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/PoolThread.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/PoolThread.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/ThreadPool.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/ThreadPool.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/ThreadSafe.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/ThreadSafe.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/WorkThread.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/threads/WorkThread.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/global.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/QtSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QtSettings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,9 +62,9 @@
     <option name="minorVersion" value="1.4" />
     <option name="productBranch" value="Classic" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2lvYYM7r4bxLgmQjEH3VgZ9Iqj8" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -62,7 +80,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "Peter",
-    "last_opened_file_path": "D:/Ambi/Work/Projects/procont",
+    "last_opened_file_path": "D:/Ambi/Work/Projects/procont/src",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -72,10 +90,22 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="CMake Application.procont-conf-app">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Ambi\Work\Projects\procont\src" />
+      <recent name="D:\Ambi\Work\Projects\procont\cmake" />
+      <recent name="D:\Ambi\Work\Projects\procont\src\common\threads" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Application.-threads">
     <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="-threads" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="procont" TARGET_NAME="-threads" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="procont-conf-app-RESOURCE-LANG" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="procont" TARGET_NAME="procont-conf-app-RESOURCE-LANG" CONFIG_NAME="Debug">
@@ -94,6 +124,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="CMake Application.-threads" />
       <item itemvalue="CMake Application.procont-conf-app-RESOURCE-LANG" />
       <item itemvalue="CMake Application.procont-conf-app-TRANSLATE" />
       <item itemvalue="CMake Application.procont-conf-app" />
@@ -108,6 +139,9 @@
       <option name="presentableId" value="Default" />
       <updated>1726062063466</updated>
       <workItem from="1726062064628" duration="949000" />
+      <workItem from="1726076336465" duration="28000" />
+      <workItem from="1726076441012" duration="16000" />
+      <workItem from="1726082864138" duration="4136000" />
     </task>
     <servers />
   </component>

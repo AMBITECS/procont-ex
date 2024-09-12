@@ -33,7 +33,13 @@ set(PROJECT_SOURCES
     item/ItemValue.cpp item/ItemValue.h
     item/ItemValueVariableTable.h item/ItemValueVariableTable.cpp
     view/TableView.h view/TableView.cpp
+    editor-st/code_editor.cpp editor-st/code_editor.h
+    editor-st/filesmanager.cpp editor-st/filesmanager.h
+    editor-st/highlighter.h editor-st/highlighter.cpp
+    editor-st/line_number_area.cpp editor-st/line_number_area.h
+    editor-st/xmlparser.cpp editor-st/xmlparser.h
     resources/procont-app-conf.qrc
+    editor-st/editor-st.qrc
 )
 
 qt_translate(
@@ -46,8 +52,6 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-        editor-st/editor-st.qrc
-        editor-st/code_editor.cpp editor-st/code_editor.h editor-st/filesmanager.cpp editor-st/filesmanager.h editor-st/highlighter.h editor-st/highlighter.cpp editor-st/line_number_area.cpp editor-st/line_number_area.h editor-st/xmlparser.cpp editor-st/xmlparser.h
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

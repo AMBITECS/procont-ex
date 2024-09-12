@@ -1,4 +1,4 @@
-#include "SpinBoxMultiRange.h".h"
+#include "SpinBoxMultiRange.h"
 
 #include <QDebug>
 
@@ -18,7 +18,7 @@ void CMultiRangeSpinBox::addRange(double min, double max)
     {
         bool success = true;
         auto values = m_ranges.values();
-        for(const auto &i : qAsConst(values))
+        for(const auto &i : std::as_const(values))
         {
             if((min - i.maxValue())*(i.minValue()-max) > 0)
             {
@@ -44,7 +44,7 @@ QString CMultiRangeSpinBox::getTooltip() const
 {
     QString tooltip = QString();
     auto keys = m_indexes.keys();
-    for(const auto &i : qAsConst(keys))
+    for(const auto &i : std::as_const(keys))
     {
         tooltip += QString("[%1, %2]").arg(m_ranges.value(m_indexes.value(i)).minValue()).arg(m_ranges.value(m_indexes.value(i)).maxValue());
         tooltip += "\n";
@@ -57,7 +57,7 @@ int CMultiRangeSpinBox::findRangeIndex(double value) const
 {
     auto index = -1;
     auto keys = m_ranges.keys();
-    for(const auto &i : qAsConst(keys))
+    for(const auto &i : std::as_const(keys))
     {
         if(value >= m_ranges.value(i).minValue() && value <= m_ranges.value(i).maxValue())
         {
@@ -73,7 +73,7 @@ int CMultiRangeSpinBox::findNextUpRangeIndex(double value) const
 {
     auto index = -1;
     auto keys = m_indexes.keys();
-    for(const auto &i : qAsConst(keys))
+    for(const auto &i : std::as_const(keys))
     {
         if(value < m_ranges.value(m_indexes.value(i)).minValue())
         {
@@ -90,7 +90,7 @@ int CMultiRangeSpinBox::findNextDownRangeIndex(double value) const
     auto index = -1;
     auto keys = m_indexes.keys();
     std::reverse(std::begin(keys), std::end(keys));
-    for(const auto &i : qAsConst(keys))
+    for(const auto &i : std::as_const(keys))
     {
         if(value > m_ranges.value(m_indexes.value(i)).maxValue())
         {

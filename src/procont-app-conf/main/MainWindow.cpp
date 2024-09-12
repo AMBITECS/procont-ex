@@ -92,9 +92,9 @@ void MainWindow::createWidgets()
 void MainWindow::createMenu()
 {
     auto fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(tr("&Open..."), this, &MainWindow::slot_open, QKeySequence::Open);
-    fileMenu->addAction(tr("&Save..."), this, &MainWindow::slot_save, QKeySequence::Save);
-    fileMenu->addAction(tr("&Exit"), this, &QWidget::close, QKeySequence::Quit);
+    fileMenu->addAction(tr("&Open..."), QKeySequence::Open, this, &MainWindow::slot_open);
+    fileMenu->addAction(tr("&Save..."), QKeySequence::Save, this, &MainWindow::slot_save);
+    fileMenu->addAction(tr("&Exit"), QKeySequence::Quit, this, &QWidget::close);
 }
 
 void MainWindow::slot_open()

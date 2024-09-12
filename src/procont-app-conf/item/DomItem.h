@@ -4,10 +4,7 @@
 #include <QStandardItem>
 #include <QDomNode>
 
-#include <utility>
-
 #include "ItemValue.h"
-// #include "ItemValueCreator.h"
 
 // ----------------------------------------------------------------------------
 // *** DomItem ***
@@ -15,6 +12,7 @@ class DomItem_builder;
 
 class DomItem : public QStandardItem
 {
+    friend class DomItemVar;
 public:
     enum ItemType
     {
@@ -26,8 +24,8 @@ public:
     DomItem(const QDomNode &node);
     virtual ~DomItem() = default;
 
-    [[nodiscard]] std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
-    [[nodiscard]] virtual DomItem * insertChild(int row, int column, const QDomNode & node, int shift = 0);
+public:
+    [[nodiscard]] DomItem * insertChild(int row, int column, const QDomNode & node, int shift = 0);
     void removeChild(int row, int column, const QDomNode & childNode);
     virtual void addEmptyNode() {;}
 
@@ -43,7 +41,8 @@ public:
 public:
     [[nodiscard]] static ItemType assignType(const QDomNode &node);
 
-public:
+private:
+    std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
     void setItemValue(ItemValue *item);
 
 protected:

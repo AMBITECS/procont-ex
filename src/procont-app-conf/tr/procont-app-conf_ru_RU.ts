@@ -100,6 +100,14 @@
     </message>
 </context>
 <context>
+    <name>FilesManager</name>
+    <message>
+        <location filename="../editor-st/filesmanager.cpp" line="66"/>
+        <source>Unable to open file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../main/MainWindow.cpp" line="58"/>
@@ -232,12 +240,12 @@
 <context>
     <name>TabWidgetEditor</name>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="95"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="97"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="97"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="99"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>

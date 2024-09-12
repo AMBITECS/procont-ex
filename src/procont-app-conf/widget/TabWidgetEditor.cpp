@@ -13,6 +13,8 @@
 #include <QToolBar>
 #include <QHeaderView>
 
+#include "editor-st/code_editor.h"
+
 TabWidgetEditor * TabWidgetEditor::_instance = nullptr;
 QHash<DomItem::ItemType, QAbstractProxyModel*> TabWidgetEditor::_hProxyModels;
 
@@ -90,13 +92,14 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
     {
         auto vSplitter = new QSplitter(Qt::Vertical);
         auto container = new QWidget;
-        auto layout = new QVBoxLayout;
+
         auto toolbar = new QToolBar;
         auto action = toolbar->addAction(QIcon(":/icon/images/add.png"), tr("Add"));
         connect(action, &QAction::triggered, this, &TabWidgetEditor::slot_addVariable);
         action = toolbar->addAction(QIcon(":/icon/images/delete.png"), tr("Remove"));
         connect(action, &QAction::triggered, this, &TabWidgetEditor::slot_delVariable);
         toolbar->setIconSize(QSize(16,16));
+
         auto table = new TableView;
         table->setModel(proxyModel(static_cast<DomItem::ItemType>(item(index)->type())));
         table->setRootIndex(p_index(m_index(index), proxyModel(static_cast<DomItem::ItemType>(item(index)->type()))));
@@ -107,11 +110,13 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
         table->setItemDelegateForColumn(7, new CTextEditDelegate);
         // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
         // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
-        layout->addWidget(toolbar);
-        layout->addWidget(table);
-        container->setLayout(layout);
+        auto vertical_layout = new QVBoxLayout;
+        vertical_layout->addWidget(toolbar);
+        vertical_layout->addWidget(table);
+        container->setLayout(vertical_layout);
         vSplitter->addWidget(container);
-        auto text = new QPlainTextEdit();
+
+        auto text = new CodeEditor(this);
         text->setMinimumSize(500, 300);
         text->appendPlainText("PROGRAM TEXT");
         vSplitter->addWidget(text);

@@ -64,22 +64,22 @@ std::pair<int, int> DomItem::insertChildren(const QDomNode & parentNode, int shi
 {
     QDomNodeList children = filterChildren(parentNode);
 
-    int ch = 0; int cn = 0; std::pair<int, int> res1 = std::make_pair(0,0);
+    int ch = 0; int cn = 0; std::pair<int, int> res = std::make_pair(0,0);
     for (int i=0;i<children.count();i++)
     {
         QDomNode child = children.at(i);
         if(!m_discard.contains(child.nodeName()))
         {
-            int rr_c = (res1.first>0)?res1.first-i:shift;
+            int rr_c = (res.first>0)?res.first-i:shift;
             insertChild(i, 0, parentNode, rr_c+cn);
             ch++;
         }
         else
         {
-            int rr_c = (res1.first>0)?res1.first:shift;
-            int cn_c = cn; cn_c += (res1.first>0)?0:ch;
-            res1 = insertChildren(child, rr_c+cn_c);
-            cn += res1.second;
+            int rr_c = (res.first>0)?res.first:shift;
+            int cn_c = cn; cn_c += (res.first>0)?0:ch;
+            res = insertChildren(child, rr_c+cn_c);
+            cn += res.second;
         }
     }
 

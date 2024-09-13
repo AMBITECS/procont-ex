@@ -1,6 +1,8 @@
-#include "code_editor.h"
+#include "CodeEditor.h"
 
-#include "line_number_area.h"
+#include "LineNumberArea.h"
+#include "Highlighter.h"
+
 #include <QPainter>
 #include <QTextBlock>
 
@@ -13,9 +15,22 @@
 #include <QAbstractItemModel>
 #include <QScrollBar>
 #include <QFocusEvent>
+#include <QFile>
+#include <QStringListModel>
+
+QCompleter * CodeEditor::_completer = nullptr;
 
 CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 {
+    // Q_INIT_RESOURCE(resources);
+
+    completer()->setWidget(this);
+    QObject::connect(_completer, QOverload<const QString &>::of(&QCompleter::activated),
+                     this, &CodeEditor::insertCompletion);
+
+    syntaxHighlighter = new Highlighter(document());
+    syntaxHighlighter->wordsFromFile(":/resources/wordlist.txt");
+
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
@@ -28,8 +43,6 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
     setTabStopDistance(40);
 
     this->installEventFilter(this);
-
-
 }
 
 int CodeEditor::lineNumberAreaWidth()
@@ -46,26 +59,77 @@ int CodeEditor::lineNumberAreaWidth()
     return space;
 }
 
-void CodeEditor::setCompleter(QCompleter *completer)
+// void CodeEditor::initCompleter(/*QCompleter *completer*/)
+// {
+//     //if (_completer)
+//     //    _completer->disconnect(this);
+
+//     // _completer = completer;
+
+//     // if (!_completer)
+//     //     return;
+
+//     // _completer->setWidget(this);
+//     // _completer->setCompletionMode(QCompleter::PopupCompletion);
+//     // _completer->setCaseSensitivity(Qt::CaseInsensitive);
+//     // QObject::connect(_completer, QOverload<const QString &>::of(&QCompleter::activated),
+//     //                  this, &CodeEditor::insertCompletion);
+
+//     _completer = new QCompleter;
+//     _completer->setModel(modelFromFile(":/resources/wordlist.txt"));
+//     _completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+//     _completer->setCaseSensitivity(Qt::CaseInsensitive);
+//     _completer->setWrapAround(false);
+//     // setCompleter(_completer);
+//     _completer->setWidget(this);
+//     _completer->setCompletionMode(QCompleter::PopupCompletion);
+//     _completer->setCaseSensitivity(Qt::CaseInsensitive);
+//     QObject::connect(_completer, QOverload<const QString &>::of(&QCompleter::activated),
+//                      this, &CodeEditor::insertCompletion);
+// }
+
+QCompleter * CodeEditor::completer()
 {
-    //if (_completer)
-    //    _completer->disconnect(this);
+    if(!_completer)
+    {
+        _completer = new QCompleter;
+        _completer->setModel(modelFromFile(":/resources/wordlist.txt"));
+        _completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+        _completer->setCaseSensitivity(Qt::CaseInsensitive);
+        _completer->setWrapAround(false);
+        _completer->setCompletionMode(QCompleter::PopupCompletion);
+        _completer->setCaseSensitivity(Qt::CaseInsensitive);
+    }
 
-    _completer = completer;
-
-    if (!_completer)
-        return;
-
-    _completer->setWidget(this);
-    _completer->setCompletionMode(QCompleter::PopupCompletion);
-    _completer->setCaseSensitivity(Qt::CaseInsensitive);
-    QObject::connect(_completer, QOverload<const QString &>::of(&QCompleter::activated),
-                     this, &CodeEditor::insertCompletion);
+    return _completer;
 }
 
-QCompleter *CodeEditor::completer() const
+QAbstractItemModel *CodeEditor::modelFromFile(const QString& fileName)
 {
-    return _completer;
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly))
+    {
+        qDebug() << "NOt file open!!!!";
+        return new QStringListModel(completer());
+    }
+
+#ifndef QT_NO_CURSOR
+    QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+#endif
+    QStringList words;
+
+    while (!file.atEnd()) {
+        QByteArray line = file.readLine();
+        if (!line.isEmpty())
+            words << QString::fromUtf8(line.trimmed());
+    }
+
+    words.sort();
+
+#ifndef QT_NO_CURSOR
+    QGuiApplication::restoreOverrideCursor();
+#endif
+    return new QStringListModel(words, completer());
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
@@ -88,9 +152,9 @@ void CodeEditor::insertCompletion(const QString &completion)
 {
     if (_completer->widget() != this)
         return;
-    QString _completion = "kick";
+    // QString _completion = "kick";
     QTextCursor tc = textCursor();
-    int extra = completion.length() - _completer->completionPrefix().length();
+    // int extra = completion.length() - _completer->completionPrefix().length();
     //tc.movePosition(QTextCursor::StartOfWord);
     tc.movePosition(QTextCursor::EndOfWord);
     tc.select(QTextCursor::WordUnderCursor);

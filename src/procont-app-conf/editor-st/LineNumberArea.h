@@ -1,6 +1,6 @@
 #pragma once
 
-#include "code_editor.h"
+#include "CodeEditor.h"
 
 class LineNumberArea : public QWidget
 {

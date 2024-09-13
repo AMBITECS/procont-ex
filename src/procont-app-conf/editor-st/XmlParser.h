@@ -63,6 +63,7 @@ public:
     QList<Pou>* getPous();
     void typesFromFile(const QString &fileName);
 
+    static QString getPouBodyText(const QDomNode& node);
 
 private:
     // xml to text
@@ -70,11 +71,11 @@ private:
     QString convertDataToText();
     QString convertPouToText(const int index);
     void parsePOU(const QDomNode& node, QList<Pou> & pous);
-
     // text to xml
     void convertTextToPou(const int index);
 
-
+private:
+    static Pou parsePOU(const QDomNode& node);
 
 private:
     QList<Pou> pous;

@@ -1,4 +1,4 @@
-#include "xmlparser.h"
+#include "XmlParser.h"
 
 #include <QFile>
 #include <QFileDialog>
@@ -176,6 +176,17 @@ void XmlParser::traverseNode(const QDomNode &node, QList<Pou> &pous)
     }
 }
 
+QString XmlParser::getPouBodyText(const QDomNode& node)
+{
+    if(node.isNotation())
+        return {};
+
+    if(node.nodeName() != "pou")
+        return {};
+
+    return parsePOU(node).body.value + "\n";
+}
+
 QString XmlParser::convertDataToText()
 {
     QString result;
@@ -235,7 +246,7 @@ QString XmlParser::convertPouToText(const int index)
     return result;
 }
 
-void XmlParser::parsePOU(const QDomNode &node, QList<Pou> &pous)
+Pou XmlParser::parsePOU(const QDomNode &node)
 {
     QDomNode domNode =
         node.firstChild();
@@ -318,7 +329,13 @@ void XmlParser::parsePOU(const QDomNode &node, QList<Pou> &pous)
 
         domNode = domNode.nextSibling();
     }
-    pous.append(pou);
+
+    return pou;
+}
+
+void XmlParser::parsePOU(const QDomNode &node, QList<Pou> &pous)
+{
+    pous.append(parsePOU(node));
 }
 
 void XmlParser::typesFromFile(const QString &fileName)

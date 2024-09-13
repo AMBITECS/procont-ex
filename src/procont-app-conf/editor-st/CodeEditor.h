@@ -1,7 +1,11 @@
 #pragma once
+
 #include <QPlainTextEdit>
 
+class Highlighter;
+
 class QCompleter;
+class QAbstractItemModel;
 
 class CodeEditor : public QPlainTextEdit
 {
@@ -13,24 +17,22 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
-    //completer logic
-    void setCompleter(QCompleter *completer);
-    QCompleter *completer() const;
+    static QCompleter * completer();
+    Highlighter * highliter() const { return syntaxHighlighter; }
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
-    //void keyPressEvent(QKeyEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
-
     void keyPressEvent(QKeyEvent *event) override;
     void focusInEvent(QFocusEvent *event) override;
+
+protected:
+    static QAbstractItemModel * modelFromFile(const QString& fileName);
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect &rect, int dy);
-
-    //completer
     void insertCompletion(const QString &completion);
 
 private:
@@ -40,5 +42,7 @@ private:
     QWidget *lineNumberArea;
     int currentPositionBlock;
 
-    QCompleter * _completer;
+    Highlighter * syntaxHighlighter;
+
+    static QCompleter * _completer;
 };

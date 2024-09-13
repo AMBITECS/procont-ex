@@ -33,11 +33,11 @@ set(PROJECT_SOURCES
     item/ItemValue.cpp item/ItemValue.h
     item/ItemValueVariableTable.h item/ItemValueVariableTable.cpp
     view/TableView.h view/TableView.cpp
-    editor-st/code_editor.cpp editor-st/code_editor.h
-    editor-st/filesmanager.cpp editor-st/filesmanager.h
-    editor-st/highlighter.h editor-st/highlighter.cpp
-    editor-st/line_number_area.cpp editor-st/line_number_area.h
-    editor-st/xmlparser.cpp editor-st/xmlparser.h
+    editor-st/CodeEditor.cpp editor-st/CodeEditor.h editor-st/CodeEditorWidget.cpp
+    editor-st/CodeEditorWidget.h editor-st/Highlighter.cpp editor-st/Highlighter.h
+    editor-st/LineNumberArea.cpp editor-st/LineNumberArea.h
+    widget/WidgetCodeEditor.h widget/WidgetCodeEditor.cpp
+    editor-st/XmlParser.cpp editor-st/XmlParser.h
     resources/procont-app-conf.qrc
     editor-st/editor-st.qrc
 )

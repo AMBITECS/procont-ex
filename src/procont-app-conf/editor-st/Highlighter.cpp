@@ -1,4 +1,4 @@
-#include "highlighter.h"
+#include "Highlighter.h"
 #include <QFile>
 #include <QCursor>
 #include <QApplication>
@@ -50,7 +50,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 
 void Highlighter::highlightBlock(const QString &text)
 {
-    for (const auto &rule : std::as_const(highlightingRules)) {
+    for (const HighlightingRule &rule : std::as_const(highlightingRules)) {
         QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
         while (matchIterator.hasNext()) {
             QRegularExpressionMatch match = matchIterator.next();

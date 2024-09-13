@@ -42,7 +42,7 @@ public:
     [[nodiscard]] static ItemType assignType(const QDomNode &node);
 
 private:
-    std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
+    [[nodiscard]] std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
     void setItemValue(ItemValue *item);
 
 protected:
@@ -52,7 +52,7 @@ protected:
 
 protected:
     static QScopedPointer<DomItem_builder> m_ItemBuilder;
-    DomItem_builder * itemBuilder() { return m_ItemBuilder.get(); }
+    [[nodiscard]] DomItem_builder * itemBuilder() { return m_ItemBuilder.get(); }
 
 protected:
     ItemType m_itemType;

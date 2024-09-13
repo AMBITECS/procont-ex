@@ -61,6 +61,14 @@
     </message>
 </context>
 <context>
+    <name>CodeEditorWidget</name>
+    <message>
+        <location filename="../editor-st/CodeEditorWidget.cpp" line="15"/>
+        <source>Find</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DomItem</name>
     <message>
         <source>Add</source>
@@ -97,14 +105,6 @@
     <message>
         <source>Attributes</source>
         <translation type="obsolete">Атрибуты</translation>
-    </message>
-</context>
-<context>
-    <name>FilesManager</name>
-    <message>
-        <location filename="../editor-st/filesmanager.cpp" line="66"/>
-        <source>Unable to open file</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -240,14 +240,35 @@
 <context>
     <name>TabWidgetEditor</name>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="97"/>
         <source>Add</source>
-        <translation>Добавить</translation>
+        <translation type="vanished">Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="99"/>
         <source>Remove</source>
-        <translation>Удалить</translation>
+        <translation type="vanished">Удалить</translation>
+    </message>
+</context>
+<context>
+    <name>WidgetCodeEditor</name>
+    <message>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="26"/>
+        <source>Add</source>
+        <translation type="unfinished">Добавить</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="28"/>
+        <source>Remove</source>
+        <translation type="unfinished">Удалить</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="56"/>
+        <source>Txt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="59"/>
+        <source>Tbl</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

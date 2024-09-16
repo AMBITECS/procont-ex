@@ -25,6 +25,8 @@ public:
     [[nodiscard]] inline QDomNode node() const { return m_node; }
     [[nodiscard]] inline QDomNode parent() const { return m_parent; }
 
+    void updateNode(const QDomNode &node_);
+
 protected:
     QDomNode m_node;
     QDomNode m_parent;

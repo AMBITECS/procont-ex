@@ -2,6 +2,7 @@
 #define WIDGETCODEEDITOR_H
 
 #include <QSplitter>
+#include <QDomNode>
 
 QT_FORWARD_DECLARE_CLASS(DomItem)
 QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
@@ -23,6 +24,10 @@ private:
     static QAbstractProxyModel * proxy(QAbstractItemModel *);
     static DomItem * item(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
 
+private:
+    void createVarsTable();
+    void createVarsText();
+
 private slots:
     void slot_addVariable();
     void slot_delVariable();
@@ -33,11 +38,12 @@ private slots:
 
 private:
     QModelIndex _index;
+    QDomNode _node;
     QAbstractProxyModel * _proxy;
 
-    CodeEditorWidget * _var_text;
-    CodeEditorWidget * _text;
-    TableView * _var_table;
+    CodeEditorWidget * _vars_text;
+    CodeEditorWidget * _body_text;
+    TableView * _vars_table;
 };
 
 #endif // WIDGETCODEEDITOR_H

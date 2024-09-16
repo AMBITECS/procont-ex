@@ -17,6 +17,7 @@
 WidgetCodeEditor::WidgetCodeEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
     : QSplitter(Qt::Vertical, parent_),
     _index(index_),
+    _node(item(_index)->node()),
     _proxy(proxy_)
 {
     // *** variables editor
@@ -31,23 +32,23 @@ WidgetCodeEditor::WidgetCodeEditor(const QModelIndex &index_, QAbstractProxyMode
     connect(action, &QAction::triggered, this, &WidgetCodeEditor::slot_delVariable);
     toolbar_table->setIconSize(QSize(16, 16));
     // variables editor table
-    _var_table = new TableView;
-    _var_table->setMinimumSize(500, 300);
-    _var_table->setModel(_proxy);
-    _var_table->setRootIndex(p_index(s_index(_index), _proxy));
-    _var_table->setColumnHidden(0, true);
-    _var_table->setSelectionBehavior(QAbstractItemView::SelectRows);
-    _var_table->setSelectionMode(QAbstractItemView::SingleSelection);
-    _var_table->horizontalHeader()->setHighlightSections(false);
-    _var_table->setItemDelegateForColumn(7, new CTextEditDelegate);
+    _vars_table = new TableView;
+    _vars_table->setMinimumSize(500, 300);
+    _vars_table->setModel(_proxy);
+    _vars_table->setRootIndex(p_index(s_index(index_), _proxy));
+    _vars_table->setColumnHidden(0, true);
+    _vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
+    _vars_table->horizontalHeader()->setHighlightSections(false);
+    _vars_table->setItemDelegateForColumn(7, new CTextEditDelegate);
     // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
     // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
     // variables editor code editor
-    _var_text = new CodeEditorWidget(this);
-    _var_text->setMinimumSize(500, 300);
-    _var_text->setPlainText(XmlParser::getPouVarsText(item(index_)->node()));
-    connect(_var_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_textChanged);
-    _var_text->hide();
+    _vars_text = new CodeEditorWidget(this);
+    _vars_text->setMinimumSize(500, 300);
+    _vars_text->setPlainText(XmlParser::getPouVarsText(item(index_)->node()));
+    connect(_vars_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_textChanged);
+    _vars_text->hide();
     // variables editor toolbar for switch view
     auto toolbar_view = new QToolBar();
     toolbar_view->setOrientation(Qt::Vertical);
@@ -64,8 +65,8 @@ WidgetCodeEditor::WidgetCodeEditor(const QModelIndex &index_, QAbstractProxyMode
     // vertical (toolbar - table/code editor)
     auto vertical_layout = new QVBoxLayout;
     vertical_layout->addWidget(toolbar_table);
-    vertical_layout->addWidget(_var_table);
-    vertical_layout->addWidget(_var_text);
+    vertical_layout->addWidget(_vars_table);
+    vertical_layout->addWidget(_vars_text);
     // horizontal (vertical - tollbar for switch view)
     auto horizontal_layout = new QHBoxLayout;
     horizontal_layout->addLayout(vertical_layout);
@@ -79,14 +80,24 @@ WidgetCodeEditor::WidgetCodeEditor(const QModelIndex &index_, QAbstractProxyMode
     addWidget(container);
 
     // *** code editor
-    _text = new CodeEditorWidget(this);
-    _text->setMinimumSize(500, 300);
-    _text->setPlainText(XmlParser::getPouBodyText(item(index_)->node()));
-    connect(_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_textChanged);
+    _body_text = new CodeEditorWidget(this);
+    _body_text->setMinimumSize(500, 300);
+    _body_text->setPlainText(XmlParser::getPouBodyText(item(index_)->node()));
+    connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_textChanged);
     // ***
 
     // add code editor to splitter
-    addWidget(_text);
+    addWidget(_body_text);
+}
+
+void WidgetCodeEditor::createVarsTable()
+{
+
+}
+
+void WidgetCodeEditor::createVarsText()
+{
+
 }
 
 QModelIndex WidgetCodeEditor::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
@@ -114,42 +125,59 @@ DomItem * WidgetCodeEditor::item(const QModelIndex &index, QAbstractItemModel * 
 
 void WidgetCodeEditor::slot_textChanged()
 {
+    QDomNode new_node = XmlParser::getPouNode(_vars_text->toPlainText(), _body_text->toPlainText(), item(_vars_table->rootIndex())->node());
+
+    auto count = item(_vars_table->rootIndex())->rowCount();
+    for(auto i=0;i<count;i++)
+    {
+        _vars_table->selectRow(0);
+        slot_delVariable();
+    }
+
+    // item(_vars_table->rootIndex())->addEmptyNode();
+    item(_vars_table->rootIndex())->updateNode(new_node);
+
+    _proxy->sourceModel()->insertRow(item(_vars_table->rootIndex())->rowCount(), s_index(_vars_table->rootIndex()));
 }
 
 void WidgetCodeEditor::slot_txtViewToggled(bool state)
 {
-    _var_table->hide();
-    _var_text->show();
+    _vars_table->hide();
+    _vars_text->show();
 }
 
 void WidgetCodeEditor::slot_tblViewToggled(bool state)
 {
-    _var_text->hide();
-    _var_table->show();
+    _vars_text->hide();
+    _vars_table->show();
 }
 
 void WidgetCodeEditor::slot_addVariable()
 {
-    auto parent = item(_var_table->rootIndex());
+    auto parent = item(_vars_table->rootIndex());
 
     // add node
     parent->addEmptyNode();
 
+    qDebug() << __PRETTY_FUNCTION__ << parent->rowCount();
+
     // add item
-    _proxy->sourceModel()->insertRow(parent->rowCount(), s_index(_var_table->rootIndex()));
+    _proxy->sourceModel()->insertRow(parent->rowCount(), s_index(_vars_table->rootIndex()));
 }
 
 void WidgetCodeEditor::slot_delVariable()
 {
     // for every selected rows
     // !!! don't work for multiselection
-    for(auto index : _var_table->selectionModel()->selectedRows())
+    for(auto index : _vars_table->selectionModel()->selectedRows())
     {
+        qDebug() << item(index)->node().nodeName() << item(index)->node().parentNode().nodeName();
+
         // delete node
-        item(_var_table->rootIndex())->removeChild(s_index(index).row(), 0, item(index)->node());
+        item(_vars_table->rootIndex())->removeChild(s_index(index).row(), 0, item(index)->node());
 
         // delete item
-        proxy(_var_table->model())->sourceModel()->
-            removeRow(s_index(index).row(), s_index(_var_table->rootIndex()));
+        proxy(_vars_table->model())->sourceModel()->
+            removeRow(s_index(index).row(), s_index(_vars_table->rootIndex()));
     }
 }

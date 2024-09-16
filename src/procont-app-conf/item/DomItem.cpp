@@ -41,16 +41,22 @@ DomItem * DomItem::parentItem() const
 
 int DomItem::rowCount()
 {
-    if (!QStandardItem::rowCount())
+    if (!QStandardItem::rowCount() && start)
+    {
         insertChildren(node());
+        start = false;
+    }
 
     return QStandardItem::rowCount();
 }
 
 int DomItem::columnCount()
 {
-    if (!QStandardItem::columnCount())
+    if (!QStandardItem::columnCount() && start)
+    {
         insertChildren(node());
+        start = false;
+    }
 
     return QStandardItem::columnCount();
 }
@@ -63,6 +69,8 @@ QDomNodeList DomItem::filterChildren(const QDomNode &node) const
 std::pair<int, int> DomItem::insertChildren(const QDomNode & parentNode, int shift)
 {
     QDomNodeList children = filterChildren(parentNode);
+
+    qDebug() << __PRETTY_FUNCTION__ << parentNode.nodeName() << m_itemType << children.count();
 
     int ch = 0; int cn = 0; std::pair<int, int> res = std::make_pair(0,0);
     for (int i=0;i<children.count();i++)
@@ -92,9 +100,15 @@ DomItem * DomItem::insertChild(int row, int column, const QDomNode & node, int s
     if (childItem)
         return childItem;
 
+    qDebug() << __PRETTY_FUNCTION__ << row << shift << column << node.nodeName();
+
     buildChildren(node, row, shift);
 
+    // qDebug() << __PRETTY_FUNCTION__;
+
     childItem = dynamic_cast<DomItem *>(child(shift+row, column));
+
+    // qDebug() << __PRETTY_FUNCTION__ << childItem;
 
     return childItem;
 }
@@ -103,13 +117,23 @@ void DomItem::removeChild(int row, int column, const QDomNode & childNode)
 {
     Q_UNUSED(column);
 
-    childNode.parentNode().removeChild(childNode);
+    // qDebug() << __PRETTY_FUNCTION__ << row << m_lChildNodes.size();
 
+    childNode.parentNode().removeChild(childNode);
     m_lChildNodes.remove(row); m_lChildCreated.remove(row);
+
+    // qDebug() << __PRETTY_FUNCTION__ << m_lChildNodes.size();
+}
+
+void DomItem::removeChildren()
+{
+    m_lChildNodes.clear(); m_lChildCreated.clear();
 }
 
 void DomItem::buildChildren(const QDomNode &node, int row, int shift)
 {
+    // qDebug() << __PRETTY_FUNCTION__;
+
     auto childNode = node.childNodes().item(row);
     auto childItem = itemBuilder()->build(childNode);
     setChild(shift+row, 0, childItem);
@@ -155,11 +179,15 @@ void DomItemVar::addEmptyNode()
 
 void DomItemVar::setupChildren(const QDomNode & node)
 {
+    // qDebug() << __PRETTY_FUNCTION__;
+
     setupChild(node, "variable");
 }
 
 void DomItemVar::setupChild(const QDomNode & node, const QString & name)
 {
+    // qDebug() << __PRETTY_FUNCTION__;
+
     auto vars = node.toElement().elementsByTagName(name);
     for(auto i=0;i<vars.count();i++)
     {
@@ -173,8 +201,12 @@ void DomItemVar::setupChild(const QDomNode & node, const QString & name)
 
 void DomItemVar::buildChildren(const QDomNode &node, int row, int shift)
 {
+    // qDebug() << __PRETTY_FUNCTION__ << m_lChildNodes.size() << row;
+
     if(m_lChildNodes.size() <= row)
         setupChildren(node);
+
+    // qDebug() << __PRETTY_FUNCTION__;
 
     for(auto i=0;i<m_lChildNodes.size();i++)
     {
@@ -184,10 +216,14 @@ void DomItemVar::buildChildren(const QDomNode &node, int row, int shift)
             m_lChildCreated[i] = true;
         }
     }
+
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void DomItemVar::buildChild(const QDomNode &node, int row)
 {
+    // qDebug() << __PRETTY_FUNCTION__;
+
     // item
     auto childNode = node;
     auto childItem = itemBuilder()->build(childNode);
@@ -262,6 +298,12 @@ void DomItemPou::addEmptyNode()
     el_localVars.appendChild(el_variable);
 }
 
+void DomItemPou::updateNode(const QDomNode & new_node_)
+{        
+    node().removeChild(node().toElement().namedItem("interface"));
+    node().appendChild(new_node_.toElement().namedItem("interface").cloneNode());
+}
+
 QDomNodeList DomItemPou::filterChildren(const QDomNode &node) const
 {
     return node.toElement().elementsByTagName("interface");
@@ -269,6 +311,8 @@ QDomNodeList DomItemPou::filterChildren(const QDomNode &node) const
 
 void DomItemPou::setupChildren(const QDomNode & node)
 {
+    // qDebug() << __PRETTY_FUNCTION__;
+
     auto ifaces = node.toElement().elementsByTagName("interface");
     if(ifaces.count())
     {

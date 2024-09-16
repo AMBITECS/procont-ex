@@ -10,6 +10,12 @@ ItemValue::ItemValue(const QDomNode &node) :
     m_parent(node.parentNode())
 {
 }
+
+void ItemValue::updateNode(const QDomNode &node_)
+{
+    m_node = node_;
+    m_parent = node_.parentNode();
+}
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------

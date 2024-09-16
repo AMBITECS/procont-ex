@@ -27,6 +27,8 @@ public:
 public:
     [[nodiscard]] DomItem * insertChild(int row, int column, const QDomNode & node, int shift = 0);
     void removeChild(int row, int column, const QDomNode & childNode);
+    void removeChildren();
+    virtual void updateNode(const QDomNode &) {;}
     virtual void addEmptyNode() {;}
 
     [[nodiscard]] DomItem * parentItem() const;
@@ -41,7 +43,7 @@ public:
 public:
     [[nodiscard]] static ItemType assignType(const QDomNode &node);
 
-private:
+public:
     [[nodiscard]] std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
     void setItemValue(ItemValue *item);
 
@@ -64,6 +66,7 @@ protected:
 
 private:
     static QStringList m_discard;
+    bool start = true;
 };
 // ----------------------------------------------------------------------------
 
@@ -94,6 +97,7 @@ public:
     [[nodiscard]] QVariant data(int role) const override;
 
     virtual void addEmptyNode() override;
+    virtual void updateNode(const QDomNode &) override;
 
 protected:
     [[nodiscard]] virtual QDomNodeList filterChildren(const QDomNode &node) const override;

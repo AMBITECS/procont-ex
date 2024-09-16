@@ -127,8 +127,6 @@ bool DomModel::insertRows(int position, int rows, const QModelIndex &parent)
     if (!parentItem)
         return false;
 
-    qDebug() << __PRETTY_FUNCTION__ << position << rows << parent;
-
     beginInsertRows(parent, position, position + rows - 1);
     parentItem->insertRows(position, rows);
     endInsertRows();

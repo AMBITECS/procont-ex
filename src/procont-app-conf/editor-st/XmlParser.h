@@ -62,12 +62,12 @@ public:
     QString getPouVarsText(const int index);
     QString getPouBodyText(const int index);
     QList<Pou>* getPous();
-    void typesFromFile(const QString &fileName);
+
+    static void typesFromFile(const QString &fileName);
 
     static QString getPouBodyText(const QDomNode& node);
     static QString getPouVarsText(const QDomNode& node);
-
-    // static
+    static QDomNode getPouNode(const QString& _text_vars, const QString&, const QDomNode &_parent);
 
 private:
     // xml to text
@@ -79,9 +79,11 @@ private:
     void convertTextToPou(const int index);
 
 private:
-    static Pou parsePOU(const QDomNode& node);
+    static Pou XmlToPOU(const QDomNode& node);
+    static Pou TxtToPOU(const QString& _text_vars, const QString& _text_body);
+    static QDomNode getPouNode(Pou _pou, const QDomNode &_parent);
 
 private:
     QList<Pou> pous;
-    QStringList types_list;
+    static QStringList types_list;
 };

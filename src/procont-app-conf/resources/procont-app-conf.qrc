@@ -2,5 +2,14 @@
     <qresource prefix="/icon">
         <file>images/delete.png</file>
         <file>images/add.png</file>
+        <file>images/text.svg</file>
+        <file>images/table.svg</file>
+        <file>images/remove.svg</file>
+        <file>images/plus.svg</file>
+        <file>images/minus.svg</file>
+        <file>images/delete.svg</file>
+        <file>images/text_3.svg</file>
+        <file>images/table_4.svg</file>
+        <file>images/table_9.svg</file>
     </qresource>
 </RCC>

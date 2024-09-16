@@ -17,6 +17,9 @@ public:
     QString toPlainText() const;
     void setPlainText(const QString &text);
 
+Q_SIGNALS:
+    void textChanged();
+
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 

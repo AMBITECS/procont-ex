@@ -1,6 +1,7 @@
 #pragma once
-#include <QObject>
+
 #include <QDomDocument>
+#include <QList>
 
 struct SimpleValue
 {
@@ -49,7 +50,7 @@ struct Pou
     Body body;
 };
 
-class XmlParser : QObject
+class XmlParser/* : QObject*/
 {
 public:
     XmlParser();
@@ -64,6 +65,9 @@ public:
     void typesFromFile(const QString &fileName);
 
     static QString getPouBodyText(const QDomNode& node);
+    static QString getPouVarsText(const QDomNode& node);
+
+    // static
 
 private:
     // xml to text

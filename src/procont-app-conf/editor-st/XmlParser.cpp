@@ -187,6 +187,35 @@ QString XmlParser::getPouBodyText(const QDomNode& node)
     return parsePOU(node).body.value + "\n";
 }
 
+QString XmlParser::getPouVarsText(const QDomNode& node)
+{
+    if(node.isNotation())
+        return {};
+
+    if(node.nodeName() != "pou")
+        return {};
+
+    QString result;
+
+    Pou pou = parsePOU(node);
+
+    result += "PROGRAM " + pou.name + "\n";
+    result += QString("VAR") + "\n";
+    for (const auto & var : pou.interface.localVars)
+    {
+        result += "\t" + var.name + ": " + var.type;
+        if (var.initialValue.simpleValue.value != "")
+        {
+            result += " := " + var.initialValue.simpleValue.value + "\n";
+        } else {
+            result += "\n";
+        }
+    }
+    result += QString("END_VAR") + "\n";
+
+    return result;
+}
+
 QString XmlParser::convertDataToText()
 {
     QString result;

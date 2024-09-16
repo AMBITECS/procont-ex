@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     proxy_pou(new ProxyModelTree_pou),
     proxy_dev(new ProxyModelTree_dev)
 {
-    setMinimumSize(QSize(1280, 900));
+    setMinimumSize(QSize(1440, 900));
 
     createWidgets();
 
@@ -44,7 +44,7 @@ void MainWindow::createWidgets()
     viewDev = new QTreeView();
     viewDev->setExpandsOnDoubleClick(false);
     viewDev->setHeaderHidden(true);
-    viewDev->setMinimumSize(300, 400);
+    viewDev->setMinimumSize(250, 400);
     dockDev = new QDockWidget(tr("Device"), this);
     dockDev->setTitleBarWidget(new QWidget());
     dockDev->setAllowedAreas(Qt::LeftDockWidgetArea);
@@ -53,7 +53,7 @@ void MainWindow::createWidgets()
 
     viewPou = new QTreeView();
     viewPou->setExpandsOnDoubleClick(false);
-    viewPou->setMinimumSize(300, 400);
+    viewPou->setMinimumSize(250, 400);
     viewPou->setHeaderHidden(true);
     dockPou = new QDockWidget(tr("POUs"), this);
     dockPou->setTitleBarWidget(new QWidget());
@@ -62,7 +62,7 @@ void MainWindow::createWidgets()
     addDockWidget(Qt::LeftDockWidgetArea, dockPou);
 
     view = new QTreeView();
-    view->setMinimumSize(300, 400);
+    view->setMinimumSize(250, 400);
     view->setHeaderHidden(true);
     auto pDock = new QDockWidget(tr("Model"), this);
     pDock->setTitleBarWidget(new QWidget());

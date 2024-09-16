@@ -5,7 +5,9 @@
 
 QT_FORWARD_DECLARE_CLASS(DomItem)
 QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
-QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
+
+QT_FORWARD_DECLARE_CLASS(CodeEditorWidget)
+QT_FORWARD_DECLARE_CLASS(TableView)
 
 #include <QAbstractProxyModel>
 
@@ -27,9 +29,15 @@ private slots:
     void slot_txtViewToggled(bool);
     void slot_tblViewToggled(bool);
 
+    void slot_textChanged();
+
 private:
     QModelIndex _index;
     QAbstractProxyModel * _proxy;
+
+    CodeEditorWidget * _var_text;
+    CodeEditorWidget * _text;
+    TableView * _var_table;
 };
 
 #endif // WIDGETCODEEDITOR_H

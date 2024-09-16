@@ -251,23 +251,23 @@
 <context>
     <name>WidgetCodeEditor</name>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="26"/>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="28"/>
         <source>Add</source>
         <translation type="unfinished">Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="28"/>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="30"/>
         <source>Remove</source>
         <translation type="unfinished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="56"/>
-        <source>Txt</source>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="55"/>
+        <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="59"/>
-        <source>Tbl</source>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="58"/>
+        <source>Table</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

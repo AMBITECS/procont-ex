@@ -19,7 +19,7 @@
   <pous>
    <pou name="sample_program" pouType="program">
     <interface>
-     <inputVars>
+     <inputVars constant="TRUE">
       <variable name="Reset">
        <type>
         <BOOL/>
@@ -29,7 +29,7 @@
        </initialValue>
       </variable>
      </inputVars>
-     <outputVars>
+     <outputVars persistent="TRUE" constant="TRUE">
       <variable name="Cnt0">
        <type>
         <INT/>
@@ -71,7 +71,7 @@
        </initialValue>
       </variable>
      </outputVars>
-     <localVars>
+     <localVars retain="TRUE">
       <variable name="sample_function_block_ST0">
        <type>
         <derived name="sample_function_block_ST"/>
@@ -314,6 +314,8 @@ Out := Cnt;]]></xhtml:p>
               <initialValue>
                 <structValue>
                   <value member="IN">
+                <structValue>
+                  <value member="IN">
                     <simpleValue value="5" />
                   </value>
                   <value member="RESET">
@@ -335,6 +337,146 @@ Out := Cnt;]]></xhtml:p>
                     <simpleValue value="3" />
                   </value>
                 </structValue>
+                  </value>
+                  <value member="RESET">
+                    <simpleValue value="TRUE" />
+                  </value>
+                  <value member="MN">
+                    <simpleValue value="100" />
+                  </value>
+                  <value member="MX">
+                    <simpleValue value="-100" />
+                  </value>
+                  <value member="AVG">
+                    <simpleValue value="1" />
+                  </value>
+                  <value member="SUM">
+                    <simpleValue value="2" />
+                  </value>
+                  <value member="COUNTER">
+                    <simpleValue value="3" />
+                  </value>
+                </structValue>
+              </initialValue>
+            </variable>
+            <variable name="newVar1">
+              <type>
+                <array>
+                  <dimension lower="0" upper="5" />
+                  <baseType>
+                    <array>
+                      <dimension lower="0" upper="5" />
+                      <baseType>
+                        <derived name="R_TRIG" />
+                      </baseType>
+                    </array>
+                  </baseType>
+                </array>
+              </type>
+              <initialValue>
+                <arrayValue>
+                  <value>
+                    <arrayValue>
+                      <value>
+                        <structValue>
+                          <value member="CLK">
+                            <simpleValue value="TRUE" />
+                          </value>
+                          <value member="Q">
+                            <simpleValue value="TRUE" />
+                          </value>
+                        </structValue>
+                      </value>
+                      <value repetitionValue="4">
+                        <structValue />
+                      </value>
+                      <value>
+                        <structValue>
+                          <value member="CLK">
+                            <simpleValue value="TRUE" />
+                          </value>
+                          <value member="Q">
+                            <simpleValue value="TRUE" />
+                          </value>
+                        </structValue>
+                      </value>
+                    </arrayValue>
+                  </value>
+                  <value repetitionValue="3">
+                    <arrayValue>
+                      <value repetitionValue="6">
+                        <structValue />
+                      </value>
+                    </arrayValue>
+                  </value>
+                  <value>
+                    <arrayValue>
+                      <value repetitionValue="3">
+                        <structValue />
+                      </value>
+                      <value>
+                        <structValue>
+                          <value member="CLK">
+                            <simpleValue value="TRUE" />
+                          </value>
+                          <value member="Q">
+                            <simpleValue value="TRUE" />
+                          </value>
+                        </structValue>
+                      </value>
+                      <value repetitionValue="2">
+                        <structValue />
+                      </value>
+                    </arrayValue>
+                  </value>
+                  <value>
+                    <arrayValue>
+                      <value repetitionValue="6">
+                        <structValue />
+                      </value>
+                    </arrayValue>
+                  </value>
+                </arrayValue>
+              </initialValue>
+            </variable>
+            <variable name="newVar">
+              <type>
+                <array>
+                  <dimension lower="0" upper="5" />
+                  <baseType>
+                    <derived name="F_TRIG" />
+                  </baseType>
+                </array>
+              </type>
+              <initialValue>
+                <arrayValue>
+                  <value>
+                    <structValue>
+                      <value member="CLK">
+                        <simpleValue value="TRUE" />
+                      </value>
+                      <value member="Q">
+                        <simpleValue value="TRUE" />
+                      </value>
+                    </structValue>
+                  </value>
+                  <value repetitionValue="3">
+                    <structValue />
+                  </value>
+                  <value>
+                    <structValue>
+                      <value member="CLK">
+                        <simpleValue value="TRUE" />
+                      </value>
+                      <value member="Q">
+                        <simpleValue value="TRUE" />
+                      </value>
+                    </structValue>
+                  </value>
+                  <value>
+                    <structValue />
+                  </value>
+                </arrayValue>
               </initialValue>
             </variable>
           </localVars>

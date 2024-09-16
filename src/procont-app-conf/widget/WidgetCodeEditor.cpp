@@ -19,61 +19,74 @@ WidgetCodeEditor::WidgetCodeEditor(const QModelIndex &index_, QAbstractProxyMode
     _index(index_),
     _proxy(proxy_)
 {
-    // auto splitter = new QSplitter(Qt::Vertical, parent_);
+    // *** variables editor
+    // *  variables editor widgets
+    // contauner for variables editor widgets
     auto container = new QWidget;
-
-    auto toolbar = new QToolBar;
-    auto action = toolbar->addAction(QIcon(":/icon/images/add.png"), tr("Add"));
+    // variables editor toolbar for table manipulations
+    auto toolbar_table = new QToolBar;
+    auto action = toolbar_table->addAction(QIcon(":/icon/images/plus.svg"), tr("Add"));
     connect(action, &QAction::triggered, this, &WidgetCodeEditor::slot_addVariable);
-    action = toolbar->addAction(QIcon(":/icon/images/delete.png"), tr("Remove"));
+    action = toolbar_table->addAction(QIcon(":/icon/images/minus.svg"), tr("Remove"));
     connect(action, &QAction::triggered, this, &WidgetCodeEditor::slot_delVariable);
-    toolbar->setIconSize(QSize(16, 16));
-
-    auto table = new TableView;
-    table->setModel(proxy_);
-    table->setRootIndex(p_index(s_index(_index), proxy_));
-    table->setColumnHidden(0, true);
-    table->setSelectionBehavior(QAbstractItemView::SelectRows);
-    table->setSelectionMode(QAbstractItemView::SingleSelection);
-    table->horizontalHeader()->setHighlightSections(false);
-    table->setItemDelegateForColumn(7, new CTextEditDelegate);
+    toolbar_table->setIconSize(QSize(16, 16));
+    // variables editor table
+    _var_table = new TableView;
+    _var_table->setMinimumSize(500, 300);
+    _var_table->setModel(_proxy);
+    _var_table->setRootIndex(p_index(s_index(_index), _proxy));
+    _var_table->setColumnHidden(0, true);
+    _var_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _var_table->setSelectionMode(QAbstractItemView::SingleSelection);
+    _var_table->horizontalHeader()->setHighlightSections(false);
+    _var_table->setItemDelegateForColumn(7, new CTextEditDelegate);
     // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
     // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
-
-    auto vars = new CodeEditorWidget(this);
-    vars->setMinimumSize(500, 300);
-    vars->setPlainText(XmlParser::getPouBodyText(item(index_)->node()));
-
-    auto vertical_layout = new QVBoxLayout;
-    vertical_layout->addWidget(toolbar);
-    vertical_layout->addWidget(table);
-    vertical_layout->addWidget(vars);
-    vars->hide();
-
-    toolbar = new QToolBar();
-    toolbar->setOrientation(Qt::Vertical);
-    auto group = new QActionGroup(toolbar);
-    action = toolbar->addAction(tr("Txt"));
+    // variables editor code editor
+    _var_text = new CodeEditorWidget(this);
+    _var_text->setMinimumSize(500, 300);
+    _var_text->setPlainText(XmlParser::getPouVarsText(item(index_)->node()));
+    connect(_var_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_textChanged);
+    _var_text->hide();
+    // variables editor toolbar for switch view
+    auto toolbar_view = new QToolBar();
+    toolbar_view->setOrientation(Qt::Vertical);
+    auto group = new QActionGroup(toolbar_view);
+    action = toolbar_view->addAction(QIcon(":/icon/images/text_3.svg"), tr("Text"));
     connect(action, &QAction::toggled, this, &WidgetCodeEditor::slot_txtViewToggled);
     action->setCheckable(true); group->addAction(action);
-    action = toolbar->addAction(tr("Tbl"));
+    action = toolbar_view->addAction(QIcon(":/icon/images/table_9.svg"), tr("Table"));
     connect(action, &QAction::toggled, this, &WidgetCodeEditor::slot_tblViewToggled);
     action->setCheckable(true); group->addAction(action);
     action->setChecked(true);
-    toolbar->setIconSize(QSize(16,16));
-
+    toolbar_view->setIconSize(QSize(24, 24));
+    // *  variables editor layout
+    // vertical (toolbar - table/code editor)
+    auto vertical_layout = new QVBoxLayout;
+    vertical_layout->addWidget(toolbar_table);
+    vertical_layout->addWidget(_var_table);
+    vertical_layout->addWidget(_var_text);
+    // horizontal (vertical - tollbar for switch view)
     auto horizontal_layout = new QHBoxLayout;
     horizontal_layout->addLayout(vertical_layout);
-    horizontal_layout->addWidget(toolbar);
+    horizontal_layout->addWidget(toolbar_view);
     container->setLayout(horizontal_layout);
+    // set layout for container
+    // container->setLayout(vertical_layout);
+    // ***
 
-    container->setLayout(vertical_layout);
+    // add variables editor to splitter
     addWidget(container);
 
-    auto text = new CodeEditorWidget(this);
-    text->setMinimumSize(500, 300);
-    text->setPlainText(XmlParser::getPouBodyText(item(index_)->node()));
-    addWidget(text);
+    // *** code editor
+    _text = new CodeEditorWidget(this);
+    _text->setMinimumSize(500, 300);
+    _text->setPlainText(XmlParser::getPouBodyText(item(index_)->node()));
+    connect(_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_textChanged);
+    // ***
+
+    // add code editor to splitter
+    addWidget(_text);
 }
 
 QModelIndex WidgetCodeEditor::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
@@ -99,41 +112,44 @@ DomItem * WidgetCodeEditor::item(const QModelIndex &index, QAbstractItemModel * 
     return reinterpret_cast<DomItem *>(s_index(index, proxy).internalPointer());
 }
 
+void WidgetCodeEditor::slot_textChanged()
+{
+}
+
 void WidgetCodeEditor::slot_txtViewToggled(bool state)
 {
-    qDebug() << "txt" << state;
+    _var_table->hide();
+    _var_text->show();
 }
 
 void WidgetCodeEditor::slot_tblViewToggled(bool state)
 {
-    qDebug() << "tbl" << state;
+    _var_text->hide();
+    _var_table->show();
 }
 
 void WidgetCodeEditor::slot_addVariable()
 {
-    // auto index = m_index(_hTables.value(currentWidget())->rootIndex());
-    // auto parentItem = item(_hTables.value(currentWidget())->rootIndex());
+    auto parent = item(_var_table->rootIndex());
 
-    // // add node
-    // parentItem->addEmptyNode();
+    // add node
+    parent->addEmptyNode();
 
-    // // add item
-    // proxy(_hTables.value(widget(currentIndex()))->model())->sourceModel()->insertRow(parentItem->rowCount(), index);
+    // add item
+    _proxy->sourceModel()->insertRow(parent->rowCount(), s_index(_var_table->rootIndex()));
 }
 
 void WidgetCodeEditor::slot_delVariable()
 {
-//     // for every selected rows
-//     // !!! don't work for multiselection
-//     for(auto index : _hTables.value(currentWidget())->selectionModel()->selectedRows())
-//     {
-//         // delete node
-//         auto childNode = item(index)->node();
-//         auto parentItem = item(_hTables.value(currentWidget())->rootIndex());
-//         parentItem->removeChild(m_index(index).row(), 0, childNode);
+    // for every selected rows
+    // !!! don't work for multiselection
+    for(auto index : _var_table->selectionModel()->selectedRows())
+    {
+        // delete node
+        item(_var_table->rootIndex())->removeChild(s_index(index).row(), 0, item(index)->node());
 
-//         // delete item
-//         proxy(_hTables.value(widget(currentIndex()))->model())->sourceModel()->
-//             removeRow(m_index(index).row(), m_index(_hTables.value(currentWidget())->rootIndex()));
-//     }
+        // delete item
+        proxy(_var_table->model())->sourceModel()->
+            removeRow(s_index(index).row(), s_index(_var_table->rootIndex()));
+    }
 }

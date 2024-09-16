@@ -32,7 +32,7 @@ CodeEditorWidget::CodeEditorWidget(QWidget *parent)
 
 void CodeEditorWidget::slot_textChanged()
 {
-    qDebug() << "text changed";
+    emit textChanged();
 }
 
 QString CodeEditorWidget::toPlainText() const

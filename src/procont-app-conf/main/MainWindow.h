@@ -13,7 +13,6 @@ QT_FORWARD_DECLARE_CLASS(ProxyModelTree_dev)
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow() = default;

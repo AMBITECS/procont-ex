@@ -144,7 +144,7 @@ QString ItemValue_Attr_opt::get() const
 }
 
 void ItemValue_Attr_opt::set(const QString &value)
-{
+{   
     if(value.isEmpty())
     {
         if(!node().isNull()) parent().toElement().removeAttributeNode(node().toAttr());

@@ -104,11 +104,11 @@ DomItem * DomItem::insertChild(int row, int column, const QDomNode & node, int s
 
     buildChildren(node, row, shift);
 
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 
     childItem = dynamic_cast<DomItem *>(child(shift+row, column));
 
-    // qDebug() << __PRETTY_FUNCTION__ << childItem;
+    qDebug() << __PRETTY_FUNCTION__ << childItem;
 
     return childItem;
 }
@@ -117,12 +117,12 @@ void DomItem::removeChild(int row, int column, const QDomNode & childNode)
 {
     Q_UNUSED(column);
 
-    // qDebug() << __PRETTY_FUNCTION__ << row << m_lChildNodes.size();
+    qDebug() << __PRETTY_FUNCTION__ << row << m_lChildNodes.size() << childNode.nodeName() << childNode.parentNode().childNodes().count();
 
     childNode.parentNode().removeChild(childNode);
     m_lChildNodes.remove(row); m_lChildCreated.remove(row);
 
-    // qDebug() << __PRETTY_FUNCTION__ << m_lChildNodes.size();
+    qDebug() << __PRETTY_FUNCTION__ << m_lChildNodes.size();
 }
 
 void DomItem::removeChildren()
@@ -132,7 +132,7 @@ void DomItem::removeChildren()
 
 void DomItem::buildChildren(const QDomNode &node, int row, int shift)
 {
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 
     auto childNode = node.childNodes().item(row);
     auto childItem = itemBuilder()->build(childNode);
@@ -179,14 +179,14 @@ void DomItemVar::addEmptyNode()
 
 void DomItemVar::setupChildren(const QDomNode & node)
 {
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 
     setupChild(node, "variable");
 }
 
 void DomItemVar::setupChild(const QDomNode & node, const QString & name)
 {
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 
     auto vars = node.toElement().elementsByTagName(name);
     for(auto i=0;i<vars.count();i++)
@@ -201,12 +201,12 @@ void DomItemVar::setupChild(const QDomNode & node, const QString & name)
 
 void DomItemVar::buildChildren(const QDomNode &node, int row, int shift)
 {
-    // qDebug() << __PRETTY_FUNCTION__ << m_lChildNodes.size() << row;
+    qDebug() << __PRETTY_FUNCTION__ << m_lChildNodes.size() << row;
 
     if(m_lChildNodes.size() <= row)
         setupChildren(node);
 
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__ << m_lChildNodes.size();
 
     for(auto i=0;i<m_lChildNodes.size();i++)
     {
@@ -217,12 +217,12 @@ void DomItemVar::buildChildren(const QDomNode &node, int row, int shift)
         }
     }
 
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 }
 
 void DomItemVar::buildChild(const QDomNode &node, int row)
 {
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 
     // item
     auto childNode = node;
@@ -242,6 +242,11 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     setChild(row, 3, childItem);
     // address
     childNode = node.attributes().namedItem("address");
+    if(childNode.isNull())
+    {
+        childNode = node.ownerDocument().createAttribute("address");
+        childNode = QDomNode(node).appendChild(childNode);
+    }
     childItem = itemBuilder()->build(childNode);
     childItem->setItemValue(new ItemValue_Address(childNode));
     setChild(row, 4, childItem);
@@ -252,11 +257,21 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     setChild(row, 5, childItem);
     // initial value
     childNode = node.namedItem("initialValue");
+    if(childNode.isNull())
+    {
+        childNode = node.ownerDocument().createElement("initialValue");
+        childNode = QDomNode(node).appendChild(childNode);
+    }
     childItem = itemBuilder()->build(childNode);
     childItem->setItemValue(new ItemValue_InitialValue(childNode));
     setChild(row, 6, childItem);
     // doc
     childNode = node.namedItem("documentation");
+    if(childNode.isNull())
+    {
+        childNode = node.ownerDocument().createElement("documentation");
+        childNode = QDomNode(node).appendChild(childNode);
+    }
     childItem = itemBuilder()->build(childNode);
     childItem->setItemValue(new ItemValue_Documentation(childNode));
     setChild(row, 7, childItem);
@@ -311,7 +326,7 @@ QDomNodeList DomItemPou::filterChildren(const QDomNode &node) const
 
 void DomItemPou::setupChildren(const QDomNode & node)
 {
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 
     auto ifaces = node.toElement().elementsByTagName("interface");
     if(ifaces.count())

@@ -127,17 +127,14 @@ void WidgetCodeEditor::slot_textChanged()
 {
     QDomNode new_node = XmlParser::getPouNode(_vars_text->toPlainText(), _body_text->toPlainText(), item(_vars_table->rootIndex())->node());
 
-    auto count = item(_vars_table->rootIndex())->rowCount();
-    for(auto i=0;i<count;i++)
-    {
-        _vars_table->selectRow(0);
-        slot_delVariable();
-    }
+    item(_vars_table->rootIndex())->removeChildren();
+    proxy(_vars_table->model())->sourceModel()->
+        removeRows(0, item(_vars_table->rootIndex())->rowCount(), s_index(_vars_table->rootIndex()));
 
-    // item(_vars_table->rootIndex())->addEmptyNode();
     item(_vars_table->rootIndex())->updateNode(new_node);
+    auto count = new_node.toElement().elementsByTagName("variable").count();
 
-    _proxy->sourceModel()->insertRow(item(_vars_table->rootIndex())->rowCount(), s_index(_vars_table->rootIndex()));
+    _proxy->sourceModel()->insertRows(0, count, s_index(_vars_table->rootIndex()));
 }
 
 void WidgetCodeEditor::slot_txtViewToggled(bool state)
@@ -159,8 +156,6 @@ void WidgetCodeEditor::slot_addVariable()
     // add node
     parent->addEmptyNode();
 
-    qDebug() << __PRETTY_FUNCTION__ << parent->rowCount();
-
     // add item
     _proxy->sourceModel()->insertRow(parent->rowCount(), s_index(_vars_table->rootIndex()));
 }
@@ -171,8 +166,6 @@ void WidgetCodeEditor::slot_delVariable()
     // !!! don't work for multiselection
     for(auto index : _vars_table->selectionModel()->selectedRows())
     {
-        qDebug() << item(index)->node().nodeName() << item(index)->node().parentNode().nodeName();
-
         // delete node
         item(_vars_table->rootIndex())->removeChild(s_index(index).row(), 0, item(index)->node());
 

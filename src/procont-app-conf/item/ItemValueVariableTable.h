@@ -162,7 +162,7 @@ public:
     enum class ValueType
     {
         valueEmpty,
-        valueSimple,
+        valueSimple = 99,
         valueSimple_struct,
         valueSimple_array,
         valueStruct,

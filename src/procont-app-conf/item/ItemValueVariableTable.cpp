@@ -400,7 +400,7 @@ void ItemValue_InitialValue::set(const QString &value)
     m_node = parent().appendChild(m_node);
 
     m_value.reset(create(m_node, v));
-    m_value->set({});
+    m_value->set(value);
 }
 // ----------------------------------------------------------------------------
 

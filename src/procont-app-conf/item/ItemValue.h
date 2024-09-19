@@ -15,7 +15,7 @@ class ItemValue
 {
 public:
 
-    ItemValue(const QDomNode &node);
+    ItemValue(const QDomNode &node, const QDomNode &parent = {});
     virtual ~ItemValue() = default;
 
     [[nodiscard]] virtual QString get() const = 0;
@@ -95,7 +95,7 @@ public:
 class ItemValue_SubNodeValue: public ItemValue
 {
 public:
-    ItemValue_SubNodeValue(const QDomNode &node);
+    ItemValue_SubNodeValue(const QDomNode &node, const QDomNode &parent = {});
 
     [[nodiscard]] QString get() const override;
     void set(const QString &value) override;

@@ -306,8 +306,8 @@ void ItemValue_TypeArray::set(const QString &value)
 // ----------------------------------------------------------------------------
 // *** ItemValue_InitialValue ***
 
-ItemValue_InitialValue::ItemValue_InitialValue(const QDomNode &node) :
-    ItemValue(node),
+ItemValue_InitialValue::ItemValue_InitialValue(const QDomNode &node, const QDomNode &parent) :
+    ItemValue(node, parent),
     m_value(create(node))
 {
 }
@@ -392,13 +392,16 @@ QString ItemValue_InitialValue::get() const
 void ItemValue_InitialValue::set(const QString &value)
 {
     InitialValue v;
-    qDebug() << __PRETTY_FUNCTION__ << InitialValue_parser::parse(value, ItemValue_InitialValue::ValueType::valueEmpty, v);
-    qDebug() << v.print();
+    auto result = InitialValue_parser::parse(value, ItemValue_InitialValue::ValueType::valueEmpty, v);
+    // qDebug() << v.print();
 
     parent().removeChild(node());
-    m_node = parent().ownerDocument().createElement("initialValue");
-    m_node = parent().appendChild(m_node);
 
+    if(value.size() && result == 0)
+    {
+        m_node = parent().ownerDocument().createElement("initialValue");
+        m_node = parent().appendChild(m_node);
+    }
     m_value.reset(create(m_node, v));
     m_value->set(value);
 }

@@ -188,7 +188,7 @@ public:
 
     };
 public:
-    ItemValue_InitialValue(const QDomNode &node/*, const QDomNode &parent = {}*/);
+    ItemValue_InitialValue(const QDomNode &node, const QDomNode &parent = {});
     ItemValue_InitialValue(const QDomNode &node, const QString &);
 
     [[nodiscard]] QString get() const override;
@@ -236,7 +236,6 @@ public:
                 if(!repeate.match(value).hasMatch())
                     return 3;
                 count = value.left(value.indexOf('(')).toInt();
-                qDebug() << __PRETTY_FUNCTION__ << value.indexOf('(') << value.lastIndexOf(')');
                 if((value.indexOf(')') - value.lastIndexOf('(')) <= 0)
                     return 4;
                 value = value.mid(value.indexOf('(')+1, value.lastIndexOf(')')-value.indexOf('(')-1);
@@ -253,7 +252,6 @@ public:
             else
             {
                 v.type = type(value, parentType);
-                qDebug() << "--" << static_cast<int>(parentType) << static_cast<int>(v.type);
                 v.repeate = count;
                 if(!is_simple_format(value, parentType))
                     return 5;
@@ -561,8 +559,8 @@ protected:
 class ItemValue_Documentation : public ItemValue_SubNodeValue
 {
 public:
-    ItemValue_Documentation(const QDomNode &node) :
-        ItemValue_SubNodeValue(node)
+    ItemValue_Documentation(const QDomNode &node, const QDomNode &parent = {}) :
+        ItemValue_SubNodeValue(node, parent)
     {
         setName("xhtml;xhtml:p");
     }

@@ -261,12 +261,12 @@
         <translation type="unfinished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="56"/>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="57"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="59"/>
+        <location filename="../widget/WidgetCodeEditor.cpp" line="60"/>
         <source>Table</source>
         <translation type="unfinished"></translation>
     </message>

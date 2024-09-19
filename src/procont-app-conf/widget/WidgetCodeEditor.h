@@ -24,17 +24,16 @@ private:
     static QAbstractProxyModel * proxy(QAbstractItemModel *);
     static DomItem * item(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
 
-private:
-    void createVarsTable();
-    void createVarsText();
-
 private slots:
     void slot_addVariable();
     void slot_delVariable();
     void slot_txtViewToggled(bool);
     void slot_tblViewToggled(bool);
 
-    void slot_textChanged();
+    void slot_codeChanged();
+    void slot_txtVarChanged();
+    void updateTblView();
+    void slot_tblVarChanged();
 
 private:
     QModelIndex _index;

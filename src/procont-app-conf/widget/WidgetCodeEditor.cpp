@@ -41,13 +41,14 @@ WidgetCodeEditor::WidgetCodeEditor(const QModelIndex &index_, QAbstractProxyMode
     _vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
     _vars_table->horizontalHeader()->setHighlightSections(false);
     _vars_table->setItemDelegateForColumn(7, new CTextEditDelegate);
+    connect(_vars_table, &TableView::signal_tableChanged, this, &WidgetCodeEditor::slot_tblVarChanged);
     // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
     // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
     // variables editor code editor
     _vars_text = new CodeEditorWidget(this);
     _vars_text->setMinimumSize(500, 300);
-    _vars_text->setPlainText(XmlParser::getPouVarsText(item(index_)->node()));
-    connect(_vars_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_textChanged);
+    _vars_text->setPlainText(XmlParser::getPouVarsText(item(_index)->node()));
+    connect(_vars_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_txtVarChanged);
     _vars_text->hide();
     // variables editor toolbar for switch view
     auto toolbar_view = new QToolBar();
@@ -83,21 +84,14 @@ WidgetCodeEditor::WidgetCodeEditor(const QModelIndex &index_, QAbstractProxyMode
     _body_text = new CodeEditorWidget(this);
     _body_text->setMinimumSize(500, 300);
     _body_text->setPlainText(XmlParser::getPouBodyText(item(index_)->node()));
-    connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_textChanged);
+    connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetCodeEditor::slot_codeChanged);
     // ***
 
     // add code editor to splitter
     addWidget(_body_text);
-}
 
-void WidgetCodeEditor::createVarsTable()
-{
-
-}
-
-void WidgetCodeEditor::createVarsText()
-{
-
+    // !!! delete when txt view node edit will work correct
+    updateTblView();
 }
 
 QModelIndex WidgetCodeEditor::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
@@ -123,28 +117,73 @@ DomItem * WidgetCodeEditor::item(const QModelIndex &index, QAbstractItemModel * 
     return reinterpret_cast<DomItem *>(s_index(index, proxy).internalPointer());
 }
 
-void WidgetCodeEditor::slot_textChanged()
+void WidgetCodeEditor::slot_codeChanged()
 {
+    // get new node from editor
     QDomNode new_node = XmlParser::getPouNode(_vars_text->toPlainText(), _body_text->toPlainText(), item(_vars_table->rootIndex())->node());
+    // set new node to item
+    item(_vars_table->rootIndex())->updateNode(new_node);
+}
 
+void WidgetCodeEditor::updateTblView()
+{
+    // get new node form txt view
+    // !!! not work correct
+    QDomNode new_node = XmlParser::getPouNode
+        (
+            _vars_text->toPlainText(),
+            _body_text->toPlainText(),
+            item(_vars_table->rootIndex())->node()
+            );
+
+    QDomDocument doc;
+    doc.appendChild(doc.importNode(new_node, true));
+    qDebug() << "import" << doc.toString();
+
+    // remove old variables from item
     item(_vars_table->rootIndex())->removeChildren();
+    // remove roews from model
     proxy(_vars_table->model())->sourceModel()->
         removeRows(0, item(_vars_table->rootIndex())->rowCount(), s_index(_vars_table->rootIndex()));
 
+    // set new node to item
     item(_vars_table->rootIndex())->updateNode(new_node);
+    // add rows to model
     auto count = new_node.toElement().elementsByTagName("variable").count();
-
     _proxy->sourceModel()->insertRows(0, count, s_index(_vars_table->rootIndex()));
+}
+
+void WidgetCodeEditor::slot_txtVarChanged()
+{
+    // user make changes in text view
+    if(_vars_text->isVisible())
+        updateTblView();
+}
+
+void WidgetCodeEditor::slot_tblVarChanged()
+{
+    // user make changes in text view
+    if(_vars_table->isVisible())
+        // set new text to text view
+        _vars_text->setPlainText(XmlParser::getPouVarsText(item(_index)->node()));
 }
 
 void WidgetCodeEditor::slot_txtViewToggled(bool state)
 {
+    Q_UNUSED(state);
+
+    slot_tblVarChanged();
+
     _vars_table->hide();
     _vars_text->show();
 }
 
 void WidgetCodeEditor::slot_tblViewToggled(bool state)
 {
+    Q_UNUSED(state);
+
+    slot_txtVarChanged();
+
     _vars_text->hide();
     _vars_table->show();
 }

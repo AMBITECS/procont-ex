@@ -249,24 +249,64 @@
     </message>
 </context>
 <context>
+    <name>WidgeEditor</name>
+    <message>
+        <source>Add</source>
+        <translation type="obsolete">Добавить</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="obsolete">Удалить</translation>
+    </message>
+</context>
+<context>
     <name>WidgetCodeEditor</name>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="29"/>
+        <source>Add</source>
+        <translation type="obsolete">Добавить</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="obsolete">Удалить</translation>
+    </message>
+</context>
+<context>
+    <name>WidgetEditor</name>
+    <message>
+        <location filename="../widget/WidgetEditor.cpp" line="32"/>
         <source>Add</source>
         <translation type="unfinished">Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="31"/>
+        <location filename="../widget/WidgetEditor.cpp" line="34"/>
         <source>Remove</source>
         <translation type="unfinished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="57"/>
+        <location filename="../widget/WidgetEditor.cpp" line="60"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetCodeEditor.cpp" line="60"/>
+        <location filename="../widget/WidgetEditor.cpp" line="63"/>
+        <source>Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WidgetEditor_fbd</name>
+    <message>
+        <location filename="../widget/WidgetEditor.cpp" line="274"/>
+        <source>FBD veiw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetEditor.cpp" line="283"/>
+        <source>Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetEditor.cpp" line="286"/>
         <source>Table</source>
         <translation type="unfinished"></translation>
     </message>

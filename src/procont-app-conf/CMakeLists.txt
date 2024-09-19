@@ -36,7 +36,8 @@ set(PROJECT_SOURCES
     editor-st/CodeEditor.cpp editor-st/CodeEditor.h editor-st/CodeEditorWidget.cpp
     editor-st/CodeEditorWidget.h editor-st/Highlighter.cpp editor-st/Highlighter.h
     editor-st/LineNumberArea.cpp editor-st/LineNumberArea.h
-    widget/WidgetCodeEditor.h widget/WidgetCodeEditor.cpp
+    editor-st/FilesManager.h editor-st/FilesManager.cpp
+    widget/WidgetEditor.h widget/WidgetEditor.cpp
     editor-st/XmlParser.cpp editor-st/XmlParser.h
     resources/procont-app-conf.qrc
     editor-st/editor-st.qrc
@@ -52,7 +53,6 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-        editor-st/FilesManager.h editor-st/FilesManager.cpp
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

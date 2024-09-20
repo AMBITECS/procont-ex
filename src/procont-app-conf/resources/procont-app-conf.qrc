@@ -11,5 +11,7 @@
         <file>images/text_3.svg</file>
         <file>images/table_4.svg</file>
         <file>images/table_9.svg</file>
+        <file>images/diagram.svg</file>
+        <file>images/pro.svg</file>
     </qresource>
 </RCC>

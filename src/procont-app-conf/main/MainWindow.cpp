@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     setMinimumSize(QSize(1440, 900));
 
+    setWindowIcon(QIcon(":/icon/images/pro.svg"));
+
     createWidgets();
 
     createMenu();

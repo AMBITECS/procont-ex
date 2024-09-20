@@ -46,11 +46,12 @@ protected:
     virtual QWidget * createVarsEditor();
     virtual QWidget * createCodeEditor();
 
-private:
+protected:
     QModelIndex _index = {};
     QDomNode _node = {};
     QAbstractProxyModel * _proxy = nullptr;
 
+private:
     TableView * _vars_table = nullptr;
     CodeEditorWidget * _vars_text = nullptr;
     CodeEditorWidget * _body_text = nullptr;
@@ -91,6 +92,9 @@ public:
 /*!
  * \brief The WidgetEditor_fbd class
  */
+
+QT_FORWARD_DECLARE_CLASS(FBDviewer)
+
 class WidgetEditor_fbd : public WidgetEditor
 {
     Q_OBJECT
@@ -99,6 +103,14 @@ public:
 
 protected:
     virtual QWidget * createCodeEditor();
+
+private slots:
+    void slot_shmViewToggled(bool);
+    void slot_txtViewToggled(bool);
+
+private:
+    QWidget * _txt_view = nullptr;
+    FBDviewer * _fbd_view = nullptr;
 };
 // ----------------------------------------------------------------------------
 

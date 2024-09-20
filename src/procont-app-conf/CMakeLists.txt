@@ -41,6 +41,9 @@ set(PROJECT_SOURCES
     editor-st/XmlParser.cpp editor-st/XmlParser.h
     resources/procont-app-conf.qrc
     editor-st/editor-st.qrc
+    translator-fbd/SchemaViewer.cpp translator-fbd/SchemaViewer.h
+    translator-fbd/GlobalType.h
+    translator-fbd/XmlParser.cpp translator-fbd/XmlParser.h
 )
 
 qt_translate(

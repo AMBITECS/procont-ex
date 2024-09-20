@@ -16,11 +16,11 @@ CodeEditorWidget::CodeEditorWidget(QWidget *parent)
     QObject::connect(searchButton, &QPushButton::clicked, this, &CodeEditorWidget::onSearchText);
     searchButton->hide();
 
-    searchLayout = new QHBoxLayout();
+    searchLayout = new QHBoxLayout;
     searchLayout->addWidget(searchLine);
     searchLayout->addWidget(searchButton);
 
-    codeEditor = new CodeEditor(this);
+    codeEditor = new CodeEditor;
     connect(codeEditor, &CodeEditor::textChanged, this, &CodeEditorWidget::slot_textChanged);
 
     auto layout = new QVBoxLayout;

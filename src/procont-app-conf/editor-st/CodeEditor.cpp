@@ -22,8 +22,6 @@ QCompleter * CodeEditor::_completer = nullptr;
 
 CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 {
-    // Q_INIT_RESOURCE(resources);
-
     completer()->setWidget(this);
     QObject::connect(_completer, QOverload<const QString &>::of(&QCompleter::activated),
                      this, &CodeEditor::insertCompletion);

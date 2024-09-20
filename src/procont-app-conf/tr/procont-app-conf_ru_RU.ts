@@ -108,19 +108,27 @@
     </message>
 </context>
 <context>
+    <name>FilesManager</name>
+    <message>
+        <location filename="../editor-st/FilesManager.cpp" line="67"/>
+        <source>Unable to open file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../main/MainWindow.cpp" line="58"/>
-        <source>POUs</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="48"/>
+        <location filename="../main/MainWindow.cpp" line="50"/>
         <source>Device</source>
         <translation>Устройства</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="67"/>
+        <location filename="../main/MainWindow.cpp" line="60"/>
+        <source>POUs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="69"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
@@ -133,27 +141,27 @@
         <translation type="obsolete">Удалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="85"/>
+        <location filename="../main/MainWindow.cpp" line="87"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="94"/>
+        <location filename="../main/MainWindow.cpp" line="96"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="95"/>
+        <location filename="../main/MainWindow.cpp" line="97"/>
         <source>&amp;Open...</source>
         <translation>&amp;Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="96"/>
+        <location filename="../main/MainWindow.cpp" line="98"/>
         <source>&amp;Save...</source>
         <translation>&amp;Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="97"/>
+        <location filename="../main/MainWindow.cpp" line="99"/>
         <source>&amp;Exit</source>
         <translation>&amp;Выход</translation>
     </message>
@@ -162,23 +170,23 @@
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="102"/>
+        <location filename="../main/MainWindow.cpp" line="104"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="102"/>
-        <location filename="../main/MainWindow.cpp" line="152"/>
+        <location filename="../main/MainWindow.cpp" line="104"/>
+        <location filename="../main/MainWindow.cpp" line="154"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="113"/>
+        <location filename="../main/MainWindow.cpp" line="115"/>
         <source>open file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="152"/>
+        <location filename="../main/MainWindow.cpp" line="154"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -273,22 +281,22 @@
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="32"/>
+        <location filename="../widget/WidgetEditor.cpp" line="34"/>
         <source>Add</source>
         <translation type="unfinished">Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="34"/>
+        <location filename="../widget/WidgetEditor.cpp" line="36"/>
         <source>Remove</source>
         <translation type="unfinished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="60"/>
+        <location filename="../widget/WidgetEditor.cpp" line="62"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="63"/>
+        <location filename="../widget/WidgetEditor.cpp" line="65"/>
         <source>Table</source>
         <translation type="unfinished"></translation>
     </message>
@@ -296,18 +304,13 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="274"/>
-        <source>FBD veiw</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widget/WidgetEditor.cpp" line="283"/>
+        <location filename="../widget/WidgetEditor.cpp" line="284"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="286"/>
-        <source>Table</source>
+        <location filename="../widget/WidgetEditor.cpp" line="287"/>
+        <source>Schema</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

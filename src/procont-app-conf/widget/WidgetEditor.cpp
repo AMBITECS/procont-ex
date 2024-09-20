@@ -13,6 +13,7 @@
 #include "view/ItemDelegate.h"
 #include "editor-st/CodeEditorWidget.h"
 #include "editor-st/XmlParser.h"
+#include "translator-fbd/SchemaViewer.h"
 
 WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
     : QSplitter(Qt::Vertical, parent_),
@@ -20,6 +21,7 @@ WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy
     _node(item(_index)->node()),
     _proxy(proxy_)
 {
+    setChildrenCollapsible(false);
 }
 
 QWidget * WidgetEditor::createVarsEditor()
@@ -36,7 +38,7 @@ QWidget * WidgetEditor::createVarsEditor()
     toolbar_table->setIconSize(QSize(16, 16));
     // variables editor table
     _vars_table = new TableView;
-    _vars_table->setMinimumSize(500, 300);
+    _vars_table->setMinimumSize(500, 200);
     _vars_table->setModel(_proxy);
     _vars_table->setRootIndex(p_index(s_index(_index), _proxy));
     _vars_table->setColumnHidden(0, true);
@@ -49,7 +51,7 @@ QWidget * WidgetEditor::createVarsEditor()
     // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
     // variables editor code editor
     _vars_text = new CodeEditorWidget(this);
-    _vars_text->setMinimumSize(500, 300);
+    _vars_text->setMinimumSize(500, 200);
     _vars_text->setPlainText(XmlParser::getPouVarsText(item(_index)->node()));
     connect(_vars_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_txtVarChanged);
     _vars_text->hide();
@@ -86,7 +88,7 @@ QWidget * WidgetEditor::createCodeEditor()
 {
     // *  code editor widgets
     _body_text = new CodeEditorWidget(this);
-    _body_text->setMinimumSize(500, 300);
+    _body_text->setMinimumSize(500, 250);
     _body_text->setPlainText(XmlParser::getPouBodyText(item(_index)->node()));
     connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_codeChanged);
     // ***
@@ -141,9 +143,9 @@ void WidgetEditor::updateTblView()
             item(_vars_table->rootIndex())->node()
             );
 
-    QDomDocument doc;
-    doc.appendChild(doc.importNode(new_node, true));
-    qDebug() << "import" << doc.toString();
+    // QDomDocument doc;
+    // doc.appendChild(doc.importNode(new_node, true));
+    // qDebug() << "import" << doc.toString();
 
     // remove old variables from item
     item(_vars_table->rootIndex())->removeChildren();
@@ -263,36 +265,35 @@ WidgetEditor_fbd::WidgetEditor_fbd(const QModelIndex &index_, QAbstractProxyMode
     updateTblView();
 }
 
-#include <QLabel>
-
 QWidget * WidgetEditor_fbd::createCodeEditor()
 {
     // *  variables editor widgets
     // contauner for variables editor widgets
     auto container = new QWidget;
     // fbd view
-    QLabel *label = new QLabel(tr("FBD veiw"));
-    label->setMinimumSize(500, 300);
+    _fbd_view = new FBDviewer;
+    _fbd_view->setMinimumSize(500, 250);
+    _fbd_view->setNode(item(_index)->node());
     // variables editor code editor
-    auto txt_view = WidgetEditor::createCodeEditor();
-    txt_view->hide();
+    _txt_view = WidgetEditor::createCodeEditor();
+    _txt_view->hide();
     // variables editor toolbar for switch view
     auto toolbar_view = new QToolBar();
     toolbar_view->setOrientation(Qt::Vertical);
     auto group = new QActionGroup(toolbar_view);
     auto action = toolbar_view->addAction(QIcon(":/icon/images/text_3.svg"), tr("Text"));
-    // connect(action, &QAction::toggled, this, &WidgetEditor::slot_txtViewToggled);
+    connect(action, &QAction::toggled, this, &WidgetEditor_fbd::slot_txtViewToggled);
     action->setCheckable(true); group->addAction(action);
-    action = toolbar_view->addAction(QIcon(":/icon/images/table_9.svg"), tr("Table"));
-    // connect(action, &QAction::toggled, this, &WidgetEditor::slot_tblViewToggled);
+    action = toolbar_view->addAction(QIcon(":/icon/images/diagram.svg"), tr("Schema"));
+    connect(action, &QAction::toggled, this, &WidgetEditor_fbd::slot_shmViewToggled);
     action->setCheckable(true); group->addAction(action);
     action->setChecked(true);
     toolbar_view->setIconSize(QSize(24, 24));
     // *  variables editor layout
     // vertical (toolbar - table/code editor)
     auto vertical_layout = new QVBoxLayout;
-    vertical_layout->addWidget(label);
-    vertical_layout->addWidget(txt_view);
+    vertical_layout->addWidget(_fbd_view);
+    vertical_layout->addWidget(_txt_view);
     // horizontal (vertical - toolbar for switch view)
     auto horizontal_layout = new QHBoxLayout;
     horizontal_layout->addLayout(vertical_layout);
@@ -302,6 +303,18 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     // ***
 
     return container;
+}
+
+void WidgetEditor_fbd::slot_shmViewToggled(bool)
+{
+    _txt_view->hide();
+    _fbd_view->show();
+}
+
+void WidgetEditor_fbd::slot_txtViewToggled(bool)
+{
+    _fbd_view->hide();
+    _txt_view->show();
 }
 // ----------------------------------------------------------------------------
 

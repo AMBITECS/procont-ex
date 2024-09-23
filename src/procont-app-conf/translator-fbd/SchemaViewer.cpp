@@ -412,6 +412,12 @@ void FBDviewer::ST_generator(QString _file_name)
 
     if(_m_ST_file.isOpen()) _m_ST_file.close();
 }
+
+void FBDviewer::ST_generate(QString &_buffer)
+{
+    GlobalType_STgenerator(_buffer);
+    Program_STgenerator(_buffer);
+}
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
@@ -522,6 +528,101 @@ void FBDviewer::GlobalType_STgenerator()
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
+void FBDviewer::GlobalType_STgenerator(QString &text_)
+{
+    QString _data;
+
+    if(!_m_udt.empty()) _data = QString("TYPE\n");
+
+    for(int _i = 0; _i < (int)_m_udt.size(); _i++)
+    {
+        switch(_m_udt[_i]._type)
+        {
+        case DT_MAX:{}break;
+        case DT_ARRAY:{
+            int _range_counter = 0;
+            int _ini_val_counter = 0;
+            //            datatype0 : ARRAY [10..20,50..60] OF WORD := [1, 1];
+            _data += QString("  %1 : ARRAY [").arg(_m_udt[_i]._name);
+            int _size = (int)_m_udt[_i]._array._range.size();
+            for(int _j = 0; _j < _size; _j++)
+            {
+                QString _range = QString("%1..%2").arg(_m_udt[_i]._array._range[_j]._begin).arg(_m_udt[_i]._array._range[_j]._end);
+                _data += _range;
+                _range_counter++;
+                if(_range_counter < _size)_data += ",";
+            }
+            _data += QString("] OF %1").arg(_m_udt[_i]._array._type);
+            if(_m_udt[_i]._initial_value_present)
+            {
+                _data += " := [";
+                int _init_size = (int)_m_udt[_i]._initial_value.size();
+                for(int _j = 0; _j < _init_size; _j++)
+                {
+                    QString _val = QString("%1").arg(_m_udt[_i]._initial_value[_j]);
+                    _data += _val;
+                    _ini_val_counter++;
+                    if(_ini_val_counter < _init_size)_data += ", ";
+                }
+                _data += "];\n";
+            }else _data += QString(";\n");
+        }break;
+        case DT_STRUCT:{
+            //            datatype5 : STRUCT
+            //              p0 : datatype3;
+            //              p1 : DINT;
+            //              p2 : DINT;
+            //              p3 : DINT;
+            //            END_STRUCT;
+            _data += QString("  %1 : STRUCT\n").arg(_m_udt[_i]._name);
+            for(int _j = 0; _j < (int)_m_udt[_i]._struct.size(); _j++)
+            {
+                QString _part = QString("    %1 : %2;\n").arg(_m_udt[_i]._struct[_j]._name).arg(_m_udt[_i]._struct[_j]._type);
+                _data += _part;
+            }
+            _data += "  END_STRUCT;\n";
+        }break;
+        case DT_ENUM:{
+            //            datatype3 : (firstType, secondType) := firstType;
+            _data += QString("  %1 : (%2").arg(_m_udt[_i]._name).arg(_m_udt[_i]._enum._value[0]);
+            for(int _j = 1; _j < (int)_m_udt[_i]._enum._value.size(); _j++)
+                _data += QString(", %1").arg(_m_udt[_i]._name);
+
+            if(_m_udt[_i]._initial_value_present)   _data += QString(") := %1;\n").arg(_m_udt[_i]._initial_value[0]);
+            else                                    _data += QString(");\n");
+        }break;
+        case DT_REDEFINE:{
+            _data += QString("  %1 : %2;\n").arg(_m_udt[_i]._name).arg(_m_udt[_i]._redefined_name);
+        }break;
+        case DT_SUBRANGE_SIGNED:{
+            //            datatype1 : INT (0..0) := 0;
+            _data += QString("  %1 : %2 (%3..%4)").arg(_m_udt[_i]._name)
+                        .arg(_m_udt[_i]._sign_unsign_range._type)
+                        .arg(_m_udt[_i]._sign_unsign_range._begin)
+                        .arg(_m_udt[_i]._sign_unsign_range._end);
+            if(_m_udt[_i]._initial_value_present)   _data += QString(" := %1;\n").arg(_m_udt[_i]._initial_value[0]);
+            else                                    _data += QString(";\n");
+        }break;
+        case DT_SUBRANGE_UNSIGNED:{
+            //            datatype1 : UINT (0..0) := 0;
+            _data += QString("  %1 : %2 (%3..%4)").arg(_m_udt[_i]._name)
+                        .arg(_m_udt[_i]._sign_unsign_range._type)
+                        .arg(_m_udt[_i]._sign_unsign_range._begin)
+                        .arg(_m_udt[_i]._sign_unsign_range._end);
+            if(_m_udt[_i]._initial_value_present)   _data += QString(" := %1;\n").arg(_m_udt[_i]._initial_value[0]);
+            else                                    _data += QString(";\n");
+        }break;
+        }
+            }
+
+    if(!_m_udt.empty())
+        _data += QString("END_TYPE\n\n");
+
+    text_ = _data;
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 void FBDviewer::Program_STgenerator()
 {
     for(int _i = 0; _i < (int)_m_pou.size(); _i++)
@@ -530,6 +631,18 @@ void FBDviewer::Program_STgenerator()
         ProgramCode_STgenerator();
     }
     Configuration_STgenerator();
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void FBDviewer::Program_STgenerator(QString &text_)
+{
+    for(int _i = 0; _i < (int)_m_pou.size(); _i++)
+    {
+        _m_pou_number = _i;
+        ProgramCode_STgenerator(text_);
+    }
+    // Configuration_STgenerator();
 }
 //-----------------------------------------------------------------------------------
 //
@@ -577,6 +690,54 @@ void FBDviewer::prepareLocalVar()
     _data += "  END_VAR\n\n";
     if(_m_ST_file.isOpen())
         _m_ST_file.write(_data.toLocal8Bit());
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void FBDviewer::prepareLocalVar(QString &text_)
+{
+    QString _data;
+    QString _type_name;
+
+    _data = QString("PROGRAM %1\n").arg(_m_pou[_m_pou_number]._name);
+    _data += "  VAR\n";
+    for(int _j = 0; _j < (int)_m_pou[_m_pou_number]._interface._localVars.size(); _j++)
+    {
+        if(_m_pou[_m_pou_number]._interface._localVars[_j]._type_name == "string")  _type_name = _m_pou[_m_pou_number]._interface._localVars[_j]._type_name.toUpper();
+        else                                                                        _type_name = _m_pou[_m_pou_number]._interface._localVars[_j]._type_name;
+
+        QString _var;
+        if(_m_pou[_m_pou_number]._interface._localVars[_j]._initialValue._simpleValue == "")
+        {
+            _var = QString("    %1 : %2;\n").arg(_m_pou[_m_pou_number]._interface._localVars[_j]._name)
+            .arg(_type_name);
+        }else{
+            if(_m_pou[_m_pou_number]._interface._localVars[_j]._type_name == "string")
+            {
+                _var = QString("    %1 : %2 := '%3';\n").arg(_m_pou[_m_pou_number]._interface._localVars[_j]._name)
+                .arg(_type_name)
+                    .arg(_m_pou[_m_pou_number]._interface._localVars[_j]._initialValue._simpleValue);
+            }else{
+                _var = QString("    %1 : %2 := %3;\n").arg(_m_pou[_m_pou_number]._interface._localVars[_j]._name)
+                .arg(_type_name)
+                    .arg(_m_pou[_m_pou_number]._interface._localVars[_j]._initialValue._simpleValue);
+            }
+        }
+        _data += _var;
+    }
+    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_func_item)
+    {
+        QString _var_code = QString("    _%1 : %2;\n")
+        .arg(_m_pou_func_item[_it._localId]._expression)
+            .arg(_m_pou_func_item[_it._localId]._out_var_type);
+
+        _data += _var_code;
+    }
+
+    _data += "  END_VAR\n\n";
+    // if(_m_ST_file.isOpen())
+    //     _m_ST_file.write(_data.toLocal8Bit());
+    text_ = _data;
 }
 //-----------------------------------------------------------------------------------
 //
@@ -695,6 +856,105 @@ void FBDviewer::ProgramCode_STgenerator()
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
+void FBDviewer::ProgramCode_STgenerator(QString &text_)
+{
+    // T_POU_FBD_ITEM_SHORT _item;
+
+    QString _data = {};
+
+    _m_pou_item.clear();
+    _m_pou_execution_order_item.clear();
+    _m_pou_generator_item.clear();
+
+    for(int _i = 0; _i < (int)_m_pou[_m_pou_number]._body._FBD._item.size(); _i++)
+        _m_pou_item.insert(_m_pou[_m_pou_number]._body._FBD._item[_i]._localId, _m_pou[_m_pou_number]._body._FBD._item[_i]);
+
+    parseItem();
+    prepareFuncTempVar();
+    prepareVarType();
+    prepareConnectContinuation();
+    prepareVar();
+    prepareFunc();
+    prepareLocalVar(text_);
+    prepareBlock();
+
+    _m_pou_execution_order_item.clear();
+    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_block_item)
+        if(_it._executionOrderId != 0)
+        {
+            _m_pou_execution_order_item.insert(_it._executionOrderId, _it);
+            _m_pou_block_item.remove(_it._localId);
+        }
+
+    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_func_item)
+        if(_it._executionOrderId != 0)
+        {
+            _m_pou_execution_order_item.insert(_it._executionOrderId, _it);
+            _m_pou_func_item.remove(_it._localId);
+        }
+
+    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_execution_order_item)
+    {
+        switch(_it._type)
+        {
+        case IT_BLOCK:{         Block_STgenerator(_it, text_); }break;
+        case IT_FUNCTION:{      Func_STgenerator(_it, text_);  }break;
+        case IT_OUTPUT:{        Var_STgenerator(_it, text_);   }break;
+        case IT_INPUT_OUTPUT:{  Var_STgenerator(_it, text_);   }break;
+        case IT_MAX:
+        case IT_COMMENT:
+        case IT_INPUT:
+        case IT_CONNECTOR:
+        case IT_NOT_DEFINED:
+        case IT_CONTINUATION:{}break;
+        }
+    }
+
+    //    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_block_item)        _m_pou_generator_item.insert(_it._localId, _it);
+    //    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_func_item)         _m_pou_generator_item.insert(_it._localId, _it);
+    //    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_out_var_item)      _m_pou_generator_item.insert(_it._localId, _it);
+    //    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_in_out_var_item)   _m_pou_generator_item.insert(_it._localId, _it);
+
+    //    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_generator_item)
+    //        switch(_it._type)
+    //        {
+    //        case IT_BLOCK:{         Block_STgenerator(_it); }break;
+    //        case IT_FUNCTION:{      Func_STgenerator(_it);  }break;
+    //        case IT_OUTPUT:{        Var_STgenerator(_it);   }break;
+    //        case IT_INPUT_OUTPUT:{  Var_STgenerator(_it);   }break;
+    //        case IT_MAX:
+    //        case IT_COMMENT:
+    //        case IT_INPUT:
+    //        case IT_CONNECTOR:
+    //        case IT_NOT_DEFINED:
+    //        case IT_CONTINUATION:{}break;
+    //        }
+
+    //    for(int _i = 0; _i < (int)_m_pou[_m_pou_number]._body._FBD._item.size(); _i++)
+    //        switch(_m_pou[_m_pou_number]._body._FBD._item[_i]._type)
+    //        {
+    //        case IT_BLOCK:{         Block_STgenerator(_m_pou_block_item[_m_pou[_m_pou_number]._body._FBD._item[_i]._localId]);      }break;
+    //        case IT_FUNCTION:{      Func_STgenerator(_m_pou_func_item[_m_pou[_m_pou_number]._body._FBD._item[_i]._localId]);        }break;
+    //        case IT_OUTPUT:{        Var_STgenerator(_m_pou_out_var_item[_m_pou[_m_pou_number]._body._FBD._item[_i]._localId]);      }break;
+    //        case IT_INPUT_OUTPUT:{  Var_STgenerator(_m_pou_in_out_var_item[_m_pou[_m_pou_number]._body._FBD._item[_i]._localId]);   }break;
+    //        case IT_MAX:
+    //        case IT_COMMENT:
+    //        case IT_INPUT:
+    //        case IT_CONNECTOR:
+    //        case IT_NOT_DEFINED:
+    //        case IT_CONTINUATION:{}break;
+    //        }
+    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_block_item)        Block_STgenerator(_it, text_);
+    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_func_item)         Func_STgenerator(_it, text_);
+    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_in_out_var_item)   Var_STgenerator(_it, text_);
+    foreach(T_POU_FBD_ITEM_SHORT _it, _m_pou_out_var_item)      Var_STgenerator(_it, text_);
+
+    _data = "\nEND_PROGRAM\n\n";
+    text_ += _data;
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 void FBDviewer::Block_STgenerator(T_POU_FBD_ITEM_SHORT _block)
 {
     QString _data;
@@ -715,6 +975,33 @@ void FBDviewer::Block_STgenerator(T_POU_FBD_ITEM_SHORT _block)
         _data = "  ";
         _data += _block._outputVariables[0] + ";\n";
         if(_m_ST_file.isOpen()) _m_ST_file.write(_data.toLocal8Bit());
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void FBDviewer::Block_STgenerator(T_POU_FBD_ITEM_SHORT _block, QString &text_)
+{
+    QString _data;
+
+    if(_block._inputVariables.isEmpty()) return;
+
+    _data = "  ";
+    _data += _block._instanceName + "(";
+    for(int _j = 0; _j < _block._inputVariables.size(); _j++)
+    {
+        _data += _block._inputVariables[_j];
+        if((_j + 1) < _block._inputVariables.size()) _data += ", ";
+    }
+    _data += ");\n";
+    // if(_m_ST_file.isOpen()) _m_ST_file.write(_data.toLocal8Bit());
+    text_ += _data;
+    if(!_block._outputVariables.isEmpty())
+    {
+        _data = "  ";
+        _data += _block._outputVariables[0] + ";\n";
+        // if(_m_ST_file.isOpen()) _m_ST_file.write(_data.toLocal8Bit());
+        text_ += _data;
     }
 }
 //-----------------------------------------------------------------------------------
@@ -741,6 +1028,28 @@ void FBDviewer::Func_STgenerator(T_POU_FBD_ITEM_SHORT _func)
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
+void FBDviewer::Func_STgenerator(T_POU_FBD_ITEM_SHORT _func, QString &text_)
+{
+    QString _data;
+
+    if(_func._inputVariables.isEmpty()) return;
+
+    _data = "  ";
+    _data += _func._expression + " := ";
+    _data += _func._typeName + "(";
+
+    for(int _j = 0; _j < _func._inputVariables.size(); _j++)
+    {
+        _data += _func._inputVariables[_j];
+        if((_j + 1) < _func._inputVariables.size()) _data += ", ";
+    }
+    _data += ");\n";
+    // if(_m_ST_file.isOpen()) _m_ST_file.write(_data.toLocal8Bit());
+    text_ += _data;
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 void FBDviewer::Var_STgenerator(T_POU_FBD_ITEM_SHORT _var)
 {
     QString _data;
@@ -750,6 +1059,20 @@ void FBDviewer::Var_STgenerator(T_POU_FBD_ITEM_SHORT _var)
     _data = "  ";
     _data += _var._inputVariables[0] + ";\n";
     if(_m_ST_file.isOpen()) _m_ST_file.write(_data.toLocal8Bit());
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void FBDviewer::Var_STgenerator(T_POU_FBD_ITEM_SHORT _var, QString &text_)
+{
+    QString _data;
+
+    if(_var._inputVariables.isEmpty()) return;
+
+    _data = "  ";
+    _data += _var._inputVariables[0] + ";\n";
+    // if(_m_ST_file.isOpen()) _m_ST_file.write(_data.toLocal8Bit());
+    text_ += _data;
 }
 //-----------------------------------------------------------------------------------
 //

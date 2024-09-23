@@ -54,6 +54,8 @@ protected:
 private:
     TableView * _vars_table = nullptr;
     CodeEditorWidget * _vars_text = nullptr;
+
+protected:
     CodeEditorWidget * _body_text = nullptr;
 };
 // ----------------------------------------------------------------------------

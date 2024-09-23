@@ -28,6 +28,7 @@ public:
     void setNode(const QDomNode & node_);
 
     void ST_generator(QString _file_name);
+    void ST_generate(QString & _buffer);
 
 protected:
     void paintEvent(QPaintEvent *) override;
@@ -38,13 +39,19 @@ protected:
     void checkPOU_item_position(int _p, int _i);
 
     void GlobalType_STgenerator();
+    void GlobalType_STgenerator(QString &text_);
     void Program_STgenerator();
+    void Program_STgenerator(QString &text_);
     void ProgramCode_STgenerator();
+    void ProgramCode_STgenerator(QString &text_);
     void Configuration_STgenerator();
 
     void Block_STgenerator(T_POU_FBD_ITEM_SHORT _block);
+    void Block_STgenerator(T_POU_FBD_ITEM_SHORT _block, QString &text_);
     void Func_STgenerator(T_POU_FBD_ITEM_SHORT _func);
+    void Func_STgenerator(T_POU_FBD_ITEM_SHORT _func, QString &text_);
     void Var_STgenerator(T_POU_FBD_ITEM_SHORT _var);
+    void Var_STgenerator(T_POU_FBD_ITEM_SHORT _var, QString &text_);
 
 protected:
     QString getTypeByVar(QString _var_name);
@@ -53,6 +60,7 @@ protected:
 
     void prepareConnectContinuation();
     void prepareLocalVar();
+    void prepareLocalVar(QString &);
     void prepareBlock();
     void prepareFuncTempVar();
     void prepareFunc();

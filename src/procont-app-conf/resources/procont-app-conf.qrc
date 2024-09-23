@@ -13,5 +13,25 @@
         <file>images/table_9.svg</file>
         <file>images/diagram.svg</file>
         <file>images/pro.svg</file>
+        <file>images/compile.svg</file>
+        <file>images/copy.svg</file>
+        <file>images/find.svg</file>
+        <file>images/open.svg</file>
+        <file>images/paste.svg</file>
+        <file>images/redo.svg</file>
+        <file>images/save.svg</file>
+        <file>images/undo.svg</file>
+        <file>images/open1.svg</file>
+        <file>images/open2.svg</file>
+        <file>images/open3.svg</file>
+        <file>images/open4.svg</file>
+        <file>images/save1.svg</file>
+        <file>images/save2.svg</file>
+        <file>images/undo1.svg</file>
+        <file>images/redo1.svg</file>
+        <file>images/cut.svg</file>
+        <file>images/delete2.svg</file>
+        <file>images/hammer.svg</file>
+        <file>images/hammer2.svg</file>
     </qresource>
 </RCC>

@@ -307,12 +307,18 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
 
 void WidgetEditor_fbd::slot_shmViewToggled(bool)
 {
+    _fbd_view->setNode(item(_index)->node());
+
     _txt_view->hide();
     _fbd_view->show();
 }
 
 void WidgetEditor_fbd::slot_txtViewToggled(bool)
 {
+    QString data = {};
+    _fbd_view->ST_generate(data);
+    _body_text->setPlainText(data);
+
     _fbd_view->hide();
     _txt_view->show();
 }

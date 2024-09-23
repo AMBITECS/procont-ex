@@ -28,11 +28,18 @@ private:
 private slots:
     void slot_open();
     void slot_save();
+    void slot_undo();
+    void slot_redo();
+    void slot_cut();
+    void slot_copy();
+    void slot_paste();
+    void slot_delete();
+    void slot_compile();
+    void slot_build();
 
     void slot_currentViewChanged(const QModelIndex &index);
 
 private:
-
     QDockWidget * dockPou = nullptr;
     QDockWidget * dockDev = nullptr;
 

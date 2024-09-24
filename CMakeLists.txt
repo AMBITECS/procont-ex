@@ -13,4 +13,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/qt_translate.cmake")
 
+add_subdirectory("matiec")
 add_subdirectory("src/procont-app-conf")

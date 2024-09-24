@@ -1,0 +1,4 @@
+[submodule "matiec"]
+	path = matiec
+	url = ../beremiz-matiec.git
+	branch = matiec_integration

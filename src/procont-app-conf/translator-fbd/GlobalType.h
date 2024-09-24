@@ -140,6 +140,7 @@ typedef struct
 typedef struct
 {
     T_FCB_ITEM_TYPE     _type               = IT_NOT_DEFINED;
+    bool                _is_used            = false;
     quint64             _localId            = 0;
     quint64             _executionOrderId   = 0;
 

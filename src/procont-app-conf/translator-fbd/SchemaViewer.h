@@ -38,19 +38,13 @@ protected:
 
     void checkPOU_item_position(int _p, int _i);
 
-    void GlobalType_STgenerator();
     void GlobalType_STgenerator(QString &text_);
-    void Program_STgenerator();
     void Program_STgenerator(QString &text_);
-    void ProgramCode_STgenerator();
     void ProgramCode_STgenerator(QString &text_);
-    void Configuration_STgenerator();
+    void Configuration_STgenerator(QString &text_);
 
-    void Block_STgenerator(T_POU_FBD_ITEM_SHORT _block);
     void Block_STgenerator(T_POU_FBD_ITEM_SHORT _block, QString &text_);
-    void Func_STgenerator(T_POU_FBD_ITEM_SHORT _func);
     void Func_STgenerator(T_POU_FBD_ITEM_SHORT _func, QString &text_);
-    void Var_STgenerator(T_POU_FBD_ITEM_SHORT _var);
     void Var_STgenerator(T_POU_FBD_ITEM_SHORT _var, QString &text_);
 
 protected:
@@ -59,7 +53,6 @@ protected:
     void parseItem();
 
     void prepareConnectContinuation();
-    void prepareLocalVar();
     void prepareLocalVar(QString &);
     void prepareBlock();
     void prepareFuncTempVar();

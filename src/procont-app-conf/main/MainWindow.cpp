@@ -250,7 +250,6 @@ void MainWindow::slot_compile()
 
 void MainWindow::slot_build()
 {
-    qDebug() << "build";
 }
 
 #undef this_pointer

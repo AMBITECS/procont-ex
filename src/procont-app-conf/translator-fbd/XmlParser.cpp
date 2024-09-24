@@ -137,10 +137,6 @@ bool PLCopenXmlParser::POU(quint32 _index, T_POU *_pou)
     quint32 _pou_counter = 0;
     QDomNode _pou_node = _m_pou_node;
 
-    // QDomDocument doc;
-    // doc.appendChild(doc.importNode(_pou_node, true));
-    // qDebug() << "import" << doc.toString();
-
     while(!_pou_node.isNull())
     {
         if(_pou_counter == _index)

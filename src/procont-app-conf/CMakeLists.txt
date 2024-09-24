@@ -14,7 +14,7 @@ set(CMAKE_AUTORCC ON)
 set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/${PNME}/${NAME}/bin)
 set(LIBRARY_OUTPUT_PATH     ${CMAKE_BINARY_DIR}/${PNME}/${NAME}/lib)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
 
 set(PROJECT_SOURCES

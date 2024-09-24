@@ -3,6 +3,12 @@
 #include <QDomDocument>
 #include <QList>
 
+enum PouType
+{
+    program,
+    functionalBlock,
+};
+
 struct SimpleValue
 {
     QString value;
@@ -48,6 +54,7 @@ struct Pou
     QString name;
     Interface interface;
     Body body;
+    QString pouType;
 };
 
 class XmlParser/* : QObject*/
@@ -77,6 +84,8 @@ private:
     void parsePOU(const QDomNode& node, QList<Pou> & pous);
     // text to xml
     void convertTextToPou(const int index);
+    static void parsePouProgram(Pou & pou, QDomNode & domNode);
+
 
 private:
     static Pou XmlToPOU(const QDomNode& node);

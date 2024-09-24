@@ -351,7 +351,21 @@ Pou XmlParser::XmlToPOU(const QDomNode &node)
     QDomNode domNode =
         node.firstChild();
     Pou pou;
-    pou.name = node.toElement().attribute("name");;
+    pou.name = node.toElement().attribute("name");
+    pou.pouType = node.toElement().attribute("pouType");
+
+    parsePouProgram(pou, domNode);
+
+    return pou;
+}
+
+void XmlParser::parsePOU(const QDomNode &node, QList<Pou> &pous)
+{
+    pous.append(XmlToPOU(node));
+}
+
+void XmlParser::parsePouProgram(Pou &pou, QDomNode &domNode)
+{
     while(!domNode.isNull()) {
         QDomElement domElement = domNode.toElement();
         if(!domElement.isNull()) {
@@ -429,13 +443,6 @@ Pou XmlParser::XmlToPOU(const QDomNode &node)
 
         domNode = domNode.nextSibling();
     }
-
-    return pou;
-}
-
-void XmlParser::parsePOU(const QDomNode &node, QList<Pou> &pous)
-{
-    pous.append(XmlToPOU(node));
 }
 
 void XmlParser::typesFromFile(const QString &fileName)

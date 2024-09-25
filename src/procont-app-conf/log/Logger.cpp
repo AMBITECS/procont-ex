@@ -5,7 +5,6 @@
 #include <QDebug>
 
 CMessanger * CMessanger::m_pInstance = nullptr;
-// QTreeWidget * CMessanger::m_pWidget = nullptr;
 
 CMessanger::CMessanger() :
     QObject(nullptr),

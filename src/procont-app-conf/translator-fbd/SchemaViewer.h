@@ -26,9 +26,14 @@ public:
 
     void setXmlFile(QString _file);
     void setNode(const QDomNode & node_);
+    void setNodeEx(const QDomNode & node_);
 
     void ST_generator(QString _file_name);
     void ST_generate(QString & _buffer);
+
+    void GlobalType_STgenerator(QString &text_);
+    void Program_STgenerator(QString &text_);
+    void Configuration_STgenerator(QString &text_);
 
 protected:
     void paintEvent(QPaintEvent *) override;
@@ -38,10 +43,8 @@ protected:
 
     void checkPOU_item_position(int _p, int _i);
 
-    void GlobalType_STgenerator(QString &text_);
-    void Program_STgenerator(QString &text_);
+protected:
     void ProgramCode_STgenerator(QString &text_);
-    void Configuration_STgenerator(QString &text_);
 
     void Block_STgenerator(T_POU_FBD_ITEM_SHORT _block, QString &text_);
     void Func_STgenerator(T_POU_FBD_ITEM_SHORT _func, QString &text_);

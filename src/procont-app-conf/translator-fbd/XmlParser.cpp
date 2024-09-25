@@ -87,7 +87,9 @@ bool PLCopenXmlParser::setNode(const QDomNode & node_)
 {
     auto _result = true;
 
+    _m_user_data_type_node = node_;
     _m_pou_node = node_;
+    _m_instances_node = node_;
 
     return _result;
 }
@@ -137,6 +139,9 @@ bool PLCopenXmlParser::POU(quint32 _index, T_POU *_pou)
     quint32 _pou_counter = 0;
     QDomNode _pou_node = _m_pou_node;
 
+    if(_pou_node.nodeName() != "pou")
+        return false;
+
     while(!_pou_node.isNull())
     {
         if(_pou_counter == _index)
@@ -169,6 +174,9 @@ bool PLCopenXmlParser::UDT(quint32 _index, T_UDT *_udt)
     bool _result = false;
     quint32 _udt_counter = 0;
     QDomNode _udt_node = _m_user_data_type_node.firstChild();
+
+    if(_udt_node.nodeName() != "dataTypes")
+        return false;
 
     while(!_udt_node.isNull())
     {
@@ -394,6 +402,9 @@ bool PLCopenXmlParser::INSTANCES(T_INSTANCES *_inst)
 {
     T_CONFIGURATION _conf;
     bool _result = false;
+
+    if(_m_instances_node.nodeName() != "configurations")
+        return false;
 
     QDomNode _configurations_node =  _m_instances_node.firstChild(); // configurations
     while(!_configurations_node.isNull())

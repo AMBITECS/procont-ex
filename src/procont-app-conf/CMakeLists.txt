@@ -44,6 +44,7 @@ set(PROJECT_SOURCES
     translator-fbd/SchemaViewer.cpp translator-fbd/SchemaViewer.h
     translator-fbd/GlobalType.h
     translator-fbd/XmlParser.cpp translator-fbd/XmlParser.h
+    translator-fbd/FbdTranslator.h translator-fbd/FbdTranslator.cpp
 )
 
 qt_translate(

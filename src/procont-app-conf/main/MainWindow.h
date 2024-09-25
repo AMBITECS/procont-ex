@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QProcess>
 
 QT_FORWARD_DECLARE_CLASS(QTreeView)
 QT_FORWARD_DECLARE_CLASS(QDockWidget)
@@ -37,6 +38,8 @@ private slots:
     void slot_compile();
     void slot_build();
 
+    void slot_addBuildMsg();
+
     void slot_currentViewChanged(const QModelIndex &index);
 
 private:
@@ -50,6 +53,10 @@ private:
     DomModel * model = nullptr;
     ProxyModelTree_pou * proxy_pou = nullptr;
     ProxyModelTree_dev * proxy_dev = nullptr;
+
+    QString m_projectDir = {};
+
+    QProcess proc;
 };
 
 #endif // MAINWINDOW_H

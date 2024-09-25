@@ -7,27 +7,34 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QUndoView>
+#include <QPlainTextEdit>
 
 #include <QDebug>
 
-CWidgetMessage *CWidgetMessage::m_pInstance = nullptr;
+CWidgetMessage * CWidgetMessage::m_pInstance = nullptr;
+QPlainTextEdit * CWidgetMessage::m_pWidgetBuild = nullptr;
 
 CWidgetMessage::CWidgetMessage(QWidget *parent) :
     QTabWidget{parent},
-    m_pWidgetTreeMessage(nullptr)
+    m_pWidgetMessage(nullptr)
 {
-    m_pWidgetTreeMessage = new QTreeWidget(this);
-    m_pWidgetTreeMessage->setColumnCount(6);
-    m_pWidgetTreeMessage->header()->resizeSection(1, 150);
-    m_pWidgetTreeMessage->header()->resizeSection(2, 160);
-    m_pWidgetTreeMessage->header()->resizeSection(3, 220);
-    m_pWidgetTreeMessage->header()->resizeSection(4, 150);
-    m_pWidgetTreeMessage->setHeaderLabels(QStringList() << tr("Number") << tr("Type") << tr("Time") << tr("Source") << tr("Object") << tr("Message"));
-    addTab(m_pWidgetTreeMessage, tr("Messages"));
+    m_pWidgetMessage = new QTreeWidget(this);
+    m_pWidgetMessage->setColumnCount(6);
+    m_pWidgetMessage->header()->resizeSection(1, 150);
+    m_pWidgetMessage->header()->resizeSection(2, 160);
+    m_pWidgetMessage->header()->resizeSection(3, 220);
+    m_pWidgetMessage->header()->resizeSection(4, 150);
+    m_pWidgetMessage->setHeaderLabels(QStringList() << tr("Number") << tr("Type") << tr("Time") << tr("Source") << tr("Object") << tr("Message"));
+    addTab(m_pWidgetMessage, tr("Messages"));
 
-    m_pActionUndoView = new QUndoView(this);
+    m_pWidgetAction = new QUndoView(this);
     // m_pActionUndoView->setStack(CWidgetProject::instance()->undoStack());
-    addTab(m_pActionUndoView, tr("Actions"));
+    addTab(m_pWidgetAction, tr("Actions"));
+
+    if(m_pWidgetBuild == nullptr)
+        m_pWidgetBuild = new QPlainTextEdit(this);
+    m_pWidgetBuild->setReadOnly(true);
+    addTab(m_pWidgetBuild, tr("Build"));
 
     setMinimumHeight(200);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -47,6 +54,11 @@ CWidgetMessage * CWidgetMessage::instance()
         m_pInstance = new CWidgetMessage;
 
     return  m_pInstance;
+}
+
+QPlainTextEdit * CWidgetMessage::buildWidget()
+{
+    return m_pWidgetBuild;
 }
 
 void CWidgetMessage::set_type(QTreeWidgetItem *item_, CMessage::eMsgType type_) const
@@ -81,7 +93,7 @@ void CWidgetMessage::slot_add(const CMessage &message_)
         if(first)
         {
             first = false;
-            root = new QTreeWidgetItem(m_pWidgetTreeMessage);
+            root = new QTreeWidgetItem(m_pWidgetMessage);
             set_type(root, message_.type());
             root->setText(0, QString().asprintf("%08lld", message_.number()));
             root->setText(2, message_.time().toString("dd.MM.yyyy hh:mm:ss.zzz"));
@@ -95,5 +107,5 @@ void CWidgetMessage::slot_add(const CMessage &message_)
             item->setText(2, i);
         }
     }
-    m_pWidgetTreeMessage->sortByColumn(0, Qt::DescendingOrder);
+    m_pWidgetMessage->sortByColumn(0, Qt::DescendingOrder);
 }

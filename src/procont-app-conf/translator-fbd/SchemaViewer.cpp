@@ -73,6 +73,9 @@ void FBDviewer::setNode(const QDomNode & node_)
 
     _m_is_drawing = false;
 
+    _m_udt.clear();
+    _m_pou.clear();
+
     if(_m_XMLparser.setNode(node_))
     {
         // ---------------------------------------------------------------
@@ -103,7 +106,59 @@ void FBDviewer::setNode(const QDomNode & node_)
             _pou._body._FBD._item.clear();
             _pou_counter++;
         }
-        _m_pou[0]._active = true;
+        if(_m_pou.size()) _m_pou[0]._active = true;
+        // ---------------------------------------------------------------
+        _m_XMLparser.INSTANCES(&_m_inst);
+        // ---------------------------------------------------------------
+        _m_is_drawing = true;
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void FBDviewer::setNodeEx(const QDomNode & node_)
+{
+    T_POU       _pou;
+    T_UDT       _udt;
+    quint32 _pou_counter = 0;
+    quint32 _udt_counter = 0;
+
+    _m_is_drawing = false;
+
+    _m_udt.clear();
+    _m_pou.clear();
+
+    if(_m_XMLparser.setNode(node_))
+    {
+        // ---------------------------------------------------------------
+        if(_m_XMLparser.UDT(_udt_counter, &_udt))
+        {
+            _m_draw_mutex.lock();
+            _m_udt.push_back(_udt);
+            _m_draw_mutex.unlock();
+            _udt_counter++;
+        }
+        // ---------------------------------------------------------------
+        while(_m_XMLparser.POU(_pou_counter, &_pou))
+        {
+            for(int _i = 0; _i < (int)_pou._body._FBD._item.size(); _i++)
+            {
+                _pou._body._FBD._item[_i]._show         = true;
+                _pou._body._FBD._item[_i]._select       = false;
+                _pou._body._FBD._item[_i]._select_move  = false;
+                _pou._body._FBD._item[_i]._rect.setX(_pou._body._FBD._item[_i]._pos_x);
+                _pou._body._FBD._item[_i]._rect.setY(_pou._body._FBD._item[_i]._pos_y);
+                _pou._body._FBD._item[_i]._rect.setWidth(_pou._body._FBD._item[_i]._width);
+                _pou._body._FBD._item[_i]._rect.setHeight(_pou._body._FBD._item[_i]._height);
+            }
+            _m_draw_mutex.lock();
+            _pou._active = false;
+            _m_pou.push_back(_pou);
+            _m_draw_mutex.unlock();
+            _pou._body._FBD._item.clear();
+            _pou_counter++;
+        }
+        if(_m_pou.size()) _m_pou[0]._active = true;
         // ---------------------------------------------------------------
         _m_XMLparser.INSTANCES(&_m_inst);
         // ---------------------------------------------------------------

@@ -257,10 +257,12 @@ void MainWindow::slot_compile()
 
 void MainWindow::slot_build()
 {
+    CWidgetMessage::instance()->setCurrentWidget(CWidgetMessage::buildWidget());
+
     // *** подготовка ST-файла
     // создание папки для сборки
     auto _buildDir = QString("%1/build").arg(m_projectDir);
-    QDir(_buildDir).removeRecursively();
+    // QDir(_buildDir).removeRecursively();
     QDir(m_projectDir).mkdir(_buildDir);
     // * формирование ST-файла
     QString st_text = {};
@@ -297,9 +299,9 @@ void MainWindow::slot_build()
     auto program = QString("%1/iec2c").arg(matiec_path);
     QStringList args;
     args << "-f" << "-l" << "-p"
-         << "-I" << QString("%1/lib").arg(matiec_path) <<
-        QString("-T %1").arg(_buildDir) <<
-        QString("%1/generated.st").arg(_buildDir);
+         << "-I" << QString("%1/lib").arg(matiec_path)
+         << "-T" << QString("%1").arg(_buildDir)
+         << QString("%1/generated.st").arg(_buildDir);
     connect(&proc, &QProcess::readyReadStandardOutput, this, &MainWindow::slot_addBuildMsg);
     connect(&proc, &QProcess::readyReadStandardError, this, &MainWindow::slot_addBuildMsg);
     CWidgetMessage::buildWidget()->clear();

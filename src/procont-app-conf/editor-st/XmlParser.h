@@ -32,6 +32,20 @@ struct Interface
     QList<Variable> inputVars;
     QList<Variable> outputVars;
 
+    void setVar(Variable var, QString varType = QString("VAR"))
+    {
+        if (varType == "VAR")
+        {
+            setVariable(var);
+        } else if (varType == "VAR_INPUT")
+        {
+            setInputVariable(var);
+        } else if (varType == "VAR_OUTPUT")
+        {
+            setOutputVariable(var);
+        }
+    }
+
     void setVariable(Variable var)
     {
         for (auto index = 0; index < localVars.size(); ++index)

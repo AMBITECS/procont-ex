@@ -62,13 +62,11 @@ QStringList XmlParser::getFilesNames()
 
 QString XmlParser::getPouText(const int index)
 {
-    qDebug() << "getPouText";
     return convertPouToText(index);
 }
 
 QString XmlParser::getAllText()
 {
-    qDebug() << "getAllText";
     return convertDataToText();
 }
 
@@ -80,25 +78,9 @@ QString XmlParser::getPouVarsText(const int index)
 
     result += "PROGRAM " + pous.at(index).name + "\n";
 
-    if(!pous.at(index).interface.localVars.empty())
-    {
-        result += QString("VAR") + "\n";
-        for (const auto & var : pous.at(index).interface.localVars)
-        {
-            result += "\t" + var.name + ": " + var.type;
-            if (var.initialValue.simpleValue.value != "")
-            {
-                result += " := " + var.initialValue.simpleValue.value + "\n";
-            } else {
-                result += "\n";
-            }
-        }
-        result += QString("END_VAR") + "\n";
-    }
-
     if(!pous.at(index).interface.inputVars.empty())
     {
-        result += QString("INPUT_VAR") + "\n";
+        result += QString("VAR_INPUT") + "\n";
         for (const auto & var : pous.at(index).interface.inputVars)
         {
             result += "\t" + var.name + ": " + var.type;
@@ -114,8 +96,24 @@ QString XmlParser::getPouVarsText(const int index)
 
     if(!pous.at(index).interface.outputVars.empty())
     {
-        result += QString("OUTPUT_VAR") + "\n";
+        result += QString("VAR_OUTPUT") + "\n";
         for (const auto & var : pous.at(index).interface.outputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_VAR") + "\n";
+    }
+
+    if(!pous.at(index).interface.localVars.empty())
+    {
+        result += QString("VAR") + "\n";
+        for (const auto & var : pous.at(index).interface.localVars)
         {
             result += "\t" + var.name + ": " + var.type;
             if (var.initialValue.simpleValue.value != "")
@@ -203,6 +201,37 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         result += "FUNCTION_BLOCK " + pou.name + "\n";
     }
 
+    if (!pou.interface.inputVars.empty())
+    {
+        result += QString("VAR_INPUT") + "\n";
+        for (const auto & var : pou.interface.inputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_VAR") + "\n";
+    }
+
+    if (!pou.interface.outputVars.empty())
+    {
+        result += QString("VAR_OUTPUT") + "\n";
+        for (const auto & var : pou.interface.outputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_VAR") + "\n";
+    }
 
     if (!pou.interface.localVars.empty())
     {
@@ -218,38 +247,6 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
             }
         }
         result += QString("END_VAR") + "\n";
-    }
-
-    if (!pou.interface.inputVars.empty())
-    {
-        result += QString("INPUT_VAR") + "\n";
-        for (const auto & var : pou.interface.inputVars)
-        {
-            result += "\t" + var.name + ": " + var.type;
-            if (var.initialValue.simpleValue.value != "")
-            {
-                result += " := " + var.initialValue.simpleValue.value + "\n";
-            } else {
-                result += "\n";
-            }
-        }
-        result += QString("END_INPUT_VAR") + "\n";
-    }
-
-    if (!pou.interface.outputVars.empty())
-    {
-        result += QString("OUTPUT_VAR") + "\n";
-        for (const auto & var : pou.interface.outputVars)
-        {
-            result += "\t" + var.name + ": " + var.type;
-            if (var.initialValue.simpleValue.value != "")
-            {
-                result += " := " + var.initialValue.simpleValue.value + "\n";
-            } else {
-                result += "\n";
-            }
-        }
-        result += QString("END_OUTPUT_VAR") + "\n";
     }
 
     return result;
@@ -281,7 +278,7 @@ QString XmlParser::convertDataToText()
 
         if (!pou.interface.inputVars.empty())
         {
-            result += QString("INPUT_VAR") + "\n";
+            result += QString("VAR_INPUT") + "\n";
             for (const auto & var : pou.interface.inputVars)
             {
                 result += "\t" + var.name + ": " + var.type;
@@ -297,7 +294,7 @@ QString XmlParser::convertDataToText()
 
         if (!pou.interface.outputVars.empty())
         {
-            result += QString("OUTPUT_VAR") + "\n";
+            result += QString("VAR_OUTPUT") + "\n";
             for (const auto & var : pou.interface.outputVars)
             {
                 result += "\t" + var.name + ": " + var.type;
@@ -345,7 +342,7 @@ QString XmlParser::convertPouToText(const int index)
     }
     if (!pous.at(index).interface.inputVars.empty())
     {
-        result += QString("INPUT_VAR") + "\n";
+        result += QString("VAR_INPUT") + "\n";
         for (const auto & var : pous.at(index).interface.inputVars)
         {
             result += "\t" + var.name + ": " + var.type;
@@ -360,7 +357,7 @@ QString XmlParser::convertPouToText(const int index)
     }
     if (!pous.at(index).interface.outputVars.empty())
     {
-        result += QString("OUTPUT_VAR") + "\n";
+        result += QString("VAR_OUTPUT") + "\n";
         for (const auto & var : pous.at(index).interface.outputVars)
         {
             result += "\t" + var.name + ": " + var.type;
@@ -398,6 +395,7 @@ QDomNode XmlParser::getPouNode(Pou _pou, const QDomNode &_parent)
 
     QDomElement interface_elem = document.createElement("interface");
     pou_elem.appendChild(interface_elem);
+
     QDomElement localVars_elem = document.createElement("localVars");
     interface_elem.appendChild(localVars_elem);
     for (const auto var : _pou.interface.localVars)
@@ -427,6 +425,64 @@ QDomNode XmlParser::getPouNode(Pou _pou, const QDomNode &_parent)
         localVars_elem.appendChild(variable_elem);
     }
 
+    QDomElement inputVars_elem = document.createElement("inputVars");
+    interface_elem.appendChild(inputVars_elem);
+    for (const auto var : _pou.interface.inputVars)
+    {
+        QDomElement variable_elem = document.createElement("variable");
+        variable_elem.setAttribute("name", var.name);
+        QDomElement type_elem = document.createElement("type");
+
+        if (types_list.contains(var.type))
+        {
+            QDomElement type_name_elem = document.createElement("type_name_elem");
+            type_name_elem.setTagName(var.type);
+            type_elem.appendChild(type_name_elem);
+            variable_elem.appendChild(type_elem);
+
+            QDomElement initialValue_elem = document.createElement("initialValue");
+            QDomElement simpleValue_elem = document.createElement("simpleValue");
+            simpleValue_elem.setAttribute("value", var.initialValue.simpleValue.value);
+            initialValue_elem.appendChild(simpleValue_elem);
+            variable_elem.appendChild(initialValue_elem);
+        } else {
+            QDomElement derived_elem = document.createElement("derived");
+            derived_elem.setAttribute("name", var.type);
+            type_elem.appendChild(derived_elem);
+            variable_elem.appendChild(type_elem);
+        }
+        inputVars_elem.appendChild(variable_elem);
+    }
+
+    QDomElement outputVars_elem = document.createElement("outputVars");
+    interface_elem.appendChild(outputVars_elem);
+    for (const auto var : _pou.interface.outputVars)
+    {
+        QDomElement variable_elem = document.createElement("variable");
+        variable_elem.setAttribute("name", var.name);
+        QDomElement type_elem = document.createElement("type");
+
+        if (types_list.contains(var.type))
+        {
+            QDomElement type_name_elem = document.createElement("type_name_elem");
+            type_name_elem.setTagName(var.type);
+            type_elem.appendChild(type_name_elem);
+            variable_elem.appendChild(type_elem);
+
+            QDomElement initialValue_elem = document.createElement("initialValue");
+            QDomElement simpleValue_elem = document.createElement("simpleValue");
+            simpleValue_elem.setAttribute("value", var.initialValue.simpleValue.value);
+            initialValue_elem.appendChild(simpleValue_elem);
+            variable_elem.appendChild(initialValue_elem);
+        } else {
+            QDomElement derived_elem = document.createElement("derived");
+            derived_elem.setAttribute("name", var.type);
+            type_elem.appendChild(derived_elem);
+            variable_elem.appendChild(type_elem);
+        }
+        outputVars_elem.appendChild(variable_elem);
+    }
+
     QDomText newNodeText = document.createCDATASection(_pou.body.value); newNodeText.setData(_pou.body.value);
     QDomElement xhtml_elem = document.createElement("xhtml:p");
     xhtml_elem.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
@@ -445,6 +501,7 @@ Pou XmlParser::TxtToPOU(const QString& _vars_text, const QString& _body_text)
     Pou pou;
     QString vars_text = _vars_text;
     QTextStream varsStream(&vars_text);
+    QString varType = "";
     while (true)
     {
         QString line = varsStream.readLine();
@@ -455,6 +512,16 @@ Pou XmlParser::TxtToPOU(const QString& _vars_text, const QString& _body_text)
             Variable variable;
             line.replace(" ", "");
             line.replace("\t", "");
+            if (line.contains("VAR_INPUT"))
+            {
+                varType = "VAR_INPUT";
+            } else if (line.contains("VAR_OUTPUT"))
+            {
+                varType = "VAR_OUTPUT";
+            } else if (line.contains("VAR"))
+            {
+                varType = "VAR";
+            }
             QStringList list_values = line.split(":=");
 
             if (list_values.size() > 1)
@@ -465,18 +532,19 @@ Pou XmlParser::TxtToPOU(const QString& _vars_text, const QString& _body_text)
                     variable.name = list_types.at(0);
                     variable.type = list_types.at(1);
                     variable.initialValue.simpleValue.value = list_values.at(1);
-                    pou.interface.setVariable(variable);
+                    pou.interface.setVar(variable, varType);
+
                 } else {
                     variable.name = list_values.at(0);
                     variable.type = list_values.at(1);
-                    pou.interface.setVariable(variable);
+                    pou.interface.setVar(variable, varType);
                 }
             } else {
                 QStringList list_types = list_values.at(0).split(":");
                 if (list_types.size() > 1) {
                     variable.name = list_types.at(0);
                     variable.type = list_types.at(1);
-                    pou.interface.setVariable(variable);
+                    pou.interface.setVar(variable, varType);
                 }
             }
         }

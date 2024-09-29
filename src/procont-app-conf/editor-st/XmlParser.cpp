@@ -62,11 +62,13 @@ QStringList XmlParser::getFilesNames()
 
 QString XmlParser::getPouText(const int index)
 {
+    qDebug() << "getPouText";
     return convertPouToText(index);
 }
 
 QString XmlParser::getAllText()
 {
+    qDebug() << "getAllText";
     return convertDataToText();
 }
 
@@ -74,19 +76,57 @@ QString XmlParser::getPouVarsText(const int index)
 {
     QString result;
 
+
+
     result += "PROGRAM " + pous.at(index).name + "\n";
-    result += QString("VAR") + "\n";
-    for (const auto & var : pous.at(index).interface.localVars)
+
+    if(!pous.at(index).interface.localVars.empty())
     {
-        result += "\t" + var.name + ": " + var.type;
-        if (var.initialValue.simpleValue.value != "")
+        result += QString("VAR") + "\n";
+        for (const auto & var : pous.at(index).interface.localVars)
         {
-            result += " := " + var.initialValue.simpleValue.value + "\n";
-        } else {
-            result += "\n";
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
         }
+        result += QString("END_VAR") + "\n";
     }
-    result += QString("END_VAR") + "\n";
+
+    if(!pous.at(index).interface.inputVars.empty())
+    {
+        result += QString("INPUT_VAR") + "\n";
+        for (const auto & var : pous.at(index).interface.inputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_VAR") + "\n";
+    }
+
+    if(!pous.at(index).interface.outputVars.empty())
+    {
+        result += QString("OUTPUT_VAR") + "\n";
+        for (const auto & var : pous.at(index).interface.outputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_VAR") + "\n";
+    }
 
     //result += QString("END_PROGRAM") + "\n";
 
@@ -153,30 +193,19 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
 
     Pou pou = XmlToPOU(node);
 
-    result += "PROGRAM " + pou.name + "\n";
-    result += QString("VAR") + "\n";
-    for (const auto & var : pou.interface.localVars)
-    {
-        result += "\t" + var.name + ": " + var.type;
-        if (var.initialValue.simpleValue.value != "")
-        {
-            result += " := " + var.initialValue.simpleValue.value + "\n";
-        } else {
-            result += "\n";
-        }
-    }
-    result += QString("END_VAR") + "\n";
-
-    return result;
-}
-
-QString XmlParser::convertDataToText()
-{
-    QString result;
-
-    for (const auto & pou : pous)
+    if (pou.pouType == QString("program"))
     {
         result += "PROGRAM " + pou.name + "\n";
+    }
+
+    if (pou.pouType == QString("functionBlock"))
+    {
+        result += "FUNCTION_BLOCK " + pou.name + "\n";
+    }
+
+
+    if (!pou.interface.localVars.empty())
+    {
         result += QString("VAR") + "\n";
         for (const auto & var : pou.interface.localVars)
         {
@@ -189,7 +218,98 @@ QString XmlParser::convertDataToText()
             }
         }
         result += QString("END_VAR") + "\n";
+    }
 
+    if (!pou.interface.inputVars.empty())
+    {
+        result += QString("INPUT_VAR") + "\n";
+        for (const auto & var : pou.interface.inputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_INPUT_VAR") + "\n";
+    }
+
+    if (!pou.interface.outputVars.empty())
+    {
+        result += QString("OUTPUT_VAR") + "\n";
+        for (const auto & var : pou.interface.outputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_OUTPUT_VAR") + "\n";
+    }
+
+    return result;
+}
+
+QString XmlParser::convertDataToText()
+{
+    QString result;
+
+    for (const auto & pou : pous)
+    {
+        result += "PROGRAM " + pou.name + "\n";
+
+        if (!pou.interface.localVars.empty())
+        {
+            result += QString("VAR") + "\n";
+            for (const auto & var : pou.interface.localVars)
+            {
+                result += "\t" + var.name + ": " + var.type;
+                if (var.initialValue.simpleValue.value != "")
+                {
+                    result += " := " + var.initialValue.simpleValue.value + "\n";
+                } else {
+                    result += "\n";
+                }
+            }
+            result += QString("END_VAR") + "\n";
+        }
+
+        if (!pou.interface.inputVars.empty())
+        {
+            result += QString("INPUT_VAR") + "\n";
+            for (const auto & var : pou.interface.inputVars)
+            {
+                result += "\t" + var.name + ": " + var.type;
+                if (var.initialValue.simpleValue.value != "")
+                {
+                    result += " := " + var.initialValue.simpleValue.value + "\n";
+                } else {
+                    result += "\n";
+                }
+            }
+            result += QString("END_VAR") + "\n";
+        }
+
+        if (!pou.interface.outputVars.empty())
+        {
+            result += QString("OUTPUT_VAR") + "\n";
+            for (const auto & var : pou.interface.outputVars)
+            {
+                result += "\t" + var.name + ": " + var.type;
+                if (var.initialValue.simpleValue.value != "")
+                {
+                    result += " := " + var.initialValue.simpleValue.value + "\n";
+                } else {
+                    result += "\n";
+                }
+            }
+            result += QString("END_VAR") + "\n";
+        }
         if (pou.body.value != "")
         {
             result += pou.body.value + "\n";
@@ -207,18 +327,52 @@ QString XmlParser::convertPouToText(const int index)
     QString result;
 
     result += "PROGRAM " + pous.at(index).name + "\n";
-    result += QString("VAR") + "\n";
-    for (const auto & var : pous.at(index).interface.localVars)
+
+    if (!pous.at(index).interface.localVars.empty())
     {
-        result += "\t" + var.name + ": " + var.type;
-        if (var.initialValue.simpleValue.value != "")
+        result += QString("VAR") + "\n";
+        for (const auto & var : pous.at(index).interface.localVars)
         {
-            result += " := " + var.initialValue.simpleValue.value + "\n";
-        } else {
-            result += "\n";
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
         }
+        result += QString("END_VAR") + "\n";
     }
-    result += QString("END_VAR") + "\n";
+    if (!pous.at(index).interface.inputVars.empty())
+    {
+        result += QString("INPUT_VAR") + "\n";
+        for (const auto & var : pous.at(index).interface.inputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_VAR") + "\n";
+    }
+    if (!pous.at(index).interface.outputVars.empty())
+    {
+        result += QString("OUTPUT_VAR") + "\n";
+        for (const auto & var : pous.at(index).interface.outputVars)
+        {
+            result += "\t" + var.name + ": " + var.type;
+            if (var.initialValue.simpleValue.value != "")
+            {
+                result += " := " + var.initialValue.simpleValue.value + "\n";
+            } else {
+                result += "\n";
+            }
+        }
+        result += QString("END_VAR") + "\n";
+    }
 
     if (pous.at(index).body.value != "")
     {
@@ -364,6 +518,70 @@ void XmlParser::parsePOU(const QDomNode &node, QList<Pou> &pous)
     pous.append(XmlToPOU(node));
 }
 
+void XmlParser::parseVariable(const QDomElement &domElementInterface, Interface& interface)
+{
+
+        QDomNode nodeLocalVars = domElementInterface.firstChild();
+        QList<Variable> localVars;
+
+        while(!nodeLocalVars.isNull()) {
+            QDomElement domElementLocalVars = nodeLocalVars.toElement();
+            if (!domElementLocalVars.isNull()){
+                if(domElementLocalVars.tagName() =="variable"){
+                    QDomNode nodeVariable = domElementLocalVars.firstChild();
+                    Variable variable;
+                    variable.name = domElementLocalVars.attribute("name");
+                    while(!nodeVariable.isNull()) {
+                        QDomElement domElementVariable = nodeVariable.toElement();
+                        if (!domElementVariable.isNull()){
+
+                            if(domElementVariable.tagName() =="type"){
+                                if (domElementVariable.firstChildElement().tagName() == QString("derived")){
+                                    variable.type = domElementVariable.firstChildElement().attribute("name");
+                                } else {
+                                    variable.type = domElementVariable.firstChildElement().tagName();
+                                }
+                            }
+
+                            if(domElementVariable.tagName() =="initialValue"){
+                                QDomNode nodeInitialValue = domElementVariable.firstChild();
+                                InitialValue initialValue;
+                                while(!nodeInitialValue.isNull()) {
+                                    QDomElement domElementInitialValue = nodeInitialValue.toElement();
+                                    if (!domElementInitialValue.isNull()){
+                                        if(domElementInitialValue.tagName() =="simpleValue"){
+                                            SimpleValue simpleValue;
+                                            simpleValue.value = domElementInitialValue.attribute("value");
+                                            initialValue.simpleValue = simpleValue;
+                                            variable.initialValue = initialValue;
+                                        }
+                                    }
+                                    nodeInitialValue = nodeInitialValue.nextSibling();
+                                }
+                            }
+
+                        }
+                        nodeVariable = nodeVariable.nextSibling();
+                    }
+                    localVars.append(variable);
+                }
+                if(domElementInterface.tagName() =="localVars")
+                {
+                    interface.localVars = localVars;
+                } else if (domElementInterface.tagName() =="inputVars")
+                {
+                    interface.inputVars = localVars;
+                } else if (domElementInterface.tagName() =="outputVars")
+                {
+                    interface.outputVars = localVars;
+                }
+
+            }
+            nodeLocalVars = nodeLocalVars.nextSibling();
+        }
+
+}
+
 void XmlParser::parsePouProgram(Pou &pou, QDomNode &domNode)
 {
     while(!domNode.isNull()) {
@@ -376,62 +594,19 @@ void XmlParser::parsePouProgram(Pou &pou, QDomNode &domNode)
                 while(!nodeInterface.isNull()) {
                     QDomElement domElementInterface = nodeInterface.toElement();
                     if(!domElementInterface.isNull()) {
-                        if(domElementInterface.tagName() =="localVars"){
-                            QDomNode nodeLocalVars = domElementInterface.firstChild();
-                            QList<Variable> localVars;
+                        //if(domElementInterface.tagName() =="localVars" || domElementInterface.tagName() =="inputVars" || domElementInterface.tagName() =="outputVars")
+                        //{
+                            parseVariable(domElementInterface, interface);
 
-                            while(!nodeLocalVars.isNull()) {
-                                QDomElement domElementLocalVars = nodeLocalVars.toElement();
-                                if (!domElementLocalVars.isNull()){
-                                    if(domElementLocalVars.tagName() =="variable"){
-                                        QDomNode nodeVariable = domElementLocalVars.firstChild();
-                                        Variable variable;
-                                        variable.name = domElementLocalVars.attribute("name");
-                                        while(!nodeVariable.isNull()) {
-                                            QDomElement domElementVariable = nodeVariable.toElement();
-                                            if (!domElementVariable.isNull()){
+                       //}
 
-                                                if(domElementVariable.tagName() =="type"){
-                                                    if (domElementVariable.firstChildElement().tagName() == QString("derived")){
-                                                        variable.type = domElementVariable.firstChildElement().attribute("name");
-                                                    } else {
-                                                        variable.type = domElementVariable.firstChildElement().tagName();
-                                                    }
-                                                }
-
-                                                if(domElementVariable.tagName() =="initialValue"){
-                                                    QDomNode nodeInitialValue = domElementVariable.firstChild();
-                                                    InitialValue initialValue;
-                                                    while(!nodeInitialValue.isNull()) {
-                                                        QDomElement domElementInitialValue = nodeInitialValue.toElement();
-                                                        if (!domElementInitialValue.isNull()){
-                                                            if(domElementInitialValue.tagName() =="simpleValue"){
-                                                                SimpleValue simpleValue;
-                                                                simpleValue.value = domElementInitialValue.attribute("value");
-                                                                initialValue.simpleValue = simpleValue;
-                                                                variable.initialValue = initialValue;
-                                                            }
-                                                        }
-                                                        nodeInitialValue = nodeInitialValue.nextSibling();
-                                                    }
-                                                }
-
-                                            }
-                                            nodeVariable = nodeVariable.nextSibling();
-                                        }
-                                        localVars.append(variable);
-                                    }
-                                    interface.localVars = localVars;
-
-                                }
-                                nodeLocalVars = nodeLocalVars.nextSibling();
-                            }
-                        }
-                        pou.interface = interface;
                     }
                     nodeInterface = nodeInterface.nextSibling();
                 }
+
+                pou.interface = interface;
             }
+
 
             if (domElement.tagName() =="body") {
                 if (!domElement.firstChildElement().isNull() && domElement.firstChildElement().tagName() == "ST"){

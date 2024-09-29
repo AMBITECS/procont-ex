@@ -29,6 +29,8 @@ struct Variable
 struct Interface
 {
     QList<Variable> localVars;
+    QList<Variable> inputVars;
+    QList<Variable> outputVars;
 
     void setVariable(Variable var)
     {
@@ -42,6 +44,33 @@ struct Interface
         }
         localVars.append(var);
     }
+
+    void setInputVariable(Variable var)
+    {
+        for (auto index = 0; index < inputVars.size(); ++index)
+        {
+            if (inputVars.at(index).name == var.name)
+            {
+                inputVars[index] = var;
+                return;
+            }
+        }
+        inputVars.append(var);
+    }
+
+    void setOutputVariable(Variable var)
+    {
+        for (auto index = 0; index < outputVars.size(); ++index)
+        {
+            if (outputVars.at(index).name == var.name)
+            {
+                outputVars[index] = var;
+                return;
+            }
+        }
+        outputVars.append(var);
+    }
+
 };
 
 struct Body
@@ -82,6 +111,7 @@ private:
     QString convertDataToText();
     QString convertPouToText(const int index);
     void parsePOU(const QDomNode& node, QList<Pou> & pous);
+    static void parseVariable(const QDomElement& domElementInterface, Interface& interface);
     // text to xml
     void convertTextToPou(const int index);
     static void parsePouProgram(Pou & pou, QDomNode & domNode);

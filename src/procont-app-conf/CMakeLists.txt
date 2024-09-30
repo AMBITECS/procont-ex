@@ -36,6 +36,7 @@ set(PROJECT_SOURCES
     editor-st/CodeEditor.cpp editor-st/CodeEditor.h editor-st/CodeEditorWidget.cpp
     editor-st/CodeEditorWidget.h editor-st/Highlighter.cpp editor-st/Highlighter.h
     editor-st/LineNumberArea.cpp editor-st/LineNumberArea.h
+    editor-st/CommonStTypes.h
     widget/WidgetCodeEditor.h widget/WidgetCodeEditor.cpp
     editor-st/XmlParser.cpp editor-st/XmlParser.h
     resources/procont-app-conf.qrc

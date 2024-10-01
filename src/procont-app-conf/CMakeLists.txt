@@ -39,6 +39,9 @@ set(PROJECT_SOURCES
     editor-st/CommonStTypes.h
     widget/WidgetCodeEditor.h widget/WidgetCodeEditor.cpp
     editor-st/XmlParser.cpp editor-st/XmlParser.h
+    editor-st/ArraySt.cpp editor-st/ArraySt.h
+    editor-st/StructSt.cpp editor-st/StructSt.h
+    editor-st/Variable.cpp editor-st/Variable.h
     resources/procont-app-conf.qrc
     editor-st/editor-st.qrc
 )

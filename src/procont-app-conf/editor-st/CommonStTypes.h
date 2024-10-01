@@ -2,6 +2,9 @@
 
 #include <QString>
 #include <QList>
+#include "Variable.h"
+#include "StructSt.h"
+#include "ArraySt.h"
 
 enum PouType
 {
@@ -9,6 +12,8 @@ enum PouType
     functionalBlock,
 };
 
+
+/*
 struct SimpleValue
 {
     QString value;
@@ -25,6 +30,7 @@ struct Variable
     QString type;
     InitialValue initialValue;
 };
+*/
 
 struct Interface
 {
@@ -99,12 +105,30 @@ struct Pou
     QString pouType;
 };
 
-struct baseType
+struct BaseType
 {
-    QList<Variable> structs;
+    QString baseType;
 };
 
-struct dataType
+struct BaseTypeStruct : public BaseType
 {
-
+    StructSt structs;
 };
+
+struct BaseTypeArray : public BaseType
+{
+    ArraySt array;
+};
+
+struct DataType
+{
+    BaseType baseType;
+};
+
+struct DataTypes
+{
+    QList<DataType> dataTypes;
+};
+
+
+

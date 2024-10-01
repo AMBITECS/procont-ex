@@ -32,10 +32,11 @@ private:
     static void parseVariable(const QDomElement& domElementInterface, Interface& interface);
     // text to xml
     void convertTextToPou(const int index);
-    static void parsePouProgram(Pou & pou, QDomNode & domNode);
+
 
 
 private:
+    static void parsePouProgram(Pou & pou, QDomNode & domNode);
     static Pou XmlToPOU(const QDomNode& node);
     static Pou TxtToPOU(const QString& _text_vars, const QString& _text_body);
     static QDomNode getPouNode(Pou _pou, const QDomNode &_parent);

@@ -596,42 +596,10 @@ void XmlParser::parseVariable(const QDomElement &domElementInterface, Interface&
             QDomElement domElementLocalVars = nodeLocalVars.toElement();
             if (!domElementLocalVars.isNull()){
                 if(domElementLocalVars.tagName() =="variable"){
-                    QDomNode nodeVariable = domElementLocalVars.firstChild();
-                    Variable variable;
-                    variable.name = domElementLocalVars.attribute("name");
-                    while(!nodeVariable.isNull()) {
-                        QDomElement domElementVariable = nodeVariable.toElement();
-                        if (!domElementVariable.isNull()){
-
-                            if(domElementVariable.tagName() =="type"){
-                                if (domElementVariable.firstChildElement().tagName() == QString("derived")){
-                                    variable.type = domElementVariable.firstChildElement().attribute("name");
-                                } else {
-                                    variable.type = domElementVariable.firstChildElement().tagName();
-                                }
-                            }
-
-                            if(domElementVariable.tagName() =="initialValue"){
-                                QDomNode nodeInitialValue = domElementVariable.firstChild();
-                                InitialValue initialValue;
-                                while(!nodeInitialValue.isNull()) {
-                                    QDomElement domElementInitialValue = nodeInitialValue.toElement();
-                                    if (!domElementInitialValue.isNull()){
-                                        if(domElementInitialValue.tagName() =="simpleValue"){
-                                            SimpleValue simpleValue;
-                                            simpleValue.value = domElementInitialValue.attribute("value");
-                                            initialValue.simpleValue = simpleValue;
-                                            variable.initialValue = initialValue;
-                                        }
-                                    }
-                                    nodeInitialValue = nodeInitialValue.nextSibling();
-                                }
-                            }
-
-                        }
-                        nodeVariable = nodeVariable.nextSibling();
-                    }
+                    //QDomNode nodeVariable = domElementLocalVars.firstChild();
+                    Variable variable = Variable::parseXML(domElementLocalVars);
                     localVars.append(variable);
+
                 }
                 if(domElementInterface.tagName() =="localVars")
                 {

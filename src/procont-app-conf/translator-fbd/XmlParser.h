@@ -35,6 +35,10 @@ class PLCopenXmlParser : public QObject
 public:
     explicit PLCopenXmlParser(QObject *parent = nullptr);
 
+public:
+    static bool parsePOU(const QDomNode &node_, T_POU * data_);
+
+public:
     bool setXmlFile(QString _xml_file);
     bool setNode(const QDomNode & node_);
 
@@ -53,25 +57,24 @@ protected:
 
     void checkPOUattr(QDomNode _node, T_POU *_pou);
 
-    void checkPOUinterface(QDomNode _node, T_POU *_pou);
-    void checkPOUbody(QDomNode _node, T_POU *_pou);
-    void checkPOUdocumentation(QDomNode _node, T_POU *_pou);
+    static void checkPOUinterface(QDomNode _node, T_POU *_pou);
+    static void checkPOUbody(QDomNode _node, T_POU *_pou);
+    static void checkPOUdocumentation(QDomNode _node, T_POU *_pou);
 
-    void checkPOUinterfaceLocalVar(QDomNode _node, T_POU *_pou);
-    void checkPOUinterfaceGlobalVar(QDomNode _node, T_POU *_pou);
+    static void checkPOUinterfaceLocalVar(QDomNode _node, T_POU *_pou);
+    static void checkPOUinterfaceGlobalVar(QDomNode _node, T_POU *_pou);
 
-    void checkPOUbodyFBD(QDomNode _node, T_POU *_pou);
-    void checkPOUbodyST(QDomNode _node, T_POU *_pou);
-    void checkPOUbodySFC(QDomNode _node, T_POU *_pou);
+    static void checkPOUbodyFBD(QDomNode _node, T_POU *_pou);
+    static void checkPOUbodyST(QDomNode _node, T_POU *_pou);
+    static void checkPOUbodySFC(QDomNode _node, T_POU *_pou);
 
-
-    void checkPOUbodyFBD_block(QDomNode _node, T_POU_FBD_ITEM *_item);
-    void checkPOUbodyFBD_in_var(QDomNode _node, T_POU_FBD_ITEM *_item);
-    void checkPOUbodyFBD_out_var(QDomNode _node, T_POU_FBD_ITEM *_item);
-    void checkPOUbodyFBD_in_out_var(QDomNode _node, T_POU_FBD_ITEM *_item);
-    void checkPOUbodyFBD_connector(QDomNode _node, T_POU_FBD_ITEM *_item);
-    void checkPOUbodyFBD_continuation(QDomNode _node, T_POU_FBD_ITEM *_item);
-    void checkPOUbodyFBD_comment(QDomNode _node, T_POU_FBD_ITEM *_item);
+    static void checkPOUbodyFBD_block(QDomNode _node, T_POU_FBD_ITEM *_item);
+    static void checkPOUbodyFBD_in_var(QDomNode _node, T_POU_FBD_ITEM *_item);
+    static void checkPOUbodyFBD_out_var(QDomNode _node, T_POU_FBD_ITEM *_item);
+    static void checkPOUbodyFBD_in_out_var(QDomNode _node, T_POU_FBD_ITEM *_item);
+    static void checkPOUbodyFBD_connector(QDomNode _node, T_POU_FBD_ITEM *_item);
+    static void checkPOUbodyFBD_continuation(QDomNode _node, T_POU_FBD_ITEM *_item);
+    static void checkPOUbodyFBD_comment(QDomNode _node, T_POU_FBD_ITEM *_item);
 
     bool checkRedifinitionBaseType(QDomNode _node, T_UDT *_udt);
 

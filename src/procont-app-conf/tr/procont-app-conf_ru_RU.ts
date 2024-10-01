@@ -356,22 +356,22 @@
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="34"/>
+        <location filename="../widget/WidgetEditor.cpp" line="35"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="36"/>
+        <location filename="../widget/WidgetEditor.cpp" line="37"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="62"/>
+        <location filename="../widget/WidgetEditor.cpp" line="63"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="65"/>
+        <location filename="../widget/WidgetEditor.cpp" line="66"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -379,12 +379,12 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="284"/>
+        <location filename="../widget/WidgetEditor.cpp" line="285"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="287"/>
+        <location filename="../widget/WidgetEditor.cpp" line="288"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

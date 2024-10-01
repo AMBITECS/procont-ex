@@ -133,6 +133,33 @@ bool PLCopenXmlParser::typesParser(QDomNode _node)
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
+bool PLCopenXmlParser::parsePOU(const QDomNode &node_, T_POU * data_)
+{
+    // node is pou
+    if(node_.nodeName() != "pou")
+        return false;
+
+    // parse
+    // interface
+    auto _child = node_.toElement().namedItem("interface");
+    if(!_child.isNull())
+        checkPOUinterface(_child, data_);
+    // body
+    _child = node_.toElement().namedItem("body");
+    if(_child.isNull())
+        return false;
+    else
+        checkPOUbody(_child, data_);
+    // documentation
+    _child = node_.toElement().namedItem("documentation");
+    if(!_child.isNull())
+        checkPOUdocumentation(_child, data_);
+
+    return true;
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 bool PLCopenXmlParser::POU(quint32 _index, T_POU *_pou)
 {
     bool _result = false;

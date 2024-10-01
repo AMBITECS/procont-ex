@@ -270,20 +270,20 @@ void MainWindow::slot_build()
     // datatypes
     {
         FBDviewer translator;
-        translator.setNode(doc.elementsByTagName("dataTypes").at(0));
-        translator.GlobalType_STgenerator(st_text);
+        // translator.setNode(doc.elementsByTagName("dataTypes").at(0));
+        // translator.GlobalType_STgenerator(st_text);
     }
     // pous
     {
         FBDviewer translator;
-        translator.setNodeEx(doc.elementsByTagName("pous").at(0).firstChild());
-        translator.Program_STgenerator(st_text);
+        // translator.setNodeEx(doc.elementsByTagName("pous").at(0).firstChild());
+        // translator.Program_STgenerator(st_text);
     }
     // configuration
     {
         FBDviewer translator;
-        translator.setNodeEx(doc.elementsByTagName("configurations").at(0));
-        translator.Configuration_STgenerator(st_text);
+        // translator.setNodeEx(doc.elementsByTagName("configurations").at(0));
+        // translator.Configuration_STgenerator(st_text);
     }
     CWidgetMessage::buildWidget()->appendPlainText(st_text);
     // *

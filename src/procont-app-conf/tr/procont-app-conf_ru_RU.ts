@@ -138,27 +138,22 @@
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="92"/>
-        <source>Test</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="102"/>
+        <location filename="../main/MainWindow.cpp" line="95"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="103"/>
+        <location filename="../main/MainWindow.cpp" line="96"/>
         <source>&amp;Open...</source>
         <translation>&amp;Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="104"/>
+        <location filename="../main/MainWindow.cpp" line="97"/>
         <source>&amp;Save...</source>
         <translation>&amp;Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="105"/>
+        <location filename="../main/MainWindow.cpp" line="98"/>
         <source>&amp;Exit</source>
         <translation>&amp;Выход</translation>
     </message>
@@ -167,23 +162,23 @@
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="110"/>
+        <location filename="../main/MainWindow.cpp" line="103"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="110"/>
-        <location filename="../main/MainWindow.cpp" line="160"/>
+        <location filename="../main/MainWindow.cpp" line="103"/>
+        <location filename="../main/MainWindow.cpp" line="153"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="121"/>
+        <location filename="../main/MainWindow.cpp" line="114"/>
         <source>open file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="160"/>
+        <location filename="../main/MainWindow.cpp" line="153"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>

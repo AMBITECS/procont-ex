@@ -33,8 +33,6 @@ private slots:
 
 private:
 
-    QDockWidget * testView = nullptr;
-
     QDockWidget * dockPou = nullptr;
     QDockWidget * dockDev = nullptr;
 

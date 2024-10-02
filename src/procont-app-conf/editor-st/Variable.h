@@ -112,7 +112,7 @@ public:
         if (variable.type == "array")
         {
             result += "\t" + variable.name + ": " + QString("ARRAY") + "[" + variable.arrayType.dimension.lower +
-                      QString("..") + variable.arrayType.dimension.upper + " OF " + variable.arrayType.baseType + "\n";
+                      QString("..") + variable.arrayType.dimension.upper + "]" + " OF " + variable.arrayType.baseType + "\n";
             return result;
         }
 

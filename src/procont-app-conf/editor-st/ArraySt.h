@@ -3,6 +3,7 @@
 #include <QDomDocument>
 #include <QList>
 //#include "CommonStTypes.h"
+#include <QDebug>
 
 struct Dimension
 {
@@ -20,10 +21,13 @@ public:
 
     static ArraySt parseXML(QDomNode &domNode)
     {
+        QDomNode nodeArray0 = domNode.firstChild();
+        QDomNode nodeArray = nodeArray0.firstChild();
         ArraySt result;
-        while(!domNode.isNull()) {
-            QDomElement domElement = domNode.toElement();
+        while(!nodeArray.isNull()) {
+            QDomElement domElement = nodeArray.toElement();
             if(!domElement.isNull()) {
+                //qDebug() << domElement.tagName();
                 if(domElement.tagName() =="dimension"){
                     result.dimension.lower = domElement.attribute("lower");
                     result.dimension.upper = domElement.attribute("upper");
@@ -37,7 +41,7 @@ public:
                 }
 
             }
-            domNode = domNode.nextSibling();
+            nodeArray = nodeArray.nextSibling();
         }
         return result;
     }

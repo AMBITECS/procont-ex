@@ -138,22 +138,27 @@
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="94"/>
+        <location filename="../main/MainWindow.cpp" line="92"/>
+        <source>Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="102"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="95"/>
+        <location filename="../main/MainWindow.cpp" line="103"/>
         <source>&amp;Open...</source>
         <translation>&amp;Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="96"/>
+        <location filename="../main/MainWindow.cpp" line="104"/>
         <source>&amp;Save...</source>
         <translation>&amp;Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="97"/>
+        <location filename="../main/MainWindow.cpp" line="105"/>
         <source>&amp;Exit</source>
         <translation>&amp;Выход</translation>
     </message>
@@ -162,23 +167,23 @@
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="102"/>
+        <location filename="../main/MainWindow.cpp" line="110"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="102"/>
-        <location filename="../main/MainWindow.cpp" line="152"/>
+        <location filename="../main/MainWindow.cpp" line="110"/>
+        <location filename="../main/MainWindow.cpp" line="160"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="113"/>
+        <location filename="../main/MainWindow.cpp" line="121"/>
         <source>open file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="152"/>
+        <location filename="../main/MainWindow.cpp" line="160"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -186,42 +191,42 @@
 <context>
     <name>ProxyModelTable_var</name>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="129"/>
+        <location filename="../model/ProxyModel.cpp" line="180"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="133"/>
+        <location filename="../model/ProxyModel.cpp" line="184"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="131"/>
+        <location filename="../model/ProxyModel.cpp" line="182"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="135"/>
+        <location filename="../model/ProxyModel.cpp" line="186"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="137"/>
+        <location filename="../model/ProxyModel.cpp" line="188"/>
         <source>Data type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="139"/>
+        <location filename="../model/ProxyModel.cpp" line="190"/>
         <source>Initial Value</source>
         <translation>Инициализация</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="141"/>
+        <location filename="../model/ProxyModel.cpp" line="192"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="143"/>
+        <location filename="../model/ProxyModel.cpp" line="194"/>
         <source>Attributes</source>
         <translation>Атрибуты</translation>
     </message>

@@ -87,6 +87,14 @@ void MainWindow::createWidgets()
     pDock->setAllowedAreas(Qt::BottomDockWidgetArea);
     pDock->setWidget(CWidgetMessage::instance());
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
+
+    // list view
+    testView = new QDockWidget(tr("Test"), this);
+    testView->setTitleBarWidget(new QWidget());
+    testView->setAllowedAreas(Qt::LeftDockWidgetArea);
+    testView->setWidget(viewPou);
+    addDockWidget(Qt::LeftDockWidgetArea, testView);
+    tabifyDockWidget(dockPou, testView);
 }
 
 void MainWindow::createMenu()

@@ -18,7 +18,8 @@ public:
     {
         typeItem    = QStandardItem::UserType + 1,
         typeVar     = QStandardItem::UserType + 2,
-        typePou     = QStandardItem::UserType + 3
+        typePou     = QStandardItem::UserType + 3,
+        dataType    = QStandardItem::UserType + 4,
     };
 public:
     DomItem(const QDomNode &node);
@@ -105,6 +106,23 @@ protected:
 };
 // ----------------------------------------------------------------------------
 
+// *** DomItemPou
+class DomItemDataType : public DomItemVar
+{
+public:
+    DomItemDataType(const QDomNode &node);
+
+    [[nodiscard]] QVariant data(int role) const override;
+
+    virtual void addEmptyNode() override;
+    virtual void updateNode(const QDomNode &) override;
+
+protected:
+    [[nodiscard]] virtual QDomNodeList filterChildren(const QDomNode &node) const override;
+    virtual void setupChildren(const QDomNode &) override;
+};
+// ----------------------------------------------------------------------------
+
 // ----------------------------------------------------------------------------
 // *** DomItem_creator
 class DomItem_creator
@@ -131,6 +149,14 @@ public:
     [[nodiscard]] virtual DomItem * create(const QDomNode &node);
 };
 // ----------------------------------------------------------------------------
+// *** DomItemPou_creator
+class DomItemDataType_creator : public DomItem_creator
+{
+public:
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
+};
+// ----------------------------------------------------------------------------
+
 
 // ----------------------------------------------------------------------------
 // *** DomItem_builder

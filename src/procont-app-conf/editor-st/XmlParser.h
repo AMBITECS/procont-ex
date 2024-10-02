@@ -25,10 +25,11 @@ public:
 
 private:
     // xml to text
-    void traverseNode(const QDomNode& node, QList<Pou> & pous);
+    void traverseNode(const QDomNode& node);
     QString convertDataToText();
     QString convertPouToText(const int index);
     void parsePOU(const QDomNode& node, QList<Pou> & pous);
+    void parseDataTypes(const QDomNode& node, QList<DataType> & dataTypes);
     static void parseVariable(const QDomElement& domElementInterface, Interface& interface);
     // text to xml
     void convertTextToPou(const int index);
@@ -37,11 +38,12 @@ private:
 
 private:
     static void parsePouProgram(Pou & pou, QDomNode & domNode);
-    static Pou XmlToPOU(const QDomNode& node);
-    static Pou TxtToPOU(const QString& _text_vars, const QString& _text_body);
-    static QDomNode getPouNode(Pou _pou, const QDomNode &_parent);
+    //static Pou XmlToPOU(const QDomNode& node);
+    //static Pou TxtToPOU(const QString& _text_vars, const QString& _text_body);
+    //static QDomNode getPouNode(Pou _pou, const QDomNode &_parent);
 
 private:
     QList<Pou> pous;
+    QList<DataType> dataTypes;
     static QStringList types_list;
 };

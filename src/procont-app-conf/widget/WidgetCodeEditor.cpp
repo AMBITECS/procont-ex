@@ -166,6 +166,7 @@ void WidgetCodeEditor::slot_tblVarChanged()
     if(_vars_table->isVisible())
         // set new text to text view
         _vars_text->setPlainText(XmlParser::getPouVarsText(item(_index)->node()));
+
 }
 
 void WidgetCodeEditor::slot_txtViewToggled(bool state)

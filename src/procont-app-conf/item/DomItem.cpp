@@ -9,7 +9,7 @@
 // *** DomItem ***
 
 QScopedPointer<DomItem_builder> DomItem::m_ItemBuilder = QScopedPointer<DomItem_builder>(new DomItem_builder);
-QStringList DomItem::m_discard = { "types", "pous", "instances", "configurations" };
+QStringList DomItem::m_discard = { "types", "pous", "instances", "configurations, dataTypes" };
 
 DomItem::DomItem(const QDomNode &node) :
     m_itemType(assignType(node)),
@@ -20,6 +20,8 @@ DomItem::DomItem(const QDomNode &node) :
 DomItem::ItemType DomItem::assignType(const QDomNode &node)
 {
     if(node.nodeName() == "pou")
+        return DomItem::typePou;
+    if(node.nodeName() == "dataType")
         return DomItem::typePou;
     if(node.nodeName() == "globalVars")
         return DomItem::typeVar;
@@ -324,6 +326,89 @@ void DomItemPou::setupChildren(const QDomNode & node)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemDataType ***
+DomItemDataType::DomItemDataType(const QDomNode &node) :
+    DomItemVar(node)
+{
+}
+
+QVariant DomItemDataType::data(int role) const
+{
+    Q_UNUSED(role);
+
+    return node().attributes().namedItem("name").nodeValue();
+}
+
+void DomItemDataType::addEmptyNode()
+{
+    QDomNode parentNode = node();
+    QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
+    el_variable.setAttribute("name", "localVar");
+    QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
+    QDomElement el_variable_type_int = parentNode.ownerDocument().createElement("REAL");
+    el_variable_type.appendChild(el_variable_type_int);
+    el_variable.appendChild(el_variable_type);
+    QDomNode el_localVars = parentNode.namedItem("interface").namedItem("localVars");
+    if(el_localVars.isNull())
+    {
+        el_localVars = parentNode.ownerDocument().createElement("localVars");
+        parentNode.namedItem("interface").appendChild(el_localVars);
+    }
+    el_localVars.appendChild(el_variable);
+}
+
+void DomItemDataType::updateNode(const QDomNode & new_node_)
+{
+    node().removeChild(node().toElement().namedItem("interface"));
+    node().appendChild(new_node_.toElement().namedItem("interface").cloneNode());
+
+    // !!! remove this if when all editors will be integrated
+    if(!node().toElement().namedItem("body").namedItem("ST").isNull())
+    {
+        node().removeChild(node().toElement().namedItem("body"));
+        node().appendChild(new_node_.toElement().namedItem("body").cloneNode());
+    }
+}
+
+QDomNodeList DomItemDataType::filterChildren(const QDomNode &node) const
+{
+    return node.toElement().elementsByTagName("interface");
+}
+
+void DomItemDataType::setupChildren(const QDomNode & node)
+{
+    auto ifaces = node.toElement().elementsByTagName("interface");
+    if(ifaces.count())
+    {
+        auto vars = ifaces.at(0).toElement().elementsByTagName("inputVars");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
+        vars = ifaces.at(0).toElement().elementsByTagName("outputVars");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
+        vars = ifaces.at(0).toElement().elementsByTagName("localVars");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
+        vars = ifaces.at(0).toElement().elementsByTagName("tempVars");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
+        vars = ifaces.at(0).toElement().elementsByTagName("inOutVars");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
+        vars = ifaces.at(0).toElement().elementsByTagName("externalVars");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
+        vars = ifaces.at(0).toElement().elementsByTagName("globalVars");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
+        vars = ifaces.at(0).toElement().elementsByTagName("accessVars");
+        for(auto i=0;i<vars.count();i++)
+            setupChild(vars.at(i), "variable");
+    }
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** DomItem_creator ***
 DomItem * DomItem_creator::create(const QDomNode &node)
 {
@@ -346,6 +431,12 @@ DomItem * DomItemPou_creator::create(const QDomNode &node)
     return new DomItemPou(node);
 }
 // ----------------------------------------------------------------------------
+// *** DomItemDataType_creator ***
+DomItem * DomItemDataType_creator::create(const QDomNode &node)
+{
+    return new DomItemDataType(node);
+}
+// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** DomItem_builder ***
@@ -354,6 +445,7 @@ DomItem_builder::DomItem_builder()
     m_creators.insert(DomItem::typeItem, new DomItem_creator);
     m_creators.insert(DomItem::typeVar, new DomItemVar_creator);
     m_creators.insert(DomItem::typePou, new DomItemPou_creator);
+    m_creators.insert(DomItem::dataType, new DomItemDataType_creator);
 }
 
 DomItem_builder::~DomItem_builder()

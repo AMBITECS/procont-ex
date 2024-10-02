@@ -25,8 +25,10 @@ bool ProxyModelTree_pou::filterAcceptsRow(int sourceRow, const QModelIndex &sour
         node.nodeName() != "fileHeader" &&
         node.nodeName() != "contentHeader" &&
         hasParent(node, "instances") == false &&
-        node.nodeName() != "dataTypes" &&
+        hasParent(node, "dataType") == false &&
+        //node.nodeName() != "dataTypes" &&
         hasParent(node, "pou") == false
+
         ;
 
     return true;
@@ -47,6 +49,55 @@ bool ProxyModelTree_pou::hasParent(const QDomNode &node, const QString &name) co
 
 
 int ProxyModelTree_pou::columnCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+
+    return 1;
+}
+
+ProxyModelTree_dataType::ProxyModelTree_dataType(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+}
+
+bool ProxyModelTree_dataType::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
+    DomItem *item = static_cast<DomItem*>(index.internalPointer());
+
+    if(!item) return false;
+
+    QDomNode node = item->node();
+
+    return
+        node.nodeName() != "xml" &&
+        node.nodeName() != "fileHeader" &&
+        node.nodeName() != "contentHeader" &&
+        hasParent(node, "instances") == false &&
+        hasParent(node, "dataType") == false &&
+        //node.nodeName() != "dataTypes" &&
+        hasParent(node, "pou") == false
+
+        ;
+
+    return true;
+}
+
+bool ProxyModelTree_dataType::hasParent(const QDomNode &node, const QString &name) const
+{
+    QDomNode parent = node.parentNode();
+
+    if(node.isNull())
+        return false;
+
+    if(parent.nodeName() == name)
+        return true;
+
+    return hasParent(parent, name);
+}
+
+
+int ProxyModelTree_dataType::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 

@@ -5,6 +5,8 @@
 #include "Variable.h"
 #include "StructSt.h"
 #include "ArraySt.h"
+#include "POU.h"
+#include "DataType.h"
 
 enum PouType
 {
@@ -32,6 +34,7 @@ struct Variable
 };
 */
 
+/*
 struct Interface
 {
     QList<Variable> localVars;
@@ -104,31 +107,9 @@ struct Pou
     Body body;
     QString pouType;
 };
+*/
 
-struct BaseType
-{
-    QString baseType;
-};
 
-struct BaseTypeStruct : public BaseType
-{
-    StructSt structs;
-};
-
-struct BaseTypeArray : public BaseType
-{
-    ArraySt array;
-};
-
-struct DataType
-{
-    BaseType baseType;
-};
-
-struct DataTypes
-{
-    QList<DataType> dataTypes;
-};
 
 
 

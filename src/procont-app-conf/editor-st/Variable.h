@@ -105,4 +105,25 @@ public:
 
         return variable;
     }
+
+    static QString covertObjToString(const Variable & variable)
+    {
+        QString result;
+        if (variable.type == "array")
+        {
+            result += "\t" + variable.name + ": " + QString("ARRAY") + "[" + variable.arrayType.dimension.lower +
+                      QString("..") + variable.arrayType.dimension.upper + " OF " + variable.arrayType.baseType + "\n";
+            return result;
+        }
+
+        result += "\t" + variable.name + ": " + variable.type;
+
+        if (variable.initialValue.simpleValue.value != "")
+        {
+            result += " := " + variable.initialValue.simpleValue.value + "\n";
+        } else {
+            result += "\n";
+        }
+        return result;
+    }
 };

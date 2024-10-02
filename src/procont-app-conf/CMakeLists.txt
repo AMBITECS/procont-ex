@@ -42,6 +42,8 @@ set(PROJECT_SOURCES
     editor-st/ArraySt.cpp editor-st/ArraySt.h
     editor-st/StructSt.cpp editor-st/StructSt.h
     editor-st/Variable.cpp editor-st/Variable.h
+    editor-st/POU.cpp editor-st/POU.h
+    editor-st/DataType.cpp editor-st/DataType.h
     resources/procont-app-conf.qrc
     editor-st/editor-st.qrc
 )

@@ -21,7 +21,7 @@ void XmlParser::importFromXml(QString filename)
         if(domDoc.setContent(&file))
         {
             QDomElement domElement = domDoc.documentElement();
-            traverseNode(domElement, pous);
+            traverseNode(domElement);
         }
         file.close();
     }
@@ -44,8 +44,8 @@ void XmlParser::exportToXml(QString filename)
     //add it to document
     document.appendChild(project);
 
-    for (const auto pou : pous)        
-        project.appendChild(getPouNode(pou, project));
+    for (const auto pou : pous)
+        project.appendChild(Pou::getPouNode(pou, project, types_list));
 
     xmlContent << document.toString();
 }
@@ -56,6 +56,11 @@ QStringList XmlParser::getFilesNames()
     for (const auto & pou : pous)
     {
         result.append(pou.name);
+    }
+    qDebug() << dataTypes.size();
+    for (const auto & dataType : dataTypes)
+    {
+        result.append(dataType.name);
     }
     return result;
 }
@@ -150,7 +155,7 @@ QList<Pou> *XmlParser::getPous()
     return &pous;
 }
 
-void XmlParser::traverseNode(const QDomNode &node, QList<Pou> &pous)
+void XmlParser::traverseNode(const QDomNode &node)
 {
     QDomNode domNode =
         node.firstChild();
@@ -159,11 +164,17 @@ void XmlParser::traverseNode(const QDomNode &node, QList<Pou> &pous)
         if(!domElement.isNull()) {
             if(domElement.tagName() =="pou")
             {
+                qDebug() << "pous";
                 parsePOU(domNode, pous);
+            }
+            if (domElement.tagName() == "dataType")
+            {
+                qDebug() << "dataTypes";
+                parseDataTypes(domNode, dataTypes);
             }
         }
 
-        traverseNode(domNode, pous);
+        traverseNode(domNode);
         domNode = domNode.nextSibling();
     }
 }
@@ -176,7 +187,8 @@ QString XmlParser::getPouBodyText(const QDomNode& node)
     if(node.nodeName() != "pou")
         return {};
 
-    return XmlToPOU(node).body.value + "\n";
+    //return XmlToPOU(node).body.value + "\n";
+    return Pou::parseXML(node).body.value + "\n";
 }
 
 QString XmlParser::getPouVarsText(const QDomNode& node)
@@ -189,7 +201,8 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
 
     QString result;
 
-    Pou pou = XmlToPOU(node);
+    //Pou pou = XmlToPOU(node);
+    Pou pou = Pou::parseXML(node);
 
     if (pou.pouType == QString("program"))
     {
@@ -206,13 +219,17 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         result += QString("VAR_INPUT") + "\n";
         for (const auto & var : pou.interface.inputVars)
         {
+            result += Variable::covertObjToString(var);
+            /*
             result += "\t" + var.name + ": " + var.type;
+
             if (var.initialValue.simpleValue.value != "")
             {
                 result += " := " + var.initialValue.simpleValue.value + "\n";
             } else {
                 result += "\n";
             }
+*/
         }
         result += QString("END_VAR") + "\n";
     }
@@ -222,6 +239,8 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         result += QString("VAR_OUTPUT") + "\n";
         for (const auto & var : pou.interface.outputVars)
         {
+            result += Variable::covertObjToString(var);
+            /*
             result += "\t" + var.name + ": " + var.type;
             if (var.initialValue.simpleValue.value != "")
             {
@@ -229,6 +248,7 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
             } else {
                 result += "\n";
             }
+*/
         }
         result += QString("END_VAR") + "\n";
     }
@@ -238,6 +258,8 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         result += QString("VAR") + "\n";
         for (const auto & var : pou.interface.localVars)
         {
+            result += Variable::covertObjToString(var);
+            /*
             result += "\t" + var.name + ": " + var.type;
             if (var.initialValue.simpleValue.value != "")
             {
@@ -245,6 +267,7 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
             } else {
                 result += "\n";
             }
+*/
         }
         result += QString("END_VAR") + "\n";
     }
@@ -382,9 +405,9 @@ QString XmlParser::convertPouToText(const int index)
 
 QDomNode XmlParser::getPouNode(const QString& _vars_text, const QString& _body_text, const QDomNode &_parent)
 {
-    return getPouNode(TxtToPOU(_vars_text, _body_text), _parent);
+    return Pou::getPouNode(Pou::TxtToPOU(_vars_text, _body_text), _parent, types_list);
 }
-
+/*
 QDomNode XmlParser::getPouNode(Pou _pou, const QDomNode &_parent)
 {
     QDomDocument document = _parent.ownerDocument();
@@ -561,13 +584,14 @@ Pou XmlParser::TxtToPOU(const QString& _vars_text, const QString& _body_text)
             break;
         else {
             body += line + "\n";
-        }
+        }        Pou pou;
     }
     pou.body.value = body;
 
     return pou;
 }
-
+*/
+/*
 Pou XmlParser::XmlToPOU(const QDomNode &node)
 {
     QDomNode domNode =
@@ -580,12 +604,18 @@ Pou XmlParser::XmlToPOU(const QDomNode &node)
 
     return pou;
 }
-
+*/
 void XmlParser::parsePOU(const QDomNode &node, QList<Pou> &pous)
 {
-    pous.append(XmlToPOU(node));
+    //pous.append(XmlToPOU(node));
+    pous.append(Pou::parseXML(node));
 }
 
+void XmlParser::parseDataTypes(const QDomNode &node, QList<DataType> &dataTypes)
+{
+    dataTypes.append(DataType::parseXML(node));
+}
+/*
 void XmlParser::parseVariable(const QDomElement &domElementInterface, Interface& interface)
 {
 
@@ -617,7 +647,8 @@ void XmlParser::parseVariable(const QDomElement &domElementInterface, Interface&
         }
 
 }
-
+*/
+/*
 void XmlParser::parsePouProgram(Pou &pou, QDomNode &domNode)
 {
     while(!domNode.isNull()) {
@@ -655,7 +686,7 @@ void XmlParser::parsePouProgram(Pou &pou, QDomNode &domNode)
         domNode = domNode.nextSibling();
     }
 }
-
+*/
 void XmlParser::typesFromFile(const QString &fileName)
 {
     QFile file(fileName);

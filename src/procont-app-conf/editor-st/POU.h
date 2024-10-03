@@ -154,7 +154,7 @@ struct Pou
 
     }
 
-    static QDomNode getPouNode(Pou _pou, const QDomNode &_parent, const QStringList & types_list)
+    static QDomNode getNode(Pou _pou, const QDomNode &_parent, const QStringList & types_list)
     {
         QDomDocument document = _parent.ownerDocument();
 
@@ -265,7 +265,7 @@ struct Pou
         return pou_elem;
     }
 
-    static Pou TxtToPOU(const QString& _vars_text, const QString& _body_text)
+    static Pou TxtToObj(const QString& _vars_text, const QString& _body_text)
     {
         Pou pou;
         QString vars_text = _vars_text;

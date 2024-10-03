@@ -55,7 +55,8 @@ public:
                     }
                     if (variable.type == "array")
                     {
-                        variable.arrayType = ArraySt::parseXML(nodeVariable);
+                        QDomNode nodeArray = nodeVariable.firstChild();
+                        variable.arrayType = ArraySt::parseXML(nodeArray);
                     }
                 }
 

@@ -29,4 +29,17 @@ public:
         return result;
     }
 
+    static QString covertObjToString(const StructSt & structs)
+    {
+        QString result;
+        result += QString("STRUCT") + "\n";
+        for (const auto var : structs.vars)
+        {
+            result += "\t";
+            result += Variable::covertObjToString(var);
+        }
+        result += "\t" + QString("END_STRUCT") + "\n";
+        return result;
+    }
+
 };

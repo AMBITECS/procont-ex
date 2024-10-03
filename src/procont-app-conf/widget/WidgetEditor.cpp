@@ -171,9 +171,11 @@ void WidgetEditor::slot_txtVarChanged()
 void WidgetEditor::slot_tblVarChanged()
 {
     // user make changes in text view
-    if(_vars_table->isVisible())
+    if(_vars_table->isVisible()) {
         // set new text to text view
         _vars_text->setPlainText(XmlParser::getPouVarsText(item(_index)->node()));
+    }
+
 }
 
 void WidgetEditor::slot_txtViewToggled(bool state)
@@ -357,7 +359,7 @@ QWidget * WidgetEditor_type::createCodeEditor()
     // QString text = XmlParser::getPouBodyText(item(_index)->node());
     QString text = {};
 
-    _body_text->setPlainText(text);
+    _body_text->setPlainText(XmlParser::getDataTypeText(item(_index)->node()));
 
     connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor_type::slot_codeChanged);
     // ***

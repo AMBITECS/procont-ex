@@ -21,13 +21,11 @@ public:
 
     static ArraySt parseXML(QDomNode &domNode)
     {
-        QDomNode nodeArray0 = domNode.firstChild();
-        QDomNode nodeArray = nodeArray0.firstChild();
+        QDomNode nodeArray = domNode.firstChild();
         ArraySt result;
         while(!nodeArray.isNull()) {
             QDomElement domElement = nodeArray.toElement();
             if(!domElement.isNull()) {
-                //qDebug() << domElement.tagName();
                 if(domElement.tagName() =="dimension"){
                     result.dimension.lower = domElement.attribute("lower");
                     result.dimension.upper = domElement.attribute("upper");
@@ -45,4 +43,18 @@ public:
         }
         return result;
     }
+
+    static QString covertObjToString(const ArraySt & array_st)
+    {
+        QString result;
+
+        result += QString("ARRAY") + "[" + array_st.dimension.lower +
+                  QString("..") + array_st.dimension.upper + "]" + " OF " + array_st.baseType + "\n";
+        return result;
+
+
+
+        return result;
+    }
+
 };

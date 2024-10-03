@@ -4,6 +4,12 @@
 #include <QList>
 #include "CommonStTypes.h"
 
+enum textBlockType
+{
+    VARS,
+    BODY,
+};
+
 class XmlParser/* : QObject*/
 {
 public:
@@ -19,9 +25,11 @@ public:
 
     static void typesFromFile(const QString &fileName);
 
+    static QString getDataTypeText(const QDomNode& node);
     static QString getPouBodyText(const QDomNode& node);
     static QString getPouVarsText(const QDomNode& node);
     static QDomNode getPouNode(const QString& _text_vars, const QString&, const QDomNode &_parent);
+    static QDomNode getDataTypeNode(const QString& _text_vars, const QString&, const QDomNode &_parent);
 
 private:
     // xml to text

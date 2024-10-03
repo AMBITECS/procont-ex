@@ -45,7 +45,7 @@ void XmlParser::exportToXml(QString filename)
     document.appendChild(project);
 
     for (const auto pou : pous)
-        project.appendChild(Pou::getPouNode(pou, project, types_list));
+        project.appendChild(Pou::getNode(pou, project, types_list));
 
     xmlContent << document.toString();
 }
@@ -57,7 +57,6 @@ QStringList XmlParser::getFilesNames()
     {
         result.append(pou.name);
     }
-    qDebug() << dataTypes.size();
     for (const auto & dataType : dataTypes)
     {
         result.append(dataType.name);
@@ -164,12 +163,10 @@ void XmlParser::traverseNode(const QDomNode &node)
         if(!domElement.isNull()) {
             if(domElement.tagName() =="pou")
             {
-                qDebug() << "pous";
                 parsePOU(domNode, pous);
             }
             if (domElement.tagName() == "dataType")
             {
-                qDebug() << "dataTypes";
                 parseDataTypes(domNode, dataTypes);
             }
         }
@@ -405,8 +402,13 @@ QString XmlParser::convertPouToText(const int index)
 
 QDomNode XmlParser::getPouNode(const QString& _vars_text, const QString& _body_text, const QDomNode &_parent)
 {
-    return Pou::getPouNode(Pou::TxtToPOU(_vars_text, _body_text), _parent, types_list);
+    return Pou::getNode(Pou::TxtToObj(_vars_text, _body_text), _parent, types_list);
 }
+
+//QDomNode XmlParser::getDataTypeNode(const QString &_text_vars, const QString &, const QDomNode &_parent)
+//{
+//    return Pou::getPouNode(Pou::TxtToPOU(_vars_text, _body_text), _parent, types_list);
+//}
 /*
 QDomNode XmlParser::getPouNode(Pou _pou, const QDomNode &_parent)
 {
@@ -711,4 +713,20 @@ void XmlParser::typesFromFile(const QString &fileName)
 #ifndef QT_NO_CURSOR
     QGuiApplication::restoreOverrideCursor();
 #endif
+}
+
+
+QString XmlParser::getDataTypeText(const QDomNode &node)
+{
+    if(node.isNotation())
+        return {};
+
+    if(node.nodeName() != "dataType")
+        return {};
+
+    QString result;
+
+    result += DataType::covertObjToString(DataType::parseXML(node));
+
+    return result;
 }

@@ -70,7 +70,7 @@ class ITranslator_creator
 public:
     ITranslator_creator() = default;
 
-    virtual ITranslator * create() = 0;
+    virtual ITranslator * create() const = 0;
 };
 // ----------------------------------------------------------------------------
 
@@ -81,12 +81,12 @@ public:
  * \brief The Translator_creator_ST class
  */
 
-class Translator_creator_ST
+class Translator_creator_ST : public ITranslator_creator
 {
 public:
     Translator_creator_ST() = default;
 
-    virtual ITranslator * create();
+    ITranslator * create() const override;
 };
 // ----------------------------------------------------------------------------
 
@@ -97,12 +97,12 @@ public:
  * \brief The Translator_creator_FBD class
  */
 
-class Translator_creator_FBD
+class Translator_creator_FBD : public ITranslator_creator
 {
 public:
     Translator_creator_FBD() = default;
 
-    virtual ITranslator * create();
+    ITranslator * create() const override;
 };
 // ----------------------------------------------------------------------------
 
@@ -116,15 +116,24 @@ public:
  */
 
 class Translator_builder
-{
-public:
+{    
+private:
     Translator_builder();
+
+public:
     ~Translator_builder();
 
-    virtual ITranslator * build();
+public:
+    static Translator_builder * instance();
+
+    ITranslator * build(const QDomNode &) const;
 
 private:
-    QHash<eTranslatorType, ITranslator_creator*> m_creators;
+    static ITranslator::eTranslatorType assignType(const QDomNode &);
+
+private:
+    static Translator_builder * _m_instance;
+    QHash<ITranslator::eTranslatorType, ITranslator_creator*> _m_hCreators;
 };
 // ----------------------------------------------------------------------------
 #endif

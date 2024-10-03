@@ -255,6 +255,8 @@ void MainWindow::slot_compile()
 #include "translator-fbd/SchemaViewer.h"
 #include <QProcess>
 
+#include "generate/Translator.h"
+
 void MainWindow::slot_build()
 {
     CWidgetMessage::instance()->setCurrentWidget(CWidgetMessage::buildWidget());
@@ -275,9 +277,13 @@ void MainWindow::slot_build()
     }
     // pous
     {
-        FBDviewer translator;
+        // FBDviewer translator;
         // translator.setNodeEx(doc.elementsByTagName("pous").at(0).firstChild());
         // translator.Program_STgenerator(st_text);
+
+        QDomNodeList pous_list = doc.elementsByTagName("pous").at(0).toElement().elementsByTagName("pou");
+        for(auto i=0;i<pous_list.count();i++)
+            Translator_builder::instance()->build(pous_list.at(i))->translate(pous_list.at(i));
     }
     // configuration
     {

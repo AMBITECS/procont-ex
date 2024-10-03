@@ -143,7 +143,7 @@ struct DataType
         return elem;
     }
 
-/*
+
     static DataType TxtToObj(const QString& _vars_text, const QString& _body_text)
     {
         DataType result;
@@ -160,62 +160,17 @@ struct DataType
                 Variable variable;
                 line.replace(" ", "");
                 line.replace("\t", "");
-                if (line.contains("VAR_INPUT"))
+                if (line.contains("STRUCT"))
                 {
-                    varType = "VAR_INPUT";
-                } else if (line.contains("VAR_OUTPUT"))
-                {
-                    varType = "VAR_OUTPUT";
-                } else if (line.contains("VAR"))
-                {
-                    varType = "VAR";
-                }
-                QStringList list_values = line.split(":=");
-
-                if (list_values.size() > 1)
-                {
-                    QStringList list_types = list_values.at(0).split(":");
-                    if (list_types.size() > 1)
-                    {
-                        variable.name = list_types.at(0);
-                        variable.type = list_types.at(1);
-                        variable.initialValue.simpleValue.value = list_values.at(1);
-                        pou.interface.setVar(variable, varType);
-
-                    } else {
-                        variable.name = list_values.at(0);
-                        variable.type = list_values.at(1);
-                        pou.interface.setVar(variable, varType);
-                    }
-                } else {
-                    QStringList list_types = list_values.at(0).split(":");
-                    if (list_types.size() > 1) {
-                        variable.name = list_types.at(0);
-                        variable.type = list_types.at(1);
-                        pou.interface.setVar(variable, varType);
-                    }
+                    result.baseType.baseTypeName = QString("struct");
+                    result.baseType.structs = StructSt::TxtToObj(_vars_text);
                 }
             }
         }
 
-        QString body_text = _body_text;
-        QTextStream bodyStream(&body_text);
-        QString body;
-        while (true)
-        {
-            QString line = bodyStream.readLine();
-
-            if (line.isNull())
-                break;
-            else {
-                body += line + "\n";
-            }        Pou pou;
-        }
-        pou.body.value = body;
-
-        return pou;
+        return result;
     }
-*/
+
 
 };
 

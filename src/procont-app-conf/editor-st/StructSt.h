@@ -42,4 +42,61 @@ public:
         return result;
     }
 
+    static StructSt TxtToObj(const QString& _vars_text)
+    {
+        StructSt result;
+        QString vars_text = _vars_text;
+        QTextStream varsStream(&vars_text);
+        bool start_struct = false;
+        while (true)
+        {
+            QString line = varsStream.readLine();
+
+            if (line.isNull())
+                break;
+            else if ((line.contains("STRUCT")))
+            {
+                start_struct = true;
+                break;
+            } else if (line.contains("END_STRUCT"))
+            {
+                start_struct = false;
+                break;
+            }
+            if (start_struct) {
+                Variable variable;
+                line.replace(" ", "");
+                line.replace("\t", "");
+
+                QStringList list_values = line.split(":=");
+
+                if (list_values.size() > 1)
+                {
+                    QStringList list_types = list_values.at(0).split(":");
+                    if (list_types.size() > 1)
+                    {
+                        variable.name = list_types.at(0);
+                        variable.type = list_types.at(1);
+                        variable.initialValue.simpleValue.value = list_values.at(1);
+                        result.vars.append(variable);
+
+                    } else {
+                        variable.name = list_values.at(0);
+                        variable.type = list_values.at(1);
+                        result.vars.append(variable);
+                    }
+                } else {
+                    QStringList list_types = list_values.at(0).split(":");
+                    if (list_types.size() > 1) {
+                        variable.name = list_types.at(0);
+                        variable.type = list_types.at(1);
+                        result.vars.append(variable);
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
 };

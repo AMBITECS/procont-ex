@@ -405,6 +405,11 @@ QDomNode XmlParser::getPouNode(const QString& _vars_text, const QString& _body_t
     return Pou::getNode(Pou::TxtToObj(_vars_text, _body_text), _parent, types_list);
 }
 
+QDomNode XmlParser::getDataTypeNode(const QString &_vars_text, const QString & _body_text, const QDomNode &_parent)
+{
+    return DataType::getNode(DataType::TxtToObj(_vars_text, _body_text), _parent, types_list);
+}
+
 //QDomNode XmlParser::getDataTypeNode(const QString &_text_vars, const QString &, const QDomNode &_parent)
 //{
 //    return Pou::getPouNode(Pou::TxtToPOU(_vars_text, _body_text), _parent, types_list);

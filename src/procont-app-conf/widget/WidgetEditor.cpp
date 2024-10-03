@@ -371,15 +371,16 @@ void WidgetEditor_type::slot_codeChanged()
 {
     qDebug() << "new code for update node" << item(_vars_table->rootIndex())->node().nodeName();
 
-    QDomNode new_node = {};
+    //QDomNode new_node = {};
     // // get new node from st editor
-    // QDomNode new_node = XmlParser::getPouNode
-    //     (
-    //         _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
-    //         _body_text != nullptr ? _body_text->toPlainText() : QString(),
-    //         item(_vars_table->rootIndex())->node()
-    //         );
-    // // set new node to item
+    QDomNode new_node = XmlParser::getDataTypeNode
+         (
+             _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
+             _body_text != nullptr ? _body_text->toPlainText() : QString(),
+             item(_vars_table->rootIndex())->node()
+             );
+
+     // set new node to item
     item(_vars_table->rootIndex())->updateNode(new_node);
 }
 // ----------------------------------------------------------------------------

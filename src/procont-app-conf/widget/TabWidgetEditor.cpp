@@ -1,6 +1,6 @@
 #include "TabWidgetEditor.h"
 
-#include "WidgetCodeEditor.h"
+#include "WidgetEditor.h"
 
 #include "model/ProxyModel.h"
 
@@ -17,6 +17,7 @@ TabWidgetEditor::TabWidgetEditor()
     {
         _hProxyModels.insert(DomItem::typePou, new ProxyModelTable_var);
         _hProxyModels.insert(DomItem::typeVar, new ProxyModelTable_global);
+        _hProxyModels.insert(DomItem::typeType, new ProxyModelTable_var);
     }
 
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slot_closeTab(int)));
@@ -85,16 +86,32 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
     switch(type)
     {
     case DomItem::typePou:
+    {
+        QWidget *editor = nullptr;
+        if(!item(index)->node().toElement().namedItem("body").namedItem("ST").isNull())
+            editor = new WidgetEditor_st(index, proxyModel(type));
+        if(!item(index)->node().toElement().namedItem("body").namedItem("FBD").isNull())
+            editor = new WidgetEditor_fbd(index, proxyModel(type));
+
+        if(editor != nullptr)
+            _hWidgets.insert(index, editor);
+        else
+            _hWidgets.insert(index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
+
+    }
+    break;
+    case DomItem::typeType:
+    {
+        _hWidgets.insert(index, new WidgetEditor_type(index, proxyModel(type)));
+    }
+    break;
     case DomItem::typeVar:
     {
-        _hWidgets.insert(index, new WidgetCodeEditor(index, proxyModel(type)));
-        // _hTables.insert(vSplitter, table);
+        _hWidgets.insert(index, new WidgetEditor_vars(index, proxyModel(type)));
     }
     break;
     default:
-    {
         _hWidgets.insert(index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
-    }
     break;
     }
 
@@ -112,7 +129,6 @@ void TabWidgetEditor::slot_currentTabChanged(int index)
 
 void TabWidgetEditor::slot_closeTab(int index)
 {
-    // _hTables.remove(widget(index));
     _hWidgets.remove(_hWidgets.key(widget(index)));
 
     delete widget(index);

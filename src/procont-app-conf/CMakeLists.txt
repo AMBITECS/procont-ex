@@ -37,7 +37,7 @@ set(PROJECT_SOURCES
     editor-st/CodeEditorWidget.h editor-st/Highlighter.cpp editor-st/Highlighter.h
     editor-st/LineNumberArea.cpp editor-st/LineNumberArea.h
     editor-st/CommonStTypes.h
-    widget/WidgetCodeEditor.h widget/WidgetCodeEditor.cpp
+
     editor-st/XmlParser.cpp editor-st/XmlParser.h
     editor-st/ArraySt.cpp editor-st/ArraySt.h
     editor-st/StructSt.cpp editor-st/StructSt.h
@@ -59,6 +59,8 @@ qt_translate(
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
         editor-st/FilesManager.h editor-st/FilesManager.cpp
+        widget/WidgetEditor.cpp widget/WidgetEditor.h
+        translator-fbd/FbdTranslator.cpp translator-fbd/FbdTranslator.h translator-fbd/GlobalType.h translator-fbd/SchemaViewer.cpp translator-fbd/SchemaViewer.h translator-fbd/XmlParser.cpp translator-fbd/XmlParser.h
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

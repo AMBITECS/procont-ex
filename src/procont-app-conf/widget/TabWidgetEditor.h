@@ -50,7 +50,6 @@ private:
 
 private:
     QHash<const QModelIndex, QWidget*> _hWidgets;
-    // QHash<QWidget*, QTableView*> _hTables;
 };
 
 #endif // TABWIDGETEDITOR_H

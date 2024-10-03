@@ -22,23 +22,6 @@ protected:
     bool hasParent(const QDomNode &node, const QString &name) const;
 };
 
-class ProxyModelTree_dataType : public QSortFilterProxyModel
-{
-    Q_OBJECT
-public:
-    explicit ProxyModelTree_dataType(QObject *parent = nullptr);
-
-public:
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
-protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-
-protected:
-    bool hasParent(const QDomNode &node, const QString &name) const;
-};
-
-
 class ProxyModelTree_dev : public QSortFilterProxyModel
 {
     Q_OBJECT

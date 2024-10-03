@@ -19,7 +19,7 @@ public:
         typeItem    = QStandardItem::UserType + 1,
         typeVar     = QStandardItem::UserType + 2,
         typePou     = QStandardItem::UserType + 3,
-        dataType    = QStandardItem::UserType + 4,
+        typeType    = QStandardItem::UserType + 4,
     };
 public:
     DomItem(const QDomNode &node);
@@ -72,6 +72,29 @@ private:
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemName
+class DomItemName : public DomItem
+{
+public:
+    DomItemName(const QDomNode &node) :
+        DomItem(node)
+    {}
+
+    [[nodiscard]] QVariant data(int role) const override
+    {
+        Q_UNUSED(role);
+
+        return node().attributes().namedItem("name").nodeValue();
+    }
+
+    virtual void updateNode(const QDomNode &)
+    {
+        qDebug() << node().nodeName() << node().parentNode().nodeName();
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** DomItemVar
 class DomItemVar : public DomItem
 {
@@ -106,26 +129,18 @@ protected:
 };
 // ----------------------------------------------------------------------------
 
-// *** DomItemPou
-class DomItemDataType : public DomItemVar
+// ----------------------------------------------------------------------------
+// *** DomItem_creator
+class DomItem_creator
 {
 public:
-    DomItemDataType(const QDomNode &node);
-
-    [[nodiscard]] QVariant data(int role) const override;
-
-    virtual void addEmptyNode() override;
-    virtual void updateNode(const QDomNode &) override;
-
-protected:
-    [[nodiscard]] virtual QDomNodeList filterChildren(const QDomNode &node) const override;
-    virtual void setupChildren(const QDomNode &) override;
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
 };
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** DomItem_creator
-class DomItem_creator
+// *** DomItemName_creator
+class DomItemName_creator : public DomItem_creator
 {
 public:
     [[nodiscard]] virtual DomItem * create(const QDomNode &node);
@@ -149,14 +164,6 @@ public:
     [[nodiscard]] virtual DomItem * create(const QDomNode &node);
 };
 // ----------------------------------------------------------------------------
-// *** DomItemPou_creator
-class DomItemDataType_creator : public DomItem_creator
-{
-public:
-    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
-};
-// ----------------------------------------------------------------------------
-
 
 // ----------------------------------------------------------------------------
 // *** DomItem_builder

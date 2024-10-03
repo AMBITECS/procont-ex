@@ -9,7 +9,7 @@
 class FbdTranslator
 {
 public:
-    FbdTranslator();
+    explicit FbdTranslator();
 
 public:
     QString getSTCode_pou(const QDomNode &node_);

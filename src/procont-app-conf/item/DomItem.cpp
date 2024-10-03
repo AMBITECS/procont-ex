@@ -127,7 +127,8 @@ void DomItem::buildChildren(const QDomNode &node, int row, int shift)
 
 QVariant DomItem::data(int role) const
 {
-    Q_UNUSED(role);
+    // if(role == Qt::DecorationRole)
+    //     return QIcon(":/icon/images/diagram.svg");
 
     return m_value->get();
 }

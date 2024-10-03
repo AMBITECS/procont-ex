@@ -21,7 +21,7 @@ QVariant DomModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant{};
 
-    if (role != Qt::DisplayRole && role != Qt::EditRole)
+    if (role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::DecorationRole)
         return QVariant{};
 
     const DomItem *item = static_cast<DomItem*>(index.internalPointer());

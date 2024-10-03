@@ -83,6 +83,10 @@
         <source>Remove</source>
         <translation type="obsolete">Удалить</translation>
     </message>
+    <message>
+        <source>Schema</source>
+        <translation type="obsolete">Схема</translation>
+    </message>
 </context>
 <context>
     <name>DomItemVar</name>

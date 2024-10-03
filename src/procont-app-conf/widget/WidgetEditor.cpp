@@ -316,12 +316,7 @@ void WidgetEditor_fbd::slot_shmViewToggled(bool)
 
 void WidgetEditor_fbd::slot_txtViewToggled(bool)
 {
-    // QString data = {};
     FbdTranslator translator;
-    // _fbd_view->ST_generate();
-
-    qDebug() << translator.getSTCode_pou(item(_index)->node());
-
     _body_text->setPlainText(translator.getSTCode_pou(item(_index)->node()));
 
     _fbd_view->hide();

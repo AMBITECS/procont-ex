@@ -45,6 +45,8 @@ set(PROJECT_SOURCES
     translator-fbd/GlobalType.h
     translator-fbd/XmlParser.cpp translator-fbd/XmlParser.h
     translator-fbd/FbdTranslator.h translator-fbd/FbdTranslator.cpp
+    generate/Compiler.cpp generate/Compiler.h
+    generate/Translator.cpp generate/Translator.h
 )
 
 qt_translate(

@@ -3,13 +3,13 @@
 
 #include <QProcess>
 
-class Compiler : public QProcess
+class Compiler : public QObject
 {
     Q_OBJECT
 public:
     Compiler();
 
-    virtual int compile();
+    int compile();
 
 protected slots:
     void slot_readStandardOutput();
@@ -20,7 +20,7 @@ protected:
     QStringList _m_args;
 
 private:
-    QProcess * _m_process = nullptr;
+    QProcess _m_process;
 };
 
 class Compiler_matiec : public Compiler

@@ -34,7 +34,6 @@ public:
 
 private:
     static CMessanger * m_pInstance;
-    // static QTreeWidget * m_pWidget;
     quint64 m_uiMessageCounter;
 };
 

@@ -302,29 +302,27 @@ void MainWindow::slot_build()
     // ***
 
     // *** трансляция ST->C
-    auto matiec_path = "/home/ambitecs/proj/procont/matiec";
-    auto program = QString("%1/iec2c").arg(matiec_path);
-    QStringList args;
-    args << "-f" << "-l" << "-p"
-         << "-I" << QString("%1/lib").arg(matiec_path)
-         << "-T" << QString("%1").arg(_buildDir)
-         << QString("%1/generated.st").arg(_buildDir);
-    connect(&proc, &QProcess::readyReadStandardOutput, this, &MainWindow::slot_addBuildMsg);
-    connect(&proc, &QProcess::readyReadStandardError, this, &MainWindow::slot_addBuildMsg);
-    CWidgetMessage::buildWidget()->clear();
-    proc.start(program, args);
+    // auto matiec_path = "/home/ambitecs/proj/procont/matiec";
+    // auto program = QString("%1/iec2c").arg(matiec_path);
+    // QStringList args;
+    // args << "-f" << "-l" << "-p"
+    //      << "-I" << QString("%1/lib").arg(matiec_path)
+    //      << "-T" << QString("%1").arg(_buildDir)
+    //      << QString("%1/generated.st").arg(_buildDir);
+    // connect(&proc, &QProcess::readyReadStandardOutput, this, &MainWindow::slot_addBuildMsg);
+    // connect(&proc, &QProcess::readyReadStandardError, this, &MainWindow::slot_addBuildMsg);
+    // CWidgetMessage::buildWidget()->clear();
+    // proc.start(program, args);
     // proc.waitForFinished();
     // qDebug() << __PRETTY_FUNCTION__;
-    // if(_m_compiler == nullptr)
-    //     _m_compiler = new Compiler_matiec
-    //         (
-    //             "generated.st",
-    //             _buildDir,
-    //             "/home/ambitecs/proj/procont/matiec"
-    //         );
-    // qDebug() << __PRETTY_FUNCTION__;
-    // _m_compiler->compile();
-    // qDebug() << __PRETTY_FUNCTION__;
+    if(_m_compiler == nullptr)
+        _m_compiler = new Compiler_matiec
+            (
+                "generated.st",
+                _buildDir,
+                "/home/ambitecs/proj/procont/matiec"
+            );
+    _m_compiler->compile();
     // ***
 }
 

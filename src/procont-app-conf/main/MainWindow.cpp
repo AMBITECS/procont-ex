@@ -256,6 +256,7 @@ void MainWindow::slot_compile()
 #include <QProcess>
 
 #include "generate/Translator.h"
+#include "generate/Compiler.h"
 
 void MainWindow::slot_build()
 {
@@ -283,7 +284,7 @@ void MainWindow::slot_build()
 
         QDomNodeList pous_list = doc.elementsByTagName("pous").at(0).toElement().elementsByTagName("pou");
         for(auto i=0;i<pous_list.count();i++)
-            Translator_builder::instance()->build(pous_list.at(i))->translate(pous_list.at(i));
+            st_text += Translator_builder::instance()->build(pous_list.at(i))->translate();
     }
     // configuration
     {
@@ -312,7 +313,18 @@ void MainWindow::slot_build()
     connect(&proc, &QProcess::readyReadStandardError, this, &MainWindow::slot_addBuildMsg);
     CWidgetMessage::buildWidget()->clear();
     proc.start(program, args);
-    proc.waitForFinished();
+    // proc.waitForFinished();
+    // qDebug() << __PRETTY_FUNCTION__;
+    // if(_m_compiler == nullptr)
+    //     _m_compiler = new Compiler_matiec
+    //         (
+    //             "generated.st",
+    //             _buildDir,
+    //             "/home/ambitecs/proj/procont/matiec"
+    //         );
+    // qDebug() << __PRETTY_FUNCTION__;
+    // _m_compiler->compile();
+    // qDebug() << __PRETTY_FUNCTION__;
     // ***
 }
 

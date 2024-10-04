@@ -20,9 +20,13 @@ public:
         typeUnknown
     };
 public:
-    ITranslator() = default;
+    ITranslator(const QDomNode &node_) : _m_node(node_)
+    {}
 
-    virtual QString translate(const QDomNode &node_) const = 0;
+    virtual QString translate() const = 0;
+
+protected:
+    QDomNode _m_node;
 };
 // ----------------------------------------------------------------------------
 
@@ -36,9 +40,9 @@ public:
 class Translator_ST : public ITranslator
 {
 public:
-    Translator_ST();
+    Translator_ST(const QDomNode &node_);
 
-    QString translate(const QDomNode &node_) const override;
+    QString translate() const override;
 };
 // ----------------------------------------------------------------------------
 
@@ -52,9 +56,9 @@ public:
 class Translator_FBD : public ITranslator
 {
 public:
-    Translator_FBD();
+    Translator_FBD(const QDomNode &node_);
 
-    QString translate(const QDomNode &node_) const override;
+    QString translate() const override;
 };
 // ----------------------------------------------------------------------------
 
@@ -70,7 +74,7 @@ class ITranslator_creator
 public:
     ITranslator_creator() = default;
 
-    virtual ITranslator * create() const = 0;
+    virtual ITranslator * create(const QDomNode &node_) const = 0;
 };
 // ----------------------------------------------------------------------------
 
@@ -86,7 +90,7 @@ class Translator_creator_ST : public ITranslator_creator
 public:
     Translator_creator_ST() = default;
 
-    ITranslator * create() const override;
+    ITranslator * create(const QDomNode &node_) const override;
 };
 // ----------------------------------------------------------------------------
 
@@ -102,7 +106,7 @@ class Translator_creator_FBD : public ITranslator_creator
 public:
     Translator_creator_FBD() = default;
 
-    ITranslator * create() const override;
+    ITranslator * create(const QDomNode &node_) const override;
 };
 // ----------------------------------------------------------------------------
 

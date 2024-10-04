@@ -7,17 +7,17 @@
 
 #include "editor-st/XmlParser.h"
 
-Translator_ST::Translator_ST() : ITranslator()
+Translator_ST::Translator_ST(const QDomNode &node_) : ITranslator(node_)
 {
 }
 
-QString Translator_ST::translate(const QDomNode &node_) const
+QString Translator_ST::translate() const
 {
     qDebug() << __PRETTY_FUNCTION__;
 
     QString _text = {};
-    _text += XmlParser::getPouVarsText(node_);
-    _text += XmlParser::getPouBodyText(node_);
+    _text += XmlParser::getPouVarsText(_m_node);
+    _text += XmlParser::getPouBodyText(_m_node);
 
     return _text;
 }
@@ -28,34 +28,34 @@ QString Translator_ST::translate(const QDomNode &node_) const
 
 #include "translator-fbd/FbdTranslator.h"
 
-Translator_FBD::Translator_FBD() : ITranslator()
+Translator_FBD::Translator_FBD(const QDomNode &node_) : ITranslator(node_)
 {
 }
 
-QString Translator_FBD::translate(const QDomNode &node_) const
+QString Translator_FBD::translate() const
 {
     qDebug() << __PRETTY_FUNCTION__;
 
     FbdTranslator translator;
-    return translator.getSTCode_pou(node_);
+    return translator.getSTCode_pou(_m_node);
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** Translator_creator_ST ***
 
-ITranslator * Translator_creator_ST::create() const
+ITranslator * Translator_creator_ST::create(const QDomNode &node_) const
 {
-    return new Translator_ST;
+    return new Translator_ST(node_);
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** Translator_creator_FBD ***
 
-ITranslator * Translator_creator_FBD::create() const
+ITranslator * Translator_creator_FBD::create(const QDomNode &node_) const
 {
-    return new Translator_FBD;
+    return new Translator_FBD(node_);
 }
 // ----------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ ITranslator * Translator_builder::build(const QDomNode &node_) const
 {
     auto type = assignType(node_);
     if(_m_hCreators.contains(type))
-        return _m_hCreators.value(type)->create();
+        return _m_hCreators.value(type)->create(node_);
 
     return nullptr;
 }

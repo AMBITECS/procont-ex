@@ -10,6 +10,7 @@ QT_FORWARD_DECLARE_CLASS(QDockWidget)
 QT_FORWARD_DECLARE_CLASS(DomModel)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_pou)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_dev)
+QT_FORWARD_DECLARE_CLASS(Compiler)
 
 class MainWindow : public QMainWindow
 {
@@ -57,6 +58,9 @@ private:
     QString m_projectDir = {};
 
     QProcess proc;
+
+    Compiler * _m_compiler = nullptr;
+
 };
 
 #endif // MAINWINDOW_H

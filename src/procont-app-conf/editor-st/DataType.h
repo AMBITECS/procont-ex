@@ -92,7 +92,7 @@ struct DataType
         if (!_dataType.baseType.structs.vars.empty())
         {
             QDomElement struct_elem = document.createElement("struct");
-            baseType_elem.appendChild(struct_elem);
+
             for (const auto var : _dataType.baseType.structs.vars)
             {
                 QDomElement variable_elem = document.createElement("variable");
@@ -109,6 +109,7 @@ struct DataType
                     QDomElement initialValue_elem = document.createElement("initialValue");
                     QDomElement simpleValue_elem = document.createElement("simpleValue");
                     simpleValue_elem.setAttribute("value", var.initialValue.simpleValue.value);
+                    qDebug() << "Value = " << var.initialValue.simpleValue.value;
                     initialValue_elem.appendChild(simpleValue_elem);
                     variable_elem.appendChild(initialValue_elem);
                 } else {
@@ -118,6 +119,7 @@ struct DataType
                     variable_elem.appendChild(type_elem);
                 }
                 struct_elem.appendChild(variable_elem);
+                baseType_elem.appendChild(struct_elem);
             }
         }
 
@@ -157,13 +159,16 @@ struct DataType
             if (line.isNull())
                 break;
             else {
-                Variable variable;
-                line.replace(" ", "");
-                line.replace("\t", "");
                 if (line.contains("STRUCT"))
                 {
                     result.baseType.baseTypeName = QString("struct");
                     result.baseType.structs = StructSt::TxtToObj(_vars_text);
+                }
+
+                if (line.contains("ARRAY"))
+                {
+                    result.baseType.array = ArraySt::TxtToObj(line);
+                    //qDebug() << ArraySt::TxtToObj(line);
                 }
             }
         }

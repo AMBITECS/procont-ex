@@ -27,6 +27,7 @@ WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy
 
 QWidget * WidgetEditor::createVarsEditor()
 {
+    XmlParser::typesFromFile(":/resources/types.txt");
     // *  variables editor widgets
     // contauner for variables editor widgets
     auto container = new QWidget;
@@ -375,8 +376,9 @@ void WidgetEditor_type::slot_codeChanged()
     // // get new node from st editor
     QDomNode new_node = XmlParser::getDataTypeNode
          (
-             _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
-             _body_text != nullptr ? _body_text->toPlainText() : QString(),
+            _body_text != nullptr ? _body_text->toPlainText() : QString(),
+            _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
+
              item(_vars_table->rootIndex())->node()
              );
 

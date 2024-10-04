@@ -19,6 +19,7 @@ public:
     QString baseType;
     Dimension dimension;
 
+
     static ArraySt parseXML(QDomNode &domNode)
     {
         QDomNode nodeArray = domNode.firstChild();
@@ -57,4 +58,39 @@ public:
         return result;
     }
 
+    static ArraySt TxtToObj(const QString& line_input)
+    {
+        ArraySt result;
+        QString line = line_input;
+
+        if (line.isNull())
+            return result;
+        else if ((line.contains("ARRAY")))
+        {
+
+            line.replace(" ", "");
+            line.replace("\t", "");
+
+            QStringList list_values = line.split(":=");
+
+            if (list_values.size() > 1)
+            {
+                QStringList list_types = list_values.at(0).split(":");
+                if (list_types.size() > 1)
+                {
+                    QString dim_lower = list_types.at(1).mid(list_types.at(1).indexOf('[') + 1, list_types.at(1).indexOf('[') - 1).split("..").at(0);
+                    QString dim_upper = list_types.at(1).mid(list_types.at(1).indexOf('[') + 1, list_types.at(1).indexOf('[') - 1).split("..").at(0);
+                    result.dimension.lower = dim_lower;
+                    result.dimension.upper = dim_upper;
+                    result.baseType = list_types.at(1).split("OF").at(1);
+
+                    qDebug() << "baseName: " << result.baseType << ", dimension lower: " << result.dimension.lower << ", dimension upper: " << result.dimension.upper;
+                }
+            }
+        }
+        return result;
+    }
+
 };
+
+

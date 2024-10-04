@@ -52,17 +52,17 @@ public:
         {
             QString line = varsStream.readLine();
 
+
             if (line.isNull())
-                break;
-            else if ((line.contains("STRUCT")))
             {
-                start_struct = true;
                 break;
-            } else if (line.contains("END_STRUCT"))
+            }
+            if (line.contains("END_STRUCT") && start_struct)
             {
                 start_struct = false;
                 break;
             }
+
             if (start_struct) {
                 Variable variable;
                 line.replace(" ", "");
@@ -93,6 +93,11 @@ public:
                         result.vars.append(variable);
                     }
                 }
+            }
+
+            if ((line.contains("STRUCT")))
+            {
+                start_struct = true;
             }
         }
 

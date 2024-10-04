@@ -11,7 +11,7 @@ set(local_proj_name ${name_short}-threads)
 project(${local_proj_name} VERSION ${VERSION_SHORT} )
 
 find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED) # QT_VERSION_MAJOR defined here
-find_package(Qt${QT_VERSION_MAJOR} 6.5 REQUIRED COMPONENTS Core Gui Widgets Xml)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Xml)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

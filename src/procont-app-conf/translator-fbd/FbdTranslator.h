@@ -9,13 +9,20 @@
 class FbdTranslator
 {
 public:
-    explicit FbdTranslator();
+    explicit FbdTranslator() = default;
+
+public:
+    static QString getSTCode_types(const QDomNode &node_);
+    static QString getSTCode_instances(const QDomNode &node_);
 
 public:
     QString getSTCode_pou(const QDomNode &node_);
 
 protected:
-    QString ProgramCode_STgenerator(const T_POU &pou_);
+    static QString getSTCode_type(const QDomNode &node_);
+    static QString UDT_STgenerator(const T_UDT &udt_);
+    static QString INSTANCES_STgenerator(const T_INSTANCES &inst_);
+    QString POU_STgenerator(const T_POU &pou_);
 
     void Block_STgenerator(T_POU_FBD_ITEM_SHORT _block, QString &text_);
     void Func_STgenerator(T_POU_FBD_ITEM_SHORT _func, QString &text_);

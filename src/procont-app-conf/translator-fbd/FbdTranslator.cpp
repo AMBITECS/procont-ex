@@ -1,22 +1,200 @@
 #include "FbdTranslator.h"
 
-FbdTranslator::FbdTranslator() {}
-
+// *** dataType
+//
 //-----------------------------------------------------------------------------------
-QString FbdTranslator::getSTCode_pou(const QDomNode &node_)
+QString FbdTranslator::getSTCode_types(const QDomNode &node_)
 {
+    // node is dataTypes
+    if(node_.nodeName() != "dataTypes")
+        return {};
+
     QString _text = {};
 
-    T_POU _POU;
-    if(PLCopenXmlParser::parsePOU(node_, &_POU))
-        _text = ProgramCode_STgenerator(_POU);
+    QDomNodeList types = node_.toElement().elementsByTagName("dataType");
+
+    if(types.size())
+        _text += QString("TYPE\n");
+
+    for(auto i=0;i<types.size();i++)
+        _text += getSTCode_type(types.at(i));
+
+    if(types.size())
+        _text += QString("END_TYPE\n\n");
 
     return _text;
 }
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
-QString FbdTranslator::ProgramCode_STgenerator(const T_POU &pou_)
+QString FbdTranslator::getSTCode_type(const QDomNode &node_)
+{
+    QString _text = {};
+
+    T_UDT _UDT;
+    if(PLCopenXmlParser::parseUDT(node_, &_UDT))
+        _text = UDT_STgenerator(_UDT);
+
+    return _text;
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+QString FbdTranslator::UDT_STgenerator(const T_UDT &udt_)
+{
+    QString _data = {};
+
+    switch(udt_._type)
+    {
+    case DT_MAX:{}break;
+    case DT_ARRAY:{
+        int _range_counter = 0;
+        int _ini_val_counter = 0;
+        //            datatype0 : ARRAY [10..20,50..60] OF WORD := [1, 1];
+        _data += QString("  %1 : ARRAY [").arg(udt_._name);
+        int _size = (int)udt_._array._range.size();
+        for(int _j = 0; _j < _size; _j++)
+        {
+            QString _range = QString("%1..%2").arg(udt_._array._range[_j]._begin).arg(udt_._array._range[_j]._end);
+            _data += _range;
+            _range_counter++;
+            if(_range_counter < _size)_data += ",";
+        }
+        _data += QString("] OF %1").arg(udt_._array._type);
+        if(udt_._initial_value_present)
+        {
+            _data += " := [";
+            int _init_size = (int)udt_._initial_value.size();
+            for(int _j = 0; _j < _init_size; _j++)
+            {
+                QString _val = QString("%1").arg(udt_._initial_value[_j]);
+                _data += _val;
+                _ini_val_counter++;
+                if(_ini_val_counter < _init_size)_data += ", ";
+            }
+            _data += "];\n";
+        }else _data += QString(";\n");
+    }break;
+    case DT_STRUCT:{
+        //            datatype5 : STRUCT
+        //              p0 : datatype3;
+        //              p1 : DINT;
+        //              p2 : DINT;
+        //              p3 : DINT;
+        //            END_STRUCT;
+        _data += QString("  %1 : STRUCT\n").arg(udt_._name);
+        for(int _j = 0; _j < (int)udt_._struct.size(); _j++)
+        {
+            QString _part = QString("    %1 : %2;\n").arg(udt_._struct[_j]._name).arg(udt_._struct[_j]._type);
+            _data += _part;
+        }
+        _data += "  END_STRUCT;\n";
+    }break;
+    case DT_ENUM:{
+        //            datatype3 : (firstType, secondType) := firstType;
+        _data += QString("  %1 : (%2").arg(udt_._name).arg(udt_._enum._value[0]);
+        for(int _j = 1; _j < (int)udt_._enum._value.size(); _j++)
+            _data += QString(", %1").arg(udt_._name);
+
+        if(udt_._initial_value_present)   _data += QString(") := %1;\n").arg(udt_._initial_value[0]);
+        else                                    _data += QString(");\n");
+    }break;
+    case DT_REDEFINE:{
+        _data += QString("  %1 : %2;\n").arg(udt_._name).arg(udt_._redefined_name);
+    }break;
+    case DT_SUBRANGE_SIGNED:{
+        //            datatype1 : INT (0..0) := 0;
+        _data += QString("  %1 : %2 (%3..%4)").arg(udt_._name)
+                     .arg(udt_._sign_unsign_range._type)
+                     .arg(udt_._sign_unsign_range._begin)
+                     .arg(udt_._sign_unsign_range._end);
+        if(udt_._initial_value_present)   _data += QString(" := %1;\n").arg(udt_._initial_value[0]);
+        else                                    _data += QString(";\n");
+    }break;
+    case DT_SUBRANGE_UNSIGNED:{
+        //            datatype1 : UINT (0..0) := 0;
+        _data += QString("  %1 : %2 (%3..%4)").arg(udt_._name)
+                     .arg(udt_._sign_unsign_range._type)
+                     .arg(udt_._sign_unsign_range._begin)
+                     .arg(udt_._sign_unsign_range._end);
+        if(udt_._initial_value_present)   _data += QString(" := %1;\n").arg(udt_._initial_value[0]);
+        else                                    _data += QString(";\n");
+    }break;
+    }
+
+    return _data;
+}
+//-----------------------------------------------------------------------------------
+// ***
+
+// *** instances
+//
+//-----------------------------------------------------------------------------------
+QString FbdTranslator::getSTCode_instances(const QDomNode &node_)
+{
+    QString _text = {};
+
+    T_INSTANCES _INST;
+    if(PLCopenXmlParser::parseINSTANCES(node_, &_INST))
+        _text = INSTANCES_STgenerator(_INST);
+
+    return _text;
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+QString FbdTranslator::INSTANCES_STgenerator(const T_INSTANCES &inst_)
+{
+    if(!inst_._configuration.size())
+        return {};
+
+    QString _data = {};
+    _data = QString("CONFIGURATION %1\n").arg(inst_._configuration[0]._name);
+    _data += QString(" RESOURCE %1 ON PLC\n").arg(inst_._configuration[0]._resource._name);
+    for(auto _i = 0; _i < inst_._configuration[0]._resource._task.size(); _i++)
+    {
+        _data += QString("   TASK %1(INTERVAL := %2,PRIORITY := %3);\n")
+        .arg(inst_._configuration[0]._resource._task[_i]._name)
+            .arg(inst_._configuration[0]._resource._task[_i]._interval)
+            .arg(inst_._configuration[0]._resource._task[_i]._priority);
+    }
+    for(auto _i = 0; _i < inst_._configuration[0]._resource._task.size(); _i++)
+    {
+        for(auto _j = 0; _j < inst_._configuration[0]._resource._task[_i]._pouInstance.size(); _j++)
+        {
+            _data += QString("   PROGRAM %1 WITH %2 : %3;\n")
+            .arg(inst_._configuration[0]._resource._task[_i]._pouInstance[_j]._name)
+                .arg(inst_._configuration[0]._resource._task[_i]._name)
+                .arg(inst_._configuration[0]._resource._task[_i]._pouInstance[_j]._typeName);
+        }
+    }
+    _data += "  END_RESOURCE\n";
+    _data += "END_CONFIGURATION\n";
+
+    return _data;
+}
+//-----------------------------------------------------------------------------------
+// ***
+
+// *** POU
+//
+//-----------------------------------------------------------------------------------
+QString FbdTranslator::getSTCode_pou(const QDomNode &node_)
+{
+
+
+    QString _text = {};
+
+    T_POU _POU;
+    if(PLCopenXmlParser::parsePOU(node_, &_POU))
+        _text = POU_STgenerator(_POU);
+
+    return _text;
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+QString FbdTranslator::POU_STgenerator(const T_POU &pou_)
 {
     QString _data = {};
 

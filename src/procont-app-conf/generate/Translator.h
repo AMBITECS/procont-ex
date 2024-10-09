@@ -4,23 +4,23 @@
 #include <QDomNode>
 
 // ----------------------------------------------------------------------------
-// *** ITranslator ***
+// *** ITranslator_POU ***
 
 /*!
- * \brief The ITranslator interface
+ * \brief The ITranslator_POU interface
  */
 
-class ITranslator
+class ITranslator_POU
 {
 public:
-    enum class eTranslatorType
+    enum class eTranslatorPOUType
     {
         typeST,
         typeFBD,
         typeUnknown
     };
 public:
-    ITranslator(const QDomNode &node_) : _m_node(node_)
+    ITranslator_POU(const QDomNode &node_) : _m_node(node_)
     {}
 
     virtual QString translate() const = 0;
@@ -31,113 +31,131 @@ protected:
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_ST ***
+// *** Translator_POU_ST ***
 
 /*!
- * \brief The Translator_ST class
+ * \brief The Translator_POU_ST class
  */
 
-class Translator_ST : public ITranslator
+class Translator_POU_ST : public ITranslator_POU
 {
 public:
-    Translator_ST(const QDomNode &node_);
+    Translator_POU_ST(const QDomNode &node_);
 
     QString translate() const override;
 };
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_FBD ***
+// *** Translator_POU_FBD ***
 
 /*!
- * \brief The Translator_FBD class
+ * \brief The Translator_POU_FBD class
  */
 
-class Translator_FBD : public ITranslator
+class Translator_POU_FBD : public ITranslator_POU
 {
 public:
-    Translator_FBD(const QDomNode &node_);
+    Translator_POU_FBD(const QDomNode &node_);
 
     QString translate() const override;
 };
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** ITranslator_creator ***
+// *** ITranslator_POU_creator ***
 
 /*!
- * \brief The ITranslator_creator interface
+ * \brief The ITranslator_POU_creator interface
  */
 
-class ITranslator_creator
+class ITranslator_POU_creator
 {
 public:
-    ITranslator_creator() = default;
+    ITranslator_POU_creator() = default;
+    virtual ~ITranslator_POU_creator() = default;
 
-    virtual ITranslator * create(const QDomNode &node_) const = 0;
+    virtual ITranslator_POU * create(const QDomNode &node_) const = 0;
 };
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_creator_ST ***
+// *** Translator_POU_creator_ST ***
 
 /*!
- * \brief The Translator_creator_ST class
+ * \brief The Translator_POU_creator_ST class
  */
 
-class Translator_creator_ST : public ITranslator_creator
+class Translator_POU_creator_ST : public ITranslator_POU_creator
 {
 public:
-    Translator_creator_ST() = default;
+    Translator_POU_creator_ST() = default;
 
-    ITranslator * create(const QDomNode &node_) const override;
+    ITranslator_POU * create(const QDomNode &node_) const override;
 };
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_creator_FBD ***
+// *** Translator_POU_creator_FBD ***
 
 /*!
- * \brief The Translator_creator_FBD class
+ * \brief The Translator_POU_creator_FBD class
  */
 
-class Translator_creator_FBD : public ITranslator_creator
+class Translator_POU_creator_FBD : public ITranslator_POU_creator
 {
 public:
-    Translator_creator_FBD() = default;
+    Translator_POU_creator_FBD() = default;
 
-    ITranslator * create(const QDomNode &node_) const override;
+    ITranslator_POU * create(const QDomNode &node_) const override;
 };
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_builder ***
+// *** Translator_POU_builder ***
 
 #include <QHash>
 
 /*!
- * \brief The Translator_builder class
+ * \brief The Translator_POU_builder class
  */
 
-class Translator_builder
+class Translator_POU_builder
 {    
 private:
-    Translator_builder();
+    Translator_POU_builder();
 
 public:
-    ~Translator_builder();
+    virtual ~Translator_POU_builder();
 
 public:
-    static Translator_builder * instance();
+    static Translator_POU_builder * instance();
 
-    ITranslator * build(const QDomNode &) const;
-
-private:
-    static ITranslator::eTranslatorType assignType(const QDomNode &);
+    ITranslator_POU * build(const QDomNode &) const;
 
 private:
-    static Translator_builder * _m_instance;
-    QHash<ITranslator::eTranslatorType, ITranslator_creator*> _m_hCreators;
+    static ITranslator_POU::eTranslatorPOUType assignType(const QDomNode &);
+
+private:
+    static Translator_POU_builder * _m_instance;
+    QHash<ITranslator_POU::eTranslatorPOUType, ITranslator_POU_creator*> _m_hCreators;
 };
 // ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator ***
+
+/*!
+ * \brief The Translator class
+ */
+
+class Translator
+{
+public:
+    Translator() = default;
+
+    static QString translate(const QDomDocument &doc_);
+};
+// ----------------------------------------------------------------------------
+
 #endif

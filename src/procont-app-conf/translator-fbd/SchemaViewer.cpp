@@ -15,7 +15,7 @@ FBDviewer::FBDviewer(QWidget *parent) : QWidget(parent)
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
-void FBDviewer::setNode(const QDomNode & node_)
+void FBDviewer::showNode(const QDomNode & node_)
 {
     _m_is_drawing = false;
     if(PLCopenXmlParser::parsePOU(node_, &_m_pou))

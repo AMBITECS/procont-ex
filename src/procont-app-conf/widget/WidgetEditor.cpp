@@ -274,7 +274,7 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     // fbd view
     _fbd_view = new FBDviewer;
     _fbd_view->setMinimumSize(500, 250);
-    _fbd_view->setNode(item(_index)->node());
+    _fbd_view->showNode(item(_index)->node());
     // variables editor code editor
     _txt_view = WidgetEditor::createCodeEditor();
     _txt_view->hide();
@@ -308,7 +308,7 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
 
 void WidgetEditor_fbd::slot_shmViewToggled(bool)
 {
-    _fbd_view->setNode(item(_index)->node());
+    _fbd_view->showNode(item(_index)->node());
 
     _txt_view->hide();
     _fbd_view->show();

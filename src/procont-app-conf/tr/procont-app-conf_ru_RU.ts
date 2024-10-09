@@ -4,63 +4,155 @@
 <context>
     <name>CWidgetMessage</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="27"/>
         <source>Number</source>
-        <translation>Номер</translation>
+        <translation type="vanished">Номер</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="27"/>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="vanished">Тип</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="27"/>
         <source>Time</source>
-        <translation>Дата и время</translation>
+        <translation type="vanished">Дата и время</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="27"/>
         <source>Source</source>
-        <translation>Источник</translation>
+        <translation type="vanished">Источник</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="27"/>
         <source>Object</source>
-        <translation>Объект</translation>
+        <translation type="vanished">Объект</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="27"/>
         <source>Message</source>
-        <translation>Сообщение</translation>
+        <translation type="vanished">Сообщение</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="28"/>
+        <source>Messages</source>
+        <translation type="vanished">Сообщения</translation>
+    </message>
+    <message>
+        <source>Actions</source>
+        <translation type="vanished">События</translation>
+    </message>
+    <message>
+        <source>Build</source>
+        <translation type="vanished">Сборка</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation type="vanished">Информация</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Critical</source>
+        <translation type="vanished">Ошибка</translation>
+    </message>
+</context>
+<context>
+    <name>CWidgetProtocol</name>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="218"/>
         <source>Messages</source>
         <translation>Сообщения</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="32"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="225"/>
         <source>Actions</source>
         <translation>События</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="37"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="221"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
+</context>
+<context>
+    <name>CWidgetProtocolTab_build</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="70"/>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="82"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="115"/>
+        <source>Message</source>
+        <translation>Сообщение</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="115"/>
+        <source>Project</source>
+        <translation>Проект</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="115"/>
+        <source>Object</source>
+        <translation>Объект</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="115"/>
+        <source>Position</source>
+        <translation>Позиция</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="126"/>
+        <source>Text</source>
+        <translation>Текст</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="130"/>
+        <source>Tree</source>
+        <translation>Дерево</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="174"/>
+        <source>Row %1, Column %2</source>
+        <translation>Строка %1, Столбец %2</translation>
+    </message>
+</context>
+<context>
+    <name>CWidgetProtocolTab_message</name>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <source>Number</source>
+        <translation>Номер</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <source>Time</source>
+        <translation>Дата и время</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <source>Source</source>
+        <translation>Источник</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <source>Object</source>
+        <translation>Объект</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <source>Message</source>
+        <translation>Сообщение</translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="83"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="95"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="74"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="87"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="78"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="91"/>
         <source>Critical</source>
         <translation>Ошибка</translation>
     </message>

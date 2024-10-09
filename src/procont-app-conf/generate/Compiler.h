@@ -3,6 +3,13 @@
 
 #include <QProcess>
 
+// ----------------------------------------------------------------------------
+// *** Compiler ***
+
+/*!
+ * \brief The Compiler class
+ */
+
 class Compiler : public QObject
 {
     Q_OBJECT
@@ -22,11 +29,20 @@ protected:
 private:
     QProcess _m_process;
 };
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Compiler ***
+
+/*!
+ * \brief The Compiler class
+ */
 
 class Compiler_matiec : public Compiler
 {
 public:
     Compiler_matiec(const QString &st_file_, const QString &build_path_, const QString &compiler_path_);
 };
+// ----------------------------------------------------------------------------
 
 #endif

@@ -39,8 +39,6 @@ private slots:
     void slot_compile();
     void slot_build();
 
-    void slot_addBuildMsg();
-
     void slot_currentViewChanged(const QModelIndex &index);
 
 private:
@@ -56,8 +54,6 @@ private:
     ProxyModelTree_dev * proxy_dev = nullptr;
 
     QString m_projectDir = {};
-
-    QProcess proc;
 
     Compiler * _m_compiler = nullptr;
 

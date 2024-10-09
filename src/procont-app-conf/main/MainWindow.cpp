@@ -86,7 +86,7 @@ void MainWindow::createWidgets()
     pDock = new QDockWidget(tr("Protocol"), this);
     pDock->setTitleBarWidget(new QWidget());
     pDock->setAllowedAreas(Qt::BottomDockWidgetArea);
-    pDock->setWidget(CWidgetMessage::instance());
+    pDock->setWidget(CWidgetProtocol::instance());
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
 
     m_projectDir = QDir::currentPath();
@@ -252,48 +252,23 @@ void MainWindow::slot_compile()
 {
 }
 
-#include "translator-fbd/SchemaViewer.h"
-#include <QProcess>
-
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
 
 void MainWindow::slot_build()
 {
-    CWidgetMessage::instance()->setCurrentWidget(CWidgetMessage::buildWidget());
+    b_command(CCmd::eCT_Show);
+    // CWidgetProtocol::instance()->setCurrentWidget(CWidgetProtocol::buildWidget());
 
     // *** подготовка ST-файла
     // создание папки для сборки
     auto _buildDir = QString("%1/build").arg(m_projectDir);
-    // QDir(_buildDir).removeRecursively();
+    QDir(_buildDir).removeRecursively();
     QDir(m_projectDir).mkdir(_buildDir);
-    // * формирование ST-файла
-    QString st_text = {};
-    QDomDocument doc = model->document();
-    // datatypes
-    {
-        FBDviewer translator;
-        // translator.setNode(doc.elementsByTagName("dataTypes").at(0));
-        // translator.GlobalType_STgenerator(st_text);
-    }
-    // pous
-    {
-        // FBDviewer translator;
-        // translator.setNodeEx(doc.elementsByTagName("pous").at(0).firstChild());
-        // translator.Program_STgenerator(st_text);
 
-        QDomNodeList pous_list = doc.elementsByTagName("pous").at(0).toElement().elementsByTagName("pou");
-        for(auto i=0;i<pous_list.count();i++)
-            st_text += Translator_builder::instance()->build(pous_list.at(i))->translate();
-    }
-    // configuration
-    {
-        FBDviewer translator;
-        // translator.setNodeEx(doc.elementsByTagName("configurations").at(0));
-        // translator.Configuration_STgenerator(st_text);
-    }
-    CWidgetMessage::buildWidget()->appendPlainText(st_text);
-    // *
+    // формирование ST-файла
+    QString st_text = Translator::translate(model->document());
+
     // запись файла
     QFile file(QString("%1/generated.st").arg(_buildDir));
     file.open(QIODevice::WriteOnly);
@@ -302,19 +277,6 @@ void MainWindow::slot_build()
     // ***
 
     // *** трансляция ST->C
-    // auto matiec_path = "/home/ambitecs/proj/procont/matiec";
-    // auto program = QString("%1/iec2c").arg(matiec_path);
-    // QStringList args;
-    // args << "-f" << "-l" << "-p"
-    //      << "-I" << QString("%1/lib").arg(matiec_path)
-    //      << "-T" << QString("%1").arg(_buildDir)
-    //      << QString("%1/generated.st").arg(_buildDir);
-    // connect(&proc, &QProcess::readyReadStandardOutput, this, &MainWindow::slot_addBuildMsg);
-    // connect(&proc, &QProcess::readyReadStandardError, this, &MainWindow::slot_addBuildMsg);
-    // CWidgetMessage::buildWidget()->clear();
-    // proc.start(program, args);
-    // proc.waitForFinished();
-    // qDebug() << __PRETTY_FUNCTION__;
     if(_m_compiler == nullptr)
         _m_compiler = new Compiler_matiec
             (
@@ -324,20 +286,6 @@ void MainWindow::slot_build()
             );
     _m_compiler->compile();
     // ***
-}
-
-void MainWindow::slot_addBuildMsg()
-{
-    auto output = proc.readAllStandardOutput().split('\n');
-    auto error = proc.readAllStandardError().split('\n');
-
-    if(output.last().size() == 0)
-        output.removeLast();
-    if(error.last().size() == 0)
-        error.removeLast();
-
-    if(output.size()) CWidgetMessage::buildWidget()->appendPlainText(output.join('\n'));
-    if(error.size()) CWidgetMessage::buildWidget()->appendPlainText(error.join('\n'));
 }
 
 #undef this_pointer

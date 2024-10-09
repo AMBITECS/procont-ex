@@ -24,7 +24,7 @@ class FBDviewer : public QWidget
 public:
     explicit FBDviewer(QWidget *parent = nullptr);
 
-    void setNode(const QDomNode & node_);
+    void showNode(const QDomNode & node_);
 
 protected:
     void paintEvent(QPaintEvent *) override;

@@ -3,6 +3,7 @@
 //-----------------------------------------------------------------------------------
 #include <QFile>
 #include "XmlParser.h"
+
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
@@ -28,107 +29,238 @@ QString _base_type_name[] = {
     "DWORD",
     "LWORD"
 };
+
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
-PLCopenXmlParser::PLCopenXmlParser(QObject *parent) : QObject(parent),
-                                                        _m_xml_file("")
+bool PLCopenXmlParser::parseUDT(const QDomNode &node_, T_UDT * data_)
 {
-    PROJECT_SECTION_NAME[0]._name ="fileHeader";
-    PROJECT_SECTION_NAME[1]._name ="contentHeader";
-    PROJECT_SECTION_NAME[2]._name ="types";
-    PROJECT_SECTION_NAME[3]._name ="instances";
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::setXmlFile(QString _xml_file)
-{
-    bool        _result = true;
-    QString     _errorStr;
-    int         _errorLine;
-    int         _errorColumn;
+    // node is dataType
+    if(node_.nodeName() != "dataType")
+        return false;
 
-    _m_xml_file = _xml_file;
-    _m_file.setFileName(_m_xml_file);
-
-    if(_m_doc.setContent(&_m_file, true, &_errorStr, &_errorLine, &_errorColumn))
-    {
-        QDomElement _root = _m_doc.documentElement();
-        if(_root.tagName() == "project")
+    for(int _i = 0;  _i < node_.toElement().attributes().length();  _i++)
+        if(!node_.toElement().attributes().item(_i).toAttr().isNull())
         {
-            QDomNode _node = _root.firstChild();
-            while(!_node.isNull())
+            if(node_.toElement().attributes().item(_i).toAttr().name() == "name")
             {
-                for(int _i = 0; _i < ARRAY_SIZE(PROJECT_SECTION_NAME); _i++)
-                    if(_node.toElement().tagName() == PROJECT_SECTION_NAME[_i]._name)
-                    {
-                        switch(_i)
-                        {
-                        case 0:{    _result &= fileHeaderParser(_node);    }break;
-                        case 1:{    _result &= contentHeaderParser(_node); }break;
-                        case 2:{    _result &= typesParser(_node);         }break;
-                        case 3:{    _result &= instancesParser(_node);     }break;
-                        default:{}break;
-                        }
-                        break;
-                    }
-                _node = _node.nextSibling();
+                data_->_name = node_.toElement().attributes().item(_i).toAttr().value();
             }
         }
-    }
+    QDomNode _baseTypenode_ = node_.firstChild(); // baseType
+    QDomNode _typenode_ = _baseTypenode_.firstChild();
 
-    return _result;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::setNode(const QDomNode & node_)
-{
-    auto _result = true;
-
-    _m_user_data_type_node = node_;
-    _m_pou_node = node_;
-    _m_instances_node = node_;
-
-    return _result;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::fileHeaderParser(QDomNode _node)
-{
-    Q_UNUSED(_node)
-    return true;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::contentHeaderParser(QDomNode _node)
-{
-    Q_UNUSED(_node)
-    return true;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::typesParser(QDomNode _node)
-{
-    QDomNode _type_node = _node.firstChild();
-
-    while(!_type_node.isNull())
+    //------------------------------------------------------------
+    if(!checkRedifinitionBaseType(_typenode_, data_))
     {
-        if(_type_node.toElement().tagName() == "dataTypes")
+        //------------------------------------------------------------
+        if(_typenode_.toElement().tagName() == "struct")
         {
-            _m_user_data_type_node = _type_node;
+            T_UDT_VARIABLE _var = {};
+            data_->_type = DT_STRUCT;
+
+            QDomNode _varnode_ = _typenode_.firstChild(); // variable
+            while(!_varnode_.isNull())
+            {
+                for(int _i = 0;  _i < _varnode_.toElement().attributes().length();  _i++)
+                    if(!_varnode_.toElement().attributes().item(_i).toAttr().isNull())
+                    {
+                        if(_varnode_.toElement().attributes().item(_i).toAttr().name() == "name")
+                            _var._name = _varnode_.toElement().attributes().item(_i).toAttr().value();
+                    }
+                QDomNode _type_varnode_ = _varnode_.firstChild().firstChild(); // type
+                if(_type_varnode_.toElement().tagName() == "derived")
+                {
+                    for(int _i = 0;  _i < _type_varnode_.toElement().attributes().length();  _i++)
+                        if(!_type_varnode_.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_type_varnode_.toElement().attributes().item(_i).toAttr().name() == "name")
+                                _var._type = _type_varnode_.toElement().attributes().item(_i).toAttr().value();
+                        }
+                }else{
+                    _var._type = _type_varnode_.toElement().tagName();
+                }
+                data_->_struct.push_back(_var);
+                _varnode_ = _varnode_.nextSibling();
+            }
         }else
-        if(_type_node.toElement().tagName() == "pous")
-        {
-            _m_pou_node = _type_node.firstChild();
-        }
-        _type_node = _type_node.nextSibling();
+            //------------------------------------------------------------
+            if(_typenode_.toElement().tagName() == "array")
+            {
+                data_->_type = DT_ARRAY;
+                QDomNode _dimensionnode_ = _typenode_.firstChild(); // dimension
+
+                data_->_array._range.clear();
+                while(!_dimensionnode_.isNull())
+                {
+                    if(_dimensionnode_.toElement().tagName() == "dimension")
+                    {
+                        T_UDT_RANGE_ARRAY _range;
+                        for(int _i = 0;  _i < _dimensionnode_.toElement().attributes().length();  _i++)
+                            if(!_dimensionnode_.toElement().attributes().item(_i).toAttr().isNull())
+                            {
+                                if(_dimensionnode_.toElement().attributes().item(_i).toAttr().name() == "lower")
+                                    _range._begin = _dimensionnode_.toElement().attributes().item(_i).toAttr().value().toInt();
+                                if(_dimensionnode_.toElement().attributes().item(_i).toAttr().name() == "upper")
+                                    _range._end = _dimensionnode_.toElement().attributes().item(_i).toAttr().value().toInt();
+                            }
+                        data_->_array._range.push_back(_range);
+                    }else
+                        if(_dimensionnode_.toElement().tagName() == "baseType")
+                        {
+                            data_->_array._type = _dimensionnode_.firstChild().toElement().tagName();
+                        }
+                    _dimensionnode_ = _dimensionnode_.nextSibling();
+                }
+
+                data_->_initial_value_present = false;
+                data_->_initial_value.clear();
+                QDomNode initialValuenode_ = _baseTypenode_.nextSibling(); // initialValue
+                QDomNode arrayValuenode_ = initialValuenode_.firstChild(); // arrayValue
+                QDomNode valuenode_ = arrayValuenode_.firstChild(); // value
+                while(!valuenode_.isNull())
+                {
+                    QDomNode simpleValuenode_ = valuenode_.firstChild(); // simpleValue
+                    QString _init_val;
+                    for(int _i = 0;  _i < simpleValuenode_.toElement().attributes().length();  _i++)
+                        if(!simpleValuenode_.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(simpleValuenode_.toElement().attributes().item(_i).toAttr().name() == "value")
+                                _init_val = simpleValuenode_.toElement().attributes().item(_i).toAttr().value();
+                        }
+                    data_->_initial_value_present = true;
+                    data_->_initial_value.push_back(_init_val);
+                    valuenode_ = valuenode_.nextSibling();
+                }
+            }else
+                //------------------------------------------------------------
+                if(_typenode_.toElement().tagName() == "enum")
+                {
+                    QString _name;
+                    data_->_type = DT_ENUM;
+                    QDomNode _valuesnode_ = _typenode_.firstChild(); // values
+                    QDomNode _valuenode_ = _valuesnode_.firstChild(); // value
+
+                    data_->_enum._value.clear();
+                    while(!_valuenode_.isNull())
+                    {
+                        for(int _i = 0;  _i < _valuenode_.toElement().attributes().length();  _i++)
+                            if(!_valuenode_.toElement().attributes().item(_i).toAttr().isNull())
+                            {
+                                if(_valuenode_.toElement().attributes().item(_i).toAttr().name() == "name")
+                                    _name = _valuenode_.toElement().attributes().item(_i).toAttr().value();
+                            }
+                        data_->_enum._value.push_back(_name);
+                        _valuenode_ = _valuenode_.nextSibling();
+                    }
+
+                    data_->_initial_value_present = false;
+                    data_->_initial_value.clear();
+                    QDomNode initialValuenode_ = _baseTypenode_.nextSibling(); // initialValue
+                    QDomNode simpleValuenode_ = initialValuenode_.firstChild(); // simpleValue
+                    while(!simpleValuenode_.isNull())
+                    {
+                        QString _init_val;
+                        for(int _i = 0;  _i < simpleValuenode_.toElement().attributes().length();  _i++)
+                            if(!simpleValuenode_.toElement().attributes().item(_i).toAttr().isNull())
+                            {
+                                if(simpleValuenode_.toElement().attributes().item(_i).toAttr().name() == "value")
+                                    _init_val = simpleValuenode_.toElement().attributes().item(_i).toAttr().value();
+                            }
+                        data_->_initial_value_present = true;
+                        data_->_initial_value.push_back(_init_val);
+                        simpleValuenode_ = simpleValuenode_.nextSibling();
+                    }
+                }else
+                    //------------------------------------------------------------
+                    if(_typenode_.toElement().tagName() == "subrangeUnsigned")
+                    {
+                        data_->_type = DT_SUBRANGE_UNSIGNED;
+                        QDomNode _rangenode_ = _typenode_.firstChild(); // range
+                        for(int _i = 0;  _i < _rangenode_.toElement().attributes().length();  _i++)
+                            if(!_rangenode_.toElement().attributes().item(_i).toAttr().isNull())
+                            {
+                                if(_rangenode_.toElement().attributes().item(_i).toAttr().name() == "lower")
+                                    data_->_sign_unsign_range._begin = _rangenode_.toElement().attributes().item(_i).toAttr().value().toInt();
+                                if(_rangenode_.toElement().attributes().item(_i).toAttr().name() == "upper")
+                                    data_->_sign_unsign_range._end = _rangenode_.toElement().attributes().item(_i).toAttr().value().toInt();
+                            }
+                        QDomNode _Typenode_ = _rangenode_.nextSibling(); // baseType
+                        data_->_sign_unsign_range._type = _Typenode_.firstChild().toElement().tagName();
+
+                        data_->_initial_value_present = false;
+                        data_->_initial_value.clear();
+                        QDomNode initialValuenode_ = _baseTypenode_.nextSibling(); // initialValue
+                        QDomNode simpleValuenode_ = initialValuenode_.firstChild(); // simpleValue
+                        while(!simpleValuenode_.isNull())
+                        {
+                            QString _init_val;
+                            for(int _i = 0;  _i < simpleValuenode_.toElement().attributes().length();  _i++)
+                                if(!simpleValuenode_.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(simpleValuenode_.toElement().attributes().item(_i).toAttr().name() == "value")
+                                        _init_val = simpleValuenode_.toElement().attributes().item(_i).toAttr().value();
+                                }
+                            data_->_initial_value_present = true;
+                            data_->_initial_value.push_back(_init_val);
+                            simpleValuenode_ = simpleValuenode_.nextSibling();
+                        }
+                    }else
+                        //------------------------------------------------------------
+                        if(_typenode_.toElement().tagName() == "subrangeSigned")
+                        {
+                            data_->_type = DT_SUBRANGE_SIGNED;
+                            QDomNode _rangenode_ = _typenode_.firstChild(); // range
+                            for(int _i = 0;  _i < _rangenode_.toElement().attributes().length();  _i++)
+                                if(!_rangenode_.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_rangenode_.toElement().attributes().item(_i).toAttr().name() == "lower")
+                                        data_->_sign_unsign_range._begin = _rangenode_.toElement().attributes().item(_i).toAttr().value().toInt();
+                                    if(_rangenode_.toElement().attributes().item(_i).toAttr().name() == "upper")
+                                        data_->_sign_unsign_range._end = _rangenode_.toElement().attributes().item(_i).toAttr().value().toInt();
+                                }
+                            QDomNode _Typenode_ = _rangenode_.nextSibling(); // baseType
+                            data_->_sign_unsign_range._type = _Typenode_.firstChild().toElement().tagName();
+
+                            data_->_initial_value_present = false;
+                            data_->_initial_value.clear();
+                            QDomNode initialValuenode_ = _baseTypenode_.nextSibling(); // initialValue
+                            QDomNode simpleValuenode_ = initialValuenode_.firstChild(); // simpleValue
+                            while(!simpleValuenode_.isNull())
+                            {
+                                QString _init_val;
+                                for(int _i = 0;  _i < simpleValuenode_.toElement().attributes().length();  _i++)
+                                    if(!simpleValuenode_.toElement().attributes().item(_i).toAttr().isNull())
+                                    {
+                                        if(simpleValuenode_.toElement().attributes().item(_i).toAttr().name() == "value")
+                                            _init_val = simpleValuenode_.toElement().attributes().item(_i).toAttr().value();
+                                    }
+                                data_->_initial_value_present = true;
+                                data_->_initial_value.push_back(_init_val);
+                                simpleValuenode_ = simpleValuenode_.nextSibling();
+                            }
+                        }
+        //------------------------------------------------------------
     }
+
     return true;
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+bool PLCopenXmlParser::checkRedifinitionBaseType(QDomNode _node, T_UDT *_udt)
+{
+    bool _result = false;
+    QString _s = _node.toElement().tagName();
+    for(int _i = 0; _i < ARRAY_SIZE(_base_type_name); _i++)
+        if(_base_type_name[_i] == _node.toElement().tagName())
+        {
+            _udt->_type = DT_REDEFINE;
+            _udt->_redefined_name = _node.toElement().tagName();
+            _result = true;
+            break;
+        }
+    return _result;
 }
 //-----------------------------------------------------------------------------------
 //
@@ -139,7 +271,8 @@ bool PLCopenXmlParser::parsePOU(const QDomNode &node_, T_POU * data_)
     if(node_.nodeName() != "pou")
         return false;
 
-    // parse
+    // attr
+    checkPOUattr(node_, data_);
     // interface
     auto _child = node_.toElement().namedItem("interface");
     if(!_child.isNull())
@@ -160,280 +293,15 @@ bool PLCopenXmlParser::parsePOU(const QDomNode &node_, T_POU * data_)
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::POU(quint32 _index, T_POU *_pou)
+bool PLCopenXmlParser::parseINSTANCES(const QDomNode &node_, T_INSTANCES * data_)
 {
-    bool _result = false;
-    quint32 _pou_counter = 0;
-    QDomNode _pou_node = _m_pou_node;
-
-    if(_pou_node.nodeName() != "pou")
+    // node is instances
+    if(node_.nodeName() != "instances")
         return false;
 
-    while(!_pou_node.isNull())
-    {
-        if(_pou_counter == _index)
-        {
-            _result = true;
-            checkPOUattr(_pou_node, _pou);
-
-            QDomNode _node = _pou_node.firstChild();
-            while(!_node.isNull())
-            {
-                if(_node.toElement().tagName() == "interface")      checkPOUinterface(_node, _pou);
-                if(_node.toElement().tagName() == "body")           checkPOUbody(_node, _pou);
-                if(_node.toElement().tagName() == "documentation")  checkPOUdocumentation(_node, _pou);
-                _node = _node.nextSibling();
-            }
-            _result = true;
-            break;
-        }
-        _pou_node = _pou_node.nextSibling();
-        _pou_counter++;
-    }
-
-    return _result;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::UDT(quint32 _index, T_UDT *_udt)
-{
-    bool _result = false;
-    quint32 _udt_counter = 0;
-    QDomNode _udt_node = _m_user_data_type_node.firstChild();
-
-    if(_udt_node.nodeName() != "dataTypes")
-        return false;
-
-    while(!_udt_node.isNull())
-    {
-        if(_udt_counter == _index)
-        {
-            _result = true;
-            QDomNode _node = _udt_node;
-            for(int _i = 0;  _i < _node.toElement().attributes().length();  _i++)
-                if(!_node.toElement().attributes().item(_i).toAttr().isNull())
-                {
-                    if(_node.toElement().attributes().item(_i).toAttr().name() == "name")
-                    {
-                        _udt->_name = _node.toElement().attributes().item(_i).toAttr().value();
-                    }
-                }
-            QDomNode _baseType_node = _node.firstChild(); // baseType
-            QDomNode _type_node = _baseType_node.firstChild();
-
-            //------------------------------------------------------------
-            if(!checkRedifinitionBaseType(_type_node, _udt))
-            {
-                //------------------------------------------------------------
-                if(_type_node.toElement().tagName() == "struct")
-                {
-                    T_UDT_VARIABLE _var = {};
-                    _udt->_type = DT_STRUCT;
-
-                    QDomNode _var_node = _type_node.firstChild(); // variable
-                    while(!_var_node.isNull())
-                    {
-                        for(int _i = 0;  _i < _var_node.toElement().attributes().length();  _i++)
-                            if(!_var_node.toElement().attributes().item(_i).toAttr().isNull())
-                            {
-                                if(_var_node.toElement().attributes().item(_i).toAttr().name() == "name")
-                                    _var._name = _var_node.toElement().attributes().item(_i).toAttr().value();
-                            }
-                        QDomNode _type_var_node = _var_node.firstChild().firstChild(); // type
-                        if(_type_var_node.toElement().tagName() == "derived")
-                        {
-                            for(int _i = 0;  _i < _type_var_node.toElement().attributes().length();  _i++)
-                                if(!_type_var_node.toElement().attributes().item(_i).toAttr().isNull())
-                                {
-                                    if(_type_var_node.toElement().attributes().item(_i).toAttr().name() == "name")
-                                        _var._type = _type_var_node.toElement().attributes().item(_i).toAttr().value();
-                                }
-                        }else{
-                            _var._type = _type_var_node.toElement().tagName();
-                        }
-                        _udt->_struct.push_back(_var);
-                        _var_node = _var_node.nextSibling();
-                    }
-                }else
-                //------------------------------------------------------------
-                if(_type_node.toElement().tagName() == "array")
-                {
-                    _udt->_type = DT_ARRAY;
-                    QDomNode _dimension_node = _type_node.firstChild(); // dimension
-
-                    _udt->_array._range.clear();
-                    while(!_dimension_node.isNull())
-                    {
-                        if(_dimension_node.toElement().tagName() == "dimension")
-                        {
-                            T_UDT_RANGE_ARRAY _range;
-                            for(int _i = 0;  _i < _dimension_node.toElement().attributes().length();  _i++)
-                                if(!_dimension_node.toElement().attributes().item(_i).toAttr().isNull())
-                                {
-                                    if(_dimension_node.toElement().attributes().item(_i).toAttr().name() == "lower")
-                                        _range._begin = _dimension_node.toElement().attributes().item(_i).toAttr().value().toInt();
-                                    if(_dimension_node.toElement().attributes().item(_i).toAttr().name() == "upper")
-                                        _range._end = _dimension_node.toElement().attributes().item(_i).toAttr().value().toInt();
-                                }
-                            _udt->_array._range.push_back(_range);
-                        }else
-                        if(_dimension_node.toElement().tagName() == "baseType")
-                        {
-                            _udt->_array._type = _dimension_node.firstChild().toElement().tagName();
-                        }
-                        _dimension_node = _dimension_node.nextSibling();
-                    }
-
-                    _udt->_initial_value_present = false;
-                    _udt->_initial_value.clear();
-                    QDomNode initialValue_node = _baseType_node.nextSibling(); // initialValue
-                    QDomNode arrayValue_node = initialValue_node.firstChild(); // arrayValue
-                    QDomNode value_node = arrayValue_node.firstChild(); // value
-                    while(!value_node.isNull())
-                    {
-                        QDomNode simpleValue_node = value_node.firstChild(); // simpleValue
-                        QString _init_val;
-                        for(int _i = 0;  _i < simpleValue_node.toElement().attributes().length();  _i++)
-                            if(!simpleValue_node.toElement().attributes().item(_i).toAttr().isNull())
-                            {
-                                if(simpleValue_node.toElement().attributes().item(_i).toAttr().name() == "value")
-                                    _init_val = simpleValue_node.toElement().attributes().item(_i).toAttr().value();
-                            }
-                        _udt->_initial_value_present = true;
-                        _udt->_initial_value.push_back(_init_val);
-                        value_node = value_node.nextSibling();
-                    }
-                }else
-                //------------------------------------------------------------
-                if(_type_node.toElement().tagName() == "enum")
-                {
-                    QString _name;
-                    _udt->_type = DT_ENUM;
-                    QDomNode _values_node = _type_node.firstChild(); // values
-                    QDomNode _value_node = _values_node.firstChild(); // value
-
-                    _udt->_enum._value.clear();
-                    while(!_value_node.isNull())
-                    {
-                        for(int _i = 0;  _i < _value_node.toElement().attributes().length();  _i++)
-                            if(!_value_node.toElement().attributes().item(_i).toAttr().isNull())
-                            {
-                                if(_value_node.toElement().attributes().item(_i).toAttr().name() == "name")
-                                    _name = _value_node.toElement().attributes().item(_i).toAttr().value();
-                            }
-                        _udt->_enum._value.push_back(_name);
-                        _value_node = _value_node.nextSibling();
-                    }
-
-                    _udt->_initial_value_present = false;
-                    _udt->_initial_value.clear();
-                    QDomNode initialValue_node = _baseType_node.nextSibling(); // initialValue
-                    QDomNode simpleValue_node = initialValue_node.firstChild(); // simpleValue
-                    while(!simpleValue_node.isNull())
-                    {
-                        QString _init_val;
-                        for(int _i = 0;  _i < simpleValue_node.toElement().attributes().length();  _i++)
-                            if(!simpleValue_node.toElement().attributes().item(_i).toAttr().isNull())
-                            {
-                                if(simpleValue_node.toElement().attributes().item(_i).toAttr().name() == "value")
-                                    _init_val = simpleValue_node.toElement().attributes().item(_i).toAttr().value();
-                            }
-                        _udt->_initial_value_present = true;
-                        _udt->_initial_value.push_back(_init_val);
-                        simpleValue_node = simpleValue_node.nextSibling();
-                    }
-                }else
-                //------------------------------------------------------------
-                if(_type_node.toElement().tagName() == "subrangeUnsigned")
-                {
-                    _udt->_type = DT_SUBRANGE_UNSIGNED;
-                    QDomNode _range_node = _type_node.firstChild(); // range
-                    for(int _i = 0;  _i < _range_node.toElement().attributes().length();  _i++)
-                        if(!_range_node.toElement().attributes().item(_i).toAttr().isNull())
-                        {
-                            if(_range_node.toElement().attributes().item(_i).toAttr().name() == "lower")
-                                _udt->_sign_unsign_range._begin = _range_node.toElement().attributes().item(_i).toAttr().value().toInt();
-                            if(_range_node.toElement().attributes().item(_i).toAttr().name() == "upper")
-                                _udt->_sign_unsign_range._end = _range_node.toElement().attributes().item(_i).toAttr().value().toInt();
-                        }
-                    QDomNode _Type_node = _range_node.nextSibling(); // baseType
-                    _udt->_sign_unsign_range._type = _Type_node.firstChild().toElement().tagName();
-
-                    _udt->_initial_value_present = false;
-                    _udt->_initial_value.clear();
-                    QDomNode initialValue_node = _baseType_node.nextSibling(); // initialValue
-                    QDomNode simpleValue_node = initialValue_node.firstChild(); // simpleValue
-                    while(!simpleValue_node.isNull())
-                    {
-                        QString _init_val;
-                        for(int _i = 0;  _i < simpleValue_node.toElement().attributes().length();  _i++)
-                            if(!simpleValue_node.toElement().attributes().item(_i).toAttr().isNull())
-                            {
-                                if(simpleValue_node.toElement().attributes().item(_i).toAttr().name() == "value")
-                                    _init_val = simpleValue_node.toElement().attributes().item(_i).toAttr().value();
-                            }
-                        _udt->_initial_value_present = true;
-                        _udt->_initial_value.push_back(_init_val);
-                        simpleValue_node = simpleValue_node.nextSibling();
-                    }
-                }else
-                //------------------------------------------------------------
-                if(_type_node.toElement().tagName() == "subrangeSigned")
-                {
-                    _udt->_type = DT_SUBRANGE_SIGNED;
-                    QDomNode _range_node = _type_node.firstChild(); // range
-                    for(int _i = 0;  _i < _range_node.toElement().attributes().length();  _i++)
-                        if(!_range_node.toElement().attributes().item(_i).toAttr().isNull())
-                        {
-                            if(_range_node.toElement().attributes().item(_i).toAttr().name() == "lower")
-                                _udt->_sign_unsign_range._begin = _range_node.toElement().attributes().item(_i).toAttr().value().toInt();
-                            if(_range_node.toElement().attributes().item(_i).toAttr().name() == "upper")
-                                _udt->_sign_unsign_range._end = _range_node.toElement().attributes().item(_i).toAttr().value().toInt();
-                        }
-                    QDomNode _Type_node = _range_node.nextSibling(); // baseType
-                    _udt->_sign_unsign_range._type = _Type_node.firstChild().toElement().tagName();
-
-                    _udt->_initial_value_present = false;
-                    _udt->_initial_value.clear();
-                    QDomNode initialValue_node = _baseType_node.nextSibling(); // initialValue
-                    QDomNode simpleValue_node = initialValue_node.firstChild(); // simpleValue
-                    while(!simpleValue_node.isNull())
-                    {
-                        QString _init_val;
-                        for(int _i = 0;  _i < simpleValue_node.toElement().attributes().length();  _i++)
-                            if(!simpleValue_node.toElement().attributes().item(_i).toAttr().isNull())
-                            {
-                                if(simpleValue_node.toElement().attributes().item(_i).toAttr().name() == "value")
-                                    _init_val = simpleValue_node.toElement().attributes().item(_i).toAttr().value();
-                            }
-                        _udt->_initial_value_present = true;
-                        _udt->_initial_value.push_back(_init_val);
-                        simpleValue_node = simpleValue_node.nextSibling();
-                    }
-                }
-                //------------------------------------------------------------
-            }
-            _result = true;
-            break;
-        }
-        _udt_node = _udt_node.nextSibling();
-        _udt_counter++;
-    }
-    return _result;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::INSTANCES(T_INSTANCES *_inst)
-{
     T_CONFIGURATION _conf;
-    bool _result = false;
 
-    if(_m_instances_node.nodeName() != "configurations")
-        return false;
-
-    QDomNode _configurations_node =  _m_instances_node.firstChild(); // configurations
+    QDomNode _configurations_node =  node_.firstChild(); // configurations
     while(!_configurations_node.isNull())
     {
         QDomNode _configuration_node = _configurations_node.firstChild(); // configuration
@@ -486,11 +354,11 @@ bool PLCopenXmlParser::INSTANCES(T_INSTANCES *_inst)
             }
             _resource_node = _resource_node.nextSibling();
         }
-        _inst->_configuration.push_back(_conf);
+        data_->_configuration.push_back(_conf);
         _configurations_node = _configurations_node.nextSibling();
     }
 
-    return _result;
+    return true;
 }
 //-----------------------------------------------------------------------------------
 //
@@ -1554,47 +1422,6 @@ void PLCopenXmlParser::checkPOUbodySFC(QDomNode _node, T_POU *_pou)
 {
     Q_UNUSED(_node)
     Q_UNUSED(_pou)
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::instancesParser(QDomNode _node)
-{
-    _m_instances_node = _node;
-    return true;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::readXmlFile()
-{
-    bool _result = false;
-    return _result;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::writeXmlFile()
-{
-    bool _result = false;
-    return _result;
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-bool PLCopenXmlParser::checkRedifinitionBaseType(QDomNode _node, T_UDT *_udt)
-{
-    bool _result = false;
-    QString _s = _node.toElement().tagName();
-    for(int _i = 0; _i < ARRAY_SIZE(_base_type_name); _i++)
-        if(_base_type_name[_i] == _node.toElement().tagName())
-        {
-            _udt->_type = DT_REDEFINE;
-            _udt->_redefined_name = _node.toElement().tagName();
-            _result = true;
-            break;
-        }
-    return _result;
 }
 //-----------------------------------------------------------------------------------
 //

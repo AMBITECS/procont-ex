@@ -3,18 +3,16 @@
 #include <QDebug>
 
 // ----------------------------------------------------------------------------
-// *** Translator_ST ***
+// *** Translator_POU_ST ***
 
 #include "editor-st/XmlParser.h"
 
-Translator_ST::Translator_ST(const QDomNode &node_) : ITranslator(node_)
+Translator_POU_ST::Translator_POU_ST(const QDomNode &node_) : ITranslator_POU(node_)
 {
 }
 
-QString Translator_ST::translate() const
+QString Translator_POU_ST::translate() const
 {
-    qDebug() << __PRETTY_FUNCTION__;
-
     QString _text = {};
     _text += XmlParser::getPouVarsText(_m_node);
     _text += XmlParser::getPouBodyText(_m_node);
@@ -24,53 +22,51 @@ QString Translator_ST::translate() const
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_FBD ***
+// *** Translator_POU_FBD ***
 
 #include "translator-fbd/FbdTranslator.h"
 
-Translator_FBD::Translator_FBD(const QDomNode &node_) : ITranslator(node_)
+Translator_POU_FBD::Translator_POU_FBD(const QDomNode &node_) : ITranslator_POU(node_)
 {
 }
 
-QString Translator_FBD::translate() const
+QString Translator_POU_FBD::translate() const
 {
-    qDebug() << __PRETTY_FUNCTION__;
-
     FbdTranslator translator;
     return translator.getSTCode_pou(_m_node);
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_creator_ST ***
+// *** Translator_POU_creator_ST ***
 
-ITranslator * Translator_creator_ST::create(const QDomNode &node_) const
+ITranslator_POU * Translator_POU_creator_ST::create(const QDomNode &node_) const
 {
-    return new Translator_ST(node_);
+    return new Translator_POU_ST(node_);
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_creator_FBD ***
+// *** Translator_POU_creator_FBD ***
 
-ITranslator * Translator_creator_FBD::create(const QDomNode &node_) const
+ITranslator_POU * Translator_POU_creator_FBD::create(const QDomNode &node_) const
 {
-    return new Translator_FBD(node_);
+    return new Translator_POU_FBD(node_);
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** Translator_builder ***
+// *** Translator_POU_builder ***
 
-Translator_builder * Translator_builder::_m_instance = nullptr;
+Translator_POU_builder * Translator_POU_builder::_m_instance = nullptr;
 
-Translator_builder::Translator_builder()
+Translator_POU_builder::Translator_POU_builder()
 {
-    _m_hCreators.insert(ITranslator::eTranslatorType::typeST, new Translator_creator_ST);
-    _m_hCreators.insert(ITranslator::eTranslatorType::typeFBD, new Translator_creator_FBD);
+    _m_hCreators.insert(ITranslator_POU::eTranslatorPOUType::typeST, new Translator_POU_creator_ST);
+    _m_hCreators.insert(ITranslator_POU::eTranslatorPOUType::typeFBD, new Translator_POU_creator_FBD);
 }
 
-Translator_builder::~Translator_builder()
+Translator_POU_builder::~Translator_POU_builder()
 {
     for(const auto & creator : std::as_const(_m_hCreators))
         delete creator;
@@ -78,30 +74,56 @@ Translator_builder::~Translator_builder()
     delete _m_instance;
 }
 
-Translator_builder * Translator_builder::instance()
+Translator_POU_builder * Translator_POU_builder::instance()
 {
     if(_m_instance == nullptr)
-        _m_instance = new Translator_builder;
+        _m_instance = new Translator_POU_builder;
 
     return _m_instance;
 }
 
-ITranslator::eTranslatorType Translator_builder::assignType(const QDomNode &node_)
+ITranslator_POU::eTranslatorPOUType Translator_POU_builder::assignType(const QDomNode &node_)
 {
     if(!node_.namedItem("body").namedItem("ST").isNull())
-        return ITranslator::eTranslatorType::typeST;
+        return ITranslator_POU::eTranslatorPOUType::typeST;
     if(!node_.namedItem("body").namedItem("FBD").isNull())
-        return ITranslator::eTranslatorType::typeFBD;
+        return ITranslator_POU::eTranslatorPOUType::typeFBD;
 
-    return ITranslator::eTranslatorType::typeUnknown;
+    return ITranslator_POU::eTranslatorPOUType::typeUnknown;
 }
 
-ITranslator * Translator_builder::build(const QDomNode &node_) const
+ITranslator_POU * Translator_POU_builder::build(const QDomNode &node_) const
 {
     auto type = assignType(node_);
     if(_m_hCreators.contains(type))
         return _m_hCreators.value(type)->create(node_);
 
     return nullptr;
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator ***
+//
+QString Translator::translate(const QDomDocument &doc_)
+{
+    QString _st_text = {};
+
+    // datatypes
+    {
+        _st_text += FbdTranslator::getSTCode_types(doc_.elementsByTagName("dataTypes").at(0));
+    }
+    // pous
+    {
+        QDomNodeList pous_list = doc_.elementsByTagName("pous").at(0).toElement().elementsByTagName("pou");
+        for(auto i=0;i<pous_list.count();i++)
+            _st_text += Translator_POU_builder::instance()->build(pous_list.at(i))->translate();
+    }
+    // configuration
+    {
+        _st_text += FbdTranslator::getSTCode_instances(doc_.elementsByTagName("instances").at(0));
+    }
+
+    return _st_text;
 }
 // ----------------------------------------------------------------------------

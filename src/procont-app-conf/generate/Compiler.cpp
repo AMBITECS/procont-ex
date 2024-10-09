@@ -1,9 +1,12 @@
 #include "Compiler.h"
 
-#include "widget/TabWidgetProtocol.h"
+#include "log/Logger.h"
 
-#include <QPlainTextEdit>
+#define this_pointer this
 
+// ----------------------------------------------------------------------------
+// *** Compiler ***
+//
 Compiler::Compiler() :
     _m_process(new QProcess)
 {
@@ -13,7 +16,7 @@ Compiler::Compiler() :
 
 int Compiler::compile()
 {
-    CWidgetMessage::buildWidget()->clear();
+    b_command(CCmd::eCT_Clear);
 
     _m_process.start(_m_compiler, _m_args);
 
@@ -27,7 +30,7 @@ void Compiler::slot_readStandardOutput()
     if(output.last().size() == 0)
         output.removeLast();
 
-    if(output.size()) CWidgetMessage::buildWidget()->appendPlainText(output.join('\n'));
+    // if(output.size()) CWidgetMessage::buildWidget()->appendPlainText(output.join('\n'));
 }
 
 void Compiler::slot_readStandardError()
@@ -37,9 +40,14 @@ void Compiler::slot_readStandardError()
     if(error.last().size() == 0)
         error.removeLast();
 
-    if(error.size()) CWidgetMessage::buildWidget()->appendPlainText(error.join('\n'));
+    for(auto i : error)
+        b_crit(i);
 }
+// ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// *** Compiler ***
+//
 Compiler_matiec::Compiler_matiec(const QString &st_file_, const QString &build_path_, const QString &compiler_path_)
 {
     _m_compiler = QString("%1/iec2c").arg(compiler_path_);
@@ -50,4 +58,6 @@ Compiler_matiec::Compiler_matiec(const QString &st_file_, const QString &build_p
          << QString("%1/%2").arg(build_path_, st_file_);
 
 }
+// ----------------------------------------------------------------------------
 
+#undef this_pointer

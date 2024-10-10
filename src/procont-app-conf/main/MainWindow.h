@@ -56,7 +56,6 @@ private:
     QString m_projectDir = {};
 
     Compiler * _m_compiler = nullptr;
-
 };
 
 #endif // MAINWINDOW_H

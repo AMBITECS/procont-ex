@@ -365,42 +365,42 @@
 <context>
     <name>ProxyModelTable_var</name>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="129"/>
+        <location filename="../model/ProxyModel.cpp" line="130"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="133"/>
+        <location filename="../model/ProxyModel.cpp" line="134"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="131"/>
+        <location filename="../model/ProxyModel.cpp" line="132"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="135"/>
+        <location filename="../model/ProxyModel.cpp" line="136"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="137"/>
+        <location filename="../model/ProxyModel.cpp" line="138"/>
         <source>Data type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="139"/>
+        <location filename="../model/ProxyModel.cpp" line="140"/>
         <source>Initial Value</source>
         <translation>Инициализация</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="141"/>
+        <location filename="../model/ProxyModel.cpp" line="142"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>
     <message>
-        <location filename="../model/ProxyModel.cpp" line="143"/>
+        <location filename="../model/ProxyModel.cpp" line="144"/>
         <source>Attributes</source>
         <translation>Атрибуты</translation>
     </message>
@@ -452,22 +452,22 @@
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="35"/>
+        <location filename="../widget/WidgetEditor.cpp" line="38"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="37"/>
+        <location filename="../widget/WidgetEditor.cpp" line="40"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="63"/>
+        <location filename="../widget/WidgetEditor.cpp" line="66"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="66"/>
+        <location filename="../widget/WidgetEditor.cpp" line="69"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -475,12 +475,12 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="285"/>
+        <location filename="../widget/WidgetEditor.cpp" line="278"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="288"/>
+        <location filename="../widget/WidgetEditor.cpp" line="281"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

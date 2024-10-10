@@ -258,7 +258,6 @@ void MainWindow::slot_compile()
 void MainWindow::slot_build()
 {
     b_command(CCmd::eCT_Show);
-    // CWidgetProtocol::instance()->setCurrentWidget(CWidgetProtocol::buildWidget());
 
     // *** подготовка ST-файла
     // создание папки для сборки

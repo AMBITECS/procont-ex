@@ -104,6 +104,8 @@ public:
 public:
     static CWidgetProtocol* instance();
 
+    static QPlainTextEdit* buildWidget();
+
 private slots:
     void slot_add_msg(const CMessage &);
     void slot_exec_cmd(const CCmd &);

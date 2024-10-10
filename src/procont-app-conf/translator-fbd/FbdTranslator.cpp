@@ -181,8 +181,6 @@ QString FbdTranslator::INSTANCES_STgenerator(const T_INSTANCES &inst_)
 //-----------------------------------------------------------------------------------
 QString FbdTranslator::getSTCode_pou(const QDomNode &node_)
 {
-
-
     QString _text = {};
 
     T_POU _POU;

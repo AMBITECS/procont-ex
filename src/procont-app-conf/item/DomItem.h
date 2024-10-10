@@ -18,7 +18,8 @@ public:
     {
         typeItem    = QStandardItem::UserType + 1,
         typeVar     = QStandardItem::UserType + 2,
-        typePou     = QStandardItem::UserType + 3
+        typePou     = QStandardItem::UserType + 3,
+        typeType    = QStandardItem::UserType + 4,
     };
 public:
     DomItem(const QDomNode &node);
@@ -71,6 +72,29 @@ private:
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemName
+class DomItemName : public DomItem
+{
+public:
+    DomItemName(const QDomNode &node) :
+        DomItem(node)
+    {}
+
+    [[nodiscard]] QVariant data(int role) const override
+    {
+        Q_UNUSED(role);
+
+        return node().attributes().namedItem("name").nodeValue();
+    }
+
+    virtual void updateNode(const QDomNode &)
+    {
+        qDebug() << node().nodeName() << node().parentNode().nodeName();
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** DomItemVar
 class DomItemVar : public DomItem
 {
@@ -108,6 +132,15 @@ protected:
 // ----------------------------------------------------------------------------
 // *** DomItem_creator
 class DomItem_creator
+{
+public:
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** DomItemName_creator
+class DomItemName_creator : public DomItem_creator
 {
 public:
     [[nodiscard]] virtual DomItem * create(const QDomNode &node);

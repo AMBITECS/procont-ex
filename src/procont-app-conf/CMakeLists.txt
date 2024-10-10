@@ -14,7 +14,7 @@ set(CMAKE_AUTORCC ON)
 set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/${PNME}/${NAME}/bin)
 set(LIBRARY_OUTPUT_PATH     ${CMAKE_BINARY_DIR}/${PNME}/${NAME}/lib)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
 
 set(PROJECT_SOURCES
@@ -38,7 +38,13 @@ set(PROJECT_SOURCES
     editor-st/LineNumberArea.cpp editor-st/LineNumberArea.h
     editor-st/FilesManager.h editor-st/FilesManager.cpp
     widget/WidgetEditor.h widget/WidgetEditor.cpp
+    editor-st/CommonStTypes.h
     editor-st/XmlParser.cpp editor-st/XmlParser.h
+    editor-st/ArraySt.cpp editor-st/ArraySt.h
+    editor-st/StructSt.cpp editor-st/StructSt.h
+    editor-st/Variable.cpp editor-st/Variable.h
+    editor-st/POU.cpp editor-st/POU.h
+    editor-st/DataType.cpp editor-st/DataType.h
     resources/procont-app-conf.qrc
     editor-st/editor-st.qrc
     translator-fbd/SchemaViewer.cpp translator-fbd/SchemaViewer.h

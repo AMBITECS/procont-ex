@@ -1,6 +1,7 @@
 #include "TabWidgetProtocol.h"
 
 #include "TabWidgetTree.h"
+#include "editor-st/CodeEditorWidget.h"
 
 #include "log/Logger.h"
 
@@ -96,6 +97,10 @@ void CWidgetProtocolTab_message::set_type(QTreeWidgetItem *item_, CMessage::eMsg
         break;
     }
 }
+
+void CWidgetProtocolTab_message::set(const CText &)
+{
+}
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -104,20 +109,23 @@ void CWidgetProtocolTab_message::set_type(QTreeWidgetItem *item_, CMessage::eMsg
 CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetProtocolTab(parent_)
 {
     auto container = new QWidget(this);
-    m_pPlainTextWidget = new QPlainTextEdit(this);
-    m_pPlainTextWidget->setReadOnly(true);
-    m_pTreeWidget = new QTreeWidget(this);
-    m_pTreeWidget->setColumnCount(4);
-    m_pTreeWidget->header()->resizeSection(0, 900);
-    m_pTreeWidget->header()->resizeSection(1, 100);
-    m_pTreeWidget->header()->resizeSection(2, 100);
-    m_pTreeWidget->header()->resizeSection(3, 200);
-    m_pTreeWidget->setHeaderLabels(QStringList() << tr("Message") << tr("Project") << tr("Object") << tr("Position"));
-    m_pTreeWidget->setWordWrap(true);
-    m_pTreeWidget->hide();
+    m_pErrorPlainTextWidget = new QPlainTextEdit(this);
+    m_pErrorPlainTextWidget->setReadOnly(true);
+    m_pErrorTreeWidget = new QTreeWidget(this);
+    m_pErrorTreeWidget->setColumnCount(4);
+    m_pErrorTreeWidget->header()->resizeSection(0, 900);
+    m_pErrorTreeWidget->header()->resizeSection(1, 100);
+    m_pErrorTreeWidget->header()->resizeSection(2, 100);
+    m_pErrorTreeWidget->header()->resizeSection(3, 200);
+    m_pErrorTreeWidget->setHeaderLabels(QStringList() << tr("Message") << tr("Project") << tr("Object") << tr("Position"));
+    m_pErrorTreeWidget->setWordWrap(true);
+    m_pErrorTreeWidget->hide();
+    m_pCodePlainTextWidget = new CodeEditorWidget(this);
+    m_pCodePlainTextWidget->hide();
     auto hb = new QHBoxLayout;
-    hb->addWidget(m_pPlainTextWidget);
-    hb->addWidget(m_pTreeWidget);
+    hb->addWidget(m_pErrorPlainTextWidget);
+    hb->addWidget(m_pErrorTreeWidget);
+    hb->addWidget(m_pCodePlainTextWidget);
     container->setLayout(hb);
 
     auto toolbar = new QToolBar;
@@ -130,7 +138,10 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     action = toolbar->addAction(QIcon(":/icon/images/diagram.svg"), tr("Tree"));
     connect(action, &QAction::triggered, this, &CWidgetProtocolTab_build::slot_treeViewToggled);
     action->setCheckable(true); group->addAction(action);
-    toolbar->setIconSize(QSize(16, 16));
+    action = toolbar->addAction(QIcon(":/icon/images/text_3.svg"), tr("Code"));
+    connect(action, &QAction::triggered, this, &CWidgetProtocolTab_build::slot_codeViewToggled);
+    action->setCheckable(true); group->addAction(action);
+    toolbar->setIconSize(QSize(24, 24));
 
     auto * layout = new QHBoxLayout(this);
     layout->addWidget(container);
@@ -141,21 +152,30 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
 
 void CWidgetProtocolTab_build::slot_textViewToggled(bool)
 {
-    m_pTreeWidget->hide();
-    m_pPlainTextWidget->show();
+    m_pCodePlainTextWidget->hide();
+    m_pErrorTreeWidget->hide();
+    m_pErrorPlainTextWidget->show();
 }
 
 void CWidgetProtocolTab_build::slot_treeViewToggled(bool)
 {
-    m_pPlainTextWidget->hide();
-    m_pTreeWidget->show();
+    m_pCodePlainTextWidget->hide();
+    m_pErrorPlainTextWidget->hide();
+    m_pErrorTreeWidget->show();
+}
+
+void CWidgetProtocolTab_build::slot_codeViewToggled(bool)
+{
+    m_pErrorPlainTextWidget->hide();
+    m_pErrorTreeWidget->hide();
+    m_pCodePlainTextWidget->show();
 }
 
 void CWidgetProtocolTab_build::add(const CMessage &message_)
 {
     for(const auto & i : message_.text())
     {
-        m_pPlainTextWidget->appendPlainText(i);
+        m_pErrorPlainTextWidget->appendPlainText(i);
 
         QString err = "error: ";
         if(i.indexOf(err) != -1)
@@ -176,7 +196,7 @@ void CWidgetProtocolTab_build::add(const CMessage &message_)
             QString type = "error";
             auto file = QFileInfo(i.left(k));
 
-            auto item = new QTreeWidgetItem(m_pTreeWidget);
+            auto item = new QTreeWidgetItem(m_pErrorTreeWidget);
             set_type(item, type);
             item->setText(0, message);
             item->setText(2, file.fileName());
@@ -199,9 +219,14 @@ void CWidgetProtocolTab_build::exec(const CCmd &cmd_)
 {
     if(cmd_.cmd() == CCmd::eCT_Clear)
     {
-        m_pPlainTextWidget->clear();
-        m_pTreeWidget->clear();
+        m_pErrorPlainTextWidget->clear();
+        m_pErrorTreeWidget->clear();
     }
+}
+
+void CWidgetProtocolTab_build::set(const CText &text_)
+{
+    m_pCodePlainTextWidget->setPlainText(text_.text());
 }
 // ----------------------------------------------------------------------------
 
@@ -231,6 +256,7 @@ CWidgetProtocol::CWidgetProtocol(QWidget *parent) :
 
     connect(CMessanger::instance(), SIGNAL(signal_send_msg(CMessage)), this, SLOT(slot_add_msg(CMessage)));
     connect(CMessanger::instance(), SIGNAL(signal_send_cmd(CCmd)), this, SLOT(slot_exec_cmd(CCmd)));
+    connect(CMessanger::instance(), SIGNAL(signal_send_txt(CText)), this, SLOT(slot_set_txt(CText)));
 }
 
 CWidgetProtocol::~CWidgetProtocol()
@@ -302,4 +328,8 @@ void CWidgetProtocol::exec(const CCmd &cmd_)
     }
 }
 
+void CWidgetProtocol::slot_set_txt(const CText &text_)
+{
+    m_pWidgetBuild->set(text_);
+}
 // ----------------------------------------------------------------------------

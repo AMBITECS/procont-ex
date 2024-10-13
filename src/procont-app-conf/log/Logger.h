@@ -15,6 +15,8 @@
 
 #define b_command(X) CMessanger::instance()->add_cmd(X, CMessage::eMT_Build)
 
+#define b_text(X) CMessanger::instance()->add_txt(X)
+
 #include <QObject>
 #include <QMap>
 
@@ -33,6 +35,8 @@ public:
 
     void add_cmd(CCmd::eCmdType, IMessage::eMsgTab = IMessage::eMT_Build);
 
+    void add_txt(const QString &);
+
     void information(void *object_, const QString &function_, const QStringList &, IMessage::eMsgTab type_ = IMessage::eMT_Message);
     void warning(void *object_, const QString &function_, const QStringList &, IMessage::eMsgTab type_ = IMessage::eMT_Message);
     void critical(void *object_, const QString &function_, const QStringList &, IMessage::eMsgTab type_ = IMessage::eMT_Message);
@@ -40,6 +44,7 @@ public:
 signals:
     void signal_send_msg(const CMessage &);
     void signal_send_cmd(const CCmd &);
+    void signal_send_txt(const CText &);
 
 public:
     static CMessanger* instance();

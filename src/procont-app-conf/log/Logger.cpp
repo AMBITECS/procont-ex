@@ -47,6 +47,12 @@ void CMessanger::add_cmd(CCmd::eCmdType cmd_, IMessage::eMsgTab type_)
     emit signal_send_cmd(cmd);
 }
 
+void CMessanger::add_txt(const QString &text_)
+{
+    auto text = CText(text_);
+    emit signal_send_txt(text);
+}
+
 void CMessanger::information(void *object_, const QString &function_, const QStringList &text_, IMessage::eMsgTab type_)
 {
     add_message(object_, function_, text_, CMessage::eML_Info, type_);

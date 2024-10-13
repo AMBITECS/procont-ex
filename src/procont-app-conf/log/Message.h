@@ -21,6 +21,22 @@ protected:
     static QString toString_type(eMsgTab);
 };
 
+class CText : public IMessage
+{
+public:
+    CText() = default;
+    CText(const QString &);
+    CText(const CText &);
+    ~CText() = default;
+    CText & operator= (const CText &) = default;
+
+public:
+    QString text() const;
+
+private:
+    QString m_text;
+};
+
 class CCmd : public IMessage
 {
 public:

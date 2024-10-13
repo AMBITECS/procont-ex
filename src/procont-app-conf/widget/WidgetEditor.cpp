@@ -13,8 +13,8 @@
 #include "view/ItemDelegate.h"
 #include "editor-st/CodeEditorWidget.h"
 #include "editor-st/XmlParser.h"
-#include "translator-fbd/SchemaViewer.h"
-#include "translator-fbd/FbdTranslator.h"
+#include "translator/SchemaViewer.h"
+#include "translator/TranslatorFbd.h"
 
 WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
     : QSplitter(Qt::Vertical, parent_),
@@ -309,7 +309,7 @@ void WidgetEditor_fbd::slot_shmViewToggled(bool)
 
 void WidgetEditor_fbd::slot_txtViewToggled(bool)
 {
-    FbdTranslator translator;
+    TranslatorFBD translator;
     _body_text->setPlainText(translator.getSTCode_pou(item(_index)->node()));
 
     _fbd_view->hide();

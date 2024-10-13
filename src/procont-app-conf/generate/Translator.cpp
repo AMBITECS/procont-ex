@@ -6,6 +6,7 @@
 // *** Translator_POU_ST ***
 
 #include "editor-st/XmlParser.h"
+#include "translator/TranslatorIec.h"
 
 Translator_POU_ST::Translator_POU_ST(const QDomNode &node_) : ITranslator_POU(node_)
 {
@@ -13,18 +14,21 @@ Translator_POU_ST::Translator_POU_ST(const QDomNode &node_) : ITranslator_POU(no
 
 QString Translator_POU_ST::translate() const
 {
-    QString _text = {};
-    _text += XmlParser::getPouVarsText(_m_node);
-    _text += XmlParser::getPouBodyText(_m_node);
+    // QString _text = {};
+    // _text += XmlParser::getPouVarsText(_m_node);
+    // _text += XmlParser::getPouBodyText(_m_node);
 
-    return _text;
+    TranslatorIEC translator;
+    return translator.getSTCode_pou(_m_node);
+
+    // return _text;
 }
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** Translator_POU_FBD ***
 
-#include "translator-fbd/FbdTranslator.h"
+#include "translator/TranslatorFbd.h"
 
 Translator_POU_FBD::Translator_POU_FBD(const QDomNode &node_) : ITranslator_POU(node_)
 {
@@ -32,7 +36,7 @@ Translator_POU_FBD::Translator_POU_FBD(const QDomNode &node_) : ITranslator_POU(
 
 QString Translator_POU_FBD::translate() const
 {
-    FbdTranslator translator;
+    TranslatorFBD translator;
     return translator.getSTCode_pou(_m_node);
 }
 // ----------------------------------------------------------------------------
@@ -111,7 +115,7 @@ QString Translator::translate(const QDomDocument &doc_)
 
     // datatypes
     {
-        _st_text += FbdTranslator::getSTCode_types(doc_.elementsByTagName("dataTypes").at(0));
+        _st_text += TranslatorIEC::getSTCode_types(doc_.elementsByTagName("dataTypes").at(0));
     }
     // pous
     {
@@ -121,7 +125,7 @@ QString Translator::translate(const QDomDocument &doc_)
     }
     // configuration
     {
-        _st_text += FbdTranslator::getSTCode_instances(doc_.elementsByTagName("instances").at(0));
+        _st_text += TranslatorIEC::getSTCode_instances(doc_.elementsByTagName("instances").at(0));
     }
 
     return _st_text;

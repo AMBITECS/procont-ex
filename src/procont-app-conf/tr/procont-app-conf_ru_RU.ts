@@ -55,17 +55,17 @@
 <context>
     <name>CWidgetProtocol</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="218"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="243"/>
         <source>Messages</source>
         <translation>Сообщения</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="225"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="250"/>
         <source>Actions</source>
         <translation>События</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="221"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="246"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
@@ -73,37 +73,42 @@
 <context>
     <name>CWidgetProtocolTab_build</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="115"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
         <source>Message</source>
         <translation>Сообщение</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="115"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="115"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
         <source>Object</source>
         <translation>Объект</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="115"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
         <source>Position</source>
         <translation>Позиция</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="126"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="134"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="130"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="138"/>
         <source>Tree</source>
         <translation>Дерево</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="174"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="141"/>
+        <source>Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="194"/>
         <source>Row %1, Column %2</source>
         <translation>Строка %1, Столбец %2</translation>
     </message>
@@ -111,48 +116,48 @@
 <context>
     <name>CWidgetProtocolTab_message</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="40"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="40"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="40"/>
         <source>Time</source>
         <translation>Дата и время</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="40"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="40"/>
         <source>Object</source>
         <translation>Объект</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="39"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="40"/>
         <source>Message</source>
         <translation>Сообщение</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="83"/>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="95"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="84"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="96"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="87"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="88"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="91"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="92"/>
         <source>Critical</source>
         <translation>Ошибка</translation>
     </message>

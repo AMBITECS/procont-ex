@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createMenu();
 
-    open("plc-e.xml");
+    open("plc-0.xml");
 }
 
 void MainWindow::createWidgets()
@@ -267,6 +267,8 @@ void MainWindow::slot_build()
 
     // формирование ST-файла
     QString st_text = Translator::translate(model->document());
+    // отображение ST-файла
+    b_text(st_text);
 
     // запись файла
     QFile file(QString("%1/generated.st").arg(_buildDir));

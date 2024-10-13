@@ -30,7 +30,8 @@ void Compiler::slot_readStandardOutput()
     if(output.last().size() == 0)
         output.removeLast();
 
-    // if(output.size()) CWidgetMessage::buildWidget()->appendPlainText(output.join('\n'));
+    for(const auto &i : output)
+        b_info(i);
 }
 
 void Compiler::slot_readStandardError()
@@ -40,7 +41,7 @@ void Compiler::slot_readStandardError()
     if(error.last().size() == 0)
         error.removeLast();
 
-    for(auto i : error)
+    for(const auto &i : error)
         b_crit(i);
 }
 // ----------------------------------------------------------------------------

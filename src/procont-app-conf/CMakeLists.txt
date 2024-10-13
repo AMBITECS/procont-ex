@@ -47,10 +47,11 @@ set(PROJECT_SOURCES
     editor-st/DataType.cpp editor-st/DataType.h
     resources/procont-app-conf.qrc
     editor-st/editor-st.qrc
-    translator-fbd/SchemaViewer.cpp translator-fbd/SchemaViewer.h
-    translator-fbd/GlobalType.h
-    translator-fbd/XmlParser.cpp translator-fbd/XmlParser.h
-    translator-fbd/FbdTranslator.h translator-fbd/FbdTranslator.cpp
+    translator/SchemaViewer.cpp translator/SchemaViewer.h
+    translator/GlobalType.h
+    translator/XmlParser.cpp translator/XmlParser.h
+    translator/TranslatorIec.h translator/TranslatorIec.cpp
+    translator/TranslatorFbd.h translator/TranslatorFbd.cpp
     generate/Compiler.cpp generate/Compiler.h
     generate/Translator.cpp generate/Translator.h
 )
@@ -65,6 +66,7 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
+        translator/TranslatorSfc.h translator/TranslatorSfc.cpp
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

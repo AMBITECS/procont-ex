@@ -21,6 +21,21 @@ QString IMessage::toString_type(eMsgTab type_)
     }
 }
 
+CText::CText(const QString& text_) :
+    m_text(text_)
+{
+}
+
+CText::CText(const CText &msg_) :
+    m_text(msg_.m_text)
+{
+}
+
+QString CText::text() const
+{
+    return m_text;
+}
+
 CCmd::CCmd(eCmdType cmd_, eMsgTab type_) :
     m_cmd(cmd_),
     m_type(type_)

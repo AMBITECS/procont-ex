@@ -1,6 +1,10 @@
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
+#include <QTextStream>
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 #include "SchemaViewer.h"
 //-----------------------------------------------------------------------------------
 //
@@ -12,6 +16,58 @@ FBDviewer::FBDviewer(QWidget *parent) : QWidget(parent)
     _m_right_mouse_button       = false;
     _m_left_right_mouse_button  = false;
 }
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+// void FBDviewer::setXmlFile(QString _file)
+// {
+//     T_POU       _pou;
+//     T_UDT       _udt;
+//     quint32 _pou_counter = 0;
+//     quint32 _udt_counter = 0;
+
+//     _m_is_drawing = false;
+
+//     if(_m_XMLparser.setXmlFile(_file))
+//     {
+//         // ---------------------------------------------------------------
+//         while(_m_XMLparser.UDT(_udt_counter, &_udt))
+//         {
+//             _m_draw_mutex.lock();
+//             _m_udt.push_back(_udt);
+//             _m_draw_mutex.unlock();
+//             _udt_counter++;
+//         }
+//         // ---------------------------------------------------------------
+//         while(_m_XMLparser.POU(_pou_counter, &_pou))
+//         {
+//             for(int _i = 0; _i < (int)_pou._body._FBD._item.size(); _i++)
+//             {
+//                 _pou._body._FBD._item[_i]._show         = true;
+//                 _pou._body._FBD._item[_i]._select       = false;
+//                 _pou._body._FBD._item[_i]._select_move  = false;
+//                 _pou._body._FBD._item[_i]._rect.setX(_pou._body._FBD._item[_i]._pos_x);
+//                 _pou._body._FBD._item[_i]._rect.setY(_pou._body._FBD._item[_i]._pos_y);
+//                 _pou._body._FBD._item[_i]._rect.setWidth(_pou._body._FBD._item[_i]._width);
+//                 _pou._body._FBD._item[_i]._rect.setHeight(_pou._body._FBD._item[_i]._height);
+//             }
+//             _m_draw_mutex.lock();
+//             _pou._active = false;
+//             _m_pou.push_back(_pou);
+//             _m_draw_mutex.unlock();
+//             _pou._body._FBD._item.clear();
+//             _pou._body._ST._ST_code.clear();
+//             _pou._body._IL._IL_code.clear();
+//             _pou._body._documentation = "";
+//             _pou_counter++;
+//         }
+//         _m_pou[0]._active = true;
+//         // ---------------------------------------------------------------
+//         _m_XMLparser.INSTANCES(&_m_inst);
+//         // ---------------------------------------------------------------
+//         _m_is_drawing = true;
+//     }
+// }
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
@@ -72,10 +128,10 @@ void FBDviewer::paintEvent(QPaintEvent *)
 
             switch(_m_pou._body._FBD._item[_i]._type)
             {
-            case IT_MAX:{}break;
-            case IT_NOT_DEFINED:{}break;
-            case IT_FUNCTION:
-            case IT_BLOCK:{
+            case IT_FBD_MAX:{}break;
+            case IT_FBD_NOT_DEFINED:{}break;
+            case IT_FBD_FUNCTION:
+            case IT_FBD_BLOCK:{
                 _painter.drawText(_m_pou._body._FBD._item[_i]._rect.x()
                                   + (_m_pou._body._FBD._item[_i]._rect.width() / 2.0)
                                       - (_fm.horizontalAdvance(_m_pou._body._FBD._item[_i]._typeName) / 2.0),
@@ -134,7 +190,7 @@ void FBDviewer::paintEvent(QPaintEvent *)
 
                 }
             }break;
-            case IT_INPUT:
+            case IT_FBD_INPUT:
             {
                 _painter.drawText(_m_pou._body._FBD._item[_i]._rect.x()
                                   + (_m_pou._body._FBD._item[_i]._rect.width() / 2.0)
@@ -142,7 +198,7 @@ void FBDviewer::paintEvent(QPaintEvent *)
                                   _m_pou._body._FBD._item[_i]._rect.y() + _fm.height(),
                                   _m_pou._body._FBD._item[_i]._expression);
             }break;
-            case IT_OUTPUT:
+            case IT_FBD_OUTPUT:
             {
                 _painter.drawText(_m_pou._body._FBD._item[_i]._rect.x()
                                   + (_m_pou._body._FBD._item[_i]._rect.width() / 2.0)
@@ -161,7 +217,7 @@ void FBDviewer::paintEvent(QPaintEvent *)
                                       _m_pou._body._FBD._item[_i]._connection._position[_c]._x,
                                       _m_pou._body._FBD._item[_i]._connection._position[_c]._y);
             }break;
-            case IT_INPUT_OUTPUT:{
+            case IT_FBD_INPUT_OUTPUT:{
                 _painter.drawText(_m_pou._body._FBD._item[_i]._rect.x()
                                   + (_m_pou._body._FBD._item[_i]._rect.width() / 2.0)
                                       - (_fm.horizontalAdvance(_m_pou._body._FBD._item[_i]._expression) / 2.0),
@@ -179,7 +235,7 @@ void FBDviewer::paintEvent(QPaintEvent *)
                                       _m_pou._body._FBD._item[_i]._connection._position[_c]._x,
                                       _m_pou._body._FBD._item[_i]._connection._position[_c]._y);
             }break;
-            case IT_CONNECTOR:{
+            case IT_FBD_CONNECTOR:{
                 _painter.drawText(_m_pou._body._FBD._item[_i]._rect.x()
                                   + (_m_pou._body._FBD._item[_i]._rect.width() / 2.0)
                                       - (_fm.horizontalAdvance(_m_pou._body._FBD._item[_i]._expression) / 2.0),
@@ -192,7 +248,7 @@ void FBDviewer::paintEvent(QPaintEvent *)
                                       _m_pou._body._FBD._item[_i]._connection._position[_c]._x,
                                       _m_pou._body._FBD._item[_i]._connection._position[_c]._y);
             }break;
-            case IT_CONTINUATION:{
+            case IT_FBD_CONTINUATION:{
                 _painter.drawText(_m_pou._body._FBD._item[_i]._rect.x()
                                   + (_m_pou._body._FBD._item[_i]._rect.width() / 2.0)
                                       - (_fm.horizontalAdvance(_m_pou._body._FBD._item[_i]._expression) / 2.0),
@@ -205,7 +261,7 @@ void FBDviewer::paintEvent(QPaintEvent *)
                                       _m_pou._body._FBD._item[_i]._connection._position[_c]._x,
                                       _m_pou._body._FBD._item[_i]._connection._position[_c]._y);
             }break;
-            case IT_COMMENT:{
+            case IT_FBD_COMMENT:{
             }break;
             }
         }
@@ -227,10 +283,10 @@ void FBDviewer::checkPOU_item_position(int _i)
 
         switch(_m_pou._body._FBD._item[_i]._type)
         {
-        case IT_MAX:{}break;
-        case IT_NOT_DEFINED:{}break;
-        case IT_FUNCTION:
-        case IT_BLOCK:{
+        case IT_FBD_MAX:{}break;
+        case IT_FBD_NOT_DEFINED:{}break;
+        case IT_FBD_FUNCTION:
+        case IT_FBD_BLOCK:{
             for(int _j = 0; _j < (int)_m_pou._body._FBD._item[_i]._inputVariables.size(); _j++)
             {
                 for(int _c = 0; _c < (int)_m_pou._body._FBD._item[_i]._inputVariables[_j]._connection._position.size(); _c++)
@@ -248,22 +304,22 @@ void FBDviewer::checkPOU_item_position(int _i)
                 }
             }
         }break;
-        case IT_INPUT:{
+        case IT_FBD_INPUT:{
         }break;
-        case IT_OUTPUT:{
+        case IT_FBD_OUTPUT:{
             for(int _c = 0; _c < (int)_m_pou._body._FBD._item[_i]._connection._position.size(); _c++)
             {
                 _m_pou._body._FBD._item[_i]._connection._position[_c]._x -= _delta_x;
                 _m_pou._body._FBD._item[_i]._connection._position[_c]._y -= _delta_y;
             }
         }break;
-        case IT_INPUT_OUTPUT:{
+        case IT_FBD_INPUT_OUTPUT:{
         }break;
-        case IT_CONNECTOR:{
+        case IT_FBD_CONNECTOR:{
         }break;
-        case IT_CONTINUATION:{
+        case IT_FBD_CONTINUATION:{
         }break;
-        case IT_COMMENT:{
+        case IT_FBD_COMMENT:{
         }break;
         }
     }
@@ -311,5 +367,6 @@ void FBDviewer::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 //-----------------------------------------------------------------------------------
+//
 //
 //-----------------------------------------------------------------------------------

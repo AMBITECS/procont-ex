@@ -13,9 +13,24 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsTextItem>
+#include <QStandardItemModel>
 
 #include "XmlParser.h"
-
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+// typedef struct{
+//     QString _name;
+//     quint32 _baseinputnumber;
+//     QString _input_type;
+//     QString _output_type;
+//     QString _comment;
+//     bool    _extensible;
+//     QString _filter;
+// }T_FUNCTION_RETURN_TYPE;
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 class QPaintEvent;
 
 class FBDviewer : public QWidget
@@ -34,7 +49,8 @@ protected:
 
     void checkPOU_item_position(int _i);
 
-    T_POU _m_pou;
+protected:
+    bool                _m_is_drawing;
 
     QMutex              _m_draw_mutex;
 
@@ -42,11 +58,11 @@ protected:
     quint32             _m_old_mouse_y;
     quint32             _m_mouse_x;
     quint32             _m_mouse_y;
-
-    bool                _m_is_drawing;
     bool                _m_left_mouse_button;
     bool                _m_right_mouse_button;
     bool                _m_left_right_mouse_button;
+
+    T_POU _m_pou;
 };
 
 #endif // SCHEMAVIEWER_H

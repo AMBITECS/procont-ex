@@ -11,18 +11,61 @@
 //-----------------------------------------------------------------------------------
 typedef enum
 {
-    IT_NOT_DEFINED = 0,
-    IT_BLOCK,
-    IT_FUNCTION,
-    IT_INPUT,
-    IT_OUTPUT,
-    IT_INPUT_OUTPUT,
-    IT_CONNECTOR,
-    IT_CONTINUATION,
-    IT_COMMENT,
+    PT_NOT_DEFINED = 0,
+    PT_PROGRAMM,
+    PT_FUNCTION_BLOCK,
+    PT_FUNCTION,
 
-    IT_MAX
-}T_FCB_ITEM_TYPE;
+    PT_MAX
+}T_POU_TYPE;
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef enum
+{
+    PBT_NOT_DEFINED = 0,
+    PBT_FBD,
+    PBT_ST,
+    PBT_SFC,
+    PBT_IL,
+    PBT_LD,
+
+    PBT_MAX
+}T_POU_BODY_TYPE;
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef enum
+{
+    IT_FBD_NOT_DEFINED = 0,
+    IT_FBD_BLOCK,
+    IT_FBD_FUNCTION,
+    IT_FBD_INPUT,
+    IT_FBD_OUTPUT,
+    IT_FBD_INPUT_OUTPUT,
+    IT_FBD_CONNECTOR,
+    IT_FBD_CONTINUATION,
+    IT_FBD_COMMENT,
+
+    IT_FBD_MAX
+}T_FBD_ITEM_TYPE;
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef enum
+{
+    IT_SFC_NOT_DEFINED = 0,
+    IT_SFC_STEP,
+    IT_SFC_ACTION_BLOCK,
+    IT_SFC_TRANSITION,
+    IT_SFC_JUMP_STEP,
+    IT_SFC_SELECTION_DIVERGENCE,
+    IT_SFC_SELECTION_CONVERGENCE,
+//    IT_SFC_CONTINUATION,
+//    IT_SFC_COMMENT,
+
+    IT_SFC_MAX
+}T_SFC_ITEM_TYPE;
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
@@ -36,6 +79,17 @@ typedef enum
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
+typedef enum
+{
+    VQ_NOQUALIFIER = 0,
+    VQ_CONSTANT,
+    VQ_RETAIN,
+    VQ_NONRETAIN
+}T_VARIABLE_QUALIFIER;
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 typedef struct
 {
     QString _simpleValue;
@@ -45,17 +99,27 @@ typedef struct
 //-----------------------------------------------------------------------------------
 typedef struct
 {
-    QString _name;
-    T_VARIABLE_TYPE _type;
+    bool _is_used                       = false;
+    T_VARIABLE_QUALIFIER _qualifier     = VQ_NOQUALIFIER;
+    QString _name                       = "";
+    QString _address                    = "";
+    QString _documentation              = "";
+    T_VARIABLE_TYPE _type               = VT_BASE;
     T_INITIAL_VALUE _initialValue;
-    QString _type_name;
+    QString _type_name                  = "";
 }T_VARIABLE;
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
 typedef struct
 {
+    QVector<T_VARIABLE> _globalVars;
     QVector<T_VARIABLE> _localVars;
+    QVector<T_VARIABLE> _inputVars;
+    QVector<T_VARIABLE> _outputVars;
+    QVector<T_VARIABLE> _inoutVars;
+    QVector<T_VARIABLE> _tempVars;
+    QVector<T_VARIABLE> _externalVars;
 }T_POU_INTERFACE;
 
 //-----------------------------------------------------------------------------------
@@ -72,6 +136,7 @@ typedef struct
 typedef struct
 {
     QString _formalParameter;
+    QString _formalParameter_type;
     QString _edge;
     struct {
         quint32 _x;
@@ -95,7 +160,7 @@ typedef struct
     QRect   _rect;
     // ------------
 
-    T_FCB_ITEM_TYPE _type;
+    T_FBD_ITEM_TYPE _type;
     quint64 _localId;
     QString _name;
     QString _typeName;
@@ -110,6 +175,7 @@ typedef struct
     bool    _negatedOut;
     bool    _negatedIn;
     QString _expression;
+    QString _return_type;
 
     struct {
         quint32 _x;
@@ -139,7 +205,93 @@ typedef struct
 //-----------------------------------------------------------------------------------
 typedef struct
 {
-    T_FCB_ITEM_TYPE     _type               = IT_NOT_DEFINED;
+    QString _name;
+    QString _ST_code;
+}T_SFC_CONDITION;
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct
+{
+    quint32 _localId        = 0;
+    QString _qualifier      = "N";
+    QString _indicator      = "";
+    quint32 _pel_position_x = 0;
+    quint32 _pel_position_y = 0;
+    QString _ST_code;
+}T_SFC_ACTION;
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct
+{
+    QString _formalParameter;
+    quint32 _rel_position_x;
+    quint32 _rel_position_y;
+}T_SFC_CONNECTION_POINT_OUT;
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct
+{
+    quint32 _refLocalId         = 0;
+    QVector<T_CONNECT_POSITION> _position;
+}T_SFC_CONNECTION;
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct
+{
+    quint32 _rel_position_x;
+    quint32 _rel_position_y;
+    T_SFC_CONNECTION _connection;
+}T_SFC_CONNECTION_POINT_IN;
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct
+{
+    T_SFC_ITEM_TYPE _type   = IT_SFC_NOT_DEFINED;
+
+    bool _is_used               = false;
+
+    quint64 _localId            = 0;
+    QString _name               = "";
+    quint64 _executionOrderId   = 0;
+    QString _initialStep        = "";
+    QString _targetName         = "";
+    quint64 _width              = 0;
+    quint64 _height             = 0;
+
+    quint32 _position_x;
+    quint32 _position_y;
+
+    QVector<T_SFC_CONNECTION_POINT_OUT> _point_out;
+    QVector<T_SFC_CONNECTION_POINT_OUT> _point_out_action;
+    QVector<T_SFC_CONNECTION_POINT_IN>  _point_in;
+
+    QVector<T_SFC_CONDITION>    _condition;
+    QVector<T_SFC_ACTION>       _action;
+}T_POU_SFC_ITEM;
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct {
+    QString _name;
+    QString _type;
+}T_CONNECTION_VAR;
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct
+{
+    T_FBD_ITEM_TYPE     _type               = IT_FBD_NOT_DEFINED;
     bool                _is_used            = false;
     quint64             _localId            = 0;
     quint64             _executionOrderId   = 0;
@@ -148,18 +300,16 @@ typedef struct
     bool                _negatedIn          = false;
     bool                _negatedOut         = false;
     QString             _expression         = "";
-    QString             _out_var_type       = "";
+    QString             _return_type        = "";
 
     QString             _name               = "";
     QString             _typeName           = "";
     QString             _instanceName       = "";
 
-    QVector<QString> _inputVariables;
-    QVector<QString> _inOutVariables;
-    QVector<QString> _outputVariables;
-
-    QVector<quint32> _out_item_tree;
-
+    bool _connection_complit                = false;
+    QVector<T_CONNECTION_VAR> _inputVariables;
+    QVector<T_CONNECTION_VAR> _inOutVariables;
+    QVector<T_CONNECTION_VAR> _outputVariables;
 }T_POU_FBD_ITEM_SHORT;
 //-----------------------------------------------------------------------------------
 //
@@ -174,8 +324,15 @@ typedef struct
 //-----------------------------------------------------------------------------------
 typedef struct
 {
-    QString _ST_string;
-    QString _code_string;
+    QVector<T_POU_SFC_ITEM> _item;
+}T_POU_BODY_SFC;
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct
+{
+    QStringList _ST_code;
 }T_POU_BODY_ST;
 
 //-----------------------------------------------------------------------------------
@@ -183,6 +340,7 @@ typedef struct
 //-----------------------------------------------------------------------------------
 typedef struct
 {
+    QStringList _IL_code;
 }T_POU_BODY_IL;
 
 //-----------------------------------------------------------------------------------
@@ -190,7 +348,9 @@ typedef struct
 //-----------------------------------------------------------------------------------
 typedef struct
 {
+    T_POU_BODY_TYPE _type;
     T_POU_BODY_FBD _FBD;
+    T_POU_BODY_SFC _SFC;
     T_POU_BODY_ST _ST;
     T_POU_BODY_IL _IL;
     QString _documentation;
@@ -207,10 +367,11 @@ typedef struct
 {
     bool _active;
     QString _name;
-    QString _pouType;
+    T_POU_TYPE _pouType;
 
     T_POU_INTERFACE _interface;
     T_POU_BODY      _body;
+    QString         _return_type;
 }T_POU;
 
 //-----------------------------------------------------------------------------------
@@ -312,6 +473,7 @@ typedef struct
 {
     QString _name;
     T_RESUORCE _resource;
+    QVector<T_VARIABLE> _globalVars;
 }T_CONFIGURATION;
 //-----------------------------------------------------------------------------------
 //

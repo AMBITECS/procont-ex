@@ -2,52 +2,12 @@
 
 #include <QDomDocument>
 #include <QList>
+#include "CommonStTypes.h"
 
-struct SimpleValue
+enum textBlockType
 {
-    QString value;
-};
-
-struct InitialValue
-{
-    SimpleValue simpleValue;
-};
-
-struct Variable
-{
-    QString name;
-    QString type;
-    InitialValue initialValue;
-};
-
-struct Interface
-{
-    QList<Variable> localVars;
-
-    void setVariable(Variable var)
-    {
-        for (auto index = 0; index < localVars.size(); ++index)
-        {
-            if (localVars.at(index).name == var.name)
-            {
-                localVars[index] = var;
-                return;
-            }
-        }
-        localVars.append(var);
-    }
-};
-
-struct Body
-{
-    QString value;
-};
-
-struct Pou
-{
-    QString name;
-    Interface interface;
-    Body body;
+    VARS,
+    BODY,
 };
 
 class XmlParser/* : QObject*/
@@ -65,25 +25,33 @@ public:
 
     static void typesFromFile(const QString &fileName);
 
+    static QString getDataTypeText(const QDomNode& node);
     static QString getPouBodyText(const QDomNode& node);
     static QString getPouVarsText(const QDomNode& node);
     static QDomNode getPouNode(const QString& _text_vars, const QString&, const QDomNode &_parent);
+    static QDomNode getDataTypeNode(const QString& _text_vars, const QString&, const QDomNode &_parent);
 
 private:
     // xml to text
-    void traverseNode(const QDomNode& node, QList<Pou> & pous);
+    void traverseNode(const QDomNode& node);
     QString convertDataToText();
     QString convertPouToText(const int index);
     void parsePOU(const QDomNode& node, QList<Pou> & pous);
+    void parseDataTypes(const QDomNode& node, QList<DataType> & dataTypes);
+    static void parseVariable(const QDomElement& domElementInterface, Interface& interface);
     // text to xml
     void convertTextToPou(const int index);
 
+
+
 private:
-    static Pou XmlToPOU(const QDomNode& node);
-    static Pou TxtToPOU(const QString& _text_vars, const QString& _text_body);
-    static QDomNode getPouNode(Pou _pou, const QDomNode &_parent);
+    static void parsePouProgram(Pou & pou, QDomNode & domNode);
+    //static Pou XmlToPOU(const QDomNode& node);
+    //static Pou TxtToPOU(const QString& _text_vars, const QString& _text_body);
+    //static QDomNode getPouNode(Pou _pou, const QDomNode &_parent);
 
 private:
     QList<Pou> pous;
+    QList<DataType> dataTypes;
     static QStringList types_list;
 };

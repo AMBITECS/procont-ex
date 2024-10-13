@@ -25,7 +25,8 @@ bool ProxyModelTree_pou::filterAcceptsRow(int sourceRow, const QModelIndex &sour
         node.nodeName() != "fileHeader" &&
         node.nodeName() != "contentHeader" &&
         hasParent(node, "instances") == false &&
-        node.nodeName() != "dataTypes" &&
+        hasParent(node, "dataType") == false &&
+        // node.nodeName() != "dataTypes" &&
         hasParent(node, "pou") == false
         ;
 

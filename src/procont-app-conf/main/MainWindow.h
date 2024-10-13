@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QProcess>
 
 QT_FORWARD_DECLARE_CLASS(QTreeView)
 QT_FORWARD_DECLARE_CLASS(QDockWidget)
@@ -9,6 +10,7 @@ QT_FORWARD_DECLARE_CLASS(QDockWidget)
 QT_FORWARD_DECLARE_CLASS(DomModel)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_pou)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_dev)
+QT_FORWARD_DECLARE_CLASS(Compiler)
 
 class MainWindow : public QMainWindow
 {
@@ -50,6 +52,10 @@ private:
     DomModel * model = nullptr;
     ProxyModelTree_pou * proxy_pou = nullptr;
     ProxyModelTree_dev * proxy_dev = nullptr;
+
+    QString m_projectDir = {};
+
+    Compiler * _m_compiler = nullptr;
 };
 
 #endif // MAINWINDOW_H

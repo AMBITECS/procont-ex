@@ -86,8 +86,10 @@ void MainWindow::createWidgets()
     pDock = new QDockWidget(tr("Protocol"), this);
     pDock->setTitleBarWidget(new QWidget());
     pDock->setAllowedAreas(Qt::BottomDockWidgetArea);
-    pDock->setWidget(CWidgetMessage::instance());
+    pDock->setWidget(CWidgetProtocol::instance());
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
+
+    m_projectDir = QDir::currentPath();
 }
 
 void MainWindow::createMenu()
@@ -135,6 +137,8 @@ void MainWindow::slot_open()
     QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"), QString{}, tr("XML files (*.xml)"));
     if(filePath.isEmpty())
         return;
+
+   m_projectDir = QFileInfo(filePath).absoluteDir().absolutePath();
 
     open(filePath);
 }
@@ -248,8 +252,41 @@ void MainWindow::slot_compile()
 {
 }
 
+#include "generate/Translator.h"
+#include "generate/Compiler.h"
+
 void MainWindow::slot_build()
 {
+    b_command(CCmd::eCT_Show);
+
+    // *** подготовка ST-файла
+    // создание папки для сборки
+    auto _buildDir = QString("%1/build").arg(m_projectDir);
+    QDir(_buildDir).removeRecursively();
+    QDir(m_projectDir).mkdir(_buildDir);
+
+    // формирование ST-файла
+    QString st_text = Translator::translate(model->document());
+    // отображение ST-файла
+    b_text(st_text);
+
+    // запись файла
+    QFile file(QString("%1/generated.st").arg(_buildDir));
+    file.open(QIODevice::WriteOnly);
+    file.write(st_text.toLocal8Bit());
+    file.close();
+    // ***
+
+    // *** трансляция ST->C
+    if(_m_compiler == nullptr)
+        _m_compiler = new Compiler_matiec
+            (
+                "generated.st",
+                _buildDir,
+                "/home/ambitecs/proj/procont/matiec"
+            );
+    _m_compiler->compile();
+    // ***
 }
 
 #undef this_pointer

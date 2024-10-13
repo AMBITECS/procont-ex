@@ -17,6 +17,7 @@ TabWidgetEditor::TabWidgetEditor()
     {
         _hProxyModels.insert(DomItem::typePou, new ProxyModelTable_var);
         _hProxyModels.insert(DomItem::typeVar, new ProxyModelTable_global);
+        _hProxyModels.insert(DomItem::typeType, new ProxyModelTable_var);
     }
 
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slot_closeTab(int)));
@@ -94,6 +95,14 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
 
         if(editor != nullptr)
             _hWidgets.insert(index, editor);
+        else
+            _hWidgets.insert(index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
+
+    }
+    break;
+    case DomItem::typeType:
+    {
+        _hWidgets.insert(index, new WidgetEditor_type(index, proxyModel(type)));
     }
     break;
     case DomItem::typeVar:

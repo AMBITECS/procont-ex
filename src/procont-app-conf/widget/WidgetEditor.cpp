@@ -13,7 +13,8 @@
 #include "view/ItemDelegate.h"
 #include "editor-st/CodeEditorWidget.h"
 #include "editor-st/XmlParser.h"
-#include "translator-fbd/SchemaViewer.h"
+#include "translator/SchemaViewer.h"
+#include "translator/TranslatorFbd.h"
 
 WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
     : QSplitter(Qt::Vertical, parent_),
@@ -26,6 +27,9 @@ WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy
 
 QWidget * WidgetEditor::createVarsEditor()
 {
+    // load types
+    XmlParser::typesFromFile(":/resources/types.txt");
+
     // *  variables editor widgets
     // contauner for variables editor widgets
     auto container = new QWidget;
@@ -124,7 +128,7 @@ void WidgetEditor::slot_codeChanged()
     // get new node from editor
     QDomNode new_node = XmlParser::getPouNode
         (
-        _vars_text->toPlainText(),
+        _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
         _body_text != nullptr ? _body_text->toPlainText() : QString(),
         item(_vars_table->rootIndex())->node()
         );
@@ -138,7 +142,7 @@ void WidgetEditor::updateTblView()
     // !!! not work correct
     QDomNode new_node = XmlParser::getPouNode
         (
-            _vars_text->toPlainText(),
+            _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
             _body_text != nullptr ? _body_text->toPlainText() : QString(),
             item(_vars_table->rootIndex())->node()
             );
@@ -220,16 +224,6 @@ void WidgetEditor::slot_delVariable()
             removeRow(s_index(index).row(), s_index(_vars_table->rootIndex()));
     }
 }
-
-// ----------------------------------------------------------------------------
-// *** WidgetEditor_vars ***
-
-WidgetEditor_vars::WidgetEditor_vars(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
-    : WidgetEditor(index_, proxy_, parent_)
-{
-    // *** variables editor
-    addWidget(createVarsEditor());
-}
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -273,7 +267,7 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     // fbd view
     _fbd_view = new FBDviewer;
     _fbd_view->setMinimumSize(500, 250);
-    _fbd_view->setNode(item(_index)->node());
+    _fbd_view->showNode(item(_index)->node());
     // variables editor code editor
     _txt_view = WidgetEditor::createCodeEditor();
     _txt_view->hide();
@@ -307,7 +301,7 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
 
 void WidgetEditor_fbd::slot_shmViewToggled(bool)
 {
-    _fbd_view->setNode(item(_index)->node());
+    _fbd_view->showNode(item(_index)->node());
 
     _txt_view->hide();
     _fbd_view->show();
@@ -315,12 +309,78 @@ void WidgetEditor_fbd::slot_shmViewToggled(bool)
 
 void WidgetEditor_fbd::slot_txtViewToggled(bool)
 {
-    QString data = {};
-    _fbd_view->ST_generate(data);
-    _body_text->setPlainText(data);
+    TranslatorFBD translator;
+    _body_text->setPlainText(translator.getSTCode_pou(item(_index)->node()));
 
     _fbd_view->hide();
     _txt_view->show();
 }
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// *** WidgetEditor_vars ***
+
+WidgetEditor_vars::WidgetEditor_vars(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
+    : WidgetEditor(index_, proxy_, parent_)
+{
+    // *** variables editor
+    addWidget(createVarsEditor());
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetEditor_type ***
+
+WidgetEditor_type::WidgetEditor_type(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
+    : WidgetEditor(index_, proxy_, parent_)
+{
+    // *** variables editor
+    QWidget * vars = createVarsEditor();
+    addWidget(vars);
+
+    // *** code editor
+    addWidget(createCodeEditor());
+
+    // !!! delete when st-editor will work correctly
+    updateTblView();
+
+    vars->hide();
+}
+
+QWidget * WidgetEditor_type::createCodeEditor()
+{
+    // *  code editor widgets
+    _body_text = new CodeEditorWidget(this);
+    _body_text->setMinimumSize(500, 250);
+
+    // !!! parse node to ST text
+    qDebug() << "new code for parse node" << item(_index)->node().nodeName() << item(_index)->type();
+    // QString text = XmlParser::getPouBodyText(item(_index)->node());
+    QString text = {};
+
+    _body_text->setPlainText(XmlParser::getDataTypeText(item(_index)->node()));
+
+    connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor_type::slot_codeChanged);
+    // ***
+
+    return _body_text;
+}
+
+void WidgetEditor_type::slot_codeChanged()
+{
+    qDebug() << "new code for update node" << item(_vars_table->rootIndex())->node().nodeName();
+
+    //QDomNode new_node = {};
+    // // get new node from st editor
+    QDomNode new_node = XmlParser::getDataTypeNode
+         (
+            _body_text != nullptr ? _body_text->toPlainText() : QString(),
+            _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
+
+             item(_vars_table->rootIndex())->node()
+             );
+
+     // set new node to item
+    item(_vars_table->rootIndex())->updateNode(new_node);
+}
+// ----------------------------------------------------------------------------

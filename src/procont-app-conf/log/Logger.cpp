@@ -5,7 +5,6 @@
 #include <QDebug>
 
 CMessanger * CMessanger::m_pInstance = nullptr;
-// QTreeWidget * CMessanger::m_pWidget = nullptr;
 
 CMessanger::CMessanger() :
     QObject(nullptr),
@@ -33,25 +32,38 @@ QString CMessanger::get_function(const QString &function_)
     return str;
 }
 
-void CMessanger::add(void *object_, const QString &function_, const QStringList &text_, CMessage::eMsgType type_, const QDateTime &time_)
+void CMessanger::add_message(void *object_, const QString &function_, const QStringList &text_,
+                     CMessage::eMsgLevel level_, IMessage::eMsgTab type_, const QDateTime &time_)
 {
     ++m_uiMessageCounter;
-    CMessage message = CMessage(object_, get_function(function_), text_, type_, m_uiMessageCounter, time_);
+    auto message = CMessage(object_, get_function(function_), text_, level_, type_, m_uiMessageCounter, time_);
     qDebug() << message.toString();
-    emit signal_send(message);
+    emit signal_send_msg(message);
 }
 
-void CMessanger::information(void *object_, const QString &function_, const QStringList &text_)
+void CMessanger::add_cmd(CCmd::eCmdType cmd_, IMessage::eMsgTab type_)
 {
-    add(object_, function_, text_, CMessage::eMT_Info);
+    auto cmd = CCmd(cmd_, type_);
+    emit signal_send_cmd(cmd);
 }
 
-void CMessanger::warning(void *object_, const QString &function_, const QStringList &text_)
+void CMessanger::add_txt(const QString &text_)
 {
-    add(object_, function_, text_, CMessage::eMT_Warning);
+    auto text = CText(text_);
+    emit signal_send_txt(text);
 }
 
-void CMessanger::critical(void *object_, const QString &function_, const QStringList &text_)
+void CMessanger::information(void *object_, const QString &function_, const QStringList &text_, IMessage::eMsgTab type_)
 {
-    add(object_, function_, text_, CMessage::eMT_Critical);
+    add_message(object_, function_, text_, CMessage::eML_Info, type_);
+}
+
+void CMessanger::warning(void *object_, const QString &function_, const QStringList &text_, IMessage::eMsgTab type_)
+{
+    add_message(object_, function_, text_, CMessage::eML_Warning, type_);
+}
+
+void CMessanger::critical(void *object_, const QString &function_, const QStringList &text_, IMessage::eMsgTab type_)
+{
+    add_message(object_, function_, text_, CMessage::eML_Critical, type_);
 }

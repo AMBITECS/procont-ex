@@ -9,7 +9,7 @@
 // *** DomItem ***
 
 QScopedPointer<DomItem_builder> DomItem::m_ItemBuilder = QScopedPointer<DomItem_builder>(new DomItem_builder);
-QStringList DomItem::m_discard = { "types", "pous", "instances", "configurations" };
+QStringList DomItem::m_discard = { "types", /*"pous",*/ "instances", "configurations"/*, "dataTypes"*/ };
 
 DomItem::DomItem(const QDomNode &node) :
     m_itemType(assignType(node)),
@@ -21,6 +21,8 @@ DomItem::ItemType DomItem::assignType(const QDomNode &node)
 {
     if(node.nodeName() == "pou")
         return DomItem::typePou;
+    if(node.nodeName() == "dataType")
+        return DomItem::typeType;
     if(node.nodeName() == "globalVars")
         return DomItem::typeVar;
 
@@ -127,7 +129,8 @@ void DomItem::buildChildren(const QDomNode &node, int row, int shift)
 
 QVariant DomItem::data(int role) const
 {
-    Q_UNUSED(role);
+    // if(role == Qt::DecorationRole)
+    //     return QIcon(":/icon/images/diagram.svg");
 
     return m_value->get();
 }
@@ -332,6 +335,14 @@ DomItem * DomItem_creator::create(const QDomNode &node)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemName_creator ***
+DomItem * DomItemName_creator::create(const QDomNode &node)
+{
+    return new DomItemName(node);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** DomItemVar_creator ***
 DomItem * DomItemVar_creator::create(const QDomNode &node)
 {
@@ -352,6 +363,7 @@ DomItem * DomItemPou_creator::create(const QDomNode &node)
 DomItem_builder::DomItem_builder()
 {
     m_creators.insert(DomItem::typeItem, new DomItem_creator);
+    m_creators.insert(DomItem::typeType, new DomItemName_creator);
     m_creators.insert(DomItem::typeVar, new DomItemVar_creator);
     m_creators.insert(DomItem::typePou, new DomItemPou_creator);
 }

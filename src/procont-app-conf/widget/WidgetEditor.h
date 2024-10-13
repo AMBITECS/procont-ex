@@ -51,11 +51,9 @@ protected:
     QDomNode _node = {};
     QAbstractProxyModel * _proxy = nullptr;
 
-private:
+protected:
     TableView * _vars_table = nullptr;
     CodeEditorWidget * _vars_text = nullptr;
-
-protected:
     CodeEditorWidget * _body_text = nullptr;
 };
 // ----------------------------------------------------------------------------
@@ -116,5 +114,24 @@ private:
 };
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// *** WidgetEditor_type ***
+
+/*!
+ * \brief The WidgetEditor_type class
+ */
+class WidgetEditor_type : public WidgetEditor
+{
+    Q_OBJECT
+public:
+    WidgetEditor_type(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
+
+private slots:
+    void slot_codeChanged();
+
+protected:
+    virtual QWidget * createCodeEditor();
+};
+// ----------------------------------------------------------------------------
 
 #endif // WIDGETEDITOR_H

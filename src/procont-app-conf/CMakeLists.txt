@@ -14,7 +14,7 @@ set(CMAKE_AUTORCC ON)
 set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/${PNME}/${NAME}/bin)
 set(LIBRARY_OUTPUT_PATH     ${CMAKE_BINARY_DIR}/${PNME}/${NAME}/lib)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
 
 set(PROJECT_SOURCES
@@ -38,12 +38,22 @@ set(PROJECT_SOURCES
     editor-st/LineNumberArea.cpp editor-st/LineNumberArea.h
     editor-st/FilesManager.h editor-st/FilesManager.cpp
     widget/WidgetEditor.h widget/WidgetEditor.cpp
+    editor-st/CommonStTypes.h
     editor-st/XmlParser.cpp editor-st/XmlParser.h
+    editor-st/ArraySt.cpp editor-st/ArraySt.h
+    editor-st/StructSt.cpp editor-st/StructSt.h
+    editor-st/Variable.cpp editor-st/Variable.h
+    editor-st/POU.cpp editor-st/POU.h
+    editor-st/DataType.cpp editor-st/DataType.h
     resources/procont-app-conf.qrc
     editor-st/editor-st.qrc
-    translator-fbd/SchemaViewer.cpp translator-fbd/SchemaViewer.h
-    translator-fbd/GlobalType.h
-    translator-fbd/XmlParser.cpp translator-fbd/XmlParser.h
+    translator/SchemaViewer.cpp translator/SchemaViewer.h
+    translator/GlobalType.h
+    translator/XmlParser.cpp translator/XmlParser.h
+    translator/TranslatorIec.h translator/TranslatorIec.cpp
+    translator/TranslatorFbd.h translator/TranslatorFbd.cpp
+    generate/Compiler.cpp generate/Compiler.h
+    generate/Translator.cpp generate/Translator.h
 )
 
 qt_translate(
@@ -56,6 +66,7 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
+        translator/TranslatorSfc.h translator/TranslatorSfc.cpp
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

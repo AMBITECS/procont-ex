@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createMenu();
 
-    open("plc-0.xml");
+    open("plc-e.xml");
 }
 
 void MainWindow::createWidgets()

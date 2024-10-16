@@ -45,7 +45,7 @@ set(PROJECT_SOURCES
     editor-st/Variable.cpp editor-st/Variable.h
     editor-st/POU.cpp editor-st/POU.h
     editor-st/DataType.cpp editor-st/DataType.h
-    resources/procont-app-conf.qrc
+
     editor-st/editor-st.qrc
     translator/SchemaViewer.cpp translator/SchemaViewer.h
     translator/GlobalType.h
@@ -56,6 +56,7 @@ set(PROJECT_SOURCES
     generate/Translator.cpp generate/Translator.h
     translator/TranslatorSfc.h translator/TranslatorSfc.cpp
     iec/StandardLibrary.cpp iec/StandardLibrary.h
+    resources/procont-app-conf.qrc
 )
 
 qt_translate(

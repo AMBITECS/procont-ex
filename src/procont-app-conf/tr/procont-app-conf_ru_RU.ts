@@ -224,17 +224,17 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../main/MainWindow.cpp" line="53"/>
+        <location filename="../main/MainWindow.cpp" line="54"/>
         <source>Device</source>
         <translation>Устройства</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="63"/>
+        <location filename="../main/MainWindow.cpp" line="64"/>
         <source>POUs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="72"/>
+        <location filename="../main/MainWindow.cpp" line="73"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
@@ -251,122 +251,173 @@
         <translation type="vanished">загрузка библиотеки &apos;StandardLibrary&apos; из файла %1/etc/%2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="90"/>
+        <location filename="../main/MainWindow.cpp" line="91"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="99"/>
+        <location filename="../main/MainWindow.cpp" line="100"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="100"/>
+        <location filename="../main/MainWindow.cpp" line="101"/>
         <source>&amp;Open...</source>
         <translation>&amp;Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="101"/>
+        <location filename="../main/MainWindow.cpp" line="102"/>
         <source>&amp;Save...</source>
         <translation>&amp;Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="102"/>
+        <location filename="../main/MainWindow.cpp" line="103"/>
         <source>&amp;Exit</source>
         <translation>&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="104"/>
+        <location filename="../main/MainWindow.cpp" line="105"/>
         <source>&amp;Edit</source>
         <translation>&amp;Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="105"/>
+        <location filename="../main/MainWindow.cpp" line="106"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="106"/>
+        <location filename="../main/MainWindow.cpp" line="107"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="108"/>
+        <location filename="../main/MainWindow.cpp" line="109"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="109"/>
+        <location filename="../main/MainWindow.cpp" line="110"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="110"/>
+        <location filename="../main/MainWindow.cpp" line="111"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="111"/>
+        <location filename="../main/MainWindow.cpp" line="112"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="113"/>
+        <location filename="../main/MainWindow.cpp" line="114"/>
         <source>&amp;View</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="115"/>
+        <location filename="../main/MainWindow.cpp" line="116"/>
         <source>&amp;Project</source>
         <translation>&amp;Проект</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="117"/>
+        <location filename="../main/MainWindow.cpp" line="118"/>
         <source>&amp;Compile</source>
         <translation>&amp;Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="118"/>
+        <location filename="../main/MainWindow.cpp" line="119"/>
         <source>Compile</source>
         <translation>Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="118"/>
+        <location filename="../main/MainWindow.cpp" line="119"/>
         <source>Ctrl+B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="119"/>
+        <location filename="../main/MainWindow.cpp" line="120"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="119"/>
+        <location filename="../main/MainWindow.cpp" line="120"/>
         <source>F11</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="162"/>
+        <location filename="../main/MainWindow.cpp" line="183"/>
+        <source>open project %1</source>
+        <translation>загрузка проекта %1</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="195"/>
+        <source>can&apos;t open file for read: %1</source>
+        <translation>не могу открыть файл для чтения: %1</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="242"/>
+        <source>project opened %1</source>
+        <translation>проект загружен %1</translation>
+    </message>
+    <message>
+        <source>open project</source>
+        <translation type="vanished">загрузка проекта</translation>
+    </message>
+    <message>
+        <source>can&apos;t open project</source>
+        <translation type="vanished">не могу загрузить проект</translation>
+    </message>
+    <message>
+        <source>project opened</source>
+        <translation type="vanished">проект загружен</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="163"/>
+        <location filename="../main/MainWindow.cpp" line="184"/>
+        <location filename="../main/MainWindow.cpp" line="243"/>
+        <source>project file: %1</source>
+        <translation>файл проекта: %1</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="170"/>
+        <location filename="../main/MainWindow.cpp" line="194"/>
+        <location filename="../main/MainWindow.cpp" line="208"/>
+        <source>can&apos;t open project %1</source>
+        <translation>не могу загрузить проект %1</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="171"/>
+        <source>file not found: %1</source>
+        <translation>файл не найден: %1</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="209"/>
+        <source>file parse error: %1</source>
+        <translation>ошибка парсинга файла: %1</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="139"/>
+        <location filename="../main/MainWindow.cpp" line="140"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="139"/>
-        <location filename="../main/MainWindow.cpp" line="191"/>
+        <location filename="../main/MainWindow.cpp" line="140"/>
+        <location filename="../main/MainWindow.cpp" line="249"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="152"/>
         <source>open file %1</source>
-        <translation>открытие файла %1</translation>
+        <translation type="vanished">открытие файла %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="191"/>
+        <location filename="../main/MainWindow.cpp" line="249"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -429,29 +480,79 @@
         <translation type="vanished">загрузка библиотеки &quot;StandardLibrary&quot; из файла: %1</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="30"/>
         <source>load library &apos;StandardLibrary&apos; from file: %1</source>
-        <translation>загрузка библиотеки &apos;StandardLibrary&apos; из файла: %1</translation>
+        <translation type="vanished">загрузка библиотеки &apos;StandardLibrary&apos; из файла: %1</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="34"/>
         <source>failed to load library &apos;StandardLibrary&apos;: no such file</source>
-        <translation>ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: нет такого файла</translation>
+        <translation type="vanished">ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: нет такого файла</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="41"/>
         <source>failed to load library &apos;StandardLibrary&apos;: can&apos; open file</source>
-        <translation>ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: не могу открыть файл</translation>
+        <translation type="vanished">ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: не могу открыть файл</translation>
+    </message>
+    <message>
+        <source>failed to load library &apos;StandardLibrary&apos;: can&apos;t parse content</source>
+        <translation type="vanished">ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: содержимое файла не соответствует формату</translation>
+    </message>
+    <message>
+        <source>loaded library &apos;StandardLibrary&apos; version %1</source>
+        <translation type="vanished">загружена библиотека &apos;StandardLibrary&apos; версии %1</translation>
     </message>
     <message>
         <location filename="../iec/StandardLibrary.cpp" line="47"/>
-        <source>failed to load library &apos;StandardLibrary&apos;: can&apos;t parse content</source>
-        <translation>ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: содержимое файла не соответствует формату</translation>
+        <location filename="../iec/StandardLibrary.cpp" line="67"/>
+        <source>open library &apos;StandardLibrary&apos;</source>
+        <translation>загрузка библиотеки &apos;StandardLibrary&apos;</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="51"/>
-        <source>loaded library &apos;StandardLibrary&apos; version %1</source>
-        <translation>загружена библиотека &apos;StandardLibrary&apos; версии %1</translation>
+        <location filename="../iec/StandardLibrary.cpp" line="48"/>
+        <location filename="../iec/StandardLibrary.cpp" line="68"/>
+        <location filename="../iec/StandardLibrary.cpp" line="100"/>
+        <source>library &apos;StandardLibrary&apos; file: %1</source>
+        <translation>файл библиотеки &apos;StandardLibrary&apos;: %1</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="78"/>
+        <source>can&apos;t open file for read: %1</source>
+        <translation>не могу открыть файл для чтения: %1</translation>
+    </message>
+    <message>
+        <source>can&apos;t open library &apos;StandardLibrary&apos; file</source>
+        <translation type="vanished">не могу открыть файл библиотеки &apos;StandardLibrary&apos;</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="56"/>
+        <source>file not found: %1</source>
+        <translation>файл не найден: %1</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="55"/>
+        <location filename="../iec/StandardLibrary.cpp" line="77"/>
+        <location filename="../iec/StandardLibrary.cpp" line="90"/>
+        <source>can&apos;t open library &apos;StandardLibrary&apos;</source>
+        <translation>не могу загрузить библиотеку &apos;StandardLibrary&apos;</translation>
+    </message>
+    <message>
+        <source>open default library &apos;StandardLibrary&apos;</source>
+        <translation type="obsolete">загрузка библиотеки  &apos;StandardLibrary&apos;</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="91"/>
+        <source>file parse error: %1</source>
+        <translation>ошибка парсинга файла: %1</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="99"/>
+        <source>library &apos;StandardLibrary&apos; opened, version %1</source>
+        <translation>библиотека &apos;StandardLibrary&apos; загружена, версия %1</translation>
+    </message>
+</context>
+<context>
+    <name>StandardLibrary</name>
+    <message>
+        <source>can&apos;t open library &apos;StandardLibrary&apos;</source>
+        <translation type="obsolete">не могу загрузить библиотеку &apos;StandardLibrary&apos;</translation>
     </message>
 </context>
 <context>
@@ -500,12 +601,12 @@
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="72"/>
+        <location filename="../widget/WidgetEditor.cpp" line="69"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="75"/>
+        <location filename="../widget/WidgetEditor.cpp" line="72"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -513,12 +614,12 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="289"/>
+        <location filename="../widget/WidgetEditor.cpp" line="282"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="292"/>
+        <location filename="../widget/WidgetEditor.cpp" line="285"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

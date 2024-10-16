@@ -34,4 +34,10 @@
         <file>images/hammer.svg</file>
         <file>images/hammer2.svg</file>
     </qresource>
+    <qresource prefix="/lib">
+        <file>lib/StandardLibrary.xml</file>
+    </qresource>
+    <qresource prefix="/proj">
+        <file>proj/plc-e.xml</file>
+    </qresource>
 </RCC>

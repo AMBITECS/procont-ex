@@ -9,6 +9,8 @@ class StandardLibrary
 public:
     static StandardLibrary * instance();
 
+    static void test();
+
 public:
     enum class eNodeType
     {
@@ -17,7 +19,7 @@ public:
     };
 
 public:
-    void load(const QString &path_);
+    void load(const QString &path_ = {});
     QString version() const;
     const QString fileName() const;
 
@@ -31,15 +33,13 @@ public:
     const QDomNode find_pou(const QString &name_) const;
 
 private:
-    /// возвращяет true, если библиотека содержит сущность типа Type_ с именем name_
-    /// проверка на существованиие POU: StandardLibrary::instance()->contents("TON")
-    /// проверка на существованиие dataType: StandardLibrary::instance()->contents("datatype0", StandardLibrary::eNodeType::eNT_Type)
-    bool contents(const QString &name_, eNodeType type_ = eNodeType::eNT_POU) const;
-    /// возвращяет константный объект QDomNode, если библиотека содержит сущность типа Type_ с именем name_, или
+    /// возвращяет true, если библиотека содержит сущность типа type_ с именем name_
+    bool contents(const QString &name_, eNodeType type_) const;
+    /// возвращяет константный объект QDomNode, если библиотека содержит сущность типа type_ с именем name_, или
     /// пустой QDomNode()
-    /// получение QDomNode POU: StandardLibrary::instance()->find("TON")
-    /// получение QDomNode dataType: StandardLibrary::instance()->contents("datatype0", StandardLibrary::eNodeType::eNT_Type)
-    const QDomNode find(const QString &name_, eNodeType type_ = eNodeType::eNT_POU) const;
+    const QDomNode find(const QString &name_, eNodeType type_) const;
+
+    QDomNodeList get_nodes(eNodeType type_) const;
 
 private:
     StandardLibrary() = default;

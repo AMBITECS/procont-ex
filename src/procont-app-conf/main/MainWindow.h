@@ -20,7 +20,7 @@ public:
     ~MainWindow() = default;
 
 private:
-    void open(const QString & filePath);
+    void open(const QString & filePath = {});
     void save(const QString & filePath);
 
 private:

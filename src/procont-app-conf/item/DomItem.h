@@ -87,7 +87,7 @@ public:
         return node().attributes().namedItem("name").nodeValue();
     }
 
-    virtual void updateNode(const QDomNode &)
+    virtual void updateNode(const QDomNode &) override
     {
         qDebug() << node().nodeName() << node().parentNode().nodeName();
     }

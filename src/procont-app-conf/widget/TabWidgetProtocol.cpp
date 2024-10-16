@@ -65,7 +65,7 @@ void CWidgetProtocolTab_message::add(const CMessage &message_)
         else
         {
             QTreeWidgetItem *item = new QTreeWidgetItem(root);
-            item->setText(2, i);
+            item->setText(5, i);
         }
     }
     m_pWidget->sortByColumn(0, Qt::DescendingOrder);

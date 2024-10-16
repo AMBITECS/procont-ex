@@ -34,9 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_baseDir = QFileInfo(QDir::currentPath()).absolutePath();
     m_projDir = QString("%1/proj").arg(m_baseDir);
 
-    StandardLibrary::instance()->load(m_baseDir);
+    StandardLibrary::instance()->load(/*m_baseDir*/);
+    StandardLibrary::instance()->test();
 
-    open(QString("%1/plc-e.xml").arg(m_projDir));
+    open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
 }
 
 void MainWindow::createWidgets()
@@ -149,41 +150,98 @@ void MainWindow::open(const QString & filePath)
 {
     TabWidgetEditor::instance()->closeTabs();
 
-    info(QString(tr("open file %1")).arg(filePath));
+    auto default_file = false;
+    QString _filePath = filePath;
+    QString _fileName = QFileInfo(_filePath.right(_filePath.size()-1)).fileName();
 
-    if (!filePath.isEmpty())
+    if(_filePath.isEmpty())
+        default_file = true;
+    else
+        info(
+            QStringList()
+            << QString(tr("open project %1")).arg(_fileName)
+            << QString(tr("project file: %1")).arg(_filePath)
+            );
+
+    if(!default_file && !QFileInfo::exists(_filePath))
     {
-        QFile file(filePath);
-        if (file.open(QIODevice::ReadOnly))
-        {
-            QDomDocument document;
-            if (document.setContent(&file))
-            {
-                auto newModel = new DomModel(document, this);
+        warn(
+            QStringList()
+            << QString(tr("can't open project %1")).arg(_fileName)
+            << QString(tr("file not found: %1").arg(_filePath))
+            );
 
-                view->setModel(newModel);
-
-                proxy_pou->setSourceModel(newModel);
-                viewPou->setModel(proxy_pou);
-                connect(viewPou, &QTreeView::doubleClicked, TabWidgetEditor::instance(), &TabWidgetEditor::slot_addTabWidget);
-
-                proxy_dev->setSourceModel(newModel);
-                viewDev->setModel(proxy_dev);
-                connect(viewDev, &QTreeView::doubleClicked, TabWidgetEditor::instance(), &TabWidgetEditor::slot_addTabWidget);
-
-                TabWidgetEditor::setModel(newModel);
-
-                delete model; model = newModel;
-                viewPou->expandAll();
-                viewDev->expandAll();
-                for (int i = 0; i < proxy_pou->columnCount(); ++i)
-                    viewPou->resizeColumnToContents(i);
-                for (int i = 0; i < proxy_dev->columnCount(); ++i)
-                    viewDev->resizeColumnToContents(i);
-            }
-            file.close();
-        }
+        default_file = true;
     }
+
+    if(default_file)
+    {
+        _filePath = ":/proj/proj/plc-e.xml";
+        _fileName = QFileInfo(_filePath.right(_filePath.size()-1)).fileName();
+        info(
+            QStringList()
+            << QString(tr("open project %1")).arg(_fileName)
+            << QString(tr("project file: %1")).arg(_filePath)
+            );
+    }
+
+
+    QFile file(_filePath);
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        crit(
+            QStringList()
+            << QString(tr("can't open project %1")).arg(_fileName)
+            << QString(tr("can't open file for read: %1").arg(_filePath))
+            );
+
+        return;
+    }
+    QDomDocument document;
+    auto result = document.setContent(&file);
+    file.close();
+
+    if(!result)
+    {
+        warn(
+            QStringList()
+            << QString(tr("can't open project %1")).arg(_fileName)
+            << QString(tr("file parse error: %1").arg(_filePath))
+            );
+
+        return;
+    }
+
+    if(result)
+    {
+        auto newModel = new DomModel(document, this);
+
+        view->setModel(newModel);
+
+        proxy_pou->setSourceModel(newModel);
+        viewPou->setModel(proxy_pou);
+        connect(viewPou, &QTreeView::doubleClicked, TabWidgetEditor::instance(), &TabWidgetEditor::slot_addTabWidget);
+
+        proxy_dev->setSourceModel(newModel);
+        viewDev->setModel(proxy_dev);
+        connect(viewDev, &QTreeView::doubleClicked, TabWidgetEditor::instance(), &TabWidgetEditor::slot_addTabWidget);
+
+        TabWidgetEditor::setModel(newModel);
+
+        delete model; model = newModel;
+        viewPou->expandAll();
+        viewDev->expandAll();
+        for (int i = 0; i < proxy_pou->columnCount(); ++i)
+            viewPou->resizeColumnToContents(i);
+        for (int i = 0; i < proxy_dev->columnCount(); ++i)
+            viewDev->resizeColumnToContents(i);
+    }
+
+    info(
+        QStringList()
+        << QString(tr("project opened %1")).arg(_fileName)
+        << QString(tr("project file: %1")).arg(_filePath)
+        );
 }
 
 void MainWindow::slot_save()

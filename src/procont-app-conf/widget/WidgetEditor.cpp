@@ -31,8 +31,6 @@ QWidget * WidgetEditor::createVarsEditor()
     XmlParser::typesFromFile(":/resources/types.txt");
 
     // *  variables editor widgets
-    // contauner for variables editor widgets
-    auto container = new QWidget;
     // variables editor toolbar for table manipulations
     auto toolbar_table = new QToolBar;
     auto action = toolbar_table->addAction(QIcon(":/icon/images/plus.svg"), tr("Add"));
@@ -51,6 +49,11 @@ QWidget * WidgetEditor::createVarsEditor()
     _vars_table->horizontalHeader()->setHighlightSections(false);
     _vars_table->setItemDelegateForColumn(7, new CTextEditDelegate);
     connect(_vars_table, &TableView::signal_tableChanged, this, &WidgetEditor::slot_tblVarChanged);
+    auto vb_table = new QVBoxLayout;
+    vb_table->addWidget(toolbar_table);
+    vb_table->addWidget(_vars_table);
+    _m_table_container = new QWidget;
+    _m_table_container->setLayout(vb_table);
     // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
     // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
     // variables editor code editor
@@ -74,13 +77,14 @@ QWidget * WidgetEditor::createVarsEditor()
     // *  variables editor layout
     // vertical (toolbar - table/code editor)
     auto vertical_layout = new QVBoxLayout;
-    vertical_layout->addWidget(toolbar_table);
-    vertical_layout->addWidget(_vars_table);
+    vertical_layout->addWidget(_m_table_container);
     vertical_layout->addWidget(_vars_text);
     // horizontal (vertical - toolbar for switch view)
     auto horizontal_layout = new QHBoxLayout;
     horizontal_layout->addLayout(vertical_layout);
     horizontal_layout->addWidget(toolbar_view);
+    // contauner for variables editor widgets
+    auto container = new QWidget;
     // set layout for container
     container->setLayout(horizontal_layout);
     // ***
@@ -185,7 +189,7 @@ void WidgetEditor::slot_txtViewToggled(bool state)
 
     slot_tblVarChanged();
 
-    _vars_table->hide();
+    _m_table_container->hide();
     _vars_text->show();
 }
 
@@ -196,7 +200,7 @@ void WidgetEditor::slot_tblViewToggled(bool state)
     slot_txtVarChanged();
 
     _vars_text->hide();
-    _vars_table->show();
+    _m_table_container->show();
 }
 
 void WidgetEditor::slot_addVariable()

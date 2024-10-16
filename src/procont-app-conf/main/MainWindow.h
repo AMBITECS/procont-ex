@@ -53,7 +53,8 @@ private:
     ProxyModelTree_pou * proxy_pou = nullptr;
     ProxyModelTree_dev * proxy_dev = nullptr;
 
-    QString m_projectDir = {};
+    QString m_projDir = {};
+    QString m_baseDir = {};
 
     Compiler * _m_compiler = nullptr;
 };

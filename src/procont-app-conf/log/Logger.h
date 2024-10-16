@@ -3,15 +3,15 @@
 
 #include "Message.h"
 
-#define info(X) CMessanger::instance()->information((void*)this_pointer, __PRETTY_FUNCTION__, QStringList(X))
-#define warn(X) CMessanger::instance()->warning((void*)this_pointer, __PRETTY_FUNCTION__, QStringList(X))
-#define crit(X) CMessanger::instance()->critical((void*)this_pointer, __PRETTY_FUNCTION__, QStringList(X))
+#define info(X) CMessanger::instance()->information((void*)this, __PRETTY_FUNCTION__, QStringList(X))
+#define warn(X) CMessanger::instance()->warning((void*)this, __PRETTY_FUNCTION__, QStringList(X))
+#define crit(X) CMessanger::instance()->critical((void*)this, __PRETTY_FUNCTION__, QStringList(X))
 
 #define command(X) CMessanger::instance()->add_cmd(X, CMessage::eMT_Message)
 
-#define b_info(X) CMessanger::instance()->information((void*)this_pointer, __PRETTY_FUNCTION__, QStringList(X), CMessage::eMT_Build)
-#define b_warn(X) CMessanger::instance()->warning((void*)this_pointer, __PRETTY_FUNCTION__, QStringList(X), CMessage::eMT_Build)
-#define b_crit(X) CMessanger::instance()->critical((void*)this_pointer, __PRETTY_FUNCTION__, QStringList(X), CMessage::eMT_Build)
+#define b_info(X) CMessanger::instance()->information((void*)this, __PRETTY_FUNCTION__, QStringList(X), CMessage::eMT_Build)
+#define b_warn(X) CMessanger::instance()->warning((void*)this, __PRETTY_FUNCTION__, QStringList(X), CMessage::eMT_Build)
+#define b_crit(X) CMessanger::instance()->critical((void*)this, __PRETTY_FUNCTION__, QStringList(X), CMessage::eMT_Build)
 
 #define b_command(X) CMessanger::instance()->add_cmd(X, CMessage::eMT_Build)
 

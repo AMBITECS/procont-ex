@@ -6,6 +6,7 @@
 #include "widget/TabWidgetEditor.h"
 #include "widget/TabWidgetProtocol.h"
 #include "log/Logger.h"
+#include "iec/StandardLibrary.h"
 
 #include <QDockWidget>
 #include <QTreeView>
@@ -16,8 +17,6 @@
 #include <QToolBar>
 
 #include <QDebug>
-
-#define this_pointer this
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -32,7 +31,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createMenu();
 
-    open("plc-e.xml");
+    m_baseDir = QFileInfo(QDir::currentPath()).absolutePath();
+    m_projDir = QString("%1/proj").arg(m_baseDir);
+
+    StandardLibrary::instance()->load(m_baseDir);
+
+    open(QString("%1/plc-e.xml").arg(m_projDir));
 }
 
 void MainWindow::createWidgets()
@@ -88,8 +92,6 @@ void MainWindow::createWidgets()
     pDock->setAllowedAreas(Qt::BottomDockWidgetArea);
     pDock->setWidget(CWidgetProtocol::instance());
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
-
-    m_projectDir = QDir::currentPath();
 }
 
 void MainWindow::createMenu()
@@ -138,7 +140,7 @@ void MainWindow::slot_open()
     if(filePath.isEmpty())
         return;
 
-   m_projectDir = QFileInfo(filePath).absoluteDir().absolutePath();
+    m_projDir = QFileInfo(filePath).absoluteDir().absolutePath();
 
     open(filePath);
 }
@@ -256,14 +258,14 @@ void MainWindow::slot_compile()
 #include "generate/Compiler.h"
 
 void MainWindow::slot_build()
-{
+{    
     b_command(CCmd::eCT_Show);
 
     // *** подготовка ST-файла
     // создание папки для сборки
-    auto _buildDir = QString("%1/build").arg(m_projectDir);
+    auto _buildDir = QString("%1/build").arg(m_baseDir);
     QDir(_buildDir).removeRecursively();
-    QDir(m_projectDir).mkdir(_buildDir);
+    QDir(m_baseDir).mkdir(_buildDir);
 
     // формирование ST-файла
     QString st_text = Translator::translate(model->document());
@@ -288,6 +290,4 @@ void MainWindow::slot_build()
     _m_compiler->compile();
     // ***
 }
-
-#undef this_pointer
 

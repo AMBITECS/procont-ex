@@ -2,8 +2,6 @@
 
 #include "log/Logger.h"
 
-#define this_pointer this
-
 // ----------------------------------------------------------------------------
 // *** Compiler ***
 //
@@ -60,5 +58,3 @@ Compiler_matiec::Compiler_matiec(const QString &st_file_, const QString &build_p
 
 }
 // ----------------------------------------------------------------------------
-
-#undef this_pointer

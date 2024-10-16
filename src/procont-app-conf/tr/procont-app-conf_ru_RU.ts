@@ -105,7 +105,7 @@
     <message>
         <location filename="../widget/TabWidgetProtocol.cpp" line="141"/>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Код</translation>
     </message>
     <message>
         <location filename="../widget/TabWidgetProtocol.cpp" line="194"/>
@@ -224,17 +224,17 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../main/MainWindow.cpp" line="49"/>
+        <location filename="../main/MainWindow.cpp" line="53"/>
         <source>Device</source>
         <translation>Устройства</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="59"/>
+        <location filename="../main/MainWindow.cpp" line="63"/>
         <source>POUs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="68"/>
+        <location filename="../main/MainWindow.cpp" line="72"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
@@ -247,97 +247,101 @@
         <translation type="obsolete">Удалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="86"/>
+        <source>load library &apos;StandardLibrary&apos; from: %1/iec/%2</source>
+        <translation type="vanished">загрузка библиотеки &apos;StandardLibrary&apos; из файла %1/etc/%2</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="90"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="97"/>
+        <location filename="../main/MainWindow.cpp" line="99"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="98"/>
+        <location filename="../main/MainWindow.cpp" line="100"/>
         <source>&amp;Open...</source>
         <translation>&amp;Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="99"/>
+        <location filename="../main/MainWindow.cpp" line="101"/>
         <source>&amp;Save...</source>
         <translation>&amp;Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="100"/>
+        <location filename="../main/MainWindow.cpp" line="102"/>
         <source>&amp;Exit</source>
         <translation>&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="102"/>
+        <location filename="../main/MainWindow.cpp" line="104"/>
         <source>&amp;Edit</source>
         <translation>&amp;Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="103"/>
+        <location filename="../main/MainWindow.cpp" line="105"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="104"/>
+        <location filename="../main/MainWindow.cpp" line="106"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="106"/>
+        <location filename="../main/MainWindow.cpp" line="108"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="107"/>
+        <location filename="../main/MainWindow.cpp" line="109"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="108"/>
+        <location filename="../main/MainWindow.cpp" line="110"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="109"/>
+        <location filename="../main/MainWindow.cpp" line="111"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="111"/>
+        <location filename="../main/MainWindow.cpp" line="113"/>
         <source>&amp;View</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="113"/>
+        <location filename="../main/MainWindow.cpp" line="115"/>
         <source>&amp;Project</source>
         <translation>&amp;Проект</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="115"/>
+        <location filename="../main/MainWindow.cpp" line="117"/>
         <source>&amp;Compile</source>
         <translation>&amp;Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="116"/>
+        <location filename="../main/MainWindow.cpp" line="118"/>
         <source>Compile</source>
         <translation>Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="116"/>
+        <location filename="../main/MainWindow.cpp" line="118"/>
         <source>Ctrl+B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="117"/>
+        <location filename="../main/MainWindow.cpp" line="119"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="117"/>
+        <location filename="../main/MainWindow.cpp" line="119"/>
         <source>F11</source>
         <translation type="unfinished"></translation>
     </message>
@@ -346,23 +350,23 @@
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="137"/>
+        <location filename="../main/MainWindow.cpp" line="139"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="137"/>
-        <location filename="../main/MainWindow.cpp" line="189"/>
+        <location filename="../main/MainWindow.cpp" line="139"/>
+        <location filename="../main/MainWindow.cpp" line="191"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="150"/>
+        <location filename="../main/MainWindow.cpp" line="152"/>
         <source>open file %1</source>
         <translation>открытие файла %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="189"/>
+        <location filename="../main/MainWindow.cpp" line="191"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -420,6 +424,35 @@
         <source>Remove</source>
         <translation type="obsolete">Удалить</translation>
     </message>
+    <message>
+        <source>load standard library from: %1</source>
+        <translation type="vanished">загрузка библиотеки &quot;StandardLibrary&quot; из файла: %1</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="30"/>
+        <source>load library &apos;StandardLibrary&apos; from file: %1</source>
+        <translation>загрузка библиотеки &apos;StandardLibrary&apos; из файла: %1</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="34"/>
+        <source>failed to load library &apos;StandardLibrary&apos;: no such file</source>
+        <translation>ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: нет такого файла</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="41"/>
+        <source>failed to load library &apos;StandardLibrary&apos;: can&apos; open file</source>
+        <translation>ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: не могу открыть файл</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="47"/>
+        <source>failed to load library &apos;StandardLibrary&apos;: can&apos;t parse content</source>
+        <translation>ошибка при загрузке библиотеки &apos;StandardLibrary&apos;: содержимое файла не соответствует формату</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="51"/>
+        <source>loaded library &apos;StandardLibrary&apos; version %1</source>
+        <translation>загружена библиотека &apos;StandardLibrary&apos; версии %1</translation>
+    </message>
 </context>
 <context>
     <name>TabWidgetEditor</name>
@@ -457,22 +490,22 @@
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="38"/>
+        <location filename="../widget/WidgetEditor.cpp" line="36"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="40"/>
+        <location filename="../widget/WidgetEditor.cpp" line="38"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="66"/>
+        <location filename="../widget/WidgetEditor.cpp" line="72"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="69"/>
+        <location filename="../widget/WidgetEditor.cpp" line="75"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -480,12 +513,12 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="278"/>
+        <location filename="../widget/WidgetEditor.cpp" line="289"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="281"/>
+        <location filename="../widget/WidgetEditor.cpp" line="292"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

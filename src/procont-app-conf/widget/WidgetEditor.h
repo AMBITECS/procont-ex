@@ -55,6 +55,7 @@ protected:
     TableView * _vars_table = nullptr;
     CodeEditorWidget * _vars_text = nullptr;
     CodeEditorWidget * _body_text = nullptr;
+    QWidget * _m_table_container = nullptr;
 };
 // ----------------------------------------------------------------------------
 

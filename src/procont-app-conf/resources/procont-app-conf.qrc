@@ -33,6 +33,9 @@
         <file>images/delete2.svg</file>
         <file>images/hammer.svg</file>
         <file>images/hammer2.svg</file>
+        <file>images/document.svg</file>
+        <file>images/hierarchy-3.svg</file>
+        <file>images/hierarchy.svg</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/StandardLibrary.xml</file>

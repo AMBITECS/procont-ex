@@ -6,8 +6,12 @@
 
 QT_FORWARD_DECLARE_CLASS(QTreeView)
 QT_FORWARD_DECLARE_CLASS(QDockWidget)
+QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
+QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
 
 QT_FORWARD_DECLARE_CLASS(DomModel)
+QT_FORWARD_DECLARE_CLASS(DomItem)
+QT_FORWARD_DECLARE_CLASS(TreeView)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_pou)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_dev)
 QT_FORWARD_DECLARE_CLASS(Compiler)
@@ -26,6 +30,7 @@ private:
 private:
     void createWidgets();
     void createMenu();
+    void createDynamicActions();
 
 private slots:
     void slot_open();
@@ -39,7 +44,20 @@ private slots:
     void slot_compile();
     void slot_build();
 
+    void slot_addDUT();
+    void slot_addPOU();
+
+    void slot_pouCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
+
     void slot_currentViewChanged(const QModelIndex &index);
+
+    void slot_pouCustomContextMenu(const QPoint &);
+
+private:
+    static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
+    static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
+    static QAbstractProxyModel * proxy(QAbstractItemModel *);
+    static DomItem * item(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
 
 private:
     QDockWidget * dockPou = nullptr;
@@ -47,7 +65,7 @@ private:
 
     QTreeView * view = nullptr;
     QTreeView * viewDev = nullptr;
-    QTreeView * viewPou = nullptr;
+    TreeView * viewPou = nullptr;
 
     DomModel * model = nullptr;
     ProxyModelTree_pou * proxy_pou = nullptr;
@@ -57,6 +75,9 @@ private:
     QString m_baseDir = {};
 
     Compiler * _m_compiler = nullptr;
+
+    QMultiHash<QString, QAction *> _m_dynamicActions;
+    QMenu * _m_contextMenu;
 };
 
 #endif // MAINWINDOW_H

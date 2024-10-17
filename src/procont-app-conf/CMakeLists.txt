@@ -57,6 +57,8 @@ set(PROJECT_SOURCES
     translator/TranslatorSfc.h translator/TranslatorSfc.cpp
     iec/StandardLibrary.cpp iec/StandardLibrary.h
     resources/procont-app-conf.qrc
+    dialog/AddPOUDialog.h dialog/AddPOUDialog.cpp dialog/AddPOUDialog.ui
+    dialog/AddTypeDialog.h dialog/AddTypeDialog.cpp dialog/AddTypeDialog.ui
 )
 
 qt_translate(

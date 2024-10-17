@@ -7,6 +7,7 @@
 #include "widget/TabWidgetProtocol.h"
 #include "log/Logger.h"
 #include "iec/StandardLibrary.h"
+#include "view/TreeView.h"
 
 #include <QDockWidget>
 #include <QTreeView>
@@ -21,7 +22,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     proxy_pou(new ProxyModelTree_pou),
-    proxy_dev(new ProxyModelTree_dev)
+    proxy_dev(new ProxyModelTree_dev),
+    _m_contextMenu(new QMenu)
 {
     setMinimumSize(QSize(1440, 900));
 
@@ -30,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
     createWidgets();
 
     createMenu();
+
+    createDynamicActions();
 
     m_baseDir = QFileInfo(QDir::currentPath()).absolutePath();
     m_projDir = QString("%1/proj").arg(m_baseDir);
@@ -57,10 +61,12 @@ void MainWindow::createWidgets()
     dockDev->setWidget(viewDev);
     addDockWidget(Qt::LeftDockWidgetArea, dockDev);
 
-    viewPou = new QTreeView();
+    viewPou = new TreeView();
     viewPou->setExpandsOnDoubleClick(false);
     viewPou->setMinimumSize(250, 400);
     viewPou->setHeaderHidden(true);
+    viewPou->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(viewPou, &QTreeView::customContextMenuRequested, this, &MainWindow::slot_pouCustomContextMenu);
     dockPou = new QDockWidget(tr("POUs"), this);
     dockPou->setTitleBarWidget(new QWidget());
     dockPou->setAllowedAreas(Qt::LeftDockWidgetArea);
@@ -97,12 +103,12 @@ void MainWindow::createWidgets()
 
 void MainWindow::createMenu()
 {
-    auto fileMenu = menuBar()->addMenu(tr("&File"));
-    auto file_open_act = fileMenu->addAction(QIcon(":/icon/images/open.svg"), tr("&Open..."), QKeySequence::Open, this, &MainWindow::slot_open);
-    auto file_save_act = fileMenu->addAction(QIcon(":/icon/images/save.svg"), tr("&Save..."), QKeySequence::Save, this, &MainWindow::slot_save);
-    fileMenu->addAction(tr("&Exit"), QKeySequence::Quit, this, &QWidget::close);
+    auto fileMenu = menuBar()->addMenu(tr("File"));
+    auto file_open_act = fileMenu->addAction(QIcon(":/icon/images/open.svg"), tr("Open..."), QKeySequence::Open, this, &MainWindow::slot_open);
+    auto file_save_act = fileMenu->addAction(QIcon(":/icon/images/save.svg"), tr("Save..."), QKeySequence::Save, this, &MainWindow::slot_save);
+    fileMenu->addAction(tr("Exit"), QKeySequence::Quit, this, &QWidget::close);
 
-    auto editMenu = menuBar()->addMenu(tr("&Edit"));
+    auto editMenu = menuBar()->addMenu(tr("Edit"));
     auto edit_undo_act = editMenu->addAction(QIcon(":/icon/images/undo1.svg"), tr("Undo"), QKeySequence::Undo, this, &MainWindow::slot_undo);
     auto edit_redo_act = editMenu->addAction(QIcon(":/icon/images/redo1.svg"), tr("Redo"), QKeySequence::Redo, this, &MainWindow::slot_redo);
     editMenu->addSeparator();
@@ -111,13 +117,14 @@ void MainWindow::createMenu()
     auto edit_paste_act = editMenu->addAction(QIcon(":/icon/images/paste.svg"), tr("Paste"), QKeySequence::Paste, this, &MainWindow::slot_paste);
     auto edit_delete_act = editMenu->addAction(QIcon(":/icon/images/delete2.svg"), tr("Delete"), QKeySequence::Delete, this, &MainWindow::slot_delete);
 
-    auto viewMenu = menuBar()->addMenu(tr("&View"));
+    auto viewMenu = menuBar()->addMenu(tr("View"));
 
-    auto projectMenu = menuBar()->addMenu(tr("&Project"));
+    auto projectMenu = menuBar()->addMenu(tr("Project"));
+    auto add_object_menu = projectMenu->addMenu(tr("Add object"));
 
-    auto compileMenu = menuBar()->addMenu(tr("&Compile"));
-    auto compile_compile_act = compileMenu->addAction(tr("Compile"), QKeySequence(tr("Ctrl+B")), this, &MainWindow::slot_compile);
-    auto compile_build_act = compileMenu->addAction(QIcon(":/icon/images/hammer2.svg"), tr("Build"), QKeySequence(tr("F11")), this, &MainWindow::slot_build);
+    auto compileMenu = menuBar()->addMenu(tr("Compile"));
+    auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
+    auto compile_build_act = compileMenu->addAction(QIcon(":/icon/images/hammer2.svg"), tr("Build"), QKeySequence(tr("Ctrl+Shift+B")), this, &MainWindow::slot_build);
 
     auto toolbar = addToolBar("main");
     toolbar->addAction(file_open_act);
@@ -133,6 +140,79 @@ void MainWindow::createMenu()
     toolbar->addSeparator();
     toolbar->addAction(compile_build_act);
     toolbar->setIconSize(QSize(24, 24));
+}
+
+void MainWindow::createDynamicActions()
+{
+    // Type
+    auto act = new QAction(QIcon(":/icon/images/hierarchy-3.svg"), tr("DUT"));
+    connect(act, &QAction::triggered, this, &MainWindow::slot_addDUT);
+    _m_dynamicActions.insert("project", act);
+    _m_dynamicActions.insert("dataTypes", act);
+
+    // POU
+    act = new QAction(QIcon(":/icon/images/document.svg"), tr("POU"));
+    connect(act, &QAction::triggered, this, &MainWindow::slot_addPOU);
+    _m_dynamicActions.insert("project", act);
+    _m_dynamicActions.insert("pous", act);
+}
+
+void MainWindow::slot_pouCustomContextMenu(const QPoint &pos_)
+{
+    QModelIndex index = viewPou->indexAt(pos_);
+    if(index.isValid())
+    {
+        QDomNode node = item(index)->node();
+        QList<QAction *> acts = _m_dynamicActions.values(node.nodeName());
+        if(acts.size())
+        {
+            _m_contextMenu->clear();
+            for(auto i : std::as_const(acts))
+                _m_contextMenu->addAction(i);
+            _m_contextMenu->exec(viewPou->viewport()->mapToGlobal(pos_));
+        }
+    }
+}
+
+void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    if(current.isValid())
+    {
+        qDebug() << item(current)->node().nodeName();
+    }
+}
+
+void MainWindow::slot_addDUT()
+{
+    qDebug() << __PRETTY_FUNCTION__;
+}
+
+void MainWindow::slot_addPOU()
+{
+    qDebug() << __PRETTY_FUNCTION__;
+}
+
+QModelIndex MainWindow::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
+{
+    if(proxy == nullptr)
+        return reinterpret_cast<const QAbstractProxyModel*>(index.model())->mapToSource(index);
+
+    return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapToSource(index);
+}
+
+QModelIndex MainWindow::p_index(const QModelIndex &index, QAbstractItemModel * proxy)
+{
+    return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapFromSource(index);
+}
+
+QAbstractProxyModel * MainWindow::proxy(QAbstractItemModel *model)
+{
+    return reinterpret_cast<QAbstractProxyModel*>(model);
+}
+
+DomItem * MainWindow::item(const QModelIndex &index, QAbstractItemModel * proxy)
+{
+    return reinterpret_cast<DomItem *>(s_index(index, proxy).internalPointer());
 }
 
 void MainWindow::slot_open()
@@ -221,6 +301,7 @@ void MainWindow::open(const QString & filePath)
         proxy_pou->setSourceModel(newModel);
         viewPou->setModel(proxy_pou);
         connect(viewPou, &QTreeView::doubleClicked, TabWidgetEditor::instance(), &TabWidgetEditor::slot_addTabWidget);
+        connect(viewPou->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::slot_pouCurrentChanged);
 
         proxy_dev->setSourceModel(newModel);
         viewDev->setModel(proxy_dev);

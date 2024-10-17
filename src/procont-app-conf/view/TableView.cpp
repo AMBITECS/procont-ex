@@ -1,4 +1,5 @@
 #include "TableView.h"
+
 #include <QMouseEvent>
 
 TableView::TableView(QWidget *parent) : QTableView(parent)
@@ -22,7 +23,7 @@ void TableView::slot_dataChanged(const QModelIndex &topLeft, const QModelIndex &
     Q_UNUSED(roles);
 
     emit signal_tableChanged();
-    }
+}
 
 void TableView::slot_rowsRemoved(const QModelIndex &parent, int first, int last)
 {

@@ -6,7 +6,10 @@
 class TreeView : public QTreeView
 {
 public:
-    TreeView();
+    TreeView(QWidget *parent = nullptr);
+
+private:
+    virtual void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif // TREEVIEW_H

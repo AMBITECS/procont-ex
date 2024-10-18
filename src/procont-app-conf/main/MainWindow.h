@@ -77,7 +77,9 @@ private:
     Compiler * _m_compiler = nullptr;
 
     QMultiHash<QString, QAction *> _m_dynamicActions;
-    QMenu * _m_contextMenu;
+    QMenu * _m_projectMenu = nullptr;
+    // QMenu * _m_pouContextMenu = nullptr;
+    // QMenu * _m_addObjectMenu = nullptr;
 };
 
 #endif // MAINWINDOW_H

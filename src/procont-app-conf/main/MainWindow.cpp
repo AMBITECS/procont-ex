@@ -22,8 +22,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     proxy_pou(new ProxyModelTree_pou),
-    proxy_dev(new ProxyModelTree_dev),
-    _m_contextMenu(new QMenu)
+    proxy_dev(new ProxyModelTree_dev)
 {
     setMinimumSize(QSize(1440, 900));
 
@@ -119,8 +118,7 @@ void MainWindow::createMenu()
 
     auto viewMenu = menuBar()->addMenu(tr("View"));
 
-    auto projectMenu = menuBar()->addMenu(tr("Project"));
-    auto add_object_menu = projectMenu->addMenu(tr("Add object"));
+    _m_projectMenu = menuBar()->addMenu(tr("Project"));
 
     auto compileMenu = menuBar()->addMenu(tr("Compile"));
     auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
@@ -166,20 +164,29 @@ void MainWindow::slot_pouCustomContextMenu(const QPoint &pos_)
         QList<QAction *> acts = _m_dynamicActions.values(node.nodeName());
         if(acts.size())
         {
-            _m_contextMenu->clear();
+            auto menu = new QMenu;
             for(auto i : std::as_const(acts))
-                _m_contextMenu->addAction(i);
-            _m_contextMenu->exec(viewPou->viewport()->mapToGlobal(pos_));
+                menu->addAction(i);
+            menu->exec(viewPou->viewport()->mapToGlobal(pos_));
         }
     }
 }
 
-void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModelIndex &previous)
+void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModelIndex &)
 {
+    _m_projectMenu->clear();
+    auto menu = new QMenu(tr("Add object"));
     if(current.isValid())
     {
-        qDebug() << item(current)->node().nodeName();
+        QDomNode node = item(current)->node();
+        QList<QAction *> acts = _m_dynamicActions.values(node.nodeName());
+        if(acts.size())
+        {
+            for(auto i : std::as_const(acts))
+                menu->addAction(i);
+        }
     }
+    _m_projectMenu->addMenu(menu);
 }
 
 void MainWindow::slot_addDUT()

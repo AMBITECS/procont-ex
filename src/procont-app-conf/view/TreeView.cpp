@@ -10,8 +10,12 @@ void TreeView::mousePressEvent(QMouseEvent *event)
 {
     QModelIndex item = indexAt(event->pos());
 
-    if (item.row() == -1 && item.column() == -1)
+    if(item.row() == -1 || item.column() == -1)
+    {
         clearSelection();
+        setCurrentIndex(QModelIndex());
+        emit selectionModel()->currentChanged(QModelIndex(), QModelIndex());
+    }
 
     QTreeView::mousePressEvent(event);
 }

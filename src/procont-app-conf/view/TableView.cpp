@@ -11,7 +11,10 @@ void TableView::mousePressEvent(QMouseEvent *event)
     QModelIndex item = indexAt(event->pos());
 
     if (item.row() == -1 && item.column() == -1)
+    {
         clearSelection();
+        setCurrentIndex(QModelIndex());
+    }
 
     QTableView::mousePressEvent(event);
 }

@@ -110,7 +110,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Rounding up/down]]</xhtmp:p>
+          <xhtml:p><![CDATA[Rounding up/down]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="DATE_AND_TIME_TO_TIME_OF_DAY" pouType="function">
@@ -134,7 +134,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Conversion to time-of-day]]</xhtmp:p>
+          <xhtml:p><![CDATA[Conversion to time-of-day]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="DATE_AND_TIME_TO_DATE" pouType="function">
@@ -158,7 +158,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Conversion to date]]</xhtmp:p>
+          <xhtml:p><![CDATA[Conversion to date]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ABS" pouType="function">
@@ -182,7 +182,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Absolute number]]</xhtmp:p>
+          <xhtml:p><![CDATA[Absolute number]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SQRT" pouType="function">
@@ -206,7 +206,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Square root (base 2)]]</xhtmp:p>
+          <xhtml:p><![CDATA[Square root (base 2)]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="LN" pouType="function">
@@ -230,7 +230,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Natural logarithm]]</xhtmp:p>
+          <xhtml:p><![CDATA[Natural logarithm]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="LOG" pouType="function">
@@ -254,7 +254,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Logarithm to base 10]]</xhtmp:p>
+          <xhtml:p><![CDATA[Logarithm to base 10]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="EXP" pouType="function">
@@ -278,7 +278,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Exponentiation]]</xhtmp:p>
+          <xhtml:p><![CDATA[Exponentiation]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SIN" pouType="function">
@@ -302,7 +302,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Sine]]</xhtmp:p>
+          <xhtml:p><![CDATA[Sine]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="COS" pouType="function">
@@ -326,7 +326,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Cosine]]</xhtmp:p>
+          <xhtml:p><![CDATA[Cosine]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="TAN" pouType="function">
@@ -350,7 +350,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Tangent]]</xhtmp:p>
+          <xhtml:p><![CDATA[Tangent]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ASIN" pouType="function">
@@ -374,7 +374,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Arc sine]]</xhtmp:p>
+          <xhtml:p><![CDATA[Arc sine]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ACOS" pouType="function">
@@ -398,7 +398,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Arc cosine]]</xhtmp:p>
+          <xhtml:p><![CDATA[Arc cosine]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ATAN" pouType="function">
@@ -422,7 +422,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Arc tangent]]</xhtmp:p>
+          <xhtml:p><![CDATA[Arc tangent]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ADD" pouType="function">
@@ -451,7 +451,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Addition]]</xhtmp:p>
+          <xhtml:p><![CDATA[Addition]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MUL" pouType="function">
@@ -480,7 +480,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Multiplication]]</xhtmp:p>
+          <xhtml:p><![CDATA[Multiplication]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB" pouType="function">
@@ -509,7 +509,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Subtraction]]</xhtmp:p>
+          <xhtml:p><![CDATA[Subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="DIV" pouType="function">
@@ -538,7 +538,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Division]]</xhtmp:p>
+          <xhtml:p><![CDATA[Division]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MOD" pouType="function">
@@ -567,7 +567,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Remainder (modulo)]]</xhtmp:p>
+          <xhtml:p><![CDATA[Remainder (modulo)]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="EXPT" pouType="function">
@@ -596,7 +596,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Exponent]]</xhtmp:p>
+          <xhtml:p><![CDATA[Exponent]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MOVE" pouType="function">
@@ -620,7 +620,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Assignment]]</xhtmp:p>
+          <xhtml:p><![CDATA[Assignment]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ADD" pouType="function">
@@ -649,7 +649,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time addition]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time addition]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ADD_TIME" pouType="function">
@@ -678,7 +678,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time addition]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time addition]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ADD" pouType="function">
@@ -707,7 +707,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time-of-day addition+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time-of-day addition+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ADD_TOD_TIME" pouType="function">
@@ -736,7 +736,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time-of-day addition]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time-of-day addition]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ADD" pouType="function">
@@ -765,7 +765,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Date addition+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Date addition+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ADD_DT_TIME" pouType="function">
@@ -794,7 +794,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Date addition]]</xhtmp:p>
+          <xhtml:p><![CDATA[Date addition]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MUL" pouType="function">
@@ -823,7 +823,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time multiplication+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time multiplication+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MULTIME" pouType="function">
@@ -852,7 +852,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time multiplication]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time multiplication]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_TIME" pouType="function">
@@ -881,7 +881,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time subtraction]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB" pouType="function">
@@ -910,7 +910,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time subtraction]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB" pouType="function">
@@ -939,7 +939,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Date subtraction+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Date subtraction+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_DATE_DATE" pouType="function">
@@ -968,7 +968,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Date subtraction]]</xhtmp:p>
+          <xhtml:p><![CDATA[Date subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB" pouType="function">
@@ -997,7 +997,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time-of-day subtraction+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time-of-day subtraction+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_TOD_TIME" pouType="function">
@@ -1026,7 +1026,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time-of-day subtraction]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time-of-day subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB" pouType="function">
@@ -1055,7 +1055,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time-of-day subtraction+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time-of-day subtraction+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_TOD_TOD" pouType="function">
@@ -1084,7 +1084,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time-of-day subtraction]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time-of-day subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB" pouType="function">
@@ -1113,7 +1113,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Date and time subtraction+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Date and time subtraction+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_DT_TIME" pouType="function">
@@ -1142,7 +1142,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Date and time subtraction]]</xhtmp:p>
+          <xhtml:p><![CDATA[Date and time subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB" pouType="function">
@@ -1171,7 +1171,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Date and time subtraction+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Date and time subtraction+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_DT_DT" pouType="function">
@@ -1200,7 +1200,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Date and time subtraction]]</xhtmp:p>
+          <xhtml:p><![CDATA[Date and time subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="DIV" pouType="function">
@@ -1229,7 +1229,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time division+" "+_("DEPRECATED")]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time division+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="DIVTIME" pouType="function">
@@ -1258,7 +1258,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time division]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time division]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SHL" pouType="function">
@@ -1277,7 +1277,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Number of bits to be shifted]]</xhtmp:p>
+                <xhtml:p><![CDATA[Number of bits to be shifted]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -1290,7 +1290,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Shift left]]</xhtmp:p>
+          <xhtml:p><![CDATA[Shift left]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SHR" pouType="function">
@@ -1309,7 +1309,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Number of bits to be shifted]]</xhtmp:p>
+                <xhtml:p><![CDATA[Number of bits to be shifted]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -1322,7 +1322,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Shift right]]</xhtmp:p>
+          <xhtml:p><![CDATA[Shift right]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ROR" pouType="function">
@@ -1341,7 +1341,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Number of bits to be shifted]]</xhtmp:p>
+                <xhtml:p><![CDATA[Number of bits to be shifted]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -1354,7 +1354,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Rotate right]]</xhtmp:p>
+          <xhtml:p><![CDATA[Rotate right]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="ROL" pouType="function">
@@ -1373,7 +1373,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Number of bits to be shifted]]</xhtmp:p>
+                <xhtml:p><![CDATA[Number of bits to be shifted]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -1386,7 +1386,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Rotate left]]</xhtmp:p>
+          <xhtml:p><![CDATA[Rotate left]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="AND" pouType="function">
@@ -1415,7 +1415,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Bitwise AND]]</xhtmp:p>
+          <xhtml:p><![CDATA[Bitwise AND]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="OR" pouType="function">
@@ -1444,7 +1444,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Bitwise OR]]</xhtmp:p>
+          <xhtml:p><![CDATA[Bitwise OR]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="XOR" pouType="function">
@@ -1473,7 +1473,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Bitwise XOR]]</xhtmp:p>
+          <xhtml:p><![CDATA[Bitwise XOR]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="NOT" pouType="function">
@@ -1497,7 +1497,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Bitwise inverting]]</xhtmp:p>
+          <xhtml:p><![CDATA[Bitwise inverting]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SEL" pouType="function">
@@ -1511,7 +1511,7 @@
                  <BOOL/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Selection out of 2 inputs (gate)]]</xhtmp:p>
+                <xhtml:p><![CDATA[Selection out of 2 inputs (gate)]]></xhtml:p>
               </documentation>
             </variable>
             <variable name="var1">
@@ -1534,7 +1534,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Binary selection (1 of 2)]]</xhtmp:p>
+          <xhtml:p><![CDATA[Binary selection (1 of 2)]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MAX" pouType="function">
@@ -1563,7 +1563,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Maximum]]</xhtmp:p>
+          <xhtml:p><![CDATA[Maximum]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MIN" pouType="function">
@@ -1592,7 +1592,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Minimum]]</xhtmp:p>
+          <xhtml:p><![CDATA[Minimum]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="LIMIT" pouType="function">
@@ -1606,7 +1606,7 @@
                  <ANY/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Minimum value for limitation]]</xhtmp:p>
+                <xhtml:p><![CDATA[Minimum value for limitation]]></xhtml:p>
               </documentation>
             </variable>
             <variable name="var1">
@@ -1619,7 +1619,7 @@
                  <ANY/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Maximum value for limitation]]</xhtmp:p>
+                <xhtml:p><![CDATA[Maximum value for limitation]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -1632,7 +1632,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Limitation]]</xhtmp:p>
+          <xhtml:p><![CDATA[Limitation]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MUX" pouType="function">
@@ -1646,7 +1646,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Selection out of n inputs]]</xhtmp:p>
+                <xhtml:p><![CDATA[Selection out of n inputs]]></xhtml:p>
               </documentation>
             </variable>
             <variable name="var1">
@@ -1669,7 +1669,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Multiplexer (select 1 of N)]]</xhtmp:p>
+          <xhtml:p><![CDATA[Multiplexer (select 1 of N)]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="GT" pouType="function">
@@ -1698,7 +1698,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Greater than]]</xhtmp:p>
+          <xhtml:p><![CDATA[Greater than]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="GE" pouType="function">
@@ -1727,7 +1727,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Greater than or equal to]]</xhtmp:p>
+          <xhtml:p><![CDATA[Greater than or equal to]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="EQ" pouType="function">
@@ -1756,7 +1756,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Equal to]]</xhtmp:p>
+          <xhtml:p><![CDATA[Equal to]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="LT" pouType="function">
@@ -1785,7 +1785,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Less than]]</xhtmp:p>
+          <xhtml:p><![CDATA[Less than]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="LE" pouType="function">
@@ -1814,7 +1814,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Less than or equal to]]</xhtmp:p>
+          <xhtml:p><![CDATA[Less than or equal to]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="NE" pouType="function">
@@ -1843,7 +1843,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Not equal to]]</xhtmp:p>
+          <xhtml:p><![CDATA[Not equal to]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="LEN" pouType="function">
@@ -1867,7 +1867,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Length of string]]</xhtmp:p>
+          <xhtml:p><![CDATA[Length of string]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="LEFT" pouType="function">
@@ -1886,7 +1886,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Left position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -1899,7 +1899,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[string left of]]</xhtmp:p>
+          <xhtml:p><![CDATA[string left of]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="RIGHT" pouType="function">
@@ -1918,7 +1918,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Left position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -1931,7 +1931,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[string right of]]</xhtmp:p>
+          <xhtml:p><![CDATA[string right of]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="MID" pouType="function">
@@ -1950,7 +1950,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Left position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
             <variable name="var2">
@@ -1958,7 +1958,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Position within character string]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -1971,7 +1971,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[string from the middle]]</xhtmp:p>
+          <xhtml:p><![CDATA[string from the middle]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="CONCAT" pouType="function">
@@ -2000,7 +2000,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Concatenation]]</xhtmp:p>
+          <xhtml:p><![CDATA[Concatenation]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="CONCAT_DATE_TOD" pouType="function">
@@ -2029,7 +2029,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Time concatenation]]</xhtmp:p>
+          <xhtml:p><![CDATA[Time concatenation]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="INSERT" pouType="function">
@@ -2053,7 +2053,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Position within character string]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -2066,7 +2066,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Insertion (into)]]</xhtmp:p>
+          <xhtml:p><![CDATA[Insertion (into)]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="DELETE" pouType="function">
@@ -2085,7 +2085,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Left position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
             <variable name="var2">
@@ -2093,7 +2093,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Position within character string]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -2106,7 +2106,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Deletion (within)]]</xhtmp:p>
+          <xhtml:p><![CDATA[Deletion (within)]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="REPLACE" pouType="function">
@@ -2130,7 +2130,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Left position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
             <variable name="var3">
@@ -2138,7 +2138,7 @@
                  <ANY_INT/>
               </type>
               <documentation>
-                <xhtpl:p><![CDATA[Position within character string]]</xhtmp:p>
+                <xhtml:p><![CDATA[Position within character string]]></xhtml:p>
               </documentation>
             </variable>
           </inputVars>
@@ -2151,7 +2151,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Replacement (within)]]</xhtmp:p>
+          <xhtml:p><![CDATA[Replacement (within)]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="FIND" pouType="function">
@@ -2180,7 +2180,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtpl:p><![CDATA[Find position]]</xhtmp:p>
+          <xhtml:p><![CDATA[Find position]]></xhtml:p>
         </documentation>
       </pou>
     </pous>

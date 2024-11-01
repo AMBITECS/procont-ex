@@ -79,7 +79,7 @@ foreach(@funcs)
 		print '                 <', $v->{'type'}, '/>', "\n";
 		print '              </type>', "\n";
 	        print '              <documentation>', "\n";
-		print '                <xhtpl:p><![CDATA[', $v->{'doc'}, ']]</xhtmp:p>', "\n";
+		print '                <xhtml:p><![CDATA[', $v->{'doc'}, ']]></xhtml:p>', "\n";
 		print '              </documentation>', "\n";
 	    }
 	}
@@ -103,7 +103,7 @@ foreach(@funcs)
     print '        </addData>', "\n";
 
     print '        <documentation>', "\n";
-    print '          <xhtpl:p><![CDATA[', $_->{'doc'}, ']]</xhtmp:p>', "\n";
+    print '          <xhtml:p><![CDATA[', $_->{'doc'}, ']]></xhtml:p>', "\n";
     print '        </documentation>', "\n";
 
     print '      </pou>', "\n";

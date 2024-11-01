@@ -55,6 +55,7 @@ void ILibrary::load()
             QStringList()
             << QString(QObject::tr("can't open library '%1'")).arg(_m_name)
             << QString(QObject::tr("file parse error: %1").arg(_m_filePath))
+            << QString("%1 in line %2, column %3").arg(result.errorMessage).arg(result.errorLine).arg(result.errorColumn)
             );
 
         return;

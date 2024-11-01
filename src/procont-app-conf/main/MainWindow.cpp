@@ -8,6 +8,11 @@
 #include "log/Logger.h"
 #include "iec/StandardLibrary.h"
 #include "view/TreeView.h"
+#include "dialog/InputAssistantDialog.h"
+#include "dialog/AddPOUDialog.h"
+#include "dialog/AddTypeDialog.h"
+#include "generate/Translator.h"
+#include "generate/Compiler.h"
 
 #include <QDockWidget>
 #include <QTreeView>
@@ -16,6 +21,7 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QToolBar>
+#include <QToolButton>
 
 #include <QDebug>
 
@@ -115,6 +121,8 @@ void MainWindow::createMenu()
     auto edit_copy_act = editMenu->addAction(QIcon(":/icon/images/copy.svg"), tr("Copy"), QKeySequence::Copy, this, &MainWindow::slot_copy);
     auto edit_paste_act = editMenu->addAction(QIcon(":/icon/images/paste.svg"), tr("Paste"), QKeySequence::Paste, this, &MainWindow::slot_paste);
     auto edit_delete_act = editMenu->addAction(QIcon(":/icon/images/delete2.svg"), tr("Delete"), QKeySequence::Delete, this, &MainWindow::slot_delete);
+    editMenu->addSeparator();
+    auto edit_input_assistant_act = editMenu->addAction(QIcon(":/icon/images/hierarchy.svg"), tr("Input assistant..."), QKeySequence(tr("F2")), this, &MainWindow::slot_input_assistant);
 
     auto viewMenu = menuBar()->addMenu(tr("View"));
 
@@ -135,6 +143,10 @@ void MainWindow::createMenu()
     toolbar->addAction(edit_copy_act);
     toolbar->addAction(edit_paste_act);
     toolbar->addAction(edit_delete_act);
+
+    _m_button = new QToolButton();
+    toolbar->addWidget(_m_button);
+
     toolbar->addSeparator();
     toolbar->addAction(compile_build_act);
     toolbar->setIconSize(QSize(24, 24));
@@ -187,16 +199,21 @@ void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModel
         }
     }
     _m_projectMenu->addMenu(menu);
+
+    _m_button->setMenu(menu);
+    _m_button->setPopupMode(QToolButton::InstantPopup);
 }
 
 void MainWindow::slot_addDUT()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    AddTypeDialog dlg;
+    dlg.exec();
 }
 
 void MainWindow::slot_addPOU()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    AddPOUDialog dlg;
+    dlg.exec();
 }
 
 QModelIndex MainWindow::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
@@ -396,12 +413,15 @@ void MainWindow::slot_delete()
 {
 }
 
+void MainWindow::slot_input_assistant()
+{
+    InputAssistantDialog dlg;
+    dlg.exec();
+}
+
 void MainWindow::slot_compile()
 {
 }
-
-#include "generate/Translator.h"
-#include "generate/Compiler.h"
 
 void MainWindow::slot_build()
 {    

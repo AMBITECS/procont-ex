@@ -8,6 +8,7 @@ QT_FORWARD_DECLARE_CLASS(QTreeView)
 QT_FORWARD_DECLARE_CLASS(QDockWidget)
 QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
 QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
+QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 QT_FORWARD_DECLARE_CLASS(DomModel)
 QT_FORWARD_DECLARE_CLASS(DomItem)
@@ -41,6 +42,8 @@ private slots:
     void slot_copy();
     void slot_paste();
     void slot_delete();
+    void slot_input_assistant();
+
     void slot_compile();
     void slot_build();
 
@@ -80,6 +83,8 @@ private:
     QMenu * _m_projectMenu = nullptr;
     // QMenu * _m_pouContextMenu = nullptr;
     // QMenu * _m_addObjectMenu = nullptr;
+
+    QToolButton * _m_button;
 };
 
 #endif // MAINWINDOW_H

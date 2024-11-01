@@ -240,17 +240,17 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../main/MainWindow.cpp" line="57"/>
+        <location filename="../main/MainWindow.cpp" line="63"/>
         <source>Device</source>
         <translation>Устройства</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="69"/>
+        <location filename="../main/MainWindow.cpp" line="75"/>
         <source>POUs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="78"/>
+        <location filename="../main/MainWindow.cpp" line="84"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
@@ -267,7 +267,7 @@
         <translation type="vanished">загрузка библиотеки &apos;StandardLibrary&apos; из файла %1/etc/%2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="96"/>
+        <location filename="../main/MainWindow.cpp" line="102"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
@@ -292,72 +292,86 @@
         <translation type="vanished">&amp;Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="105"/>
+        <location filename="../main/MainWindow.cpp" line="111"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="106"/>
+        <location filename="../main/MainWindow.cpp" line="112"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="107"/>
+        <location filename="../main/MainWindow.cpp" line="113"/>
         <source>Save...</source>
         <translation>Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="108"/>
+        <location filename="../main/MainWindow.cpp" line="114"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="110"/>
+        <location filename="../main/MainWindow.cpp" line="116"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="111"/>
+        <location filename="../main/MainWindow.cpp" line="117"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="112"/>
+        <location filename="../main/MainWindow.cpp" line="118"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="114"/>
+        <location filename="../main/MainWindow.cpp" line="120"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="115"/>
+        <location filename="../main/MainWindow.cpp" line="121"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="116"/>
+        <location filename="../main/MainWindow.cpp" line="122"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="117"/>
+        <location filename="../main/MainWindow.cpp" line="123"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="119"/>
+        <source>Input assistant</source>
+        <translation type="vanished">Ассистент ввода...</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="125"/>
+        <source>F2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="125"/>
+        <source>Input assistant...</source>
+        <translation>Ассистент ввода...</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="127"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="125"/>
+        <location filename="../main/MainWindow.cpp" line="133"/>
         <source>Ctrl+Shift+B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="146"/>
+        <location filename="../main/MainWindow.cpp" line="158"/>
         <source>DUT</source>
         <translation type="unfinished"></translation>
     </message>
@@ -366,12 +380,12 @@
         <translation type="vanished">&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="121"/>
+        <location filename="../main/MainWindow.cpp" line="129"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="178"/>
+        <location filename="../main/MainWindow.cpp" line="190"/>
         <source>Add object</source>
         <translation>Добавить объект</translation>
     </message>
@@ -384,34 +398,34 @@
         <translation type="vanished">&amp;Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="123"/>
-        <location filename="../main/MainWindow.cpp" line="124"/>
+        <location filename="../main/MainWindow.cpp" line="131"/>
+        <location filename="../main/MainWindow.cpp" line="132"/>
         <source>Compile</source>
         <translation>Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="125"/>
+        <location filename="../main/MainWindow.cpp" line="133"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="152"/>
+        <location filename="../main/MainWindow.cpp" line="164"/>
         <source>POU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="249"/>
-        <location filename="../main/MainWindow.cpp" line="270"/>
+        <location filename="../main/MainWindow.cpp" line="266"/>
+        <location filename="../main/MainWindow.cpp" line="287"/>
         <source>open project %1</source>
         <translation>загрузка проекта %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="282"/>
+        <location filename="../main/MainWindow.cpp" line="299"/>
         <source>can&apos;t open file for read: %1</source>
         <translation>не могу открыть файл для чтения: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="330"/>
+        <location filename="../main/MainWindow.cpp" line="347"/>
         <source>project opened %1</source>
         <translation>проект загружен %1</translation>
     </message>
@@ -428,26 +442,26 @@
         <translation type="vanished">проект загружен</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="250"/>
-        <location filename="../main/MainWindow.cpp" line="271"/>
-        <location filename="../main/MainWindow.cpp" line="331"/>
+        <location filename="../main/MainWindow.cpp" line="267"/>
+        <location filename="../main/MainWindow.cpp" line="288"/>
+        <location filename="../main/MainWindow.cpp" line="348"/>
         <source>project file: %1</source>
         <translation>файл проекта: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="257"/>
-        <location filename="../main/MainWindow.cpp" line="281"/>
-        <location filename="../main/MainWindow.cpp" line="295"/>
+        <location filename="../main/MainWindow.cpp" line="274"/>
+        <location filename="../main/MainWindow.cpp" line="298"/>
+        <location filename="../main/MainWindow.cpp" line="312"/>
         <source>can&apos;t open project %1</source>
         <translation>не могу загрузить проект %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="258"/>
+        <location filename="../main/MainWindow.cpp" line="275"/>
         <source>file not found: %1</source>
         <translation>файл не найден: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="296"/>
+        <location filename="../main/MainWindow.cpp" line="313"/>
         <source>file parse error: %1</source>
         <translation>ошибка парсинга файла: %1</translation>
     </message>
@@ -456,13 +470,13 @@
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="227"/>
+        <location filename="../main/MainWindow.cpp" line="244"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="227"/>
-        <location filename="../main/MainWindow.cpp" line="337"/>
+        <location filename="../main/MainWindow.cpp" line="244"/>
+        <location filename="../main/MainWindow.cpp" line="354"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
@@ -471,7 +485,7 @@
         <translation type="vanished">открытие файла %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="337"/>
+        <location filename="../main/MainWindow.cpp" line="354"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>

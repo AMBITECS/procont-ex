@@ -19,46 +19,58 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Xml Ling
 
 set(PROJECT_SOURCES
     main/MainApp.cpp
-    model/DomModel.h model/DomModel.cpp
-    item/DomItem.h item/DomItem.cpp
-    model/ProxyModel.cpp model/ProxyModel.h
-    view/TreeView.h view/TreeView.cpp
-    widget/TabWidgetEditor.h widget/TabWidgetEditor.cpp
-    widget/TabWidgetTree.h widget/TabWidgetTree.cpp
     main/MainWindow.cpp main/MainWindow.h
-    widget/TabWidgetProtocol.cpp widget/TabWidgetProtocol.h
-    log/Logger.h log/Logger.cpp log/Message.h log/Message.cpp
-    view/ItemDelegate.h view/ItemDelegate.cpp
-    view/SpinBoxMultiRange.h view/SpinBoxMultiRange.cpp
+
+    model/DomModel.h model/DomModel.cpp
+    model/ProxyModel.cpp model/ProxyModel.h
+
+    item/DomItem.h item/DomItem.cpp
     item/ItemValue.cpp item/ItemValue.h
     item/ItemValueVariableTable.h item/ItemValueVariableTable.cpp
-    view/TableView.h view/TableView.cpp
-    editor-st/CodeEditor.cpp editor-st/CodeEditor.h editor-st/CodeEditorWidget.cpp
-    editor-st/CodeEditorWidget.h editor-st/Highlighter.cpp editor-st/Highlighter.h
-    editor-st/LineNumberArea.cpp editor-st/LineNumberArea.h
-    editor-st/FilesManager.h editor-st/FilesManager.cpp
-    widget/WidgetEditor.h widget/WidgetEditor.cpp
-    editor-st/CommonStTypes.h
-    editor-st/XmlParser.cpp editor-st/XmlParser.h
-    editor-st/ArraySt.cpp editor-st/ArraySt.h
-    editor-st/StructSt.cpp editor-st/StructSt.h
-    editor-st/Variable.cpp editor-st/Variable.h
-    editor-st/POU.cpp editor-st/POU.h
-    editor-st/DataType.cpp editor-st/DataType.h
 
-    editor-st/editor-st.qrc
+    widget/TabWidgetEditor.h widget/TabWidgetEditor.cpp
+    widget/TabWidgetTree.h widget/TabWidgetTree.cpp
+    widget/TabWidgetProtocol.cpp widget/TabWidgetProtocol.h
+    widget/WidgetEditor.h widget/WidgetEditor.cpp
+
+    log/Logger.h log/Logger.cpp log/Message.h log/Message.cpp
+
+    view/TreeView.h view/TreeView.cpp
+    view/ItemDelegate.h view/ItemDelegate.cpp
+    view/SpinBoxMultiRange.h view/SpinBoxMultiRange.cpp
+    view/TableView.h view/TableView.cpp
+
+    editor/st/CodeEditor.cpp editor/st/CodeEditor.h
+    editor/st/CodeEditorWidget.cpp editor/st/CodeEditorWidget.h
+    editor/st/Highlighter.cpp editor/st/Highlighter.h
+    editor/st/LineNumberArea.cpp editor/st/LineNumberArea.h
+    editor/st/FilesManager.h editor/st/FilesManager.cpp
+    editor/st/CommonStTypes.h
+    editor/st/XmlParser.cpp editor/st/XmlParser.h
+    editor/st/ArraySt.cpp editor/st/ArraySt.h
+    editor/st/StructSt.cpp editor/st/StructSt.h
+    editor/st/Variable.cpp editor/st/Variable.h
+    editor/st/POU.cpp editor/st/POU.h
+    editor/st/DataType.cpp editor/st/DataType.h
+    editor/st/editor-st.qrc
+
     translator/SchemaViewer.cpp translator/SchemaViewer.h
     translator/GlobalType.h
     translator/XmlParser.cpp translator/XmlParser.h
     translator/TranslatorIec.h translator/TranslatorIec.cpp
     translator/TranslatorFbd.h translator/TranslatorFbd.cpp
+    translator/TranslatorSfc.h translator/TranslatorSfc.cpp
+
     generate/Compiler.cpp generate/Compiler.h
     generate/Translator.cpp generate/Translator.h
-    translator/TranslatorSfc.h translator/TranslatorSfc.cpp
+
     iec/StandardLibrary.cpp iec/StandardLibrary.h
-    resources/procont-app-conf.qrc
+    iec/Library.h iec/Library.cpp
+
     dialog/AddPOUDialog.h dialog/AddPOUDialog.cpp dialog/AddPOUDialog.ui
     dialog/AddTypeDialog.h dialog/AddTypeDialog.cpp dialog/AddTypeDialog.ui
+
+    resource/procont-app-conf.qrc
 )
 
 qt_translate(

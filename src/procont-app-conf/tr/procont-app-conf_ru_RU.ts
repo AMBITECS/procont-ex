@@ -181,7 +181,7 @@
 <context>
     <name>CodeEditorWidget</name>
     <message>
-        <location filename="../editor-st/CodeEditorWidget.cpp" line="15"/>
+        <location filename="../editor/st/CodeEditorWidget.cpp" line="15"/>
         <source>Find</source>
         <translation>Поиск</translation>
     </message>
@@ -232,7 +232,7 @@
 <context>
     <name>FilesManager</name>
     <message>
-        <location filename="../editor-st/FilesManager.cpp" line="67"/>
+        <location filename="../editor/st/FilesManager.cpp" line="67"/>
         <source>Unable to open file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -554,52 +554,81 @@
         <translation type="vanished">загружена библиотека &apos;StandardLibrary&apos; версии %1</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="47"/>
-        <location filename="../iec/StandardLibrary.cpp" line="67"/>
         <source>open library &apos;StandardLibrary&apos;</source>
-        <translation>загрузка библиотеки &apos;StandardLibrary&apos;</translation>
+        <translation type="vanished">загрузка библиотеки &apos;StandardLibrary&apos;</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="48"/>
-        <location filename="../iec/StandardLibrary.cpp" line="68"/>
-        <location filename="../iec/StandardLibrary.cpp" line="100"/>
         <source>library &apos;StandardLibrary&apos; file: %1</source>
-        <translation>файл библиотеки &apos;StandardLibrary&apos;: %1</translation>
+        <translation type="vanished">файл библиотеки &apos;StandardLibrary&apos;: %1</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="78"/>
+        <location filename="../iec/Library.cpp" line="23"/>
+        <source>open library &apos;%1&apos;</source>
+        <translation>загрузка библиотеки &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../iec/Library.cpp" line="24"/>
+        <location filename="../iec/Library.cpp" line="67"/>
+        <source>library &apos;%1&apos; file: %2</source>
+        <translation>библиотека &apos;%1&apos; файл: %2</translation>
+    </message>
+    <message>
+        <location filename="../iec/Library.cpp" line="31"/>
+        <location filename="../iec/Library.cpp" line="43"/>
+        <location filename="../iec/Library.cpp" line="56"/>
+        <source>can&apos;t open library &apos;%1&apos;</source>
+        <translation>не могу загрузить библиотеку &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../iec/Library.cpp" line="44"/>
         <source>can&apos;t open file for read: %1</source>
         <translation>не могу открыть файл для чтения: %1</translation>
+    </message>
+    <message>
+        <location filename="../iec/Library.cpp" line="66"/>
+        <source>library &apos;%1&apos; opened, version %2</source>
+        <translation>библиотека &apos;%1&apos; загружена, версия %2</translation>
     </message>
     <message>
         <source>can&apos;t open library &apos;StandardLibrary&apos; file</source>
         <translation type="vanished">не могу открыть файл библиотеки &apos;StandardLibrary&apos;</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="56"/>
+        <location filename="../iec/Library.cpp" line="32"/>
         <source>file not found: %1</source>
         <translation>файл не найден: %1</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="55"/>
-        <location filename="../iec/StandardLibrary.cpp" line="77"/>
-        <location filename="../iec/StandardLibrary.cpp" line="90"/>
         <source>can&apos;t open library &apos;StandardLibrary&apos;</source>
-        <translation>не могу загрузить библиотеку &apos;StandardLibrary&apos;</translation>
+        <translation type="vanished">не могу загрузить библиотеку &apos;StandardLibrary&apos;</translation>
     </message>
     <message>
         <source>open default library &apos;StandardLibrary&apos;</source>
         <translation type="obsolete">загрузка библиотеки  &apos;StandardLibrary&apos;</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="91"/>
+        <location filename="../iec/Library.cpp" line="57"/>
         <source>file parse error: %1</source>
         <translation>ошибка парсинга файла: %1</translation>
     </message>
     <message>
-        <location filename="../iec/StandardLibrary.cpp" line="99"/>
         <source>library &apos;StandardLibrary&apos; opened, version %1</source>
-        <translation>библиотека &apos;StandardLibrary&apos; загружена, версия %1</translation>
+        <translation type="vanished">библиотека &apos;StandardLibrary&apos; загружена, версия %1</translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="48"/>
+        <source>StandardFunctionBlocks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="50"/>
+        <source>AdditionalFunctionBlocks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="52"/>
+        <source>StandardIECFunctions</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1,7 +1,7 @@
 #include "TabWidgetProtocol.h"
 
 #include "TabWidgetTree.h"
-#include "editor-st/CodeEditorWidget.h"
+#include "editor/st/CodeEditorWidget.h"
 
 #include "log/Logger.h"
 

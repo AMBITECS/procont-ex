@@ -54,5 +54,3 @@ void TableView::setModel(QAbstractItemModel *model)
     connect(this->model(), &QAbstractItemModel::rowsRemoved, this, &TableView::slot_rowsRemoved);
     connect(this->model(), &QAbstractItemModel::rowsInserted, this, &TableView::slot_rowsInserted);
 }
-
-

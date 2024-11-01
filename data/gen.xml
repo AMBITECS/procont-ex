@@ -1,0 +1,2094 @@
+      <pou name="TRUNC" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_INT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Type conversion"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Rounding up/down]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="DATE_AND_TIME_TO_TIME_OF_DAY" pouType="function">
+        <interface>
+          <returnType>
+            <TOD/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Type conversion"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Conversion to time-of-day]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="DATE_AND_TIME_TO_DATE" pouType="function">
+        <interface>
+          <returnType>
+            <DATE/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Type conversion"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Conversion to date]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ABS" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_NUM/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Absolute number]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SQRT" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Square root (base 2)]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="LN" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Natural logarithm]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="LOG" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Logarithm to base 10]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="EXP" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Exponentiation]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SIN" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Sine]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="COS" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Cosine]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="TAN" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Tangent]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ASIN" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Arc sine]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ACOS" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Arc cosine]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ATAN" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Numerical"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Arc tangent]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ADD" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_NUM/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Arithmetic"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Addition]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MUL" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_NUM/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Arithmetic"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Multiplication]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_NUM/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Arithmetic"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Subtraction]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="DIV" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_NUM/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Arithmetic"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Division]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MOD" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_INT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_INT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Arithmetic"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Remainder (modulo)]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="EXPT" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_REAL/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Arithmetic"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Exponent]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MOVE" pouType="function">
+        <interface>
+          <returnType>
+            <ANY/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Arithmetic"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Assignment]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ADD" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time addition]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ADD_TIME" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time addition]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ADD" pouType="function">
+        <interface>
+          <returnType>
+            <TOD/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time-of-day addition+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ADD_TOD_TIME" pouType="function">
+        <interface>
+          <returnType>
+            <TOD/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time-of-day addition]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ADD" pouType="function">
+        <interface>
+          <returnType>
+            <DT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Date addition+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ADD_DT_TIME" pouType="function">
+        <interface>
+          <returnType>
+            <DT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Date addition]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MUL" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time multiplication+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MULTIME" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time multiplication]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB_TIME" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time subtraction]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time subtraction]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DATE/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <DATE/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Date subtraction+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB_DATE_DATE" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DATE/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <DATE/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Date subtraction]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB" pouType="function">
+        <interface>
+          <returnType>
+            <TOD/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time-of-day subtraction+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB_TOD_TIME" pouType="function">
+        <interface>
+          <returnType>
+            <TOD/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time-of-day subtraction]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time-of-day subtraction+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB_TOD_TOD" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time-of-day subtraction]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB" pouType="function">
+        <interface>
+          <returnType>
+            <DT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Date and time subtraction+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB_DT_TIME" pouType="function">
+        <interface>
+          <returnType>
+            <DT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Date and time subtraction]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Date and time subtraction+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SUB_DT_DT" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <DT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Date and time subtraction]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="DIV" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time division+" "+_("DEPRECATED")]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="DIVTIME" pouType="function">
+        <interface>
+          <returnType>
+            <TIME/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <TIME/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_NUM/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Time"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time division]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SHL" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_BIT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Number of bits to be shifted]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Bit-shift"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Shift left]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SHR" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_BIT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Number of bits to be shifted]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Bit-shift"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Shift right]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ROR" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_NBIT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_NBIT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Number of bits to be shifted]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Bit-shift"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Rotate right]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="ROL" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_NBIT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_NBIT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Number of bits to be shifted]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Bit-shift"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Rotate left]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="AND" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_BIT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Bitwise"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Bitwise AND]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="OR" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_BIT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Bitwise"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Bitwise OR]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="XOR" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_BIT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Bitwise"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Bitwise XOR]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="NOT" pouType="function">
+        <interface>
+          <returnType>
+            <ANY_BIT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_BIT/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Bitwise"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Bitwise inverting]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="SEL" pouType="function">
+        <interface>
+          <returnType>
+            <ANY/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Selection out of 2 inputs (gate)]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var2">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Selection"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Binary selection (1 of 2)]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MAX" pouType="function">
+        <interface>
+          <returnType>
+            <ANY/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Selection"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Maximum]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MIN" pouType="function">
+        <interface>
+          <returnType>
+            <ANY/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Selection"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Minimum]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="LIMIT" pouType="function">
+        <interface>
+          <returnType>
+            <ANY/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Minimum value for limitation]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var2">
+              <type>
+                 <ANY/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Maximum value for limitation]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Selection"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Limitation]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MUX" pouType="function">
+        <interface>
+          <returnType>
+            <ANY/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Selection out of n inputs]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var2">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Selection"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Multiplexer (select 1 of N)]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="GT" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Comparison"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Greater than]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="GE" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Comparison"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Greater than or equal to]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="EQ" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Comparison"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Equal to]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="LT" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Comparison"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Less than]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="LE" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Comparison"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Less than or equal to]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="NE" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Comparison"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Not equal to]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="LEN" pouType="function">
+        <interface>
+          <returnType>
+            <INT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Length of string]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="LEFT" pouType="function">
+        <interface>
+          <returnType>
+            <STRING/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[string left of]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="RIGHT" pouType="function">
+        <interface>
+          <returnType>
+            <STRING/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[string right of]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="MID" pouType="function">
+        <interface>
+          <returnType>
+            <STRING/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="var2">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[string from the middle]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="CONCAT" pouType="function">
+        <interface>
+          <returnType>
+            <STRING/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Concatenation]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="CONCAT_DATE_TOD" pouType="function">
+        <interface>
+          <returnType>
+            <DT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <DATE/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <TOD/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Time concatenation]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="INSERT" pouType="function">
+        <interface>
+          <returnType>
+            <STRING/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var2">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Insertion (into)]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="DELETE" pouType="function">
+        <interface>
+          <returnType>
+            <STRING/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="var2">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Deletion (within)]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="REPLACE" pouType="function">
+        <interface>
+          <returnType>
+            <STRING/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var2">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="var3">
+              <type>
+                 <ANY_INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Position within character string]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Replacement (within)]]></xhtml:p>
+        </documentation>
+      </pou>
+      <pou name="FIND" pouType="function">
+        <interface>
+          <returnType>
+            <INT/>
+          </returnType>
+          <inputVars>
+            <variable name="var0">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+            <variable name="var1">
+              <type>
+                 <STRING/>
+              </type>
+            </variable>
+          </inputVars>
+        </interface>
+        <body>
+        </body>
+        <addData>
+          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
+            <group name="Character string"/>
+          </data>
+        </addData>
+        <documentation>
+          <xhtml:p><![CDATA[Find position]]></xhtml:p>
+        </documentation>
+      </pou>

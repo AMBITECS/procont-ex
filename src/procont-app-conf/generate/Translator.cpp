@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------
 // *** Translator_POU_ST ***
 
-#include "editor-st/XmlParser.h"
+#include "editor/st/XmlParser.h"
 #include "translator/TranslatorIec.h"
 
 Translator_POU_ST::Translator_POU_ST(const QDomNode &node_) : ITranslator_POU(node_)

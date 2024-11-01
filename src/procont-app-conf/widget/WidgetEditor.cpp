@@ -11,8 +11,8 @@
 #include "item/DomItem.h"
 #include "view/TableView.h"
 #include "view/ItemDelegate.h"
-#include "editor-st/CodeEditorWidget.h"
-#include "editor-st/XmlParser.h"
+#include "editor/st/CodeEditorWidget.h"
+#include "editor/st/XmlParser.h"
 #include "translator/SchemaViewer.h"
 #include "translator/TranslatorFbd.h"
 

@@ -22,7 +22,7 @@ void TableView::slot_dataChanged(const QModelIndex &topLeft, const QModelIndex &
     Q_UNUSED(roles);
 
     emit signal_tableChanged();
-    }
+}
 
 void TableView::slot_rowsRemoved(const QModelIndex &parent, int first, int last)
 {
@@ -50,5 +50,3 @@ void TableView::setModel(QAbstractItemModel *model)
     connect(this->model(), &QAbstractItemModel::rowsRemoved, this, &TableView::slot_rowsRemoved);
     connect(this->model(), &QAbstractItemModel::rowsInserted, this, &TableView::slot_rowsInserted);
 }
-
-

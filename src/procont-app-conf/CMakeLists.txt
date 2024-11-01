@@ -56,6 +56,7 @@ set(PROJECT_SOURCES
     generate/Translator.cpp generate/Translator.h
     translator/TranslatorSfc.h translator/TranslatorSfc.cpp
     iec/StandardLibrary.cpp iec/StandardLibrary.h
+    iec/Library.h iec/Library.cpp
     resources/procont-app-conf.qrc
 )
 

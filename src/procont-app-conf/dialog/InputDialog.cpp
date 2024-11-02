@@ -23,23 +23,26 @@ InputDialog::InputDialog()
     tab1->setChildrenCollapsible(false);
     auto tab1_wgt_t = new QWidget;
     auto tab1_listwidget_cat = new QListView;
-    tab1_listwidget_cat->setMinimumSize(250, 400);
-    tab1_treewidget_lib = new QTreeView;
-    tab1_treewidget_lib->setMinimumSize(550, 400);
+    tab1_listwidget_cat->setMinimumSize(250, 500);
+    tab1_listwidget_cat->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _m_treeview_name = new QTreeView;
+    _m_treeview_name->setMinimumSize(550, 500);
+    _m_treeview_name->setEditTriggers(QAbstractItemView::NoEditTriggers);
     auto tab1_splitter_h = new QSplitter(Qt::Horizontal);
     tab1_splitter_h->addWidget(tab1_listwidget_cat);
-    tab1_splitter_h->addWidget(tab1_treewidget_lib);
+    tab1_splitter_h->addWidget(_m_treeview_name);
     tab1_splitter_h->setChildrenCollapsible(false);
     auto vb = new QVBoxLayout;
     vb->addWidget(tab1_splitter_h);
     tab1_wgt_t->setLayout(vb);
     auto tab1_wgt_b = new QWidget;
-    auto tab1_textview_doc = new QTextEdit;
-    tab1_textview_doc->setMinimumHeight(100);
-    auto tab1_treewidget_vars = new QTreeWidget;
+    _m_textedit_doc = new QTextEdit;
+    _m_textedit_doc->setReadOnly(true);
+    _m_textedit_doc->setMinimumHeight(100);
+    auto tab1_treewidget_vars = new QTreeView;
     tab1_treewidget_vars->setMinimumHeight(100);
     auto tab1_splitter_v = new QSplitter(Qt::Vertical, tab1_wgt_b);
-    tab1_splitter_v->addWidget(tab1_textview_doc);
+    tab1_splitter_v->addWidget(_m_textedit_doc);
     tab1_splitter_v->addWidget(tab1_treewidget_vars);
     tab1_splitter_v->setChildrenCollapsible(false);
     vb = new QVBoxLayout;
@@ -101,12 +104,10 @@ InputDialog::InputDialog()
     tab1_listwidget_cat->setModel(catModel);
     connect(tab1_listwidget_cat->selectionModel(), &QItemSelectionModel::currentChanged, this, &InputDialog::slot_categoryCurrentChanged);
 
-    auto nameModel = new QStandardItemModel;
-    nameModel->setColumnCount(3);
-    nameModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
-    nameModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Type"));
-    nameModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Source"));
-    tab1_treewidget_lib->setModel(nameModel);
+    _m_treeview_name->setModel(new QStandardItemModel);
+    connect(_m_treeview_name->selectionModel(), &QItemSelectionModel::currentChanged, this, &InputDialog::slot_typeCurrentChanged);
+
+    tab1_treewidget_vars->setModel(new QStandardItemModel);
 }
 
 QString InputDialog::get_type(const QString & name_)
@@ -129,7 +130,7 @@ void InputDialog::slot_categoryCurrentChanged(const QModelIndex &current, const 
     if(current.isValid())
     {
         QString type = current.data().toString();
-        auto nameModel = reinterpret_cast<QStandardItemModel*>(tab1_treewidget_lib->model());
+        auto nameModel = reinterpret_cast<QStandardItemModel*>(_m_treeview_name->model());
         nameModel->clear();
         nameModel->setColumnCount(3);
         nameModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
@@ -144,9 +145,36 @@ void InputDialog::slot_categoryCurrentChanged(const QModelIndex &current, const 
                 nameModel->setData(nameModel->index(0, 0), info.name);
                 nameModel->setData(nameModel->index(0, 1), info.type);
                 nameModel->setData(nameModel->index(0, 2), info.source);
-                nameModel->setData(nameModel->index(0, 2), info.library, Qt::ToolTipRole);
             }
         }
-        tab1_treewidget_lib->setColumnWidth(0, 200);
+        _m_treeview_name->setColumnWidth(0, 200);
+    }
+}
+
+void InputDialog::slot_typeCurrentChanged(const QModelIndex &current, const QModelIndex &)
+{
+    if(current.isValid())
+    {
+        _m_textedit_doc->clear();
+
+        QDomNode node = StandardLibrary::instance()->find_pou(current.data().toString());
+        if(!node.isNull())
+        {
+            QString name = node.toElement().attribute("name");
+            QString i_vars = {};
+            QDomNodeList list_vars = node.toElement().namedItem("interface").namedItem("inputVars").childNodes();
+            for(auto i=0;i<list_vars.count();i++)
+                i_vars += list_vars.at(i).toElement().namedItem("type").firstChild().nodeName() + ", ";
+            i_vars = i_vars.left(i_vars.size()-2);
+            QString ret_val = {};
+            if(node.toElement().attribute("pouType") == "function")
+                ret_val = node.toElement().namedItem("interface").namedItem("returnType").firstChild().nodeName();
+
+            QString ret = (ret_val.size() != 0) ? QString(" => %1").arg(ret_val) : "";
+
+            _m_textedit_doc->append(QString("%1(%2)%3").arg(name).arg(i_vars).arg(ret));
+            _m_textedit_doc->append(QString());
+            _m_textedit_doc->append(node.toElement().namedItem("documentation").namedItem("xhtml:p").toElement().text());
+        }
     }
 }

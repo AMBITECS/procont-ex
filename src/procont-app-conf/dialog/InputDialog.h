@@ -4,6 +4,7 @@
 #include <QDialog>
 
 QT_FORWARD_DECLARE_CLASS(QTreeView)
+QT_FORWARD_DECLARE_CLASS(QTextEdit)
 
 class InputDialog : public QDialog
 {
@@ -12,13 +13,15 @@ public:
 
 private slots:
     void slot_categoryCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
+    void slot_typeCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
 
 private:
     static QString get_type(const QString &);
 
 private:
     QStringList _m_categories;
-    QTreeView * tab1_treewidget_lib;
+    QTreeView * _m_treeview_name;
+    QTextEdit * _m_textedit_doc;
 };
 
 #endif // INPUTDIALOG_H

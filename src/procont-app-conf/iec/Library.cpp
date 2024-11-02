@@ -170,7 +170,7 @@ const ILibrary::ObjectInfo ILibrary::object_info(const QString &name_) const
         type = node.toElement().attribute("pouType");
 
     if(!node.isNull())
-        return ILibrary::ObjectInfo(name_, type, QString("%1, %2").arg(_m_name).arg(version()), name());
+        return ILibrary::ObjectInfo(name_, type, QString("%1, %2").arg(name()).arg(version()));
 
     return ILibrary::ObjectInfo();
 }

@@ -8,7 +8,6 @@
 #include "log/Logger.h"
 #include "iec/StandardLibrary.h"
 #include "view/TreeView.h"
-#include "dialog/InputAssistantDialog.h"
 #include "dialog/InputDialog.h"
 #include "dialog/AddPOUDialog.h"
 #include "dialog/AddTypeDialog.h"

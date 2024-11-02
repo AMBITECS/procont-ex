@@ -4,21 +4,24 @@
 
 #include <QDebug>
 
-QScopedPointer<StandardLibrary> StandardLibrary::_m_instance;
+StandardLibrary * StandardLibrary::_m_instance = nullptr;
 QMap<QString, ILibrary *> StandardLibrary::_m_libs;
 
 StandardLibrary::~StandardLibrary()
 {
     for(auto i : _m_libs)
         delete i;
+
+    if(_m_instance != nullptr)
+        delete _m_instance;
 }
 
 StandardLibrary * StandardLibrary::instance()
 {
-    if(_m_instance.get() == nullptr)
-        _m_instance.reset(new StandardLibrary);
+    if(_m_instance == nullptr)
+        _m_instance = new StandardLibrary;
 
-    return _m_instance.get();
+    return _m_instance;
 }
 
 void StandardLibrary::test()
@@ -45,11 +48,11 @@ QString StandardLibrary::version() const
 
 void StandardLibrary::load()
 {
-    auto name_ = QObject::tr("StandardFunctionBlocks");
+    auto name_ = QObject::tr("Standard Function Blocks");
     _m_libs.insert(name_, new ILibrary(name_, ":/lib/lib/StandardFunctionBlocks.xml"));
-    name_ = QObject::tr("AdditionalFunctionBlocks");
+    name_ = QObject::tr("Additional Function Blocks");
     _m_libs.insert(name_, new ILibrary(name_, ":/lib/lib/AdditionalFunctionBlocks.xml"));
-    name_ = QObject::tr("StandardIECFunctions");
+    name_ = QObject::tr("Standard IEC Functions");
     _m_libs.insert(name_, new ILibrary(name_, ":/lib/lib/StandardIECFunctions.xml"));
 
     for(auto i : std::as_const(_m_libs))

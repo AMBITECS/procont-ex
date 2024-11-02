@@ -3,8 +3,6 @@
 
 #include "Library.h"
 
-#include <QScopedPointer>
-
 class StandardLibrary : public ILibrary
 {
 public:
@@ -37,7 +35,7 @@ private:
     StandardLibrary() = default;
 
 private:
-    static QScopedPointer<StandardLibrary> _m_instance;
+    static StandardLibrary * _m_instance;
     static QMap<QString, ILibrary *> _m_libs;
 };
 

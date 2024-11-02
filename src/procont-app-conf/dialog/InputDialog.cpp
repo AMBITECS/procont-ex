@@ -18,15 +18,18 @@
 
 InputDialog::InputDialog()
 {
+    setWindowTitle(tr("Input Assistant"));
+    setMinimumSize(800, 700);
+
     // *** tab 1 - categories
     auto tab1 = new QSplitter(Qt::Vertical);
     tab1->setChildrenCollapsible(false);
     auto tab1_wgt_t = new QWidget;
     auto tab1_listwidget_cat = new QListView;
-    tab1_listwidget_cat->setMinimumSize(250, 500);
+    tab1_listwidget_cat->setFixedWidth(250);
     tab1_listwidget_cat->setEditTriggers(QAbstractItemView::NoEditTriggers);
     _m_treeview_name = new QTreeView;
-    _m_treeview_name->setMinimumSize(550, 500);
+    _m_treeview_name->setMinimumSize(550, 400);
     _m_treeview_name->setEditTriggers(QAbstractItemView::NoEditTriggers);
     auto tab1_splitter_h = new QSplitter(Qt::Horizontal);
     tab1_splitter_h->addWidget(tab1_listwidget_cat);
@@ -90,8 +93,6 @@ InputDialog::InputDialog()
     layout->addWidget(buttonBox);
 
     setLayout(layout);
-
-    setMinimumSize(800, 680);
 
     for(auto i : StandardLibrary::instance()->objects())
     {

@@ -70,6 +70,8 @@ set(PROJECT_SOURCES
     dialog/AddPOUDialog.h dialog/AddPOUDialog.cpp dialog/AddPOUDialog.ui
     dialog/AddTypeDialog.h dialog/AddTypeDialog.cpp dialog/AddTypeDialog.ui
 
+    dialog/InputDialog.h dialog/InputDialog.cpp
+
     resource/procont-app-conf.qrc
 )
 
@@ -83,8 +85,6 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-        dialog/InputAssistantDialog.h dialog/InputAssistantDialog.cpp dialog/InputAssistantDialog.ui
-        dialog/InputDialog.h dialog/InputDialog.cpp
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

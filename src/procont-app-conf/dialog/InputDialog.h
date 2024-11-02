@@ -8,6 +8,7 @@ QT_FORWARD_DECLARE_CLASS(QTextEdit)
 
 class InputDialog : public QDialog
 {
+    Q_OBJECT
 public:
     InputDialog();
 

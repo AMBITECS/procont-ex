@@ -9,6 +9,7 @@
 #include "iec/StandardLibrary.h"
 #include "view/TreeView.h"
 #include "dialog/InputAssistantDialog.h"
+#include "dialog/InputDialog.h"
 #include "dialog/AddPOUDialog.h"
 #include "dialog/AddTypeDialog.h"
 #include "generate/Translator.h"
@@ -126,7 +127,9 @@ void MainWindow::createMenu()
 
     auto viewMenu = menuBar()->addMenu(tr("View"));
 
-    _m_projectMenu = menuBar()->addMenu(tr("Project"));
+    auto projectMenu = menuBar()->addMenu(tr("Project"));
+    _m_addObjectMenu = new QMenu(tr("Add object"));
+    projectMenu->addMenu(_m_addObjectMenu);
 
     auto compileMenu = menuBar()->addMenu(tr("Compile"));
     auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
@@ -143,10 +146,11 @@ void MainWindow::createMenu()
     toolbar->addAction(edit_copy_act);
     toolbar->addAction(edit_paste_act);
     toolbar->addAction(edit_delete_act);
-
+    toolbar->addSeparator();
     _m_button = new QToolButton();
     toolbar->addWidget(_m_button);
-
+    _m_button->setIcon(QIcon(":/icon/images/plus-large.svg"));
+    _m_button->setPopupMode(QToolButton::InstantPopup);
     toolbar->addSeparator();
     toolbar->addAction(compile_build_act);
     toolbar->setIconSize(QSize(24, 24));
@@ -186,8 +190,7 @@ void MainWindow::slot_pouCustomContextMenu(const QPoint &pos_)
 
 void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModelIndex &)
 {
-    _m_projectMenu->clear();
-    auto menu = new QMenu(tr("Add object"));
+    _m_addObjectMenu->clear();
     if(current.isValid())
     {
         QDomNode node = item(current)->node();
@@ -195,13 +198,10 @@ void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModel
         if(acts.size())
         {
             for(auto i : std::as_const(acts))
-                menu->addAction(i);
+                _m_addObjectMenu->addAction(i);
         }
     }
-    _m_projectMenu->addMenu(menu);
-
-    _m_button->setMenu(menu);
-    _m_button->setPopupMode(QToolButton::InstantPopup);
+    _m_button->setMenu(_m_addObjectMenu);
 }
 
 void MainWindow::slot_addDUT()
@@ -415,7 +415,7 @@ void MainWindow::slot_delete()
 
 void MainWindow::slot_input_assistant()
 {
-    InputAssistantDialog dlg;
+    InputDialog dlg;
     dlg.exec();
 }
 

@@ -28,6 +28,10 @@ public:
     const QDomNode find_type(const QString &name_) const override;
     /// получение POU из библиотеки
     const QDomNode find_pou(const QString &name_) const override;
+    /// получение списка имен
+    const QStringList objects() const override;
+    /// получение информации об объекте
+    const ObjectInfo object_info(const QString &name_) const override;
 
 private:
     StandardLibrary() = default;

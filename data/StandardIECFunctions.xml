@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
-  <fileHeader companyName="Ambitecs" productName="Standard Function Blocks Library" productVersion="1.0" creationDateTime="2024-09-20T00:00:00"/>
-  <contentHeader name="Standard Function Blocks" author="Lepekhin Igor" modificationDateTime="2024-11-01T08:00:00">
+  <fileHeader companyName="Ambitecs" productName="Standard IEC Functions" productVersion="1.0.0" creationDateTime="2024-09-20T00:00:00"/>
+  <contentHeader name="Standard IEC Functions" author="Lepekhin Igor" modificationDateTime="2024-11-01T08:00:00">
     <coordinateInfo>
       <fbd>
         <scaling x="0" y="0"/>
@@ -16,77 +16,6 @@
   </contentHeader>
   <types>
     <dataTypes>
-      <dataType name="datatype0">
-        <baseType>
-          <struct>
-            <variable name="id">
-              <type>
-                <DINT/>
-              </type>
-              <initialValue>
-                <simpleValue value="1"/>
-              </initialValue>
-            </variable>
-            <variable name="lvl">
-              <type>
-                <DINT/>
-              </type>
-              <initialValue>
-                <simpleValue value="2"/>
-              </initialValue>
-            </variable>
-            <variable name="make">
-              <type>
-                <DINT/>
-              </type>
-              <initialValue>
-                <simpleValue value="3"/>
-              </initialValue>
-            </variable>
-          </struct>
-        </baseType>
-      </dataType>
-      <dataType name="datatype1">
-        <baseType>
-          <array>
-            <dimension lower="0" upper="9"/>
-            <baseType>
-              <INT/>
-            </baseType>
-          </array>
-        </baseType>
-      </dataType>
-      <dataType name="datatype2">
-        <baseType>
-          <struct>
-            <variable name="one">
-              <type>
-                <DINT/>
-              </type>
-            </variable>
-            <variable name="">
-              <type>
-                <array>
-                  <dimension lower="0" upper="5"/>
-                  <baseType>
-                    <WORD/>
-                  </baseType>
-                </array>
-              </type>
-            </variable>
-            <variable name="">
-              <type>
-                <derived name="datatype0"/>
-              </type>
-            </variable>
-          </struct>
-        </baseType>
-      </dataType>
-      <dataType name="datatype3">
-        <baseType>
-          <BOOL/>
-        </baseType>
-      </dataType>
     </dataTypes>
     <pous>
       <pou name="TRUNC" pouType="function">

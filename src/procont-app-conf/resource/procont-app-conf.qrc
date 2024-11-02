@@ -36,6 +36,8 @@
         <file>images/document.svg</file>
         <file>images/hierarchy-3.svg</file>
         <file>images/hierarchy.svg</file>
+        <file>images/plus-large.svg</file>
+        <file>images/plus2.svg</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/AdditionalFunctionBlocks.xml</file>

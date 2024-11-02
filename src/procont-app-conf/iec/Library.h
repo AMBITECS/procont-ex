@@ -5,6 +5,19 @@
 
 class ILibrary
 {
+public:
+    struct ObjectInfo
+    {
+        QString name = {};
+        QString type = {};
+        QString source = {};
+        QString library = {};
+
+        ObjectInfo() = default;
+        ObjectInfo(const QString &name_, const QString &type_, const QString &source_, const QString &library_) :
+            name(name_), type(type_), source(source_), library(library_)
+        {}
+    };
 protected:
     enum class eNodeType
     {
@@ -18,6 +31,7 @@ public:
 
 public:
     virtual void load();
+    virtual QString name() const;
     virtual QString version() const;
     virtual const QString filePath() const;
 
@@ -29,11 +43,15 @@ public:
     virtual const QDomNode find_type(const QString &name_) const;
     /// получение POU из библиотеки
     virtual const QDomNode find_pou(const QString &name_) const;
+    /// получение списка имен объектов
+    virtual const QStringList objects() const;
+    /// получение информации об объекте
+    virtual const ObjectInfo object_info(const QString &name_) const;
 
 private:
-    /// возвращяет true, если библиотека содержит сущность типа type_ с именем name_
+    /// возвращяет true, если библиотека содержит объект типа type_ с именем name_
     bool contents(const QString &name_, eNodeType type_) const;
-    /// возвращяет константный объект QDomNode, если библиотека содержит сущность типа type_ с именем name_, или
+    /// возвращяет константный объект QDomNode, если библиотека содержит объект типа type_ с именем name_, или
     /// пустой QDomNode()
     const QDomNode find(const QString &name_, eNodeType type_) const;
 

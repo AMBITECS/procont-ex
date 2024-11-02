@@ -73,6 +73,11 @@ QString ILibrary::version() const
     return _m_library.namedItem("project").namedItem("fileHeader").toElement().attribute("productVersion");
 }
 
+QString ILibrary::name() const
+{
+    return _m_library.namedItem("project").namedItem("fileHeader").toElement().attribute("productName");
+}
+
 QDomNodeList ILibrary::get_nodes(eNodeType type_) const
 {
     if(type_ == eNodeType::eNT_Type)
@@ -133,5 +138,40 @@ const QDomNode ILibrary::find_type(const QString &name_) const
 const QDomNode ILibrary::find_pou(const QString &name_) const
 {
     return find(name_, eNodeType::eNT_POU);
-
 }
+
+/// получение списка имен
+const QStringList ILibrary::objects() const
+{
+    QStringList result;
+
+    QDomNodeList list = get_nodes(eNodeType::eNT_POU);
+    for(auto i=0;i<list.size();i++)
+        result.append(list.at(i).toElement().attribute("name"));
+
+    list = get_nodes(eNodeType::eNT_Type);
+    for(auto i=0;i<list.size();i++)
+        result.append(list.at(i).toElement().attribute("name"));
+
+    return result;
+}
+
+/// получение информации об объекте
+const ILibrary::ObjectInfo ILibrary::object_info(const QString &name_) const
+{
+    QDomNode node = find_pou(name_);
+    QString type;
+    if(node.isNull())
+    {
+        node = find_type(name_);
+        type = "dataType";
+    }
+    else
+        type = node.toElement().attribute("pouType");
+
+    if(!node.isNull())
+        return ILibrary::ObjectInfo(name_, type, QString("%1, %2").arg(_m_name).arg(version()), name());
+
+    return ILibrary::ObjectInfo();
+}
+

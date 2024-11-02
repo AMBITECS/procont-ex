@@ -101,3 +101,32 @@ const QDomNode StandardLibrary::find_pou(const QString &name_) const
 
     return {};
 }
+
+/// получение списка имен
+const QStringList StandardLibrary::objects() const
+{
+    QStringList result;
+
+    for(auto i : std::as_const(_m_libs))
+        result += i->objects();
+
+    return result;
+}
+
+/// получение информации об объекте
+const ILibrary::ObjectInfo StandardLibrary::object_info(const QString &name_) const
+{
+    ILibrary::ObjectInfo result;
+
+    for(auto i : std::as_const(_m_libs))
+    {
+        result = i->object_info(name_);
+        if(!result.name.isEmpty())
+            return result;
+    }
+
+    return {};
+}
+
+
+

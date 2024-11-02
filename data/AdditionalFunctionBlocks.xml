@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
-  <fileHeader companyName="Ambitecs" productName="Additional Function Blocks Library" productVersion="1.0" creationDateTime="2024-11-01T08:00:00"/>
+  <fileHeader companyName="Ambitecs" productName="Additional Function Blocks" productVersion="1.0.0" creationDateTime="2024-11-01T08:00:00"/>
   <contentHeader name="Additional Funtion Blocks" author="Lepekhin Igor" modificationDateTime="2024-11-01T08:00:00">
     <coordinateInfo>
       <fbd>

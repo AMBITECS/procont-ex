@@ -102,13 +102,13 @@ void MainWindow::createWidgets()
     tabifyDockWidget(dockDev, dockPou);
 
     // right area
-    _m_toolWidget = new CTreeObject;
-    _m_toolWidget->setMinimumSize(200, 500);
-    pDock = new QDockWidget(tr("ToolBar"), this);
-    pDock->setTitleBarWidget(new QWidget());
-    pDock->setAllowedAreas(Qt::RightDockWidgetArea);
-    pDock->setWidget(_m_toolWidget);
-    addDockWidget(Qt::RightDockWidgetArea, pDock);
+    // _m_toolWidget = new CTreeObject;
+    // _m_toolWidget->setMinimumSize(200, 500);
+    // pDock = new QDockWidget(tr("ToolBar"), this);
+    // pDock->setTitleBarWidget(new QWidget());
+    // pDock->setAllowedAreas(Qt::RightDockWidgetArea);
+    // pDock->setWidget(_m_toolWidget);
+    // addDockWidget(Qt::RightDockWidgetArea, pDock);
 
     // bottom area
     pDock = new QDockWidget(tr("Protocol"), this);
@@ -118,10 +118,10 @@ void MainWindow::createWidgets()
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
 }
 
-CTreeObject * MainWindow::toolWidget() const
-{
-    return _m_toolWidget;
-}
+// CTreeObject * MainWindow::toolWidget() const
+// {
+//     return _m_toolWidget;
+// }
 
 void MainWindow::createMenu()
 {
@@ -269,7 +269,6 @@ void MainWindow::slot_open()
 void MainWindow::open(const QString & filePath)
 {
     TabWidgetEditor::instance()->closeTabs();
-    TabWidgetEditor::instance()->addIntro();
 
     auto default_file = false;
     QString _filePath = filePath;

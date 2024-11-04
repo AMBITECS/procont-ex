@@ -25,13 +25,6 @@ TabWidgetEditor::TabWidgetEditor()
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(slot_currentTabChanged(int)));
 }
 
-void TabWidgetEditor::addIntro()
-{
-    auto wgt = new OglWidget(widget(0));
-    addTab(wgt, tr("Intro"));
-    setCurrentWidget(wgt);
-}
-
 TabWidgetEditor * TabWidgetEditor::instance()
 {
     if(_instance == nullptr)

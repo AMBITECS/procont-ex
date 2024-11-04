@@ -94,8 +94,7 @@ public:
  * \brief The WidgetEditor_fbd class
  */
 
-// QT_FORWARD_DECLARE_CLASS(FBDviewer)
-QT_FORWARD_DECLARE_CLASS(CDiagramWidget)
+QT_FORWARD_DECLARE_CLASS(FBDviewer)
 
 class WidgetEditor_fbd : public WidgetEditor
 {
@@ -112,8 +111,7 @@ private slots:
 
 private:
     QWidget * _txt_view = nullptr;
-    // FBDviewer * _fbd_view = nullptr;
-    CDiagramWidget * _m_fbd_view = nullptr;
+    FBDviewer * _m_fbd_view = nullptr;
 };
 // ----------------------------------------------------------------------------
 

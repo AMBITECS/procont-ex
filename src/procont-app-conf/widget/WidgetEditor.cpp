@@ -15,8 +15,6 @@
 #include "editor/st/XmlParser.h"
 #include "translator/SchemaViewer.h"
 #include "translator/TranslatorFbd.h"
-#include "editor/fbd/fbd/graphics/cdiagramwidget.h"
-#include "main/MainWindow.h"
 
 WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
     : QSplitter(Qt::Vertical, parent_),
@@ -271,12 +269,9 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     // contauner for variables editor widgets
     auto container = new QWidget;
     // fbd view
-    // _fbd_view = new FBDviewer;
-    // _fbd_view->setMinimumSize(500, 250);
-    // _fbd_view->showNode(item(_index)->node());
-    _m_fbd_view = new CDiagramWidget(item(_index)->node(), MainWindow::instance()->toolWidget());
-    // _m_fbd_view->set_active();
+    _m_fbd_view = new FBDviewer;
     _m_fbd_view->setMinimumSize(500, 250);
+    _m_fbd_view->showNode(item(_index)->node());
     // variables editor code editor
     _txt_view = WidgetEditor::createCodeEditor();
     _txt_view->hide();
@@ -310,7 +305,7 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
 
 void WidgetEditor_fbd::slot_shmViewToggled(bool)
 {
-    // _fbd_view->showNode(item(_index)->node());
+    _m_fbd_view->showNode(item(_index)->node());
 
     _txt_view->hide();
     _m_fbd_view->show();

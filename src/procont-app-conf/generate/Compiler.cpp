@@ -10,6 +10,7 @@ Compiler::Compiler() :
 {
     connect(&_m_process, &QProcess::readyReadStandardOutput, this, &Compiler::slot_readStandardOutput);
     connect(&_m_process, &QProcess::readyReadStandardError, this, &Compiler::slot_readStandardError);
+    connect(&_m_process, &QProcess::finished, this, &Compiler::slot_finished);
 }
 
 int Compiler::compile()
@@ -17,6 +18,8 @@ int Compiler::compile()
     b_command(CCmd::eCT_Clear);
 
     _m_process.start(_m_compiler, _m_args);
+
+    info(QObject::tr("build started"));
 
     return 0;
 }
@@ -41,6 +44,18 @@ void Compiler::slot_readStandardError()
 
     for(const auto &i : error)
         b_crit(i);
+}
+
+void Compiler::slot_finished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    QString message = QObject::tr("build finished");
+    if(exitCode > 0)
+    {
+        warn(message);
+        return;
+    }
+
+    info(message);
 }
 // ----------------------------------------------------------------------------
 

@@ -705,6 +705,16 @@
         <source>Standard IEC Functions</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../generate/Compiler.cpp" line="22"/>
+        <source>build started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generate/Compiler.cpp" line="51"/>
+        <source>build finished</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StandardLibrary</name>

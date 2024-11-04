@@ -130,7 +130,6 @@ bool PLCopenXmlParser::POU(quint32 _index, T_POU *_pou)
     {
         if(_pou_counter == _index)
         {
-            _result = true;
             checkPOUattr(_pou_node, _pou);
 
             QDomNode _node = _pou_node.firstChild();
@@ -436,65 +435,115 @@ bool PLCopenXmlParser::parseINSTANCES(const QDomNode &node_, T_INSTANCES * data_
         return false;
 
     T_CONFIGURATION _conf;
+    bool _result = true;
 
     QDomNode _configurations_node =  node_.firstChild(); // configurations
     while(!_configurations_node.isNull())
     {
-        QDomNode _configuration_node = _configurations_node.firstChild(); // configuration
-        for(int _i = 0;  _i < _configuration_node.toElement().attributes().length();  _i++)
-            if(!_configuration_node.toElement().attributes().item(_i).toAttr().isNull())
-            {
-                if(_configuration_node.toElement().attributes().item(_i).toAttr().name() == "name")
-                    _conf._name = _configuration_node.toElement().attributes().item(_i).toAttr().value();
-            }
-        QDomNode _resource_node = _configuration_node.firstChild(); // resource
-        while(!_resource_node.isNull())
+        QDomNode _configuration_node = _configurations_node.firstChild();
+        if(_configuration_node.toElement().tagName() == "configuration")
         {
-            for(int _i = 0;  _i < _resource_node.toElement().attributes().length();  _i++)
-                if(!_resource_node.toElement().attributes().item(_i).toAttr().isNull())
+            for(int _i = 0; _i < _configuration_node.toElement().attributes().length(); _i++)
+                if(!_configuration_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
-                    if(_resource_node.toElement().attributes().item(_i).toAttr().name() == "name")
-                        _conf._resource._name = _resource_node.toElement().attributes().item(_i).toAttr().value();
+                    if(_configuration_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                        _conf._name = _configuration_node.toElement().attributes().item(_i).toAttr().value();
                 }
-            QDomNode _task_node = _resource_node.firstChild(); // task
-            while(!_task_node.isNull())
+            QDomNode _conf_item_node = _configuration_node.firstChild(); // resource globalVars
+            while(!_conf_item_node.isNull())
             {
-                T_TASK _task;
-                for(int _i = 0;  _i < _task_node.toElement().attributes().length();  _i++)
-                    if(!_task_node.toElement().attributes().item(_i).toAttr().isNull())
-                    {
-                        if(_task_node.toElement().attributes().item(_i).toAttr().name() == "name")
-                            _task._name = _task_node.toElement().attributes().item(_i).toAttr().value();
-                        if(_task_node.toElement().attributes().item(_i).toAttr().name() == "interval")
-                            _task._interval = _task_node.toElement().attributes().item(_i).toAttr().value();
-                        if(_task_node.toElement().attributes().item(_i).toAttr().name() == "priority")
-                            _task._priority = _task_node.toElement().attributes().item(_i).toAttr().value();
-                    }
-                QDomNode _pou_inst_node = _task_node.firstChild(); // pouInstance
-                while(!_pou_inst_node.isNull())
+                if(_conf_item_node.toElement().tagName() == "resource")
                 {
-                    T_POU_INSTANCE  _pou_inst;
-                    for(int _i = 0;  _i < _pou_inst_node.toElement().attributes().length();  _i++)
-                        if(!_pou_inst_node.toElement().attributes().item(_i).toAttr().isNull())
+                    for(int _i = 0;  _i < _conf_item_node.toElement().attributes().length();  _i++)
+                        if(!_conf_item_node.toElement().attributes().item(_i).toAttr().isNull())
                         {
-                            if(_pou_inst_node.toElement().attributes().item(_i).toAttr().name() == "name")
-                                _pou_inst._name = _pou_inst_node.toElement().attributes().item(_i).toAttr().value();
-                            if(_pou_inst_node.toElement().attributes().item(_i).toAttr().name() == "typeName")
-                                _pou_inst._typeName = _pou_inst_node.toElement().attributes().item(_i).toAttr().value();
+                            if(_conf_item_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                                _conf._resource._name = _conf_item_node.toElement().attributes().item(_i).toAttr().value();
                         }
-                    _task._pouInstance.push_back(_pou_inst);
-                    _pou_inst_node = _pou_inst_node.nextSibling();
-                }
-                _conf._resource._task.push_back(_task);
-                _task_node = _task_node.nextSibling();
-            }
-            _resource_node = _resource_node.nextSibling();
-        }
-        data_->_configuration.push_back(_conf);
-        _configurations_node = _configurations_node.nextSibling();
-    }
+                    QDomNode _task_node = _conf_item_node.firstChild(); // task
+                    while(!_task_node.isNull())
+                    {
+                        T_TASK _task;
+                        for(int _i = 0;  _i < _task_node.toElement().attributes().length();  _i++)
+                            if(!_task_node.toElement().attributes().item(_i).toAttr().isNull())
+                            {
+                                if(_task_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                                    _task._name = _task_node.toElement().attributes().item(_i).toAttr().value();
+                                if(_task_node.toElement().attributes().item(_i).toAttr().name() == "interval")
+                                    _task._interval = _task_node.toElement().attributes().item(_i).toAttr().value();
+                                if(_task_node.toElement().attributes().item(_i).toAttr().name() == "priority")
+                                    _task._priority = _task_node.toElement().attributes().item(_i).toAttr().value();
+                            }
+                        QDomNode _pou_inst_node = _task_node.firstChild(); // pouInstance
+                        while(!_pou_inst_node.isNull())
+                        {
+                            T_POU_INSTANCE  _pou_inst;
+                            for(int _i = 0;  _i < _pou_inst_node.toElement().attributes().length();  _i++)
+                                if(!_pou_inst_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pou_inst_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                                        _pou_inst._name = _pou_inst_node.toElement().attributes().item(_i).toAttr().value();
+                                    if(_pou_inst_node.toElement().attributes().item(_i).toAttr().name() == "typeName")
+                                        _pou_inst._typeName = _pou_inst_node.toElement().attributes().item(_i).toAttr().value();
+                                }
+                            _task._pouInstance.push_back(_pou_inst);
+                            _pou_inst_node = _pou_inst_node.nextSibling();
+                        }
+                        _conf._resource._task.push_back(_task);
+                        _task_node = _task_node.nextSibling();
+                    }
+                }else
+                    if(_conf_item_node.toElement().tagName() == "globalVars")
+                    {
+                        T_VARIABLE _var;
 
-    return true;
+                        for(int _i = 0;  _i < _conf_item_node.toElement().attributes().length();  _i++)
+                            if(!_conf_item_node.toElement().attributes().item(_i).toAttr().isNull())
+                            {
+                                if(_conf_item_node.toElement().attributes().item(_i).toAttr().name() == "constant")
+                                    _var._qualifier = VQ_CONSTANT;
+                                if(_conf_item_node.toElement().attributes().item(_i).toAttr().name() == "retain")
+                                    _var._qualifier = VQ_RETAIN;
+                                if(_conf_item_node.toElement().attributes().item(_i).toAttr().name() == "nonretain")
+                                    _var._qualifier = VQ_NONRETAIN;
+                            }
+                        QDomNode _var_node = _conf_item_node.firstChild(); // variable
+                        while(!_var_node.isNull())
+                        {
+                            for(int _i = 0;  _i < _var_node.toElement().attributes().length();  _i++)
+                                if(!_var_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_var_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                                        _var._name = _var_node.toElement().attributes().item(_i).toAttr().value();
+                                }
+                            QDomNode _var_item_node = _var_node.firstChild(); // variable
+                            while(!_var_item_node.isNull())
+                            {
+                                if(_var_item_node.toElement().tagName() == "type")
+                                    _var._type_name = _var_item_node.firstChild().toElement().tagName();
+                                if(_var_item_node.toElement().tagName() == "initialValue")
+                                {
+                                    QDomNode _var_init_node = _var_item_node.firstChild(); // simpleValue
+                                    for(int _i = 0;  _i < _var_init_node.toElement().attributes().length();  _i++)
+                                        if(!_var_init_node.toElement().attributes().item(_i).toAttr().isNull())
+                                        {
+                                            if(_var_init_node.toElement().attributes().item(_i).toAttr().name() == "value")
+                                                _var._initialValue._simpleValue = _var_init_node.toElement().attributes().item(_i).toAttr().value();
+                                        }
+                                }
+                                _var_item_node = _var_item_node.nextSibling();
+                            }
+                            _conf._globalVars.push_back(_var);
+                            _var_node = _var_node.nextSibling();
+                        }
+                    }
+                _conf_item_node = _conf_item_node.nextSibling();
+            }
+            data_->_configuration.push_back(_conf);
+            _configurations_node = _configurations_node.nextSibling();
+        }
+    }
+    return _result;
 }
 //-----------------------------------------------------------------------------------
 //
@@ -506,7 +555,7 @@ void PLCopenXmlParser::checkPOUattr(QDomNode _node, T_POU *_pou)
         {
             if(_node.toElement().attributes().item(_i).toAttr().name() == "name")
             {
-                _pou->_name = _node.toElement().attributes().item(_i).toAttr().value();
+                _pou->_name = _node.toElement().attributes().item(_i).toAttr().value().toLocal8Bit();
             }else
             if(_node.toElement().attributes().item(_i).toAttr().name() == "pouType")
             {
@@ -639,12 +688,8 @@ void PLCopenXmlParser::checkPOUinterfaceLocalVar(QDomNode _node, T_POU *_pou)
             }
             if(_type_node.toElement().tagName() == "documentation")
             {
-                QDomNode _doc_node = _type_node.firstChild();
-                if(_doc_node.toElement().tagName() == "p")
-                {
-                    QDomNode _text_node = _doc_node.firstChild();
-                    _var._documentation = _text_node.nodeValue();
-                }
+                QDomNode _text_node = _type_node.firstChild().firstChild();
+                _var._documentation = _text_node.nodeValue();
             }
             _type_node = _type_node.nextSibling();
         }
@@ -721,12 +766,8 @@ void PLCopenXmlParser::checkPOUinterfaceInOutVar(QDomNode _node, T_POU *_pou)
             }
             if(_type_node.toElement().tagName() == "documentation")
             {
-                QDomNode _doc_node = _type_node.firstChild();
-                if(_doc_node.toElement().tagName() == "p")
-                {
-                    QDomNode _text_node = _doc_node.firstChild();
-                    _var._documentation = _text_node.nodeValue();
-                }
+                QDomNode _text_node = _type_node.firstChild().firstChild();
+                _var._documentation = _text_node.nodeValue();
             }
             _type_node = _type_node.nextSibling();
         }
@@ -803,12 +844,8 @@ void PLCopenXmlParser::checkPOUinterfaceTempVar(QDomNode _node, T_POU *_pou)
             }
             if(_type_node.toElement().tagName() == "documentation")
             {
-                QDomNode _doc_node = _type_node.firstChild();
-                if(_doc_node.toElement().tagName() == "p")
-                {
-                    QDomNode _text_node = _doc_node.firstChild();
-                    _var._documentation = _text_node.nodeValue();
-                }
+                QDomNode _text_node = _type_node.firstChild().firstChild();
+                _var._documentation = _text_node.nodeValue();
             }
             _type_node = _type_node.nextSibling();
         }
@@ -885,12 +922,8 @@ void PLCopenXmlParser::checkPOUinterfaceExternalVar(QDomNode _node, T_POU *_pou)
             }
             if(_type_node.toElement().tagName() == "documentation")
             {
-                QDomNode _doc_node = _type_node.firstChild();
-                if(_doc_node.toElement().tagName() == "p")
-                {
-                    QDomNode _text_node = _doc_node.firstChild();
-                    _var._documentation = _text_node.nodeValue();
-                }
+                QDomNode _text_node = _type_node.firstChild().firstChild();
+                _var._documentation = _text_node.nodeValue();
             }
             _type_node = _type_node.nextSibling();
         }
@@ -967,12 +1000,8 @@ void PLCopenXmlParser::checkPOUinterfaceGlobalVar(QDomNode _node, T_POU *_pou)
             }
             if(_type_node.toElement().tagName() == "documentation")
             {
-                QDomNode _doc_node = _type_node.firstChild();
-                if(_doc_node.toElement().tagName() == "p")
-                {
-                    QDomNode _text_node = _doc_node.firstChild();
-                    _var._documentation = _text_node.nodeValue();
-                }
+                QDomNode _text_node = _type_node.firstChild().firstChild();
+                _var._documentation = _text_node.nodeValue();
             }
             _type_node = _type_node.nextSibling();
         }
@@ -1049,12 +1078,8 @@ void PLCopenXmlParser::checkPOUinterfaceInputVar(QDomNode _node, T_POU *_pou)
             }
             if(_type_node.toElement().tagName() == "documentation")
             {
-                QDomNode _doc_node = _type_node.firstChild();
-                if(_doc_node.toElement().tagName() == "p")
-                {
-                    QDomNode _text_node = _doc_node.firstChild();
-                    _var._documentation = _text_node.nodeValue();
-                }
+                QDomNode _text_node = _type_node.firstChild().firstChild();
+                _var._documentation = _text_node.nodeValue();
             }
             _type_node = _type_node.nextSibling();
         }
@@ -1131,12 +1156,8 @@ void PLCopenXmlParser::checkPOUinterfaceOutputVar(QDomNode _node, T_POU *_pou)
             }
             if(_type_node.toElement().tagName() == "documentation")
             {
-                QDomNode _doc_node = _type_node.firstChild();
-                if(_doc_node.toElement().tagName() == "p")
-                {
-                    QDomNode _text_node = _doc_node.firstChild();
-                    _var._documentation = _text_node.nodeValue();
-                }
+                QDomNode _text_node = _type_node.firstChild().firstChild();
+                _var._documentation = _text_node.nodeValue();
             }
             _type_node = _type_node.nextSibling();
         }
@@ -1167,8 +1188,31 @@ void PLCopenXmlParser::checkPOUbody(QDomNode _node, T_POU *_pou)
 //-----------------------------------------------------------------------------------
 void PLCopenXmlParser::checkPOUactions(QDomNode _node, T_POU *_pou)
 {
-    Q_UNUSED(_node)
-    Q_UNUSED(_pou)
+    QDomNode _action_node = _node.firstChild();
+    while(!_action_node.isNull())
+    {
+        T_POU_ACTION _action;
+        for(int _i = 0;  _i < _action_node.toElement().attributes().length();  _i++)
+            if (!_action_node.toElement().attributes().item(_i).toAttr().isNull())
+            {
+                if(_action_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                    _action._name = _action_node.toElement().attributes().item(_i).toAttr().value();
+            }
+
+        QDomNode _body_node = _action_node.firstChild().firstChild();
+        while(!_body_node.isNull())
+        {
+            if(_body_node.toElement().tagName() == "FBD")   checkPOUactionFBD(_body_node, &_action);
+            if(_body_node.toElement().tagName() == "ST")    checkPOUactionST(_body_node, &_action);
+            if(_body_node.toElement().tagName() == "SFC")   checkPOUactionSFC(_body_node, &_action);
+            if(_body_node.toElement().tagName() == "IL")    checkPOUactionIL(_body_node, &_action);
+            if(_body_node.toElement().tagName() == "LD")    checkPOUactionLD(_body_node, &_action);
+            _body_node = _body_node.nextSibling();
+        }
+
+        _pou->_actions.push_back(_action);
+        _action_node = _action_node.nextSibling();
+    }
 }
 //-----------------------------------------------------------------------------------
 //
@@ -1258,6 +1302,18 @@ void PLCopenXmlParser::checkPOUbodySFC(QDomNode _node, T_POU *_pou)
             _item._type = IT_SFC_SELECTION_CONVERGENCE;
             _pou->_body._SFC._item.push_back(_item);
         }else
+        if(_name == "simultaneousDivergence")
+        {
+            checkPOUbodySFC_simultaneous_divergence(_item_node, &_item);
+            _item._type = IT_SFC_SIMULTANEUS_DIVERGENCE;
+            _pou->_body._SFC._item.push_back(_item);
+        }else
+        if(_name == "simultaneousConvergence")
+        {
+            checkPOUbodySFC_simultaneous_convergence(_item_node, &_item);
+            _item._type = IT_SFC_SIMULTANEUS_CONVERGENCE;
+            _pou->_body._SFC._item.push_back(_item);
+        }else
         if(_name == "transition")
         {
             checkPOUbodySFC_transition(_item_node, &_item);
@@ -1275,8 +1331,1631 @@ void PLCopenXmlParser::checkPOUbodySFC(QDomNode _node, T_POU *_pou)
             checkPOUbodySFC_jump_step(_item_node, &_item);
             _item._type = IT_SFC_JUMP_STEP;
             _pou->_body._SFC._item.push_back(_item);
+        }else
+        if(_name == "comment")
+        {
+            checkPOUbodySFC_comment(_item_node, &_item);
+            _item._type = IT_SFC_COMMENT;
+            _pou->_body._SFC._item.push_back(_item);
         }
         _item_node = _item_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD(QDomNode _node, T_POU *_pou)
+{
+    QDomNode _item_node = _node.firstChild();
+    _pou->_body._type = PBT_LD;
+
+    while(!_item_node.isNull())
+    {
+        T_POU_LD_ITEM _item;
+        QString _name = _item_node.toElement().tagName();
+        if(_name == "block")
+        {
+            checkPOUbodyLD_block(_item_node, &_item);
+            if(_item._instanceName != "")   _item._type = IT_LD_BLOCK;
+            else                            _item._type = IT_LD_FUNCTION;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "inVariable")
+        {
+            checkPOUbodyLD_in_var(_item_node, &_item);
+            _item._type = IT_LD_INPUT;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "outVariable")
+        {
+            checkPOUbodyLD_out_var(_item_node, &_item);
+            _item._type = IT_LD_OUTPUT;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "inOutVariable")
+        {
+            checkPOUbodyLD_in_out_var(_item_node, &_item);
+            _item._type = IT_LD_INPUT_OUTPUT;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "connector")
+        {
+            checkPOUbodyLD_connector(_item_node, &_item);
+            _item._type = IT_LD_CONNECTOR;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "continuation")
+        {
+            checkPOUbodyLD_continuation(_item_node, &_item);
+            _item._type = IT_LD_CONTINUATION;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "comment")
+        {
+            checkPOUbodyLD_comment(_item_node, &_item);
+            _item._type = IT_LD_COMMENT;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "contact")
+        {
+            checkPOUbodyLD_contact(_item_node, &_item);
+            _item._type = IT_LD_CONTACT;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "leftPowerRail")
+        {
+            checkPOUbodyLD_left_power_rail(_item_node, &_item);
+            _item._type = IT_LD_LEFT_POWER_RAIL;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "rightPowerRail")
+        {
+            checkPOUbodyLD_right_power_rail(_item_node, &_item);
+            _item._type = IT_LD_RIGHT_POWER_RAIL;
+            _pou->_body._LD._item.push_back(_item);
+        }else
+        if(_name == "coil")
+        {
+            checkPOUbodyLD_coil(_item_node, &_item);
+            _item._type = IT_LD_COIL;
+            _pou->_body._LD._item.push_back(_item);
+        }
+        _item_node = _item_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyST(QDomNode _node, T_POU *_pou)
+{
+    QDomNode _ST_node = _node.firstChild();
+
+    _pou->_body._type = PBT_ST;
+
+    QStringList _list;
+    _list << _ST_node.firstChild().nodeValue().split("\n");
+    for(int _i = 0; _i < _list.size(); _i++)
+        _pou->_body._ST._ST_code << _list.at(_i).trimmed();
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyIL(QDomNode _node, T_POU *_pou)
+{
+    QDomNode _IL_node = _node.firstChild();
+
+    _pou->_body._type = PBT_IL;
+
+    QStringList _list;
+    _list << _IL_node.firstChild().nodeValue().split("\n");
+    for(int _i = 0; _i < _list.size(); _i++)
+        _pou->_body._IL._IL_code << _list.at(_i).trimmed();
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUactionFBD(QDomNode _node, T_POU_ACTION *_action)
+{
+    QDomNode _item_node = _node.firstChild();
+    _action->_type = PBT_FBD;
+
+    while(!_item_node.isNull())
+    {
+        T_POU_FBD_ITEM _item;
+        QString _name = _item_node.toElement().tagName();
+        if(_name == "block")
+        {
+            checkPOUbodyFBD_block(_item_node, &_item);
+            if(_item._instanceName != "")   _item._type = IT_FBD_BLOCK;
+            else                            _item._type = IT_FBD_FUNCTION;
+            _action->_FBD._item.push_back(_item);
+        }else
+            if(_name == "inVariable")
+            {
+                checkPOUbodyFBD_in_var(_item_node, &_item);
+                _item._type = IT_FBD_INPUT;
+                _action->_FBD._item.push_back(_item);
+            }else
+                if(_name == "outVariable")
+                {
+                    checkPOUbodyFBD_out_var(_item_node, &_item);
+                    _item._type = IT_FBD_OUTPUT;
+                    _action->_FBD._item.push_back(_item);
+                }else
+                    if(_name == "inOutVariable")
+                    {
+                        checkPOUbodyFBD_in_out_var(_item_node, &_item);
+                        _item._type = IT_FBD_INPUT_OUTPUT;
+                        _action->_FBD._item.push_back(_item);
+                    }else
+                        if(_name == "connector")
+                        {
+                            checkPOUbodyFBD_connector(_item_node, &_item);
+                            _item._type = IT_FBD_CONNECTOR;
+                            _action->_FBD._item.push_back(_item);
+                        }else
+                            if(_name == "continuation")
+                            {
+                                checkPOUbodyFBD_continuation(_item_node, &_item);
+                                _item._type = IT_FBD_CONTINUATION;
+                                _action->_FBD._item.push_back(_item);
+                            }else
+                                if(_name == "comment")
+                                {
+                                    checkPOUbodyFBD_comment(_item_node, &_item);
+                                    _item._type = IT_FBD_COMMENT;
+                                    _action->_FBD._item.push_back(_item);
+                                }
+        _item_node = _item_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUactionSFC(QDomNode _node, T_POU_ACTION *_action)
+{
+    QDomNode _item_node = _node.firstChild();
+    _action->_type = PBT_SFC;
+
+    while(!_item_node.isNull())
+    {
+        T_POU_SFC_ITEM _item;
+        QString _name = _item_node.toElement().tagName();
+        if(_name == "step")
+        {
+            checkPOUbodySFC_step(_item_node, &_item);
+            _item._type = IT_SFC_STEP;
+            _action->_SFC._item.push_back(_item);
+        }else
+            if(_name == "selectionDivergence")
+            {
+                checkPOUbodySFC_selection_divergence(_item_node, &_item);
+                _item._type = IT_SFC_SELECTION_DIVERGENCE;
+                _action->_SFC._item.push_back(_item);
+            }else
+                if(_name == "selectionConvergence")
+                {
+                    checkPOUbodySFC_selection_convergence(_item_node, &_item);
+                    _item._type = IT_SFC_SELECTION_CONVERGENCE;
+                    _action->_SFC._item.push_back(_item);
+                }else
+                    if(_name == "simultaneousDivergence")
+                    {
+                        checkPOUbodySFC_simultaneous_divergence(_item_node, &_item);
+                        _item._type = IT_SFC_SIMULTANEUS_DIVERGENCE;
+                        _action->_SFC._item.push_back(_item);
+                    }else
+                        if(_name == "simultaneousConvergence")
+                        {
+                            checkPOUbodySFC_simultaneous_convergence(_item_node, &_item);
+                            _item._type = IT_SFC_SIMULTANEUS_CONVERGENCE;
+                            _action->_SFC._item.push_back(_item);
+                        }else
+                            if(_name == "transition")
+                            {
+                                checkPOUbodySFC_transition(_item_node, &_item);
+                                _item._type = IT_SFC_TRANSITION;
+                                _action->_SFC._item.push_back(_item);
+                            }else
+                                if(_name == "actionBlock")
+                                {
+                                    checkPOUbodySFC_action_block(_item_node, &_item);
+                                    _item._type = IT_SFC_ACTION_BLOCK;
+                                    _action->_SFC._item.push_back(_item);
+                                }else
+                                    if(_name == "jumpStep")
+                                    {
+                                        checkPOUbodySFC_jump_step(_item_node, &_item);
+                                        _item._type = IT_SFC_JUMP_STEP;
+                                        _action->_SFC._item.push_back(_item);
+                                    }else
+                                        if(_name == "comment")
+                                        {
+                                            checkPOUbodySFC_comment(_item_node, &_item);
+                                            _item._type = IT_SFC_COMMENT;
+                                            _action->_SFC._item.push_back(_item);
+                                        }
+        _item_node = _item_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUactionLD(QDomNode _node, T_POU_ACTION *_action)
+{
+    QDomNode _item_node = _node.firstChild();
+    _action->_type = PBT_LD;
+
+    while(!_item_node.isNull())
+    {
+        T_POU_LD_ITEM _item;
+        QString _name = _item_node.toElement().tagName();
+        if(_name == "block")
+        {
+            checkPOUbodyLD_block(_item_node, &_item);
+            if(_item._instanceName != "")   _item._type = IT_LD_BLOCK;
+            else                            _item._type = IT_LD_FUNCTION;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "inVariable")
+        {
+            checkPOUbodyLD_in_var(_item_node, &_item);
+            _item._type = IT_LD_INPUT;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "outVariable")
+        {
+            checkPOUbodyLD_out_var(_item_node, &_item);
+            _item._type = IT_LD_OUTPUT;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "inOutVariable")
+        {
+            checkPOUbodyLD_in_out_var(_item_node, &_item);
+            _item._type = IT_LD_INPUT_OUTPUT;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "connector")
+        {
+            checkPOUbodyLD_connector(_item_node, &_item);
+            _item._type = IT_LD_CONNECTOR;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "continuation")
+        {
+            checkPOUbodyLD_continuation(_item_node, &_item);
+            _item._type = IT_LD_CONTINUATION;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "comment")
+        {
+            checkPOUbodyLD_comment(_item_node, &_item);
+            _item._type = IT_LD_COMMENT;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "contact")
+        {
+            checkPOUbodyLD_contact(_item_node, &_item);
+            _item._type = IT_LD_CONTACT;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "leftPowerRail")
+        {
+            checkPOUbodyLD_left_power_rail(_item_node, &_item);
+            _item._type = IT_LD_LEFT_POWER_RAIL;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "rightPowerRail")
+        {
+            checkPOUbodyLD_right_power_rail(_item_node, &_item);
+            _item._type = IT_LD_RIGHT_POWER_RAIL;
+            _action->_LD._item.push_back(_item);
+        }else
+        if(_name == "coil")
+        {
+            checkPOUbodyLD_coil(_item_node, &_item);
+            _item._type = IT_LD_COIL;
+            _action->_LD._item.push_back(_item);
+        }
+        _item_node = _item_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUactionST(QDomNode _node, T_POU_ACTION *_action)
+{
+    QDomNode _ST_node = _node.firstChild();
+
+    _action->_type = PBT_ST;
+
+    QStringList _list;
+    _list << _ST_node.firstChild().nodeValue().split("\n");
+    for(int _i = 0; _i < _list.size(); _i++)
+        _action->_ST._ST_code << _list.at(_i).trimmed();
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUactionIL(QDomNode _node, T_POU_ACTION *_action)
+{
+    QDomNode _IL_node = _node.firstChild();
+
+    _action->_type = PBT_IL;
+
+    QStringList _list;
+    _list << _IL_node.firstChild().nodeValue().split("\n");
+    for(int _i = 0; _i < _list.size(); _i++)
+        _action->_IL._IL_code << _list.at(_i).trimmed();
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_block(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    T_POU_ITEM_VARIABLE _block_var;
+    QDomNode _block_node = _node;
+
+    _block_var._connection._refLocalId = -1;
+
+    for(int _i = 0;  _i < _block_node.toElement().attributes().length(); _i++)
+        if(!_block_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_block_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _block_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_block_node.toElement().attributes().item(_i).toAttr().name() == "typeName")
+                _item->_typeName = _block_node.toElement().attributes().item(_i).toAttr().value();
+            if(_block_node.toElement().attributes().item(_i).toAttr().name() == "instanceName")
+                _item->_instanceName = _block_node.toElement().attributes().item(_i).toAttr().value();
+            if(_block_node.toElement().attributes().item(_i).toAttr().name() == "executionOrderId")
+                _item->_executionOrderId = _block_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_block_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _block_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_block_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _block_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+
+    QDomNode _ch_node = _block_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        if(_ch_node.toElement().tagName() == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_ch_node.toElement().tagName() == "inputVariables")
+        {
+            QDomNode _in_var_node = _ch_node.firstChild();
+            while(!_in_var_node.isNull())
+            {
+                if(_in_var_node.toElement().tagName() == "variable")
+                {
+                    for(int _i = 0;  _i < _in_var_node.toElement().attributes().length();  _i++)
+                        if(!_in_var_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_var_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _block_var._formalParameter = _in_var_node.toElement().attributes().item(_i).toAttr().value();
+                            if(_in_var_node.toElement().attributes().item(_i).toAttr().name() == "edge")
+                                _block_var._edge = _in_var_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+                }
+                QDomNode _point_in = _in_var_node.firstChild();
+                while(!_point_in.isNull())
+                {
+                    if(_point_in.toElement().tagName() == "connectionPointIn")
+                    {
+                        QDomNode _param_node = _point_in.firstChild();
+                        while(!_param_node.isNull())
+                        {
+                            if(_param_node.toElement().tagName() == "relPosition")
+                            {
+                                for(int _i = 0;  _i < _param_node.toElement().attributes().length();  _i++)
+                                    if(!_param_node.toElement().attributes().item(_i).toAttr().isNull())
+                                    {
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                            _block_var._relPosition._x = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                            _block_var._relPosition._y = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    }
+                            }
+                            if(_param_node.toElement().tagName() == "connection")
+                            {
+                                for(int _i = 0;  _i < _param_node.toElement().attributes().length();  _i++)
+                                    if(!_param_node.toElement().attributes().item(_i).toAttr().isNull())
+                                    {
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                            _block_var._connection._refLocalId = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                            _block_var._connection._formalParameter = _param_node.toElement().attributes().item(_i).toAttr().value();
+                                    }
+                                T_CONNECT_POSITION _connect_pos;
+                                QDomNode _connect_node = _param_node.firstChild();
+                                while(!_connect_node.isNull())
+                                {
+                                    if(_connect_node.toElement().tagName() == "position")
+                                    {
+                                        for(int _i = 0;  _i < _connect_node.toElement().attributes().length();  _i++)
+                                            if(!_connect_node.toElement().attributes().item(_i).toAttr().isNull())
+                                            {
+                                                if(_connect_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                                    _connect_pos._x = _connect_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                                if(_connect_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                                    _connect_pos._y = _connect_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                            }
+                                        _block_var._connection._position.push_back(_connect_pos);
+                                    }
+                                    _connect_node = _connect_node.nextSibling();
+                                }
+                            }
+                            _param_node = _param_node.nextSibling();
+                        }
+                    }
+                    _point_in = _point_in.nextSibling();
+                }
+                _item->_inputVariables.push_back(_block_var);
+                _block_var._formalParameter = "";
+                _block_var._edge = "";
+                _block_var._connection._refLocalId = -1;
+                _block_var._connection._formalParameter = "";
+                _block_var._connection._position.clear();
+                _in_var_node = _in_var_node.nextSibling();
+            }
+        }
+        if(_ch_node.toElement().tagName() == "inOutVariables")
+        {
+            QDomNode _in_var_node = _ch_node.firstChild();
+            while(!_in_var_node.isNull())
+            {
+                if(_in_var_node.toElement().tagName() == "variable")
+                {
+                    for(int _i = 0;  _i < _in_var_node.toElement().attributes().length();  _i++)
+                        if(!_in_var_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_var_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _block_var._formalParameter = _in_var_node.toElement().attributes().item(_i).toAttr().value();
+                            if(_in_var_node.toElement().attributes().item(_i).toAttr().name() == "edge")
+                                _block_var._edge = _in_var_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+                }
+                QDomNode _point_in = _in_var_node.firstChild();
+                while(!_point_in.isNull())
+                {
+                    if(_point_in.toElement().tagName() == "connectionPointInOut")
+                    {
+                        QDomNode _param_node = _point_in.firstChild();
+                        while(!_param_node.isNull())
+                        {
+                            if(_param_node.toElement().tagName() == "relPosition")
+                            {
+                                for(int _i = 0;  _i < _param_node.toElement().attributes().length();  _i++)
+                                    if(!_param_node.toElement().attributes().item(_i).toAttr().isNull())
+                                    {
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                            _block_var._relPosition._x = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                            _block_var._relPosition._y = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    }
+                            }
+                            if(_param_node.toElement().tagName() == "connection")
+                            {
+                                for(int _i = 0;  _i < _param_node.toElement().attributes().length();  _i++)
+                                    if(!_param_node.toElement().attributes().item(_i).toAttr().isNull())
+                                    {
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                            _block_var._connection._refLocalId = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                            _block_var._connection._formalParameter = _param_node.toElement().attributes().item(_i).toAttr().value();
+                                    }
+                                T_CONNECT_POSITION _connect_pos;
+                                QDomNode _connect_node = _param_node.firstChild();
+                                while(!_connect_node.isNull())
+                                {
+                                    if(_connect_node.toElement().tagName() == "position")
+                                    {
+                                        for(int _i = 0;  _i < _connect_node.toElement().attributes().length();  _i++)
+                                            if(!_connect_node.toElement().attributes().item(_i).toAttr().isNull())
+                                            {
+                                                if(_connect_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                                    _connect_pos._x = _connect_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                                if(_connect_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                                    _connect_pos._y = _connect_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                            }
+                                        _block_var._connection._position.push_back(_connect_pos);
+                                    }
+                                    _connect_node = _connect_node.nextSibling();
+                                }
+                            }
+                            _param_node = _param_node.nextSibling();
+                        }
+                    }
+                    _point_in = _point_in.nextSibling();
+                }
+                _item->_inOutVariables.push_back(_block_var);
+                _block_var._formalParameter = "";
+                _block_var._edge = "";
+                _block_var._connection._refLocalId = -1;
+                _block_var._connection._formalParameter = "";
+                _block_var._connection._position.clear();
+                _in_var_node = _in_var_node.nextSibling();
+            }
+        }
+        if(_ch_node.toElement().tagName() == "outputVariables")
+        {
+            QDomNode _in_var_node = _ch_node.firstChild();
+            while(!_in_var_node.isNull())
+            {
+                if(_in_var_node.toElement().tagName() == "variable")
+                {
+                    for(int _i = 0;  _i < _in_var_node.toElement().attributes().length();  _i++)
+                        if(!_in_var_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_var_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _block_var._formalParameter = _in_var_node.toElement().attributes().item(_i).toAttr().value();
+                            if(_in_var_node.toElement().attributes().item(_i).toAttr().name() == "edge")
+                                _block_var._edge = _in_var_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+                }
+                QDomNode _point_in = _in_var_node.firstChild();
+                while(!_point_in.isNull())
+                {
+                    if(_point_in.toElement().tagName() == "connectionPointOut")
+                    {
+                        QDomNode _param_node = _point_in.firstChild();
+                        while(!_param_node.isNull())
+                        {
+                            if(_param_node.toElement().tagName() == "relPosition")
+                            {
+                                for(int _i = 0;  _i < _param_node.toElement().attributes().length();  _i++)
+                                    if(!_param_node.toElement().attributes().item(_i).toAttr().isNull())
+                                    {
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                            _block_var._relPosition._x = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                            _block_var._relPosition._y = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    }
+                            }
+                            if(_param_node.toElement().tagName() == "connection")
+                            {
+                                for(int _i = 0;  _i < _param_node.toElement().attributes().length();  _i++)
+                                    if(!_param_node.toElement().attributes().item(_i).toAttr().isNull())
+                                    {
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                            _block_var._connection._refLocalId = _param_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                        if(_param_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                            _block_var._connection._formalParameter = _param_node.toElement().attributes().item(_i).toAttr().value();
+                                    }
+                                T_CONNECT_POSITION _connect_pos;
+                                QDomNode _connect_node = _param_node.firstChild();
+                                while(!_connect_node.isNull())
+                                {
+                                    if(_connect_node.toElement().tagName() == "position")
+                                    {
+                                        for(int _i = 0;  _i < _connect_node.toElement().attributes().length();  _i++)
+                                            if(!_connect_node.toElement().attributes().item(_i).toAttr().isNull())
+                                            {
+                                                if(_connect_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                                    _connect_pos._x = _connect_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                                if(_connect_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                                    _connect_pos._y = _connect_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                            }
+                                        _block_var._connection._position.push_back(_connect_pos);
+                                    }
+                                    _connect_node = _connect_node.nextSibling();
+                                }
+                            }
+                            _param_node = _param_node.nextSibling();
+                        }
+                    }
+                    _point_in = _point_in.nextSibling();
+                }
+                _item->_outputVariables.push_back(_block_var);
+                _block_var._formalParameter = "";
+                _block_var._edge = "";
+                _block_var._connection._refLocalId = -1;
+                _block_var._connection._formalParameter = "";
+                _block_var._connection._position.clear();
+                _in_var_node = _in_var_node.nextSibling();
+            }
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_in_var(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _var_node = _node;
+
+    _item->_connection._refLocalId = -1;
+    _item->_connection._formalParameter = "";
+
+    for(int _i = 0;  _i < _var_node.toElement().attributes().length(); _i++)
+        if(!_var_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "negated")
+                _item->_negated = (_var_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "executionOrderId")
+                _item->_executionOrderId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+
+    QDomNode _ch_node = _var_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "expression")
+            _item->_expression = _ch_node.toElement().text();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_out_var(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _var_node = _node;
+
+    _item->_connection._refLocalId = -1;
+    _item->_connection._formalParameter = "";
+
+    for(int _i = 0;  _i < _var_node.toElement().attributes().length(); _i++)
+        if(!_var_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "negated")
+                _item->_negated = (_var_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "executionOrderId")
+                _item->_executionOrderId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+
+    QDomNode _ch_node = _var_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "expression")
+            _item->_expression = _ch_node.toElement().text();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_in_out_var(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _var_node = _node;
+
+    _item->_connection._refLocalId = -1;
+    _item->_connection._formalParameter = "";
+
+    for(int _i = 0;  _i < _var_node.toElement().attributes().length(); _i++)
+        if(!_var_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "negatedIn")
+                _item->_negatedIn = (_var_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "negatedOut")
+                _item->_negatedOut = (_var_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "executionOrderId")
+                _item->_executionOrderId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+
+    QDomNode _ch_node = _var_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "expression")
+            _item->_expression = _ch_node.toElement().text();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_connector(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _var_node = _node;
+
+    for(int _i = 0;  _i < _var_node.toElement().attributes().length(); _i++)
+        if(!_var_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                _item->_name = _var_node.toElement().attributes().item(_i).toAttr().value();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+
+    QDomNode _ch_node = _var_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_continuation(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _var_node = _node;
+
+    for(int _i = 0;  _i < _var_node.toElement().attributes().length(); _i++)
+        if(!_var_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                _item->_name = _var_node.toElement().attributes().item(_i).toAttr().value();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_var_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+
+    QDomNode _ch_node = _var_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_comment(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _comment_node = _node;
+
+    for(int _i = 0;  _i < _comment_node.toElement().attributes().length(); _i++)
+        if(!_comment_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_comment_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _comment_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_comment_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _comment_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_comment_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _comment_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+    QDomNode _ch_node = _comment_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        if(_ch_node.toElement().tagName() == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toInt();
+                }
+        }else
+        if(_ch_node.toElement().tagName() == "content")
+            {
+                QDomNode _content_node = _ch_node.firstChild();
+                _item->_comment_content = _content_node.firstChild().nodeValue();
+            }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_contact(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _contact_node = _node;
+
+    for(int _i = 0;  _i < _contact_node.toElement().attributes().length(); _i++)
+        if(!_contact_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_contact_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _contact_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_contact_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _contact_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_contact_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _contact_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_contact_node.toElement().attributes().item(_i).toAttr().name() == "negated")
+                _item->_negated = (_contact_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
+            if(_contact_node.toElement().attributes().item(_i).toAttr().name() == "edge")
+                _item->_edge = _contact_node.toElement().attributes().item(_i).toAttr().value();
+        }
+
+    QDomNode _ch_node = _contact_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "variable")
+            _item->_expression = _ch_node.toElement().text();
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_left_power_rail(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _rail_node = _node;
+
+    for(int _i = 0;  _i < _rail_node.toElement().attributes().length(); _i++)
+        if(!_rail_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_rail_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _rail_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_rail_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _rail_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_rail_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _rail_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+
+    QDomNode _ch_node = _rail_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_right_power_rail(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _rail_node = _node;
+
+    for(int _i = 0;  _i < _rail_node.toElement().attributes().length(); _i++)
+        if(!_rail_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_rail_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _rail_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_rail_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _rail_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_rail_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _rail_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+
+    QDomNode _ch_node = _rail_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodyLD_coil(QDomNode _node, T_POU_LD_ITEM *_item)
+{
+    QDomNode _coil_node = _node;
+
+    for(int _i = 0;  _i < _coil_node.toElement().attributes().length(); _i++)
+        if(!_coil_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_coil_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _coil_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_coil_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _coil_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_coil_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _coil_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_coil_node.toElement().attributes().item(_i).toAttr().name() == "negated")
+                _item->_negated = (_coil_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
+            if(_coil_node.toElement().attributes().item(_i).toAttr().name() == "storage")
+                _item->_storage = _coil_node.toElement().attributes().item(_i).toAttr().value();
+            if(_coil_node.toElement().attributes().item(_i).toAttr().name() == "edge")
+                _item->_edge = _coil_node.toElement().attributes().item(_i).toAttr().value();
+        }
+
+    QDomNode _ch_node = _coil_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_pos_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_pos_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "variable")
+            _item->_expression = _ch_node.toElement().text();
+
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
     }
 }
 //-----------------------------------------------------------------------------------
@@ -1319,7 +2998,7 @@ void PLCopenXmlParser::checkPOUbodySFC_step(QDomNode _node, T_POU_SFC_ITEM *_ite
         }
         if(_tag_name == "connectionPointIn")
         {
-            T_SFC_CONNECTION_POINT_IN _in;
+            T_CONNECTION_POINT_IN _in;
 
             QDomNode _in_node = _ch_node.firstChild();
             while(!_in_node.isNull())
@@ -1338,17 +3017,20 @@ void PLCopenXmlParser::checkPOUbodySFC_step(QDomNode _node, T_POU_SFC_ITEM *_ite
                 }
                 if(_in_name == "connection")
                 {
-                    T_CONNECT_POSITION _pos;
+                    T_CONNECTION _conn;
                     for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
                         if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
                         {
                             if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
-                                _in._connection._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
                         }
 
                     QDomNode _pos_node = _in_node.firstChild();
                     while(!_pos_node.isNull())
                     {
+                        T_CONNECT_POSITION _pos;
                         if(_pos_node.toElement().tagName() == "position")
                         {
                             for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
@@ -1359,10 +3041,11 @@ void PLCopenXmlParser::checkPOUbodySFC_step(QDomNode _node, T_POU_SFC_ITEM *_ite
                                     if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
                                         _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
                                 }
-                            _in._connection._position.push_back(_pos);
+                            _conn._position.push_back(_pos);
                         }
                         _pos_node = _pos_node.nextSibling();
                     }
+                    _in._connection.push_back(_conn);
                 }
                 _in_node = _in_node.nextSibling();
             }
@@ -1370,7 +3053,7 @@ void PLCopenXmlParser::checkPOUbodySFC_step(QDomNode _node, T_POU_SFC_ITEM *_ite
         }
         if(_tag_name == "connectionPointOut")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1398,7 +3081,7 @@ void PLCopenXmlParser::checkPOUbodySFC_step(QDomNode _node, T_POU_SFC_ITEM *_ite
         }
         if(_tag_name == "connectionPointOutAction")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1461,7 +3144,7 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_divergence(QDomNode _node, T_PO
         }
         if(_tag_name == "connectionPointIn")
         {
-            T_SFC_CONNECTION_POINT_IN _in;
+            T_CONNECTION_POINT_IN _in;
 
             QDomNode _in_node = _ch_node.firstChild();
             while(!_in_node.isNull())
@@ -1480,17 +3163,20 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_divergence(QDomNode _node, T_PO
                 }
                 if(_in_name == "connection")
                 {
-                    T_CONNECT_POSITION _pos;
+                    T_CONNECTION _conn;
                     for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
                         if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
                         {
                             if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
-                                _in._connection._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
                         }
 
                     QDomNode _pos_node = _in_node.firstChild();
                     while(!_pos_node.isNull())
                     {
+                        T_CONNECT_POSITION _pos;
                         if(_pos_node.toElement().tagName() == "position")
                         {
                             for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
@@ -1501,10 +3187,11 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_divergence(QDomNode _node, T_PO
                                     if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
                                         _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
                                 }
-                            _in._connection._position.push_back(_pos);
+                            _conn._position.push_back(_pos);
                         }
                         _pos_node = _pos_node.nextSibling();
                     }
+                    _in._connection.push_back(_conn);
                 }
                 _in_node = _in_node.nextSibling();
             }
@@ -1512,7 +3199,7 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_divergence(QDomNode _node, T_PO
         }
         if(_tag_name == "connectionPointOut")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1540,7 +3227,7 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_divergence(QDomNode _node, T_PO
         }
         if(_tag_name == "connectionPointOutAction")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1603,7 +3290,7 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_convergence(QDomNode _node, T_P
         }
         if(_tag_name == "connectionPointIn")
         {
-            T_SFC_CONNECTION_POINT_IN _in;
+            T_CONNECTION_POINT_IN _in;
 
             QDomNode _in_node = _ch_node.firstChild();
             while(!_in_node.isNull())
@@ -1622,17 +3309,20 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_convergence(QDomNode _node, T_P
                 }
                 if(_in_name == "connection")
                 {
-                    T_CONNECT_POSITION _pos;
+                    T_CONNECTION _conn;
                     for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
                         if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
                         {
                             if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
-                                _in._connection._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
                         }
 
                     QDomNode _pos_node = _in_node.firstChild();
                     while(!_pos_node.isNull())
                     {
+                        T_CONNECT_POSITION _pos;
                         if(_pos_node.toElement().tagName() == "position")
                         {
                             for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
@@ -1643,10 +3333,11 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_convergence(QDomNode _node, T_P
                                     if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
                                         _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
                                 }
-                            _in._connection._position.push_back(_pos);
+                            _conn._position.push_back(_pos);
                         }
                         _pos_node = _pos_node.nextSibling();
                     }
+                    _in._connection.push_back(_conn);
                 }
                 _in_node = _in_node.nextSibling();
             }
@@ -1654,7 +3345,7 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_convergence(QDomNode _node, T_P
         }
         if(_tag_name == "connectionPointOut")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1682,7 +3373,299 @@ void PLCopenXmlParser::checkPOUbodySFC_selection_convergence(QDomNode _node, T_P
         }
         if(_tag_name == "connectionPointOutAction")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out_action.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodySFC_simultaneous_divergence(QDomNode _node, T_POU_SFC_ITEM *_item)
+{
+    QDomNode _main_node = _node;
+
+    for(int _i = 0;  _i < _main_node.toElement().attributes().length(); _i++)
+        if(!_main_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_main_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _main_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_main_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _main_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_main_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _main_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+    QDomNode _ch_node = _main_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_position_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_position_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        if(_tag_name == "connectionPointOutAction")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out_action.push_back(_out);
+        }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodySFC_simultaneous_convergence(QDomNode _node, T_POU_SFC_ITEM *_item)
+{
+    QDomNode _main_node = _node;
+
+    for(int _i = 0;  _i < _main_node.toElement().attributes().length(); _i++)
+        if(!_main_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_main_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _main_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_main_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _main_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_main_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _main_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+    QDomNode _ch_node = _main_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        QString _tag_name = _ch_node.toElement().tagName();
+        if(_tag_name == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_position_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_position_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                }
+        }
+        if(_tag_name == "connectionPointIn")
+        {
+            T_CONNECTION_POINT_IN _in;
+
+            QDomNode _in_node = _ch_node.firstChild();
+            while(!_in_node.isNull())
+            {
+                QString _in_name = _in_node.toElement().tagName();
+                if(_in_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _in._rel_position_x = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _in._rel_position_y = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                if(_in_name == "connection")
+                {
+                    T_CONNECTION _conn;
+                    for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
+                        if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+
+                    QDomNode _pos_node = _in_node.firstChild();
+                    while(!_pos_node.isNull())
+                    {
+                        T_CONNECT_POSITION _pos;
+                        if(_pos_node.toElement().tagName() == "position")
+                        {
+                            for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
+                                if(!_pos_node.toElement().attributes().item(_i).toAttr().isNull())
+                                {
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                        _pos._x = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                    if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                        _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                }
+                            _conn._position.push_back(_pos);
+                        }
+                        _pos_node = _pos_node.nextSibling();
+                    }
+                    _in._connection.push_back(_conn);
+                }
+                _in_node = _in_node.nextSibling();
+            }
+            _item->_point_in.push_back(_in);
+        }
+        if(_tag_name == "connectionPointOut")
+        {
+            T_CONNECTION_POINT_OUT _out;
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                        _out._formalParameter = _ch_node.toElement().attributes().item(_i).toAttr().value();
+                }
+            QDomNode _out_node = _ch_node.firstChild();
+            while(!_out_node.isNull())
+            {
+                QString _out_name = _out_node.toElement().tagName();
+                if(_out_name == "relPosition")
+                {
+                    for(int _i = 0;  _i < _out_node.toElement().attributes().length(); _i++)
+                        if(!_out_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                                _out._rel_position_x = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_out_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                                _out._rel_position_y = _out_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                        }
+                }
+                _out_node = _out_node.nextSibling();
+            }
+            _item->_point_out.push_back(_out);
+        }
+        if(_tag_name == "connectionPointOutAction")
+        {
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1747,7 +3730,7 @@ void PLCopenXmlParser::checkPOUbodySFC_transition(QDomNode _node, T_POU_SFC_ITEM
         }
         if(_tag_name == "connectionPointIn")
         {
-            T_SFC_CONNECTION_POINT_IN _in;
+            T_CONNECTION_POINT_IN _in;
 
             QDomNode _in_node = _ch_node.firstChild();
             while(!_in_node.isNull())
@@ -1766,17 +3749,20 @@ void PLCopenXmlParser::checkPOUbodySFC_transition(QDomNode _node, T_POU_SFC_ITEM
                 }
                 if(_in_name == "connection")
                 {
-                    T_CONNECT_POSITION _pos;
+                    T_CONNECTION _conn;
                     for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
                         if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
                         {
                             if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
-                                _in._connection._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
                         }
 
                     QDomNode _pos_node = _in_node.firstChild();
                     while(!_pos_node.isNull())
                     {
+                        T_CONNECT_POSITION _pos;
                         if(_pos_node.toElement().tagName() == "position")
                         {
                             for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
@@ -1787,10 +3773,11 @@ void PLCopenXmlParser::checkPOUbodySFC_transition(QDomNode _node, T_POU_SFC_ITEM
                                     if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
                                         _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
                                 }
-                            _in._connection._position.push_back(_pos);
+                            _conn._position.push_back(_pos);
                         }
                         _pos_node = _pos_node.nextSibling();
                     }
+                    _in._connection.push_back(_conn);
                 }
                 _in_node = _in_node.nextSibling();
             }
@@ -1798,7 +3785,7 @@ void PLCopenXmlParser::checkPOUbodySFC_transition(QDomNode _node, T_POU_SFC_ITEM
         }
         if(_tag_name == "connectionPointOut")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1826,7 +3813,7 @@ void PLCopenXmlParser::checkPOUbodySFC_transition(QDomNode _node, T_POU_SFC_ITEM
         }
         if(_tag_name == "connectionPointOutAction")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1916,7 +3903,7 @@ void PLCopenXmlParser::checkPOUbodySFC_action_block(QDomNode _node, T_POU_SFC_IT
         }
         if(_tag_name == "connectionPointIn")
         {
-            T_SFC_CONNECTION_POINT_IN _in;
+            T_CONNECTION_POINT_IN _in;
 
             QDomNode _in_node = _ch_node.firstChild();
             while(!_in_node.isNull())
@@ -1935,17 +3922,20 @@ void PLCopenXmlParser::checkPOUbodySFC_action_block(QDomNode _node, T_POU_SFC_IT
                 }
                 if(_in_name == "connection")
                 {
-                    T_CONNECT_POSITION _pos;
+                    T_CONNECTION _conn;
                     for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
                         if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
                         {
                             if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
-                                _in._connection._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
                         }
 
                     QDomNode _pos_node = _in_node.firstChild();
                     while(!_pos_node.isNull())
                     {
+                        T_CONNECT_POSITION _pos;
                         if(_pos_node.toElement().tagName() == "position")
                         {
                             for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
@@ -1956,10 +3946,11 @@ void PLCopenXmlParser::checkPOUbodySFC_action_block(QDomNode _node, T_POU_SFC_IT
                                     if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
                                         _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
                                 }
-                            _in._connection._position.push_back(_pos);
+                            _conn._position.push_back(_pos);
                         }
                         _pos_node = _pos_node.nextSibling();
                     }
+                    _in._connection.push_back(_conn);
                 }
                 _in_node = _in_node.nextSibling();
             }
@@ -1967,7 +3958,7 @@ void PLCopenXmlParser::checkPOUbodySFC_action_block(QDomNode _node, T_POU_SFC_IT
         }
         if(_tag_name == "connectionPointOut")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -1995,7 +3986,7 @@ void PLCopenXmlParser::checkPOUbodySFC_action_block(QDomNode _node, T_POU_SFC_IT
         }
         if(_tag_name == "connectionPointOutAction")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -2052,8 +4043,19 @@ void PLCopenXmlParser::checkPOUbodySFC_action_block(QDomNode _node, T_POU_SFC_IT
                                 _act._pel_position_y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
                         }
                 }
+                if(_cond_name == "reference")
+                {
+                    _act._action_type = AR_REFERENS;
+                    for(int _i = 0;  _i < _act_node.toElement().attributes().length();  _i++)
+                        if (!_act_node.toElement().attributes().item(_i).toAttr().isNull())
+                        {
+                            if(_act_node.toElement().attributes().item(_i).toAttr().name() == "name")
+                                _act._reference_name = _act_node.toElement().attributes().item(_i).toAttr().value();
+                        }
+                }
                 if(_cond_name == "inline")
                 {
+                    _act._action_type = AR_INLINE;
                     QDomNode _st_node = _act_node.firstChild();
                     if(_st_node.toElement().tagName() == "ST")
                         _act._ST_code = _st_node.firstChild().firstChild().nodeValue();
@@ -2101,7 +4103,7 @@ void PLCopenXmlParser::checkPOUbodySFC_jump_step(QDomNode _node, T_POU_SFC_ITEM 
         }
         if(_tag_name == "connectionPointIn")
         {
-            T_SFC_CONNECTION_POINT_IN _in;
+            T_CONNECTION_POINT_IN _in;
 
             QDomNode _in_node = _ch_node.firstChild();
             while(!_in_node.isNull())
@@ -2120,17 +4122,20 @@ void PLCopenXmlParser::checkPOUbodySFC_jump_step(QDomNode _node, T_POU_SFC_ITEM 
                 }
                 if(_in_name == "connection")
                 {
-                    T_CONNECT_POSITION _pos;
+                    T_CONNECTION _conn;
                     for(int _i = 0;  _i < _in_node.toElement().attributes().length(); _i++)
                         if(!_in_node.toElement().attributes().item(_i).toAttr().isNull())
                         {
                             if(_in_node.toElement().attributes().item(_i).toAttr().name() == "refLocalId")
-                                _in._connection._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                                _conn._refLocalId = _in_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+                            if(_in_node.toElement().attributes().item(_i).toAttr().name() == "formalParameter")
+                                _conn._formalParameter = _in_node.toElement().attributes().item(_i).toAttr().value();
                         }
 
                     QDomNode _pos_node = _in_node.firstChild();
                     while(!_pos_node.isNull())
                     {
+                        T_CONNECT_POSITION _pos;
                         if(_pos_node.toElement().tagName() == "position")
                         {
                             for(int _i = 0;  _i < _pos_node.toElement().attributes().length(); _i++)
@@ -2141,10 +4146,11 @@ void PLCopenXmlParser::checkPOUbodySFC_jump_step(QDomNode _node, T_POU_SFC_ITEM 
                                     if(_pos_node.toElement().attributes().item(_i).toAttr().name() == "y")
                                         _pos._y = _pos_node.toElement().attributes().item(_i).toAttr().value().toUInt();
                                 }
-                            _in._connection._position.push_back(_pos);
+                            _conn._position.push_back(_pos);
                         }
                         _pos_node = _pos_node.nextSibling();
                     }
+                    _in._connection.push_back(_conn);
                 }
                 _in_node = _in_node.nextSibling();
             }
@@ -2152,7 +4158,7 @@ void PLCopenXmlParser::checkPOUbodySFC_jump_step(QDomNode _node, T_POU_SFC_ITEM 
         }
         if(_tag_name == "connectionPointOut")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -2180,7 +4186,7 @@ void PLCopenXmlParser::checkPOUbodySFC_jump_step(QDomNode _node, T_POU_SFC_ITEM 
         }
         if(_tag_name == "connectionPointOutAction")
         {
-            T_SFC_CONNECTION_POINT_OUT _out;
+            T_CONNECTION_POINT_OUT _out;
             for(int _i = 0;  _i < _ch_node.toElement().attributes().length(); _i++)
                 if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
                 {
@@ -2212,9 +4218,48 @@ void PLCopenXmlParser::checkPOUbodySFC_jump_step(QDomNode _node, T_POU_SFC_ITEM 
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
+void PLCopenXmlParser::checkPOUbodySFC_comment(QDomNode _node, T_POU_SFC_ITEM *_item)
+{
+    QDomNode _comment_node = _node;
+
+    for(int _i = 0;  _i < _comment_node.toElement().attributes().length(); _i++)
+        if(!_comment_node.toElement().attributes().item(_i).toAttr().isNull())
+        {
+            if(_comment_node.toElement().attributes().item(_i).toAttr().name() == "localId")
+                _item->_localId = _comment_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_comment_node.toElement().attributes().item(_i).toAttr().name() == "width")
+                _item->_width = _comment_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+            if(_comment_node.toElement().attributes().item(_i).toAttr().name() == "height")
+                _item->_height = _comment_node.toElement().attributes().item(_i).toAttr().value().toUInt();
+        }
+    QDomNode _ch_node = _comment_node.firstChild();
+    while(!_ch_node.isNull())
+    {
+        if(_ch_node.toElement().tagName() == "position")
+        {
+            for(int _i = 0;  _i < _ch_node.toElement().attributes().length();  _i++)
+                if(!_ch_node.toElement().attributes().item(_i).toAttr().isNull())
+                {
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "x")
+                        _item->_position_x = _ch_node.toElement().attributes().item(_i).toAttr().value().toInt();
+                    if(_ch_node.toElement().attributes().item(_i).toAttr().name() == "y")
+                        _item->_position_y = _ch_node.toElement().attributes().item(_i).toAttr().value().toInt();
+                }
+        }else
+            if(_ch_node.toElement().tagName() == "content")
+            {
+                QDomNode _content_node = _ch_node.firstChild();
+                _item->_comment_content = _content_node.firstChild().nodeValue();
+            }
+        _ch_node = _ch_node.nextSibling();
+    }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 void PLCopenXmlParser::checkPOUbodyFBD_block(QDomNode _node, T_POU_FBD_ITEM *_item)
 {
-    T_POU_FBD_ITEM_VARIABLE _block_var;
+    T_POU_ITEM_VARIABLE _block_var;
     QDomNode _block_node = _node;
 
     _block_var._connection._refLocalId = -1;
@@ -2503,7 +4548,7 @@ void PLCopenXmlParser::checkPOUbodyFBD_in_var(QDomNode _node, T_POU_FBD_ITEM *_i
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "localId")
                 _item->_localId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "negated")
-                _item->_negated = _var_node.toElement().attributes().item(_i).toAttr().value().toInt();
+                _item->_negated = (_var_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "executionOrderId")
                 _item->_executionOrderId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "width")
@@ -2595,7 +4640,7 @@ void PLCopenXmlParser::checkPOUbodyFBD_out_var(QDomNode _node, T_POU_FBD_ITEM *_
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "localId")
                 _item->_localId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "negated")
-                _item->_negated = _var_node.toElement().attributes().item(_i).toAttr().value().toInt();
+                _item->_negated = (_var_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "executionOrderId")
                 _item->_executionOrderId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "width")
@@ -2687,9 +4732,9 @@ void PLCopenXmlParser::checkPOUbodyFBD_in_out_var(QDomNode _node, T_POU_FBD_ITEM
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "localId")
                 _item->_localId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "negatedIn")
-                _item->_negatedIn = _var_node.toElement().attributes().item(_i).toAttr().value().toInt();
+                _item->_negatedIn = (_var_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "negatedOut")
-                _item->_negatedOut = _var_node.toElement().attributes().item(_i).toAttr().value().toInt();
+                _item->_negatedOut = (_var_node.toElement().attributes().item(_i).toAttr().value() == "true") ? true : false;
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "executionOrderId")
                 _item->_executionOrderId = _var_node.toElement().attributes().item(_i).toAttr().value().toUInt();
             if(_var_node.toElement().attributes().item(_i).toAttr().name() == "width")
@@ -3022,58 +5067,10 @@ void PLCopenXmlParser::checkPOUbodyFBD_comment(QDomNode _node, T_POU_FBD_ITEM *_
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
-void PLCopenXmlParser::checkPOUbodyST(QDomNode _node, T_POU *_pou)
-{
-    QDomNode _ST_node = _node.firstChild();
-
-    _pou->_body._type = PBT_ST;
-
-    if(_ST_node.toElement().tagName() == "p")
-    {
-        QDomNode _code_node = _ST_node.firstChild();
-        QStringList _list;
-        _list << _code_node.nodeValue().split("\n");
-        for(int _i = 0; _i < _list.size(); _i++)
-            _pou->_body._ST._ST_code << _list.at(_i).trimmed();
-    }
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
 void PLCopenXmlParser::checkPOUdocumentation(QDomNode _node, T_POU *_pou)
 {
-    QDomNode _doc_node = _node.firstChild();
-    if(_doc_node.toElement().tagName() == "p")
-    {
-        QDomNode _text_node = _doc_node.firstChild();
-        _pou->_body._documentation = _text_node.nodeValue();
-    }
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-void PLCopenXmlParser::checkPOUbodyIL(QDomNode _node, T_POU *_pou)
-{
-    QDomNode _IL_node = _node.firstChild();
-
-    _pou->_body._type = PBT_IL;
-
-    if(_IL_node.toElement().tagName() == "p")
-    {
-        QDomNode _code_node = _IL_node.firstChild();
-        QStringList _list;
-        _list << _code_node.nodeValue().split("\n");
-        for(int _i = 0; _i < _list.size(); _i++)
-            _pou->_body._IL._IL_code << _list.at(_i).trimmed();
-    }
-}
-//-----------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------
-void PLCopenXmlParser::checkPOUbodyLD(QDomNode _node, T_POU *_pou)
-{
-    Q_UNUSED(_node)
-    _pou->_body._type = PBT_LD;
+    QDomNode _text_node = _node.firstChild().firstChild();
+    _pou->_body._documentation = _text_node.nodeValue();
 }
 //-----------------------------------------------------------------------------------
 //
@@ -3105,7 +5102,6 @@ bool PLCopenXmlParser::writeXmlFile()
 bool PLCopenXmlParser::checkRedifinitionBaseType(QDomNode _node, T_UDT *_udt)
 {
     bool _result = false;
-    QString _s = _node.toElement().tagName();
     for(int _i = 0; _i < ARRAY_SIZE(_base_type_name); _i++)
         if(_base_type_name[_i] == _node.toElement().tagName())
         {

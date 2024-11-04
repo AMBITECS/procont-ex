@@ -1,10 +1,12 @@
 #ifndef TRANSLATORIEC_H
 #define TRANSLATORIEC_H
 
-#include "XmlParser.h"
+#include <QObject>
+#include "GlobalType.h"
 
-class TranslatorIEC
+class TranslatorIEC : public QObject
 {
+    Q_OBJECT
 public:
     TranslatorIEC();
 
@@ -17,38 +19,19 @@ public:
 
 protected:
     static QString getSTCode_type(const QDomNode &node_);
-    static QString UDT_STgenerator(const T_UDT &udt_);
+    static QString UDT_STgenerator(T_UDT *udt_);
 
-    static QString INSTANCES_STgenerator(const T_INSTANCES &inst_);
+    static QString INSTANCES_STgenerator(T_INSTANCES *inst_);
 
-    void Program_STgenerator(T_POU &pou_, QString &text_);
-
-    void ProgramCode_STgenerator(T_POU &pou_, QString &text_);
-
-    virtual void ProgramCode_Program_STgenerator(T_POU &pou_, QString &text_);
-    virtual void ProgramCode_Function_STgenerator(T_POU &pou_, QString &text_);
-    virtual void ProgramCode_FunctionBlock_STgenerator(T_POU &pou_, QString &text_);
-
-    void parseFBDitem(const T_POU &pou_);
-
-    void AllVarFBD_STgenerator(T_POU &pou_, QString &text_);
-    void prepareAllRetainVar(T_POU &pou_, QString &);
-    void prepareAllNonRetainVar(T_POU &pou_, QString &);
-    void prepareAllConstantVar(T_POU &pou_, QString &);
-
-    static QString getTypeByVar(const T_POU &pou_, QString _var_name);
+    virtual void Code_STgenerator(T_POU pou_, QString &text_) = 0;
 
 protected:
+    void AllVar_STgenerator(T_POU *pou_, QString &text_);
+    void prepareAllRetainVar(T_POU *pou_, QString &);
+    void prepareAllNonRetainVar(T_POU *pou_, QString &);
+    void prepareAllConstantVar(T_POU *pou_, QString &);
 
-    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_in_var_item;
-    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_out_var_item;
-    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_in_out_var_item;
-
-    QMap<quint64, T_POU_FBD_ITEM>       _m_pou_FBD_item;
-    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_block_item;
-    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_func_item;
-    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_connect_item;
-    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_continuation_item;
+    static QString getTypeByVar(const T_POU *pou_, QString _var_name);
 };
 
 #endif // TRANSLATORIEC_H

@@ -6,7 +6,7 @@
 // *** Translator_POU_ST ***
 
 #include "editor/st/XmlParser.h"
-#include "translator/TranslatorIec.h"
+#include "translator/TranslatorST.h"
 
 Translator_POU_ST::Translator_POU_ST(const QDomNode &node_) : ITranslator_POU(node_)
 {
@@ -18,7 +18,7 @@ QString Translator_POU_ST::translate() const
     // _text += XmlParser::getPouVarsText(_m_node);
     // _text += XmlParser::getPouBodyText(_m_node);
 
-    TranslatorIEC translator;
+    TranslatorST translator;
     return translator.getSTCode_pou(_m_node);
 
     // return _text;

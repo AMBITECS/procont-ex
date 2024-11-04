@@ -75,6 +75,11 @@ protected:
     static void checkPOUbodyIL(QDomNode _node, T_POU *_pou);
     static void checkPOUbodyLD(QDomNode _node, T_POU *_pou);
 
+    static void checkPOUactionFBD(QDomNode _node, T_POU_ACTION *_action);
+    static void checkPOUactionST(QDomNode _node, T_POU_ACTION *_action);
+    static void checkPOUactionSFC(QDomNode _node, T_POU_ACTION *_action);
+    static void checkPOUactionIL(QDomNode _node, T_POU_ACTION *_action);
+    static void checkPOUactionLD(QDomNode _node, T_POU_ACTION *_action);
 
     static void checkPOUbodyFBD_block(QDomNode _node, T_POU_FBD_ITEM *_item);
     static void checkPOUbodyFBD_in_var(QDomNode _node, T_POU_FBD_ITEM *_item);
@@ -87,9 +92,24 @@ protected:
     static void checkPOUbodySFC_step(QDomNode _node, T_POU_SFC_ITEM *_item);
     static void checkPOUbodySFC_selection_divergence(QDomNode _node, T_POU_SFC_ITEM *_item);
     static void checkPOUbodySFC_selection_convergence(QDomNode _node, T_POU_SFC_ITEM *_item);
+    static void checkPOUbodySFC_simultaneous_divergence(QDomNode _node, T_POU_SFC_ITEM *_item);
+    static void checkPOUbodySFC_simultaneous_convergence(QDomNode _node, T_POU_SFC_ITEM *_item);
     static void checkPOUbodySFC_transition(QDomNode _node, T_POU_SFC_ITEM *_item);
     static void checkPOUbodySFC_action_block(QDomNode _node, T_POU_SFC_ITEM *_item);
     static void checkPOUbodySFC_jump_step(QDomNode _node, T_POU_SFC_ITEM *_item);
+    static void checkPOUbodySFC_comment(QDomNode _node, T_POU_SFC_ITEM *_item);
+
+    static void checkPOUbodyLD_block(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_in_var(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_out_var(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_in_out_var(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_connector(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_continuation(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_comment(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_contact(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_left_power_rail(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_right_power_rail(QDomNode _node, T_POU_LD_ITEM *_item);
+    static void checkPOUbodyLD_coil(QDomNode _node, T_POU_LD_ITEM *_item);
 
     static bool checkRedifinitionBaseType(QDomNode _node, T_UDT *_udt);
 

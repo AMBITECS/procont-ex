@@ -85,6 +85,7 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
+        translator/TranslatorIL.cpp translator/TranslatorIL.h translator/TranslatorLD.cpp translator/TranslatorLD.h translator/TranslatorST.cpp translator/TranslatorST.h
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

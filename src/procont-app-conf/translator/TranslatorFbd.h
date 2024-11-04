@@ -1,21 +1,22 @@
 #ifndef TRANSLATORFBD_H
 #define TRANSLATORFBD_H
 
-#include "XmlParser.h"
-
 #include "TranslatorIec.h"
 
 class TranslatorFBD : public TranslatorIEC
 {
+    Q_OBJECT
 public:
     TranslatorFBD();
+    void Code_STgenerator(T_POU_BODY_FBD _fbd, QString &text_);
 
 protected:
-    void ProgramCode_Program_STgenerator(T_POU &pou_, QString &text_) override;
-    void ProgramCode_Function_STgenerator(T_POU &pou_, QString &text_) override;
-    void ProgramCode_FunctionBlock_STgenerator(T_POU &pou_, QString &text_) override;
+    void Code_STgenerator(T_POU pou_, QString &text_) override;
 
 protected:
+    void parseItem(T_POU *pou_);
+    void parseItem(T_POU_BODY_FBD *_fbd);
+
     void prepareConnectContinuation();
     void prepareBlock();
     void prepareFuncTempVar();
@@ -38,8 +39,18 @@ protected:
     quint32 linkConnect(quint32 _connect_id);
 
 protected:
-    QMultiMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_execution_order_item;
-    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_pou_FBD_generator_item;
+    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_in_var_item;
+    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_out_var_item;
+    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_in_out_var_item;
+
+    QMap<quint64, T_POU_FBD_ITEM>       _m_item;
+    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_block_item;
+    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_func_item;
+    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_connect_item;
+    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_continuation_item;
+
+    QMultiMap<quint64, T_POU_FBD_ITEM_SHORT> _m_execution_order_item;
+    QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_generator_item;
 };
 
 #endif // TRANSLATORFBD_H

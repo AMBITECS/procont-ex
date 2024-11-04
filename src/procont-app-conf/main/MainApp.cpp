@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
     QTranslator translator;
     if( translator.load( ":/procont-app-conf_ru_RU.qm" ) )
         a.installTranslator( &translator );
-    MainWindow w;
-    w.show();
+    // MainWindow w;
+    MainWindow::instance()->show();
 
     return a.exec();
 }

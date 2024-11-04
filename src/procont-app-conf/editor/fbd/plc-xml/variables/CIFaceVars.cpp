@@ -1,0 +1,224 @@
+//
+// Created by artem on 10/20/24.
+//
+
+#include "CIfaceVars.h"
+
+CIfaceVars::CIfaceVars()
+{
+    m_variables = new QList<CVariable*>();
+}
+
+CIfaceVars::CIfaceVars(const CIfaceVars &other)
+{
+    m_variables = new QList<CVariable*>(*other.m_variables);
+    m_var_type = other.m_var_type;
+}
+
+CIfaceVars::CIfaceVars(const QDomNode &dom_node)
+{
+    m_var_type = dom_node.nodeName();
+    m_variables = new QList<CVariable*>();
+
+    m_name = dom_node.attributes().namedItem("name").toAttr().value();
+    m_constant = dom_node.attributes().namedItem("constant").toAttr().value().toInt();
+    m_retain = dom_node.attributes().namedItem("retain").toAttr().value().toInt();
+    m_persistent = dom_node.attributes().namedItem("persistent").toAttr().value().toInt();
+
+    for (uint16_t i = 0; i < dom_node.childNodes().count(); ++i)
+    {
+        QDomNode child = dom_node.childNodes().at(i);
+        auto var = new CVariable(child);
+        m_variables->push_back(var);
+    }
+}
+
+CIfaceVars::CIfaceVars(CIfaceVars &&other) noexcept
+    : m_var_type(std::move(other.m_var_type))
+{
+    m_variables = other.m_variables;
+    other.m_variables = nullptr;
+}
+
+CIfaceVars::~CIfaceVars()
+{
+    if (!m_variables)
+    {
+        return;
+    }
+
+    clean();
+    delete m_variables;
+}
+
+QDomNode CIfaceVars::dom_node() const
+{
+    QDomDocument doc;
+    QDomElement root = doc.createElement(m_var_type);
+
+    if (!m_name.isEmpty())
+    {
+        root.setAttribute("name", m_name);
+    }
+
+    root.setAttribute("constant", m_constant);
+    root.setAttribute("retain", m_retain);
+    root.setAttribute("persistent", m_persistent);
+
+    for (auto &item : *m_variables)
+    {
+        root.appendChild(item->dom_node());
+    }
+
+    return root;
+}
+
+QString CIfaceVars::name() const
+{
+    return m_name;
+}
+
+void CIfaceVars::set_name(const QString &name)
+{
+    m_name = name;
+}
+
+bool CIfaceVars::is_constant() const
+{
+    return m_constant;
+}
+
+void CIfaceVars::set_constant(const bool &constant)
+{
+    m_constant = constant;
+}
+
+bool CIfaceVars::is_retain() const
+{
+    return m_retain;
+}
+
+void CIfaceVars::set_retain(const bool &retain)
+{
+    m_retain = retain;
+}
+
+bool CIfaceVars::is_persistent() const
+{
+    return m_persistent;
+}
+
+void CIfaceVars::set_persistent(const bool &persistent)
+{
+    m_persistent = persistent;
+}
+
+void CIfaceVars::clean()
+{
+    for (auto &item : *m_variables)
+    {
+        delete item;
+    }
+    m_variables->clear();
+}
+
+QList<CVariable *> *CIfaceVars::variables()
+{
+    return m_variables;
+}
+
+CAddData *CIfaceVars::add_data()
+{
+    return &m_add_data;
+}
+
+CDocumentation *CIfaceVars::documentation()
+{
+    return &m_document;
+}
+
+bool CIfaceVars::is_empty() const
+{
+    return m_variables->isEmpty();
+}
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+CAccessVars::CAccessVars() : CIfaceVars()
+{
+    m_var_type = "accessVars";
+}
+
+CAccessVars::~CAccessVars()
+= default;
+
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+CLocalVars::CLocalVars() : CIfaceVars()
+{
+    m_var_type = "localVars";
+}
+
+CLocalVars::~CLocalVars()
+= default;
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+CGlobalVars::CGlobalVars() : CIfaceVars()
+{
+    m_var_type = "globalVars";
+}
+
+CGlobalVars::~CGlobalVars()
+= default;
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+CExternalVars::CExternalVars() : CIfaceVars()
+{
+    m_var_type = "externalVars";
+}
+
+CExternalVars::~CExternalVars()
+= default;
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+CTempVars::CTempVars()
+{
+    m_var_type = "tempVars";
+}
+
+CTempVars::~CTempVars()
+= default;
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+CInVars::CInVars()
+{
+    m_var_type = "inputVars";
+}
+
+CInVars::~CInVars()
+= default;
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+COutVars::COutVars() : CIfaceVars()
+{
+    m_var_type = "outputVars";
+}
+
+COutVars::~COutVars()
+= default;
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+CInOutVars::CInOutVars() : CIfaceVars()
+{
+    m_var_type = "inOutVars";
+}
+
+CInOutVars::~CInOutVars()
+= default;

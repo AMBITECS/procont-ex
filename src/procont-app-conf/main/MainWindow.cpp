@@ -13,6 +13,7 @@
 #include "dialog/AddTypeDialog.h"
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
+#include "editor/fbd/general/ctreeobject.h"
 
 #include <QDockWidget>
 #include <QTreeView>
@@ -24,6 +25,8 @@
 #include <QToolButton>
 
 #include <QDebug>
+
+MainWindow * MainWindow::_m_instance = nullptr;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,6 +50,14 @@ MainWindow::MainWindow(QWidget *parent) :
     StandardLibrary::instance()->test();
 
     open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
+}
+
+MainWindow * MainWindow::instance()
+{
+    if(_m_instance == nullptr)
+        _m_instance = new MainWindow;
+
+    return _m_instance;
 }
 
 void MainWindow::createWidgets()
@@ -91,12 +102,13 @@ void MainWindow::createWidgets()
     tabifyDockWidget(dockDev, dockPou);
 
     // right area
-    // auto prpWgt = new QTreeWidget();
-    // prpWgt->setMinimumSize(200, 500);
-    // auto prpWgt_dw = new ads::CDockWidget("Properties");
-    // prpWgt_dw->setWidget(prpWgt);
-    // prpWgt_dw->setMinimumSizeHintMode(ads::CDockWidget::MinimumSizeHintFromContentMinimumSize);
-    // manager->addDockWidgetTab(ads::RightDockWidgetArea, prpWgt_dw);
+    _m_toolWidget = new CTreeObject;
+    _m_toolWidget->setMinimumSize(200, 500);
+    pDock = new QDockWidget(tr("ToolBar"), this);
+    pDock->setTitleBarWidget(new QWidget());
+    pDock->setAllowedAreas(Qt::RightDockWidgetArea);
+    pDock->setWidget(_m_toolWidget);
+    addDockWidget(Qt::RightDockWidgetArea, pDock);
 
     // bottom area
     pDock = new QDockWidget(tr("Protocol"), this);
@@ -104,6 +116,11 @@ void MainWindow::createWidgets()
     pDock->setAllowedAreas(Qt::BottomDockWidgetArea);
     pDock->setWidget(CWidgetProtocol::instance());
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
+}
+
+CTreeObject * MainWindow::toolWidget() const
+{
+    return _m_toolWidget;
 }
 
 void MainWindow::createMenu()
@@ -252,6 +269,7 @@ void MainWindow::slot_open()
 void MainWindow::open(const QString & filePath)
 {
     TabWidgetEditor::instance()->closeTabs();
+    TabWidgetEditor::instance()->addIntro();
 
     auto default_file = false;
     QString _filePath = filePath;

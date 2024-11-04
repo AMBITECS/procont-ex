@@ -3,6 +3,7 @@
 #include "WidgetEditor.h"
 
 #include "model/ProxyModel.h"
+#include "editor/fbd/general/OglWidget.h"
 
 #include <QLabel>
 
@@ -22,6 +23,13 @@ TabWidgetEditor::TabWidgetEditor()
 
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slot_closeTab(int)));
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(slot_currentTabChanged(int)));
+}
+
+void TabWidgetEditor::addIntro()
+{
+    auto wgt = new OglWidget(widget(0));
+    addTab(wgt, tr("Intro"));
+    setCurrentWidget(wgt);
 }
 
 TabWidgetEditor * TabWidgetEditor::instance()

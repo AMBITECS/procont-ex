@@ -4,6 +4,7 @@
 
 #include "model/ProxyModel.h"
 #include "editor/fbd/general/OglWidget.h"
+#include "main/MainWindow.h"
 
 #include <QLabel>
 
@@ -133,6 +134,9 @@ void TabWidgetEditor::slot_currentTabChanged(int index)
         emit signal_currentTabChanged(_hWidgets.key(widget(index)));
     else
         emit signal_currentTabChanged(QModelIndex());
+
+    if(dynamic_cast<WidgetEditor_fbd*>(widget(index)))
+        reinterpret_cast<WidgetEditor_fbd*>(widget(index))->activate();
 }
 
 void TabWidgetEditor::slot_closeTab(int index)

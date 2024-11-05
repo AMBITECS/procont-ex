@@ -13,6 +13,8 @@ public:
 
     QDrag *     get_drag();
 
+    void clear();
+
 protected:
     void mousePressEvent( QMouseEvent* event ) override;
     void mouseMoveEvent( QMouseEvent* event ) override;

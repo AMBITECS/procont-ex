@@ -25,6 +25,8 @@ class WidgetEditor : public QSplitter
 public:
     WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
+    virtual void activate() const {;}
+
 protected:
     static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
     static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
@@ -90,6 +92,8 @@ public:
 // ----------------------------------------------------------------------------
 // *** WidgetEditor_fbd ***
 
+#include "editor/fbd/fbd/graphics/cdiagramwidget.h"
+
 /*!
  * \brief The WidgetEditor_fbd class
  */
@@ -102,6 +106,8 @@ class WidgetEditor_fbd : public WidgetEditor
     Q_OBJECT
 public:
     WidgetEditor_fbd(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
+
+    virtual void activate() const override { _m_fbd_view->set_active(); }
 
 protected:
     virtual QWidget * createCodeEditor();

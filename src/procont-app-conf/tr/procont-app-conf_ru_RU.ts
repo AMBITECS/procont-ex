@@ -79,17 +79,17 @@
 <context>
     <name>CWidgetProtocol</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="243"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="246"/>
         <source>Messages</source>
         <translation>Сообщения</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="250"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="253"/>
         <source>Actions</source>
         <translation>События</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="246"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="249"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
@@ -97,42 +97,42 @@
 <context>
     <name>CWidgetProtocolTab_build</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="121"/>
         <source>Message</source>
         <translation>Сообщение</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="121"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="121"/>
         <source>Object</source>
         <translation>Объект</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="121"/>
         <source>Position</source>
         <translation>Позиция</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="134"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="137"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="138"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="141"/>
         <source>Tree</source>
         <translation>Дерево</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="141"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="144"/>
         <source>Code</source>
         <translation>Код</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="194"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="197"/>
         <source>Row %1, Column %2</source>
         <translation>Строка %1, Столбец %2</translation>
     </message>
@@ -724,7 +724,7 @@
         <translation type="vanished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="31"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="32"/>
         <source>Intro</source>
         <translation type="unfinished"></translation>
     </message>
@@ -754,22 +754,22 @@
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="38"/>
+        <location filename="../widget/WidgetEditor.cpp" line="37"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="40"/>
+        <location filename="../widget/WidgetEditor.cpp" line="39"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="71"/>
+        <location filename="../widget/WidgetEditor.cpp" line="70"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="74"/>
+        <location filename="../widget/WidgetEditor.cpp" line="73"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -777,12 +777,12 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="287"/>
+        <location filename="../widget/WidgetEditor.cpp" line="286"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="290"/>
+        <location filename="../widget/WidgetEditor.cpp" line="289"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

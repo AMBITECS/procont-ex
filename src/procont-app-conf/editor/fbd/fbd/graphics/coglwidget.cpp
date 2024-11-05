@@ -38,6 +38,7 @@ void
 COglWidget::initializeGL()
 {
     //QOpenGLWidget::initializeGL();
+    initializeOpenGLFunctions();
     if (!m_funcGL)
     {
         m_funcGL = QOpenGLContext::currentContext()->functions();
@@ -45,24 +46,32 @@ COglWidget::initializeGL()
 
     s_color color = m_style->background();
 
-    m_funcGL->glClearColor(color.red, color.green, color.blue, color.alpha);
-    m_funcGL->glEnable(GL_ALPHA_TEST);
+    //m_funcGL->glClearColor(color.red, color.green, color.blue, color.alpha);
+    glClearColor(color.red, color.green, color.blue, color.alpha);
+    //m_funcGL->glEnable(GL_ALPHA_TEST);
+    glEnable(GL_ALPHA_TEST);
 
     // тест глубины
-    m_funcGL->glEnable(GL_DEPTH_TEST);
+    //m_funcGL->glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
     // glColor будет устанавливать свойства материала
-    m_funcGL->glEnable(GL_COLOR_MATERIAL);
+    //m_funcGL->glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_COLOR_MATERIAL);
 
     // разрешаем освещение
-    m_funcGL->glEnable(GL_LIGHTING);
+    //m_funcGL->glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING);
 
     // включаем нулевую лампу
-    m_funcGL->glEnable(GL_LIGHT0);
+    //m_funcGL->glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT0);
 
     // разрешаем смешение цветов и "прозрачность"
-    m_funcGL->glEnable(GL_BLEND);
-    m_funcGL->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //m_funcGL->glEnable(GL_BLEND);
+    glEnable(GL_BLEND);
+    //m_funcGL->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void COglWidget::resizeGL(int w, int h)

@@ -388,6 +388,9 @@ void MainWindow::save(const QString & filePath)
 
 void MainWindow::slot_currentViewChanged(const QModelIndex &index)
 {
+    while(toolWidget()->topLevelItemCount())
+        delete toolWidget()->topLevelItem(0);
+
     if(!index.isValid())
         return;
 

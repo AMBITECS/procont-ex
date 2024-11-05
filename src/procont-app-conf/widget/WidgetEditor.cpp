@@ -15,7 +15,6 @@
 #include "editor/st/XmlParser.h"
 #include "translator/SchemaViewer.h"
 #include "translator/TranslatorFbd.h"
-#include "editor/fbd/fbd/graphics/cdiagramwidget.h"
 #include "main/MainWindow.h"
 
 WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)

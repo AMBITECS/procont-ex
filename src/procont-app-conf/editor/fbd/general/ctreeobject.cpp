@@ -14,6 +14,11 @@ CTreeObject::CTreeObject(QWidget *parent) : QTreeWidget(parent)
 CTreeObject::~CTreeObject()
 = default;
 
+void CTreeObject::clear()
+{
+
+}
+
 void CTreeObject::mousePressEvent(QMouseEvent *event)
 {
     m_dragStart = event->pos();

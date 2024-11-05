@@ -769,12 +769,12 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="288"/>
+        <location filename="../widget/WidgetEditor.cpp" line="287"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="291"/>
+        <location filename="../widget/WidgetEditor.cpp" line="290"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

@@ -18,6 +18,14 @@
     </message>
 </context>
 <context>
+    <name>CTreeObject</name>
+    <message>
+        <location filename="../editor/fbd/general/ctreeobject.cpp" line="10"/>
+        <source>Components</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CWidgetMessage</name>
     <message>
         <source>Number</source>

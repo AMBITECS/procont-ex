@@ -18,6 +18,14 @@
     </message>
 </context>
 <context>
+    <name>CTreeObject</name>
+    <message>
+        <location filename="../editor/fbd/general/ctreeobject.cpp" line="10"/>
+        <source>Components</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CWidgetMessage</name>
     <message>
         <source>Number</source>
@@ -238,6 +246,14 @@
     </message>
 </context>
 <context>
+    <name>Form</name>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/diagramwgt.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>InputAssistantDialog</name>
     <message>
         <source>Input assistant</source>
@@ -315,6 +331,11 @@
     <message>
         <source>&amp;Edit</source>
         <translation type="vanished">&amp;Редактировать</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="107"/>
+        <source>ToolBar</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="128"/>
@@ -439,18 +460,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="282"/>
-        <location filename="../main/MainWindow.cpp" line="303"/>
+        <location filename="../main/MainWindow.cpp" line="283"/>
+        <location filename="../main/MainWindow.cpp" line="304"/>
         <source>open project %1</source>
         <translation>загрузка проекта %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="315"/>
+        <location filename="../main/MainWindow.cpp" line="316"/>
         <source>can&apos;t open file for read: %1</source>
         <translation>не могу открыть файл для чтения: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="363"/>
+        <location filename="../main/MainWindow.cpp" line="364"/>
         <source>project opened %1</source>
         <translation>проект загружен %1</translation>
     </message>
@@ -467,26 +488,26 @@
         <translation type="vanished">проект загружен</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="283"/>
-        <location filename="../main/MainWindow.cpp" line="304"/>
-        <location filename="../main/MainWindow.cpp" line="364"/>
+        <location filename="../main/MainWindow.cpp" line="284"/>
+        <location filename="../main/MainWindow.cpp" line="305"/>
+        <location filename="../main/MainWindow.cpp" line="365"/>
         <source>project file: %1</source>
         <translation>файл проекта: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="290"/>
-        <location filename="../main/MainWindow.cpp" line="314"/>
-        <location filename="../main/MainWindow.cpp" line="328"/>
+        <location filename="../main/MainWindow.cpp" line="291"/>
+        <location filename="../main/MainWindow.cpp" line="315"/>
+        <location filename="../main/MainWindow.cpp" line="329"/>
         <source>can&apos;t open project %1</source>
         <translation>не могу загрузить проект %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="291"/>
+        <location filename="../main/MainWindow.cpp" line="292"/>
         <source>file not found: %1</source>
         <translation>файл не найден: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="329"/>
+        <location filename="../main/MainWindow.cpp" line="330"/>
         <source>file parse error: %1</source>
         <translation>ошибка парсинга файла: %1</translation>
     </message>
@@ -501,7 +522,7 @@
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="260"/>
-        <location filename="../main/MainWindow.cpp" line="370"/>
+        <location filename="../main/MainWindow.cpp" line="371"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
@@ -510,7 +531,7 @@
         <translation type="vanished">открытие файла %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="370"/>
+        <location filename="../main/MainWindow.cpp" line="371"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -702,6 +723,11 @@
         <source>Remove</source>
         <translation type="vanished">Удалить</translation>
     </message>
+    <message>
+        <location filename="../widget/TabWidgetEditor.cpp" line="32"/>
+        <source>Intro</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WidgeEditor</name>
@@ -728,22 +754,22 @@
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="36"/>
+        <location filename="../widget/WidgetEditor.cpp" line="37"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="38"/>
+        <location filename="../widget/WidgetEditor.cpp" line="39"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="69"/>
+        <location filename="../widget/WidgetEditor.cpp" line="70"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="72"/>
+        <location filename="../widget/WidgetEditor.cpp" line="73"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -751,12 +777,12 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="282"/>
+        <location filename="../widget/WidgetEditor.cpp" line="286"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="285"/>
+        <location filename="../widget/WidgetEditor.cpp" line="289"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

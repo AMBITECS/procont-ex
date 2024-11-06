@@ -25,6 +25,8 @@ class WidgetEditor : public QSplitter
 public:
     WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
+    virtual void activate() const {;}
+
 protected:
     static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
     static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
@@ -90,11 +92,14 @@ public:
 // ----------------------------------------------------------------------------
 // *** WidgetEditor_fbd ***
 
+#include "editor/fbd/fbd/graphics/cdiagramwidget.h"
+
 /*!
  * \brief The WidgetEditor_fbd class
  */
 
-QT_FORWARD_DECLARE_CLASS(FBDviewer)
+// QT_FORWARD_DECLARE_CLASS(FBDviewer)
+QT_FORWARD_DECLARE_CLASS(CDiagramWidget)
 
 class WidgetEditor_fbd : public WidgetEditor
 {
@@ -102,8 +107,10 @@ class WidgetEditor_fbd : public WidgetEditor
 public:
     WidgetEditor_fbd(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
+    virtual void activate() const override { _m_fbd_view->set_active(); }
+
 protected:
-    virtual QWidget * createCodeEditor();
+    virtual QWidget * createCodeEditor() override;
 
 private slots:
     void slot_shmViewToggled(bool);
@@ -111,7 +118,8 @@ private slots:
 
 private:
     QWidget * _txt_view = nullptr;
-    FBDviewer * _m_fbd_view = nullptr;
+    // FBDviewer * _fbd_view = nullptr;
+    CDiagramWidget * _m_fbd_view = nullptr;
 };
 // ----------------------------------------------------------------------------
 

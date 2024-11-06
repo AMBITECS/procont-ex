@@ -28,11 +28,11 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     m_ogl_widget = new COglWidget(&startup);
 
     /// place ST-widget
-    {
-        auto lo = new QGridLayout(ui->stWidget);
-        lo->addWidget(m_st_widget);
-        lo->setContentsMargins(0, 0, 0, 0);
-    }
+    // {
+    //     auto lo = new QGridLayout(ui->stWidget);
+    //     lo->addWidget(m_st_widget);
+    //     lo->setContentsMargins(0, 0, 0, 0);
+    // }
 
     /// place OpenGL widget
     {

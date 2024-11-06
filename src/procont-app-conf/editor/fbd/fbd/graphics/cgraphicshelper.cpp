@@ -217,7 +217,7 @@ void CGraphicsHelper::fill_interface()
     }
     vars += "END_VAR";
 
-    m_st_widget->setPlainText(vars);
+    // m_st_widget->setPlainText(vars);
 }
 
 void CGraphicsHelper::on_drag_ladder_enter(QDragEnterEvent *event)

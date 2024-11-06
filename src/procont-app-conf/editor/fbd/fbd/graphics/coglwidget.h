@@ -22,7 +22,7 @@ struct s_ogl_startup
 
 };
 
-class COglWidget : public QOpenGLWidget//, QOpenGLFunctions
+class COglWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:

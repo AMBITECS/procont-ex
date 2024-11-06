@@ -16,7 +16,7 @@ QT_FORWARD_DECLARE_CLASS(TreeView)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_pou)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_dev)
 QT_FORWARD_DECLARE_CLASS(Compiler)
-// QT_FORWARD_DECLARE_CLASS(CTreeObject)
+QT_FORWARD_DECLARE_CLASS(CTreeObject)
 
 class MainWindow : public QMainWindow
 {
@@ -28,7 +28,7 @@ public:
 public:
     static MainWindow * instance();
 
-    // CTreeObject * toolWidget() const;
+    CTreeObject * toolWidget() const;
 
 private:
     void open(const QString & filePath = {});
@@ -90,7 +90,7 @@ private:
 
     QToolButton * _m_button;
 
-    // CTreeObject * _m_toolWidget;
+    CTreeObject * _m_toolWidget;
 
 private:
     static MainWindow * _m_instance;

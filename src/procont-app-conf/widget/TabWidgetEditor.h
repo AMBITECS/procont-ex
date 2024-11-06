@@ -24,6 +24,8 @@ public:
 
     static void setModel(QAbstractItemModel *);
 
+    void addIntro();
+
 public slots:
     void slot_addTabWidget(const QModelIndex &index);
 

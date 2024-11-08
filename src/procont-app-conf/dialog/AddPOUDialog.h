@@ -13,6 +13,7 @@ QT_FORWARD_DECLARE_CLASS(QLineEdit)
 
 class AddPOUDialog : public QDialog
 {
+    Q_OBJECT
 public:
     AddPOUDialog();
 

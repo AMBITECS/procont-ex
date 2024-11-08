@@ -15,22 +15,22 @@
     <message>
         <location filename="../dialog/AddPOUDialog.cpp" line="16"/>
         <source>Add POU</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить POU</translation>
     </message>
     <message>
         <location filename="../dialog/AddPOUDialog.cpp" line="27"/>
         <source>Create new POU (program organization unit)</source>
-        <translation type="unfinished"></translation>
+        <translation>Создать новый POU (компонент организации программы)</translation>
     </message>
     <message>
         <location filename="../dialog/AddPOUDialog.cpp" line="33"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../dialog/AddPOUDialog.cpp" line="37"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../dialog/AddPOUDialog.cpp" line="38"/>

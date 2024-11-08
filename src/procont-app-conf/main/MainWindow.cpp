@@ -10,7 +10,7 @@
 #include "view/TreeView.h"
 #include "dialog/InputDialog.h"
 #include "dialog/AddPOUDialog.h"
-#include "dialog/AddTypeDialog.h"
+#include "dialog/AddDUTDialog.h"
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
 #include "editor/fbd/general/ctreeobject.h"
@@ -220,18 +220,6 @@ void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModel
     _m_button->setMenu(_m_addObjectMenu);
 }
 
-void MainWindow::slot_addDUT()
-{
-    AddTypeDialog dlg;
-    dlg.exec();
-}
-
-void MainWindow::slot_addPOU()
-{
-    AddPOUDialog dlg;
-    dlg.exec();
-}
-
 QModelIndex MainWindow::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
 {
     if(proxy == nullptr)
@@ -253,6 +241,26 @@ QAbstractProxyModel * MainWindow::proxy(QAbstractItemModel *model)
 DomItem * MainWindow::item(const QModelIndex &index, QAbstractItemModel * proxy)
 {
     return reinterpret_cast<DomItem *>(s_index(index, proxy).internalPointer());
+}
+
+void MainWindow::slot_addDUT()
+{
+    AddDUTDialog dlg;
+    dlg.exec();
+
+    auto model = reinterpret_cast<QAbstractProxyModel*>(viewPou->model());
+    auto indexes = model->sourceModel()->match(model->sourceModel()->index(0, 0), Qt::DecorationRole, "dataTypes", -1, Qt::MatchRecursive);
+    qDebug() << indexes;
+}
+
+void MainWindow::slot_addPOU()
+{
+    AddPOUDialog dlg;
+    dlg.exec();
+
+    auto model = reinterpret_cast<QAbstractProxyModel*>(viewPou->model());
+    auto indexes = model->sourceModel()->match(model->sourceModel()->index(0, 0), Qt::DecorationRole, "pous", -1, Qt::MatchRecursive);
+    qDebug() << indexes;
 }
 
 void MainWindow::slot_open()

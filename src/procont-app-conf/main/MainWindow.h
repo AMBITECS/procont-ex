@@ -92,6 +92,8 @@ private:
 
     CTreeObject * _m_toolWidget;
 
+
+
 private:
     static MainWindow * _m_instance;
 };

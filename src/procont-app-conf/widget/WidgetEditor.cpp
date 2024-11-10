@@ -152,10 +152,6 @@ void WidgetEditor::updateTblView()
             item(_vars_table->rootIndex())->node()
             );
 
-    // QDomDocument doc;
-    // doc.appendChild(doc.importNode(new_node, true));
-    // qDebug() << "import" << doc.toString();
-
     // remove old variables from item
     item(_vars_table->rootIndex())->removeChildren();
     // remove roews from model
@@ -209,7 +205,7 @@ void WidgetEditor::slot_addVariable()
     auto parent = item(_vars_table->rootIndex());
 
     // add node
-    parent->addEmptyNode();
+    parent->addNode();
 
     // add item
     _proxy->sourceModel()->insertRow(parent->rowCount(), s_index(_vars_table->rootIndex()));
@@ -381,14 +377,15 @@ void WidgetEditor_type::slot_codeChanged()
     //QDomNode new_node = {};
     // // get new node from st editor
     QDomNode new_node = XmlParser::getDataTypeNode
-         (
+        (
             _body_text != nullptr ? _body_text->toPlainText() : QString(),
             _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
-
              item(_vars_table->rootIndex())->node()
-             );
+        );
 
-     // set new node to item
+    qDebug() << DomItem::printNode(new_node);
+
+    // set new node to item
     item(_vars_table->rootIndex())->updateNode(new_node);
 }
 // ----------------------------------------------------------------------------

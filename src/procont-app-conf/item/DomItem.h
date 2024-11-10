@@ -30,7 +30,7 @@ public:
     void removeChild(int row, int column, const QDomNode & childNode);
     void removeChildren();
     virtual void updateNode(const QDomNode &) {;}
-    virtual void addEmptyNode() {;}
+    virtual void addNode(const QDomNode & = QDomNode());
 
     [[nodiscard]] DomItem * parentItem() const;
     [[nodiscard]] QDomNode node() const;
@@ -41,8 +41,11 @@ public:
     virtual void setData(const QVariant &value, int role) override;
     [[nodiscard]] int type() const override { return m_itemType; }
 
+    [[nodiscard]] QString print() const;
+
 public:
     [[nodiscard]] static ItemType assignType(const QDomNode &node);
+    [[nodiscard]] static QString printNode(const QDomNode &);
 
 public:
     [[nodiscard]] std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
@@ -87,9 +90,12 @@ public:
         return node().attributes().namedItem("name").nodeValue();
     }
 
-    virtual void updateNode(const QDomNode &) override
+    virtual void updateNode(const QDomNode & new_node_) override
     {
-        qDebug() << node().nodeName() << node().parentNode().nodeName();
+        // qDebug() << node().nodeName() << node().parentNode().nodeName();
+
+        // node().parentNode().appendChild(new_node_.cloneNode());
+        // node().parentNode().removeChild(node());
     }
 };
 // ----------------------------------------------------------------------------
@@ -101,7 +107,7 @@ class DomItemVar : public DomItem
 public:
     DomItemVar(const QDomNode &node);
 
-    virtual void addEmptyNode() override;
+    virtual void addNode(const QDomNode & = QDomNode()) override;
 
 protected:
     virtual void buildChildren(const QDomNode &node, int row, int shift = 0) override;
@@ -120,7 +126,7 @@ public:
 
     [[nodiscard]] QVariant data(int role) const override;
 
-    virtual void addEmptyNode() override;
+    virtual void addNode(const QDomNode & = QDomNode()) override;
     virtual void updateNode(const QDomNode &) override;
 
 protected:

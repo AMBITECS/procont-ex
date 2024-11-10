@@ -112,7 +112,11 @@ void DomItem::removeChild(int row, int column, const QDomNode & childNode)
     Q_UNUSED(column);
 
     childNode.parentNode().removeChild(childNode);
-    m_lChildNodes.remove(row); m_lChildCreated.remove(row);
+
+    if(m_lChildNodes.size())
+        m_lChildNodes.remove(row);
+    if(m_lChildCreated.size())
+        m_lChildCreated.remove(row);
 }
 
 void DomItem::removeChildren()
@@ -146,6 +150,27 @@ void DomItem::setItemValue(ItemValue *pointer)
 {
     m_value.reset(pointer);
 }
+
+void DomItem::addNode(const QDomNode & node_)
+{
+    qDebug() << __PRETTY_FUNCTION__;
+
+    auto _node = node().ownerDocument().importNode(node_, true);
+    node().appendChild(_node);
+}
+
+QString DomItem::print() const
+{
+    return printNode(node());
+}
+
+QString DomItem::printNode(const QDomNode &node_)
+{
+    QDomDocument _doc;
+    _doc.appendChild(_doc.importNode(node_, true));
+
+    return _doc.toString();
+}
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -155,8 +180,10 @@ DomItemVar::DomItemVar(const QDomNode &node) :
 {
 }
 
-void DomItemVar::addEmptyNode()
+void DomItemVar::addNode(const QDomNode &)
 {
+    qDebug() << __PRETTY_FUNCTION__;
+
     QDomNode parentNode = node();
     QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
     QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
@@ -257,8 +284,10 @@ QVariant DomItemPou::data(int role) const
     return node().attributes().namedItem("name").nodeValue();
 }
 
-void DomItemPou::addEmptyNode()
+void DomItemPou::addNode(const QDomNode &)
 {
+    qDebug() << __PRETTY_FUNCTION__;
+
     QDomNode parentNode = node();
     QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
     el_variable.setAttribute("name", "localVar");
@@ -267,12 +296,22 @@ void DomItemPou::addEmptyNode()
     el_variable_type.appendChild(el_variable_type_int);
     el_variable.appendChild(el_variable_type);
     QDomNode el_localVars = parentNode.namedItem("interface").namedItem("localVars");
+
+    // qDebug() << DomItem::printNode(parentNode);
+
     if(el_localVars.isNull())
     {
+        // qDebug() << __PRETTY_FUNCTION__ << "empty";
+
         el_localVars = parentNode.ownerDocument().createElement("localVars");
         parentNode.namedItem("interface").appendChild(el_localVars);
+
+        // qDebug() << DomItem::printNode(parentNode);
     }
+
     el_localVars.appendChild(el_variable);
+
+    // qDebug() << DomItem::printNode(parentNode);
 }
 
 void DomItemPou::updateNode(const QDomNode & new_node_)

@@ -128,6 +128,12 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
     setCurrentWidget(_hWidgets.value(index));
 }
 
+void TabWidgetEditor::closeTab(const QModelIndex &index)
+{
+    if(_hWidgets.contains(index))
+        slot_closeTab(indexOf(_hWidgets.value(index)));
+}
+
 void TabWidgetEditor::slot_currentTabChanged(int index)
 {
     if(std::find(std::begin(_hWidgets), std::end(_hWidgets), widget(index)) != std::end(_hWidgets))

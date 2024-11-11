@@ -9,6 +9,7 @@
 #include <QDomNode>
 #include <QDateTime>
 #include <QPoint>
+#include <cmath>
 
 #define  FLOAT_DIFF 0.0001  //!< максимальная разница между float, ДО которой float'ы могут считаться одинаковыми
 
@@ -21,7 +22,7 @@
  */
 static bool     is_floats_equal(const float &val0, const float &val1)
 {
-    if (fabs(val0 - val1) >= FLOAT_DIFF)
+    if (std::fabs(val0 - val1) >= FLOAT_DIFF)
     {
         return false;
     }
@@ -65,7 +66,7 @@ static const QString bool_str[2]
     "true"
 };
 
-enum EPouType
+enum  EPouType
 {
     ePT_PROGRAM,
     ePT_FUNCTIONAL_BLOCK,
@@ -125,10 +126,11 @@ enum EDefinedDataTypes
     DDT_TOD,
     DDT_STRING,
     DDT_WSTRING,
-    DDT_ENUM,
+    DDT_ENUM,           //!< граница базовых типов, больше смысла не имеет
     DDT_STRUCT,
-    DDT_DERIVED,    //!< user defined or POU
+    DDT_DERIVED,        //!< user defined or POU
     DDT_MODIFICATION,   //!< array, range or pointer
+    DDT_UNDEF,
     DDT_COUNT
 };
 
@@ -158,8 +160,23 @@ static const QString base_types_names[EDefinedDataTypes::DDT_COUNT]
     "ENUM",
     "STRUCT",
     "DERIVED",
-    "MODIFICATION"
+    "MODIFICATION",
+    "UNDEFINED"
 };
+
+static  EDefinedDataTypes  get_type_from_string(const std::string & type_s)
+{
+    int count = 0;
+    for (auto &name : base_types_names)
+    {
+        if (name.toStdString() == type_s)
+        {
+            return (EDefinedDataTypes)count;
+        }
+        count++;
+    }
+    return DDT_UNDEF;
+}
 
 /** @brief последний индекс базового типа */
 static const int base_type_last = EDefinedDataTypes::DDT_ENUM;

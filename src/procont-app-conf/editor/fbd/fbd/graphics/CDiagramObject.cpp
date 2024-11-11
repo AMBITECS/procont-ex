@@ -4,11 +4,13 @@
 
 #include <QPainter>
 #include "CDiagramObject.h"
+#include "CLadder.h"
 
-CDiagramObject::CDiagramObject(QPoint *ladder_top_left, CBlock *block)
+CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_top_left
 {
     m_block = block;
-    m_ladder_relative_tl = ladder_top_left;
+    m_ladder_relative_tl = ladder->real_top_left();
+    m_parent = ladder;
 
     m_texts.push_back(&m_type_name);
     m_texts.push_back(&m_var_name);
@@ -18,7 +20,14 @@ CDiagramObject::CDiagramObject(QPoint *ladder_top_left, CBlock *block)
     m_pins = new std::vector<CConnectorPin*>();
     m_highlights = new std::vector<std::pair<QRect, QImage>>();
 
-    build_block();
+    m_type_name.set_text(m_block->type_name());
+    m_var_name.set_text(m_block->instance_name());
+
+    define_size();
+
+    locate_pins();
+
+    m_rect.setSize(m_size);
 }
 
 CDiagramObject::~CDiagramObject()
@@ -59,90 +68,72 @@ std::vector<CObjectsText *> *CDiagramObject::texts()
     return &m_texts;
 }
 
-void CDiagramObject::set_relative_pos(const int &x, const int &y)
-{
-    m_rel_x = x;
-    m_rel_y = y;
-
-
-    //define_size();
-    update_rel_position();
-    define_bound();
-}
-
-void CDiagramObject::build_block()
-{
-
-    m_type_name.set_text(m_block->type_name());
-    m_var_name.set_text(m_block->instance_name());
-
-    define_size();
-
-    m_rect.setSize(m_size);
-}
-
 void CDiagramObject::define_size()
 {
-    int in_max_size = 0;
-    int out_max_size = 0;
-    int outer_text_max = 0;
-
     if (!m_pins->empty())
     {
         return;
     }
 
     int def_width = m_type_name.width() > m_var_name.width() ? m_type_name.width() : m_var_name.width();
+    int inner_left_max = 0;
+    int inner_right_max = 0;
+
     def_width += 2 * NAME_SHIFT;
 
-    for (auto &inout : *m_block->in_out_variables())
+    /*for (auto &inout : *m_block->in_out_variables())
     {
-        auto pin_io = new CConnectorPin(inout, PD_INPUT, &m_top_left);
+        auto pin_io = new CConnectorPin(inout, PD_INPUT, &m_base_shift);
         m_inputs->push_back(pin_io);
         m_outputs->push_back(pin_io);
-
-        if (pin_io->inner_text_width() > in_max_size)
-        {
-            in_max_size = pin_io->inner_text_width();
-        }
-        if (pin_io->rect()->width() > out_max_size)
-        {
-            out_max_size = pin_io->inner_text_width();
-        }
-    }
+    }*/
 
     for (auto &in : *m_block->input_variables())
     {
-        auto in_pin = new CConnectorPin(in, PD_INPUT, &m_top_left);
+        auto in_pin = new CConnectorPin(in, this, PD_INPUT, &m_base_shift);
         m_inputs->push_back(in_pin);
-
-        if (in_pin->inner_text_width() > in_max_size)
-        {
-            in_max_size = in_pin->inner_text_width();
-        }
     }
 
     for (auto &out : *m_block->output_variables())
     {
-        auto pin_out = new CConnectorPin(out, PD_OUTPUT, &m_top_left);
+        auto pin_out = new CConnectorPin(out, this, PD_OUTPUT, &m_base_shift);
         m_outputs->push_back(pin_out);
+    }
 
-        if (pin_out->inner_text_width() > out_max_size)
+    int inner = 0;
+    for (auto &in : *m_inputs)
+    {
+        inner = in->inner_text_width() + 3;
+        if (inner > inner_left_max)
         {
-            out_max_size = pin_out->inner_text_width();
+            inner_left_max = inner;
+        }
+    }
+
+    for (auto &out : *m_outputs)
+    {
+        inner = out->inner_text_width() + 3;
+        if (inner > inner_right_max)
+        {
+            inner_right_max = inner;
         }
     }
 
     size_t max_pins = m_inputs->size() > m_outputs->size() ? m_inputs->size() : m_outputs->size();
 
-    def_width = def_width > (in_max_size + out_max_size + 20) ? def_width : in_max_size + out_max_size + 20;
+    def_width = def_width > (inner_left_max + inner_right_max + 20) ? def_width
+                : inner_left_max + inner_right_max + 20;
 
     m_size.setWidth(def_width);
     m_size.setHeight(TOP_SHIFT + (max_pins * PIN_SHIFT) + BOTTOM_SHIFT);
+    m_rect.setSize(m_size);
 
     m_pins->clear();
     m_pins->insert(m_pins->end(), m_inputs->begin(), m_inputs->end());
     m_pins->insert(m_pins->end(), m_outputs->begin(), m_outputs->end());
+
+    // TODO: initial m_bounds size is wrong. images sizes are known but not used
+    m_bounds.setSize(m_size);
 }
 
 void CDiagramObject::update_rel_position(QPoint * relative_tl)
@@ -154,7 +145,6 @@ void CDiagramObject::update_rel_position(QPoint * relative_tl)
 
     m_rect = QRect({relative_tl->x() + m_rel_x, relative_tl->y() + m_rel_y}, m_size);
     m_image = QImage({2, m_rect.height()}, QImage::Format_ARGB32);
-
     m_image.fill(m_color_curr);
 
     int tp_w = m_type_name.width();
@@ -163,61 +153,21 @@ void CDiagramObject::update_rel_position(QPoint * relative_tl)
     m_type_name.set_pos({m_rect.left() + (m_rect.width()/2 - tp_w / 2), m_rect.top() + 15});
     m_var_name.set_pos({m_rect.left() + (m_rect.width()/2 - ins_nw/2), m_rect.top() - 5});
 
-    m_top_left = m_rect.topLeft();
+    m_base_shift = m_rect.topLeft();
 
-    locate_pins();
 
-    if (relative_tl == m_ladder_relative_tl)
+    //locate_pins();
+    for (auto &pin : *m_pins)
     {
-        define_bound();
+        pin->update_position();
     }
+
+    update_bound_rect();
 }
 
 QRect CDiagramObject::bound_rect() const
 {
     return m_bounds;
-}
-
-void CDiagramObject::define_bound()
-{
-    int outer_left = 0;
-    int outer_right = 0;
-    int inp_w, out_w ;
-
-    bool is_outer_l = false;
-    bool is_outer_r = false;
-
-    for (auto &in : *m_inputs)
-    {
-        inp_w = in->outer_text_width() + in->image()->width() + 3;
-
-
-
-        if (inp_w > outer_left)
-        {
-            outer_left = inp_w;
-        }
-    }
-
-    for (auto &out : *m_outputs)
-    {
-        out_w = out->outer_text_width() + out->image()->width() + 3;
-        if (out_w > outer_right)
-        {
-            outer_right = out_w;
-        }
-    }
-
-    int width = (m_rect.right() + outer_right) - (m_rect.left()-outer_left);
-    m_bounds.setRect(m_rect.left() - outer_left, m_rect.top(), width, m_rect.height());
-
-    draw_bound_rect();
-
-
-
-    // тот случай когда QRect не адекватен
-    //m_bounds.setSize({m_size.width() + outer_left + outer_right, m_size.height()});
-    //m_bounds.setTopLeft({m_rect.left() - outer_left, m_rel_y});
 }
 
 QImage CDiagramObject::bound_image() const
@@ -258,19 +208,25 @@ bool CDiagramObject::is_selected() const
     return m_is_selected;
 }
 
-void CDiagramObject::draw_drag_image()
+QImage CDiagramObject::drag_image(const bool &is_transparent)
 {
     int diff = m_rect.left() - m_bounds.left();
+
     QPoint point(-m_rel_x + diff,0);
     update_rel_position(&point);
 
+    QImage image;
+
     QRect rect;
     rect.setRect(0,0, m_bounds.width(), m_bounds.height()+40);
-    m_drag_image = QImage(rect.size(), QImage::Format_ARGB32);
-    m_drag_image.fill({255,255,255,127});
+    image = QImage(rect.size(), QImage::Format_ARGB32);
+
+    int alpha = is_transparent ? 0 : 127;
+
+    image.fill({255,255,255,alpha});
 
     QPainter painter;
-    painter.begin(&m_drag_image);
+    painter.begin(&image);
 
     painter.drawImage(*this->rect(), *this->image());
     for (auto &txt : *this->texts())
@@ -283,19 +239,14 @@ void CDiagramObject::draw_drag_image()
         painter.drawImage(*cap->rect(), *cap->image());
         for (auto &txt : *cap->texts())
         {
-
             painter.drawText(txt->pos(), txt->text());
         }
     }
 
     painter.end();
 
-    m_drag_image = m_drag_image.scaled(rect.width()/2, rect.height()/2);
-}
-
-QImage CDiagramObject::drag_image() const
-{
-    return m_drag_image;
+    image = image.scaled(rect.width()/2, rect.height()/2);
+    return image;
 }
 
 uint64_t CDiagramObject::local_id() const
@@ -303,30 +254,53 @@ uint64_t CDiagramObject::local_id() const
     return m_block->local_id();
 }
 
-void CDiagramObject::set_ladders_top_left(QPoint *ltl, const QPoint & pos)
+void CDiagramObject::set_ladders_relative_top_left(CLadder *ladder, const QPoint & rtl_shift)
 {
-    m_ladder_relative_tl = ltl;
-    m_top_left = pos;
+    m_parent = ladder;
+    m_ladder_relative_tl = m_parent->real_top_left();
+    m_base_shift = rtl_shift;
+    m_rel_x = rtl_shift.x();
+    m_rel_y = rtl_shift.y();
 
-    locate_pins();
+
     update_rel_position();
+    update_bound_rect();
+    int b_width = m_bounds.width();
+
+    m_bounds.setRect(m_rect.x() - m_difference, m_rect.top(), b_width, m_rect.height());
+}
+
+void CDiagramObject::update_position()
+{
+    update_rel_position();
+
+    for (auto &pin : *m_pins)
+        pin->update_position();
+
+    update_bound_rect();
+    int b_width = m_bounds.width();
+
+    m_bounds.setRect(m_rect.x() - m_difference, m_rect.top(), b_width, m_rect.height());
 }
 
 void CDiagramObject::locate_pins()
 {
-    int rel_y = TOP_SHIFT;
+    int rel_in_y = TOP_SHIFT;
+    int rel_out_y = TOP_SHIFT;
 
-    for (auto &in : *m_inputs)
+    for (auto &pin : *m_pins)
     {
-        in->set_rel_position({0, rel_y});
-        rel_y += PIN_SHIFT;
-    }
+        if (pin->direction() == EPinDirection::PD_INPUT)
+        {
+            pin->set_rel_position({0, rel_in_y});
+            rel_in_y += PIN_SHIFT;
+        }
 
-    rel_y = TOP_SHIFT;
-    for (auto &out : *m_outputs)
-    {
-        out->set_rel_position({m_rect.width(), rel_y});
-        rel_y += PIN_SHIFT;
+        else
+        {
+            pin->set_rel_position({m_rect.width(), rel_out_y});
+            rel_out_y += PIN_SHIFT;
+        }
     }
 }
 
@@ -351,6 +325,48 @@ bool CDiagramObject::switch_highlights(const QPoint &pos)
     }
 
     return found;
+}
+
+void CDiagramObject::update_bound_rect()
+{
+    int outer_left = 0;
+    int outer_right = 0;
+    int inp_w, out_w ;
+
+    for (auto &in : *m_inputs)
+    {
+        inp_w = in->outer_text_width() + in->image()->width() + 3;
+
+        if (inp_w > outer_left)
+        {
+            outer_left = inp_w;
+        }
+    }
+
+    for (auto &out : *m_outputs)
+    {
+        out_w = out->outer_text_width() + out->image()->width() + 3;
+        if (out_w > outer_right)
+        {
+            outer_right = out_w;
+        }
+    }
+
+    int width = (m_rect.right() + outer_right) - (m_rect.left()-outer_left);
+    m_bounds.setSize({width, m_rect.height()});
+
+    m_difference = outer_left;
+    //draw_bound_rect();
+}
+
+QString CDiagramObject::instance_name() const
+{
+    return m_var_name.text();
+}
+
+QString CDiagramObject::type_name() const
+{
+    return m_type_name.text();
 }
 
 

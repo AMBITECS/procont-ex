@@ -3,10 +3,14 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QList>
+#include <QIcon>
 
 
 CTreeObject::CTreeObject(QWidget *parent) : QTreeWidget(parent)
-{}
+{
+    QStringList column; column << tr("Components");
+    setHeaderLabels(column);
+}
 
 CTreeObject::~CTreeObject()
 = default;
@@ -15,12 +19,6 @@ void CTreeObject::mousePressEvent(QMouseEvent *event)
 {
     m_dragStart = event->pos();
     m_drag_item = this->itemAt(m_dragStart);
-
-    if (!m_drag_item)
-    {
-        return;
-    }
-
 }
 
 void CTreeObject::mouseMoveEvent(QMouseEvent *event)
@@ -35,7 +33,7 @@ void CTreeObject::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-    if (m_drag_item == nullptr)
+    if (m_drag_item == nullptr || m_drag_item->childCount() > 0)
     {
         return;
     }
@@ -43,22 +41,16 @@ void CTreeObject::mouseMoveEvent(QMouseEvent *event)
 
     m_drag = new QDrag( this );
     auto* mimeData = new QMimeData();
-    //mimeData->setImageData( QImage(":/codesys/images/24x24/default_element.png") );
-    mimeData->setProperty("palette", 1);
+    mimeData->setProperty("source", "palette");
     mimeData->setProperty("element", m_drag_item->data(0, Qt::UserRole).toInt());
     m_drag->setMimeData( mimeData );
-    m_drag->setPixmap( QPixmap(":/codesys/images/24x24/default_element.png") );
+    QPixmap pix = m_drag_item->icon(0).pixmap(16,16);
+    m_drag->setPixmap( pix );
 
     Qt::DropAction result = m_drag->exec( Qt::MoveAction );
-    //qDebug() << "Drop action result: " << result;
-    if( result == Qt::MoveAction ) {
-        //setPixmap( QPixmap() );
-        //setText( "" );
-    }
-}
 
-QDrag *CTreeObject::get_drag()
-{
-    return m_drag;
+    if( result == Qt::MoveAction ) {
+        //
+    }
 }
 

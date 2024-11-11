@@ -10,7 +10,7 @@
 #include "view/TreeView.h"
 #include "dialog/InputDialog.h"
 #include "dialog/AddPOUDialog.h"
-#include "dialog/AddTypeDialog.h"
+#include "dialog/AddDUTDialog.h"
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
 #include "editor/fbd/general/ctreeobject.h"
@@ -23,10 +23,13 @@
 #include <QFileDialog>
 #include <QToolBar>
 #include <QToolButton>
+#include <QApplication>
+#include <QMessageBox>
 
 #include <QDebug>
 
 MainWindow * MainWindow::_m_instance = nullptr;
+QString MainWindow::_m_config_filename = QString();
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,9 +50,21 @@ MainWindow::MainWindow(QWidget *parent) :
     m_projDir = QString("%1/proj").arg(m_baseDir);
 
     StandardLibrary::instance()->load(/*m_baseDir*/);
-    StandardLibrary::instance()->test();
+    // StandardLibrary::instance()->test();
 
     open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
+
+    info(_m_config_filename);
+
+    if(!QFileInfo::exists(_m_config_filename))
+        _m_config_filename = QString("%1/etc/procont.ini").arg(m_baseDir);
+
+    _m_settings = new QSettings(_m_config_filename, QSettings::IniFormat);
+}
+
+void MainWindow::setConfig(const QString &filename_)
+{
+    _m_config_filename = filename_;
 }
 
 MainWindow * MainWindow::instance()
@@ -102,13 +117,13 @@ void MainWindow::createWidgets()
     tabifyDockWidget(dockDev, dockPou);
 
     // right area
-    // _m_toolWidget = new CTreeObject;
-    // _m_toolWidget->setMinimumSize(200, 500);
-    // pDock = new QDockWidget(tr("ToolBar"), this);
-    // pDock->setTitleBarWidget(new QWidget());
-    // pDock->setAllowedAreas(Qt::RightDockWidgetArea);
-    // pDock->setWidget(_m_toolWidget);
-    // addDockWidget(Qt::RightDockWidgetArea, pDock);
+    _m_toolWidget = new CTreeObject;
+    _m_toolWidget->setMinimumSize(200, 500);
+    pDock = new QDockWidget(tr("ToolBar"), this);
+    pDock->setTitleBarWidget(new QWidget());
+    pDock->setAllowedAreas(Qt::RightDockWidgetArea);
+    pDock->setWidget(_m_toolWidget);
+    addDockWidget(Qt::RightDockWidgetArea, pDock);
 
     // bottom area
     pDock = new QDockWidget(tr("Protocol"), this);
@@ -118,10 +133,10 @@ void MainWindow::createWidgets()
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
 }
 
-// CTreeObject * MainWindow::toolWidget() const
-// {
-//     return _m_toolWidget;
-// }
+CTreeObject * MainWindow::toolWidget() const
+{
+    return _m_toolWidget;
+}
 
 void MainWindow::createMenu()
 {
@@ -132,11 +147,16 @@ void MainWindow::createMenu()
 
     auto editMenu = menuBar()->addMenu(tr("Edit"));
     auto edit_undo_act = editMenu->addAction(QIcon(":/icon/images/undo1.svg"), tr("Undo"), QKeySequence::Undo, this, &MainWindow::slot_undo);
+    edit_undo_act->setEnabled(false);
     auto edit_redo_act = editMenu->addAction(QIcon(":/icon/images/redo1.svg"), tr("Redo"), QKeySequence::Redo, this, &MainWindow::slot_redo);
+    edit_redo_act->setEnabled(false);
     editMenu->addSeparator();
     auto edit_cut_act = editMenu->addAction(QIcon(":/icon/images/cut.svg"), tr("Cut"), QKeySequence::Cut, this, &MainWindow::slot_cut);
+    edit_cut_act->setEnabled(false);
     auto edit_copy_act = editMenu->addAction(QIcon(":/icon/images/copy.svg"), tr("Copy"), QKeySequence::Copy, this, &MainWindow::slot_copy);
+    edit_copy_act->setEnabled(false);
     auto edit_paste_act = editMenu->addAction(QIcon(":/icon/images/paste.svg"), tr("Paste"), QKeySequence::Paste, this, &MainWindow::slot_paste);
+    edit_paste_act->setEnabled(false);
     auto edit_delete_act = editMenu->addAction(QIcon(":/icon/images/delete2.svg"), tr("Delete"), QKeySequence::Delete, this, &MainWindow::slot_delete);
     editMenu->addSeparator();
     auto edit_input_assistant_act = editMenu->addAction(QIcon(":/icon/images/hierarchy.svg"), tr("Input assistant..."), QKeySequence(tr("F2")), this, &MainWindow::slot_input_assistant);
@@ -220,18 +240,6 @@ void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModel
     _m_button->setMenu(_m_addObjectMenu);
 }
 
-void MainWindow::slot_addDUT()
-{
-    AddTypeDialog dlg;
-    dlg.exec();
-}
-
-void MainWindow::slot_addPOU()
-{
-    AddPOUDialog dlg;
-    dlg.exec();
-}
-
 QModelIndex MainWindow::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
 {
     if(proxy == nullptr)
@@ -255,6 +263,38 @@ DomItem * MainWindow::item(const QModelIndex &index, QAbstractItemModel * proxy)
     return reinterpret_cast<DomItem *>(s_index(index, proxy).internalPointer());
 }
 
+void MainWindow::slot_addDUT()
+{
+    AddDUTDialog dlg;
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        auto model = reinterpret_cast<QAbstractProxyModel*>(viewPou->model());
+        auto indexes = model->sourceModel()->match(model->sourceModel()->index(0, 0), Qt::DecorationRole, "dataTypes", -1, Qt::MatchRecursive);
+        auto parentIndex = indexes.at(0);
+        auto parentItem = reinterpret_cast<DomItem *>(parentIndex.internalPointer());
+
+        // qDebug() <<
+
+        parentItem->addNode(dlg.getNode().toDocument().documentElement());
+        model->sourceModel()->insertRow(parentItem->rowCount(), parentIndex);
+    }
+}
+
+void MainWindow::slot_addPOU()
+{
+    AddPOUDialog dlg;
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        auto model = reinterpret_cast<QAbstractProxyModel*>(viewPou->model());
+        auto indexes = model->sourceModel()->match(model->sourceModel()->index(0, 0), Qt::DecorationRole, "pous", -1, Qt::MatchRecursive);
+        auto parentIndex = indexes.at(0);
+        auto parentItem = reinterpret_cast<DomItem *>(parentIndex.internalPointer());
+
+        parentItem->addNode(dlg.getNode().toDocument().documentElement());
+        model->sourceModel()->insertRow(parentItem->rowCount(), parentIndex);
+    }
+}
+
 void MainWindow::slot_open()
 {
     QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"), QString{}, tr("XML files (*.xml)"));
@@ -269,6 +309,7 @@ void MainWindow::slot_open()
 void MainWindow::open(const QString & filePath)
 {
     TabWidgetEditor::instance()->closeTabs();
+    TabWidgetEditor::instance()->addIntro();
 
     auto default_file = false;
     QString _filePath = filePath;
@@ -387,6 +428,9 @@ void MainWindow::save(const QString & filePath)
 
 void MainWindow::slot_currentViewChanged(const QModelIndex &index)
 {
+    while(toolWidget()->topLevelItemCount())
+        delete toolWidget()->topLevelItem(0);
+
     if(!index.isValid())
         return;
 
@@ -427,6 +471,40 @@ void MainWindow::slot_paste()
 
 void MainWindow::slot_delete()
 {
+    static QStringList listViewExclude; listViewExclude << "project" << "dataTypes" << "pous";
+    // pou tree
+    if(QApplication::focusWidget() == viewPou)
+    {
+        for(auto index : viewPou->selectionModel()->selectedRows())
+        {
+            if(listViewExclude.contains(item(index)->node().nodeName()))
+                continue;
+
+            QString _type = {};
+            if(item(index)->parentItem()->node().nodeName() == "pous")
+                _type = "POU";
+            if(item(index)->parentItem()->node().nodeName() == "dataTypes")
+                _type = "DUT";
+
+            auto _name = item(index)->node().toElement().attribute("name");
+            if
+                (
+                    QMessageBox::Yes ==
+                    QMessageBox::question
+                    (
+                        this,
+                        tr("Attention"),
+                        QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
+                        )
+                    )
+            {
+                TabWidgetEditor::instance()->closeTab(index);
+                item(index)->parentItem()->removeChild(s_index(index).row(), 0, item(index)->node());
+                proxy(viewPou->model())->sourceModel()->
+                    removeRow(s_index(index).row(), s_index(index.parent()));
+            }
+        }
+    }
 }
 
 void MainWindow::slot_input_assistant()
@@ -467,7 +545,7 @@ void MainWindow::slot_build()
             (
                 "generated.st",
                 _buildDir,
-                "/home/ambitecs/proj/procont/matiec"
+                _m_settings->value("Compiler/matiec_path").toString()
             );
     _m_compiler->compile();
     // ***

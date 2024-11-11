@@ -11,8 +11,6 @@ public:
     explicit CTreeObject(QWidget *parent = nullptr);
     ~CTreeObject() override;
 
-    QDrag *     get_drag();
-
 protected:
     void mousePressEvent( QMouseEvent* event ) override;
     void mouseMoveEvent( QMouseEvent* event ) override;

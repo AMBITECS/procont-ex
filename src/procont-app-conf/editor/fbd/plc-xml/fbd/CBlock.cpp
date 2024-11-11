@@ -44,6 +44,8 @@ CBlock::CBlock(const CBlock &other)
     m_position      = CPosition(other.m_position);
     m_add_data      = CAddData(other.m_add_data);
     m_documentation = CDocumentation(other.m_documentation);
+    m_inputs        = other.m_inputs;
+    m_outputs       = other.m_outputs;
 }
 
 CBlock::CBlock(CBlock &&other) noexcept
@@ -51,6 +53,8 @@ CBlock::CBlock(CBlock &&other) noexcept
     , m_instance_name(std::move(other.m_instance_name))
     , m_global_id(std::move(other.m_global_id))
     , m_add_data(other.m_add_data)
+    , m_inputs(std::move(other.m_inputs))
+    , m_outputs(std::move(other.m_outputs))
 
 {
     m_in_vars       = other.m_in_vars;
@@ -81,6 +85,8 @@ CBlock::CBlock(const QDomNode &dom_node)
 
     m_position      = CPosition(dom_node.namedItem("position") );
     m_add_data      = CAddData(dom_node.namedItem("addData"));
+    extract_params();
+
     m_documentation = CDocumentation(dom_node.namedItem("documentation"));
 
     m_in_vars       = new QList<CBlockVar*>();
@@ -266,8 +272,7 @@ CDocumentation *CBlock::documentation()
 }
 
 void
-CBlock::extract_vars(const QString &direction,
-                     const QDomNode &node)
+CBlock::extract_vars(const QString &direction, const QDomNode &node)
 {
     QList<CBlockVar*> * vars = nullptr;
 
@@ -295,5 +300,58 @@ CBlock::extract_vars(const QString &direction,
         auto var = new CBlockVar(child);
         vars->push_back(var);
     }
+}
+
+void CBlock::extract_params()
+{
+    if (m_add_data.is_empty())
+    {
+        return;
+    }
+
+    for (auto &data : *m_add_data.data_list())
+    {
+        if (data->name() == "inputparamtypes" && !data->any_node().isNull())
+        {
+            QDomElement de = data->any_node().toElement();
+            std::string types_s = de.text().toStdString();
+            extract_pin_params(INS, types_s);
+        }
+        if (data->name() == "outputparamtypes" && !data->any_node().isNull())
+        {
+            QDomElement de = data->any_node().toElement();
+            std::string types_s = de.text().toStdString();
+            extract_pin_params(OUTS, types_s);
+        }
+    }
+}
+
+void CBlock::extract_pin_params(const std::string &direction, const std::string &types_string)
+{
+    std::vector<EDefinedDataTypes> type_list;
+    std::vector<EDefinedDataTypes> * vect = direction == INS ? &m_inputs : &m_outputs;
+    std::string type_s;
+
+    for (auto &letter : types_string)
+    {
+        if (letter == ' ')
+        {
+            EDefinedDataTypes type = get_type_from_string(type_s);
+            type_list.push_back(type);
+            type_s.clear();
+
+            continue;
+        }
+
+        type_s += letter;
+    }
+
+    /// but last parameter was not recognized
+    EDefinedDataTypes type = get_type_from_string(type_s);
+    type_list.push_back(type);
+
+
+    vect->clear();
+    vect->insert(vect->end(), type_list.begin(), type_list.end());
 }
 

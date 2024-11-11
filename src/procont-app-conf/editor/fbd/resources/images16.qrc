@@ -902,6 +902,10 @@
         <file>images/16x16/textfield_rename.png</file>
         <file>images/16x16/fbd-diaggram.png</file>
         <file>images/24x24/default_element.png</file>
+        <file>images/codesys/auto_left.png</file>
+        <file>images/codesys/auto_right.png</file>
+        <file>images/codesys/bottom_auto.png</file>
+        <file>images/codesys/upper_auto.png</file>
     </qresource>
     <qresource prefix="/24">
         <file>images/24x24/3d bar chart.png</file>

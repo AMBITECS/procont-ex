@@ -58,12 +58,12 @@ public:
     std::vector<CLadder*>  * ladders();
 
     CLadder *   add_new_ladder();
-    void        insert_new_component(CLadder *p_ladder, const EPaletteElements &elements);
     CLadder *   insert_new_ladder(CLadder *next);
 
     void        reset_all_highlights();
     s_selection *       get_selection();
     void        check_diagram_size();
+    void insert_new_component(CLadder *p_ladder, const EPaletteElements &elements, const QPoint &pos);
 
 signals:
     void    update_hatch();
@@ -92,11 +92,15 @@ private:
     CPou        * m_pou;
     s_selection   m_selection;
 
+    EBodyType     m_diagram_type;
+    CFbdContent * m_fbd_content{nullptr};
+
     std::vector<CLadder*>     * m_ladders;
     std::vector<CLadder*>     * m_visible_ladders;
     QPoint       m_mouse_pressed{};
 
     QSize        m_diagram_size{0,0};
+    CConnectorPin   * m_drag_pin{nullptr};
 
     void    clear_ladders();
     QPoint  get_visible_range(const QPoint & pos);
@@ -105,6 +109,7 @@ private:
     CLadder * get_ladder(const unsigned long & id_ladder);
 
     bool find_out_var(CConnectorPin *p_pin, const uint64_t &block_id);
+
 };
 
 

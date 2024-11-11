@@ -15,7 +15,6 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     ui->setupUi(this);
 
     m_dom_node = new QDomNode(pou_node);
-    m_st_widget = new CodeEditorWidget();
 
     s_ogl_startup startup;
     startup.tree = tree_object;
@@ -23,16 +22,9 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     startup.horizontal = ui->horizontalScrollBar;
     startup.node = m_dom_node;
     startup.is_editable = is_editable;
-    startup.st_widget = m_st_widget;
+
 
     m_ogl_widget = new COglWidget(&startup);
-
-    /// place ST-widget
-    {
-        auto lo = new QGridLayout(ui->stWidget);
-        lo->addWidget(m_st_widget);
-        lo->setContentsMargins(0, 0, 0, 0);
-    }
 
     /// place OpenGL widget
     {
@@ -41,15 +33,14 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
         lo->setContentsMargins(0, 0, 0, 0);
     }
 
+    connect(m_ogl_widget, &COglWidget::diagram_changed, this, &CDiagramWidget::updated_diagram);
+
     m_tree_widget = tree_object;
     ui->diagramSplitter->setSizes({33333, 66667});
-
-    build_tree();
 }
 
 CDiagramWidget::~CDiagramWidget()
 {
-    delete m_st_widget;
     delete m_ogl_widget;
     delete m_dom_node;
 
@@ -73,9 +64,15 @@ void CDiagramWidget::set_active()
     }
 }
 
-void CDiagramWidget::diagram_updated()
+void CDiagramWidget::updated_diagram()
 {
+    emit changed_diagram(*m_dom_node);
+}
 
+void CDiagramWidget::updated_interface(const QDomNode &node)
+{
+    // changing interface
+    emit changed_interface();
 }
 
 

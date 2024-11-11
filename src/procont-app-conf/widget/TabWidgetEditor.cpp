@@ -4,6 +4,7 @@
 
 #include "model/ProxyModel.h"
 #include "editor/fbd/general/OglWidget.h"
+#include "main/MainWindow.h"
 
 #include <QLabel>
 
@@ -23,6 +24,13 @@ TabWidgetEditor::TabWidgetEditor()
 
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slot_closeTab(int)));
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(slot_currentTabChanged(int)));
+}
+
+void TabWidgetEditor::addIntro()
+{
+    auto wgt = new OglWidget(widget(0));
+    addTab(wgt, tr("Intro"));
+    setCurrentWidget(wgt);
 }
 
 TabWidgetEditor * TabWidgetEditor::instance()
@@ -120,12 +128,21 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
     setCurrentWidget(_hWidgets.value(index));
 }
 
+void TabWidgetEditor::closeTab(const QModelIndex &index)
+{
+    if(_hWidgets.contains(index))
+        slot_closeTab(indexOf(_hWidgets.value(index)));
+}
+
 void TabWidgetEditor::slot_currentTabChanged(int index)
 {
     if(std::find(std::begin(_hWidgets), std::end(_hWidgets), widget(index)) != std::end(_hWidgets))
         emit signal_currentTabChanged(_hWidgets.key(widget(index)));
     else
         emit signal_currentTabChanged(QModelIndex());
+
+    if(dynamic_cast<WidgetEditor_fbd*>(widget(index)))
+        reinterpret_cast<WidgetEditor_fbd*>(widget(index))->activate();
 }
 
 void TabWidgetEditor::slot_closeTab(int index)

@@ -9,7 +9,15 @@ int main(int argc, char *argv[])
     QTranslator translator;
     if( translator.load( ":/procont-app-conf_ru_RU.qm" ) )
         a.installTranslator( &translator );
-    // MainWindow w;
+
+    auto config = QString();
+    for(auto i=0;i<argc;i++)
+    {
+        if(QString(argv[i]) == "--config" || QString(argv[i]) == "-c")
+            config = (++i <= argc) ? argv[i] : QString();
+    }
+
+    MainWindow::setConfig(config);
     MainWindow::instance()->show();
 
     return a.exec();

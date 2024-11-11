@@ -47,17 +47,17 @@
         <location filename="../dialog/AddDUTDialog.cpp" line="190"/>
         <location filename="../dialog/AddDUTDialog.cpp" line="202"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../dialog/AddDUTDialog.cpp" line="191"/>
         <source>Please enter DUT name</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите имя DUT</translation>
     </message>
     <message>
         <location filename="../dialog/AddDUTDialog.cpp" line="203"/>
         <source>The name &apos;%1&apos; is already in use, please enter a different name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя &apos;%1&apos; уже используется, введите другое</translation>
     </message>
     <message>
         <location filename="../dialog/AddDUTDialog.cpp" line="61"/>
@@ -189,17 +189,17 @@
         <location filename="../dialog/AddPOUDialog.cpp" line="273"/>
         <location filename="../dialog/AddPOUDialog.cpp" line="285"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../dialog/AddPOUDialog.cpp" line="274"/>
         <source>Please enter POU name</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите имя POU</translation>
     </message>
     <message>
         <location filename="../dialog/AddPOUDialog.cpp" line="286"/>
         <source>The name &apos;%1&apos; is already in use, please enter a different name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя &apos;%1&apos; уже используется, введите другое</translation>
     </message>
     <message>
         <location filename="../dialog/AddPOUDialog.cpp" line="108"/>
@@ -498,7 +498,7 @@
     <message>
         <location filename="../main/MainWindow.cpp" line="106"/>
         <source>POUs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="115"/>
@@ -545,7 +545,7 @@
     <message>
         <location filename="../main/MainWindow.cpp" line="127"/>
         <source>ToolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Панель инструментов</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="148"/>
@@ -605,12 +605,12 @@
     <message>
         <location filename="../main/MainWindow.cpp" line="499"/>
         <source>Attention</source>
-        <translation type="unfinished"></translation>
+        <translation>Внимание</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="500"/>
         <source>Do you really want to delete %1 &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы действительно хотите удалить %1 &apos;%2&apos;</translation>
     </message>
     <message>
         <source>Input assistant</source>
@@ -619,7 +619,7 @@
     <message>
         <location filename="../main/MainWindow.cpp" line="167"/>
         <source>F2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="167"/>
@@ -634,12 +634,12 @@
     <message>
         <location filename="../main/MainWindow.cpp" line="177"/>
         <source>Ctrl+Shift+B</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="203"/>
         <source>DUT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -677,7 +677,7 @@
     <message>
         <location filename="../main/MainWindow.cpp" line="209"/>
         <source>POU</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="326"/>
@@ -913,37 +913,37 @@
     <message>
         <location filename="../iec/StandardLibrary.cpp" line="51"/>
         <source>Standard Function Blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартные функциональные блоки</translation>
     </message>
     <message>
         <location filename="../iec/StandardLibrary.cpp" line="53"/>
         <source>Additional Function Blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительные функциональные блоки</translation>
     </message>
     <message>
         <location filename="../iec/StandardLibrary.cpp" line="55"/>
         <source>Standard IEC Functions</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартные функции IEC</translation>
     </message>
     <message>
         <location filename="../generate/Compiler.cpp" line="23"/>
         <source>Compiler not found, build is aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Компилятор не найден, соборка прервана</translation>
     </message>
     <message>
         <location filename="../generate/Compiler.cpp" line="24"/>
         <source>not found file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>не найден файл &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../generate/Compiler.cpp" line="33"/>
         <source>build started</source>
-        <translation type="unfinished"></translation>
+        <translation>сборка запущена</translation>
     </message>
     <message>
         <location filename="../generate/Compiler.cpp" line="62"/>
         <source>build finished</source>
-        <translation type="unfinished"></translation>
+        <translation>сборка закончена</translation>
     </message>
 </context>
 <context>
@@ -966,7 +966,7 @@
     <message>
         <location filename="../widget/TabWidgetEditor.cpp" line="32"/>
         <source>Intro</source>
-        <translation type="unfinished"></translation>
+        <translation>Обзор</translation>
     </message>
 </context>
 <context>

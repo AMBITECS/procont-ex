@@ -4,7 +4,7 @@
 
 #include <QPainter>
 #include "OglWidget.h"
-#include "../../../fbd/graphics/COglStyle.h"
+#include "../fbd/graphics/COglStyle.h"
 
 OglWidget::OglWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
@@ -13,7 +13,6 @@ OglWidget::OglWidget(QWidget *parent) : QOpenGLWidget(parent)
 
 OglWidget::~OglWidget()
 {
-    //QOpenGLWidget::~QOpenGLWidget();
 }
 
 void OglWidget::paintEvent(QPaintEvent *event)

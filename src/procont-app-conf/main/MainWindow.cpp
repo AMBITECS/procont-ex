@@ -29,7 +29,8 @@
 #include <QDebug>
 
 MainWindow * MainWindow::_m_instance = nullptr;
-QString MainWindow::_m_config_filename = QString();
+QString MainWindow::_m_config_filepath = QString();
+QString MainWindow::_m_base_directory = QString();
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -46,25 +47,29 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createDynamicActions();
 
-    m_baseDir = QFileInfo(QDir::currentPath()).absolutePath();
-    m_projDir = QString("%1/proj").arg(m_baseDir);
-
     StandardLibrary::instance()->load(/*m_baseDir*/);
     // StandardLibrary::instance()->test();
 
     open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
 
-    info(_m_config_filename);
+    if(!QFileInfo::exists(_m_base_directory))
+        _m_base_directory = QFileInfo(QDir::currentPath()).absolutePath();
+    m_projDir = QString("%1/proj").arg(_m_base_directory);
 
-    if(!QFileInfo::exists(_m_config_filename))
-        _m_config_filename = QString("%1/etc/procont.ini").arg(m_baseDir);
+    if(!QFileInfo::exists(_m_config_filepath))
+        _m_config_filepath = QString("%1/etc/procont.ini").arg(_m_base_directory);
 
-    _m_settings = new QSettings(_m_config_filename, QSettings::IniFormat);
+    _m_settings = new QSettings(_m_config_filepath, QSettings::IniFormat);
 }
 
-void MainWindow::setConfig(const QString &filename_)
+void MainWindow::setConfig(const QString &filepath_)
 {
-    _m_config_filename = filename_;
+    _m_config_filepath = filepath_;
+}
+
+void MainWindow::setDirectory(const QString &dirpath_)
+{
+    _m_base_directory = dirpath_;
 }
 
 MainWindow * MainWindow::instance()
@@ -272,8 +277,6 @@ void MainWindow::slot_addDUT()
         auto indexes = model->sourceModel()->match(model->sourceModel()->index(0, 0), Qt::DecorationRole, "dataTypes", -1, Qt::MatchRecursive);
         auto parentIndex = indexes.at(0);
         auto parentItem = reinterpret_cast<DomItem *>(parentIndex.internalPointer());
-
-        // qDebug() <<
 
         parentItem->addNode(dlg.getNode().toDocument().documentElement());
         model->sourceModel()->insertRow(parentItem->rowCount(), parentIndex);
@@ -523,9 +526,9 @@ void MainWindow::slot_build()
 
     // *** подготовка ST-файла
     // создание папки для сборки
-    auto _buildDir = QString("%1/build").arg(m_baseDir);
+    auto _buildDir = QString("%1/build").arg(_m_base_directory);
     QDir(_buildDir).removeRecursively();
-    QDir(m_baseDir).mkdir(_buildDir);
+    QDir(_m_base_directory).mkdir(_buildDir);
 
     // формирование ST-файла
     QString st_text = Translator::translate(model->document());

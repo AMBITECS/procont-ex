@@ -32,6 +32,7 @@ public:
     CTreeObject * toolWidget() const;
 
     static void setConfig(const QString &);
+    static void setDirectory(const QString &);
 
 private:
     void open(const QString & filePath = {});
@@ -84,7 +85,6 @@ private:
     ProxyModelTree_dev * proxy_dev = nullptr;
 
     QString m_projDir = {};
-    QString m_baseDir = {};
 
     Compiler * _m_compiler = nullptr;
 
@@ -97,7 +97,8 @@ private:
 
     QSettings * _m_settings{nullptr};
 
-    static QString _m_config_filename;
+    static QString _m_config_filepath;
+    static QString _m_base_directory;
 
 private:
     static MainWindow * _m_instance;

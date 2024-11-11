@@ -2,13 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QProcess>
+#include <QSettings>
 
 QT_FORWARD_DECLARE_CLASS(QTreeView)
 QT_FORWARD_DECLARE_CLASS(QDockWidget)
 QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
 QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
+QT_FORWARD_DECLARE_CLASS(QSettings)
 
 QT_FORWARD_DECLARE_CLASS(DomModel)
 QT_FORWARD_DECLARE_CLASS(DomItem)
@@ -88,11 +89,11 @@ private:
     QMultiHash<QString, QAction *> _m_dynamicActions;
     QMenu * _m_addObjectMenu = nullptr;
 
-    QToolButton * _m_button;
+    QToolButton * _m_button{nullptr};
 
-    CTreeObject * _m_toolWidget;
+    CTreeObject * _m_toolWidget{nullptr};
 
-
+    QSettings * _m_settings{nullptr};
 
 private:
     static MainWindow * _m_instance;

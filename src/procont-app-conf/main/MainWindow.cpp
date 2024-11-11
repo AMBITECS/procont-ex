@@ -49,9 +49,11 @@ MainWindow::MainWindow(QWidget *parent) :
     m_projDir = QString("%1/proj").arg(m_baseDir);
 
     StandardLibrary::instance()->load(/*m_baseDir*/);
-    StandardLibrary::instance()->test();
+    // StandardLibrary::instance()->test();
 
     open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
+
+    _m_settings = new QSettings(QString("%1/etc/procont.ini").arg(m_baseDir), QSettings::IniFormat);
 }
 
 MainWindow * MainWindow::instance()
@@ -532,7 +534,7 @@ void MainWindow::slot_build()
             (
                 "generated.st",
                 _buildDir,
-                "/home/ambitecs/proj/procont/matiec"
+                _m_settings->value("Compiler/matiec_path").toString()
             );
     _m_compiler->compile();
     // ***

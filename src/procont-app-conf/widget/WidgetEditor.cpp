@@ -208,6 +208,7 @@ void WidgetEditor::slot_addVariable()
     parent->addNode();
 
     // add item
+    qDebug() << __PRETTY_FUNCTION__;
     _proxy->sourceModel()->insertRow(parent->rowCount(), s_index(_vars_table->rootIndex()));
 }
 
@@ -358,7 +359,7 @@ QWidget * WidgetEditor_type::createCodeEditor()
     _body_text->setMinimumSize(500, 250);
 
     // !!! parse node to ST text
-    qDebug() << "new code for parse node" << item(_index)->node().nodeName() << item(_index)->type();
+    // qDebug() << "new code for parse node" << item(_index)->node().nodeName() << item(_index)->type();
     // QString text = XmlParser::getPouBodyText(item(_index)->node());
     QString text = {};
 
@@ -372,7 +373,7 @@ QWidget * WidgetEditor_type::createCodeEditor()
 
 void WidgetEditor_type::slot_codeChanged()
 {
-    qDebug() << "new code for update node" << item(_vars_table->rootIndex())->node().nodeName();
+    // qDebug() << "new code for update node" << item(_vars_table->rootIndex())->node().nodeName();
 
     //QDomNode new_node = {};
     // // get new node from st editor

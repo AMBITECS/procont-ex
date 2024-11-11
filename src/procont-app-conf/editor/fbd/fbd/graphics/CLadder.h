@@ -12,6 +12,7 @@
 #include <QDragMoveEvent>
 #include "CDiagramObject.h"
 #include "CObjectsText.h"
+#include "../palette/palette.h"
 
 
 #define  LEFT_WIDTH 50     //!< the width of the left rect
@@ -60,35 +61,40 @@ struct s_images
     QImage  landing_bottom{};
 };
 
-class CLadder
+
+class CLadder //: public QObject
 {
+    //Q_OBJECT
 public:
     CLadder() = delete;
     CLadder(QPoint * hatch_top_left, QSize * hatch_size, CLadder * prev_ladder = nullptr, CLadder *next = nullptr);
     ~CLadder();
 
+    /// change ladders content
+    void                put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos);
+    CDiagramObject *    remove_object(CDiagramObject *dragged_obj);
+    CDiagramObject *    add_object(CBlock * object);
+
+    /// change and update ladder position
+    void    update_real_position(CLadder *sender = nullptr);
+    void    update_rel_position();
+
+    /// context
     void    set_previous(CLadder *ladder);
     void    set_next(CLadder *ladder);
-
     [[nodiscard]] bool    is_visible() const;     //!< is visible via hatch in the current position
 
-    //void    hatch_resized();
-    //void    hatch_moving(const QPoint &cur_position);
     void    highlights_off();
-    //    void    highlights_on(const QPoint &pos);
 
     void    set_selected(const bool &is_selected);
     [[nodiscard]] bool    is_selected() const;
     [[nodiscard]] bool    is_clicked_here(const QPoint &pos) const;
     void    drag_object(QDragMoveEvent * event);
-    void    put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos);
-    CDiagramObject *    remove_object(CDiagramObject *dragged_obj);
+
 
     [[nodiscard]] QPoint              real_bottom_right() const;
+    QPoint *    real_top_left();
 
-    void    update_real_position(CLadder *sender = nullptr);
-    void    update_rel_position();
-    CDiagramObject *  add_object(CBlock * object);
 
     QVector<QPair<QRect*, QImage*>>   * draw_ladder();
     QVector<QPair<QRect, QImage>>       draw_highlights();
@@ -97,7 +103,6 @@ public:
     [[nodiscard]] const uint16_t      * height();
     QRect                             * base_relative_rect();
     [[nodiscard]] uint16_t              number() const;
-    [[nodiscard]] QImage                drag_image() const;
 
     void    resort();
 
@@ -106,6 +111,7 @@ public:
     CLadder   *  next_ladder();
 
     void get_selected(const QPoint &point, s_selection *p_selection);
+    void insert_new_component(const QPoint &point, CBlock *block);
 
 protected:
 
@@ -127,7 +133,6 @@ private:
     uint16_t      m_current_width{};
     bool          m_is_selected{false};
 
-    QPoint        m_absolute_tl{0,0};
     QPoint        m_relative_tl{0,0};
 
     QList<CDiagramObject*>          * m_objects;
@@ -141,7 +146,7 @@ private:
     s_rects       m_relative{};
     s_colors      m_colors;
     s_images      m_images;
-    //QRect         m_placeholder{};
+
     QRect         m_ladder_landing{};
     QRect         m_base_rel;
     QImage        m_drag_image;

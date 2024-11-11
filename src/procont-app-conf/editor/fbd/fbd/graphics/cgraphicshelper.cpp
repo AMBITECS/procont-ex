@@ -2,20 +2,21 @@
 
 #include <QMimeData>
 #include <QPixmap>
-#include "../palette/palette.h"
-#include "../../../st/CodeEditorWidget.h"
-#include <QDrag>
 #include <QTimer>
-#include "../../general/QtDialogs.h"
+#include <QMenu>
 
-CGraphicsHelper::CGraphicsHelper(QDomNode *node, CodeEditorWidget * st_widget) : QWidget()
+#include "../../general/QtDialogs.h"
+#include "../variables.h"
+#include "coglwidget.h"
+
+CGraphicsHelper::CGraphicsHelper(QDomNode *node) : QWidget()
 {
     m_pou_node = node;
-    m_pou = new CPou(*m_pou_node);
+    if (node->isNull())
+        m_pou = new CPou();
+    else
+        m_pou = new CPou(*m_pou_node);
 
-    m_st_widget = st_widget;
-
-    fill_interface();
 
     m_graphics_world = new COglWorld(m_pou, &m_hatch_tl);
 
@@ -54,7 +55,7 @@ std::vector<CLadder*>  * CGraphicsHelper::ladders()
 
 void CGraphicsHelper::on_right_mouse_click(QMouseEvent *event)
 {
-    // TODO: if under mouse is ladder or nothing - build context menu
+    /// ещё не придумал
 }
 
 void CGraphicsHelper::on_left_mouse_click(QMouseEvent *event)
@@ -80,21 +81,31 @@ void CGraphicsHelper::on_key_released_event(QKeyEvent *event)
 void CGraphicsHelper::on_drop_event(QDropEvent *event)
 {
     auto mime = event->mimeData();
-    CLadder * receiver = nullptr;
+    //CLadder * receiver;
+
+    /// reset all highlights
+    for (auto &ladder : *m_ladders)
+    {
+        ladder->highlights_off();
+    }
 
     /// define which ladder is receiver
     s_selection selected = m_graphics_world->get_selection(event->position().toPoint());
 
+    QString drag_source = mime->property(txt_vars::drag_source_prop).toString();
+
     /// define what is dropped: component or ladder, from palette or inner drag
-    if (mime->property("palette").toInt() == 1)
+    if (drag_source == txt_vars::drag_src_palette)
     {
-        EPaletteElements type = (EPaletteElements)event->mimeData()->property("element").toInt();
+        EPaletteElements type = (EPaletteElements)event->mimeData()->property(txt_vars::drag_element).toInt();
+
         /// new component
-        if (type != EPaletteElements::EG_CIRCUIT)
+        if (type >= 9)
         {
             if (selected.ladder)
             {
-                m_graphics_world->insert_new_component(selected.ladder, type);
+                m_graphics_world->insert_new_component(selected.ladder, type,
+                                                       event->position().toPoint());
             }
             else
             {
@@ -121,14 +132,6 @@ void CGraphicsHelper::on_drop_event(QDropEvent *event)
 
     if (m_dragged_obj && selected.ladder)
     {
-        /// if dropped on the source ladder
-        if (selected.ladder == m_object_source)
-        {
-            selected.reset();
-            m_dragged_obj = nullptr;
-            m_object_source = nullptr;
-            return;
-        }
 
         if (!m_object_source->remove_object(m_dragged_obj))
         {
@@ -137,6 +140,12 @@ void CGraphicsHelper::on_drop_event(QDropEvent *event)
         }
 
         selected.ladder->put_dragged_object(m_dragged_obj, event->position().toPoint());
+
+        if (m_object_source != selected.ladder)
+        {
+            m_object_source->resort();
+        }
+        selected.ladder->resort();
     }
 
     /// there were different landing highlights. Now we have to switch them off
@@ -196,30 +205,6 @@ void CGraphicsHelper::scroll_bar_moved(const QPoint &pos)
     emit scroll_bars_moving(pos);
 }
 
-void CGraphicsHelper::fill_interface()
-{
-    if (m_pou->interface()->is_empty())
-    {
-        return;
-    }
-
-    QString name = "PROGRAM " + m_pou->name() + "\n";
-    QString vars = name;
-    QString comment;
-    auto iface = m_pou->interface();
-
-    vars += "VAR\n";
-    for (auto &var : *iface->local_variables()->variables())
-    {
-        // TODO: realize arrays, addresses pointers and so on
-        comment = var->comment().isEmpty() ? "" : "//" + var->comment();
-        vars += "\t"+  var->name() + "\t:\t"+var->type() + ";\t" +  comment + "\n";
-    }
-    vars += "END_VAR";
-
-    // m_st_widget->setPlainText(vars);
-}
-
 void CGraphicsHelper::on_drag_ladder_enter(QDragEnterEvent *event)
 {
     auto sel = m_graphics_world->get_selection();
@@ -264,6 +249,129 @@ void CGraphicsHelper::diagram_sized(const int &w, const int &h)
 void CGraphicsHelper::project_complete()
 {
     emit on_project_loaded();
+}
+
+void CGraphicsHelper::object_remove(CLadder *ladder, CDiagramObject *object)
+{
+
+}
+
+
+bool CGraphicsHelper::make_menu(COglWidget *p_widget, QMenu *p_menu, const QPoint &point)
+{
+    s_selection selection = m_graphics_world->get_selection(point);
+
+    if (selection.empty())
+    {
+        return false;
+    }
+
+    auto p_object = selection.object;
+    auto p_ladder = selection.ladder;
+    auto p_pin = selection.pin;
+
+    if (p_object && p_ladder)
+    {
+        make_object_menu(p_menu, p_object, p_ladder);
+    }
+
+    if (p_pin)
+    {
+        make_pin_menu(p_menu, p_pin);
+    }
+
+    if (p_ladder && !p_pin && !p_object)
+    {
+        make_ladder_menu(p_menu, p_ladder);
+    }
+
+    return true;
+}
+
+void CGraphicsHelper::make_object_menu(QMenu *p_menu, CDiagramObject *p_object, CLadder *p_ladder)
+{
+    auto act_remove = new QAction(p_menu);
+    auto act_cat = new QAction(p_menu);
+
+    QAction * act_paste = nullptr;
+    if (m_clip_object)
+    {
+        act_paste = new QAction(p_menu);
+        act_paste->setEnabled(m_clip_object);
+    }
+
+
+
+    QString text = "Удалить " + p_object->type_name() + " " + p_object->instance_name();
+    act_remove->setText(text);
+
+    text = "Вырезать " + p_object->type_name() + " " + p_object->instance_name();
+    act_cat->setText(text);
+
+    if (m_clip_object)
+    {
+        text = "Вставить " + m_clip_object->type_name() + " " + m_clip_object->instance_name();
+        act_paste->setIcon(QIcon(":/24/images/24x24/Paste.png"));
+        //connect()
+    }
+
+
+    act_remove->setIcon(QIcon(":/24/images/24x24/Close.png"));
+    connect(act_remove, &QAction::toggled, [=](){
+        object_remove(p_ladder, p_object);});
+
+    act_cat->setIcon(QIcon(":/16/images/16x16/cut_red.png"));
+    connect(act_cat, &QAction::toggled, [=](){object_cat(p_ladder, p_object);});
+
+    p_menu->addAction(act_remove);
+    p_menu->addAction(act_cat);
+    if(act_paste)
+        p_menu->addAction(act_paste);
+}
+
+void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CConnectorPin * p_pin)
+{
+    auto act_find_helper = new QAction(QIcon(":/24/images/24x24/Search.png"),
+                                       "Найти переменную с помощью ассистента...",
+                                       p_menu);
+    auto act_edit_connect = new QAction(QIcon(":/24/images/24x24/Modify.png"),
+                                        "Редактировать соединение",
+                                        p_menu);
+    auto act_reset_connect = new QAction(QIcon(":/16/images/16x16/chart_organisation_delete.png"),
+                                        "Очистить соединение",
+                                        p_menu);
+
+    QAction * act_inversion = nullptr;
+    QAction * act_edge_rising = nullptr;
+    QAction * act_edge_falling = nullptr;
+    //QAction * act_storage = nullptr;
+
+    if (p_pin->type() == EDefinedDataTypes::DDT_BOOL)
+    {
+        act_inversion = new QAction(QIcon(""), "Инвертировать", p_menu);
+        connect(act_inversion, &QAction::toggled, this, [p_pin]{p_pin->set_negated(!p_pin->is_negated());});
+
+        act_edge_rising = new QAction(QIcon(""), "Нарастающий фронт");
+    }
+
+
+
+
+    p_menu->addAction(act_find_helper);
+    p_menu->addAction(act_edit_connect);
+    p_menu->addAction(act_reset_connect);
+    p_menu->addSeparator();
+
+}
+
+void CGraphicsHelper::make_ladder_menu(QMenu *p_menu, CLadder *p_ladder)
+{
+
+}
+
+void CGraphicsHelper::object_cat(CLadder *p_ladder, CDiagramObject *p_object)
+{
+
 }
 
 

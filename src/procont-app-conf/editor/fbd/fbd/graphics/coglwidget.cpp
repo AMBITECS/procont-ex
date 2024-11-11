@@ -1,22 +1,35 @@
 #include "coglwidget.h"
-#include "../palette/palette.h"
 
 #include <QMouseEvent>
 #include <QMimeData>
-#include <GL/glu.h>
 #include <QPainter>
+#include <QMenu>
+
+
+#include "../variables.h"
 
 
 COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     : QOpenGLWidget(parent), m_vertical(ogl_startup->vertical), m_horizontal(ogl_startup->horizontal)
 {
-    connect(m_vertical, &QScrollBar::valueChanged, this, &COglWidget::vertical_scroll_moved);
-    connect(m_horizontal, &QScrollBar::valueChanged, this, &COglWidget::horizontal_scroll_moved);
+    this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+
+    connect(m_vertical, &QScrollBar::valueChanged,
+            this, &COglWidget::vertical_scroll_moved);
+    connect(m_horizontal, &QScrollBar::valueChanged,
+            this, &COglWidget::horizontal_scroll_moved);
+    connect(this, &COglWidget::customContextMenuRequested,
+            this, &COglWidget::slotCustomMenuRequested);
+
 
     m_paint_dev = dynamic_cast<QPaintDevice *>(this);
     m_style = new COglStyle();
-    m_helper = new CGraphicsHelper(ogl_startup->node, ogl_startup->st_widget);
+    m_helper = new CGraphicsHelper(ogl_startup->node);
 
+    m_is_editable = ogl_startup->is_editable;
+
+    connect(this, &COglWidget::drag_moving,
+            m_helper, &CGraphicsHelper::on_drag_move_event);
     connect(this, &COglWidget::scroll_bars_moving,
             m_helper, &CGraphicsHelper::scroll_bar_moved);
     connect(m_helper, &CGraphicsHelper::diagram_resized,
@@ -25,7 +38,10 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     m_ladders = m_helper->ladders();
     connect(m_helper, &CGraphicsHelper::on_project_loaded, this, &COglWidget::project_loaded);
 
-    this->setAcceptDrops(true);
+
+
+
+    this->setAcceptDrops(m_is_editable);
 }
 
 COglWidget::~COglWidget()
@@ -37,40 +53,28 @@ COglWidget::~COglWidget()
 void
 COglWidget::initializeGL()
 {
-    //QOpenGLWidget::initializeGL();
     initializeOpenGLFunctions();
-    if (!m_funcGL)
-    {
-        m_funcGL = QOpenGLContext::currentContext()->functions();
-    }
+
 
     s_color color = m_style->background();
 
-    //m_funcGL->glClearColor(color.red, color.green, color.blue, color.alpha);
     glClearColor(color.red, color.green, color.blue, color.alpha);
-    //m_funcGL->glEnable(GL_ALPHA_TEST);
     glEnable(GL_ALPHA_TEST);
 
     // тест глубины
-    //m_funcGL->glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
 
     // glColor будет устанавливать свойства материала
-    //m_funcGL->glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_COLOR_MATERIAL);
 
     // разрешаем освещение
-    //m_funcGL->glEnable(GL_LIGHTING);
     glEnable(GL_LIGHTING);
 
     // включаем нулевую лампу
-    //m_funcGL->glEnable(GL_LIGHT0);
     glEnable(GL_LIGHT0);
 
     // разрешаем смешение цветов и "прозрачность"
-    //m_funcGL->glEnable(GL_BLEND);
     glEnable(GL_BLEND);
-    //m_funcGL->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
@@ -78,12 +82,11 @@ void COglWidget::resizeGL(int w, int h)
 {
     //QOpenGLWidget::resizeGL(w, h);
     glViewport(0, 0, w, h);                 // установка площади обзора
-    //glViewport(m_X_scroll, m_Y_scroll, w, h);
-    glMatrixMode(GL_PROJECTION);            // установка режима матрицы
-    glLoadIdentity();                       // загрузка матрицы
-    //gluLookAt(x,y+height,z,x-sin(angleX/180*PI),y+height+(tan(angleY/180*PI)),z-cos(angleX/180*PI), 0, 1, 0);
+    glMatrixMode(GL_PROJECTION);                // установка режима матрицы
+    glLoadIdentity();                               // загрузка матрицы
     m_helper->resized(w, h);
-    height = h;
+    m_height = h;
+    m_width  = w;
     QOpenGLWidget::resizeGL(w, h);
     update();
     //repaint();
@@ -97,6 +100,8 @@ COglWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     draw_ladders();
+    draw_drag_bottom_upper();
+
 }
 
 void
@@ -115,7 +120,7 @@ COglWidget::mousePressEvent(QMouseEvent *event)
 
     if (event->button() == Qt::LeftButton)
     {
-        m_start_move = event->pos();
+        //m_start_move = event->pos();
         m_helper->on_left_mouse_click(event);
     }
 
@@ -156,30 +161,52 @@ COglWidget::keyReleaseEvent(QKeyEvent *evt)
 void
 COglWidget::dropEvent(QDropEvent *event)
 {
-    m_helper->on_drop_event(event);
-    update();
+    if (!m_is_editable)
+    {
+        event->ignore();
+        return;
+    }
+
+    m_vertical_auto_rect = QRect();
+    m_vertical_autoscroll = QImage();
+
+    QString source = event->mimeData()->property(txt_vars::drag_source_prop).toString();
+
+    if (source == txt_vars::drag_src_palette || source == txt_vars::drag_src_canvas)
+    {
+        m_helper->on_drop_event(event);
+        update();
+    }
     QWidget::dropEvent(event);
 }
 
 void COglWidget::dragEnterEvent(QDragEnterEvent *event)
 {
+    if (!m_is_editable)
+    {
+        event->ignore();
+        return;
+    }
+
     auto mime = event->mimeData();
-    if (mime->property("palette").toInt() == 1)
+    QString source = mime->property(txt_vars::drag_source_prop).toString();
+
+    if (source == txt_vars::drag_src_palette)
     {
         event->acceptProposedAction();
         m_helper->on_drag_enter_event(event);
     }
-    if (mime->property("source").toString() == "canvas")
+    if (source == txt_vars::drag_src_canvas)
     {
         /// drag component
-        if (mime->property("object") == "object")
+        if (mime->property(txt_vars::drag_obj_prop_name) == txt_vars::dragging_object)
         {
             event->acceptProposedAction();
             m_helper->on_drag_object_enter(event);
         }
 
         /// drag ladder
-        if (mime->property("object") == "ladder")
+        if (mime->property(txt_vars::drag_obj_prop_name) == txt_vars::dragging_ladder)
         {
             event->acceptProposedAction();
             m_helper->on_drag_ladder_enter(event);
@@ -192,14 +219,84 @@ void COglWidget::dragEnterEvent(QDragEnterEvent *event)
 void
 COglWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (event->mimeData()->property("element").toInt() == EG_CIRCUIT)
+    if (!m_is_editable)
     {
-        //m_helper->on_drag_new_node(event->position().toPoint());
-        m_helper->on_drag_move_event(event);
+        event->ignore();
+        return;
     }
-    else
+
+    bool is_bottom_drag = false;
+    bool is_top_drag = false;
+    bool is_right_drag = false;
+    bool is_left_drag = false;
+
+    /// bottom autoscroll
+    if (event->position().toPoint().y() >= m_height-20 &&
+        m_vertical->isEnabled() && (m_vertical->sliderPosition() < m_vertical->maximum())
+    )
+    {
+        is_bottom_drag = true;
+        m_vertical_autoscroll = QImage(":/codesys/images/codesys/bottom_auto.png");
+        m_vertical_auto_rect = QRect(0, m_height - 20, m_width, 20);
+        m_vertical->setValue(m_vertical->value() + 5);
+    }
+
+    /// upper autoscroll
+    if (event->position().toPoint().y() <= 20 &&
+        m_vertical->isEnabled() && (m_vertical->sliderPosition() > 0)
+    )
+    {
+        is_top_drag = true;
+        m_vertical_autoscroll = QImage(":/codesys/images/codesys/upper_auto.png");
+        m_vertical_auto_rect = QRect(0, 0, m_width, 20);
+        m_vertical->setValue(m_vertical->value() - 5);
+    }
+
+    /// right autoscroll
+    if (event->position().toPoint().x() > m_width - 20 &&
+        m_horizontal->isEnabled() &&
+        m_horizontal->value() < m_horizontal->maximum()
+    )
+    {
+        is_right_drag = true;
+        m_horizon_auto_rect = QRect(m_width-20, 0, 20, m_height);
+        m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_right.png");
+        //m_horizon_autoscroll.
+        m_horizontal->setValue(m_horizontal->value() + 2);
+
+    }
+    /// left autoscroll
+    if (event->position().toPoint().x() < 20 &&
+            m_horizontal->isEnabled() &&
+            m_horizontal->value() > 0
+    )
+    {
+        is_left_drag = true;
+        m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_left.png");
+        m_horizon_auto_rect = QRect(0,0, 20, m_height);
+        m_horizontal->setValue(m_horizontal->value() - 2);
+    }
+
+    if (!is_bottom_drag && !is_top_drag)
+    {
+        m_vertical_autoscroll = QImage();
+        m_vertical_auto_rect = QRect();
+    }
+
+    if (!is_right_drag && !is_left_drag)
+    {
+        m_horizon_auto_rect = QRect();
+        m_horizon_autoscroll = QImage();
+    }
+
+    QString source = event->mimeData()->property(txt_vars::drag_source_prop).toString();
+    // event->mimeData()->property("element").toInt() == EG_CIRCUIT
+
+    /// if drag object is our
+    if (source == txt_vars::drag_src_palette || source == txt_vars::drag_src_canvas)
     {
         m_helper->on_drag_move_event(event);
+        //emit drag_moving(event);
     }
     QWidget::dragMoveEvent(event);
     update();
@@ -226,6 +323,7 @@ void COglWidget::draw_ladders()
     QPainter mPainter(m_paint_dev);
     mPainter.beginNativePainting();
     mPainter.setFont(QFont("Helvetica", 8));
+
 
     for (auto &ladder : *m_ladders) // later need to change all ladders to ladders buffer
     {
@@ -282,11 +380,14 @@ void COglWidget::draw_ladders()
             }
         }
     }
-    mPainter.endNativePainting();   
+
+    mPainter.endNativePainting();
 }
 
 void COglWidget::dragLeaveEvent(QDragLeaveEvent *event)
 {
+    m_vertical_autoscroll = QImage();
+    m_vertical_auto_rect = QRect();
     m_helper->on_drag_exit(event);
     //QWidget::dragLeaveEvent(event);
     update();
@@ -318,4 +419,32 @@ void COglWidget::diagram_resized(const int &w, const int &h)
     {
         m_horizontal->setMaximum(w / m_horizontal->pageStep() - m_horizontal->pageStep());
     }
+}
+
+bool COglWidget::is_editable() const
+{
+    return m_is_editable;
+}
+
+void COglWidget::set_editable(const bool &editable)
+{
+    m_is_editable = editable;
+}
+
+void COglWidget::draw_drag_bottom_upper()
+{
+    QPainter mPainter(m_paint_dev);
+    mPainter.beginNativePainting();
+    mPainter.drawImage(m_vertical_auto_rect, m_vertical_autoscroll);
+    mPainter.drawImage(m_horizon_auto_rect, m_horizon_autoscroll);
+    mPainter.endNativePainting();
+}
+
+void COglWidget::slotCustomMenuRequested(const QPoint &pos)
+{
+    auto c_menu = new QMenu(this);
+
+    m_helper->make_menu(this, c_menu, pos);
+
+    c_menu->popup(this->mapToGlobal(pos));
 }

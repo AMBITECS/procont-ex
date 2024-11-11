@@ -4,15 +4,22 @@
 
 #include "CConnectorPin.h"
 
-CConnectorPin::CConnectorPin(CBlockVar *var, const EPinDirection &direction, QPoint * rel_tl)
+CConnectorPin::CConnectorPin(CBlockVar *var, CDiagramObject* parent, const EPinDirection &direction, QPoint * obj_tl)
 {
+    if (!parent || !var)
+    {
+        throw std::runtime_error("can't create `CConnectorPin::CConnectorPin(...)` with parent or var as nullptr");
+    }
+
+    m_parent = parent;
+
     m_direction = direction;
     m_variable = var;
-    m_rel_obj_tp = rel_tl;
+    m_rel_obj_tp = obj_tl;
 
     m_formal_param.set_text(m_variable->formal_parameter());
 
-    // TODO: исправить и привести сюда этот атрибут
+    m_is_negated = var->is_negated();
     set_negated(m_is_negated);
 
     if (direction == EPinDirection::PD_INPUT)
@@ -28,6 +35,8 @@ CConnectorPin::CConnectorPin(CBlockVar *var, const EPinDirection &direction, QPo
 
     m_texts.push_back(&m_formal_param);
     m_texts.push_back(&m_expression);
+
+    set_selected(false);
 }
 
 CConnectorPin::~CConnectorPin()
@@ -63,7 +72,6 @@ void CConnectorPin::set_rel_position(const QPoint &pos)
 
 void CConnectorPin::update_position()
 {
-    int w = m_formal_param.width();
     QSize img_sz = m_image.size();
     QPoint img_pos;
     int img_exp_x, img_formal_x;
@@ -113,14 +121,16 @@ void CConnectorPin::set_negated(const bool &negated)
 
     if (negated)
     {
-        m_image = m_direction == EPinDirection::PD_INPUT ? QImage(":/codesys/images/codesys/pin_input_inv.png")
+        m_norm_img = m_direction == EPinDirection::PD_INPUT ? QImage(":/codesys/images/codesys/pin_input_inv.png")
                 : QImage(":/codesys/images/codesys/pin_output_inv.png");
     }
     else
     {
-        m_image = m_direction == EPinDirection::PD_INPUT ? QImage(":/codesys/images/codesys/pin_input_norm.png")
+        m_norm_img = m_direction == EPinDirection::PD_INPUT ? QImage(":/codesys/images/codesys/pin_input_norm.png")
                 : QImage(":/codesys/images/codesys/pin_output_norm.png");
     }
+
+    saturate_image();
 }
 
 EPinDirection CConnectorPin::direction() const
@@ -148,12 +158,6 @@ QString CConnectorPin::formal_param() const
 
 void CConnectorPin::set_formal_param(const QString &formal)
 {
-    /*QString str;
-    if (!m_variable->point_in()->connections()->empty())
-    {
-        str = formal + "." + m_variable->point_in()->connections()->front()->formal_parameter();
-    }*/
-
     m_expression.set_text(formal);
 }
 
@@ -175,7 +179,45 @@ void CConnectorPin::set_out_variable(COutVariable *out)
 
 void CConnectorPin::set_selected(const bool &selected)
 {
+    m_image = selected ? m_selected_img : m_norm_img;
+    m_is_selected = selected;
+}
 
+void CConnectorPin::saturate_image()
+{
+    m_selected_img = QImage(m_norm_img);
+    for (auto x = 0; x < m_selected_img.width(); x++)
+    {
+        for (auto y = 0; y <m_selected_img.height(); y++)
+        {
+            QColor color = m_selected_img.pixelColor(x, y);
+            color.setHslF(0.7,
+                          1.0,
+                          color.lightnessF());
+            m_selected_img.setPixelColor(x, y, color);
+        }
+    }
+}
+
+bool CConnectorPin::is_selected() const
+{
+    return m_is_selected;
+}
+
+EEdge CConnectorPin::edge_modifier() const
+{
+    return m_edge_modifier;
+}
+
+void CConnectorPin::set_edge_modifier(const EEdge &edge)
+{
+    m_edge_modifier = edge;
+    m_out_variable->set_edge(edge);
+}
+
+EDefinedDataTypes CConnectorPin::type() const
+{
+    return DDT_UINT;
 }
 
 

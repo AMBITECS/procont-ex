@@ -100,6 +100,8 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
+        editor/fbd/fbd/palette/DBlock.h editor/fbd/fbd/palette/DBlock.cpp editor/fbd/fbd/palette/init-data.h
+        editor/fbd/fbd/variables.h
     )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

@@ -9,7 +9,7 @@
 #include <QScrollBar>
 #include <QTreeWidget>
 #include <QDomNode>
-#include "../../..//st/CodeEditorWidget.h"
+
 #include "../../general/types.h"
 #include "coglwidget.h"
 
@@ -23,8 +23,6 @@ typedef struct s_fbd_start_data
     QDomNode *xml_data{nullptr};
     CTreeObject *tree;
 } SFbdStartupData;
-
-
 
 namespace Ui {
     class Form;
@@ -47,17 +45,21 @@ class CDiagramWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object, const bool &is_editable = true, QWidget *parent = nullptr);
+    explicit CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object,
+                            const bool &is_editable = true, QWidget *parent = nullptr);
     ~CDiagramWidget() override;
 
     void  set_active();
 
 
 signals:
-    void    diagram_changed(const QDomNode & node);
+    void    changed_diagram(const QDomNode & node); //!< diagram was changed
+    void    changed_interface();                    //!< The interface has been changed from the diagram.
+                                                    //!< It needs to be visually updated
 
 public slots:
-    void    diagram_updated();
+    void    updated_diagram();
+    void    updated_interface(const QDomNode &node);
 
 protected:
 
@@ -69,9 +71,8 @@ protected slots:
 
 private:
     Ui::Form   *ui;
-    CodeEditorWidget    * m_st_widget;
     COglWidget          * m_ogl_widget;
-    QTreeWidget         * m_tree_widget;
+    CTreeObject         * m_tree_widget;
     //QTabWidget          * m_parent;
     //int                   m_this_index{-1};
     //bool                  m_active{false};

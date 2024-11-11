@@ -2,7 +2,7 @@
 // Created by nechi on 28.09.2024.
 //
 
-#include "QtDialogs.h"
+#include "../include/QtDialogs.h"
 #include <QPushButton>
 
 void QtDialogs::warn_user(const QString &msg)

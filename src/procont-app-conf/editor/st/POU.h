@@ -11,7 +11,7 @@ struct Interface
     QList<Variable> localVars;
     QList<Variable> inputVars;
     QList<Variable> outputVars;
-
+    QString returnType;
     void setVar(Variable var, QString varType = QString("VAR"))
     {
         if (varType == "VAR")
@@ -64,6 +64,11 @@ struct Interface
         }
         outputVars.append(var);
     }
+
+    void setReturnType(QString type)
+    {
+        returnType = type;
+    }
 };
 
 struct Body
@@ -85,6 +90,7 @@ struct Pou
         Pou pou;
         pou.name = node.toElement().attribute("name");
         pou.pouType = node.toElement().attribute("pouType");
+        // qDebug() << pou.pouType;
         while(!domNode.isNull()) {
             QDomElement domElement = domNode.toElement();
             if(!domElement.isNull()) {
@@ -97,17 +103,19 @@ struct Pou
                         if(!domElementInterface.isNull()) {
                             //if(domElementInterface.tagName() =="localVars" || domElementInterface.tagName() =="inputVars" || domElementInterface.tagName() =="outputVars")
                             //{
-                            parseVariable(domElementInterface, interface);
-
-                            //}
-
+                            if(domElementInterface.tagName() == "returnType")
+                            {
+                                interface.setReturnType(domElementInterface.firstChildElement().tagName());
+                                // qDebug() << "return type = " << interface.returnType;
+                            } else {
+                                parseVariable(domElementInterface, interface);
+                            }
                         }
                         nodeInterface = nodeInterface.nextSibling();
                     }
 
                     pou.interface = interface;
                 }
-
 
                 if (domElement.tagName() =="body") {
                     if (!domElement.firstChildElement().isNull() && domElement.firstChildElement().tagName() == "ST"){
@@ -164,6 +172,11 @@ struct Pou
 
         QDomElement interface_elem = document.createElement("interface");
         pou_elem.appendChild(interface_elem);
+
+        QDomElement returnType_elem = document.createElement("returnType");
+        QDomElement returnTypeValue_elem = document.createElement(_pou.interface.returnType);
+        returnType_elem.appendChild(returnTypeValue_elem);
+        interface_elem.appendChild(returnType_elem);
 
         QDomElement localVars_elem = document.createElement("localVars");
         interface_elem.appendChild(localVars_elem);
@@ -271,6 +284,7 @@ struct Pou
         QString vars_text = _vars_text;
         QTextStream varsStream(&vars_text);
         QString varType = "";
+        QString returnType = "";
         while (true)
         {
             QString line = varsStream.readLine();
@@ -281,6 +295,15 @@ struct Pou
                 Variable variable;
                 line.replace(" ", "");
                 line.replace("\t", "");
+                if (line.contains("FUNCTION"))
+                {
+                    QStringList list_types = line.split(":");
+                    if (list_types.size() > 1)
+                    {
+                        pou.interface.setReturnType(list_types.at(1));
+
+                    }
+                }
                 if (line.contains("VAR_INPUT"))
                 {
                     varType = "VAR_INPUT";

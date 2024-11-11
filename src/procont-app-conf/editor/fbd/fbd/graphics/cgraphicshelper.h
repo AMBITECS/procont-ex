@@ -17,6 +17,7 @@
 #include "COglWorld.h"
 
 
+
 struct s_diagram_modes
 {
     bool    is_panning{false};
@@ -24,36 +25,44 @@ struct s_diagram_modes
     bool    is_read_only{false};
 };
 
-class CodeEditorWidget;
+class COglWidget;
 
 class CGraphicsHelper : public QWidget
 {
     Q_OBJECT
+
+
+
 public:
-    explicit CGraphicsHelper(QDomNode * node, CodeEditorWidget * st_widget);
+    explicit CGraphicsHelper(QDomNode * node);
     ~CGraphicsHelper() override;
 
-    void    on_right_mouse_click(QMouseEvent *event);
-    void    on_left_mouse_click(QMouseEvent *event);
-
-
-    void    on_mouse_released(const QPoint &pos);
-    void    on_key_press_evt(QKeyEvent *event);
-    void    on_key_released_event(QKeyEvent *event);
+    /// drag drop
     void    on_drop_event(QDropEvent *event);
     void    on_drag_enter_event(QDragEnterEvent *event);
     void    on_drag_move_event(QDragMoveEvent *event);
-    // void    on_drag_existing_node(CLadder *ladder);
     void    on_drag_exit(QDragLeaveEvent *event);
     void    on_drag_ladder_enter(QDragEnterEvent * event);
     void    on_drag_object_enter(QDragEnterEvent * event);
+
+    /// mouse
+    void    on_mouse_released(const QPoint &pos);
     void    on_move_object(QDragMoveEvent *event);
     void    on_move_ladder(QDragMoveEvent *event);
+    void    on_right_mouse_click(QMouseEvent *event);
+    void    on_left_mouse_click(QMouseEvent *event);
 
+    /// keyboard
+    void    on_key_press_evt(QKeyEvent *event);
+    void    on_key_released_event(QKeyEvent *event);
 
+    /// others
     void    resized(const int &w, const int &h);
-
     std::vector<CLadder*>    * ladders();
+    bool make_menu(COglWidget *p_widget, QMenu *p_menu, const QPoint &point);
+
+
+    /// signals and slots
 signals:
     void    canvas_resized(const int &w, const int &h);
     void    mouse_clicked(const QPoint &pos);
@@ -67,19 +76,20 @@ signals:
     void    shutdown_highlights();
     void    diagram_resized(const int &w, const int &h);
 
-    // void    drag_ladder_enter(QDragEnterEvent * event);
-    // void    drag_object_enter(QDragEnterEvent * event);
 
 public slots:
     void    scroll_bar_moved(const QPoint & point);      //!< on scroll bar action
     void    diagram_sized(const int &w, const int &h);   //!< to scale scrollbars
+    void    object_remove(CLadder *ladder, CDiagramObject *object);
 protected slots:
     void    project_complete();
 
 protected:
 
 private:
-    std::vector<CLadder*>    * m_ladders;
+    std::vector<CLadder*>
+                      * m_ladders;
+
     QDomNode          * m_pou_node;
     CPou              * m_pou;
     QPoint              m_hatch_tl{0,0};
@@ -87,13 +97,16 @@ private:
 
     s_diagram_modes     m_modes;
     COglWorld         * m_graphics_world;
-    CodeEditorWidget  * m_st_widget;
 
     CDiagramObject    * m_dragged_obj{nullptr};
+    CDiagramObject    * m_clip_object{nullptr};
     CLadder           * m_object_source{nullptr};
     CLadder           * m_dragged_ladder{nullptr};
 
-    void fill_interface();
+    void make_object_menu(QMenu *p_menu, CDiagramObject *p_object, CLadder *p_ladder);
+    void make_pin_menu(QMenu *p_menu, CConnectorPin * p_pin);
+    void make_ladder_menu(QMenu *p_menu, CLadder *p_ladder);
+    void object_cat(CLadder *p_ladder, CDiagramObject *p_object);
 };
 
 #endif // CGRAPHICSHELPER_H

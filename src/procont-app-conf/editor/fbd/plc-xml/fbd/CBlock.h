@@ -14,6 +14,9 @@
 #include "../CDocumentation.h"
 #include "../variables/CBlockVar.h"
 
+#define  INS "inputs"
+#define  OUTS "outputs"
+
 /**
  * XML Format for IEC 61131-3 page 47
  */
@@ -24,11 +27,11 @@ public:
     CBlock(const CBlock & other);
     CBlock(CBlock && other) noexcept;
     explicit CBlock(const QDomNode &dom_node);
-    ~CBlock();
+    virtual ~CBlock();
 
-    QDomNode        dom_node() const;
+    [[nodiscard]] QDomNode        dom_node() const;
 
-    bool            is_empty() const;
+    [[nodiscard]] bool            is_empty() const;
 
     [[nodiscard]] uint64_t            local_id() const;
     void                set_local_id(const uint64_t & local_id);
@@ -53,7 +56,7 @@ public:
     CAddData        *   add_data();
     CDocumentation  *   documentation();
 
-private:
+protected:
     uint64_t          m_local_id{0};
     float             m_width{0};
     float             m_height{0};
@@ -69,9 +72,15 @@ private:
     CAddData          m_add_data;
     CDocumentation    m_documentation;
 
+    std::vector<EDefinedDataTypes>  m_inputs;
+    std::vector<EDefinedDataTypes>  m_outputs;
+
     void
     extract_vars(const QString &direction,
                  const QDomNode &node);
+    void extract_params();
+
+    void extract_pin_params(const std::string &direction, const std::string &types_string);
 };
 
 

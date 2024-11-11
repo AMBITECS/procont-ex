@@ -297,7 +297,7 @@ QDomNode AddPOUDialog::getNode() const
     QDomDocument doc_;
     auto pou_ = doc_.createElement("pou"); doc_.appendChild(pou_);
     pou_.setAttribute("name", _m_lineEdit_name->text());
-    pou_.setAttribute("type", pouType2Str(radioId2enumType(_m_buttonGroup_type->checkedId())));
+    pou_.setAttribute("pouType", pouType2Str(radioId2enumType(_m_buttonGroup_type->checkedId())));
     auto interface_ = doc_.createElement("interface"); pou_.appendChild(interface_);
     auto localVars_ = doc_.createElement("localVars"); interface_.appendChild(localVars_);
     auto variable_ = doc_.createElement("variable"); localVars_.appendChild(variable_);

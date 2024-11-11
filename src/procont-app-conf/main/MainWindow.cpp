@@ -29,6 +29,7 @@
 #include <QDebug>
 
 MainWindow * MainWindow::_m_instance = nullptr;
+QString MainWindow::_m_config_filename = QString();
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -53,7 +54,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
 
-    _m_settings = new QSettings(QString("%1/etc/procont.ini").arg(m_baseDir), QSettings::IniFormat);
+    info(_m_config_filename);
+
+    if(!QFileInfo::exists(_m_config_filename))
+        _m_config_filename = QString("%1/etc/procont.ini").arg(m_baseDir);
+
+    _m_settings = new QSettings(_m_config_filename, QSettings::IniFormat);
+}
+
+void MainWindow::setConfig(const QString &filename_)
+{
+    _m_config_filename = filename_;
 }
 
 MainWindow * MainWindow::instance()

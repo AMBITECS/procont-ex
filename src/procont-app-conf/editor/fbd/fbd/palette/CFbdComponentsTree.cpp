@@ -57,6 +57,8 @@ void CFbdComponentsTree::build_tree()
         counter++;
     }
 
+
+
     m_widget->expandAll();
 }
 

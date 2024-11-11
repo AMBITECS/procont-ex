@@ -18,10 +18,12 @@ enum EPinDirection
     PD_OUTPUT
 };
 
+class CDiagramObject;
+
 class CConnectorPin
 {
 public:
-    CConnectorPin(CBlockVar* var, const EPinDirection &direction, QPoint * rel_tl);
+    CConnectorPin(CBlockVar* var, CDiagramObject* parent, const EPinDirection &direction, QPoint * obj_tl);
     ~CConnectorPin();
 
     void    set_object_top_left(QPoint * top_left, const QPoint &rel_position);
@@ -32,8 +34,7 @@ public:
     QRect   * rect();
     std::vector<CObjectsText*> * texts();
     QPoint  * position();
-    [[nodiscard]] bool    is_negated() const;
-    void    set_negated(const bool &negated);
+    [[nodiscard]] bool        is_selected() const;
     [[nodiscard]] uint16_t inner_text_width() const;
     [[nodiscard]] uint16_t outer_text_width() const;
     [[nodiscard]] EPinDirection   direction() const;
@@ -44,26 +45,45 @@ public:
     void    set_formal_param(const QString & formal);
     CBlockVar * block_var();
 
+    [[nodiscard]] bool    is_negated() const;
+    void    set_negated(const bool &negated);
+
+    [[nodiscard]] EEdge    edge_modifier() const;
+    void            set_edge_modifier(const EEdge & edge);
+
+    [[nodiscard]] EDefinedDataTypes   type() const;
 
     void set_selected(const bool &selected);
 
 private:
-    QRect             m_rect;
-    QImage            m_image;
-    CObjectsText      m_formal_param;
-    CObjectsText      m_expression;
     QPoint            m_pos;
     QPoint          * m_rel_obj_tp;
+
+    QRect             m_rect;
+    QImage            m_image;
+    QImage            m_norm_img;
+    QImage            m_selected_img;
+
+    CObjectsText      m_formal_param;
+    CObjectsText      m_expression;
     EPinDirection     m_direction;
     CBlockVar       * m_variable;
-    std::vector<CObjectsText*>  m_texts;
+
+    std::vector<CObjectsText*>
+                      m_texts;
+
     bool              m_is_negated{false};
+    EEdge             m_edge_modifier{EEdge::EI_NONE};
+
     CInVariable     * m_input_data{nullptr};
     COutVariable    * m_out_variable{nullptr};
+    bool              m_is_selected{false};
 
     QRect             m_bound_rect{};
 
+    void        saturate_image();   // make 'selected' image
 
+    CDiagramObject  * m_parent;
 };
 
 

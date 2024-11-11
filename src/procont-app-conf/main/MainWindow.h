@@ -31,6 +31,8 @@ public:
 
     CTreeObject * toolWidget() const;
 
+    static void setConfig(const QString &);
+
 private:
     void open(const QString & filePath = {});
     void save(const QString & filePath);
@@ -94,6 +96,8 @@ private:
     CTreeObject * _m_toolWidget{nullptr};
 
     QSettings * _m_settings{nullptr};
+
+    static QString _m_config_filename;
 
 private:
     static MainWindow * _m_instance;

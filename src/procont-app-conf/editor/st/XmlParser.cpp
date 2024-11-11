@@ -214,7 +214,6 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
     if (pou.pouType == QString("function"))
     {
         result += "FUNCTION " + pou.name;
-        qDebug() << "Return type = " << pou.interface.returnType << " Pou name = " << pou.name;
 
         if (pou.interface.returnType != QString(""))
         {

@@ -23,6 +23,8 @@ private:
     QStringList _m_categories;
     QTreeView * _m_treeview_name;
     QTextEdit * _m_textedit_doc;
+
+    QStringList _m_view_content = {"functionBlock" ,"function"};
 };
 
 #endif // INPUTDIALOG_H

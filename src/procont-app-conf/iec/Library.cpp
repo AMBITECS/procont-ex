@@ -5,10 +5,24 @@
 #include <QFile>
 #include <QFileInfo>
 
-ILibrary::ILibrary(const QString & _name, const QString &_filepath) :
+ILibrary::ILibrary(const QString & _name, const QString &_filepath, const QString &_name_user) :
     _m_name(_name),
-    _m_filePath(_filepath)
+    _m_name_user(_name_user),
+    _m_filePath(_filepath),
+    _m_library(new QDomDocument)
 {
+}
+
+ILibrary::ILibrary(const QString & _name, QDomDocument *library_, const QString &_name_user) :
+    _m_name(_name),
+    _m_name_user(_name_user),
+    _m_library(library_)
+{
+}
+
+ILibrary::~ILibrary()
+{
+    delete _m_library;
 }
 
 const QString ILibrary::filePath() const
@@ -46,7 +60,7 @@ void ILibrary::load()
 
         return;
     }
-    auto result = _m_library.setContent(&file);
+    auto result = _m_library->setContent(&file);
     file.close();
 
     if(!result)
@@ -70,21 +84,24 @@ void ILibrary::load()
 
 QString ILibrary::version() const
 {
-    return _m_library.namedItem("project").namedItem("fileHeader").toElement().attribute("productVersion");
+    return _m_library->namedItem("project").namedItem("fileHeader").toElement().attribute("productVersion");
 }
 
 QString ILibrary::name() const
 {
-    return _m_library.namedItem("project").namedItem("fileHeader").toElement().attribute("productName");
+    if(!_m_name_user.isEmpty())
+        return _m_name_user;
+
+    return _m_library->namedItem("project").namedItem("fileHeader").toElement().attribute("productName");
 }
 
 QDomNodeList ILibrary::get_nodes(eNodeType type_) const
 {
     if(type_ == eNodeType::eNT_Type)
-        return _m_library.namedItem("project").namedItem("types").namedItem("dataTypes").toElement().elementsByTagName("dataType");
+        return _m_library->namedItem("project").namedItem("types").namedItem("dataTypes").toElement().elementsByTagName("dataType");
 
     if(type_ == eNodeType::eNT_POU)
-        return _m_library.namedItem("project").namedItem("types").namedItem("pous").toElement().elementsByTagName("pou");
+        return _m_library->namedItem("project").namedItem("types").namedItem("pous").toElement().elementsByTagName("pou");
 
     return {};
 }
@@ -174,4 +191,3 @@ const ILibrary::ObjectInfo ILibrary::object_info(const QString &name_) const
 
     return ILibrary::ObjectInfo();
 }
-

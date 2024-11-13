@@ -15,6 +15,7 @@ public:
 
 public:
     void load() override;
+    void add(const QString & name_, QDomDocument * doc_, const QString &_name_user) override;
     QString version() const override;
     const QString filePath() const override;
 

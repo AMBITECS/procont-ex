@@ -26,10 +26,13 @@ protected:
 
 public:
     ILibrary() = default;
-    ILibrary(const QString & _name, const QString & _filepath = {});
+    ILibrary(const QString & _name, const QString & _filepath, const QString &_name_user = {});
+    ILibrary(const QString & _name, QDomDocument * library_, const QString &_name_user = {});
+    virtual ~ILibrary();
 
 public:
     virtual void load();
+    virtual void add(const QString & name_, QDomDocument * doc_, const QString &_name_user) {;}
     virtual QString name() const;
     virtual QString version() const;
     virtual const QString filePath() const;
@@ -57,9 +60,10 @@ private:
     QDomNodeList get_nodes(eNodeType type_) const;
 
 private:
-    const QString _m_name = {};
-    const QString _m_filePath = {};
-    QDomDocument _m_library {};
+    const QString _m_name {};
+    QString _m_name_user {};
+    const QString _m_filePath {};
+    QDomDocument * _m_library { nullptr };
 };
 
 #endif // LIBRARY_H

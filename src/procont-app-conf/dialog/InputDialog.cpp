@@ -16,6 +16,8 @@
 #include <QStringListModel>
 #include <QStandardItemModel>
 
+#include <QFile>
+
 InputDialog::InputDialog()
 {
     setWindowTitle(tr("Input Assistant"));
@@ -94,12 +96,33 @@ InputDialog::InputDialog()
 
     setLayout(layout);
 
-    for(auto i : StandardLibrary::instance()->objects())
-    {
-        QString type = get_type(i);
-        if(!_m_categories.contains(type))
-            _m_categories.append(type);
-    }
+    // QFile file("./lib.csv");
+    // file.open(QIODevice::WriteOnly);
+    // for(auto i : StandardLibrary::instance()->objects())
+    // {
+    //     QString type = get_type(i);
+    //     if(!_m_categories.contains(type) && _m_view_content.contains(type))
+    //         _m_categories.append(type);
+
+    //     QDomNode node = StandardLibrary::instance()->find_pou(i);
+
+    //     QString name = node.toElement().attribute("name");
+    //     QString i_vars = {};
+    //     QDomNodeList list_vars = node.toElement().namedItem("interface").namedItem("inputVars").childNodes();
+    //     for(auto i=0;i<list_vars.count();i++)
+    //         i_vars += list_vars.at(i).toElement().namedItem("type").firstChild().nodeName() + ", ";
+    //     i_vars = i_vars.left(i_vars.size()-2);
+    //     QString ret_val = {};
+    //     if(node.toElement().attribute("pouType") == "function")
+    //         ret_val = node.toElement().namedItem("interface").namedItem("returnType").firstChild().nodeName();
+
+    //     QString ret = (ret_val.size() != 0) ? QString(" => %1").arg(ret_val) : "";
+
+    //     file.write(QString("%1;%2;%3;%4\n").arg(name, QString("%1(%2)%3").arg(name).arg(i_vars).arg(ret),
+    //         node.namedItem("addData").namedItem("data").namedItem("group").toElement().attribute("name"),
+    //         node.namedItem("documentation").namedItem("xhtml:p").toElement().text()).toLatin1());
+    // }
+    // file.close();
 
     auto catModel = new QStringListModel(_m_categories);
     tab1_listwidget_cat->setModel(catModel);

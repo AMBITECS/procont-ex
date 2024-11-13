@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QDomDocument>
 
 QT_FORWARD_DECLARE_CLASS(QTreeView)
 QT_FORWARD_DECLARE_CLASS(QDockWidget)
@@ -33,6 +34,8 @@ public:
 
     static void setConfig(const QString &);
     static void setDirectory(const QString &);
+
+    const QDomDocument & document() const;
 
 private:
     void open(const QString & filePath = {});
@@ -99,6 +102,8 @@ private:
 
     static QString _m_config_filepath;
     static QString _m_base_directory;
+
+    QDomDocument _m_project_document;
 
 private:
     static MainWindow * _m_instance;

@@ -11,10 +11,11 @@ public:
         QString name = {};
         QString type = {};
         QString source = {};
+        QString category = {};
 
         ObjectInfo() = default;
-        ObjectInfo(const QString &name_, const QString &type_, const QString &source_) :
-            name(name_), type(type_), source(source_)
+        ObjectInfo(const QString &name_, const QString &type_, const QString &source_, const QString &category_) :
+            name(name_), type(type_), source(source_), category(category_)
         {}
     };
 protected:

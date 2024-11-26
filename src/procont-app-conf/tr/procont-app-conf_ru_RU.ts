@@ -473,17 +473,17 @@
 <context>
     <name>InputDialog</name>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="23"/>
+        <location filename="../dialog/InputDialog.cpp" line="24"/>
         <source>Input Assistant</source>
         <translation>Ассистент ввода</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="87"/>
+        <location filename="../dialog/InputDialog.cpp" line="88"/>
         <source>Categories</source>
         <translation>Категории</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="88"/>
+        <location filename="../dialog/InputDialog.cpp" line="89"/>
         <source>Find</source>
         <translation>Поиск</translation>
     </message>
@@ -901,17 +901,17 @@
         <translation type="vanished">библиотека &apos;StandardLibrary&apos; загружена, версия %1</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="160"/>
+        <location filename="../dialog/InputDialog.cpp" line="172"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="161"/>
+        <location filename="../dialog/InputDialog.cpp" line="173"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="162"/>
+        <location filename="../dialog/InputDialog.cpp" line="174"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
@@ -1027,6 +1027,24 @@
         <location filename="../widget/WidgetEditor.cpp" line="286"/>
         <source>Schema</source>
         <translation>Схема</translation>
+    </message>
+</context>
+<context>
+    <name>tr_str</name>
+    <message>
+        <location filename="translation.cpp" line="7"/>
+        <source>functionBlock</source>
+        <translation>Функциональный блок</translation>
+    </message>
+    <message>
+        <location filename="translation.cpp" line="8"/>
+        <source>function</source>
+        <translation>Функция</translation>
+    </message>
+    <message>
+        <location filename="translation.cpp" line="9"/>
+        <source>dataType</source>
+        <translation>Тип данных</translation>
     </message>
 </context>
 </TS>

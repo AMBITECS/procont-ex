@@ -1,6 +1,7 @@
 #include "InputDialog.h"
 
 #include "iec/StandardLibrary.h"
+#include "tr/translation.h"
 
 #include <QLayout>
 #include <QTabWidget>
@@ -124,7 +125,18 @@ InputDialog::InputDialog()
     // }
     // file.close();
 
-    auto catModel = new QStringListModel(_m_categories);
+    QStringList _categories_ru;
+    for(auto i : StandardLibrary::instance()->objects())
+    {
+        QString type = get_type(i);
+       if(!_m_categories.contains(type))
+        {
+            _m_categories.append(type);
+            _categories_ru.append(tr_str::instance()->ru(type));
+        }
+    }
+
+    auto catModel = new QStringListModel(_categories_ru);
     tab1_listwidget_cat->setModel(catModel);
     connect(tab1_listwidget_cat->selectionModel(), &QItemSelectionModel::currentChanged, this, &InputDialog::slot_categoryCurrentChanged);
 
@@ -153,22 +165,31 @@ void InputDialog::slot_categoryCurrentChanged(const QModelIndex &current, const 
 {
     if(current.isValid())
     {
-        QString type = current.data().toString();
+        QString type = tr_str::instance()->en(current.data().toString());
         auto nameModel = reinterpret_cast<QStandardItemModel*>(_m_treeview_name->model());
         nameModel->clear();
         nameModel->setColumnCount(3);
         nameModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
         nameModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Type"));
         nameModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Source"));
+        QMap<QString, QStandardItem *> _topItems;
         for(auto i : StandardLibrary::instance()->objects())
         {
             ILibrary::ObjectInfo info = StandardLibrary::instance()->object_info(i);
             if(get_type(i) == type)
             {
-                nameModel->insertRow(0);
-                nameModel->setData(nameModel->index(0, 0), info.name);
-                nameModel->setData(nameModel->index(0, 1), info.type);
-                nameModel->setData(nameModel->index(0, 2), info.source);
+                if(!_topItems.contains(info.category))
+                {
+                    _topItems[info.category] = new QStandardItem(info.category);
+                    nameModel->insertRow(0, _topItems[info.category]);
+                }
+
+                auto items = QList<QStandardItem *>();
+                items << new QStandardItem(info.name) << new QStandardItem(tr_str::instance()->ru(info.type)) << new QStandardItem(info.source);
+                _topItems[info.category]->insertRow(0, items);
+                // nameModel->setData(nameModel->index(0, 0), info.name);
+                // nameModel->setData(nameModel->index(0, 1), tr_str::instance()->ru(info.type));
+                // nameModel->setData(nameModel->index(0, 2), info.source);
             }
         }
         _m_treeview_name->setColumnWidth(0, 200);

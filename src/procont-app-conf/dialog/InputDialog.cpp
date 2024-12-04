@@ -44,9 +44,9 @@ InputDialog::InputDialog()
     auto tab1_wgt_b = new QWidget;
     _m_textedit_doc = new QTextEdit;
     _m_textedit_doc->setReadOnly(true);
-    _m_textedit_doc->setMinimumHeight(100);
+    _m_textedit_doc->setMinimumHeight(75);
     auto tab1_treewidget_vars = new QTreeView;
-    tab1_treewidget_vars->setMinimumHeight(100);
+    tab1_treewidget_vars->setMinimumHeight(75);
     auto tab1_splitter_v = new QSplitter(Qt::Vertical, tab1_wgt_b);
     tab1_splitter_v->addWidget(_m_textedit_doc);
     tab1_splitter_v->addWidget(tab1_treewidget_vars);
@@ -185,7 +185,9 @@ void InputDialog::slot_categoryCurrentChanged(const QModelIndex &current, const 
                 }
 
                 auto items = QList<QStandardItem *>();
-                items << new QStandardItem(info.name) << new QStandardItem(tr_str::instance()->ru(info.type)) << new QStandardItem(info.source);
+                items << new QStandardItem(info.name)
+                      << new QStandardItem(tr_str::instance()->ru(info.type))
+                      << new QStandardItem(info.source);
                 _topItems[info.category]->insertRow(0, items);
                 // nameModel->setData(nameModel->index(0, 0), info.name);
                 // nameModel->setData(nameModel->index(0, 1), tr_str::instance()->ru(info.type));

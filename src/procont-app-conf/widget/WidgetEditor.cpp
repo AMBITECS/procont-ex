@@ -208,7 +208,7 @@ void WidgetEditor::slot_addVariable()
     parent->addNode();
 
     // add item
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
     _proxy->sourceModel()->insertRow(parent->rowCount(), s_index(_vars_table->rootIndex()));
 }
 
@@ -384,7 +384,7 @@ void WidgetEditor_type::slot_codeChanged()
              item(_vars_table->rootIndex())->node()
         );
 
-    qDebug() << DomItem::printNode(new_node);
+    // qDebug() << DomItem::printNode(new_node);
 
     // set new node to item
     item(_vars_table->rootIndex())->updateNode(new_node);

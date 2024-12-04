@@ -189,7 +189,7 @@ const ILibrary::ObjectInfo ILibrary::object_info(const QString &name_) const
     if(!node.isNull())
     {
         auto category = node.toElement().elementsByTagName("category").at(0).toElement().attribute("name");
-        qDebug() << node.toElement().namedItem("addData").namedItem("data").namedItem("category").nodeName();
+        // qDebug() << node.toElement().namedItem("addData").namedItem("data").namedItem("category").nodeName();
         if(category.isEmpty())
             category = _m_name;
         return ILibrary::ObjectInfo(name_, type, QString("%1, %2").arg(name()).arg(version()), category);

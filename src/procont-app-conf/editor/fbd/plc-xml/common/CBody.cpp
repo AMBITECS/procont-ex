@@ -175,10 +175,11 @@ CSfcContent *CBody::sfc_content()
     return m_sfc_content;
 }
 
-void CBody::add_fbd_diagram()
+CFbdContent * CBody::add_fbd_diagram()
 {
     delete m_fbd_content;
     m_fbd_content = new CFbdContent();
+    return  m_fbd_content;
 }
 
 void CBody::define_diagram_type()

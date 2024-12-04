@@ -9,6 +9,8 @@
 #include <QDomNode>
 #include <QDateTime>
 #include <QPoint>
+#include <cmath>
+#include <regex>
 
 #define  FLOAT_DIFF 0.0001  //!< максимальная разница между float, ДО которой float'ы могут считаться одинаковыми
 
@@ -21,7 +23,7 @@
  */
 static bool     is_floats_equal(const float &val0, const float &val1)
 {
-    if (fabs(val0 - val1) >= FLOAT_DIFF)
+    if (std::fabs(val0 - val1) >= FLOAT_DIFF)
     {
         return false;
     }
@@ -65,15 +67,15 @@ static const QString bool_str[2]
     "true"
 };
 
-enum EPouType
+enum  EPouType
 {
-    ePT_PROGRAM,
-    ePT_FUNCTIONAL_BLOCK,
-    ePT_FUNCTION,
-    ePT_COUNT
+    EPT_PROGRAM,
+    EPT_FUNCTIONAL_BLOCK,
+    EPT_FUNCTION,
+    EPT_COUNT
 };
 
-static const QString pou_types_names[EPouType::ePT_COUNT]
+static const QString pou_types_names[EPouType::EPT_COUNT]
 {
     "program",
     "functionBlock",
@@ -113,22 +115,25 @@ enum EDefinedDataTypes
     DDT_INT,
     DDT_DINT,
     DDT_LINT,
+    DDT_ANY_INT,
     DDT_USINT,
     DDT_UINT,
     DDT_UDINT,
     DDT_ULINT,
+    DDT_ANY_UINT,
     DDT_REAL,
     DDT_LREAL,
+    DDT_ANY_REAL,
+    DDT_ANY_NUM,
     DDT_TIME,
     DDT_DATE,
     DDT_DT,
     DDT_TOD,
     DDT_STRING,
     DDT_WSTRING,
-    DDT_ENUM,
-    DDT_STRUCT,
-    DDT_DERIVED,    //!< user defined or POU
-    DDT_MODIFICATION,   //!< array, range or pointer
+    DDT_ENUM,           //!< граница базовых типов, больше смысла не имеет
+    DDT_DERIVED,        //!< user defined or POU
+    DDT_UNDEF,
     DDT_COUNT
 };
 
@@ -143,12 +148,16 @@ static const QString base_types_names[EDefinedDataTypes::DDT_COUNT]
     "INT",
     "DINT",
     "LINT",
+    "ANY_INT",
     "USINT",
     "UINT",
     "UDINT",
     "ULINT",
+    "ANY_UINT",
     "REAL",
     "LREAL",
+    "ANY_REAL",
+    "ANY_NUM",
     "TIME",
     "DATE",
     "DT",
@@ -156,12 +165,46 @@ static const QString base_types_names[EDefinedDataTypes::DDT_COUNT]
     "STRING",
     "WSTRING",
     "ENUM",
-    "STRUCT",
     "DERIVED",
-    "MODIFICATION"
+    "UNDEFINED"
 };
+
+static EDefinedDataTypes  get_type_from_string(const std::string & type_s)
+{
+    int count = 0;
+    for (auto &name : base_types_names)
+    {
+        if (name.toStdString() == type_s)
+        {
+            return (EDefinedDataTypes)count;
+        }
+        count++;
+    }
+    return DDT_UNDEF;
+}
+
 
 /** @brief последний индекс базового типа */
 static const int base_type_last = EDefinedDataTypes::DDT_ENUM;
+
+static bool  is_convertible_to_anyint(const EDefinedDataTypes &type)
+{
+    return type >= DDT_SINT && type <= DDT_ANY_INT;
+}
+
+static bool is_convertible_to_anyuint(const EDefinedDataTypes &type)
+{
+    return type >= DDT_USINT && type <= DDT_ANY_UINT;
+}
+
+static bool is_convertible_to_anyfloat(const EDefinedDataTypes &type)
+{
+    return type >= DDT_REAL && type <= DDT_ANY_REAL;
+}
+
+static bool is_convertible_to_any_num(const EDefinedDataTypes &type)
+{
+    return (type >= DDT_SINT && type <= DDT_ANY_NUM);
+}
 
 #endif //EDITORSD_INCLUDES_H

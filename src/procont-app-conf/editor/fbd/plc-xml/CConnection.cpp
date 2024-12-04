@@ -12,7 +12,7 @@ CConnection::CConnection()
 CConnection::CConnection(CConnection &&tmp) noexcept
     :   m_formal_param(std::move(tmp.m_formal_param))
     ,   m_global_id(std::move(tmp.m_global_id))
-    ,   m_add_data(std::move(tmp.m_add_data))
+    ,   m_add_data(tmp.m_add_data)
     ,   m_ref_local_id(tmp.m_ref_local_id)
 {
     m_positions = tmp.m_positions;
@@ -44,7 +44,7 @@ CConnection::CConnection(const QDomNode &dom_node)
     m_global_id = dom_node.attributes().namedItem("globalId").toAttr().value();
 
     auto list = dom_node.childNodes();
-    for (uint16_t i = 0; i < list.count(); ++i)
+    for (auto i = 0; i < list.count(); ++i)
     {
         auto child = list.at(i);
 
@@ -116,7 +116,7 @@ uint64_t CConnection::ref_local_id() const
     return m_ref_local_id;
 }
 
-void CConnection::set_re_local_id(const uint64_t &ref_local_id)
+void CConnection::set_ref_local_id(const uint64_t &ref_local_id)
 {
     m_ref_local_id = ref_local_id;
 }
@@ -177,7 +177,7 @@ CPosition *CConnection::remove_position(const uint16_t &index)
     }
 
     CPosition *trash = m_positions->at(index);
-    m_positions->erase(m_positions->begin() + index);
+    m_positions->erase(m_positions->cbegin() + index);
 
     return trash;
 }
@@ -190,7 +190,7 @@ CPosition *CConnection::remove_position(const CPosition &position)
         if (*pos == position)
         {
             auto trash = m_positions->at(counter);
-            m_positions->erase(m_positions->begin() + counter);
+            m_positions->erase(m_positions->cbegin() + counter);
             return trash;
         }
 
@@ -208,7 +208,7 @@ CPosition *CConnection::remove_position(CPosition *position)
         if (pos == position)
         {
             auto trash = m_positions->at(counter);
-            m_positions->erase(m_positions->begin() + counter);
+            m_positions->erase(m_positions->cbegin() + counter);
             return trash;
         }
         counter++;
@@ -226,7 +226,7 @@ CPosition *CConnection::remove_position(const float &x, const float &y)
         if (*item == trash)
         {
             auto res = m_positions->at(counter);
-            m_positions->erase(m_positions->begin() + counter);
+            m_positions->erase(m_positions->cbegin() + counter);
             return res;
         }
         counter++;

@@ -211,6 +211,17 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         result += "FUNCTION_BLOCK " + pou.name + "\n";
     }
 
+    if (pou.pouType == QString("function"))
+    {
+        result += "FUNCTION " + pou.name;
+
+        if (pou.interface.returnType != QString(""))
+        {
+            result += " : " + pou.interface.returnType;
+        }
+        result += "\n";
+    }
+
     if (!pou.interface.inputVars.empty())
     {
         result += QString("VAR_INPUT") + "\n";
@@ -268,7 +279,6 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         }
         result += QString("END_VAR") + "\n";
     }
-
     return result;
 }
 

@@ -2,13 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QProcess>
+#include <QSettings>
+#include <QDomDocument>
 
 QT_FORWARD_DECLARE_CLASS(QTreeView)
 QT_FORWARD_DECLARE_CLASS(QDockWidget)
 QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
 QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
+QT_FORWARD_DECLARE_CLASS(QSettings)
 
 QT_FORWARD_DECLARE_CLASS(DomModel)
 QT_FORWARD_DECLARE_CLASS(DomItem)
@@ -29,6 +31,11 @@ public:
     static MainWindow * instance();
 
     CTreeObject * toolWidget() const;
+
+    static void setConfig(const QString &);
+    static void setDirectory(const QString &);
+
+    const QDomDocument & document() const;
 
 private:
     void open(const QString & filePath = {});
@@ -81,16 +88,22 @@ private:
     ProxyModelTree_dev * proxy_dev = nullptr;
 
     QString m_projDir = {};
-    QString m_baseDir = {};
 
     Compiler * _m_compiler = nullptr;
 
     QMultiHash<QString, QAction *> _m_dynamicActions;
     QMenu * _m_addObjectMenu = nullptr;
 
-    QToolButton * _m_button;
+    QToolButton * _m_button{nullptr};
 
-    CTreeObject * _m_toolWidget;
+    CTreeObject * _m_toolWidget{nullptr};
+
+    QSettings * _m_settings{nullptr};
+
+    static QString _m_config_filepath;
+    static QString _m_base_directory;
+
+    QDomDocument _m_project_document;
 
 private:
     static MainWindow * _m_instance;

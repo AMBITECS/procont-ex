@@ -15,7 +15,38 @@
     </coordinateInfo>
   </contentHeader>
   <types>
-    <dataTypes/>
+    <dataTypes>
+      <dataType name="datatype0">
+        <baseType>
+          <struct>
+            <variable name="id">
+              <type>
+                <DINT/>
+              </type>
+              <initialValue>
+                <simpleValue value="1"/>
+              </initialValue>
+            </variable>
+            <variable name="lvl">
+              <type>
+                <DINT/>
+              </type>
+              <initialValue>
+                <simpleValue value="2"/>
+              </initialValue>
+            </variable>
+            <variable name="make">
+              <type>
+                <DINT/>
+              </type>
+              <initialValue>
+                <simpleValue value="3"/>
+              </initialValue>
+            </variable>
+          </struct>
+        </baseType>
+      </dataType>
+    </dataTypes>
     <pous>
       <pou name="AverageVal" pouType="function">
         <interface>

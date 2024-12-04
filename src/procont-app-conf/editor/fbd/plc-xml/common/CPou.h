@@ -22,10 +22,14 @@ public:
     QDomNode    dom_node() const;
     bool        is_empty() const;
 
+    CBlock      get_block();
+
     QString     name() const;
     void        set_name(const QString &name);
     QString     type() const;
     void        set_type(const QString & type);
+
+    QDomNode    * sourceDomNode();
 
     CInterface * interface();
     QList<CBody*>   * bodies();
@@ -35,6 +39,7 @@ public:
     CDocumentation  * documentation();
 
 private:
+    QDomNode    * m_dom_node{nullptr};
     QString       m_name;
     QString       m_type;
     QString       m_global_id;

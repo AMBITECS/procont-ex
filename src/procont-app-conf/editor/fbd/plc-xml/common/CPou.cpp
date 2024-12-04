@@ -4,6 +4,10 @@
 
 #include "CPou.h"
 
+extern  uint16_t    max_local_id;
+
+#include "editor/fbd/fbd/variables.h"
+
 CPou::CPou()
 {
     m_interface = new CInterface();
@@ -12,6 +16,7 @@ CPou::CPou()
     m_add_data = new CAddData();
     m_doc = new CDocumentation();
     m_bodies = new QList<CBody*>();
+    m_dom_node = new QDomNode();
 }
 
 CPou::CPou(const CPou &other)
@@ -32,14 +37,18 @@ CPou::CPou(const CPou &other)
 
     m_name = other.m_name;
     m_type = other.m_type;
+    m_dom_node = new QDomNode(*other.m_dom_node);
 }
 
 CPou::CPou(const QDomNode &dom_node)
 {
+    m_dom_node = new QDomNode(dom_node);
     m_bodies = new QList<CBody*>();
+    m_name = m_dom_node->attributes().namedItem(xmln::name).toAttr().value();
+    m_type = m_dom_node->attributes().namedItem(xmln::pou_type).toAttr().value();
 
-    m_interface = new CInterface(dom_node.namedItem("interface"));
-    m_actions = new CActions(dom_node.namedItem("actions"));
+    m_interface = new CInterface(m_dom_node->namedItem("interface"));
+    m_actions = new CActions(m_dom_node->namedItem("actions"));
     m_transitions = new CTransitions(dom_node.namedItem("transitions"));
     m_add_data = new CAddData(dom_node.namedItem("addData"));
     m_doc = new CDocumentation(dom_node.namedItem("documentation"));
@@ -53,10 +62,12 @@ CPou::CPou(const QDomNode &dom_node)
             m_bodies->emplace_back(new CBody(child));
         }
     }
+
 }
 
 CPou::~CPou()
 {
+    delete m_dom_node;
     delete m_interface;
     delete m_actions;
     delete m_transitions;
@@ -166,4 +177,104 @@ CAddData *CPou::add_data()
 CDocumentation *CPou::documentation()
 {
     return m_doc;
+}
+
+QDomNode *CPou::sourceDomNode()
+{
+    return m_dom_node;
+}
+
+CBlock CPou::get_block()
+{
+    CBlock block{};
+    block.set_local_id(++max_local_id);
+    block.set_type_name(m_name);
+
+    if (m_type != (QString)xmln::function_pou_type)
+    {
+        block.set_instance_name("???");
+    }
+
+    QString inputs;
+    QString outputs;
+    QString inOuts;
+
+    for (auto &in : *m_interface->input_variables()->variables())
+    {
+        auto *var = new CBlockVar();
+        var->set_iface_variable(in);
+        var->set_direction(EPinDirection::PD_INPUT);
+        block.input_variables()->push_back(var);
+        inputs += in->type() + " ";
+    }
+
+    /// if function - there is no output variables, there is return type
+    if (m_type == (QString)xmln::function_pou_type)
+    {
+        auto out = new CBlockVar();
+        out->set_formal_param("out");
+        out->set_type(m_interface->return_type());
+        out->set_direction(EPinDirection::PD_OUTPUT);
+        block.output_variables()->push_back(out);
+    }
+
+    else
+    {
+        for (auto &in_out : *m_interface->in_out_variables()->variables())
+        {
+            auto *var = new CBlockVar();
+            var->set_iface_variable(in_out);
+            var->set_direction(EPinDirection::PD_IN_OUT);
+            block.in_out_variables()->push_back(var);
+            inOuts += in_out->type() + " ";
+        }
+
+        for(auto &out : *m_interface->output_variables()->variables())
+        {
+            auto var = new CBlockVar();
+            var->set_iface_variable(out);
+            var->set_direction(PD_OUTPUT);
+            block.output_variables()->push_back(var);
+            outputs += out->type();
+        }
+    }
+
+
+    /// create CodeSys crutch
+    QDomDocument doc;
+    auto *inp_data = new CData();
+    auto *out_data = new CData();
+    auto * in_out_data = new CData();
+
+    if (!inputs.isEmpty())
+    {
+        inp_data->set_name("inputparamtypes");
+        QDomElement types = doc.createElement("InputParamTypes");
+        types.setNodeValue(inputs);
+        inp_data->set_any_node(types);
+
+        block.add_data()->append_data(inp_data);
+    }
+
+    if (!outputs.isEmpty())
+    {
+        out_data->set_name("outputparamtypes");
+        QDomElement types = doc.createElement("OutputParamTypes");
+        types.setNodeValue(outputs);
+        out_data->set_any_node(types);
+
+        block.add_data()->append_data(out_data);
+    }
+
+    if (!inOuts.isEmpty())
+    {
+        in_out_data->set_name("inoutparamtypes");
+        QDomElement types = doc.createElement("InoutParamTypes");
+        types.setNodeValue(inOuts);
+        in_out_data->set_any_node(types);
+
+        block.add_data()->append_data(in_out_data);
+    }
+
+    return block;
 }

@@ -21,6 +21,7 @@ CConnectionPointIn::CConnectionPointIn(const CConnectionPointIn &other)
     m_add_data = other.m_add_data;
     m_rel_position = other.m_rel_position;
     m_attr_global_id = other.m_attr_global_id;
+    m_ref_local_id = other.m_ref_local_id;
 }
 
 CConnectionPointIn::CConnectionPointIn(CConnectionPointIn &&tmp) noexcept
@@ -30,6 +31,7 @@ CConnectionPointIn::CConnectionPointIn(CConnectionPointIn &&tmp) noexcept
     m_connections = tmp.m_connections;
     tmp.m_connections = nullptr;
     m_rel_position = tmp.m_rel_position;
+    m_ref_local_id = tmp.m_ref_local_id;
 }
 
 CConnectionPointIn::CConnectionPointIn(const QDomNode &dom_node)
@@ -58,6 +60,11 @@ CConnectionPointIn::CConnectionPointIn(const QDomNode &dom_node)
         if (child.nodeName() == "connection")
         {
             auto connect = new CConnection(child);
+            if (m_ref_local_id == 0)
+            {
+                m_ref_local_id = connect->ref_local_id();
+                fix_var = m_ref_local_id;
+            }
             m_connections->push_back(connect);
         }
 
@@ -106,6 +113,8 @@ CConnectionPointIn &CConnectionPointIn::operator=(const CConnectionPointIn &rhs)
     m_add_data = rhs.m_add_data;
     m_rel_position = rhs.m_rel_position;
     m_attr_global_id = rhs.m_attr_global_id;
+    m_ref_local_id = rhs.m_ref_local_id;
+    m_expression = rhs.m_expression;
 
     return *this;
 }
@@ -161,4 +170,29 @@ void CConnectionPointIn::set_expression(const QString &expression)
 QList<CConnection *> *CConnectionPointIn::connections()
 {
     return m_connections;
+}
+
+uint64_t CConnectionPointIn::ref_local_id() const
+{
+    return m_ref_local_id;
+}
+
+void CConnectionPointIn::set_reference_id(const uint64_t &ref_id)
+{
+    m_ref_local_id = ref_id;
+}
+
+QString CConnectionPointIn::formal_param() const
+{
+    return m_connections->empty() ? "" : m_connections->front()->formal_parameter();
+}
+
+void CConnectionPointIn::set_formal_param(const QString &param)
+{
+    if (m_connections->empty())
+    {
+        return;
+    }
+
+    m_connections->front()->set_formal_param(param);
 }

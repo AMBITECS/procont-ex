@@ -2,6 +2,8 @@
 
 #include "log/Logger.h"
 
+#include <QFileInfo>
+
 // ----------------------------------------------------------------------------
 // *** Compiler ***
 //
@@ -10,13 +12,25 @@ Compiler::Compiler() :
 {
     connect(&_m_process, &QProcess::readyReadStandardOutput, this, &Compiler::slot_readStandardOutput);
     connect(&_m_process, &QProcess::readyReadStandardError, this, &Compiler::slot_readStandardError);
+    connect(&_m_process, &QProcess::finished, this, &Compiler::slot_finished);
 }
 
 int Compiler::compile()
 {
+    if(!QFileInfo::exists(_m_compiler))
+    {
+        QStringList lmess;
+        lmess << QObject::tr("Compiler not found, build is aborted");
+        lmess << QString(QObject::tr("not found file '%1'").arg(_m_compiler));
+        warn(lmess);
+        return 1;
+    }
+
     b_command(CCmd::eCT_Clear);
 
     _m_process.start(_m_compiler, _m_args);
+
+    info(QObject::tr("build started"));
 
     return 0;
 }
@@ -42,13 +56,25 @@ void Compiler::slot_readStandardError()
     for(const auto &i : error)
         b_crit(i);
 }
+
+void Compiler::slot_finished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    QString message = QObject::tr("build finished");
+    if(exitCode > 0)
+    {
+        warn(message);
+        return;
+    }
+
+    info(message);
+}
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** Compiler ***
 //
 Compiler_matiec::Compiler_matiec(const QString &st_file_, const QString &build_path_, const QString &compiler_path_)
-{
+{    
     _m_compiler = QString("%1/iec2c").arg(compiler_path_);
 
     _m_args << "-f" << "-l" << "-p"

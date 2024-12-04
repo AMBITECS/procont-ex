@@ -8,10 +8,11 @@ class CTreeObject : public QTreeWidget
 {
     Q_OBJECT
 public:
-    explicit CTreeObject(QWidget *parent = nullptr);
+    explicit CTreeObject(QWidget *parent);
     ~CTreeObject() override;
 
-    QDrag *     get_drag();
+signals:
+    void  dragging_complete();
 
     void clear();
 

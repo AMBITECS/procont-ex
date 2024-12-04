@@ -21,6 +21,7 @@ public:
 protected slots:
     void slot_readStandardOutput();
     void slot_readStandardError();
+    void slot_finished(int exitCode, QProcess::ExitStatus exitStatus);
 
 protected:
     QString _m_compiler;

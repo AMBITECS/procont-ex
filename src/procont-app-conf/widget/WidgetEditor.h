@@ -110,7 +110,7 @@ public:
     virtual void activate() const override { _m_fbd_view->set_active(); }
 
 protected:
-    virtual QWidget * createCodeEditor();
+    virtual QWidget * createCodeEditor() override;
 
 private slots:
     void slot_shmViewToggled(bool);

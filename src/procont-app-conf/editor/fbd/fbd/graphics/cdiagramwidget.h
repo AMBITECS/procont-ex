@@ -9,9 +9,10 @@
 #include <QScrollBar>
 #include <QTreeWidget>
 #include <QDomNode>
-#include "../../..//st/CodeEditorWidget.h"
-#include "../../general/types.h"
+
+#include "editor/fbd/general/types.h"
 #include "coglwidget.h"
+#include "editor/fbd/general/ctreeobject.h"
 
 typedef struct s_fbd_start_data
 {
@@ -47,17 +48,24 @@ class CDiagramWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object, const bool &is_editable = true, QWidget *parent = nullptr);
+    explicit CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object,
+                            const bool &is_editable = true, QWidget *parent = nullptr);
     ~CDiagramWidget() override;
-
     void  set_active();
 
+    QUndoStack *    undo_stack();
 
 signals:
-    void    diagram_changed(const QDomNode & node);
+    void    changed_diagram(const QDomNode & node); //!< diagram was changed
+    void    changed_interface();                    //!< The interface has been changed from the diagram.
+                                                    //!< It needs to be visually updated
+    void    undo_enabled();
+    void    interface_variable_new(const QString &type, const QString &name);
+    void    interface_variable_rename(const QString &old_name, const QString &new_name);
 
 public slots:
-    void    diagram_updated();
+    void    updated_diagram();                      //!< update diagram it is get_interface_variables to assemble QDomNode
+    void    updated_interface(const QDomNode &node);//!< interface has been changed. It is time to update diagram variables
 
 protected:
 
@@ -69,9 +77,8 @@ protected slots:
 
 private:
     Ui::Form   *ui;
-    CodeEditorWidget    * m_st_widget;
     COglWidget          * m_ogl_widget;
-    QTreeWidget         * m_tree_widget;
+    CTreeObject         * m_tree_widget;
     //QTabWidget          * m_parent;
     //int                   m_this_index{-1};
     //bool                  m_active{false};

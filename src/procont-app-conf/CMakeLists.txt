@@ -66,6 +66,8 @@ set(PROJECT_SOURCES
     editor/fbd/resources/images16.qrc
     editor/fbd/general/ctreeobject.h editor/fbd/general/ctreeobject.cpp
     editor/fbd/general/OglWidget.h editor/fbd/general/OglWidget.cpp
+    editor/fbd/fbd/palette/DBlock.h editor/fbd/fbd/palette/DBlock.cpp editor/fbd/fbd/palette/init-data.h
+    editor/fbd/fbd/variables.h
 
     translator/SchemaViewer.cpp translator/SchemaViewer.h
     translator/GlobalType.h
@@ -88,6 +90,8 @@ set(PROJECT_SOURCES
     dialog/AddDUTDialog.h dialog/AddDUTDialog.cpp
 
     resource/procont-app-conf.qrc
+
+    tr/translation.h tr/translation.cpp
 )
 
 qt_translate(
@@ -100,9 +104,7 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-        editor/fbd/fbd/palette/DBlock.h editor/fbd/fbd/palette/DBlock.cpp editor/fbd/fbd/palette/init-data.h
-        editor/fbd/fbd/variables.h
-    )
+   )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})
 endif()

@@ -1,6 +1,7 @@
 #include "InputDialog.h"
 
 #include "iec/StandardLibrary.h"
+#include "tr/translation.h"
 
 #include <QLayout>
 #include <QTabWidget>
@@ -15,6 +16,8 @@
 #include <QTableWidget>
 #include <QStringListModel>
 #include <QStandardItemModel>
+
+#include <QFile>
 
 InputDialog::InputDialog()
 {
@@ -41,9 +44,9 @@ InputDialog::InputDialog()
     auto tab1_wgt_b = new QWidget;
     _m_textedit_doc = new QTextEdit;
     _m_textedit_doc->setReadOnly(true);
-    _m_textedit_doc->setMinimumHeight(100);
+    _m_textedit_doc->setMinimumHeight(75);
     auto tab1_treewidget_vars = new QTreeView;
-    tab1_treewidget_vars->setMinimumHeight(100);
+    tab1_treewidget_vars->setMinimumHeight(75);
     auto tab1_splitter_v = new QSplitter(Qt::Vertical, tab1_wgt_b);
     tab1_splitter_v->addWidget(_m_textedit_doc);
     tab1_splitter_v->addWidget(tab1_treewidget_vars);
@@ -94,14 +97,46 @@ InputDialog::InputDialog()
 
     setLayout(layout);
 
+    // QFile file("./lib.csv");
+    // file.open(QIODevice::WriteOnly);
+    // for(auto i : StandardLibrary::instance()->objects())
+    // {
+    //     QString type = get_type(i);
+    //     if(!_m_categories.contains(type) && _m_view_content.contains(type))
+    //         _m_categories.append(type);
+
+    //     QDomNode node = StandardLibrary::instance()->find_pou(i);
+
+    //     QString name = node.toElement().attribute("name");
+    //     QString i_vars = {};
+    //     QDomNodeList list_vars = node.toElement().namedItem("interface").namedItem("inputVars").childNodes();
+    //     for(auto i=0;i<list_vars.count();i++)
+    //         i_vars += list_vars.at(i).toElement().namedItem("type").firstChild().nodeName() + ", ";
+    //     i_vars = i_vars.left(i_vars.size()-2);
+    //     QString ret_val = {};
+    //     if(node.toElement().attribute("pouType") == "function")
+    //         ret_val = node.toElement().namedItem("interface").namedItem("returnType").firstChild().nodeName();
+
+    //     QString ret = (ret_val.size() != 0) ? QString(" => %1").arg(ret_val) : "";
+
+    //     file.write(QString("%1;%2;%3;%4\n").arg(name, QString("%1(%2)%3").arg(name).arg(i_vars).arg(ret),
+    //         node.namedItem("addData").namedItem("data").namedItem("group").toElement().attribute("name"),
+    //         node.namedItem("documentation").namedItem("xhtml:p").toElement().text()).toLatin1());
+    // }
+    // file.close();
+
+    QStringList _categories_ru;
     for(auto i : StandardLibrary::instance()->objects())
     {
         QString type = get_type(i);
-        if(!_m_categories.contains(type))
+       if(!_m_categories.contains(type))
+        {
             _m_categories.append(type);
+            _categories_ru.append(tr_str::instance()->ru(type));
+        }
     }
 
-    auto catModel = new QStringListModel(_m_categories);
+    auto catModel = new QStringListModel(_categories_ru);
     tab1_listwidget_cat->setModel(catModel);
     connect(tab1_listwidget_cat->selectionModel(), &QItemSelectionModel::currentChanged, this, &InputDialog::slot_categoryCurrentChanged);
 
@@ -130,22 +165,33 @@ void InputDialog::slot_categoryCurrentChanged(const QModelIndex &current, const 
 {
     if(current.isValid())
     {
-        QString type = current.data().toString();
+        QString type = tr_str::instance()->en(current.data().toString());
         auto nameModel = reinterpret_cast<QStandardItemModel*>(_m_treeview_name->model());
         nameModel->clear();
         nameModel->setColumnCount(3);
         nameModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
         nameModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Type"));
         nameModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Source"));
+        QMap<QString, QStandardItem *> _topItems;
         for(auto i : StandardLibrary::instance()->objects())
         {
             ILibrary::ObjectInfo info = StandardLibrary::instance()->object_info(i);
             if(get_type(i) == type)
             {
-                nameModel->insertRow(0);
-                nameModel->setData(nameModel->index(0, 0), info.name);
-                nameModel->setData(nameModel->index(0, 1), info.type);
-                nameModel->setData(nameModel->index(0, 2), info.source);
+                if(!_topItems.contains(info.category))
+                {
+                    _topItems[info.category] = new QStandardItem(info.category);
+                    nameModel->insertRow(0, _topItems[info.category]);
+                }
+
+                auto items = QList<QStandardItem *>();
+                items << new QStandardItem(info.name)
+                      << new QStandardItem(tr_str::instance()->ru(info.type))
+                      << new QStandardItem(info.source);
+                _topItems[info.category]->insertRow(0, items);
+                // nameModel->setData(nameModel->index(0, 0), info.name);
+                // nameModel->setData(nameModel->index(0, 1), tr_str::instance()->ru(info.type));
+                // nameModel->setData(nameModel->index(0, 2), info.source);
             }
         }
         _m_treeview_name->setColumnWidth(0, 200);

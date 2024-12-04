@@ -9,11 +9,13 @@
 CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_top_left
 {
     m_block = block;
+    m_block->set_global_id(QString::number(ladder->number() - 1));
+
     m_ladder_relative_tl = ladder->real_top_left();
     m_parent = ladder;
 
     m_texts.push_back(&m_type_name);
-    m_texts.push_back(&m_var_name);
+    m_texts.push_back(&m_instance_name);
 
     m_inputs = new std::vector<CConnectorPin*>();
     m_outputs = new std::vector<CConnectorPin*>();
@@ -21,7 +23,7 @@ CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_
     m_highlights = new std::vector<std::pair<QRect, QImage>>();
 
     m_type_name.set_text(m_block->type_name());
-    m_var_name.set_text(m_block->instance_name());
+    m_instance_name.set_text(m_block->instance_name());
 
     define_size();
 
@@ -75,18 +77,19 @@ void CDiagramObject::define_size()
         return;
     }
 
-    int def_width = m_type_name.width() > m_var_name.width() ? m_type_name.width() : m_var_name.width();
+    int def_width = m_type_name.width() > m_instance_name.width() ? m_type_name.width() : m_instance_name.width();
     int inner_left_max = 0;
     int inner_right_max = 0;
 
     def_width += 2 * NAME_SHIFT;
 
-    /*for (auto &inout : *m_block->in_out_variables())
+    for (auto &inout : *m_block->in_out_variables())
     {
-        auto pin_io = new CConnectorPin(inout, PD_INPUT, &m_base_shift);
-        m_inputs->push_back(pin_io);
-        m_outputs->push_back(pin_io);
-    }*/
+        auto pin_i = new CConnectorPin(inout, this, PD_INPUT, &m_base_shift);
+        auto pin_o = new CConnectorPin(inout, this, PD_OUTPUT, &m_base_shift);
+        m_inputs->push_back(pin_i);
+        m_outputs->push_back(pin_o);
+    }
 
     for (auto &in : *m_block->input_variables())
     {
@@ -132,8 +135,8 @@ void CDiagramObject::define_size()
     m_pins->insert(m_pins->end(), m_inputs->begin(), m_inputs->end());
     m_pins->insert(m_pins->end(), m_outputs->begin(), m_outputs->end());
 
-    // TODO: initial m_bounds size is wrong. images sizes are known but not used
-    m_bounds.setSize(m_size);
+    // TODO: initial m_text_bounds size is wrong. images sizes are known but not used
+    m_text_bounds.setSize(m_size);
 }
 
 void CDiagramObject::update_rel_position(QPoint * relative_tl)
@@ -148,10 +151,10 @@ void CDiagramObject::update_rel_position(QPoint * relative_tl)
     m_image.fill(m_color_curr);
 
     int tp_w = m_type_name.width();
-    int ins_nw = m_var_name.width();
+    int ins_nw = m_instance_name.width();
 
     m_type_name.set_pos({m_rect.left() + (m_rect.width()/2 - tp_w / 2), m_rect.top() + 15});
-    m_var_name.set_pos({m_rect.left() + (m_rect.width()/2 - ins_nw/2), m_rect.top() - 5});
+    m_instance_name.set_pos({m_rect.left() + (m_rect.width() / 2 - ins_nw / 2), m_rect.top() - 5});
 
     m_base_shift = m_rect.topLeft();
 
@@ -165,9 +168,9 @@ void CDiagramObject::update_rel_position(QPoint * relative_tl)
     update_bound_rect();
 }
 
-QRect CDiagramObject::bound_rect() const
+QRect CDiagramObject::bound_text_rect() const
 {
-    return m_bounds;
+    return m_text_bounds;
 }
 
 QImage CDiagramObject::bound_image() const
@@ -177,7 +180,7 @@ QImage CDiagramObject::bound_image() const
 
 void CDiagramObject::draw_bound_rect()
 {
-    m_bound_img = QImage(m_bounds.size(), QImage::Format_ARGB32);
+    m_bound_img = QImage(m_text_bounds.size(), QImage::Format_ARGB32);
     m_bound_img.fill(QColor(255,255,255,0));
 
     QPainter painter(&m_bound_img);
@@ -210,7 +213,7 @@ bool CDiagramObject::is_selected() const
 
 QImage CDiagramObject::drag_image(const bool &is_transparent)
 {
-    int diff = m_rect.left() - m_bounds.left();
+    int diff = m_rect.left() - m_text_bounds.left();
 
     QPoint point(-m_rel_x + diff,0);
     update_rel_position(&point);
@@ -218,7 +221,7 @@ QImage CDiagramObject::drag_image(const bool &is_transparent)
     QImage image;
 
     QRect rect;
-    rect.setRect(0,0, m_bounds.width(), m_bounds.height()+40);
+    rect.setRect(0, 0, m_text_bounds.width(), m_text_bounds.height() + 40);
     image = QImage(rect.size(), QImage::Format_ARGB32);
 
     int alpha = is_transparent ? 0 : 127;
@@ -256,18 +259,23 @@ uint64_t CDiagramObject::local_id() const
 
 void CDiagramObject::set_ladders_relative_top_left(CLadder *ladder, const QPoint & rtl_shift)
 {
+    if (m_parent != ladder)
+    {
+        m_block->set_global_id(QString::number(m_parent->number() - 1));
+    }
+
     m_parent = ladder;
     m_ladder_relative_tl = m_parent->real_top_left();
     m_base_shift = rtl_shift;
     m_rel_x = rtl_shift.x();
     m_rel_y = rtl_shift.y();
 
-
     update_rel_position();
     update_bound_rect();
-    int b_width = m_bounds.width();
+    int b_width = m_text_bounds.width();
 
-    m_bounds.setRect(m_rect.x() - m_difference, m_rect.top(), b_width, m_rect.height());
+    m_text_bounds.setRect(m_rect.x() - m_text_bound_shift, m_rect.top(), b_width, m_rect.height());
+    m_graph_bounds.setRect(m_rect.x() - m_graph_bound_shift, m_rect.top(), m_graph_bounds.width(), m_rect.height());
 }
 
 void CDiagramObject::update_position()
@@ -275,12 +283,15 @@ void CDiagramObject::update_position()
     update_rel_position();
 
     for (auto &pin : *m_pins)
+    {
         pin->update_position();
+    }
 
     update_bound_rect();
-    int b_width = m_bounds.width();
+    int b_width = m_text_bounds.width();
 
-    m_bounds.setRect(m_rect.x() - m_difference, m_rect.top(), b_width, m_rect.height());
+    m_text_bounds.setRect(m_rect.x() - m_text_bound_shift, m_rect.top(), b_width, m_rect.height());
+    m_graph_bounds.setRect(m_rect.x() - m_graph_bound_shift, m_rect.top(), m_graph_bounds.width(), m_rect.height());
 }
 
 void CDiagramObject::locate_pins()
@@ -317,7 +328,7 @@ bool CDiagramObject::switch_highlights(const QPoint &pos)
 
     if (m_rect.contains(pos))
     {
-        QRect rect = m_bounds;
+        QRect rect = m_text_bounds;
         QImage image = QImage(1, rect.height(), QImage::Format_ARGB32);
         image.fill(QColor(205,247,210, 127));
         m_highlights->emplace_back(rect, image);
@@ -331,10 +342,27 @@ void CDiagramObject::update_bound_rect()
 {
     int outer_left = 0;
     int outer_right = 0;
+    int outer_left_gr = 0;
+    int outer_right_max = 0;
     int inp_w, out_w ;
+
+
 
     for (auto &in : *m_inputs)
     {
+        if (in->opposite_pin())
+        {
+            if (in->opposite_pin()->parent()->parent() != m_parent)
+            {
+                in->set_opposite_name(true);
+            }
+            else
+            {
+                outer_left_gr += 1;
+                in->set_opposite_name(false);
+            }
+        }
+
         inp_w = in->outer_text_width() + in->image()->width() + 3;
 
         if (inp_w > outer_left)
@@ -343,6 +371,8 @@ void CDiagramObject::update_bound_rect()
         }
     }
 
+    outer_left_gr = outer_left + (outer_left_gr * def_lines_diff) + def_bound_dist;
+
     for (auto &out : *m_outputs)
     {
         out_w = out->outer_text_width() + out->image()->width() + 3;
@@ -350,23 +380,83 @@ void CDiagramObject::update_bound_rect()
         {
             outer_right = out_w;
         }
+
+        if (!out->opposites()->empty())
+        {
+            if (out->opposites()->size() > outer_right_max)
+            {
+                outer_right_max = (int)out->opposites()->size();
+            }
+        }
     }
 
-    int width = (m_rect.right() + outer_right) - (m_rect.left()-outer_left);
-    m_bounds.setSize({width, m_rect.height()});
+    outer_right_max = outer_right + def_bound_dist + outer_right_max * def_lines_diff;
 
-    m_difference = outer_left;
+    int width = (m_rect.right() + outer_right) - (m_rect.left()-outer_left);
+    int graph_width = (m_rect.right() + outer_right_max) - (m_rect.left() - outer_left_gr);
+    m_text_bounds.setSize({width, m_rect.height()});
+    m_graph_bounds.setSize({graph_width, m_rect.height()});
+
+    m_text_bound_shift = outer_left;
+    m_graph_bound_shift = outer_left_gr;
     //draw_bound_rect();
 }
 
 QString CDiagramObject::instance_name() const
 {
-    return m_var_name.text();
+    return m_instance_name.text();
 }
 
 QString CDiagramObject::type_name() const
 {
     return m_type_name.text();
+}
+
+CLadder *CDiagramObject::parent()
+{
+    return m_parent;
+}
+
+CBlock *CDiagramObject::block()
+{
+    update_block_data();
+    return m_block;
+}
+
+void CDiagramObject::update_block_data()
+{
+
+}
+
+CObjectsText *CDiagramObject::inst_text()
+{
+    return &m_instance_name;
+}
+
+EDefinedDataTypes CDiagramObject::type() const
+{
+    return get_type_from_string(m_type_name.text().toStdString());
+}
+
+void CDiagramObject::set_instance_name(const QString &name)
+{
+    m_instance_name.set_text(name);
+    m_block->set_instance_name(name);
+}
+
+std::vector<CConnectorPin *> *CDiagramObject::outputs()
+{
+    return m_outputs;
+}
+
+std::vector<CConnectorPin *> *CDiagramObject::inputs()
+{
+    return m_inputs;
+}
+
+QRect CDiagramObject::bound_graph_rect() const
+{
+    return m_graph_bounds;
 }
 
 

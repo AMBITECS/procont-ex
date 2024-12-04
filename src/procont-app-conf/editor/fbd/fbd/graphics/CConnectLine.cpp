@@ -1,0 +1,145 @@
+//
+// Created by nechi on 29.11.2024.
+//
+
+#include <QRect>
+#include "CConnectLine.h"
+
+CConnectLine::CConnectLine(QPoint * ladder_tl)
+{
+    m_lines = new QList<QLine>();
+    m_error = QColor(255, 25, 91);
+    m_warn  = QColor(222,217,80);
+    m_selected = QColor(153,48,150);
+    m_norm = QColor(52,95,161);
+    m_ladder_tl = ladder_tl;
+    m_prev_ltl = *ladder_tl;
+    m_base = m_norm;
+}
+
+CConnectLine::~CConnectLine()
+{
+    delete m_lines;
+}
+
+QList<QLine> *CConnectLine::lines()
+{
+    return m_lines;
+}
+
+bool CConnectLine::is_clicked_on(const QPoint &pos)
+{
+    QRect rect;
+
+    for (auto &line : *m_lines)
+    {
+        /// if vertical
+        if (line.p1().x() == line.p2().x())
+        {
+            rect = QRect(line.p1().x()-DIFFERENCE, line.p1().y(),
+                         DIFFERENCE * 2 + 1, line.dy());
+
+            if (rect.contains(pos))
+            {
+                return true;
+            }
+        }
+        /// horizontal
+        if (line.p1().y() == line.p2().y())
+        {
+            rect = QRect(line.p1().x(), line.p1().y()-DIFFERENCE,
+                         line.dx(), DIFFERENCE * 2 + 1);
+
+            if (rect.contains(pos))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void CConnectLine::set_selected(const bool &is_selected)
+{
+    m_is_selected = is_selected;
+
+    if (is_selected)
+    {
+        m_base = m_selected;
+    }
+    check_is_norm();
+}
+
+bool CConnectLine::is_selected() const
+{
+    return m_is_selected;
+}
+
+void CConnectLine::set_warning(const bool &is_warning)
+{
+    m_is_warn = is_warning;
+    if (is_warning)
+    {
+        m_base = m_warn;
+    }
+    check_is_norm();
+}
+
+bool CConnectLine::is_warning() const
+{
+    return m_is_warn;
+}
+
+void CConnectLine::set_is_error(const bool &is_error)
+{
+    m_is_error = is_error;
+    if (is_error)
+    {
+        m_base = m_error;
+    }
+    check_is_norm();
+}
+
+bool CConnectLine::is_error() const
+{
+    return m_is_error;
+}
+
+QColor CConnectLine::color()
+{
+    return m_base;
+}
+
+bool CConnectLine::check_is_norm()
+{
+    if (!m_is_error && !m_is_warn && !m_is_selected)
+    {
+        m_base = m_norm;
+    }
+    return true;
+}
+
+void CConnectLine::update_position()
+{
+    QPoint diff = *m_ladder_tl - m_prev_ltl;
+
+    for (auto &line : *m_lines)
+    {
+        line.setP1(line.p1() + diff);
+        line.setP2(line.p2() + diff);
+    }
+
+    m_prev_ltl = *m_ladder_tl;
+}
+
+void CConnectLine::add_line(const QLine &line)
+{
+    m_lines->push_back(line);
+}
+
+void CConnectLine::clear()
+{
+    m_lines->clear();
+}
+

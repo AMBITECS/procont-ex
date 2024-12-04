@@ -27,6 +27,7 @@ public:
 
     [[nodiscard]] QString             return_type() const;
     void                set_return_type(const QString &return_type);
+    [[nodiscard]] bool  is_derived() const;
 
     CLocalVars      * local_variables();
     CTempVars       * temp_variables();
@@ -36,6 +37,10 @@ public:
     CExternalVars   * external_variables();
     CGlobalVars     * global_variables();
     CAccessVars     * access_variables();
+
+    std::vector<CVariable*>     all_variables();
+    std::vector<CVariable*>     p_inputs();
+    std::vector<CVariable*>     p_outputs();
 
 private:
     // return type
@@ -52,10 +57,12 @@ private:
     CExternalVars   * m_external_vars;
     CGlobalVars     * m_global_vars;
     CAccessVars     * m_access_vars;
+    bool              m_is_derived{false};
 
     void add_child(QDomElement & element, CIfaceVars *p_vars);
 
     void extract_child_nodes(QDomNode &node, CIfaceVars *p_vars, const QString &node_name);
+    void gather_variables(QList<CVariable*> * source_variables, std::vector<CVariable*> * dest_vars);
 };
 
 

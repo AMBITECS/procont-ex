@@ -4,11 +4,16 @@
 
 #include "CBlock.h"
 
+extern uint16_t max_local_id;
+
 CBlock::CBlock()
 {
     m_in_vars       = new QList<CBlockVar*>();
     m_in_out_vars   = new QList<CBlockVar*>();
     m_out_vars      = new QList<CBlockVar*>();
+
+    max_local_id++;
+    set_local_id(max_local_id);
 }
 
 CBlock::CBlock(const CBlock &other)
@@ -33,7 +38,9 @@ CBlock::CBlock(const CBlock &other)
         m_out_vars->push_back(var);
     }
 
-    m_local_id      = other.m_local_id;
+    max_local_id++;
+    set_local_id(max_local_id);
+
     m_width         = other.m_width;
     m_height        = other.m_height;
     m_type_name     = other.m_type_name;
@@ -65,7 +72,9 @@ CBlock::CBlock(CBlock &&other) noexcept
     other.m_out_vars = nullptr;
     other.m_in_vars = nullptr;
 
-    m_local_id      = other.m_local_id;
+    max_local_id++;
+    set_local_id(max_local_id);
+
     m_width         = other.m_width;
     m_height        = other.m_height;
     m_exec_order    = other.m_exec_order;
@@ -76,6 +85,13 @@ CBlock::CBlock(CBlock &&other) noexcept
 CBlock::CBlock(const QDomNode &dom_node)
 {
     m_local_id  = dom_node.attributes().namedItem("localId").toAttr().value().toULongLong();
+
+    if (m_local_id == 0)
+    {
+        max_local_id++;
+        set_local_id(max_local_id);
+    }
+
     m_width     = dom_node.attributes().namedItem("width").toAttr().value().toFloat();
     m_height    = dom_node.attributes().namedItem("height").toAttr().value().toFloat();
     m_type_name = dom_node.attributes().namedItem("typeName").toAttr().value();
@@ -276,17 +292,23 @@ CBlock::extract_vars(const QString &direction, const QDomNode &node)
 {
     QList<CBlockVar*> * vars = nullptr;
 
+    EPinDirection dir;
+
     if (direction == "in")
     {
         vars = m_in_vars;
+        dir = PD_INPUT;
+
     }
     if (direction == "in_out")
     {
         vars = m_in_out_vars;
+        dir = PD_IN_OUT;
     }
     if (direction == "out")
     {
         vars = m_out_vars;
+        dir = PD_OUTPUT;
     }
 
     if (!vars)
@@ -298,6 +320,7 @@ CBlock::extract_vars(const QString &direction, const QDomNode &node)
     {
         auto child = node.childNodes().at(i);
         auto var = new CBlockVar(child);
+        var->set_direction(dir);
         vars->push_back(var);
     }
 }

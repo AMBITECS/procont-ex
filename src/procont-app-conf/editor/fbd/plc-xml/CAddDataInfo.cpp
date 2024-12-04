@@ -84,7 +84,7 @@ CInfo *CAddDataInfo::remove_info(CInfo *info)
     {
         if (item == info)
         {
-            m_info_list->erase(m_info_list->begin() + counter);
+            m_info_list->erase(m_info_list->cbegin() + counter);
             return info;
         }
         counter++;
@@ -101,7 +101,7 @@ CInfo *CAddDataInfo::remove_info(const uint16_t &index)
     }
 
     CInfo   * for_delete = m_info_list->at(index);
-    m_info_list->erase(m_info_list->begin() + index);
+    m_info_list->erase(m_info_list->cbegin() + index);
 
     return for_delete;
 }

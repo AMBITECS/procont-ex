@@ -44,6 +44,10 @@ void CObjectsText::set_color(const QColor &color)
 void CObjectsText::set_text(const QString &text)
 {
     m_text = text;
+    if (text == "???")
+    {
+        m_color = QColor(240, 200,200);
+    }
     update_size();
 }
 
@@ -59,4 +63,11 @@ void CObjectsText::update_size()
     QSize sz = fm.size(Qt::TextSingleLine , m_text);
     m_width = sz.width();
     m_height = sz.height();
+
+    m_rect.setRect(m_pos.x(), m_pos.y(), m_width, m_height);
+}
+
+QRect CObjectsText::text_rect() const
+{
+    return m_rect;
 }

@@ -13,6 +13,7 @@
 #include "CDiagramObject.h"
 #include "CObjectsText.h"
 #include "../palette/palette.h"
+#include "CConnectLine.h"
 
 
 #define  LEFT_WIDTH 50     //!< the width of the left rect
@@ -23,6 +24,9 @@
 #define  BOT_LANDING_HEIGHT 3
 #define  OBJECTS_DISTANCE   40
 #define  OBJECTS_TOP_SHIFT  30
+
+#define def_bound_dist 5
+#define def_lines_diff 5
 
 class s_selection;
 
@@ -71,13 +75,13 @@ public:
     ~CLadder();
 
     /// change ladders content
-    void                put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos);
-    CDiagramObject *    remove_object(CDiagramObject *dragged_obj);
+    //void                put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos);
+    //CDiagramObject *    remove_object(CDiagramObject *dragged_obj);
     CDiagramObject *    add_object(CBlock * object);
 
     /// change and update ladder position
     void    update_real_position(CLadder *sender = nullptr);
-    void    update_rel_position();
+    void    update_relative_position();
 
     /// context
     void    set_previous(CLadder *ladder);
@@ -90,6 +94,13 @@ public:
     [[nodiscard]] bool    is_selected() const;
     [[nodiscard]] bool    is_clicked_here(const QPoint &pos) const;
     void    drag_object(QDragMoveEvent * event);
+
+    /// for graphic connecting info
+    void    bottom_line_count_increase();
+    void    bottom_line_count_decrease();
+    [[nodiscard]] short   bottom_line_count() const;
+    CConnectLine* add_line(CConnectLine *line);
+    std::vector<CConnectLine*> * connections();
 
 
     [[nodiscard]] QPoint              real_bottom_right() const;
@@ -110,8 +121,8 @@ public:
     CLadder   *  previous_ladder();
     CLadder   *  next_ladder();
 
-    void get_selected(const QPoint &point, s_selection *p_selection);
-    void insert_new_component(const QPoint &point, CBlock *block);
+    void    get_selected(const QPoint &point, s_selection *p_selection);
+    void    refresh_graphic_connections();
 
 protected:
 
@@ -121,6 +132,7 @@ private:
     CLadder     * m_next{nullptr};
 
     CObjectsText    m_num_text;
+    std::vector<CConnectLine*> * m_lines;
 
     QPoint      * m_hatch_pos{nullptr};
     QSize       * m_hatch_size;
@@ -134,6 +146,7 @@ private:
     bool          m_is_selected{false};
 
     QPoint        m_relative_tl{0,0};
+    short         m_bottom_lines{0};
 
     QList<CDiagramObject*>          * m_objects;
     QVector<QPair<QRect, QImage>>     m_highlights;

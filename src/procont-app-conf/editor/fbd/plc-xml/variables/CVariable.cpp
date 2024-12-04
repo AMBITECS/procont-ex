@@ -39,8 +39,7 @@ CVariable::CVariable(const QDomNode &node)
 CVariable::~CVariable()
 = default;
 
-QDomNode
-CVariable::dom_node()
+QDomNode CVariable::dom_node()
 {
     QDomDocument doc;
     QDomElement node = doc.createElement("variable");
@@ -109,8 +108,7 @@ CVariable::operator=(const CVariable &rhs)
     return *this;
 }
 
-QString
-CVariable::type() const
+QString CVariable::type() const
 {
     return m_type;
 }
@@ -181,4 +179,5 @@ void CVariable::set_comment(const QString &comment)
 {
     m_doc.set_document(comment);
 }
+
 

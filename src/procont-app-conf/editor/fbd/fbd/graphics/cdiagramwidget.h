@@ -10,8 +10,9 @@
 #include <QTreeWidget>
 #include <QDomNode>
 
-#include "../../general/types.h"
+#include "editor/fbd/general/types.h"
 #include "coglwidget.h"
+#include "editor/fbd/general/ctreeobject.h"
 
 typedef struct s_fbd_start_data
 {
@@ -23,6 +24,8 @@ typedef struct s_fbd_start_data
     QDomNode *xml_data{nullptr};
     CTreeObject *tree;
 } SFbdStartupData;
+
+
 
 namespace Ui {
     class Form;
@@ -48,18 +51,21 @@ public:
     explicit CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object,
                             const bool &is_editable = true, QWidget *parent = nullptr);
     ~CDiagramWidget() override;
-
     void  set_active();
 
+    QUndoStack *    undo_stack();
 
 signals:
     void    changed_diagram(const QDomNode & node); //!< diagram was changed
     void    changed_interface();                    //!< The interface has been changed from the diagram.
                                                     //!< It needs to be visually updated
+    void    undo_enabled();
+    void    interface_variable_new(const QString &type, const QString &name);
+    void    interface_variable_rename(const QString &old_name, const QString &new_name);
 
 public slots:
-    void    updated_diagram();
-    void    updated_interface(const QDomNode &node);
+    void    updated_diagram();                      //!< update diagram it is get_interface_variables to assemble QDomNode
+    void    updated_interface(const QDomNode &node);//!< interface has been changed. It is time to update diagram variables
 
 protected:
 

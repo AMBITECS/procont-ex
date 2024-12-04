@@ -7,10 +7,7 @@
 
 
 CTreeObject::CTreeObject(QWidget *parent) : QTreeWidget(parent)
-{
-    QStringList column; column << tr("Components");
-    setHeaderLabels(column);
-}
+{}
 
 CTreeObject::~CTreeObject()
 = default;
@@ -49,8 +46,11 @@ void CTreeObject::mouseMoveEvent(QMouseEvent *event)
 
     Qt::DropAction result = m_drag->exec( Qt::MoveAction );
 
-    if( result == Qt::MoveAction ) {
-        //
+    emit dragging_complete();
+
+    if( result == Qt::MoveAction )
+    {
+
     }
 }
 

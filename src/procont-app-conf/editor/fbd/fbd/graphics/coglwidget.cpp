@@ -4,9 +4,9 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QMenu>
-
-
-#include "../variables.h"
+#include <QApplication>
+#include "editor/fbd/general/QtDialogs.h"
+#include "CConnectLine.h"
 
 
 COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
@@ -16,15 +16,47 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
 
     connect(m_vertical, &QScrollBar::valueChanged,
             this, &COglWidget::vertical_scroll_moved);
+
     connect(m_horizontal, &QScrollBar::valueChanged,
             this, &COglWidget::horizontal_scroll_moved);
+
     connect(this, &COglWidget::customContextMenuRequested,
             this, &COglWidget::slotCustomMenuRequested);
 
 
+    m_diagram_font = QFont("Helvetica", 8);
+    m_diagram_font.setStyle(QApplication::font().style());
+
+    m_message_font = QApplication::font();
+    m_message_font.setStyle(QApplication::font().style());
+    QFontMetrics fm(m_message_font);
+    m_wrong_type_img = QImage(QSize(fm.height(), 2), QImage::Format_ARGB32);
+    m_wrong_type_img.fill(QColor(255, 25, 91));
+
+    /*QSurfaceFormat format = context()->format();
+    format.setSwapBehavior(QSurfaceFormat::SwapBehavior::DoubleBuffer);
+    setFormat(format);*/
+
+    if (!ogl_startup->node ||
+         ogl_startup->node->isNull() ||
+         ogl_startup->node->parentNode().isNull())
+    {
+        QtDialogs::alarm_user("Переданная структура QDomNode пуста, либо в ней нет родительских структур\n"
+                              "Продолжение нормальной работы невозможно.");
+        return;
+    }
+
+
     m_paint_dev = dynamic_cast<QPaintDevice *>(this);
     m_style = new COglStyle();
-    m_helper = new CGraphicsHelper(ogl_startup->node);
+    m_helper = new CGraphicsHelper(this, ogl_startup->node);
+    connect(m_helper, &CGraphicsHelper::drag_complete, this, &COglWidget::drag_complete);
+    connect(m_helper, &CGraphicsHelper::iface_var_new, this, &COglWidget::iface_new_var);
+    connect(m_helper, &CGraphicsHelper::iface_var_rename, this, &COglWidget::iface_ren_var);
+    connect(m_helper, &CGraphicsHelper::undo_enabled, [this](){emit this->undo_enabled();});
+    connect(this, &COglWidget::mouse_dblClicked, m_helper, &CGraphicsHelper::double_clicked);
+    connect(m_helper, &CGraphicsHelper::on_project_loaded, this, &COglWidget::project_loaded);
+    connect(m_helper, &CGraphicsHelper::types_wrong, this, &COglWidget::show_wrong_types);
 
     m_is_editable = ogl_startup->is_editable;
 
@@ -35,11 +67,9 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     connect(m_helper, &CGraphicsHelper::diagram_resized,
             this, &COglWidget::diagram_resized);
 
+
     m_ladders = m_helper->ladders();
     connect(m_helper, &CGraphicsHelper::on_project_loaded, this, &COglWidget::project_loaded);
-
-
-
 
     this->setAcceptDrops(m_is_editable);
 }
@@ -60,6 +90,9 @@ COglWidget::initializeGL()
 
     glClearColor(color.red, color.green, color.blue, color.alpha);
     glEnable(GL_ALPHA_TEST);
+
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_LINE_SMOOTH);
 
     // тест глубины
     glEnable(GL_DEPTH_TEST);
@@ -101,7 +134,7 @@ COglWidget::paintGL()
 
     draw_ladders();
     draw_drag_bottom_upper();
-
+    draw_type_message();
 }
 
 void
@@ -140,6 +173,8 @@ COglWidget::mouseMoveEvent(QMouseEvent *event)
 void
 COglWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    m_wrong_type_rect = {};
+    m_wrong_type_text = "";
     m_helper->on_mouse_released(event->pos());
     QWidget::mouseReleaseEvent(event);
 }
@@ -167,15 +202,20 @@ COglWidget::dropEvent(QDropEvent *event)
         return;
     }
 
+    /// reset possible autoscroll gradients
     m_vertical_auto_rect = QRect();
     m_vertical_autoscroll = QImage();
+    m_horizon_auto_rect = {};
+    m_horizon_autoscroll = {};
+    m_wrong_type_rect = QRect();
+    m_wrong_type_text = "";
 
     QString source = event->mimeData()->property(txt_vars::drag_source_prop).toString();
 
     if (source == txt_vars::drag_src_palette || source == txt_vars::drag_src_canvas)
     {
         m_helper->on_drop_event(event);
-        update();
+        repaint();
     }
     QWidget::dropEvent(event);
 }
@@ -188,7 +228,9 @@ void COglWidget::dragEnterEvent(QDragEnterEvent *event)
         return;
     }
 
-    auto mime = event->mimeData();
+    m_wrong_type_rect = QRect();
+
+    const QMimeData * mime = event->mimeData();
     QString source = mime->property(txt_vars::drag_source_prop).toString();
 
     if (source == txt_vars::drag_src_palette)
@@ -202,16 +244,29 @@ void COglWidget::dragEnterEvent(QDragEnterEvent *event)
         if (mime->property(txt_vars::drag_obj_prop_name) == txt_vars::dragging_object)
         {
             event->acceptProposedAction();
-            m_helper->on_drag_object_enter(event);
         }
 
         /// drag ladder
         if (mime->property(txt_vars::drag_obj_prop_name) == txt_vars::dragging_ladder)
         {
             event->acceptProposedAction();
-            m_helper->on_drag_ladder_enter(event);
         }
+
+        if (mime->property(txt_vars::drag_obj_prop_name) == txt_vars::drag_pin)
+        {
+            event->acceptProposedAction();
+        }
+
+
+        m_helper->on_drag_enter_event(event);
     }
+
+    if (source != txt_vars::drag_src_palette &&
+        source != txt_vars::drag_src_canvas)
+    {
+        event->ignore();
+    }
+
     QWidget::dragEnterEvent(event);
     this->update();
 }
@@ -226,9 +281,9 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
     }
 
     bool is_bottom_drag = false;
-    bool is_top_drag = false;
-    bool is_right_drag = false;
-    bool is_left_drag = false;
+    bool is_top_drag    = false;
+    bool is_right_drag  = false;
+    bool is_left_drag   = false;
 
     /// bottom autoscroll
     if (event->position().toPoint().y() >= m_height-20 &&
@@ -295,9 +350,12 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
     /// if drag object is our
     if (source == txt_vars::drag_src_palette || source == txt_vars::drag_src_canvas)
     {
+        m_wrong_type_rect = QRect();
+        m_wrong_type_text = "";
+
         m_helper->on_drag_move_event(event);
-        //emit drag_moving(event);
     }
+
     QWidget::dragMoveEvent(event);
     update();
 }
@@ -321,8 +379,8 @@ void COglWidget::horizontal_scroll_moved(int position)
 void COglWidget::draw_ladders()
 {
     QPainter mPainter(m_paint_dev);
+    mPainter.setFont(m_diagram_font);
     mPainter.beginNativePainting();
-    mPainter.setFont(QFont("Helvetica", 8));
 
 
     for (auto &ladder : *m_ladders) // later need to change all ladders to ladders buffer
@@ -352,7 +410,7 @@ void COglWidget::draw_ladders()
         for (auto &object : *ladder->draw_components())
         {
             mPainter.drawImage(*object->rect(), *object->image());
-            //mPainter.drawImage(object->bound_rect(), object->bound_image());
+            //mPainter.drawImage(object->bound_text_rect(), object->bound_image());
 
             /// draw text
             for (auto &text : *object->texts())
@@ -379,6 +437,15 @@ void COglWidget::draw_ladders()
                 mPainter.drawImage(hl.first, hl.second);
             }
         }
+
+        /// draw connecting lines
+        auto def_color = mPainter.pen().color();
+        for (auto &lines : *ladder->connections())
+        {
+            mPainter.setPen(lines->color());
+            mPainter.drawLines(*lines->lines());
+        }
+        mPainter.setPen(def_color);
     }
 
     mPainter.endNativePainting();
@@ -396,8 +463,8 @@ void COglWidget::dragLeaveEvent(QDragLeaveEvent *event)
 void
 COglWidget::project_loaded()
 {
-    //m_helper->resized(this->width(), this->height);
     update();
+    repaint();
 }
 
 void COglWidget::diagram_resized(const int &w, const int &h)
@@ -443,8 +510,76 @@ void COglWidget::draw_drag_bottom_upper()
 void COglWidget::slotCustomMenuRequested(const QPoint &pos)
 {
     auto c_menu = new QMenu(this);
-
     m_helper->make_menu(this, c_menu, pos);
 
     c_menu->popup(this->mapToGlobal(pos));
+}
+
+QUndoStack *COglWidget::undo_stack()
+{
+    return m_helper->undo_stack();
+}
+
+void COglWidget::mouseDoubleClickEvent(QMouseEvent *dblEvent)
+{
+    emit mouse_dblClicked(dblEvent);
+}
+
+void COglWidget::iface_new_var(const QString &type, const QString &name)
+{
+    emit iface_var_new(type, name);
+}
+
+void COglWidget::iface_ren_var(const QString &old_name, const QString &new_name)
+{
+    emit iface_var_ren(old_name, new_name);
+}
+
+void COglWidget::show_wrong_types(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable)
+{
+    QString delim = is_comparable ? " -> " : " ≠ ";
+    if (dragged == target)
+    {
+        delim = " - ";
+    }
+    !is_comparable ? m_wrong_type_text = dragged + delim + target : m_wrong_type_text = dragged + " = " + target;
+
+#ifdef NDEBUG
+    if (is_comparable)
+    {
+        m_wrong_type_text = "";
+        m_wrong_type_rect = {};
+        return;
+    }
+#endif
+
+    QFontMetrics fm(m_message_font);
+    int w = fm.size(Qt::TextSingleLine, m_wrong_type_text).width();
+    int h = fm.size(Qt::TextSingleLine, m_wrong_type_text).height();
+    m_wrong_type_rect = QRect({pos.x(), pos.y() - 30}, QSize(w, h));
+    is_comparable ? m_wrong_type_img.fill(Qt::darkGreen) : m_wrong_type_img.fill(QColor(255, 25, 91) );
+}
+
+void COglWidget::draw_type_message()
+{
+    QPainter mPainter(m_paint_dev);
+    mPainter.setRenderHint(QPainter::TextAntialiasing);//Antialiasing);
+    //mPainter.setRenderHint(QPainter::RenderHint::TextAntialiasing);//HighQualityAntialiasing);
+    mPainter.beginNativePainting();
+
+    mPainter.drawImage(m_wrong_type_rect, m_wrong_type_img);
+    mPainter.setPen(Qt::yellow);
+    mPainter.drawRect(m_wrong_type_rect);
+
+    mPainter.setPen(QColor(Qt::white));
+    mPainter.drawText(m_wrong_type_rect, Qt::AlignCenter, m_wrong_type_text);
+
+
+    mPainter.endNativePainting();
+}
+
+void COglWidget::drag_complete()
+{
+    m_wrong_type_text = "";
+    m_wrong_type_rect = {};
 }

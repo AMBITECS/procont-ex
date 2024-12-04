@@ -249,6 +249,17 @@ bool CInOutVariable::is_empty() const
                   m_expression.is_empty();
     return empty;
 }
+
+uint64_t CInOutVariable::reference_local_id() const
+{
+    return m_point_in.ref_local_id();
+}
+
+void CInOutVariable::set_reference_local_id(const uint64_t &ref_id)
+{
+    m_point_in.set_reference_id(ref_id);
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 // CInOutVariables -----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------

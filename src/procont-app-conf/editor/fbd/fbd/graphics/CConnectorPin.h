@@ -108,6 +108,7 @@ private:
     bool              m_is_negated{false};
     EEdge             m_edge_modifier{EEdge::EI_NONE};
     bool              m_is_selected{false};
+    bool              m_is_connected{false};
 
     CConnectorPin   * m_opposite_pin{nullptr};
     std::vector<CConnectorPin*> * m_out_connections;    //!< if this pin is output

@@ -91,7 +91,7 @@ private:
     bool find_chine(CConnectorPin *&p_pin);
     bool find_input_data(CConnectorPin *pin);
     bool find_output_data(CConnectorPin *pin);
-    bool find_in_out_data(CConnectorPin *pin);
+    // bool find_in_out_data(CConnectorPin *pin);
 
 
     void collect_pins_data(std::vector<s_tree_item> &tree_items, CConnectorPin *pin);

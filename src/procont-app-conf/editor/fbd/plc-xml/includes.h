@@ -107,10 +107,7 @@ static const QString body_types_names [EBodyType::BT_COUNT]
 enum EDefinedDataTypes
 {
     DDT_BOOL,
-    DDT_BYTE,
-    DDT_WORD,
-    DDT_DWORD,
-    DDT_LWORD,
+    DDT_ANY_BIT,
     DDT_SINT,
     DDT_INT,
     DDT_DINT,
@@ -132,7 +129,12 @@ enum EDefinedDataTypes
     DDT_STRING,
     DDT_WSTRING,
     DDT_ENUM,           //!< граница базовых типов, больше смысла не имеет
+    DDT_BYTE,
+    DDT_WORD,
+    DDT_DWORD,
+    DDT_LWORD,
     DDT_DERIVED,        //!< user defined or POU
+    DDT_ANY,
     DDT_UNDEF,
     DDT_COUNT
 };
@@ -140,10 +142,7 @@ enum EDefinedDataTypes
 static const QString base_types_names[EDefinedDataTypes::DDT_COUNT]
 {
     "BOOL",
-    "BYTE",
-    "WORD",
-    "DWORD",
-    "LWORD",
+    "ANY_BIT",
     "SINT",
     "INT",
     "DINT",
@@ -165,7 +164,12 @@ static const QString base_types_names[EDefinedDataTypes::DDT_COUNT]
     "STRING",
     "WSTRING",
     "ENUM",
+    "BYTE",
+    "WORD",
+    "DWORD",
+    "LWORD",
     "DERIVED",
+    "ANY",
     "UNDEFINED"
 };
 
@@ -189,7 +193,7 @@ static const int base_type_last = EDefinedDataTypes::DDT_ENUM;
 
 static bool  is_convertible_to_anyint(const EDefinedDataTypes &type)
 {
-    return type >= DDT_SINT && type <= DDT_ANY_INT;
+    return (type >= DDT_SINT && type <= DDT_ANY_INT) || (type == DDT_ENUM);
 }
 
 static bool is_convertible_to_anyuint(const EDefinedDataTypes &type)
@@ -204,7 +208,12 @@ static bool is_convertible_to_anyfloat(const EDefinedDataTypes &type)
 
 static bool is_convertible_to_any_num(const EDefinedDataTypes &type)
 {
-    return (type >= DDT_SINT && type <= DDT_ANY_NUM);
+    return (type >= DDT_SINT && type <= DDT_ANY_NUM) || (type == DDT_ENUM);
+}
+
+static bool is_convertible_to_bool(const EDefinedDataTypes &type)
+{
+    return type <= DDT_ANY_BIT;
 }
 
 #endif //EDITORSD_INCLUDES_H

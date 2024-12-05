@@ -28,6 +28,8 @@ private:
     QString           m_opposite_old_var;
     CVariable       * m_iface_var{nullptr};
     CVariable       * m_old_iface_var{nullptr};
+    CConnectLine    * m_line{nullptr};
+    CConnectLine    * m_line_to_del{nullptr};
 
     void refresh_view();
 };

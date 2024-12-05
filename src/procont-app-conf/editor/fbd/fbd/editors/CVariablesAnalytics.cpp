@@ -193,10 +193,12 @@ bool CVariablesAnalytics::find_chine(CConnectorPin *&p_pin)
         }
 
         /// find our output
-        auto inp_expr = p_pin->block_var()->point_in()->formal_param();
+        std::string inp_expr = p_pin->block_var()->point_in()->formal_param().toStdString();
+        CFilter::capitalize_word(inp_expr);
         for (auto &block_var : *block->output_variables())
         {
-            auto var_express = block_var->formal_parameter();
+            auto var_express = block_var->formal_parameter().toStdString();
+            CFilter::capitalize_word(var_express);
             if (var_express != inp_expr)
             {
                 continue;
@@ -210,8 +212,9 @@ bool CVariablesAnalytics::find_chine(CConnectorPin *&p_pin)
             return true;
         }
 
-        ///< hmm. block is found, but output is none???
-        throw std::runtime_error("Logic broken in 'CVariablesAnalytics::find_chine'");
+        ///< hmm. block is found, but output is none. I think it is library from beremiz and project from OpenPLC
+        fprintf(stderr, "Block is found, but no output was found in 'CVariablesAnalytics::find_chine'\n");
+        throw std::runtime_error("Block is found, but no output was found in 'CVariablesAnalytics::find_chine'");
     }
 
     /// empty pin
@@ -282,11 +285,6 @@ bool CVariablesAnalytics::find_output_data(CConnectorPin *pin)
     return false;
 }
 
-bool CVariablesAnalytics::find_in_out_data(CConnectorPin *pin)
-{
-    return false;
-}
-
 void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items, CConnectorPin *pin)
 {
     uint16_t  id = 1;
@@ -304,6 +302,19 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
         }
 
         if (filter.filter_string(var->type().toStdString(), ff_base_types | ff_user_types))
+        {
+            continue;
+        }
+
+        s_compare_types c_types;
+
+        bool check = check_pin_compatibility(pin->derived_type(),
+                                             pin->type(),
+                                             var->type(),
+                                             get_type_from_string(var->type().toStdString()),
+                                             c_types);
+
+        if (!check)
         {
             continue;
         }
@@ -326,7 +337,7 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
             {
                 items_v = find_fbd_outputs_collection(body->fbd_content(), pin, id);
             }
-            else
+            if(pin->direction() == PD_OUTPUT)
             {
                 items_v = find_fbd_inputs_collection(body->fbd_content(), pin, id);
             }
@@ -374,11 +385,39 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
                     continue;
                 }
 
+                if (connector->is_connected())
+                {
+                    continue;
+                }
+
+                /// info about local pin type
+                QString dragged_pin_type_name = pin->type() == DDT_DERIVED ? pin->derived_type() :
+                                                base_types_names[pin->type()];
+                EDefinedDataTypes dragged_pin_type = pin->type();
+
+                /// info about alien pin type
+                QString target_pin_type_name = connector->type() == DDT_DERIVED ? connector->derived_type() :
+                                               base_types_names[connector->type()];
+                EDefinedDataTypes target_pin_type = connector->type();
+
+                s_compare_types compare_types;
+                bool res = check_pin_compatibility(
+                        dragged_pin_type_name,
+                        dragged_pin_type,
+                        target_pin_type_name,
+                        target_pin_type,
+                        compare_types);
+
+                if (!res)
+                {
+                    continue;
+                }
+
                 s_tree_item sub_item;
 
                 sub_item.id = id++;
                 sub_item.id_parent = item.id;
-                sub_item.type = connector->derived_type().isEmpty() ? base_types_names[connector->type()].toStdString() : connector->derived_type().toStdString();
+                sub_item.type = target_pin_type_name.toStdString();
                 sub_item.name = connector->formal_param().toStdString();
 
                 tree_items.push_back(sub_item);
@@ -427,11 +466,34 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdCo
                     continue;
                 }
 
+                /// info about local pin type
+                QString dragged_pin_type_name = pin->type() == DDT_DERIVED ? pin->derived_type() :
+                                                base_types_names[pin->type()];
+                EDefinedDataTypes dragged_pin_type = pin->type();
+
+                /// info about alien pin type
+                QString target_pin_type_name = connector->type() == DDT_DERIVED ? connector->derived_type() :
+                                               base_types_names[connector->type()];
+                EDefinedDataTypes target_pin_type = connector->type();
+
+                s_compare_types compare_types;
+                bool res = check_pin_compatibility(
+                        dragged_pin_type_name,
+                        dragged_pin_type,
+                        target_pin_type_name,
+                        target_pin_type,
+                        compare_types);
+
+                if (!res)
+                {
+                    continue;
+                }
+
                 s_tree_item sub_item;
 
                 sub_item.id = id++;
                 sub_item.id_parent = item.id;
-                sub_item.type = connector->derived_type().toStdString();
+                sub_item.type = target_pin_type_name.toStdString();
                 sub_item.name = connector->formal_param().toStdString();
 
                 tree_items.push_back(sub_item);
@@ -635,7 +697,7 @@ bool CVariablesAnalytics::check_pin_compatibility(const QString &dragged_pin_typ
                                                   const EDefinedDataTypes &dragged_pin_type,
                                                   const QString &target_pin_typename,
                                                   const EDefinedDataTypes &target_pin_type,
-                                                  s_compare_types & compare_types,
+                                                  s_compare_types & compare_types,  //!< что бы глянуть на экране, что к чему
                                                   const bool &strict_compliance)
 {
     QString target_type_pin, dragged_type_pin;
@@ -643,30 +705,23 @@ bool CVariablesAnalytics::check_pin_compatibility(const QString &dragged_pin_typ
     target_type_pin = target_pin_type == DDT_DERIVED ? get_comparable_type(target_pin_typename) : target_pin_typename;
     dragged_type_pin = dragged_pin_type == DDT_DERIVED ? get_comparable_type(dragged_pin_typename) : dragged_pin_typename;
 
-    /// для начала проверим пользовательские типы, если они, вернем их базовые (которые могут быть совсем не базовые)
-    if (dragged_pin_type == EDefinedDataTypes::DDT_DERIVED ||
-        target_pin_type == EDefinedDataTypes::DDT_DERIVED)
+    if (target_type_pin.isEmpty())
     {
-        if (target_type_pin.isEmpty())
-        {
-            target_type_pin = target_pin_typename;
-        }
+        target_type_pin = target_pin_typename;
+    }
 
-        if (dragged_type_pin.isEmpty())
-        {
-            dragged_type_pin = dragged_pin_typename;
-        }
-
-        if (strict_compliance)
-        {
-            compare_types.target_type = target_type_pin;
-            compare_types.dragged_type = dragged_type_pin;
-            return target_type_pin == dragged_type_pin;
-        }
+    if (dragged_type_pin.isEmpty())
+    {
+        dragged_type_pin = dragged_pin_typename;
     }
 
     compare_types.target_type = target_type_pin;
     compare_types.dragged_type = dragged_type_pin;
+
+    if (strict_compliance)
+    {
+        return target_type_pin == dragged_type_pin;
+    }
 
     /// Ok. soft compliance of the base types or POUs
 
@@ -730,6 +785,13 @@ QString CVariablesAnalytics::analyze_array(const QString &variable, CArray *user
 bool CVariablesAnalytics::analyze_base_types(const EDefinedDataTypes &target_type, const EDefinedDataTypes &dragged_type,
                                         const bool &is_strict_compliance)
 {
+    if (target_type == DDT_ANY || dragged_type == DDT_ANY)
+    {
+        return true;
+    }
+
+
+
     if (target_type == dragged_type)
     {
         return true;
@@ -754,9 +816,19 @@ bool CVariablesAnalytics::analyze_base_types(const EDefinedDataTypes &target_typ
         return dragged_type == DDT_DATE || dragged_type == DDT_DT;
     }
 
+    if (is_convertible_to_bool(target_type) && is_convertible_to_bool(dragged_type))
+    {
+        return true;
+    }
+
     /// в целом приводимые типы
     if (is_convertible_to_any_num(target_type) && is_convertible_to_any_num(dragged_type))
     {
+        if (target_type == DDT_ANY_NUM || dragged_type == DDT_ANY_NUM)
+        {
+            return true;
+        }
+
         if (is_convertible_to_anyint(dragged_type) && is_convertible_to_anyint(target_type))
         {
             return true;

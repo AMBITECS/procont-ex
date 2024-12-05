@@ -149,8 +149,19 @@ uint64_t CConnectorPin::ref_local_id() const
 
 void CConnectorPin::set_in_variable(CInVariable *variable)
 {
+    if (!variable && m_direction == PD_INPUT)
+    {
+        m_is_connected = false;
+        return;
+    }
+
     set_negated(variable->negated());
     m_outer_text.set_text(variable->expression()->expression());
+
+    if (m_direction == PD_INPUT)
+    {
+        m_is_connected = true;
+    }
 }
 
 QString CConnectorPin::formal_param() const
@@ -175,7 +186,20 @@ CBlockVar *CConnectorPin::block_var()
 
 void CConnectorPin::set_out_variable(COutVariable *out)
 {
+    if (!out)
+    {
+        if (m_direction == PD_INPUT)
+            m_is_connected = false;
+        m_outer_text.set_text("");
+
+        return;
+    }
+
     m_outer_text.set_text(out->expression()->expression());
+    if (m_direction == PD_INPUT)
+    {
+        m_is_connected = true;
+    }
 }
 
 void CConnectorPin::set_selected(const bool &selected)
@@ -304,13 +328,7 @@ void CConnectorPin::set_iface_variable(CVariable *var)
 
 bool CConnectorPin::is_connected() const
 {
-    if (m_direction == PD_OUTPUT)
-    {
-        return !m_out_connections->empty();
-    }
-
-    bool res = m_opposite_pin;
-    return res;
+    return m_is_connected;
 }
 
 bool CConnectorPin::pin_here(const QPoint &pos) const
@@ -323,6 +341,8 @@ void CConnectorPin::set_opposite_pin(CConnectorPin *opposite_pin)
     if (m_direction == PD_INPUT)
     {
         m_opposite_pin = opposite_pin;
+        m_outer_text.set_text("");
+        m_is_connected = true;
     }
 }
 
@@ -358,6 +378,8 @@ void CConnectorPin::add_opposite(CConnectorPin *opposite)
         return;
     }
 
+    m_is_connected = true;
+
     for (auto &pin : *m_out_connections)
     {
         if (pin == opposite)
@@ -367,6 +389,7 @@ void CConnectorPin::add_opposite(CConnectorPin *opposite)
     }
 
     m_out_connections->push_back(opposite);
+    m_parent->update_bound_rect();
 }
 
 std::vector<CConnectorPin *> *CConnectorPin::opposites()

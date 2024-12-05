@@ -14,8 +14,6 @@ public:
 signals:
     void  dragging_complete();
 
-    void clear();
-
 protected:
     void mousePressEvent( QMouseEvent* event ) override;
     void mouseMoveEvent( QMouseEvent* event ) override;

@@ -7,18 +7,10 @@
 
 
 CTreeObject::CTreeObject(QWidget *parent) : QTreeWidget(parent)
-{
-    QStringList column; column << tr("Components");
-    setHeaderLabels(column);
-}
+{}
 
 CTreeObject::~CTreeObject()
 = default;
-
-void CTreeObject::clear()
-{
-
-}
 
 void CTreeObject::mousePressEvent(QMouseEvent *event)
 {

@@ -1,31 +1,78 @@
 #include "coglwidget.h"
-#include "../palette/palette.h"
 
 #include <QMouseEvent>
 #include <QMimeData>
-#include <GL/glu.h>
 #include <QPainter>
+#include <QMenu>
+#include <QApplication>
+#include "editor/fbd/general/QtDialogs.h"
+#include "CConnectLine.h"
 
 
 COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     : QOpenGLWidget(parent), m_vertical(ogl_startup->vertical), m_horizontal(ogl_startup->horizontal)
 {
-    connect(m_vertical, &QScrollBar::valueChanged, this, &COglWidget::vertical_scroll_moved);
-    connect(m_horizontal, &QScrollBar::valueChanged, this, &COglWidget::horizontal_scroll_moved);
+    this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+
+    connect(m_vertical, &QScrollBar::valueChanged,
+            this, &COglWidget::vertical_scroll_moved);
+
+    connect(m_horizontal, &QScrollBar::valueChanged,
+            this, &COglWidget::horizontal_scroll_moved);
+
+    connect(this, &COglWidget::customContextMenuRequested,
+            this, &COglWidget::slotCustomMenuRequested);
+
+
+    m_diagram_font = QFont("Helvetica", 8);
+    m_diagram_font.setStyle(QApplication::font().style());
+
+    m_message_font = QApplication::font();
+    m_message_font.setStyle(QApplication::font().style());
+    QFontMetrics fm(m_message_font);
+
+    m_wrong_type_img = QImage(QSize(fm.height(), 2), QImage::Format_ARGB32);
+    m_wrong_type_img.fill(QColor(119, 36, 49));
+
+    /*QSurfaceFormat format = context()->format();
+    format.setSwapBehavior(QSurfaceFormat::SwapBehavior::DoubleBuffer);
+    setFormat(format);*/
+
+    if (!ogl_startup->node ||
+         ogl_startup->node->isNull() ||
+         ogl_startup->node->parentNode().isNull())
+    {
+        QtDialogs::alarm_user("Переданная структура QDomNode пуста, либо в ней нет родительских структур\n"
+                              "Продолжение нормальной работы невозможно.");
+        return;
+    }
+
 
     m_paint_dev = dynamic_cast<QPaintDevice *>(this);
     m_style = new COglStyle();
-    m_helper = new CGraphicsHelper(ogl_startup->node, ogl_startup->st_widget);
+    m_helper = new CGraphicsHelper(this, ogl_startup->node);
+    connect(m_helper, &CGraphicsHelper::drag_complete, this, &COglWidget::drag_complete);
+    connect(m_helper, &CGraphicsHelper::iface_var_new, this, &COglWidget::iface_new_var);
+    connect(m_helper, &CGraphicsHelper::iface_var_rename, this, &COglWidget::iface_ren_var);
+    connect(m_helper, &CGraphicsHelper::undo_enabled, [this](){emit this->undo_enabled();});
+    connect(this, &COglWidget::mouse_dblClicked, m_helper, &CGraphicsHelper::double_clicked);
+    connect(m_helper, &CGraphicsHelper::on_project_loaded, this, &COglWidget::project_loaded);
+    connect(m_helper, &CGraphicsHelper::types_wrong, this, &COglWidget::show_wrong_types);
 
+    m_is_editable = ogl_startup->is_editable;
+
+    connect(this, &COglWidget::drag_moving,
+            m_helper, &CGraphicsHelper::on_drag_move_event);
     connect(this, &COglWidget::scroll_bars_moving,
             m_helper, &CGraphicsHelper::scroll_bar_moved);
     connect(m_helper, &CGraphicsHelper::diagram_resized,
             this, &COglWidget::diagram_resized);
 
+
     m_ladders = m_helper->ladders();
     connect(m_helper, &CGraphicsHelper::on_project_loaded, this, &COglWidget::project_loaded);
 
-    this->setAcceptDrops(true);
+    this->setAcceptDrops(m_is_editable);
 }
 
 COglWidget::~COglWidget()
@@ -37,40 +84,31 @@ COglWidget::~COglWidget()
 void
 COglWidget::initializeGL()
 {
-    //QOpenGLWidget::initializeGL();
     initializeOpenGLFunctions();
-    if (!m_funcGL)
-    {
-        m_funcGL = QOpenGLContext::currentContext()->functions();
-    }
+
 
     s_color color = m_style->background();
 
-    //m_funcGL->glClearColor(color.red, color.green, color.blue, color.alpha);
     glClearColor(color.red, color.green, color.blue, color.alpha);
-    //m_funcGL->glEnable(GL_ALPHA_TEST);
     glEnable(GL_ALPHA_TEST);
 
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_LINE_SMOOTH);
+
     // тест глубины
-    //m_funcGL->glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
 
     // glColor будет устанавливать свойства материала
-    //m_funcGL->glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_COLOR_MATERIAL);
 
     // разрешаем освещение
-    //m_funcGL->glEnable(GL_LIGHTING);
     glEnable(GL_LIGHTING);
 
     // включаем нулевую лампу
-    //m_funcGL->glEnable(GL_LIGHT0);
     glEnable(GL_LIGHT0);
 
     // разрешаем смешение цветов и "прозрачность"
-    //m_funcGL->glEnable(GL_BLEND);
     glEnable(GL_BLEND);
-    //m_funcGL->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
@@ -78,12 +116,11 @@ void COglWidget::resizeGL(int w, int h)
 {
     //QOpenGLWidget::resizeGL(w, h);
     glViewport(0, 0, w, h);                 // установка площади обзора
-    //glViewport(m_X_scroll, m_Y_scroll, w, h);
-    glMatrixMode(GL_PROJECTION);            // установка режима матрицы
-    glLoadIdentity();                       // загрузка матрицы
-    //gluLookAt(x,y+height,z,x-sin(angleX/180*PI),y+height+(tan(angleY/180*PI)),z-cos(angleX/180*PI), 0, 1, 0);
+    glMatrixMode(GL_PROJECTION);                // установка режима матрицы
+    glLoadIdentity();                               // загрузка матрицы
     m_helper->resized(w, h);
-    height = h;
+    m_height = h;
+    m_width  = w;
     QOpenGLWidget::resizeGL(w, h);
     update();
     //repaint();
@@ -97,6 +134,8 @@ COglWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     draw_ladders();
+    draw_drag_bottom_upper();
+    draw_type_message();
 }
 
 void
@@ -115,7 +154,7 @@ COglWidget::mousePressEvent(QMouseEvent *event)
 
     if (event->button() == Qt::LeftButton)
     {
-        m_start_move = event->pos();
+        //m_start_move = event->pos();
         m_helper->on_left_mouse_click(event);
     }
 
@@ -135,6 +174,8 @@ COglWidget::mouseMoveEvent(QMouseEvent *event)
 void
 COglWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    m_wrong_type_rect = {};
+    m_wrong_type_text = "";
     m_helper->on_mouse_released(event->pos());
     QWidget::mouseReleaseEvent(event);
 }
@@ -156,35 +197,77 @@ COglWidget::keyReleaseEvent(QKeyEvent *evt)
 void
 COglWidget::dropEvent(QDropEvent *event)
 {
-    m_helper->on_drop_event(event);
-    update();
+    if (!m_is_editable)
+    {
+        event->ignore();
+        return;
+    }
+
+    /// reset possible autoscroll gradients
+    m_vertical_auto_rect = QRect();
+    m_vertical_autoscroll = QImage();
+    m_horizon_auto_rect = {};
+    m_horizon_autoscroll = {};
+    m_wrong_type_rect = QRect();
+    m_wrong_type_text = "";
+
+    QString source = event->mimeData()->property(txt_vars::drag_source_prop).toString();
+
+    if (source == txt_vars::drag_src_palette || source == txt_vars::drag_src_canvas)
+    {
+        m_helper->on_drop_event(event);
+        repaint();
+    }
     QWidget::dropEvent(event);
 }
 
 void COglWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    auto mime = event->mimeData();
-    if (mime->property("palette").toInt() == 1)
+    if (!m_is_editable)
+    {
+        event->ignore();
+        return;
+    }
+
+    m_wrong_type_rect = QRect();
+
+    const QMimeData * mime = event->mimeData();
+    QString source = mime->property(txt_vars::drag_source_prop).toString();
+
+    if (source == txt_vars::drag_src_palette)
     {
         event->acceptProposedAction();
         m_helper->on_drag_enter_event(event);
     }
-    if (mime->property("source").toString() == "canvas")
+    if (source == txt_vars::drag_src_canvas)
     {
         /// drag component
-        if (mime->property("object") == "object")
+        if (mime->property(txt_vars::drag_obj_prop_name) == txt_vars::dragging_object)
         {
             event->acceptProposedAction();
-            m_helper->on_drag_object_enter(event);
         }
 
         /// drag ladder
-        if (mime->property("object") == "ladder")
+        if (mime->property(txt_vars::drag_obj_prop_name) == txt_vars::dragging_ladder)
         {
             event->acceptProposedAction();
-            m_helper->on_drag_ladder_enter(event);
         }
+
+        if (mime->property(txt_vars::drag_obj_prop_name) == txt_vars::drag_pin)
+        {
+            event->acceptProposedAction();
+        }
+
+
+        m_helper->on_drag_enter_event(event);
     }
+
+    if (source != txt_vars::drag_src_palette &&
+        source != txt_vars::drag_src_canvas)
+    {
+        event->ignore();
+    }
+
     QWidget::dragEnterEvent(event);
     this->update();
 }
@@ -192,15 +275,88 @@ void COglWidget::dragEnterEvent(QDragEnterEvent *event)
 void
 COglWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (event->mimeData()->property("element").toInt() == EG_CIRCUIT)
+    if (!m_is_editable)
     {
-        //m_helper->on_drag_new_node(event->position().toPoint());
+        event->ignore();
+        return;
+    }
+
+    bool is_bottom_drag = false;
+    bool is_top_drag    = false;
+    bool is_right_drag  = false;
+    bool is_left_drag   = false;
+
+    /// bottom autoscroll
+    if (event->position().toPoint().y() >= m_height-20 &&
+        m_vertical->isEnabled() && (m_vertical->sliderPosition() < m_vertical->maximum())
+    )
+    {
+        is_bottom_drag = true;
+        m_vertical_autoscroll = QImage(":/codesys/images/codesys/bottom_auto.png");
+        m_vertical_auto_rect = QRect(0, m_height - 20, m_width, 20);
+        m_vertical->setValue(m_vertical->value() + 5);
+    }
+
+    /// upper autoscroll
+    if (event->position().toPoint().y() <= 20 &&
+        m_vertical->isEnabled() && (m_vertical->sliderPosition() > 0)
+    )
+    {
+        is_top_drag = true;
+        m_vertical_autoscroll = QImage(":/codesys/images/codesys/upper_auto.png");
+        m_vertical_auto_rect = QRect(0, 0, m_width, 20);
+        m_vertical->setValue(m_vertical->value() - 5);
+    }
+
+    /// right autoscroll
+    if (event->position().toPoint().x() > m_width - 20 &&
+        m_horizontal->isEnabled() &&
+        m_horizontal->value() < m_horizontal->maximum()
+    )
+    {
+        is_right_drag = true;
+        m_horizon_auto_rect = QRect(m_width-20, 0, 20, m_height);
+        m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_right.png");
+        //m_horizon_autoscroll.
+        m_horizontal->setValue(m_horizontal->value() + 2);
+
+    }
+    /// left autoscroll
+    if (event->position().toPoint().x() < 20 &&
+            m_horizontal->isEnabled() &&
+            m_horizontal->value() > 0
+    )
+    {
+        is_left_drag = true;
+        m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_left.png");
+        m_horizon_auto_rect = QRect(0,0, 20, m_height);
+        m_horizontal->setValue(m_horizontal->value() - 2);
+    }
+
+    if (!is_bottom_drag && !is_top_drag)
+    {
+        m_vertical_autoscroll = QImage();
+        m_vertical_auto_rect = QRect();
+    }
+
+    if (!is_right_drag && !is_left_drag)
+    {
+        m_horizon_auto_rect = QRect();
+        m_horizon_autoscroll = QImage();
+    }
+
+    QString source = event->mimeData()->property(txt_vars::drag_source_prop).toString();
+    // event->mimeData()->property("element").toInt() == EG_CIRCUIT
+
+    /// if drag object is our
+    if (source == txt_vars::drag_src_palette || source == txt_vars::drag_src_canvas)
+    {
+        m_wrong_type_rect = QRect();
+        m_wrong_type_text = "";
+
         m_helper->on_drag_move_event(event);
     }
-    else
-    {
-        m_helper->on_drag_move_event(event);
-    }
+
     QWidget::dragMoveEvent(event);
     update();
 }
@@ -224,8 +380,9 @@ void COglWidget::horizontal_scroll_moved(int position)
 void COglWidget::draw_ladders()
 {
     QPainter mPainter(m_paint_dev);
+    mPainter.setFont(m_diagram_font);
     mPainter.beginNativePainting();
-    mPainter.setFont(QFont("Helvetica", 8));
+
 
     for (auto &ladder : *m_ladders) // later need to change all ladders to ladders buffer
     {
@@ -254,7 +411,7 @@ void COglWidget::draw_ladders()
         for (auto &object : *ladder->draw_components())
         {
             mPainter.drawImage(*object->rect(), *object->image());
-            //mPainter.drawImage(object->bound_rect(), object->bound_image());
+            //mPainter.drawImage(object->bound_text_rect(), object->bound_image());
 
             /// draw text
             for (auto &text : *object->texts())
@@ -281,12 +438,24 @@ void COglWidget::draw_ladders()
                 mPainter.drawImage(hl.first, hl.second);
             }
         }
+
+        /// draw connecting lines
+        auto def_color = mPainter.pen().color();
+        for (auto &lines : *ladder->connections())
+        {
+            mPainter.setPen(lines->color());
+            mPainter.drawLines(*lines->lines());
+        }
+        mPainter.setPen(def_color);
     }
-    mPainter.endNativePainting();   
+
+    mPainter.endNativePainting();
 }
 
 void COglWidget::dragLeaveEvent(QDragLeaveEvent *event)
 {
+    m_vertical_autoscroll = QImage();
+    m_vertical_auto_rect = QRect();
     m_helper->on_drag_exit(event);
     //QWidget::dragLeaveEvent(event);
     update();
@@ -295,8 +464,8 @@ void COglWidget::dragLeaveEvent(QDragLeaveEvent *event)
 void
 COglWidget::project_loaded()
 {
-    //m_helper->resized(this->width(), this->height);
     update();
+    repaint();
 }
 
 void COglWidget::diagram_resized(const int &w, const int &h)
@@ -318,4 +487,106 @@ void COglWidget::diagram_resized(const int &w, const int &h)
     {
         m_horizontal->setMaximum(w / m_horizontal->pageStep() - m_horizontal->pageStep());
     }
+}
+
+bool COglWidget::is_editable() const
+{
+    return m_is_editable;
+}
+
+void COglWidget::set_editable(const bool &editable)
+{
+    m_is_editable = editable;
+}
+
+void COglWidget::draw_drag_bottom_upper()
+{
+    QPainter mPainter(m_paint_dev);
+    mPainter.beginNativePainting();
+    mPainter.drawImage(m_vertical_auto_rect, m_vertical_autoscroll);
+    mPainter.drawImage(m_horizon_auto_rect, m_horizon_autoscroll);
+    mPainter.endNativePainting();
+}
+
+void COglWidget::slotCustomMenuRequested(const QPoint &pos)
+{
+    auto c_menu = new QMenu(this);
+    m_helper->make_menu(this, c_menu, pos);
+
+    c_menu->popup(this->mapToGlobal(pos));
+}
+
+QUndoStack *COglWidget::undo_stack()
+{
+    return m_helper->undo_stack();
+}
+
+void COglWidget::mouseDoubleClickEvent(QMouseEvent *dblEvent)
+{
+    emit mouse_dblClicked(dblEvent);
+}
+
+void COglWidget::iface_new_var(const QString &type, const QString &name)
+{
+    emit iface_var_new(type, name);
+}
+
+void COglWidget::iface_ren_var(const QString &old_name, const QString &new_name)
+{
+    emit iface_var_ren(old_name, new_name);
+}
+
+void COglWidget::show_wrong_types(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable)
+{
+    QString delim = is_comparable ? " -> " : " <> "; //" ≠ ";
+    if (dragged == target)
+    {
+        delim = " : ";
+    }
+
+    m_wrong_type_text = dragged + delim + target;
+
+    if (dragged == "один")
+    {
+        m_wrong_type_text = "Занято!";
+    }
+
+#ifdef NDEBUG
+    if (is_comparable)
+    {
+        m_wrong_type_text = "";
+        m_wrong_type_rect = {};
+        return;
+    }
+#endif
+
+    QFontMetrics fm(m_message_font);
+    int w = fm.size(Qt::TextSingleLine, m_wrong_type_text).width();
+    int h = fm.size(Qt::TextSingleLine, m_wrong_type_text).height();
+    m_wrong_type_rect = QRect({pos.x(), pos.y() - 30}, QSize(w, h));
+    is_comparable ? m_wrong_type_img.fill(QColor(43,120,36)) : m_wrong_type_img.fill(QColor(119, 36, 49) );
+}
+
+void COglWidget::draw_type_message()
+{
+    QPainter mPainter(m_paint_dev);
+    mPainter.setRenderHint(QPainter::TextAntialiasing);//Antialiasing);
+    //mPainter.setRenderHint(QPainter::RenderHint::TextAntialiasing);//HighQualityAntialiasing);
+    mPainter.beginNativePainting();
+
+    mPainter.drawImage(m_wrong_type_rect, m_wrong_type_img);
+    mPainter.setPen(Qt::yellow);
+    mPainter.drawRect(m_wrong_type_rect);
+
+    mPainter.setPen(QColor(Qt::white));
+    mPainter.drawText(m_wrong_type_rect, Qt::AlignCenter, m_wrong_type_text);
+
+
+    mPainter.endNativePainting();
+}
+
+void COglWidget::drag_complete()
+{
+    m_wrong_type_text = "";
+    m_wrong_type_rect = {};
 }

@@ -652,9 +652,14 @@ QUndoStack *COglWorld::undo_stack()
 void COglWorld::mouse_dblClicked(QMouseEvent *evt)
 {
     /// define pin's variable or object's instance name
-    if (m_selection.ladder && m_selection.pin)
+    if (m_selection.pin)
     {
         /// pin variable
+        if (m_selection.pin->direction() == PD_INPUT && m_selection.pin->is_connected())
+        {
+            return;
+        }
+
         m_editors->show_combo(m_selection.pin);
         return;
     }
@@ -709,16 +714,22 @@ bool COglWorld::check_pins_to_connection(CConnectorPin *target_pin, s_compare_ty
         return false;
     }
 
+    /// check target pin is busy
+    if (target_pin->direction() == PD_INPUT && target_pin->is_connected())
+    {
+        comparable_types.target_type = "ко многим";
+        comparable_types.dragged_type = "один";
+        return false;
+    }
+
     /// info about dragged pin type
     QString dragged_pin_type_name = m_drag_pin->type() == DDT_DERIVED ? m_drag_pin->derived_type() :
                                                 base_types_names[m_drag_pin->type()];
-
     EDefinedDataTypes dragged_pin_type = m_drag_pin->type();
 
     /// info about target pin type
     QString target_pin_type_name = target_pin->type() == DDT_DERIVED ? target_pin->derived_type() :
                                         base_types_names[target_pin->type()];
-
     EDefinedDataTypes target_pin_type = target_pin->type();
 
     comparable_types.dragged_type = dragged_pin_type_name;

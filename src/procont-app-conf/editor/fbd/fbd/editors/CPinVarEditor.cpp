@@ -114,7 +114,6 @@ bool CPinVarEditor::eventFilter(QObject *object, QEvent *event)
         if (key == Qt::Key_Return || key == Qt::Key_Enter)
         {
             emit new_variable_name(m_new_variable);
-
             return false;
         }
     }

@@ -6,7 +6,7 @@
 #include "ui_diagramwgt.h"
 #include <QGridLayout>
 #include "../palette/CFbdComponentsTree.h"
-#include "../../general/QtDialogs.h"
+
 
 
 CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object, const bool &is_editable, QWidget *parent)
@@ -15,7 +15,6 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     ui->setupUi(this);
 
     m_dom_node = new QDomNode(pou_node);
-    m_st_widget = new CodeEditorWidget();
 
     s_ogl_startup startup;
     startup.tree = tree_object;
@@ -23,16 +22,17 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     startup.horizontal = ui->horizontalScrollBar;
     startup.node = m_dom_node;
     startup.is_editable = is_editable;
-    startup.st_widget = m_st_widget;
+
 
     m_ogl_widget = new COglWidget(&startup);
 
-    /// place ST-widget
-    // {
-    //     auto lo = new QGridLayout(ui->stWidget);
-    //     lo->addWidget(m_st_widget);
-    //     lo->setContentsMargins(0, 0, 0, 0);
-    // }
+    /*connect(tree_object, &CTreeObject::dragging_complete,
+            m_ogl_widget, &COglWidget::drag_complete);*/
+    connect(m_ogl_widget, &COglWidget::undo_enabled, [this](){emit this->undo_enabled();});
+    connect(m_ogl_widget, &COglWidget::iface_var_new,
+            [this](const QString &t, const QString &n){emit interface_variable_new(t, n);});
+    connect(m_ogl_widget, &COglWidget::iface_var_ren,
+            [this](const QString &o, const QString &n){emit interface_variable_rename(o, n);});
 
     /// place OpenGL widget
     {
@@ -41,15 +41,14 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
         lo->setContentsMargins(0, 0, 0, 0);
     }
 
+    connect(m_ogl_widget, &COglWidget::diagram_changed, this, &CDiagramWidget::updated_diagram);
+
     m_tree_widget = tree_object;
     ui->diagramSplitter->setSizes({33333, 66667});
-
-    build_tree();
 }
 
 CDiagramWidget::~CDiagramWidget()
 {
-    delete m_st_widget;
     delete m_ogl_widget;
     delete m_dom_node;
 
@@ -73,9 +72,20 @@ void CDiagramWidget::set_active()
     }
 }
 
-void CDiagramWidget::diagram_updated()
+void CDiagramWidget::updated_diagram()
 {
+    emit changed_diagram(*m_dom_node);
+}
 
+void CDiagramWidget::updated_interface(const QDomNode &node)
+{
+    // changing interface
+    emit changed_interface();
+}
+
+QUndoStack *CDiagramWidget::undo_stack()
+{
+    return m_ogl_widget->undo_stack();
 }
 
 

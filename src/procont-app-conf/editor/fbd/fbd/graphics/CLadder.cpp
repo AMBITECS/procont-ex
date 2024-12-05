@@ -657,5 +657,22 @@ void CLadder::refresh_graphic_connections()
     }
 }
 
+CConnectLine *CLadder::remove_line(CConnectLine *line)
+{
+    int counter = 0;
+    m_bottom_lines--;   // тут совсем не факт TODO: fix this moment
+
+    for (auto &item : *m_lines)
+    {
+        if (item == line)
+        {
+            m_lines->erase(m_lines->begin() + counter);
+            return line;
+        }
+        counter++;
+    }
+    return nullptr;
+}
+
 
 

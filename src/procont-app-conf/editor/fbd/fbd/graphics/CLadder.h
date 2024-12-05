@@ -99,8 +99,10 @@ public:
     void    bottom_line_count_increase();
     void    bottom_line_count_decrease();
     [[nodiscard]] short   bottom_line_count() const;
+
     CConnectLine* add_line(CConnectLine *line);
     std::vector<CConnectLine*> * connections();
+    CConnectLine* remove_line(CConnectLine *line);
 
 
     [[nodiscard]] QPoint              real_bottom_right() const;

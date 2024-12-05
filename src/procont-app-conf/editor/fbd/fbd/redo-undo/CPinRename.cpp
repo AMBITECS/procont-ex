@@ -3,6 +3,7 @@
 //
 
 #include "CPinRename.h"
+#include "editor/fbd/fbd/graphics/CGrapchicsLogic.h"
 
 #include <utility>
 
@@ -26,41 +27,74 @@ CPinRename::CPinRename(COglWorld *ogl_world, CConnectorPin *pin, QString  pin_va
 }
 
 CPinRename::~CPinRename()
-= default;
+{
+    delete m_line_to_del;
+}
 
 void CPinRename::redo()
 {
-
-    if (m_iface_var)
+    if ( (m_opposite_pin && (m_opposite_pin->parent()->parent() == m_pin->parent()->parent())) || m_line )
     {
-        m_pin->set_iface_variable(m_iface_var);
+        delete m_line;
+
+        CGraphicsLogic logic;
+
+        m_line = logic.add_new_line(m_pin, m_opposite_pin);
+        m_pin->parent()->parent()->add_line(m_line);
+
+        m_line_to_del = nullptr;
     }
 
     else
     {
-        m_pin->set_formal_param(m_pin_var);
-        m_opposite_pin->set_formal_param(m_opposite_var);
-        m_opposite_pin->parent()->update_bound_rect();
-    }
+        if (m_iface_var)
+        {
+            m_pin->set_iface_variable(m_iface_var);
+        }
 
-    m_pin->parent()->update_bound_rect();
+        else
+        {
+            m_pin->set_formal_param(m_pin_var);
+            m_opposite_pin->set_formal_param(m_opposite_var);
+            m_opposite_pin->parent()->update_bound_rect();
+        }
+    }
 
     refresh_view();
 }
 
 void CPinRename::undo()
 {
-    if (m_iface_var)
+    if (m_line)
     {
-        m_pin->set_iface_variable(m_old_iface_var);
-    }
+        m_line_to_del = m_line;
+        m_pin->parent()->parent()->remove_line(m_line);
 
+        if (m_pin->direction() == PD_OUTPUT)
+        {
+            m_pin->remove_opposite(m_opposite_pin);
+            m_opposite_pin->set_opposite_pin(nullptr);
+        }
+        else
+        {
+            m_opposite_pin->remove_opposite(m_pin);
+            m_pin->set_opposite_pin(nullptr);
+        }
+    }
     else
     {
-        m_pin->set_formal_param(m_pin_old_var);        
-        m_opposite_pin->set_formal_param(m_opposite_old_var);
-        m_opposite_pin->parent()->update_bound_rect();
+        if (m_iface_var)
+        {
+            m_pin->set_iface_variable(m_old_iface_var);
+        }
 
+        else
+        {
+            m_pin->set_formal_param(m_pin_old_var);
+            m_opposite_pin->set_formal_param(m_opposite_old_var);
+            m_opposite_pin->parent()->update_bound_rect();
+
+        }
     }
 
     m_pin->parent()->update_bound_rect();
@@ -85,6 +119,11 @@ void CPinRename::refresh_view()
         {
             opposite_ladder->resort();
         }
+    }
+
+    if (m_line)
+    {
+        m_pin->parent()->parent()->refresh_graphic_connections();
     }
 
     m_world->update_hatch();

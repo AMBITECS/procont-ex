@@ -6,7 +6,7 @@
 #include "../graphics/CDiagramObject.h"
 #include "../graphics/coglwidget.h"
 #include "../redo-undo/CPinRename.h"
-#include "editor/fbd/fbd/graphics/CGrapchicsLogic.h"
+#include "editor/fbd/resources/colors.h"
 
 CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
 {
@@ -114,8 +114,10 @@ void CEditors::rename_inst()
     bool is_error = m_obj_inst_editor->is_error();
     QString new_name = m_obj_inst_editor->text();
 
-    QColor color = is_error ? m_obj_inst_editor->color() : QColor(Qt::black);
-    m_diagram_object->inst_text()->set_color(color);
+    CDiagramColors colors;
+    QColor err_color = is_error ? colors.base_colors().err_color : colors.base_colors().diag_text_def;
+
+    m_diagram_object->inst_text()->set_color(err_color);
 
     m_diagram_object = nullptr;
     m_obj_inst_editor->setVisible(false);
@@ -133,8 +135,10 @@ void CEditors::insert_new_inst()
     bool is_error = m_obj_inst_editor->is_error();
     QString new_name = m_obj_inst_editor->text();
 
-    QColor color = is_error ? m_obj_inst_editor->color() : QColor(Qt::black);
-    m_diagram_object->inst_text()->set_color(color);
+    CDiagramColors colors;
+    QColor err_color = is_error ? colors.base_colors().err_color : colors.base_colors().diag_text_def;
+
+    m_diagram_object->inst_text()->set_color(err_color);
 
     QString type = m_diagram_object->type_name();
 

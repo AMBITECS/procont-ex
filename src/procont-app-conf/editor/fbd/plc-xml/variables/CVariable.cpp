@@ -8,7 +8,17 @@ CVariable::CVariable()
 = default;
 
 CVariable::CVariable(const CVariable &src)
- = default;
+{
+//    m_add_data = src.m_add_data;
+//    m_type = src.m_type;
+//    m_attr_addr = src.m_attr_addr;
+//    m_attr_global_id = src.m_attr_global_id;
+//    if (!src.m_attr_name.isNull())
+//        m_attr_name = src.m_attr_name;
+//    m_init_value = src.m_init_value;
+//    m_doc = src.m_doc;
+    *this = src;
+}
 
 CVariable::CVariable(CVariable &&tmp) noexcept
     : m_add_data(tmp.m_add_data)
@@ -22,7 +32,8 @@ CVariable::CVariable(CVariable &&tmp) noexcept
 
 CVariable::CVariable(const QDomNode &node)
 {
-    m_attr_name = node.attributes().namedItem("name").toAttr().value();
+    if (!node.attributes().namedItem("name").toAttr().isNull())
+        m_attr_name = node.attributes().namedItem("name").toAttr().value();
     m_attr_addr = node.attributes().namedItem("address").toAttr().value();
     m_attr_global_id = node.attributes().namedItem("globalId").toAttr().value();
 

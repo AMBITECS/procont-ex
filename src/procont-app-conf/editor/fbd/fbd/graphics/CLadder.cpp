@@ -9,8 +9,8 @@
 
 #include "COglWorld.h"
 #include "editor/fbd/general/QtDialogs.h"
-#include "../variables.h"
 #include "CGrapchicsLogic.h"
+#include "editor/fbd/resources/colors.h"
 
 extern uint16_t    max_local_id;
 
@@ -35,10 +35,24 @@ CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladde
         m_next->set_previous(this);
     }
 
+    CDiagramColors colors;
+
     m_number = 0;
     m_num_text.set_text(QString::number(m_number));
+    m_num_text.set_color(colors.ladder_colors().ladder_number);
     m_texts.push_back(&m_num_text);
-    m_num_text.set_color(m_colors.divider);
+
+
+
+    m_colors.def_left = colors.ladder_colors().normal.left_part;
+    m_colors.def_right = colors.ladder_colors().normal.base_part;
+    m_colors.selected_left = colors.ladder_colors().selected.left_part;
+    m_colors.selected_right = colors.ladder_colors().selected.base_part;
+    m_colors.divider = colors.ladder_colors().rail;
+    m_colors.gray_field = colors.ladder_colors().grey_part;
+    m_colors.gray_bottom = m_colors.gray_field;
+    m_colors.landing_brick = colors.ladder_colors().landing_brick;
+    m_colors.landing_strip = colors.ladder_colors().landing_strip;
 
     fill_ladder_image();
     set_selected(false);

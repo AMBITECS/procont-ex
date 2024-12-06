@@ -6,7 +6,7 @@
 #include <QMenu>
 #include <QApplication>
 #include "editor/fbd/general/QtDialogs.h"
-#include "CConnectLine.h"
+#include "editor/fbd/resources/colors.h"
 
 
 COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
@@ -33,10 +33,6 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
 
     m_wrong_type_img = QImage(QSize(fm.height(), 2), QImage::Format_ARGB32);
     m_wrong_type_img.fill(QColor(119, 36, 49));
-
-    /*QSurfaceFormat format = context()->format();
-    format.setSwapBehavior(QSurfaceFormat::SwapBehavior::DoubleBuffer);
-    setFormat(format);*/
 
     if (!ogl_startup->node ||
          ogl_startup->node->isNull() ||
@@ -86,10 +82,15 @@ COglWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
+    CDiagramColors colors;
+    float r, g, b;
+    colors.base_colors().diag_background.getRgbF(&r, &g, &b);
 
-    s_color color = m_style->background();
+    glClearColor(r,
+                 g,
+                 b,
+                 1.0f);
 
-    glClearColor(color.red, color.green, color.blue, color.alpha);
     glEnable(GL_ALPHA_TEST);
 
     glEnable(GL_MULTISAMPLE);
@@ -129,8 +130,6 @@ void COglWidget::resizeGL(int w, int h)
 void
 COglWidget::paintGL()
 {
-    //QOpenGLWidget::paintGL();
-    // base drawing cycle
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     draw_ladders();

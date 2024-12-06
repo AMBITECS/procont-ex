@@ -253,14 +253,9 @@ CVariable *CBlockVar::get_iface_variable()
 
 void CBlockVar::set_iface_variable(CVariable *var)
 {
-    m_variable = var;
-
-    if (m_variable)
-    {
-        *m_variable = *var;
-        m_formal_parameter = m_variable->name();
-        this->set_type(var->type());
-    }
+    *m_variable = *var;
+    m_formal_parameter = m_variable->name();
+    this->set_type(var->type());
 }
 
 void CBlockVar::reset_connections()

@@ -154,7 +154,7 @@ void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
             }
         }
 
-        m_new_variable += item->item()->name;
+        m_new_variable += item->item()->name.c_str();
 
         this->setEditText(m_new_variable);
     }

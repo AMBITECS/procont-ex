@@ -85,9 +85,9 @@ private:
     QImage          m_image;
     QImage          m_bound_img;
     bool            m_is_selected{false};
-    QColor          m_color_norm{226, 234, 247};
-    QColor          m_color_sel{80,176,243};
-    QColor          m_color_curr{m_color_norm};
+    QColor          m_color_norm;//{226, 234, 247};
+    QColor          m_color_sel;//{80,176,243};
+    QColor          m_color_curr;//{m_color_norm};
 
     bool            bound_complete{false};
 

@@ -4,6 +4,7 @@
 
 #include "CConnectorPin.h"
 #include "CDiagramObject.h"
+#include "editor/fbd/resources/colors.h"
 
 CConnectorPin::CConnectorPin(CBlockVar *var, CDiagramObject* parent, const EPinDirection &direction, QPoint * obj_tl)
 {
@@ -40,6 +41,10 @@ CConnectorPin::CConnectorPin(CBlockVar *var, CDiagramObject* parent, const EPinD
         auto out = m_variable->point_out();
         m_outer_text.set_text(out->expression());
     }
+
+    CDiagramColors colors;
+    m_pin_name.set_color(colors.base_colors().diag_text_alternate);
+    m_outer_text.set_color(colors.base_colors().diag_text_def);
 
     m_texts.push_back(&m_pin_name);
     m_texts.push_back(&m_outer_text);

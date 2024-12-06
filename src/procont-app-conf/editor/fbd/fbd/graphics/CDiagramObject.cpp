@@ -5,6 +5,7 @@
 #include <QPainter>
 #include "CDiagramObject.h"
 #include "CLadder.h"
+#include "editor/fbd/resources/colors.h"
 
 CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_top_left
 {
@@ -13,6 +14,14 @@ CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_
 
     m_ladder_relative_tl = ladder->real_top_left();
     m_parent = ladder;
+
+    CDiagramColors colors;
+    m_type_name.set_color(colors.base_colors().diag_text_alternate);
+    m_instance_name.set_color(colors.base_colors().diag_text_def);
+
+    m_color_norm = colors.ladder_colors().normal.block;//{226, 234, 247};
+    m_color_sel = colors.ladder_colors().selected.block;//{80,176,243};
+    m_color_curr = m_color_norm;
 
     m_texts.push_back(&m_type_name);
     m_texts.push_back(&m_instance_name);

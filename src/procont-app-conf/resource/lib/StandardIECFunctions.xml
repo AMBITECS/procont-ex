@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
-  <fileHeader companyName="Ambitecs" productName="Standard IEC Functions" productVersion="1.0.0" creationDateTime="2024-09-20T00:00:00"/>
-  <contentHeader name="Standard IEC Functions" author="Lepekhin Igor" modificationDateTime="2024-11-01T08:00:00">
+  <fileHeader companyName="Ambitecs" productName="Standard IEC Functions" productVersion="1.0.1" creationDateTime="2024-09-20T00:00:00"/>
+  <contentHeader name="Standard IEC Functions" author="Lepekhin Igor" modificationDateTime="2024-12-05T08:00:00">
     <coordinateInfo>
       <fbd>
         <scaling x="0" y="0"/>
@@ -1187,7 +1187,7 @@
                  <ANY/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY/>
               </type>
@@ -1282,7 +1282,7 @@
                  <ANY/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY/>
               </type>
@@ -1322,7 +1322,7 @@
                  <ANY/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY/>
               </type>
@@ -1621,7 +1621,7 @@
                 <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY_INT/>
               </type>
@@ -1716,7 +1716,7 @@
                  <STRING/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY_INT/>
               </type>
@@ -1756,7 +1756,7 @@
                 <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY_INT/>
               </type>
@@ -1793,7 +1793,7 @@
                  <STRING/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY_INT/>
               </type>
@@ -1801,7 +1801,7 @@
                 <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var3">
+            <variable name="IN4">
               <type>
                  <ANY_INT/>
               </type>

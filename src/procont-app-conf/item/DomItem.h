@@ -20,6 +20,8 @@ public:
         typeVar     = QStandardItem::UserType + 2,
         typePou     = QStandardItem::UserType + 3,
         typeType    = QStandardItem::UserType + 4,
+        typeName    = QStandardItem::UserType + 5,
+        typeProject = QStandardItem::UserType + 6
     };
 public:
     DomItem(const QDomNode &node);
@@ -89,13 +91,23 @@ public:
 
         return node().attributes().namedItem("name").nodeValue();
     }
+};
+// ----------------------------------------------------------------------------
 
-    virtual void updateNode(const QDomNode & new_node_) override
+// ----------------------------------------------------------------------------
+// *** DomItemProject
+class DomItemProject : public DomItem
+{
+public:
+    DomItemProject(const QDomNode &node) :
+        DomItem(node)
+    {}
+
+    [[nodiscard]] QVariant data(int role) const override
     {
-        // qDebug() << node().nodeName() << node().parentNode().nodeName();
+        Q_UNUSED(role);
 
-        // node().parentNode().appendChild(new_node_.cloneNode());
-        // node().parentNode().removeChild(node());
+        return node().namedItem("contentHeader").toElement().attribute("name");
     }
 };
 // ----------------------------------------------------------------------------
@@ -165,6 +177,15 @@ public:
 // ----------------------------------------------------------------------------
 // *** DomItemPou_creator
 class DomItemPou_creator : public DomItem_creator
+{
+public:
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** DomItemProject_creator
+class DomItemProject_creator : public DomItem_creator
 {
 public:
     [[nodiscard]] virtual DomItem * create(const QDomNode &node);

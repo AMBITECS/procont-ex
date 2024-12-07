@@ -1,6 +1,7 @@
 #include "Library.h"
 
 #include "log/Logger.h"
+#include "tr/translation.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -192,7 +193,7 @@ const ILibrary::ObjectInfo ILibrary::object_info(const QString &name_) const
         // qDebug() << node.toElement().namedItem("addData").namedItem("data").namedItem("category").nodeName();
         if(category.isEmpty())
             category = _m_name;
-        return ILibrary::ObjectInfo(name_, type, QString("%1, %2").arg(name()).arg(version()), category);
+        return ILibrary::ObjectInfo(name_, type, QString("%1, %2").arg(tr_str::instance()->ru(name())).arg(version()), category);
     }
 
     return ILibrary::ObjectInfo();

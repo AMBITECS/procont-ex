@@ -3,6 +3,8 @@
 #include "ItemValue.h"
 #include "ItemValueVariableTable.h"
 
+#include "tr/translation.h"
+
 #include <QtXml>
 
 // ----------------------------------------------------------------------------
@@ -21,6 +23,15 @@ DomItem::ItemType DomItem::assignType(const QDomNode &node)
 {
     if(node.nodeName() == "pou")
         return DomItem::typePou;
+    if(node.nodeName() == "project")
+        return DomItem::typeProject;
+    if(
+        node.nodeName() == "configuration" ||
+        node.nodeName() == "resource" ||
+        node.nodeName() == "task" ||
+        node.nodeName() == "pouInstance"
+        )
+        return DomItem::typeName;
     if(node.nodeName() == "dataType")
         return DomItem::typeType;
     if(node.nodeName() == "globalVars")
@@ -136,7 +147,7 @@ QVariant DomItem::data(int role) const
     // if(role == Qt::DecorationRole)
     //     return QIcon(":/icon/images/diagram.svg");
 
-    return m_value->get();
+    return tr_str::instance()->ru(m_value->get());
 }
 
 void DomItem::setData(const QVariant &value, int role)
@@ -390,6 +401,14 @@ DomItem * DomItemPou_creator::create(const QDomNode &node)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemProject_creator ***
+DomItem * DomItemProject_creator::create(const QDomNode &node)
+{
+    return new DomItemProject(node);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** DomItem_builder ***
 DomItem_builder::DomItem_builder()
 {
@@ -397,6 +416,8 @@ DomItem_builder::DomItem_builder()
     m_creators.insert(DomItem::typeType, new DomItemName_creator);
     m_creators.insert(DomItem::typeVar, new DomItemVar_creator);
     m_creators.insert(DomItem::typePou, new DomItemPou_creator);
+    m_creators.insert(DomItem::typeName, new DomItemName_creator);
+    m_creators.insert(DomItem::typeProject, new DomItemProject_creator);
 }
 
 DomItem_builder::~DomItem_builder()

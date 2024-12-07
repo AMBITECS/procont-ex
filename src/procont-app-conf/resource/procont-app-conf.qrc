@@ -38,6 +38,12 @@
         <file>images/hierarchy.svg</file>
         <file>images/plus-large.svg</file>
         <file>images/plus2.svg</file>
+        <file>images/input.svg</file>
+        <file>images/output.svg</file>
+        <file>images/input2.svg</file>
+        <file>images/input3.svg</file>
+        <file>images/output2.svg</file>
+        <file>images/output3.svg</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/AdditionalFunctionBlocks.xml</file>

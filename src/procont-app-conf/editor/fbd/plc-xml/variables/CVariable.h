@@ -8,6 +8,8 @@
 #include "../includes.h"
 #include "../CDocumentation.h"
 #include "../CAddData.h"
+#include "../CConnectionPointIn.h"
+#include "../CConnectionPointOut.h"
 
 
 /**
@@ -44,6 +46,9 @@ public:
 
     QString     comment() const;
     void        set_comment(const QString &comment);
+
+    //[[nodiscard]] CConnectionPointIn * connection_point_in() const;
+    //[[nodiscard]] CConnectionPointOut* connection_point_out() const;
 
 private:
     QString     m_attr_name;   // required

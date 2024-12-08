@@ -362,7 +362,7 @@ void MainWindow::open(const QString & filePath)
         return;
     }
     QDomDocument document;
-    auto result = document.setContent(&file);
+    auto result = _m_project_document.setContent(&file);
     file.close();
 
     if(!result)
@@ -378,7 +378,9 @@ void MainWindow::open(const QString & filePath)
 
     if(result)
     {
-        auto newModel = new DomModel(document, this);
+        auto newModel = new DomModel(_m_project_document, this);
+
+        StandardLibrary::instance()->add("User objects", &_m_project_document, tr("User objects"));
 
         view->setModel(newModel);
 

@@ -25,8 +25,8 @@ void CFbdComponentsTree::build_tree()
                     << "Функциональные блоки";
 
     QVector<QVector<s_comp_item>> groups;
-    groups  << general_data
-            << logic_data
+    groups << general_data
+           << bitwise_operators
             << math_data
             << other_data
             << func_blocks_data;

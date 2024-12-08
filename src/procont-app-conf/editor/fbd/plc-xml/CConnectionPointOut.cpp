@@ -14,7 +14,7 @@ CConnectionPointOut::CConnectionPointOut(const CConnectionPointOut &other)
 
 CConnectionPointOut::CConnectionPointOut(CConnectionPointOut &&other) noexcept
     :   m_attr_global_id(std::move(other.m_attr_global_id))
-    ,   m_add_data(std::move(other.m_add_data))
+    ,   m_add_data(other.m_add_data)
     ,   m_rel_position(std::move(other.m_rel_position))
     ,   m_expression(std::move(other.m_expression))
 {}

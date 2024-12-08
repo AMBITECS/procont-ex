@@ -14,7 +14,7 @@ public:
     explicit DomModel(const QDomDocument &document, QObject *parent = nullptr);
     ~DomModel();
 
-    QDomDocument document() const { return domDocument; }
+    const QDomDocument & document() const { return domDocument; }
 
     [[nodiscard]] DomItem * item(const QModelIndex &index) const;
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
@@ -29,7 +29,7 @@ public:
     [[nodiscard]] bool removeRows(int position, int rows, const QModelIndex &parent = {}) override;
 
 private:
-    QDomDocument domDocument;
+    const QDomDocument & domDocument;
     DomItem * rootItem;
 };
 

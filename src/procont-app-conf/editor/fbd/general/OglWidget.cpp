@@ -13,6 +13,7 @@ OglWidget::OglWidget(QWidget *parent) : QOpenGLWidget(parent)
 
 OglWidget::~OglWidget()
 {
+    //QOpenGLWidget::~QOpenGLWidget();
 }
 
 void OglWidget::paintEvent(QPaintEvent *event)

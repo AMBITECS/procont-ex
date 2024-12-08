@@ -14,8 +14,6 @@ class DBlock : public CBlock
 public:
     explicit DBlock(const s_init_block &init_block);
     ~DBlock() override;
-
-
 };
 
 

@@ -3,6 +3,7 @@
 //
 
 #include "CInterface.h"
+#include "../fbd/variables.h"
 
 CInterface::CInterface()
 {
@@ -62,10 +63,11 @@ CInterface::CInterface(CInterface &&tmp) noexcept
 
 CInterface::CInterface(const QDomNode &node)
 {
+    /*
     if (node.nodeName() != "interface")
     {
         throw std::runtime_error("in 'CInterface::CInterface(const QDomNode &node)' wrong node name");
-    }
+    }*/
 
     m_local_vars    = new CLocalVars();
     m_temp_vars     = new CTempVars();
@@ -81,6 +83,20 @@ CInterface::CInterface(const QDomNode &node)
     {
         QDomNode child = node.childNodes().at(i);
 
+        if (child.nodeName() == xmln::return_type)
+        {
+            auto type_node = child.firstChild();
+            if (type_node.attributes().isEmpty())
+            {
+                m_return_type = type_node.nodeName();
+                m_is_derived = false;
+            }
+            else
+            {
+                m_return_type = type_node.attributes().namedItem(xmln::name).toAttr().value();
+                m_is_derived = true;
+            }
+        }
         extract_child_nodes(child, m_local_vars, "localVars");
         extract_child_nodes(child, m_temp_vars, "tempVars");
         extract_child_nodes(child, m_input_vars, "inputVars");
@@ -226,5 +242,54 @@ bool CInterface::is_empty() const
                  m_global_vars->is_empty() &&
                  m_access_vars->is_empty();
     return empty;
+}
+
+std::vector<CVariable *>  CInterface::all_variables()
+{
+    std::vector<CVariable*> p_variables;
+
+    gather_variables(m_global_vars->variables(), &p_variables);
+    gather_variables(m_external_vars->variables(), &p_variables);
+    gather_variables(m_access_vars->variables(), &p_variables);
+    gather_variables(m_in_out_vars->variables(), &p_variables);
+    gather_variables(m_input_vars->variables(), &p_variables);
+    gather_variables(m_output_vars->variables(), &p_variables);
+    gather_variables(m_local_vars->variables(), &p_variables);
+
+    return p_variables;
+}
+
+void CInterface::gather_variables(QList<CVariable *> *source_variables, std::vector<CVariable *> *dest_vars)
+{
+    if (!source_variables->empty())
+        dest_vars->insert(dest_vars->end(), source_variables->begin(), source_variables->end());
+}
+
+std::vector<CVariable *> CInterface::p_inputs()
+{
+    std::vector<CVariable *> inputs;
+
+    for (auto &var : *m_input_vars->variables())
+    {
+        inputs.push_back(var);
+    }
+
+    return inputs;
+}
+
+std::vector<CVariable *> CInterface::p_outputs()
+{
+    std::vector<CVariable *> outputs;
+
+    outputs.insert(outputs.end(),
+                   m_output_vars->variables()->begin(),
+                   m_output_vars->variables()->end());
+
+    return outputs;
+}
+
+bool CInterface::is_derived() const
+{
+    return m_is_derived;
 }
 

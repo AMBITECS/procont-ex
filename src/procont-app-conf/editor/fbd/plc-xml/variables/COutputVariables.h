@@ -9,6 +9,9 @@
 #include "../CConnectionPointIn.h"
 #include "../CPosition.h"
 
+/**
+ * @brief this variable is located in the body's inner environment
+ */
 class COutVariable
 {
 public:
@@ -23,6 +26,9 @@ public:
 
     [[nodiscard]] uint64_t        local_id() const;
     void            set_local_id(const uint64_t & local_id);
+
+    [[nodiscard]] uint64_t    reference_id() const;
+    void        set_reference_id(const uint64_t &id);
 
     [[nodiscard]] float           width() const;
     void            set_width(const float & width);
@@ -49,6 +55,9 @@ public:
 
     CPosition   *   position();
     CExpression *   expression();
+
+    QString         formal_parameter() const;
+    void            set_formal_param(const QString &formal);
 
 
     CConnectionPointIn * point_in();

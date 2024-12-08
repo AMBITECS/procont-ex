@@ -2,6 +2,8 @@
 // Created by artem on 10/22/24.
 //
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #ifndef EDITORSD_CCONNECTIONPOINTIN_H
 #define EDITORSD_CCONNECTIONPOINTIN_H
 
@@ -32,11 +34,18 @@ public:
     void    set_expression(const QString &expression);
 
     QList<CConnection*>  * connections();
+    [[nodiscard]] uint64_t    ref_local_id() const;
+    void        set_reference_id(const uint64_t &ref_id);
+
+    QString   formal_param() const;
+    void      set_formal_param(const QString &param);
 
 private:
     QString         m_attr_global_id;
     CRelPosition    m_rel_position;
     QString         m_name;
+    uint64_t        m_ref_local_id{0};
+    uint64_t        fix_var{0};
 
     QList<CConnection*>  * m_connections;
     CExpression            m_expression;
@@ -46,3 +55,5 @@ private:
 
 
 #endif //EDITORSD_CCONNECTIONPOINTIN_H
+
+#pragma clang diagnostic pop

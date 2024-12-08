@@ -8,8 +8,11 @@
 #include <QMimeData>
 
 #include "COglWorld.h"
-#include "../../general/QtDialogs.h"
+#include "editor/fbd/general/QtDialogs.h"
 #include "../variables.h"
+#include "CGrapchicsLogic.h"
+
+extern uint16_t    max_local_id;
 
 
 CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladder, CLadder *next)
@@ -20,6 +23,17 @@ CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladde
     m_hatch_size    = hatch_size;
     m_objects       = new QList<CDiagramObject*>();
     m_ladder_draw   = new QVector<QPair<QRect*, QImage*>>();
+    m_lines = new std::vector<CConnectLine*>();
+
+    if (m_previous)
+    {
+        m_previous->set_next(this);
+    }
+
+    if (m_next)
+    {
+        m_next->set_previous(this);
+    }
 
     m_number = 0;
     m_num_text.set_text(QString::number(m_number));
@@ -37,6 +51,12 @@ CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladde
 
 CLadder::~CLadder()
 {
+    for (auto line : *m_lines)
+    {
+        delete line;
+    }
+    delete m_lines;
+
     for (auto & obj : *m_objects)
     {
         delete obj;
@@ -105,6 +125,7 @@ void CLadder::update_real_position(CLadder *sender)
     if (sender != m_previous && sender != nullptr)
     {
         m_previous = sender;
+        sender->set_next(this);
         m_prev_changed = true;
     }
 
@@ -146,9 +167,12 @@ void CLadder::update_real_position(CLadder *sender)
     m_abs_rects.bottom = QRect(absolute_tl.x(), absolute_tl.y() + m_current_height-1,
                                m_current_width, 1);
 
+    if (do_chine)
+    {
+        update_relative_position();
+    }
     if (do_chine && m_next)
     {
-        update_rel_position();
         m_next->update_real_position(this);
     }
 }
@@ -208,6 +232,8 @@ uint16_t CLadder::define_height() const
         }
     }
 
+    height += (m_bottom_lines * def_lines_diff) + def_bound_dist;
+
     height = height < DEF_HEIGHT ? DEF_HEIGHT : height + HEIGHT_RESERVE + OBJECTS_TOP_SHIFT;
 
     return height;
@@ -215,6 +241,11 @@ uint16_t CLadder::define_height() const
 
 void CLadder::set_selected(const bool &is_selected)
 {
+    if (is_selected == m_is_selected)
+    {
+        return;
+    }
+
     m_is_selected = is_selected;
 
     if (!is_selected)
@@ -257,7 +288,7 @@ void CLadder::fill_ladder_image()
     m_images.landing_bottom.fill(m_colors.landing_strip);
 }
 
-void CLadder::update_rel_position()
+void CLadder::update_relative_position()
 {
     m_relative.base.setRect(-m_hatch_pos->x(), m_abs_rects.left.top() - m_hatch_pos->y(),
                             m_current_width, m_current_height);
@@ -279,6 +310,11 @@ void CLadder::update_rel_position()
     {
         obj->update_position();
     }
+
+    for (auto &line : *m_lines)
+    {
+        line->update_position();
+    }
 }
 
 bool CLadder::is_clicked_here(const QPoint &pos) const
@@ -294,7 +330,7 @@ void CLadder::drag_object(QDragMoveEvent *event)
         return;
     }
 
-    auto mime = event->mimeData();
+    const QMimeData * mime = event->mimeData();
 
     m_highlights.clear();
 
@@ -305,17 +341,18 @@ void CLadder::drag_object(QDragMoveEvent *event)
         source == txt_vars::drag_src_canvas     // "canvas"
        )
     {
-        EPaletteElements type = (EPaletteElements)event->mimeData()->property("element").toInt();
+        EPaletteElements type = (EPaletteElements)event->mimeData()->property(txt_vars::drag_element).toInt();
 
         /// если лесенка
         if (type == EPaletteElements::EG_CIRCUIT ||
-            mime->property("object").toString() == "ladder"
+            mime->property(txt_vars::drag_obj_prop_name).toString() == txt_vars::dragging_ladder
            )
         {
             show_landing_highlight();
         }
         /// если компонент
-        else
+        auto drag_item_name = mime->property(txt_vars::drag_obj_prop_name).toString();
+        if (drag_item_name == txt_vars::dragging_object || (type >= EL_AND && type < EPaletteElements::EP_FBD) )
         {
             if (m_objects->empty())
             {
@@ -338,6 +375,12 @@ void CLadder::drag_object(QDragMoveEvent *event)
                     show_brick();
                 }
             }
+        }
+
+        /// if this is pin
+        if (mime->property(txt_vars::drag_obj_prop_name).toString() == txt_vars::drag_pin)
+        {
+            //bool is_over_other_pin = what_is_here(event->position().toPoint());
         }
     }
 }
@@ -362,7 +405,7 @@ void CLadder::show_brick()
 
     else
     {
-        int right = m_objects->back()->bound_rect().right();
+        int right = m_objects->back()->bound_text_rect().right();
         int width = m_abs_rects.base.right() - right;
         rect = QRect(right, m_relative.base.top(), width, m_current_height);
         image = QImage({1, rect.width()}, QImage::Format_ARGB32);
@@ -383,22 +426,21 @@ void CLadder::resort()
 {
     if (m_objects->empty())
     {
-        //m_current_height = DEF_HEIGHT;
         update_real_position();
         return;
     }
 
     uint16_t index = 0;
-    uint16_t difference;    //!< distance between left bound_rect and left component rect
+    uint16_t difference;    //!< distance between left bound_text_rect and left component rect
     int prev_last = 0;
 
     for (auto & obj : *m_objects)
     {
-        difference = obj->rect()->left() - obj->bound_rect().left();
+        difference = obj->rect()->left() - obj->bound_graph_rect().left();
 
         int last_right = index == 0 ?
                 LEFT_WIDTH + GRAY_WIDTH + OBJECTS_DISTANCE/2 + difference :
-                prev_last + m_objects->at(index-1)->bound_rect().width() + OBJECTS_DISTANCE + difference;
+                         prev_last + m_objects->at(index - 1)->bound_graph_rect().width() + OBJECTS_DISTANCE + difference;
 
         obj->set_ladders_relative_top_left(this, {last_right, OBJECTS_TOP_SHIFT});
         prev_last = last_right - difference;
@@ -406,9 +448,9 @@ void CLadder::resort()
         index++;
     }
 
-    if (m_objects->back()->bound_rect().right() > m_ladder_width)
+    if (m_objects->back()->bound_text_rect().right() > m_ladder_width)
     {
-        m_ladder_width = m_objects->back()->bound_rect().right();
+        m_ladder_width = m_objects->back()->bound_text_rect().right();
     }
 
     update_real_position();
@@ -445,7 +487,7 @@ void CLadder::get_selected(const QPoint &point, s_selection *p_selection)
     }
 }
 
-void CLadder::put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos)
+/*void CLadder::put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos)
 {
     if (m_objects->empty())
     {
@@ -460,7 +502,7 @@ void CLadder::put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos)
 
         for (auto &obj: *m_objects)
         {
-            if (obj->bound_rect().contains(pos))
+            if (obj->bound_text_rect().contains(pos))
             {
                 found = true;
                 break;
@@ -482,9 +524,9 @@ void CLadder::put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos)
     highlights_off();
 
     update_real_position();
-}
+}*/
 
-CDiagramObject *CLadder::remove_object(CDiagramObject *dragged_obj)
+/*CDiagramObject *CLadder::remove_object(CDiagramObject *dragged_obj)
 {
     int index = 0;
     for (auto &obj : *m_objects)
@@ -500,7 +542,7 @@ CDiagramObject *CLadder::remove_object(CDiagramObject *dragged_obj)
     }
 
     return nullptr;
-}
+}*/
 
 QImage CLadder::drag_image()
 {
@@ -551,15 +593,68 @@ QPoint CLadder::real_bottom_right() const
     return m_abs_rects.base.bottomRight();
 }
 
-void CLadder::insert_new_component(const QPoint &point, CBlock *block)
-{
-    auto diagram_object = new CDiagramObject(this, block);
-    put_dragged_object(diagram_object, point);
-}
-
 QPoint *CLadder::real_top_left()
 {
     return &m_relative_tl;
+}
+
+void CLadder::bottom_line_count_increase()
+{
+    m_bottom_lines ++;
+}
+
+void CLadder::bottom_line_count_decrease()
+{
+    m_bottom_lines--;
+}
+
+short CLadder::bottom_line_count() const
+{
+    return m_bottom_lines;
+}
+
+CConnectLine *CLadder::add_line(CConnectLine *line)
+{
+    m_lines->push_back(line);
+    return line;
+}
+
+std::vector<CConnectLine *> *CLadder::connections()
+{
+    return m_lines;
+}
+
+void CLadder::refresh_graphic_connections()
+{
+    m_bottom_lines = 0;
+    CConnectorPin *opposite;
+    for (auto &line : *m_lines)
+    {
+        delete line;
+    }
+    m_lines->clear();
+
+    CGraphicsLogic connect_algo;
+
+    for (auto &obj : *m_objects)
+    {
+        for (auto &pin : *obj->outputs())
+        {
+            if (pin->opposites()->empty())
+            {
+                continue;
+            }
+
+            for (auto &conn : *pin->opposites())
+            {
+                auto line = connect_algo.add_new_line(conn, pin);
+                if (line)
+                {
+                    m_lines->push_back(line);
+                }
+            }
+        }
+    }
 }
 
 

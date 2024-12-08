@@ -1,4 +1,5 @@
 .idea/
+cmake-build-debug/
 # C++ objects and libs
 *.slo
 *.lo

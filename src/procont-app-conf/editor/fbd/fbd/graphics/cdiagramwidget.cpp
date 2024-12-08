@@ -6,7 +6,7 @@
 #include "ui_diagramwgt.h"
 #include <QGridLayout>
 #include "../palette/CFbdComponentsTree.h"
-#include "../../general/QtDialogs.h"
+
 
 
 CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object, const bool &is_editable, QWidget *parent)
@@ -25,6 +25,14 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
 
 
     m_ogl_widget = new COglWidget(&startup);
+
+    /*connect(tree_object, &CTreeObject::dragging_complete,
+            m_ogl_widget, &COglWidget::drag_complete);*/
+    connect(m_ogl_widget, &COglWidget::undo_enabled, [this](){emit this->undo_enabled();});
+    connect(m_ogl_widget, &COglWidget::iface_var_new,
+            [this](const QString &t, const QString &n){emit interface_variable_new(t, n);});
+    connect(m_ogl_widget, &COglWidget::iface_var_ren,
+            [this](const QString &o, const QString &n){emit interface_variable_rename(o, n);});
 
     /// place OpenGL widget
     {
@@ -73,6 +81,11 @@ void CDiagramWidget::updated_interface(const QDomNode &node)
 {
     // changing interface
     emit changed_interface();
+}
+
+QUndoStack *CDiagramWidget::undo_stack()
+{
+    return m_ogl_widget->undo_stack();
 }
 
 

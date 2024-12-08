@@ -49,27 +49,36 @@ public:
     QImage  * image();
     std::vector<std::pair<QRect, QImage>>  * highlights();
     std::vector<CConnectorPin*> * pins();
+    std::vector<CConnectorPin*> * outputs();
+    std::vector<CConnectorPin*> * inputs();
     std::vector<CObjectsText*>  * texts();
 
-    [[nodiscard]] bool  switch_highlights(const QPoint &pos);
-    [[nodiscard]] QRect   bound_rect() const;
+    [[nodiscard]] QRect   bound_text_rect() const;
+    [[nodiscard]] QRect   bound_graph_rect() const; //!< границы образуемые графическими соединениями
     [[nodiscard]] QImage  bound_image() const;
+    [[nodiscard]] QImage drag_image(const bool &is_transparent = false);
 
+
+    [[nodiscard]] bool  switch_highlights(const QPoint &pos);
     void  set_selected(const bool & selected);
     [[nodiscard]] bool  is_selected() const;
-    [[nodiscard]] QImage drag_image(const bool &is_transparent = false);
-    [[nodiscard]] uint64_t local_id() const;
 
+    [[nodiscard]] uint64_t    local_id() const;
     [[nodiscard]] QString     instance_name() const;
+    void                      set_instance_name(const QString &name);
     [[nodiscard]] QString     type_name() const;
+    [[nodiscard]] EDefinedDataTypes         type() const;
+
     CLadder * parent();
-    void     set_parent(CLadder *ladder);
+    CBlock  * block();
+
+    CObjectsText *  inst_text();
 
 private:
 
     CBlock  * m_block;
     CObjectsText    m_type_name;
-    CObjectsText    m_var_name;
+    CObjectsText    m_instance_name;
     QSize           m_size;
     QSize           m_bound_size;
 
@@ -87,10 +96,12 @@ private:
     int           m_rel_y{0};
     QPoint        m_base_shift;         //!< сдвиг компонента относительно top-left ступени
     QPoint      * m_ladder_relative_tl; //!< top-left ступени
-    int           m_difference{0};
+    int           m_text_bound_shift{0};
+    int           m_graph_bound_shift{0};
 
     QRect         m_rect;
-    QRect         m_bounds;
+    QRect         m_text_bounds;
+    QRect         m_graph_bounds; //!< граница образуемая графическими соединениями
 
     std::vector<CConnectorPin*>  * m_inputs;
     std::vector<CConnectorPin*>  * m_outputs;
@@ -104,6 +115,8 @@ private:
     void  update_rel_position(QPoint * relative_tl = nullptr);
 
     CLadder *m_parent;
+
+    void update_block_data();
 };
 
 

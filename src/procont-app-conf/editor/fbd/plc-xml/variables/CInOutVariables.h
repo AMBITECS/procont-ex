@@ -31,6 +31,9 @@ public:
     [[nodiscard]] uint64_t        local_id() const;
     void            set_local_id(const uint64_t & local_id);
 
+    uint64_t    reference_local_id() const;
+    void        set_reference_local_id(const uint64_t &ref_id);
+
     [[nodiscard]] float           width() const;
     void            set_width(const float & width);
 

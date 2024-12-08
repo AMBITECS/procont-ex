@@ -93,8 +93,9 @@ set(PROJECT_SOURCES
     iec/StandardLibrary.cpp iec/StandardLibrary.h
     iec/Library.h iec/Library.cpp
 
-    dialog/AddPOUDialog.h dialog/AddPOUDialog.cpp dialog/AddPOUDialog.ui
-    dialog/AddTypeDialog.h dialog/AddTypeDialog.cpp dialog/AddTypeDialog.ui
+    dialog/AddPOUDialog.h dialog/AddPOUDialog.cpp #dialog/AddPOUDialog.ui
+    dialog/AddDUTDialog.h dialog/AddDUTDialog.cpp
+    #dialog/AddTypeDialog.h dialog/AddTypeDialog.cpp dialog/AddTypeDialog.ui
 
     dialog/InputDialog.h dialog/InputDialog.cpp
 

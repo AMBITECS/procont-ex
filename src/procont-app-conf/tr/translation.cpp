@@ -7,6 +7,12 @@ tr_str::tr_str()
     _m_strings["functionBlock"] = tr("functionBlock");
     _m_strings["function"] = tr("function");
     _m_strings["dataType"] = tr("dataType");
+    _m_strings["dataTypes"] = tr("dataTypes");
+    _m_strings["pous"] = tr("pous");
+    _m_strings["User types"] = tr("User types");
+    _m_strings["Standard Function Blocks"] = tr("Standard Function Blocks");
+    _m_strings["Additional Function Blocks"] = tr("Additional Function Blocks");
+    _m_strings["Additional Function Blocks"] = tr("Additional Function Blocks");
 }
 
 QString tr_str::ru(const QString &name_)

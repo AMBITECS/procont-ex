@@ -11,7 +11,7 @@ public:
 public:
     static StandardLibrary * instance();
 
-    static void test();
+    // static void test();
 
 public:
     void load() override;

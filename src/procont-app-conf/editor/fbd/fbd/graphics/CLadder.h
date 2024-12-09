@@ -14,6 +14,7 @@
 #include "CObjectsText.h"
 #include "../palette/palette.h"
 #include "CConnectLine.h"
+//#include "COglWorld.h"
 
 
 #define  LEFT_WIDTH 50     //!< the width of the left rect
@@ -65,19 +66,22 @@ struct s_images
     QImage  landing_bottom{};
 };
 
+class COglWorld;
 
 class CLadder //: public QObject
 {
     //Q_OBJECT
 public:
     CLadder() = delete;
-    CLadder(QPoint * hatch_top_left, QSize * hatch_size, CLadder * prev_ladder = nullptr, CLadder *next = nullptr);
+    CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size,
+            CLadder *prev_ladder = nullptr, CLadder *next = nullptr);
     ~CLadder();
 
     /// change ladders content
     //void                put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos);
     //CDiagramObject *    remove_object(CDiagramObject *dragged_obj);
     CDiagramObject *    add_object(CBlock * object);
+    COglWorld       * parent();
 
     /// change and update ladder position
     void    update_real_position(CLadder *sender = nullptr);
@@ -132,6 +136,7 @@ protected:
 private:
     CLadder     * m_previous{nullptr};
     CLadder     * m_next{nullptr};
+    COglWorld   * m_parent;
 
     CObjectsText    m_num_text;
     std::vector<CConnectLine*> * m_lines;

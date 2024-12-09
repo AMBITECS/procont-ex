@@ -14,16 +14,22 @@
 
 
 class CDiagramObject;
+class CPinIn;
+class CPinOut;
 
 class CPin
 {
 public:
-    CPin(CDiagramObject* parent, CBlockVar* var);
+
     virtual ~CPin();
 
     /// base data
     CDiagramObject   *  parent();
-    CBlockVar        *  pin_base_variable();
+    CBlockVar * block_variable();
+
+    /// to avoid dynamic_cast<CPinXXX>(pin)
+    CPinIn *    input();    //!< in case of direction input - returns CPinIn, otherwise - nullptr
+    CPinOut*    output();   //!< in case of direction output - returns CPinOut, otherwise - nullptr
 
     /// drawing object
     QImage  * image();
@@ -41,6 +47,8 @@ public:
     [[nodiscard]] bool        is_error_state() const;
     void                      set_error(const bool & is_error);
     [[nodiscard]] EPinDirection   direction() const;
+    [[nodiscard]] bool        is_pin_at_pos(const QPoint &pos) const;
+    [[nodiscard]] bool        is_connected() const;
 
     /// tech data for drawing parent
     [[nodiscard]] uint16_t    pin_name_width() const;     //!< ширина текста, находящегося "внутри" родителя
@@ -48,9 +56,6 @@ public:
      * ширина из имеющихся */
     [[nodiscard]] uint16_t    outer_text_width() const;
 
-    /// configure pin
-    [[nodiscard]] uint64_t    ref_local_id() const;        //!< id на который ссылается этот pin при имеющейся связи
-    void    set_reference_id(const uint64_t &ref_id);
 
     [[nodiscard]] QString     pin_name() const;
     void    set_pin_name(const QString & formal);
@@ -59,23 +64,33 @@ public:
     [[nodiscard]] EDefinedDataTypes type() const;
     void        set_type(const QString &type);
 
-    void        clear_connections();
+
 
 protected:
+    CPin(CDiagramObject* parent, CBlockVar* var, QPoint * parent_tl);
+
     CBlockVar       * m_block_variable;
     CDiagramObject  * m_parent;
+
+    void    saturate();
 
     /// drawing data
     QPoint            m_pos;
     QPoint          * m_relative_parent_tp;
     QRect             m_rect;
+    QRect             m_bound_rect{};
     QImage            m_draw_image;
     QImage            m_img_norm;
     QImage            m_img_selected;
     QImage            m_img_error;
 
+    CObjectsText      m_pin_name;
+    CObjectsText      m_outer_text;
+    std::vector<CObjectsText*>  m_texts;
+
     bool              m_is_selected{false};
     bool              m_is_error{false};
+    bool              m_is_connected{false};
     EPinDirection     m_direction{PD_UNDEF};
 
 };

@@ -26,9 +26,9 @@ CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_
     m_texts.push_back(&m_type_name);
     m_texts.push_back(&m_instance_name);
 
-    m_inputs = new std::vector<CConnectorPin*>();
-    m_outputs = new std::vector<CConnectorPin*>();
-    m_pins = new std::vector<CConnectorPin*>();
+    m_inputs = new std::vector<CPinIn*>();
+    m_outputs = new std::vector<CPinOut*>();
+    m_pins = new std::vector<CPin*>();
     m_highlights = new std::vector<std::pair<QRect, QImage>>();
 
     m_type_name.set_text(m_block->type_name());
@@ -69,7 +69,7 @@ QImage *CDiagramObject::image()
     return &m_image;
 }
 
-std::vector<CConnectorPin *> *CDiagramObject::pins()
+std::vector<CPin *> *CDiagramObject::pins()
 {
     return m_pins;
 }
@@ -94,37 +94,41 @@ void CDiagramObject::define_size()
 
     for (auto &inout : *m_block->in_out_variables())
     {
-        auto pin_i = new CConnectorPin(inout, this, PD_INPUT, &m_base_shift);
-        auto pin_o = new CConnectorPin(inout, this, PD_OUTPUT, &m_base_shift);
+        auto pin_i = new CPinIn(this, inout, &m_base_shift);
+        auto pin_o = new CPinOut(this, inout, &m_base_shift);
         m_inputs->push_back(pin_i);
         m_outputs->push_back(pin_o);
     }
 
     for (auto &in : *m_block->input_variables())
     {
-        auto in_pin = new CConnectorPin(in, this, PD_INPUT, &m_base_shift);
+        auto in_pin = new CPinIn(this, in, &m_base_shift);
         m_inputs->push_back(in_pin);
     }
 
     for (auto &out : *m_block->output_variables())
     {
-        auto pin_out = new CConnectorPin(out, this, PD_OUTPUT, &m_base_shift);
+        auto pin_out = new CPinOut(this, out, &m_base_shift);
         m_outputs->push_back(pin_out);
     }
 
     int inner = 0;
-    for (auto &in : *m_inputs)
+    for (auto *&inp : *m_inputs)
     {
-        inner = in->inner_text_width() + 3;
+        auto in = dynamic_cast<CPin*>(inp);
+
+        inner = in->pin_name_width() + 3;
         if (inner > inner_left_max)
         {
             inner_left_max = inner;
         }
     }
 
-    for (auto &out : *m_outputs)
+    for (auto &outp : *m_outputs)
     {
-        inner = out->inner_text_width() + 3;
+        auto out = dynamic_cast<CPin*>(outp);
+
+        inner = out->pin_name_width() + 3;
         if (inner > inner_right_max)
         {
             inner_right_max = inner;
@@ -355,13 +359,11 @@ void CDiagramObject::update_bound_rect()
     int outer_right_max = 0;
     int inp_w, out_w ;
 
-
-
     for (auto &in : *m_inputs)
     {
-        if (in->opposite_pin())
+        if (in->opposite())
         {
-            if (in->opposite_pin()->parent()->parent() != m_parent)
+            if (in->opposite()->parent()->parent() != m_parent)
             {
                 in->set_opposite_name(true);
             }
@@ -390,11 +392,11 @@ void CDiagramObject::update_bound_rect()
             outer_right = out_w;
         }
 
-        if (!out->opposites()->empty())
+        if (!out->graphic_connections()->empty())
         {
-            if (out->opposites()->size() > outer_right_max)
+            if (out->graphic_connections()->size() > outer_right_max)
             {
-                outer_right_max = (int)out->opposites()->size();
+                outer_right_max = (int)out->graphic_connections()->size();
             }
         }
     }
@@ -453,12 +455,12 @@ void CDiagramObject::set_instance_name(const QString &name)
     m_block->set_instance_name(name);
 }
 
-std::vector<CConnectorPin *> *CDiagramObject::outputs()
+std::vector<CPinOut*> *CDiagramObject::outputs()
 {
     return m_outputs;
 }
 
-std::vector<CConnectorPin *> *CDiagramObject::inputs()
+std::vector<CPinIn *> *CDiagramObject::inputs()
 {
     return m_inputs;
 }

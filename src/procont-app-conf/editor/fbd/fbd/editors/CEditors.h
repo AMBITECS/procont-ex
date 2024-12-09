@@ -24,7 +24,7 @@ public:
     ~CEditors() override;
 
     void    show_line_edit(CDiagramObject *obj);
-    void    show_combo(CConnectorPin *pin);
+    void    show_combo(CPin *pin);
 
 signals:
     /// blocks new/rename
@@ -53,8 +53,10 @@ private:
     QVarSelectModel *m_model;
     COglWorld   * m_world;
 
+    std::vector<s_tree_item>    combo_data;
+
     CDiagramObject  * m_diagram_object{nullptr};
-    CConnectorPin   * m_pin{nullptr};
+    CPin   * m_pin{nullptr};
 };
 
 

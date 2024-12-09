@@ -7,8 +7,8 @@
 
 #include <utility>
 
-CPinRename::CPinRename(COglWorld *ogl_world, CConnectorPin *pin, QString  pin_var,
-                       CConnectorPin *opposite_pin, QString opposite_var, CVariable *iface_var)
+CPinRename::CPinRename(COglWorld *ogl_world, CPin *pin, QString  pin_var,
+                       CPin *opposite_pin, QString opposite_var, CVariable *iface_var)
     : QUndoCommand()
     , m_world(ogl_world)
     , m_pin(pin)
@@ -17,12 +17,13 @@ CPinRename::CPinRename(COglWorld *ogl_world, CConnectorPin *pin, QString  pin_va
     , m_opposite_var(std::move(opposite_var))
     , m_iface_var(iface_var)
 {
-    m_pin_old_var = m_pin->formal_param();
-    m_old_iface_var = m_pin->block_var()->get_iface_variable();
+    m_pin_old_var = m_pin->pin_name();
+
+    m_old_iface_var = m_pin->block_variable()->get_iface_variable();
 
     if (m_opposite_pin)
     {
-        m_opposite_old_var = m_opposite_pin->formal_param();
+        m_opposite_old_var = m_opposite_pin->pin_name();
     }
 }
 
@@ -49,13 +50,14 @@ void CPinRename::redo()
     {
         if (m_iface_var)
         {
-            m_pin->set_iface_variable(m_iface_var);
+            m_pin->set_pin_name(m_iface_var->name());
+            m_pin->block_variable()->set_iface_variable(m_iface_var);
         }
 
         else
         {
-            m_pin->set_formal_param(m_pin_var);
-            m_opposite_pin->set_formal_param(m_opposite_var);
+            m_pin->set_pin_name(m_pin_var);
+            m_opposite_pin->set_pin_name(m_opposite_var);
             m_opposite_pin->parent()->update_bound_rect();
         }
     }
@@ -72,26 +74,26 @@ void CPinRename::undo()
 
         if (m_pin->direction() == PD_OUTPUT)
         {
-            m_pin->remove_opposite(m_opposite_pin);
-            m_opposite_pin->set_opposite_pin(nullptr);
+            m_pin->output()->remove_connection(m_opposite_pin->input());
+            m_opposite_pin->input()->disconnect();
         }
         else
         {
-            m_opposite_pin->remove_opposite(m_pin);
-            m_pin->set_opposite_pin(nullptr);
+            m_opposite_pin->output()->remove_connection(m_pin->input());
+            m_pin->input()->disconnect();
         }
     }
     else
     {
         if (m_iface_var)
         {
-            m_pin->set_iface_variable(m_old_iface_var);
+            m_pin->block_variable()->set_iface_variable(m_old_iface_var);
         }
 
         else
         {
-            m_pin->set_formal_param(m_pin_old_var);
-            m_opposite_pin->set_formal_param(m_opposite_old_var);
+            m_pin->set_pin_name(m_pin_old_var);
+            m_opposite_pin->set_pin_name(m_opposite_old_var);
             m_opposite_pin->parent()->update_bound_rect();
 
         }

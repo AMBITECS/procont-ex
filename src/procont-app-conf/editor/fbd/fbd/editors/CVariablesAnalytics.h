@@ -6,13 +6,13 @@
 #define EDITORSD_CVARIABLESANALYTICS_H
 
 #include "../../plc-xml/CInterface.h"
-#include "../graphics/CConnectorPin.h"
 #include "../../plc-xml/common/CPou.h"
 #include "../variables.h"
 #include "CFilter.h"
 #include "../../plc-xml/common/CUserType.h"
 #include "../../plc-xml/common/types/CArray.h"
 #include "../../../../iec/StandardLibrary.h"
+#include "editor/fbd/fbd/graphics/CPin.h"
 
 class COglWorld;
 
@@ -23,6 +23,8 @@ struct s_tree_item
     uint16_t  id_parent{0};
     std::string name;
     std::string type;
+    CVariable   * iface_variable{nullptr};
+    CPin *  opposite_pin{nullptr};
 };
 
 struct s_compare_types
@@ -42,7 +44,7 @@ public:
      * @param pin
      * @return
      */
-    std::vector<s_tree_item>   query(CConnectorPin     * pin);
+    std::vector<s_tree_item>   query(CPin     * pin);
 
     /**
      * @brief returns editing diagram POU variables for object correct naming
@@ -51,13 +53,14 @@ public:
      */
     std::vector<std::pair<QString, EDefinedDataTypes>> get_interface_variables();
 
-    void    bind_pins(CDiagramObject *object);
+    /// find pin connections
+//    void    bind_pins(CPin *pin);
 
     /** @brief найти и назначить новую переменную */
-    bool find_target(const std::string &variable, CConnectorPin **pin, CVariable ** iface_var);
+    //bool find_target(const std::string &variable, CPin **pin, CVariable ** iface_var);
 
-
-    void setup_block(CBlock *block);   //!< выяснить типы входов/выходов
+    /** @brief выяснить типы входов/выходов а если на входе висит соединение, то и его распутаем */
+    void setup_block(CBlock *block);
 
     /**
      * @brief проверка пинов на возможность соединения на предмет их типов. Если задано строгое соответствие,
@@ -72,33 +75,39 @@ public:
     std::vector<CPou*> * pou_array();
     CBlock  get_block(const QString &block_type_name);
 
+    bool  connect_pin(CPinIn * input, bool &found, CBlockVar ** opposite_out);  //!< возврат true - означает системную или другую серьёзную ошибку
+
 private:
 
     COglWorld           * m_world;
-    CPou                * m_diag_pou{nullptr};
-    CInterface          * m_interface{nullptr};
+    CPou                * m_diagram_pou{nullptr};
+    CInterface          * m_diagram_interface{nullptr};
     std::vector<CPou*>  * m_pou_array;
+    std::vector<CVariable*> * m_global_variables;
     QDomNode            * m_pous;
     std::vector<CUserType*> *m_types;
     StandardLibrary     * m_standard_library;
 
+    std::vector<std::tuple<CBlockVar*, CBlock*, CBlockVar*>>  m_graph_connections;
+
 
     void clear_pous();
-    void define_variables_sets();  //!< сформировать структуры возможных источников данных для назначения на вход/выход блоков
     void clear_variable_sets();
     static void  copy_vars(QList<CVariable*> *variables, std::vector<std::pair<QString, EDefinedDataTypes>> *map);
 
-    bool find_chine(CConnectorPin *&p_pin);
-    bool find_input_data(CConnectorPin *pin);
-    bool find_output_data(CConnectorPin *pin);
-    // bool find_in_out_data(CConnectorPin *pin);
+    //bool find_chine(CPinIn *&p_pin);
+    bool find_input_data(CBlockVar *pin);
+    //bool find_output_data(CPin *pin);
+
+    /** @brief обновить данные, которые с течением времени могли измениться */
+    void update_arrays();
 
 
-    void collect_pins_data(std::vector<s_tree_item> &tree_items, CConnectorPin *pin);
+    void collect_pins_data(std::vector<s_tree_item> &tree_items, CPin *pin);
 
-    std::vector<s_tree_item> find_fbd_inputs_collection(CFbdContent *body_content, CConnectorPin *pin, uint16_t &id);
+    std::vector<s_tree_item> find_fbd_inputs_collection(CFbdContent *body_content, CPin *pin, uint16_t &id);
 
-    std::vector<s_tree_item> find_fbd_outputs_collection(CFbdContent *body_content, CConnectorPin *pin, uint16_t &id);
+    std::vector<s_tree_item> find_fbd_outputs_collection(CFbdContent *body_content, CPin *pin, uint16_t &id);
 
 
     static bool check_variables(CBlockVar *pin, const int &dir, CInterface *iface);
@@ -112,6 +121,7 @@ private:
     bool get_library_type_data(CBlock *block, const QString &standard_type_name);
 
     //CVariable* find_var(CBlockVar *pin, CInterface *standard_iface);
+    bool get_input_source(CBlockVar *block_var, CInVariable * in_variable);
 };
 
 

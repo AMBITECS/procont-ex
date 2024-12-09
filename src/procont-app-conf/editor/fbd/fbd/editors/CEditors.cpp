@@ -69,7 +69,7 @@ void CEditors::show_line_edit(CDiagramObject *obj)
     m_diagram_object = obj;
 }
 
-void CEditors::show_combo(CConnectorPin *pin)
+void CEditors::show_combo(CPin *pin)
 {
     if (m_pin_var_editor->isVisible())
     {
@@ -78,8 +78,9 @@ void CEditors::show_combo(CConnectorPin *pin)
 
     m_pin = pin;
 
-    auto model_data = m_var_analytics->query(pin);
-    m_model->set_data(&model_data);
+    combo_data = m_var_analytics->query(pin);
+
+    m_model->set_data(&combo_data);
     m_pin_var_editor->setModel(m_model);
     m_pin_var_editor->expandAll();
 
@@ -163,16 +164,33 @@ void CEditors::pin_edit_cancel()
 void CEditors::pin_new_variable(const QString &var_name)
 {
     /// find opposite side of the variable
-    CConnectorPin *opposite_pin = nullptr;
+    CPin *opposite_pin = nullptr;
     CVariable   *iface_var = nullptr;
     QString opposite_var_name;
 
-    if (!var_name.contains("["))
+    /*if (!var_name.contains("["))
     {
         if (!m_var_analytics->find_target(var_name.toStdString(), &opposite_pin, &iface_var))
         {
             throw std::runtime_error("What the fuck in 'CEditors::pin_new_variable'");
         }
+    }*/
+
+    for (auto &item : combo_data)
+    {
+        if (item.name == var_name.toStdString())
+        {
+            opposite_pin = item.opposite_pin;
+            iface_var = item.iface_variable;
+            opposite_var_name = opposite_pin ? opposite_pin->type_name() : iface_var->type();
+
+            break;
+        }
+    }
+
+    if (!opposite_pin && !iface_var)
+    {
+        throw std::runtime_error("Can't opposite connection be null in 'void CEditors::pin_new_variable(const QString &var_name)'");
     }
 
     auto cmd_pin_var = new CPinRename(m_world, m_pin, var_name,

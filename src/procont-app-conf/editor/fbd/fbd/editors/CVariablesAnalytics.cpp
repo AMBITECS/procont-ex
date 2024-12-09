@@ -19,10 +19,14 @@ CVariablesAnalytics::CVariablesAnalytics(COglWorld *world)
     m_pou_array = new std::vector<CPou*>();
     m_pous = new QDomNode(world->m_pou->sourceDomNode()->parentNode());
     m_types = new std::vector<CUserType*>();
+    m_global_variables = new std::vector<CVariable*>();
 
     m_standard_library = StandardLibrary::instance();
 
-    define_variables_sets();
+    m_diagram_pou = m_world->m_pou;
+    m_diagram_interface = m_diagram_pou->interface();
+
+    update_arrays();
 }
 
 CVariablesAnalytics::~CVariablesAnalytics()
@@ -31,10 +35,11 @@ CVariablesAnalytics::~CVariablesAnalytics()
     delete m_pou_array;
     delete m_pous;
     delete m_types;
-    //delete m_standard_library;
+    delete m_global_variables;
+
 }
 
-std::vector<s_tree_item> CVariablesAnalytics::query(CConnectorPin *pin)
+std::vector<s_tree_item> CVariablesAnalytics::query(CPin *pin)
 {
     if (!pin)
     {
@@ -52,13 +57,13 @@ std::vector<std::pair<QString, EDefinedDataTypes>> CVariablesAnalytics::get_inte
 {
     std::vector<std::pair<QString, EDefinedDataTypes>> existing;
 
-    copy_vars(m_interface->in_out_variables()->variables(), &existing);
-    copy_vars(m_interface->input_variables()->variables(), &existing);
-    copy_vars(m_interface->output_variables()->variables(), &existing);
-    copy_vars(m_interface->local_variables()->variables(), &existing);
-    copy_vars(m_interface->global_variables()->variables(), &existing);
-    copy_vars(m_interface->access_variables()->variables(), &existing);
-    copy_vars(m_interface->external_variables()->variables(), &existing);
+    copy_vars(m_diagram_interface->in_out_variables()->variables(), &existing);
+    copy_vars(m_diagram_interface->input_variables()->variables(), &existing);
+    copy_vars(m_diagram_interface->output_variables()->variables(), &existing);
+    copy_vars(m_diagram_interface->local_variables()->variables(), &existing);
+    copy_vars(m_diagram_interface->global_variables()->variables(), &existing);
+    copy_vars(m_diagram_interface->access_variables()->variables(), &existing);
+    copy_vars(m_diagram_interface->external_variables()->variables(), &existing);
 
     return existing;
 }
@@ -72,53 +77,65 @@ void CVariablesAnalytics::clear_pous()
     m_pou_array->clear();
 }
 
-void CVariablesAnalytics::define_variables_sets()
+void CVariablesAnalytics::update_arrays()
 {
-    m_diag_pou = m_world->m_pou;
+    if (m_pous->isNull())
+    {
+        throw std::runtime_error("Can't work with empty QDomNode in 'void CVariablesAnalytics::update_arrays()'");
+    }
+
+    /// pous
+    for (auto &pou : *m_pou_array)
+        delete pou;
+    m_pou_array->clear();
+
+    int pous_amount = m_pous->childNodes().count();
+    for (int i = 0; i < pous_amount; i++)
+    {
+        auto pou_node = m_pous->childNodes().at(i);
+
+        auto pou_name = pou_node.attributes().namedItem(xmln::name).toAttr().value();
+        if (pou_name == m_diagram_pou->name())
+        {
+            continue;
+        }
+
+        auto pou = new CPou(pou_node);
+        m_pou_array->push_back(pou);
+    }
 
     /// load user defined variables
-    if (!m_pous->isNull())
+    auto types = m_pous->parentNode();
+
+    for (auto &item : *m_types)
+        delete item;
+    m_types->clear();
+
+    // check node is "types" name
+    if (types.nodeName() == (QString)xmln::types_node)
     {
-        auto types = m_pous->parentNode();
+        auto users_types = types.namedItem(xmln::datatypes);
 
-        // check node is "types" name
-        if (types.nodeName() == (QString)xmln::types_node)
+        for (int i = 0; i < users_types.childNodes().count(); i++)
         {
-            auto users_types = types.namedItem(xmln::datatypes);
-
-            for (int i = 0; i < users_types.childNodes().count(); i++)
-            {
-                auto type = users_types.childNodes().at(i);
-                auto utype = CUserType::get_user_type(type);
-                auto user_type = CUserType::get_user_type(utype, &type);
-                m_types->push_back(user_type);
-            }
+            auto type = users_types.childNodes().at(i);
+            auto utype = CUserType::get_user_type(type);
+            auto user_type = CUserType::get_user_type(utype, &type);
+            m_types->push_back(user_type);
         }
     }
 
-
-    /// get pou instances
-    if (!m_pous->isNull())
+    /// global variables
+    m_global_variables->clear();
+    for (auto &pou : *m_pou_array)
     {
-        int pous_amount = m_pous->childNodes().count();
-        for (int i = 0; i < pous_amount; i++)
+        auto iface = pou->interface();
+
+        for (auto &var : *iface->global_variables()->variables())
         {
-            auto pou_node = m_pous->childNodes().at(i);
-
-            auto pou_name = pou_node.attributes().namedItem(xmln::name).toAttr().value();
-            if (pou_name == m_diag_pou->name())
-            {
-                continue;
-            }
-
-            auto pou = new CPou(pou_node);
-            m_pou_array->push_back(pou);
+            m_global_variables->push_back(var);
         }
     }
-
-    /// interface instance;
-    m_interface = m_diag_pou->interface();
-
 }
 
 void CVariablesAnalytics::clear_variable_sets()
@@ -141,151 +158,98 @@ void CVariablesAnalytics::copy_vars(QList<CVariable *> *variables,
     }
 }
 
-void CVariablesAnalytics::bind_pins(CDiagramObject *object)
+bool CVariablesAnalytics::find_input_data(CBlockVar *input)
 {
-    for (auto &pin : *object->pins())
-    {
-        find_chine(pin);
-    }
-}
+    /// возможные варианты:<br>
+    /// - пин пустой и ни к чему не привязан<br>
+    /// - на пине сидит константа<br>- на пине графическая связь с другим блоком<br>
+    /// - пин привязан к интерфейсной переменной<br>- пин привязан к глобальной переменной (сканить все POU на предмет
+    ///   глобальных переменных)<br>- пин привязан к переменной из программного POU (пока не обрабатывается)<br>
+    /// Эти варианты годны при выполнении одного из двух условий при reference_local_id > 0:<br>
+    /// - в содержимом CBody находитсяCInVariable c соответствущим local_id от которой идёт связь на другие ресурсы (выше)<br>
+    /// -в содержимом CBody находится CBlock с соответствующим local_id для графической связи
 
-bool CVariablesAnalytics::find_chine(CConnectorPin *&p_pin)
-{
-    if (m_diag_pou->bodies()->empty())
+    //CBody * body = m_diagram_pou->bodies()->front();
+    CInVariable *in_variable = nullptr;
+    CInOutVariable *in_out_variable = nullptr;
+
+    uint64_t pin_ref_id = input->ref_local_id();
+    //QString formal_param = input->formal_parameter();
+
+    /// 1. pin is empty. Returning
+    if (pin_ref_id == 0)
     {
-        throw std::runtime_error("not prepared data in 'CVariablesAnalytics::find_chine'");
+        return false;
     }
 
-    /// search output variables in the body if connection by VARIABLE (not graphics)
-    switch (p_pin->direction())
+    /// ищем выполнения одного из двух условий: в теле CBody есть CInVariable или соединение с блоком
+    bool is_var = m_diagram_pou->find_body_input_variable(pin_ref_id, &in_variable, &in_out_variable);
+
+    /// если это условие не выполнилось, значит графическая связь с блоком
+    if (!is_var)
     {
-        case PD_INPUT:
-            if (find_input_data(p_pin))
+        CBlock *block = nullptr;
+        CBlockVar * out_var = nullptr;
+        bool res = m_diagram_pou->find_block_connecting_info(pin_ref_id, input->point_in()->formal_param(),
+                                                             &block, &out_var);
+
+        /// если и тут мимо - ошибка в проекте или в системе загрузки проекта
+        if (!res)
+        {
+            throw std::runtime_error("none of 2 conditions are correct in 'bool CVariablesAnalytics::find_input_data(CPin *p_in)'");
+        }
+
+        /// надо где-то сохранить информацию для графического соединения и эту инфу можем сохранить либо в пине
+        /// либо в CBlockVar пина, либо в каком-то специальном месте. Последнее приятнее чем мусорить в пине или в CBlockVar
+        m_graph_connections.emplace_back(input, block, out_var);
+        return true;
+    }
+
+    /// возможные варианты:<br>- в 'CInVariable' сидит константа<br>- в CInVariable сидит ссылка на интерфейсную
+    /// переменную local interface, global variable or iface var of the program_pou<br>
+    /// - в CInOutVariable сидит ссылка на что угодно с двух сторон. И наш input как-то относится к этому коню.
+    /// Отдельная тема
+
+    if (in_out_variable)
+    {
+        CBlockVar   * possible_block_var = nullptr;
+        CVariable   * possible_iface_var = nullptr;
+
+        bool in_out_done = m_diagram_pou->process_in_out(input, in_out_variable,
+                                                         &possible_block_var,
+                                                         &possible_iface_var);
+        if (in_out_done)
+        {
+            if (possible_block_var)
             {
-                return true;
+                m_graph_connections.emplace_back(input, possible_block_var->parent(), possible_block_var);
             }
-            break;
-        case PD_OUTPUT:
-            if (find_output_data(p_pin))
+            if (possible_iface_var)
             {
-                return true;
+                input->set_iface_variable(possible_iface_var);
             }
-            break;
-        case PD_IN_OUT:
-            /*if (find_in_out_data(p_pin))
-            {
-                return true;
-            }*/
-            break;
-        default:
-            return false;
-    }
-
-    /// we are here. It means graphics connection between blocks
-    auto pin_ref_id = p_pin->ref_local_id();
-    auto body = m_diag_pou->bodies()->front();
-
-    for (auto &block : *body->fbd_content()->blocks())
-    {
-        if (block->local_id() != pin_ref_id)
-        {
-            continue;
-        }
-
-        /// find our output
-        std::string inp_expr = p_pin->block_var()->point_in()->formal_param().toStdString();
-        CFilter::capitalize_word(inp_expr);
-        for (auto &block_var : *block->output_variables())
-        {
-            auto var_express = block_var->formal_parameter().toStdString();
-            CFilter::capitalize_word(var_express);
-            if (var_express != inp_expr)
-            {
-                continue;
-            }
-
-            QString pin_text = block->instance_name().isEmpty() ? block->type_name() + "_" + QString::number(block->local_id()) :
-                               block->instance_name();
-            pin_text += "." + block_var->formal_parameter();
-            pin_text = "";
-            p_pin->set_graphic_base(block->local_id(), block_var, pin_text);
-            return true;
-        }
-
-        ///< hmm. block is found, but output is none. I think it is library from beremiz and project from OpenPLC
-        fprintf(stderr, "Block is found, but no output was found in 'CVariablesAnalytics::find_chine'\n");
-        throw std::runtime_error("Block is found, but no output was found in 'CVariablesAnalytics::find_chine'");
-    }
-
-    /// empty pin
-    return false;
-}
-
-bool CVariablesAnalytics::find_input_data(CConnectorPin *pin)
-{
-    auto body = m_diag_pou->bodies()->front();
-    auto pin_ref_id = pin->ref_local_id();
-
-    bool is_constant = true;
-
-    for (auto &in : *body->fbd_content()->inVariables())
-    {
-        auto in_local_id = in->local_id();
-        if (in_local_id != pin_ref_id)
-        {
-            continue;
-        }
-
-        /// наличие в пине in_variable и отсутствие iface_variable означает что in_variable - константа
-        pin->set_in_variable(in);
-
-        QString expression = in->expression()->expression();
-
-        for (auto &var: m_diag_pou->interface()->all_variables())
-        {
-            if (var->name() != expression)
-            {
-                continue;
-            }
-            /// есть таки iface_variable, значит не константа
-            pin->set_iface_variable(var);
-            is_constant = false;
-        }
-
-        if (!is_constant)
-        {
-            return true;
-        }
-
-        std::string expr = in->expression()->expression().toStdString();
-        auto df_type = CFilter::get_type_from_const(expr);
-        pin->set_type(base_types_names[df_type]);
-    }
-    return false;
-}
-
-bool CVariablesAnalytics::find_output_data(CConnectorPin *pin)
-{
-    auto body = m_diag_pou->bodies()->front();
-
-    uint64_t block_id = pin->parent()->block()->local_id();
-    QString  pin_formal = pin->formal_param();
-
-    for (auto &out_var : *body->fbd_content()->out_variables())
-    {
-        uint64_t var_ref_id = out_var->point_in()->ref_local_id();
-        QString  var_formal_param = out_var->formal_parameter();
-
-        if (var_ref_id == block_id && var_formal_param == pin_formal)
-        {
-            pin->set_out_variable(out_var);
             return true;
         }
     }
-    return false;
+
+    if (get_input_source(input, in_variable))
+    {
+        return true;
+    }
+
+    std::string expr = in_variable->expression()->expression().toStdString();
+    EDefinedDataTypes df_type = CFilter::get_type_from_const(expr);
+
+    if (df_type == DDT_ANY_NUM)
+    {
+        return false;
+    }
+
+    input->set_constant(df_type, expr);
+    return true;
 }
 
-void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items, CConnectorPin *pin)
+void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items, CPin *pin)
 {
     uint16_t  id = 1;
     std::vector<s_tree_item> items;
@@ -294,7 +258,7 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
     CFilter filter(this);
 
     /// collecting interface variables
-    for (auto &var : m_diag_pou->interface()->all_variables())
+    for (auto &var : m_diagram_pou->interface()->all_variables())
     {
         if (var->name() == pin->parent()->instance_name())
         {
@@ -308,7 +272,7 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
 
         s_compare_types c_types;
 
-        bool check = check_pin_compatibility(pin->derived_type(),
+        bool check = check_pin_compatibility(pin->type_name(),
                                              pin->type(),
                                              var->type(),
                                              get_type_from_string(var->type().toStdString()),
@@ -324,12 +288,13 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
         item.id_parent = 0;
         item.name = var->name().toStdString();
         item.type = var->type().toStdString();
+        item.iface_variable = var;
 
         items.push_back(item);
     }
 
     /// collecting block's in/outs
-    for (auto &body : *m_diag_pou->bodies())
+    for (auto &body : *m_diagram_pou->bodies())
     {
         if (body->fbd_content())
         {
@@ -349,10 +314,8 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
 }
 
 std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdContent * /*body_content*/,
-                                                                         CConnectorPin *pin, uint16_t &id)
+                                                                         CPin *pin, uint16_t &id)
 {
-// TODO: later select only needed outputs, not all
-    //auto pin_type = pin->type();
 
     std::vector<s_tree_item> tree_items;
 
@@ -391,22 +354,22 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
                 }
 
                 /// info about local pin type
-                QString dragged_pin_type_name = pin->type() == DDT_DERIVED ? pin->derived_type() :
+                QString dragged_pin_type_name = pin->type() == DDT_DERIVED ? pin->type_name() :
                                                 base_types_names[pin->type()];
                 EDefinedDataTypes dragged_pin_type = pin->type();
 
                 /// info about alien pin type
-                QString target_pin_type_name = connector->type() == DDT_DERIVED ? connector->derived_type() :
+                QString target_pin_type_name = connector->type() == DDT_DERIVED ? connector->type_name() :
                                                base_types_names[connector->type()];
                 EDefinedDataTypes target_pin_type = connector->type();
 
                 s_compare_types compare_types;
                 bool res = check_pin_compatibility(
-                        dragged_pin_type_name,
-                        dragged_pin_type,
-                        target_pin_type_name,
-                        target_pin_type,
-                        compare_types);
+                                    dragged_pin_type_name,
+                                    dragged_pin_type,
+                                    target_pin_type_name,
+                                    target_pin_type,
+                                    compare_types);
 
                 if (!res)
                 {
@@ -418,7 +381,8 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
                 sub_item.id = id++;
                 sub_item.id_parent = item.id;
                 sub_item.type = target_pin_type_name.toStdString();
-                sub_item.name = connector->formal_param().toStdString();
+                sub_item.name = connector->type_name().toStdString();
+                sub_item.opposite_pin = connector;
 
                 tree_items.push_back(sub_item);
             }
@@ -430,11 +394,8 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
 }
 
 std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdContent * /*body_content*/,
-                                                                          CConnectorPin *pin, uint16_t &id)
+                                                                          CPin *pin, uint16_t &id)
 {
-    // TODO: later select only needed outputs, not all
-    //auto pin_type = pin->type();
-
     std::vector<s_tree_item> tree_items;
 
 
@@ -467,22 +428,22 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdCo
                 }
 
                 /// info about local pin type
-                QString dragged_pin_type_name = pin->type() == DDT_DERIVED ? pin->derived_type() :
+                QString dragged_pin_type_name = pin->type() == DDT_DERIVED ? pin->type_name() :
                                                 base_types_names[pin->type()];
                 EDefinedDataTypes dragged_pin_type = pin->type();
 
                 /// info about alien pin type
-                QString target_pin_type_name = connector->type() == DDT_DERIVED ? connector->derived_type() :
+                QString target_pin_type_name = connector->type() == DDT_DERIVED ? connector->type_name() :
                                                base_types_names[connector->type()];
                 EDefinedDataTypes target_pin_type = connector->type();
 
                 s_compare_types compare_types;
                 bool res = check_pin_compatibility(
-                        dragged_pin_type_name,
-                        dragged_pin_type,
-                        target_pin_type_name,
-                        target_pin_type,
-                        compare_types);
+                                dragged_pin_type_name,
+                                dragged_pin_type,
+                                target_pin_type_name,
+                                target_pin_type,
+                                compare_types);
 
                 if (!res)
                 {
@@ -494,7 +455,8 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdCo
                 sub_item.id = id++;
                 sub_item.id_parent = item.id;
                 sub_item.type = target_pin_type_name.toStdString();
-                sub_item.name = connector->formal_param().toStdString();
+                sub_item.name = connector->pin_name().toStdString();
+                sub_item.opposite_pin = pin;
 
                 tree_items.push_back(sub_item);
             }
@@ -505,7 +467,7 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdCo
     return tree_items;
 }
 
-bool CVariablesAnalytics::find_target(const std::string &variable, CConnectorPin **pin, CVariable ** iface_var)
+/*bool CVariablesAnalytics::find_target(const std::string &variable, CPin **pin, CVariable ** iface_var)
 {
     /// define names
     auto pos = variable.find('.');
@@ -515,7 +477,7 @@ bool CVariablesAnalytics::find_target(const std::string &variable, CConnectorPin
     /// search target in interface
     CFilter filter(this);
 
-    for (auto &var : m_interface->all_variables())
+    for (auto &var : m_diagram_interface->all_variables())
     {
         if (filter.filter_string(var->type().toStdString(), FilterFlags::ff_base_types | ff_user_types))
         {
@@ -544,7 +506,7 @@ bool CVariablesAnalytics::find_target(const std::string &variable, CConnectorPin
 
             for (auto &connector : *obj->pins())
             {
-                if (connector->formal_param().toStdString() != pin_name )
+                if (connector->pin_name().toStdString() != pin_name )
                 {
                     continue;
                 }
@@ -555,11 +517,11 @@ bool CVariablesAnalytics::find_target(const std::string &variable, CConnectorPin
     }
 
     return false;
-}
+}*/
 
 CInterface *CVariablesAnalytics::local_pou_interface()
 {
-    return m_interface;
+    return m_diagram_interface;
 }
 
 std::vector<CUserType *> *CVariablesAnalytics::user_types()
@@ -574,25 +536,8 @@ std::vector<CPou *> *CVariablesAnalytics::pou_array()
 
 void CVariablesAnalytics::setup_block(CBlock *block)
 {
-    /// for single usage only
-    {
-        QStringList lib_pous = m_standard_library->objects();
-//
-        QFile file("lib_pous.txt");
-        file.open(QIODevice::WriteOnly);
-//
-        QTextStream qout(&file);
-//
-        for (auto &txt: lib_pous)
-        {
-            qout << txt << "\n";
-        }
-//
-        file.close();
-    }
-
-    bool is_object_pou = false;
-    /// define source: libraries, POU
+    bool is_pou_data = false;
+    /// define is source is POU
     for (auto &pou : *m_pou_array)
     {
         if (pou->is_empty() || pou->interface()->is_empty())
@@ -600,59 +545,89 @@ void CVariablesAnalytics::setup_block(CBlock *block)
             continue;
         }
 
-        /// well it is our pou
-        auto o_type = block->type_name();
-        auto p_name = pou->name();
-        bool not_found = true;
 
-        if (o_type == p_name)
+        auto block_type = block->type_name();
+        auto pou_name = pou->name();
+        bool not_found = false;
+
+        /// well it is our pou
+        if (block_type == pou_name)
         {
             for (auto &pin : *block->input_variables())
             {
-                check_variables(pin, -1, pou->interface());
+                if (!check_variables(pin, -1, pou->interface()))// -1 input; 0 - in-out; 1 - out
+                    not_found = true;
             }
 
             for (auto &pin : *block->output_variables())
             {
-                check_variables(pin, 1, pou->interface());
+                if (!check_variables(pin, 1, pou->interface()))// -1 input; 0 - in-out; 1 - out
+                    not_found = true;
             }
             for (auto &pin : *block->in_out_variables())
             {
-                check_variables(pin, 0, pou->interface());
+                if (!check_variables(pin, 0, pou->interface()))// -1 input; 0 - in-out; 1 - out
+                    not_found = true;
             }
 
-//            if (not_found) // -1 input; 0 - in-out; 1 - out
-//            {
-//                throw std::runtime_error("logic broken in 'CVariablesAnalytics::setup_block'");
-//            }
+            /// if not found is wrong POU or my logic
+            if (not_found)
+            {
+                throw std::runtime_error("logic broken in 'CVariablesAnalytics::setup_block'");
+            }
 
-            is_object_pou = true;
+            is_pou_data = true;
+        }
+
+        if (is_pou_data)
+        {
             break;
         }
     }
 
-    if (is_object_pou)
-        return;
-
-    /// well, it's library. Not available now (later)
-    for (auto &std_type : m_standard_library->objects())
+    if (!is_pou_data)
     {
-        if (std_type == block->type_name())
+        /// well, it's library.
+        for (auto &std_type : m_standard_library->objects())
         {
+            if (std_type != block->type_name())
+            {
+                continue;
+            }
+
             if (!get_library_type_data(block, std_type))
             {
                 throw std::runtime_error("тогда что это может быть???");
             }
+            break;
         }
     }
-    //    if (!is_object_pou)
-//    {
-//        for (auto &pin : *block->pins())
-//        {
-//            pin->set_type("ANY_NUM");
-//        }
-//    }
 
+    /// in-outs and in into the single array
+    std::vector<CBlockVar*> inputs;
+    if (!block->in_out_variables()->empty())
+    {
+        inputs.insert(inputs.end(), block->in_out_variables()->begin(),
+                      block->in_out_variables()->end());
+    }
+    if (!block->input_variables()->empty())
+    {
+        inputs.insert(inputs.end(), block->input_variables()->begin(),
+                      block->input_variables()->end());
+    }
+    /// if here all pins has type. Lets define connection
+    for (auto &in : inputs)
+    {
+        if (in->point_in()->is_empty())
+        {
+            continue;
+        }
+
+        if (!find_input_data(in))
+        {
+            throw std::runtime_error("connecting failed in 'void CVariablesAnalytics::setup_block(CBlock *block)'");
+        }
+    }
 }
 
 bool CVariablesAnalytics::check_variables(CBlockVar *pin, const int &dir, CInterface *iface)
@@ -919,18 +894,6 @@ bool CVariablesAnalytics::get_library_type_data(CBlock *block, const QString &st
     return true;
 }
 
-//CVariable* CVariablesAnalytics::find_var(CBlockVar *pin, CInterface *standard_iface)
-//{
-//    for (auto &var : standard_iface->all_variables())
-//    {
-//        if (var->name() == pin->formal_parameter())
-//        {
-//            pin->set_iface_variable(var);
-//            return var;
-//        }
-//    }
-//    return nullptr;
-//}
 
 CBlock CVariablesAnalytics::get_block(const QString &block_type_name)
 {
@@ -946,3 +909,80 @@ CBlock CVariablesAnalytics::get_block(const QString &block_type_name)
 
     return block;
 }
+
+bool CVariablesAnalytics::get_input_source(CBlockVar *block_var, CInVariable * in_variable)
+{
+    QString expression = in_variable->expression()->expression();//block_var->point_in()->expression();
+
+    for (auto &var: m_diagram_pou->interface()->all_variables())
+    {
+        if (var->name() != expression)
+        {
+            continue;
+        }
+        /// есть таки iface_variable, значит не константа
+        block_var->set_iface_variable(var);
+
+        return true;
+    }
+
+    /// глянем в глобальных переменных
+    for (auto &glob_var : *m_global_variables)
+    {
+        if (glob_var->name() != expression)
+        {
+            continue;
+        }
+        block_var->set_iface_variable(glob_var);
+        return true;
+    }
+
+    /// осталось одно место: в интерфейсе программных POU
+    for (auto pou : *m_pou_array)
+    {
+        if (pou->type() != "program" || pou->is_empty())
+        {
+            continue;
+        }
+
+        CInterface * iface = pou->interface();
+
+        for (auto &iface_var : iface->all_variables())
+        {
+            if (iface_var->name() != expression)
+            {
+                continue;
+            }
+
+            block_var->set_iface_variable(iface_var);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool CVariablesAnalytics::connect_pin(CPinIn *input, bool &found, CBlockVar ** opposite_out)
+{
+    /// connection data
+    CBlockVar * some_input;
+    CBlock    * opposite_block;
+    found = false;
+
+    if (m_graph_connections.empty())
+    {
+        return true;
+    }
+
+    for (auto &tup : m_graph_connections)
+    {
+        std::tie(some_input, opposite_block, *opposite_out) = tup;
+        if (some_input == input->block_variable())
+        {
+            found = true;
+            break;
+        }
+    }
+
+    return false;
+}
+

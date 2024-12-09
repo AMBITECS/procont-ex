@@ -39,11 +39,12 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
     m_diagram_type = EBodyType::BT_COUNT;
 
     m_editors   = new CEditors(openGLwidget, this, pou->sourceDomNode());
-    connect(m_editors, &CEditors::interface_new_var,
-            [this](const QString &t, const QString &n){ iface_new_var(t, n); });
 
-    connect(m_editors, &CEditors::interface_rename,
-            [this](const QString &o, const QString &n){ iface_rename(o, n); });
+    connect(m_editors, &CEditors::interface_new_var, this, &COglWorld::iface_new_var);
+
+
+    connect(m_editors, &CEditors::interface_rename, this, &COglWorld::iface_rename);
+
 
     connect(m_editors, &CEditors::pin_variable_renamed,
             this, &COglWorld::pin_variable_rename);
@@ -167,7 +168,7 @@ s_selection COglWorld::get_selection(const QPoint &pos)
 
             for (auto &pin : *obj->pins())
             {
-                if (!pin->pin_here(pos))
+                if (!pin->is_pin_at_pos(pos))
                 {
                     continue;
                 }
@@ -321,7 +322,7 @@ void COglWorld::load_project()
         auto object = cur_ladder->add_object(block);
 
 
-        analytics.bind_pins(object);
+        //analytics.bind_pins(object);
 
         object->update_bound_rect();
         object->update_position();
@@ -350,31 +351,47 @@ void COglWorld::load_project()
 
     /// draw connecting lines
     CGraphicsLogic connect_logic;
+    CBlockVar * opposite_out;
+
     for (auto &ladder : *m_ladders)
     {
         for (auto &obj : *ladder->draw_components())
         {
-            for (auto &pin : *obj->pins())
+            for (auto &pin : *obj->inputs())
             {
-                if (pin->graphic_connection_base()->block_local_id == 0)
+                bool is_found;
+                bool error = analytics.connect_pin(pin, is_found, &opposite_out);
+
+                if (!is_found || error)
                 {
                     continue;
                 }
 
-                /// this pin has to be connected to the other pin. Find him.
-                CConnectorPin * opposite_pin = find_opposite_pin(pin);
-
-                if (opposite_pin->parent()->parent() != pin->parent()->parent())
+                /// search diagram object
+                for (auto &diag_obj : *obj->parent()->draw_components())
                 {
-                    // FIXME: возможно на этот пин нужно что-нить повесить
-                    break;
-                }
+                    if (diag_obj->block() != opposite_out->parent())
+                    {
+                        continue;
+                    }
+                    bool is_done = false;
+                    for (auto &out : *diag_obj->outputs())
+                    {
+                        if (out->block_variable() != opposite_out)
+                        {
+                            continue;
+                        }
+                        CConnectLine * line = connect_logic.add_new_line(pin, out);
+                        pin->parent()->parent()->add_line(line);
 
-                CConnectLine * line = connect_logic.add_new_line(pin, opposite_pin);
+                        is_done = true;
+                        break;
+                    }
 
-                if (line)
-                {
-                    pin->parent()->parent()->add_line(line);
+                    if (is_done)
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -400,7 +417,7 @@ void COglWorld::load_later()
     if (m_ladders->empty())
     {
         CLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
-        auto last = new CLadder(m_hatch_topLeft, &m_hatch_size, prev);
+        auto last = new CLadder(this,m_hatch_topLeft, &m_hatch_size, prev);
 
         m_ladders->push_back(last);
         if (prev)
@@ -516,7 +533,7 @@ CLadder *COglWorld::get_ladder(const unsigned long &id_ladder)
 
         for (auto i = ind; i < (id_ladder + 1); i++)
         {
-            ladder = new CLadder(m_hatch_topLeft, &m_hatch_size, prev);
+            ladder = new CLadder(this, m_hatch_topLeft, &m_hatch_size, prev);
 
             if (prev)
             {
@@ -707,7 +724,7 @@ void COglWorld::pin_variable_rename()
     emit undo_enabled();
 }
 
-bool COglWorld::check_pins_to_connection(CConnectorPin *target_pin, s_compare_types &comparable_types)
+bool COglWorld::check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types)
 {
     if (!m_drag_pin || (target_pin == m_drag_pin))
     {
@@ -723,12 +740,12 @@ bool COglWorld::check_pins_to_connection(CConnectorPin *target_pin, s_compare_ty
     }
 
     /// info about dragged pin type
-    QString dragged_pin_type_name = m_drag_pin->type() == DDT_DERIVED ? m_drag_pin->derived_type() :
+    QString dragged_pin_type_name = m_drag_pin->type() == DDT_DERIVED ? m_drag_pin->type_name() :
                                                 base_types_names[m_drag_pin->type()];
     EDefinedDataTypes dragged_pin_type = m_drag_pin->type();
 
     /// info about target pin type
-    QString target_pin_type_name = target_pin->type() == DDT_DERIVED ? target_pin->derived_type() :
+    QString target_pin_type_name = target_pin->type() == DDT_DERIVED ? target_pin->type_name() :
                                         base_types_names[target_pin->type()];
     EDefinedDataTypes target_pin_type = target_pin->type();
 
@@ -756,7 +773,7 @@ bool COglWorld::check_pins_to_connection(CConnectorPin *target_pin, s_compare_ty
     return res;
 }
 
-void COglWorld::connect_pins(CConnectorPin *dragged_pin, CConnectorPin *target_pin)
+void COglWorld::connect_pins(CPin *dragged_pin, CPin *target_pin)
 {
     /// if pin ladders are the same - graphic connection
     if (dragged_pin->parent()->parent() == target_pin->parent()->parent())
@@ -767,35 +784,6 @@ void COglWorld::connect_pins(CConnectorPin *dragged_pin, CConnectorPin *target_p
     }
 
     emit undo_enabled();
-}
-
-CConnectorPin *COglWorld::find_opposite_pin(CConnectorPin *f_pin)
-{
-    // auto ladder = f_pin->parent()->parent();
-    auto base = f_pin->graphic_connection_base();
-
-    for (auto &ladder : *m_ladders)
-    {
-        for (auto &obj : *ladder->draw_components())
-        {
-            if (base->block_local_id != obj->block()->local_id())
-            {
-                continue;
-            }
-
-            for (auto &pin : *obj->pins())
-            {
-                if (base->block_var == pin->block_var())
-                {
-                    return pin;
-                }
-            }
-        }
-    }
-
-    throw std::runtime_error("can't find opposite pin in 'COglWorld::find_opposite_pin'");
-
-    return nullptr;
 }
 
 /*QPoint COglWorld::start_drag_point() const

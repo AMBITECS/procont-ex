@@ -1,6 +1,6 @@
 ### Todo
 queue to `In progress...`
-- start graphical connecting components.
+
 - tuning
   - scaling support
   - put POUs into the `components palette`
@@ -8,7 +8,7 @@ queue to `In progress...`
   - Multiselect support
 - refactoring
 - Adapt the class diagram and data flow in `UML` to the final form
-- there are the rudiments of a design theme support system. It may be worth developing them.
+
 
 ### In progress...
 - new/edit/reset variables on the components inputs/outputs
@@ -30,3 +30,9 @@ queue to `In progress...`
 - Полная поддержка drag-drop выбранных объектов (без множественного выбора)
 - realize `localId` to get current max `localId` everywhere. Seems to be `extern`.
 - undo/redo via `Qt's Undo Framework` (с добавлением функционала undo/redo будет пополняться)
+- graphical connecting components.
+- тёмная и светлая темы. Определяется автоматически. Выставлять вручную нельзя (пока) 
+
+### не забыть
+ очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько 
+ (по стандарту, но не факт что так будет)

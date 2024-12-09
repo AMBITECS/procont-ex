@@ -60,7 +60,7 @@ void CInsertNewLadder::insert()
 
     if (!m_new_ladder)
     {
-        m_new_ladder = new CLadder(m_ogl_world->m_hatch_topLeft,
+        m_new_ladder = new CLadder(m_ogl_world, m_ogl_world->m_hatch_topLeft,
                                    &m_ogl_world->m_hatch_size,
                                    prev,
                                    m_next);

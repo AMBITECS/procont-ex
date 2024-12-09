@@ -8,7 +8,7 @@
 #include <QLine>
 #include <QList>
 #include <QColor>
-#include "CConnectorPin.h"
+#include "CPin.h"
 
 #define  DIFFERENCE 2   //!< +- pixels for selecting line
 

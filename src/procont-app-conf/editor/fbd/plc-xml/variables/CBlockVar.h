@@ -11,6 +11,9 @@
 #include "../CConnectionPointOut.h"
 #include "CVariable.h"
 
+
+class CBlock;
+
 enum EPinDirection
 {
     PD_INPUT,
@@ -25,16 +28,19 @@ enum EPinDirection
 class CBlockVar
 {
 public:
-    CBlockVar();
+    explicit CBlockVar(CBlock *parent = nullptr);
     CBlockVar(const CBlockVar & other);
-    explicit CBlockVar(const QDomNode & domNode);
+    explicit CBlockVar(CBlock *parent, const QDomNode & domNode);
     ~CBlockVar();
 
+    CBlock  *parent();
+    void    set_parent(CBlock * block);
     CBlockVar & operator = (const CBlockVar &rhs);
 
     [[nodiscard]] QDomNode    dom_node() const;
     [[nodiscard]] bool        is_empty() const;
     [[nodiscard]] bool        is_negated() const;
+    void                      set_negated(const bool &negated);
 
     [[nodiscard]] EEdge           edge_modifier() const;
     void    set_edge(const EEdge &edge_modifier);
@@ -47,9 +53,6 @@ public:
 
     CConnectionPointIn   * point_in();
     CConnectionPointOut  * point_out();
-
-    [[nodiscard]] uint64_t       reference_id() const;
-    void        set_reference_id(const uint64_t &ref_id);
 
     [[nodiscard]] EPinDirection   direction() const;
     void    set_direction(const EPinDirection &dir);
@@ -66,9 +69,15 @@ public:
 
     void           reset_connections();
 
+    QString     constant_value() const;
+
+    void        set_constant(const EDefinedDataTypes &type, const std::string &const_value);
+
 protected:
 
     QString m_formal_parameter;
+    QString m_constant_value;
+
     QString             m_derived_type;
     CConnectionPointIn  * m_point_in{nullptr};
     CConnectionPointOut * m_point_out{nullptr};
@@ -80,6 +89,7 @@ protected:
     EPinDirection   m_direction{PD_UNDEF};
     CAddData    * add_data;
     CVariable   * m_variable;
+    CBlock *m_parent{nullptr};
 
 };
 

@@ -15,7 +15,7 @@
 extern uint16_t    max_local_id;
 
 
-CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladder, CLadder *next)
+CLadder::CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size, CLadder *prev_ladder, CLadder *next)
 {
     m_hatch_pos     = hatch_top_left;
     m_previous      = prev_ladder;
@@ -24,6 +24,12 @@ CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladde
     m_objects       = new QList<CDiagramObject*>();
     m_ladder_draw   = new QVector<QPair<QRect*, QImage*>>();
     m_lines = new std::vector<CConnectLine*>();
+    m_parent        = world;
+
+    if (!m_parent)
+    {
+        throw std::runtime_error("parent is null in 'CLadder::CLadder(...)'");
+    }
 
     if (m_previous)
     {
@@ -641,7 +647,7 @@ std::vector<CConnectLine *> *CLadder::connections()
 void CLadder::refresh_graphic_connections()
 {
     m_bottom_lines = 0;
-    CConnectorPin *opposite;
+    CPin *opposite;
     for (auto &line : *m_lines)
     {
         delete line;
@@ -654,12 +660,12 @@ void CLadder::refresh_graphic_connections()
     {
         for (auto &pin : *obj->outputs())
         {
-            if (pin->opposites()->empty())
+            if (pin->graphic_connections()->empty())
             {
                 continue;
             }
 
-            for (auto &conn : *pin->opposites())
+            for (auto &conn : *pin->graphic_connections())
             {
                 auto line = connect_algo.add_new_line(conn, pin);
                 if (line)
@@ -686,6 +692,11 @@ CConnectLine *CLadder::remove_line(CConnectLine *line)
         counter++;
     }
     return nullptr;
+}
+
+COglWorld *CLadder::parent()
+{
+    return m_parent;
 }
 
 

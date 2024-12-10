@@ -6,6 +6,7 @@
 #include "../graphics/CDiagramObject.h"
 #include "../graphics/coglwidget.h"
 #include "../redo-undo/CPinRename.h"
+#include "editor/fbd/resources/colors.h"
 
 CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
 {
@@ -24,8 +25,10 @@ CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
             this, &CEditors::inst_editor_complete);*/
 
     m_pin_var_editor  = new CPinVarEditor(wgt);
-    connect(m_pin_var_editor, &CPinVarEditor::edit_cancel, this, &CEditors::pin_edit_cancel);
-    connect(m_pin_var_editor, &CPinVarEditor::new_variable_name, this, &CEditors::pin_new_variable);
+    connect(m_pin_var_editor, &CPinVarEditor::edit_cancel,
+            this, &CEditors::pin_edit_cancel);
+    connect(m_pin_var_editor, &CPinVarEditor::new_variable_name,
+            this, &CEditors::pin_new_variable);
 
     m_obj_inst_editor->setVisible(false);
     m_pin_var_editor->setVisible(false);
@@ -66,7 +69,7 @@ void CEditors::show_line_edit(CDiagramObject *obj)
     m_diagram_object = obj;
 }
 
-void CEditors::show_combo(CConnectorPin *pin)
+void CEditors::show_combo(CPin *pin)
 {
     if (m_pin_var_editor->isVisible())
     {
@@ -75,8 +78,9 @@ void CEditors::show_combo(CConnectorPin *pin)
 
     m_pin = pin;
 
-    auto model_data = m_var_analytics->query(pin);
-    m_model->set_data(&model_data);
+    combo_data = m_var_analytics->query(pin);
+
+    m_model->set_data(&combo_data);
     m_pin_var_editor->setModel(m_model);
     m_pin_var_editor->expandAll();
 
@@ -88,6 +92,7 @@ void CEditors::show_combo(CConnectorPin *pin)
     m_pin_var_editor->show();
     m_pin_var_editor->setFocus(Qt::FocusReason::PopupFocusReason);
 
+    pin->parent()->update_bound_rect();
     pin->parent()->parent()->resort();
     pin->parent()->parent()->update_real_position();
 }
@@ -110,8 +115,10 @@ void CEditors::rename_inst()
     bool is_error = m_obj_inst_editor->is_error();
     QString new_name = m_obj_inst_editor->text();
 
-    QColor color = is_error ? m_obj_inst_editor->color() : QColor(Qt::black);
-    m_diagram_object->inst_text()->set_color(color);
+    CDiagramColors colors;
+    QColor err_color = is_error ? colors.base_colors().err_color : colors.base_colors().diag_text_def;
+
+    m_diagram_object->inst_text()->set_color(err_color);
 
     m_diagram_object = nullptr;
     m_obj_inst_editor->setVisible(false);
@@ -129,8 +136,10 @@ void CEditors::insert_new_inst()
     bool is_error = m_obj_inst_editor->is_error();
     QString new_name = m_obj_inst_editor->text();
 
-    QColor color = is_error ? m_obj_inst_editor->color() : QColor(Qt::black);
-    m_diagram_object->inst_text()->set_color(color);
+    CDiagramColors colors;
+    QColor err_color = is_error ? colors.base_colors().err_color : colors.base_colors().diag_text_def;
+
+    m_diagram_object->inst_text()->set_color(err_color);
 
     QString type = m_diagram_object->type_name();
 
@@ -155,28 +164,39 @@ void CEditors::pin_edit_cancel()
 void CEditors::pin_new_variable(const QString &var_name)
 {
     /// find opposite side of the variable
-    CConnectorPin *opposite_pin = nullptr;
+    CPin *opposite_pin = nullptr;
     CVariable   *iface_var = nullptr;
-    QString opposite_var_base;
     QString opposite_var_name;
 
-
-    if (!m_var_analytics->find_target(var_name.toStdString(), &opposite_pin, &iface_var))
+    /*if (!var_name.contains("["))
     {
-        throw std::runtime_error("What the fuck in 'CEditors::pin_new_variable'");
+        if (!m_var_analytics->find_target(var_name.toStdString(), &opposite_pin, &iface_var))
+        {
+            throw std::runtime_error("What the fuck in 'CEditors::pin_new_variable'");
+        }
+    }*/
+
+    for (auto &item : combo_data)
+    {
+        if (item.name == var_name.toStdString())
+        {
+            opposite_pin = item.opposite_pin;
+            iface_var = item.iface_variable;
+            opposite_var_name = opposite_pin ? opposite_pin->type_name() : iface_var->type();
+
+            break;
+        }
     }
 
-    if (opposite_pin)
+    if (!opposite_pin && !iface_var)
     {
-        opposite_var_base = m_pin->parent()->instance_name().isEmpty() ?
-                                    m_pin->parent()->type_name() + QString::number(m_pin->parent()->local_id()) :
-                                    m_pin->parent()->instance_name();
-        opposite_var_name = opposite_var_base + "." + m_pin->formal_param();
+        throw std::runtime_error("Can't opposite connection be null in 'void CEditors::pin_new_variable(const QString &var_name)'");
     }
 
     auto cmd_pin_var = new CPinRename(m_world, m_pin, var_name,
                                       opposite_pin, opposite_var_name, iface_var);
     m_world->undo_stack()->push(cmd_pin_var);
+
 
     m_pin = nullptr;
     m_pin_var_editor->setVisible(false);

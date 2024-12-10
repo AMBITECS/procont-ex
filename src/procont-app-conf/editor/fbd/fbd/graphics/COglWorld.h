@@ -16,7 +16,7 @@
 #include "editor/fbd/fbd/editors/CVariablesAnalytics.h"
 
 
-class CConnectorPin;
+class CPin;
 class CConnectLine;
 class COglWidget;
 class CEditors;
@@ -35,7 +35,7 @@ struct s_selection
 {
     CLadder * ladder{nullptr};
     CDiagramObject  * object{nullptr};
-    CConnectorPin   * pin{nullptr};
+    CPin   * pin{nullptr};
     CConnectLine    * connection_line{nullptr};
     void reset()
     {
@@ -80,8 +80,8 @@ public:
     void              insert_ladder(CLadder *dragged_ladder, CLadder *before);
     bool              move_object(CLadder * source, CLadder *destination, CDiagramObject *object, const QPoint &pos);
     void              check_diagram_size();
-    bool              check_pins_to_connection(CConnectorPin *target_pin, s_compare_types &comparable_types);
-    void              connect_pins(CConnectorPin *dragged_pin, CConnectorPin *target_pin);
+    bool              check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types);
+    void              connect_pins(CPin *dragged_pin, CPin *target_pin);
 
 signals:
     void    update_hatch();
@@ -136,7 +136,7 @@ private:
     CEditors    * m_editors;
 
     QSize        m_diagram_size{0,0};
-    CConnectorPin   * m_drag_pin{nullptr};
+    CPin   * m_drag_pin{nullptr};
 
     void    clear_ladders();
     QPoint  get_visible_range(const QPoint & pos);
@@ -145,7 +145,7 @@ private:
     void    check_local_id(const uint16_t &local_id);  //!< if loaded items local_id > global variable increase global
     void    init_projects_instances();
 
-    CConnectorPin *find_opposite_pin(CConnectorPin *pin);
+
 };
 
 

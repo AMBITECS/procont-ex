@@ -352,7 +352,7 @@ void CGraphicsHelper::make_object_menu(QMenu *p_menu, CDiagramObject *p_object, 
         p_menu->addAction(act_paste);
 }
 
-void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CConnectorPin * p_pin)
+void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
 {
     auto act_find_helper = new QAction(QIcon(":/24/images/24x24/Search.png"),
                                        "Найти переменную с помощью ассистента...",
@@ -367,12 +367,12 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CConnectorPin * p_pin)
     QAction * act_inversion = nullptr;
     QAction * act_edge_rising = nullptr;
     QAction * act_edge_falling = nullptr;
-    //QAction * act_storage = nullptr;
 
-    if (p_pin->type() == EDefinedDataTypes::DDT_BOOL)
+    if (p_pin->type() == EDefinedDataTypes::DDT_BOOL && p_pin->direction() == PD_INPUT)
     {
         act_inversion = new QAction(QIcon(""), "Инвертировать", p_menu);
-        connect(act_inversion, &QAction::toggled, this, [p_pin]{p_pin->set_negated(!p_pin->is_negated());});
+        connect(act_inversion, &QAction::toggled, this,
+                [p_pin]{p_pin->input()->set_negated(!p_pin->input()->is_negated());});
 
         act_edge_rising = new QAction(QIcon(""), "Нарастающий фронт");
     }

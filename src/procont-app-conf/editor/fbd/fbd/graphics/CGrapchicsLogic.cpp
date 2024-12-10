@@ -3,6 +3,8 @@
 //
 
 #include "CGrapchicsLogic.h"
+#include "CPinIn.h"
+#include "CPinOut.h"
 
 CGraphicsLogic::CGraphicsLogic()
 = default;
@@ -10,7 +12,7 @@ CGraphicsLogic::CGraphicsLogic()
 CGraphicsLogic::~CGraphicsLogic()
 = default;
 
-CConnectLine *CGraphicsLogic::add_new_line(CConnectorPin *dragged_pin, CConnectorPin *target_pin)
+CConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
 {
     if (dragged_pin->parent()->parent() != target_pin->parent()->parent())
     {
@@ -67,18 +69,18 @@ CConnectLine *CGraphicsLogic::add_new_line(CConnectorPin *dragged_pin, CConnecto
     }
 
     /// для быстрого пересоединения дадим пинам инфу о пинах на том конце
-    m_dragged_pin->direction() == PD_INPUT ? m_dragged_pin->set_opposite_pin(m_target_pin) :
-                                             m_dragged_pin->add_opposite(m_target_pin);
+    auto input = m_dragged_pin->direction() == PD_INPUT ? m_dragged_pin->input() : m_target_pin->input();
+    auto output = m_dragged_pin->direction() == PD_OUTPUT ? m_dragged_pin->output() : m_target_pin->output();
 
-    m_target_pin->direction() == PD_INPUT ? m_target_pin->set_opposite_pin(m_dragged_pin) :
-                                            m_target_pin->add_opposite(m_dragged_pin);
+    output->connect(input);
+    input->connect_pin(output);
 
     m_ladder->update_real_position();
 
     return conn_line;
 }
 
-QLine  CGraphicsLogic::first_line(CConnectorPin *pin, CConnectorPin *opp)
+QLine  CGraphicsLogic::first_line(CPin *pin, CPin *opp)
 {
     /// define index of the pin on the left (input) or right (output) sid of the object
     int index = 0;
@@ -86,8 +88,9 @@ QLine  CGraphicsLogic::first_line(CConnectorPin *pin, CConnectorPin *opp)
     int dist_to_bound;    //!< дистанция от пина до bound_text_rect компонента
     auto direction = pin->direction();
 
-    std::vector<CConnectorPin*> *pins = direction == PD_INPUT ? pin->parent()->inputs() :
-                                        pin->parent()->outputs();
+    std::vector<CPin*> *pins = direction == PD_INPUT ?
+                               reinterpret_cast<std::vector<CPin *> *>(pin->parent()->inputs()) :
+                               reinterpret_cast<std::vector<CPin *> *>(pin->parent()->outputs());
 
     for (auto &item : *pins)
     {
@@ -97,7 +100,8 @@ QLine  CGraphicsLogic::first_line(CConnectorPin *pin, CConnectorPin *opp)
         }
         else
         {
-            index += item->is_connected() ? index_of(item->opposites(), opp) : 0;
+            auto out = item->output();
+            index += item->is_connected() ? index_of(out->graphic_connections(), opp) : 0;
         }
 
         if (item == pin)
@@ -215,7 +219,7 @@ QLine CGraphicsLogic::equalizing_line(const QPoint &point1, const QPoint &point2
     return {p1, p2};
 }
 
-int CGraphicsLogic::index_of(std::vector<CConnectorPin *> *pins_array, CConnectorPin *pin)
+int CGraphicsLogic::index_of(std::vector<CPin *> *pins_array, CPin *pin)
 {
     int index = 0;
     for (auto &item : *pins_array)

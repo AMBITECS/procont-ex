@@ -6,7 +6,7 @@
 #include <QMenu>
 #include <QApplication>
 #include "editor/fbd/general/QtDialogs.h"
-#include "CConnectLine.h"
+#include "editor/fbd/resources/colors.h"
 
 
 COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
@@ -30,12 +30,9 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     m_message_font = QApplication::font();
     m_message_font.setStyle(QApplication::font().style());
     QFontMetrics fm(m_message_font);
-    m_wrong_type_img = QImage(QSize(fm.height(), 2), QImage::Format_ARGB32);
-    m_wrong_type_img.fill(QColor(255, 25, 91));
 
-    /*QSurfaceFormat format = context()->format();
-    format.setSwapBehavior(QSurfaceFormat::SwapBehavior::DoubleBuffer);
-    setFormat(format);*/
+    m_wrong_type_img = QImage(QSize(fm.height(), 2), QImage::Format_ARGB32);
+    m_wrong_type_img.fill(QColor(119, 36, 49));
 
     if (!ogl_startup->node ||
          ogl_startup->node->isNull() ||
@@ -85,10 +82,15 @@ COglWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
+    CDiagramColors colors;
+    float r, g, b;
+    colors.base_colors().diag_background.getRgbF(&r, &g, &b);
 
-    s_color color = m_style->background();
+    glClearColor(r,
+                 g,
+                 b,
+                 1.0f);
 
-    glClearColor(color.red, color.green, color.blue, color.alpha);
     glEnable(GL_ALPHA_TEST);
 
     glEnable(GL_MULTISAMPLE);
@@ -128,8 +130,6 @@ void COglWidget::resizeGL(int w, int h)
 void
 COglWidget::paintGL()
 {
-    //QOpenGLWidget::paintGL();
-    // base drawing cycle
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     draw_ladders();
@@ -537,12 +537,18 @@ void COglWidget::iface_ren_var(const QString &old_name, const QString &new_name)
 
 void COglWidget::show_wrong_types(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable)
 {
-    QString delim = is_comparable ? " -> " : " ≠ ";
+    QString delim = is_comparable ? " -> " : " <> "; //" ≠ ";
     if (dragged == target)
     {
-        delim = " - ";
+        delim = " : ";
     }
-    !is_comparable ? m_wrong_type_text = dragged + delim + target : m_wrong_type_text = dragged + " = " + target;
+
+    m_wrong_type_text = dragged + delim + target;
+
+    if (dragged == "один")
+    {
+        m_wrong_type_text = "Занято!";
+    }
 
 #ifdef NDEBUG
     if (is_comparable)
@@ -557,7 +563,7 @@ void COglWidget::show_wrong_types(const QString &dragged, const QString &target,
     int w = fm.size(Qt::TextSingleLine, m_wrong_type_text).width();
     int h = fm.size(Qt::TextSingleLine, m_wrong_type_text).height();
     m_wrong_type_rect = QRect({pos.x(), pos.y() - 30}, QSize(w, h));
-    is_comparable ? m_wrong_type_img.fill(Qt::darkGreen) : m_wrong_type_img.fill(QColor(255, 25, 91) );
+    is_comparable ? m_wrong_type_img.fill(QColor(43,120,36)) : m_wrong_type_img.fill(QColor(119, 36, 49) );
 }
 
 void COglWidget::draw_type_message()

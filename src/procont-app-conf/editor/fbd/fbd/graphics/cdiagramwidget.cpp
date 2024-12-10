@@ -7,7 +7,7 @@
 #include <QGridLayout>
 #include "../palette/CFbdComponentsTree.h"
 
-
+#include "editor/fbd/resources/colors.h"
 
 CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object, const bool &is_editable, QWidget *parent)
     : QWidget(parent), ui(new Ui::Form)
@@ -23,6 +23,8 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     startup.node = m_dom_node;
     startup.is_editable = is_editable;
 
+    /// define diagram colors
+    CDiagramColors colors; //!<3 и всё ))
 
     m_ogl_widget = new COglWidget(&startup);
 

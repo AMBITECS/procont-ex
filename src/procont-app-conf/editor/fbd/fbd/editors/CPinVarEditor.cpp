@@ -114,7 +114,6 @@ bool CPinVarEditor::eventFilter(QObject *object, QEvent *event)
         if (key == Qt::Key_Return || key == Qt::Key_Enter)
         {
             emit new_variable_name(m_new_variable);
-
             return false;
         }
     }
@@ -155,7 +154,7 @@ void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
             }
         }
 
-        m_new_variable += item->item()->name;
+        m_new_variable += item->item()->name.c_str();
 
         this->setEditText(m_new_variable);
     }

@@ -56,6 +56,7 @@ public:
     CAddData        *   add_data();
     CDocumentation  *   documentation();
 
+
 protected:
     uint64_t          m_local_id{0};
     float             m_width{0};

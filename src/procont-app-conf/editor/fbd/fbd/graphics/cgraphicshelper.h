@@ -115,14 +115,14 @@ private:
 
     CDiagramObject    * m_dragged_obj{nullptr};
     CDiagramObject    * m_clip_object{nullptr};
-    CConnectorPin     * m_dragged_pin{nullptr};
+    CPin              * m_dragged_pin{nullptr};
     CLadder           * m_object_source{nullptr};
     CLadder           * m_dragged_ladder{nullptr};
     COglWidget        * m_opengl_widget{nullptr};
 
 
     void make_object_menu(QMenu *p_menu, CDiagramObject *p_object, CLadder *p_ladder);
-    void make_pin_menu(QMenu *p_menu, CConnectorPin * p_pin);
+    void make_pin_menu(QMenu *p_menu, CPin * p_pin);
     void make_ladder_menu(QMenu *p_menu, CLadder *p_ladder);
     void object_cat(CLadder *p_ladder, CDiagramObject *p_object);
     void reset_dragged_objects();

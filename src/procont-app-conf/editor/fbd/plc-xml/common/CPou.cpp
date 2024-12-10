@@ -7,6 +7,7 @@
 extern  uint16_t    max_local_id;
 
 #include "editor/fbd/fbd/variables.h"
+#include "editor/fbd/fbd/editors/CFilter.h"
 
 CPou::CPou()
 {
@@ -277,4 +278,237 @@ CBlock CPou::get_block()
     }
 
     return block;
+}
+
+bool CPou::find_body_input_variable(const uint64_t &reference_id, CInVariable ** in_var, CInOutVariable ** in_out_var)
+{
+    if (m_bodies->empty())
+    {
+        return false;
+    }
+
+    /// очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько.
+    /// И еще нет единого интерфейса для различных языков программирования
+    CBody * body = m_bodies->front();
+
+    CFbdContent * content;
+
+    /// этот кусок костыля по-праву должен быть частью самого CBody, но только когда появится общий интерфейс, а пока такой костыль
+    switch (body->diagram_lang())
+    {
+        case EBodyType::BT_FBD:
+            content = body->fbd_content();
+            if (!content)
+                return false;
+            break;
+        default:
+            return false;
+    }
+
+
+    for (auto &in : *content->inVariables())
+    {
+        if( in->local_id() == reference_id)
+        {
+            *in_var = in;
+            return true;
+        }
+    }
+
+    for (auto &in_out : *content->in_out_variables())
+    {
+        if (in_out->local_id() == reference_id)
+        {
+            *in_out_var = in_out;
+            return true;
+        }
+    }
+
+
+
+    return false;
+}
+
+CBlock *CPou::find_block_by_id(const uint64_t &ref_id)
+{
+    if (m_bodies->empty())
+    {
+        return nullptr;
+    }
+
+    /// очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько.
+    /// И еще нет единого интерфейса для различных языков программирования
+    CBody * body = m_bodies->front();
+
+    CFbdContent * content;
+
+    /// этот кусок костыля по-праву должен быть частью самого CBody, но только когда появится общий интерфейс, а пока такой костыль
+    switch (body->diagram_lang())
+    {
+        case EBodyType::BT_FBD:
+            content = body->fbd_content();
+            if (!content)
+                return nullptr;
+            break;
+        default:
+            return nullptr;
+    }
+
+    for (auto &block : *content->blocks())
+    {
+        if( block->local_id() == ref_id)
+        {
+            return block;
+        }
+    }
+    return nullptr;
+}
+
+bool CPou::find_block_connecting_info(const uint64_t &ref_id, const QString &formal_param, CBlock **p_block,
+                                      CBlockVar **p_block_var)
+{
+    if (m_bodies->empty())
+    {
+        return false;
+    }
+
+    /// очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько.
+    /// И еще нет единого интерфейса для различных языков программирования
+    CBody * body = m_bodies->front();
+
+    CFbdContent * content;
+
+    /// этот кусок костыля по-праву должен быть частью самого CBody, но только когда появится общий интерфейс, а пока такой костыль
+    switch (body->diagram_lang())
+    {
+        case EBodyType::BT_FBD:
+            content = body->fbd_content();
+            if (!content)
+                return false;
+            break;
+        default:
+            return false;
+    }
+
+    for (auto &block : *content->blocks())
+    {
+        if( block->local_id() == ref_id)
+        {
+            *p_block = block;
+            break;
+        }
+    }
+
+    if (!*p_block)
+    {
+        return false;
+    }
+
+    CBlock *block_item = *p_block;
+
+    /// let find output
+    for (auto &out : *block_item->output_variables())
+    {
+        std::string formal = out->formal_parameter().toStdString();
+        CFilter::capitalize_word(formal);
+        if (formal == formal_param.toStdString())
+        {
+            *p_block_var = out;
+            return true;
+        }
+    }
+
+    auto pred = [=](CBlockVar* var)
+    {
+        if (var->formal_parameter() == formal_param)
+        {
+            *p_block_var = var;
+            return true;
+        }
+        return false;
+    };
+
+    auto res = std::any_of(block_item->in_out_variables()->begin(),
+                           block_item->in_out_variables()->end(), pred);
+
+    return res;
+}
+
+bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
+                          CBlockVar **possible_block_var, CVariable **possible_iface)
+{
+    /// возможные варианты наш block_var (должен быть входным) лишь один из задних клиентов проститутствующей in_out_variable<br>
+    /// check input of the in_out_var
+
+    if (in_out_variable->point_in()->is_empty())
+    {
+        return false;
+    }
+
+    bool res = recursive_find_front(in_out_variable, possible_block_var, possible_iface);
+    return res;
+}
+
+bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
+                                CBlockVar **p_block_var, CVariable ** p_iface_var)
+{
+    uint64_t  ref_local_id = in_out_variable->point_in()->ref_local_id();
+    QString   formal_param = in_out_variable->point_in()->formal_param();
+
+    /// check if block
+    CBlock * block = find_block_by_id(ref_local_id);
+
+    if (block)
+    {
+        QList<CBlockVar*> array;
+        array.append(*block->in_out_variables());
+        array.append(*block->output_variables());
+
+        for (auto &var : array)
+        {
+            if (var->formal_parameter() == formal_param)
+            {
+                *p_block_var = var;
+                return true;
+            }
+        }
+    }
+
+    /// check interface
+    for (auto &i_var : m_interface->all_variables())
+    {
+        if (i_var->name() == formal_param)
+        {
+            *p_iface_var = i_var;
+            return true;
+        }
+    }
+
+    /// очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько.
+    /// И еще нет единого интерфейса для различных языков программирования
+    CBody * body = m_bodies->front();
+
+    CFbdContent * content;
+
+    /// этот кусок костыля по-праву должен быть частью самого CBody, но только когда появится общий интерфейс, а пока такой костыль
+    switch (body->diagram_lang())
+    {
+        case EBodyType::BT_FBD:
+            content = body->fbd_content();
+            if (!content)
+                return false;
+            break;
+        default:
+            return false;
+    }
+    for (auto &in_out : *content->in_out_variables())
+    {
+        if(in_out->local_id() == ref_local_id)
+        {
+            bool res = recursive_find_front(in_out, p_block_var, p_iface_var);
+            if (res)
+                return true;
+        }
+    }
+    return false;
 }

@@ -22,6 +22,7 @@ CBlock::CBlock(const CBlock &other)
     for (auto &alien : *other.m_in_vars)
     {
         auto var = new CBlockVar(*alien);
+        var->set_parent(this);
         m_in_vars->push_back(var);
     }
 
@@ -29,12 +30,14 @@ CBlock::CBlock(const CBlock &other)
     for (auto &alien : *other.m_in_out_vars)
     {
         auto var = new CBlockVar(*alien);
+        var->set_parent(this);
         m_in_out_vars->push_back(var);
     }
     m_out_vars      = new QList<CBlockVar*>();
     for (auto &alien : *other.m_out_vars)
     {
         auto var = new CBlockVar(*alien);
+        var->set_parent(this);
         m_out_vars->push_back(var);
     }
 
@@ -319,7 +322,7 @@ CBlock::extract_vars(const QString &direction, const QDomNode &node)
     for (uint16_t i = 0; i < node.childNodes().count(); ++i)
     {
         auto child = node.childNodes().at(i);
-        auto var = new CBlockVar(child);
+        auto var = new CBlockVar(this, child);
         var->set_direction(dir);
         vars->push_back(var);
     }

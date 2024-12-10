@@ -1,5 +1,4 @@
 .idea/
-cmake-build-debug/
 # C++ objects and libs
 *.slo
 *.lo
@@ -29,7 +28,7 @@ ui_*.h
 *.qmlc
 *.jsc
 Makefile*
-/build*
+/build
 *.qm
 *.prl
 

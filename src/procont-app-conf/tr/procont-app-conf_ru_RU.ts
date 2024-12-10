@@ -2,237 +2,27 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
-    <name>AddDUTDialog</name>
+    <name>AddPOUDialog</name>
     <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="19"/>
-        <source>Add DUT</source>
-        <translation>Добавить DUT</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="30"/>
-        <source>Create new data user type</source>
-        <translation>Создать новый объект типа данных</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="39"/>
-        <source>Name</source>
-        <translation>Имя</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="43"/>
-        <source>Type</source>
-        <translation>Тип</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="45"/>
-        <source>  </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="47"/>
-        <source>Structure</source>
-        <translation>Структура</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="55"/>
-        <source>Extends</source>
-        <translation>Расширение для</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="73"/>
-        <source>Text list support</source>
-        <translation>Поддержка списков текстов</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="190"/>
-        <location filename="../dialog/AddDUTDialog.cpp" line="202"/>
-        <source>Warning</source>
-        <translation>Предупреждение</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="191"/>
-        <source>Please enter DUT name</source>
-        <translation>Введите имя DUT</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="203"/>
-        <source>The name &apos;%1&apos; is already in use, please enter a different name</source>
-        <translation>Имя &apos;%1&apos; уже используется, введите другое</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="61"/>
-        <source>...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="66"/>
-        <source>Enumeration</source>
-        <translation>Перечисление</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="77"/>
-        <source>Alias</source>
-        <translation>Псевдоним</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="85"/>
-        <source>Base Type</source>
-        <translation>Базовый тип</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="90"/>
-        <source> &gt; </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="95"/>
-        <source>Union</source>
-        <translation>Объединение</translation>
+        <location filename="../dialog/AddPOUDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>AddPOUDialog</name>
+    <name>AddTypeDialog</name>
     <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="20"/>
-        <source>Add POU</source>
-        <translation>Добавить POU</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="31"/>
-        <source>Create new POU (program organization unit)</source>
-        <translation>Создать новый POU (компонент организации программы)</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="40"/>
-        <source>Name</source>
-        <translation>Имя</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="44"/>
-        <source>Type</source>
-        <translation>Тип</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="46"/>
-        <source>Program</source>
-        <translation>Программа</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="52"/>
-        <source>Function Block</source>
-        <translation>Функциональный блок</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="61"/>
-        <source>Extends</source>
-        <translation>Расширение для</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="67"/>
-        <location filename="../dialog/AddPOUDialog.cpp" line="78"/>
-        <location filename="../dialog/AddPOUDialog.cpp" line="134"/>
-        <source>...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="72"/>
-        <source>Implements</source>
-        <translation>Реализация</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="83"/>
-        <source>Final</source>
-        <translatorcomment>Окончательный</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="86"/>
-        <source>Abstract</source>
-        <translation>Абстрактный</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="91"/>
-        <source>Access specifier</source>
-        <translation>Спецификатор доступа</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="97"/>
-        <source>INTERNAL</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="98"/>
-        <source>PUBLIC</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="102"/>
-        <source>Method implementation language</source>
-        <translation>Язык реализации метода</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="122"/>
-        <source>Function</source>
-        <translation>Функция</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="129"/>
-        <source>Return type</source>
-        <translation>Тип возвращаемого значения</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="153"/>
-        <source>Implementation language</source>
-        <translation>Язык реализации</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="273"/>
-        <location filename="../dialog/AddPOUDialog.cpp" line="285"/>
-        <source>Warning</source>
-        <translation>Предупреждение</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="274"/>
-        <source>Please enter POU name</source>
-        <translation>Введите имя POU</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="286"/>
-        <source>The name &apos;%1&apos; is already in use, please enter a different name</source>
-        <translation>Имя &apos;%1&apos; уже используется, введите другое</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="108"/>
-        <source>Function Block Diagram (FBD)</source>
-        <translation>Язык функциональных блоковых диаграмм (FBD)</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="56"/>
-        <source>  </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="109"/>
-        <source>Sequential Function Chart (SFC)</source>
-        <translation>Язык последовательных функциональных схем (SFC)</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="110"/>
-        <source>Ladder Diagram (LD)</source>
-        <translation>Язык релейных диаграмм (LD)</translation>
-    </message>
-    <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="111"/>
-        <source>Structured Text(ST)</source>
-        <translation>Структурированный текст (ST)</translation>
+        <location filename="../dialog/AddTypeDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CTreeObject</name>
     <message>
-        <location filename="../editor/fbd/general/ctreeobject.cpp" line="11"/>
+        <location filename="../editor/fbd/general/ctreeobject.cpp" line="10"/>
         <source>Components</source>
-        <translation>Компоненты</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -289,17 +79,17 @@
 <context>
     <name>CWidgetProtocol</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="243"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="246"/>
         <source>Messages</source>
         <translation>Сообщения</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="250"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="253"/>
         <source>Actions</source>
         <translation>События</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="246"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="249"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
@@ -307,42 +97,42 @@
 <context>
     <name>CWidgetProtocolTab_build</name>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="121"/>
         <source>Message</source>
         <translation>Сообщение</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="121"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="121"/>
         <source>Object</source>
         <translation>Объект</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="120"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="121"/>
         <source>Position</source>
         <translation>Позиция</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="134"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="137"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="138"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="141"/>
         <source>Tree</source>
         <translation>Дерево</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="141"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="144"/>
         <source>Code</source>
         <translation>Код</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="194"/>
+        <location filename="../widget/TabWidgetProtocol.cpp" line="197"/>
         <source>Row %1, Column %2</source>
         <translation>Строка %1, Столбец %2</translation>
     </message>
@@ -473,17 +263,17 @@
 <context>
     <name>InputDialog</name>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="27"/>
+        <location filename="../dialog/InputDialog.cpp" line="21"/>
         <source>Input Assistant</source>
         <translation>Ассистент ввода</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="142"/>
+        <location filename="../dialog/InputDialog.cpp" line="85"/>
         <source>Categories</source>
         <translation>Категории</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="143"/>
+        <location filename="../dialog/InputDialog.cpp" line="86"/>
         <source>Find</source>
         <translation>Поиск</translation>
     </message>
@@ -491,13 +281,19 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../main/MainWindow.cpp" line="96"/>
+        <location filename="../main/MainWindow.cpp" line="74"/>
         <source>Device</source>
         <translation>Устройства</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="86"/>
+        <source>POUs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="95"/>
         <source>Model</source>
-        <translation type="vanished">Модель</translation>
+        <translation>Модель</translation>
     </message>
     <message>
         <source>Add</source>
@@ -512,7 +308,7 @@
         <translation type="vanished">загрузка библиотеки &apos;StandardLibrary&apos; из файла %1/etc/%2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="136"/>
+        <location filename="../main/MainWindow.cpp" line="114"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
@@ -537,166 +333,105 @@
         <translation type="vanished">&amp;Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="129"/>
+        <location filename="../main/MainWindow.cpp" line="107"/>
         <source>ToolBar</source>
-        <translation>Панель инструментов</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="150"/>
+        <location filename="../main/MainWindow.cpp" line="128"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="151"/>
+        <location filename="../main/MainWindow.cpp" line="129"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="152"/>
+        <location filename="../main/MainWindow.cpp" line="130"/>
         <source>Save...</source>
         <translation>Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="153"/>
+        <location filename="../main/MainWindow.cpp" line="131"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="155"/>
+        <location filename="../main/MainWindow.cpp" line="133"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="156"/>
+        <location filename="../main/MainWindow.cpp" line="134"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="158"/>
+        <location filename="../main/MainWindow.cpp" line="135"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="161"/>
+        <location filename="../main/MainWindow.cpp" line="137"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="169"/>
+        <location filename="../main/MainWindow.cpp" line="138"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="177"/>
+        <location filename="../main/MainWindow.cpp" line="139"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="185"/>
+        <location filename="../main/MainWindow.cpp" line="140"/>
         <source>Delete</source>
         <translation>Удалить</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="229"/>
-        <source>Rename</source>
-        <translation>Переименовать</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="239"/>
-        <source>Properties</source>
-        <translation>Свойства</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="261"/>
-        <source>Resource</source>
-        <translation>Ресурс</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="266"/>
-        <source>Task</source>
-        <translation>Задача</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="271"/>
-        <source>POU instance</source>
-        <translation>Экземмпляр программы</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="276"/>
-        <source>Add device</source>
-        <translation>Добавить устройство</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="526"/>
-        <source>User types</source>
-        <translation>Пользовательские типы</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="645"/>
-        <location filename="../main/MainWindow.cpp" line="682"/>
-        <source>Attention</source>
-        <translation>Внимание</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="646"/>
-        <location filename="../main/MainWindow.cpp" line="683"/>
-        <source>Do you really want to delete %1 &apos;%2&apos;</source>
-        <translation>Вы действительно хотите удалить %1 &apos;%2&apos;</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="667"/>
-        <source>configuration</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Input assistant</source>
         <translation type="vanished">Ассистент ввода...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="193"/>
+        <location filename="../main/MainWindow.cpp" line="142"/>
         <source>F2</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="193"/>
+        <location filename="../main/MainWindow.cpp" line="142"/>
         <source>Input assistant...</source>
         <translation>Ассистент ввода...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="195"/>
+        <location filename="../main/MainWindow.cpp" line="144"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="203"/>
+        <location filename="../main/MainWindow.cpp" line="152"/>
         <source>Ctrl+Shift+B</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="249"/>
+        <location filename="../main/MainWindow.cpp" line="178"/>
         <source>DUT</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;View</source>
         <translation type="vanished">&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="197"/>
+        <location filename="../main/MainWindow.cpp" line="146"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="198"/>
-        <location filename="../main/MainWindow.cpp" line="251"/>
-        <location filename="../main/MainWindow.cpp" line="252"/>
-        <location filename="../main/MainWindow.cpp" line="257"/>
-        <location filename="../main/MainWindow.cpp" line="258"/>
-        <location filename="../main/MainWindow.cpp" line="263"/>
-        <location filename="../main/MainWindow.cpp" line="268"/>
-        <location filename="../main/MainWindow.cpp" line="273"/>
-        <location filename="../main/MainWindow.cpp" line="345"/>
-        <location filename="../main/MainWindow.cpp" line="364"/>
+        <location filename="../main/MainWindow.cpp" line="147"/>
         <source>Add object</source>
         <translation>Добавить объект</translation>
     </message>
@@ -709,35 +444,34 @@
         <translation type="vanished">&amp;Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="201"/>
-        <location filename="../main/MainWindow.cpp" line="202"/>
+        <location filename="../main/MainWindow.cpp" line="150"/>
+        <location filename="../main/MainWindow.cpp" line="151"/>
         <source>Compile</source>
         <translation>Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="203"/>
+        <location filename="../main/MainWindow.cpp" line="152"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="108"/>
-        <location filename="../main/MainWindow.cpp" line="255"/>
+        <location filename="../main/MainWindow.cpp" line="184"/>
         <source>POU</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="470"/>
-        <location filename="../main/MainWindow.cpp" line="491"/>
+        <location filename="../main/MainWindow.cpp" line="283"/>
+        <location filename="../main/MainWindow.cpp" line="304"/>
         <source>open project %1</source>
         <translation>загрузка проекта %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="503"/>
+        <location filename="../main/MainWindow.cpp" line="316"/>
         <source>can&apos;t open file for read: %1</source>
         <translation>не могу открыть файл для чтения: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="553"/>
+        <location filename="../main/MainWindow.cpp" line="364"/>
         <source>project opened %1</source>
         <translation>проект загружен %1</translation>
     </message>
@@ -754,26 +488,26 @@
         <translation type="vanished">проект загружен</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="471"/>
-        <location filename="../main/MainWindow.cpp" line="492"/>
-        <location filename="../main/MainWindow.cpp" line="554"/>
+        <location filename="../main/MainWindow.cpp" line="284"/>
+        <location filename="../main/MainWindow.cpp" line="305"/>
+        <location filename="../main/MainWindow.cpp" line="365"/>
         <source>project file: %1</source>
         <translation>файл проекта: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="478"/>
-        <location filename="../main/MainWindow.cpp" line="502"/>
-        <location filename="../main/MainWindow.cpp" line="515"/>
+        <location filename="../main/MainWindow.cpp" line="291"/>
+        <location filename="../main/MainWindow.cpp" line="315"/>
+        <location filename="../main/MainWindow.cpp" line="329"/>
         <source>can&apos;t open project %1</source>
         <translation>не могу загрузить проект %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="479"/>
+        <location filename="../main/MainWindow.cpp" line="292"/>
         <source>file not found: %1</source>
         <translation>файл не найден: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="516"/>
+        <location filename="../main/MainWindow.cpp" line="330"/>
         <source>file parse error: %1</source>
         <translation>ошибка парсинга файла: %1</translation>
     </message>
@@ -782,13 +516,13 @@
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="447"/>
+        <location filename="../main/MainWindow.cpp" line="260"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="447"/>
-        <location filename="../main/MainWindow.cpp" line="560"/>
+        <location filename="../main/MainWindow.cpp" line="260"/>
+        <location filename="../main/MainWindow.cpp" line="371"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
@@ -797,7 +531,7 @@
         <translation type="vanished">открытие файла %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="560"/>
+        <location filename="../main/MainWindow.cpp" line="371"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -888,30 +622,30 @@
         <translation type="vanished">файл библиотеки &apos;StandardLibrary&apos;: %1</translation>
     </message>
     <message>
-        <location filename="../iec/Library.cpp" line="38"/>
+        <location filename="../iec/Library.cpp" line="23"/>
         <source>open library &apos;%1&apos;</source>
         <translation>загрузка библиотеки &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../iec/Library.cpp" line="39"/>
-        <location filename="../iec/Library.cpp" line="82"/>
+        <location filename="../iec/Library.cpp" line="24"/>
+        <location filename="../iec/Library.cpp" line="67"/>
         <source>library &apos;%1&apos; file: %2</source>
         <translation>библиотека &apos;%1&apos; файл: %2</translation>
     </message>
     <message>
-        <location filename="../iec/Library.cpp" line="46"/>
-        <location filename="../iec/Library.cpp" line="58"/>
-        <location filename="../iec/Library.cpp" line="71"/>
+        <location filename="../iec/Library.cpp" line="31"/>
+        <location filename="../iec/Library.cpp" line="43"/>
+        <location filename="../iec/Library.cpp" line="56"/>
         <source>can&apos;t open library &apos;%1&apos;</source>
         <translation>не могу загрузить библиотеку &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../iec/Library.cpp" line="59"/>
+        <location filename="../iec/Library.cpp" line="44"/>
         <source>can&apos;t open file for read: %1</source>
         <translation>не могу открыть файл для чтения: %1</translation>
     </message>
     <message>
-        <location filename="../iec/Library.cpp" line="81"/>
+        <location filename="../iec/Library.cpp" line="66"/>
         <source>library &apos;%1&apos; opened, version %2</source>
         <translation>библиотека &apos;%1&apos; загружена, версия %2</translation>
     </message>
@@ -920,7 +654,7 @@
         <translation type="vanished">не могу открыть файл библиотеки &apos;StandardLibrary&apos;</translation>
     </message>
     <message>
-        <location filename="../iec/Library.cpp" line="47"/>
+        <location filename="../iec/Library.cpp" line="32"/>
         <source>file not found: %1</source>
         <translation>файл не найден: %1</translation>
     </message>
@@ -933,7 +667,7 @@
         <translation type="obsolete">загрузка библиотеки  &apos;StandardLibrary&apos;</translation>
     </message>
     <message>
-        <location filename="../iec/Library.cpp" line="72"/>
+        <location filename="../iec/Library.cpp" line="57"/>
         <source>file parse error: %1</source>
         <translation>ошибка парсинга файла: %1</translation>
     </message>
@@ -942,70 +676,34 @@
         <translation type="vanished">библиотека &apos;StandardLibrary&apos; загружена, версия %1</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="118"/>
-        <location filename="../dialog/InputDialog.cpp" line="216"/>
-        <location filename="../dialog/InputDialog.cpp" line="254"/>
+        <location filename="../dialog/InputDialog.cpp" line="137"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="119"/>
-        <location filename="../dialog/InputDialog.cpp" line="217"/>
+        <location filename="../dialog/InputDialog.cpp" line="138"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="120"/>
-        <location filename="../dialog/InputDialog.cpp" line="218"/>
+        <location filename="../dialog/InputDialog.cpp" line="139"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="255"/>
-        <source>Value type</source>
-        <translation>Тип данных</translation>
-    </message>
-    <message>
-        <location filename="../dialog/InputDialog.cpp" line="256"/>
-        <source>Variable type</source>
-        <translation>Тип переменной</translation>
-    </message>
-    <message>
-        <location filename="../dialog/InputDialog.cpp" line="257"/>
-        <source>Documentation</source>
-        <translation>Документация</translation>
-    </message>
-    <message>
+        <location filename="../iec/StandardLibrary.cpp" line="51"/>
         <source>Standard Function Blocks</source>
-        <translation type="vanished">Стандартные функциональные блоки</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../iec/StandardLibrary.cpp" line="53"/>
         <source>Additional Function Blocks</source>
-        <translation type="vanished">Дополнительные функциональные блоки</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../iec/StandardLibrary.cpp" line="55"/>
         <source>Standard IEC Functions</source>
-        <translation type="vanished">Стандартные функции IEC</translation>
-    </message>
-    <message>
-        <location filename="../generate/Compiler.cpp" line="23"/>
-        <source>Compiler not found, build is aborted</source>
-        <translation>Компилятор не найден, соборка прервана</translation>
-    </message>
-    <message>
-        <location filename="../generate/Compiler.cpp" line="24"/>
-        <source>not found file &apos;%1&apos;</source>
-        <translation>не найден файл &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <location filename="../generate/Compiler.cpp" line="33"/>
-        <source>build started</source>
-        <translation>сборка запущена</translation>
-    </message>
-    <message>
-        <location filename="../generate/Compiler.cpp" line="62"/>
-        <source>build finished</source>
-        <translation>сборка закончена</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1028,7 +726,7 @@
     <message>
         <location filename="../widget/TabWidgetEditor.cpp" line="32"/>
         <source>Intro</source>
-        <translation>Обзор</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1079,58 +777,14 @@
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="283"/>
+        <location filename="../widget/WidgetEditor.cpp" line="286"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="286"/>
+        <location filename="../widget/WidgetEditor.cpp" line="289"/>
         <source>Schema</source>
         <translation>Схема</translation>
-    </message>
-</context>
-<context>
-    <name>tr_str</name>
-    <message>
-        <location filename="translation.cpp" line="7"/>
-        <source>functionBlock</source>
-        <translation>Функциональный блок</translation>
-    </message>
-    <message>
-        <location filename="translation.cpp" line="8"/>
-        <source>function</source>
-        <translation>Функция</translation>
-    </message>
-    <message>
-        <location filename="translation.cpp" line="9"/>
-        <source>dataType</source>
-        <translation>Тип данных</translation>
-    </message>
-    <message>
-        <location filename="translation.cpp" line="10"/>
-        <source>dataTypes</source>
-        <translation>Типы данных</translation>
-    </message>
-    <message>
-        <location filename="translation.cpp" line="11"/>
-        <source>pous</source>
-        <translation>Программные объекты</translation>
-    </message>
-    <message>
-        <location filename="translation.cpp" line="12"/>
-        <source>User types</source>
-        <translation>Пользовательские типы</translation>
-    </message>
-    <message>
-        <location filename="translation.cpp" line="13"/>
-        <source>Standard Function Blocks</source>
-        <translation>Стандартные функциональные блоки</translation>
-    </message>
-    <message>
-        <location filename="translation.cpp" line="14"/>
-        <location filename="translation.cpp" line="15"/>
-        <source>Additional Function Blocks</source>
-        <translation>Дополнительные функциональные блоки</translation>
     </message>
 </context>
 </TS>

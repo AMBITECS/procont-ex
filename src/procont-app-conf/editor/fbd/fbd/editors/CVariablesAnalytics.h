@@ -90,10 +90,10 @@ private:
 
     std::vector<std::tuple<CBlockVar*, CBlock*, CBlockVar*>>  m_graph_connections;
 
-
+    CFbdContent *  get_pou_content();
     void clear_pous();
     void clear_variable_sets();
-    static void  copy_vars(QList<CVariable*> *variables, std::vector<std::pair<QString, EDefinedDataTypes>> *map);
+    static void  copy_vars(std::vector<CVariable*> *variables, std::vector<std::pair<QString, EDefinedDataTypes>> *map);
 
     //bool find_chine(CPinIn *&p_pin);
     bool find_input_data(CBlockVar *pin);
@@ -110,7 +110,7 @@ private:
     std::vector<s_tree_item> find_fbd_outputs_collection(CFbdContent *body_content, CPin *pin, uint16_t &id);
 
 
-    static bool check_variables(CBlockVar *pin, const int &dir, CInterface *iface);
+    //static bool check_variables(CBlockVar *pin, const int &dir, CInterface *iface);
 
     [[nodiscard]] QString get_comparable_type(const QString &mb_user_type);
     static QString     analyze_array(const QString &variable, CArray * user_type);
@@ -118,10 +118,10 @@ private:
     static bool analyze_base_types(const EDefinedDataTypes &target_type, const EDefinedDataTypes &dragged_type,
                             const bool &is_strict_compliance);
 
-    bool get_library_type_data(CBlock *block, const QString &standard_type_name);
+    //bool get_library_type_data(CBlock *block, const QString &standard_type_name);
 
-    //CVariable* find_var(CBlockVar *pin, CInterface *standard_iface);
-    bool get_input_source(CBlockVar *block_var, CInVariable * in_variable);
+    // CVariable* find_var(CBlockVar *pin, CInterface *standard_iface);
+    // bool get_input_source(CBlockVar *block_var, CInVariable * in_variable);
 };
 
 

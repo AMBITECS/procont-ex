@@ -56,6 +56,9 @@ public:
     CAddData        *   add_data();
     CDocumentation  *   documentation();
 
+    /** @brief block загруженный в проекте из POU не имеет типов входов/выходов а из*/
+    bool    normalize_block(const CBlock &n_block);
+
 
 protected:
     uint64_t          m_local_id{0};

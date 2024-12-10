@@ -381,3 +381,17 @@ void CBlock::extract_pin_params(const std::string &direction, const std::string 
     vect->insert(vect->end(), type_list.begin(), type_list.end());
 }
 
+bool CBlock::normalize_block(const CBlock &n_block)
+{
+    if (m_in_vars->size() != n_block.m_in_vars->size() ||
+        m_in_out_vars->size() != n_block.m_in_out_vars->size() ||
+        m_out_vars->size() != n_block.m_out_vars->size()
+    )
+    {
+        return false;
+    }
+
+    int counter = 0;
+
+}
+

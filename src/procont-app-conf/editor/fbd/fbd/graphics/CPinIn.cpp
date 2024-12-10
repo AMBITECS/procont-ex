@@ -116,9 +116,6 @@ void CPinIn::connect_iface_variable(CVariable * variable)
 
 void CPinIn::update_condition()
 {
-    m_pin_name.set_text(m_block_variable->formal_parameter());
-    m_outer_text.set_text(m_block_variable->point_in()->expression());
-
     saturate();
 
     if (m_block_variable->is_negated())

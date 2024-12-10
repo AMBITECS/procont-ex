@@ -13,14 +13,20 @@ CPin::CPin(CDiagramObject *parent, CBlockVar *var, QPoint * parent_tl)
     m_block_variable     = var;
     m_relative_parent_tp = parent_tl;
 
-    if (var->get_iface_variable())
+    QString formal_param = m_block_variable->formal_parameter() + ":"+var->derived_type();
+    m_pin_name.set_text(formal_param);
+
+    auto iface_var = m_block_variable->get_iface_variable();
+    if (!iface_var->is_empty())
     {
-        m_outer_text.set_text(var->get_iface_variable()->name());
+        m_outer_text.set_text(iface_var->name());
+        m_is_connected = true;
     }
 
-    if (!var->constant_value().isEmpty())
+    if (!m_block_variable->constant_value().isEmpty())
     {
-        m_outer_text.set_text(var->constant_value());
+        m_outer_text.set_text(m_block_variable->constant_value());
+        m_is_connected = true;
     }
 
     CDiagramColors colors;
@@ -210,3 +216,4 @@ CBlockVar *CPin::block_variable()
 {
     return m_block_variable;
 }
+

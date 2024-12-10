@@ -6,19 +6,19 @@
 
 CIfaceVars::CIfaceVars()
 {
-    m_variables = new QList<CVariable*>();
+    m_variables = new std::vector<CVariable*>();
 }
 
 CIfaceVars::CIfaceVars(const CIfaceVars &other)
 {
-    m_variables = new QList<CVariable*>(*other.m_variables);
+    m_variables = new std::vector<CVariable*>(*other.m_variables);
     m_var_type = other.m_var_type;
 }
 
 CIfaceVars::CIfaceVars(const QDomNode &dom_node)
 {
     m_var_type = dom_node.nodeName();
-    m_variables = new QList<CVariable*>();
+    m_variables = new std::vector<CVariable*>();
 
     m_name = dom_node.attributes().namedItem("name").toAttr().value();
     m_constant = dom_node.attributes().namedItem("constant").toAttr().value().toInt();
@@ -122,7 +122,7 @@ void CIfaceVars::clean()
     m_variables->clear();
 }
 
-QList<CVariable *> *CIfaceVars::variables()
+std::vector<CVariable *> *CIfaceVars::variables()
 {
     return m_variables;
 }
@@ -139,7 +139,7 @@ CDocumentation *CIfaceVars::documentation()
 
 bool CIfaceVars::is_empty() const
 {
-    return m_variables->isEmpty();
+    return m_variables->empty();
 }
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------

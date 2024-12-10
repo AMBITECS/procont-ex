@@ -321,10 +321,6 @@ void COglWorld::load_project()
         analytics.setup_block(block);
         auto object = cur_ladder->add_object(block);
 
-
-        //analytics.bind_pins(object);
-
-        object->update_bound_rect();
         object->update_position();
     }
 
@@ -581,6 +577,11 @@ void COglWorld::mouse_move(QMouseEvent *event)
     if ( (event->pos() - m_mouse_pressed).manhattanLength()
          < QApplication::startDragDistance()
        )
+    {
+        return;
+    }
+
+    if(m_selection.pin && m_selection.pin->direction() == PD_INPUT && m_selection.pin->is_connected())
     {
         return;
     }

@@ -38,7 +38,7 @@ public:
     void        set_persistent( const bool & persistent );
 
     void        clean();
-    QList<CVariable*> * variables();
+    std::vector<CVariable*> * variables();
 
     CAddData *  add_data();
     CDocumentation * documentation();
@@ -52,7 +52,7 @@ protected:
     bool        m_retain{false};
     bool        m_persistent{false};
 
-    QList<CVariable*> * m_variables;
+    std::vector<CVariable*> * m_variables;
     CAddData            m_add_data;
     CDocumentation      m_document;
 };

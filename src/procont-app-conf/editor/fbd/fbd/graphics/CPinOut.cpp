@@ -18,8 +18,6 @@ CPinOut::CPinOut(CDiagramObject *parent, CBlockVar *base, QPoint *parent_tl) : C
     m_graphic_connections = new std::vector<CPin*>();
     m_iface_vars = new std::vector<CVariable*>();
     m_world = parent->parent()->parent();
-
-    m_pin_name.set_text(m_block_variable->formal_parameter());
 }
 
 CPinOut::~CPinOut()

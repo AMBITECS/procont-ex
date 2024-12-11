@@ -191,4 +191,9 @@ void CVariable::set_comment(const QString &comment)
     m_doc.set_document(comment);
 }
 
+bool CVariable::is_empty() const
+{
+    return m_attr_name.isEmpty();
+}
+
 

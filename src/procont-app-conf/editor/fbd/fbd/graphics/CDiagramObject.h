@@ -73,6 +73,8 @@ public:
     CLadder * parent();
     CBlock  * block();
 
+    CPinOut * get_output_by_name(const QString & formal);
+
     CObjectsText *  inst_text();
 
 private:

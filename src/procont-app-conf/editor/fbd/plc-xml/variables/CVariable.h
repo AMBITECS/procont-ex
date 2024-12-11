@@ -50,6 +50,8 @@ public:
     //[[nodiscard]] CConnectionPointIn * connection_point_in() const;
     //[[nodiscard]] CConnectionPointOut* connection_point_out() const;
 
+    bool        is_empty() const;
+
 private:
     QString     m_attr_name{""};   // required
     QString     m_attr_addr{};

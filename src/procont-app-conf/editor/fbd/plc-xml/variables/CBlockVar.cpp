@@ -191,13 +191,12 @@ QString CBlockVar::derived_type() const
 
 void CBlockVar::set_type(const QString &type)
 {
-    m_derived_type = "";
+    m_derived_type = type;
     m_type = get_type_from_string(type.toStdString());
 
     if (m_type == DDT_UNDEF || m_type == DDT_DERIVED)
     {
         m_type = DDT_DERIVED;
-        m_derived_type = type;
     }
 }
 
@@ -284,4 +283,62 @@ void CBlockVar::set_constant(const EDefinedDataTypes &type, const std::string &c
 QString CBlockVar::constant_value() const
 {
     return m_constant_value;
+}
+
+void CBlockVar::add_opposite(CBlockVar *opposite)
+{
+    if (m_direction != PD_OUTPUT || !opposite)
+    {
+        throw std::runtime_error("can't add null or wrong direction in 'CBlockVar::add_opposite'");
+    }
+
+    for (auto &var : m_opposites)
+    {
+        if (var == opposite)
+        {
+            return;
+        }
+    }
+
+    m_opposites.push_back(opposite);
+}
+
+CBlockVar* CBlockVar::remove_opposite(CBlockVar *opposite)
+{
+    if (m_direction != PD_OUTPUT)
+    {
+        throw std::runtime_error("wrong direction in 'CBlockVar::remove_opposite'");
+    }
+
+    if (!opposite)
+    {
+        throw std::runtime_error("can't remove nullptr in 'CBlockVar::remove_opposite'");
+    }
+
+    int counter = 0;
+    for (auto &var : m_opposites)
+    {
+        if (var == opposite)
+        {
+            m_opposites.erase(m_opposites.begin() + counter);
+            return opposite;
+        }
+        counter++;
+    }
+    return nullptr;
+}
+
+void CBlockVar::connect_opposite(CBlockVar *opposite)
+{
+    if (m_direction != PD_INPUT)
+    {
+        throw std::runtime_error("wrong direction in 'CBlockVar::connect_opposite'");
+    }
+
+    if (!opposite)
+    {
+        throw std::runtime_error("can't connect nul in 'CBlockVar::connect_opposite'");
+    }
+
+    m_opposite = opposite;
 }

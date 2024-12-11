@@ -76,7 +76,7 @@ public:
     CBlock  get_block(const QString &block_type_name);
 
     bool  connect_pin(CPinIn * input, bool &found, CBlockVar ** opposite_out);  //!< возврат true - означает системную или другую серьёзную ошибку
-
+    bool find_input_data();
 private:
 
     COglWorld           * m_world;
@@ -95,9 +95,8 @@ private:
     void clear_variable_sets();
     static void  copy_vars(std::vector<CVariable*> *variables, std::vector<std::pair<QString, EDefinedDataTypes>> *map);
 
-    //bool find_chine(CPinIn *&p_pin);
-    bool find_input_data(CBlockVar *pin);
-    //bool find_output_data(CPin *pin);
+
+
 
     /** @brief обновить данные, которые с течением времени могли измениться */
     void update_arrays();
@@ -109,19 +108,17 @@ private:
 
     std::vector<s_tree_item> find_fbd_outputs_collection(CFbdContent *body_content, CPin *pin, uint16_t &id);
 
-
-    //static bool check_variables(CBlockVar *pin, const int &dir, CInterface *iface);
-
     [[nodiscard]] QString get_comparable_type(const QString &mb_user_type);
     static QString     analyze_array(const QString &variable, CArray * user_type);
 
     static bool analyze_base_types(const EDefinedDataTypes &target_type, const EDefinedDataTypes &dragged_type,
                             const bool &is_strict_compliance);
+    CDiagramObject *    find_object_by_id(const uint64_t & local_id);
+    CVariable *get_iface_variable(const QString &name, QString &add_name);
 
-    //bool get_library_type_data(CBlock *block, const QString &standard_type_name);
+    CPinOut *find_output(CBlockVar *p_var);
 
-    // CVariable* find_var(CBlockVar *pin, CInterface *standard_iface);
-    // bool get_input_source(CBlockVar *block_var, CInVariable * in_variable);
+    void process_out_variables();
 };
 
 

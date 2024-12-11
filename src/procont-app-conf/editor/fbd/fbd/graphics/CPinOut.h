@@ -7,6 +7,8 @@
 
 #include "CPin.h"
 
+#define OUTER_SHIFT 2
+
 class COglWorld;
 
 class CPinOut : public CPin
@@ -22,7 +24,8 @@ public:
     std::vector<CVariable*> * iface_variables();
     void    remove_connection(CPinIn *opposite);
     void    remove_connection(CVariable * iface_var);
-
+    int     outer_height() const;   //!< возвращает высоту занимаемую текстовым перечислением соединений
+    int     outer_width() const;    //!< возвращает ширину занимаемую текстовым перечислением соединений
 
 protected:
 
@@ -31,6 +34,9 @@ private:
     std::vector<CPin*>      * m_graphic_connections;
     std::vector<CVariable*> * m_iface_vars;
     COglWorld               * m_world;
+
+    CObjectsText    make_outer_text(CVariable *variable);
+    void            resort_outers();
 
 };
 

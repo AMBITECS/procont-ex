@@ -29,6 +29,8 @@ public:
     explicit CBlock(const QDomNode &dom_node);
     virtual ~CBlock();
 
+    CBlock& operator=(const CBlock &block);
+
     [[nodiscard]] QDomNode        dom_node() const;
 
     [[nodiscard]] bool            is_empty() const;
@@ -56,8 +58,10 @@ public:
     CAddData        *   add_data();
     CDocumentation  *   documentation();
 
-    /** @brief block загруженный в проекте из POU не имеет типов входов/выходов а из*/
+    /** @brief block при загрузке проекта не имеет типов входов/выходов а сейчас всё будет хорошо */
     bool    normalize_block(const CBlock &n_block);
+
+    CBlockVar * get_output_by_name(const QString &name);
 
 
 protected:

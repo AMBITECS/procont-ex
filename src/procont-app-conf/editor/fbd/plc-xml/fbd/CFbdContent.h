@@ -15,6 +15,13 @@
 #include "CReturn.h"
 #include "../common/CComment.h"
 
+struct s_variable_data
+{
+    void    * variable{nullptr};
+    uint64_t  local_id{0};
+    EPinDirection   source{PD_UNDEF};
+};
+
 /**
  * @brief These elements are a collection of objects, which are defined in FBD. They can be used in all
  *  graphical bodies.
@@ -39,6 +46,9 @@ public:
     QList<CJump*>       * jumps();
     QList<CReturn*>     * returns();
     QList<CComment*>    * comments();
+
+    s_variable_data     get_var_by_local_id(const uint64_t &id);
+    CBlock  *           get_block_by_id(const uint64_t &id);
 
 private:
     QList<CBlock*>      * m_blocks;

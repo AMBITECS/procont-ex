@@ -241,3 +241,58 @@ QList<CComment *> *CFbdContent::comments()
 {
     return m_comments;
 }
+
+s_variable_data CFbdContent::get_var_by_local_id(const uint64_t &id)
+{
+    s_variable_data data;
+
+    for (auto &var : *m_in_out_variables)
+    {
+        if (var->local_id() == id)
+        {
+            data.source = PD_IN_OUT;
+            data.variable = var;
+            data.local_id = id;
+
+            return data;
+        }
+    }
+
+    for (auto &var : *m_inVariables)
+    {
+        if (var->local_id() == id)
+        {
+            data.source = PD_INPUT;
+            data.variable = var;
+            data.local_id = id;
+
+            return data;
+        }
+    }
+
+    for (auto &var : *m_out_variables)
+    {
+        if (var->local_id() == id)
+        {
+            data.source = PD_OUTPUT;
+            data.variable = var;
+            data.local_id = id;
+
+            return data;
+        }
+    }
+
+    return data;
+}
+
+CBlock *CFbdContent::get_block_by_id(const uint64_t &id)
+{
+    for (auto &block : *m_blocks)
+    {
+        if (block->local_id() == id)
+        {
+            return block;
+        }
+    }
+    return nullptr;
+}

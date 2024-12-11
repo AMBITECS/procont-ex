@@ -57,7 +57,7 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
     connect(this, &CGraphicsHelper::mouse_dblClicked,
             this, &CGraphicsHelper::double_clicked);
 
-    m_ladders = m_graphics_world->ladders();
+    m_ladders = m_graphics_world->visible_ladders();
 }
 
 CGraphicsHelper::~CGraphicsHelper()
@@ -206,7 +206,7 @@ CGraphicsHelper::on_drag_enter_event(QDragEnterEvent *event)
 
 void CGraphicsHelper::on_drag_move_event(QDragMoveEvent *event)
 {
-    /// check all visible ladders
+    /// check all visible visible_ladders
 
     if (event->mimeData()->property(txt_vars::drag_obj_prop_name) == txt_vars::drag_pin)
     {

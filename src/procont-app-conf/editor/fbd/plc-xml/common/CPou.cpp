@@ -435,7 +435,7 @@ bool CPou::find_block_connecting_info(const uint64_t &ref_id, const QString &for
 }
 
 bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                          CBlockVar **possible_block_var, CVariable **possible_iface)
+                          CBlockVar **possible_block_var, std::vector<CVariable *> *possible_iface)
 {
     /// возможные варианты наш block_var (должен быть входным) лишь один из задних клиентов проститутствующей in_out_variable<br>
     /// check input of the in_out_var
@@ -450,8 +450,18 @@ bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
 }
 
 bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
-                                CBlockVar **p_block_var, CVariable ** p_iface_var)
+                                CBlockVar **p_block_var, std::vector<CVariable *> *possible_iface)
 {
+    if (!in_out_variable->expression()->expression().isEmpty())
+    {
+        auto var = m_interface->get_variable_by_name(in_out_variable->expression()->expression());
+
+        if (var)
+        {
+            possible_iface->push_back(var);
+        }
+    }
+
     uint64_t  ref_local_id = in_out_variable->point_in()->ref_local_id();
     QString   formal_param = in_out_variable->point_in()->formal_param();
 
@@ -479,7 +489,7 @@ bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
     {
         if (i_var->name() == formal_param)
         {
-            *p_iface_var = i_var;
+            possible_iface->push_back(i_var);
             return true;
         }
     }
@@ -505,7 +515,7 @@ bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
     {
         if(in_out->local_id() == ref_local_id)
         {
-            bool res = recursive_find_front(in_out, p_block_var, p_iface_var);
+            bool res = recursive_find_front(in_out, p_block_var, possible_iface);
             if (res)
                 return true;
         }

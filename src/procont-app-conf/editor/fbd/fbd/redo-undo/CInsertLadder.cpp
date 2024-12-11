@@ -119,7 +119,7 @@ void CInsertLadder::incision(int &position)
         m_walking_ladder->set_previous(before->previous_ladder());
         m_walking_ladder->set_next(before);
 
-        /// setup old ladders new prev and next
+        /// setup old visible_ladders new prev and next
         before->previous_ladder()->set_next(m_walking_ladder);
         before->set_previous(m_walking_ladder);
 

@@ -6,6 +6,7 @@
 #include "CDiagramObject.h"
 #include "CLadder.h"
 #include "editor/fbd/resources/colors.h"
+#include "editor/fbd/fbd/editors/CFilter.h"
 
 CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_top_left
 {
@@ -468,6 +469,25 @@ std::vector<CPinIn *> *CDiagramObject::inputs()
 QRect CDiagramObject::bound_graph_rect() const
 {
     return m_graph_bounds;
+}
+
+CPinOut *CDiagramObject::get_output_by_name(const QString &formal)
+{
+    std::string form = formal.toStdString();
+    CFilter::capitalize_word(form);
+    std::string pin_name;
+
+    for (auto &out : *m_outputs)
+    {
+        pin_name = out->block_variable()->formal_parameter().toStdString();
+        CFilter::capitalize_word(pin_name);
+
+        if (pin_name == form)
+        {
+            return out;
+        }
+    }
+    return nullptr;
 }
 
 

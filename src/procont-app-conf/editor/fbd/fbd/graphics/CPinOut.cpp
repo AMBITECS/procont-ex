@@ -75,3 +75,13 @@ void CPinOut::remove_connection(CVariable *iface_var)
 {
 
 }
+
+CObjectsText CPinOut::make_outer_text(CVariable *variable)
+{
+    
+}
+
+void CPinOut::resort_outers()
+{
+
+}

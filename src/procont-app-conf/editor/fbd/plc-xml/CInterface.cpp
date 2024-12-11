@@ -259,7 +259,7 @@ std::vector<CVariable *>  CInterface::all_variables()
     return p_variables;
 }
 
-void CInterface::gather_variables(QList<CVariable *> *source_variables, std::vector<CVariable *> *dest_vars)
+void CInterface::gather_variables(std::vector<CVariable *> *source_variables, std::vector<CVariable *> *dest_vars)
 {
     if (!source_variables->empty())
         dest_vars->insert(dest_vars->end(), source_variables->begin(), source_variables->end());
@@ -291,5 +291,17 @@ std::vector<CVariable *> CInterface::p_outputs()
 bool CInterface::is_derived() const
 {
     return m_is_derived;
+}
+
+CVariable *CInterface::get_variable_by_name(const QString &name)
+{
+    for (auto &var : all_variables())
+    {
+        if (var->name() == name)
+        {
+            return var;
+        }
+    }
+    return nullptr;
 }
 

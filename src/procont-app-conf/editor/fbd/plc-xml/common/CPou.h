@@ -49,8 +49,11 @@ public:
     bool             find_block_connecting_info(const uint64_t &ref_id, const QString &formal_param,
                                                 CBlock ** block, CBlockVar **block_var);
     bool             process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                                    CBlockVar **possible_block_var, CVariable **possible_iface);
+                                    CBlockVar **possible_block_var, std::vector<CVariable *> *possible_iface);
     CBlock *         find_block_by_id(const uint64_t &ref_id);
+
+    bool recursive_find_front(CInOutVariable *in_out_variable,
+                              CBlockVar **p_block_var,std::vector<CVariable *> *possible_iface);
 
 private:
     QDomNode    * m_dom_node{nullptr};
@@ -65,8 +68,7 @@ private:
 
     QList<CBody*>   * m_bodies;
 
-    bool recursive_find_front(CInOutVariable *in_out_variable,
-                              CBlockVar **p_block_var, CVariable ** p_iface_var);
+
 };
 
 

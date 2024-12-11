@@ -73,6 +73,14 @@ public:
 
     void        set_constant(const EDefinedDataTypes &type, const std::string &const_value);
 
+    /// connections for output
+    void        add_opposite(CBlockVar *opposite);
+    CBlockVar * remove_opposite(CBlockVar *opposite);
+
+    /// connection for input
+    void        connect_opposite(CBlockVar *opposite);
+    void        disconnect_opposite();
+
 protected:
 
     QString m_formal_parameter;
@@ -85,6 +93,9 @@ protected:
     EEdge   m_edge_modifier{EEdge::EI_NONE};
     EStorageMode m_store_modifier{EStorageMode::SM_NONE};
     EDefinedDataTypes   m_type{EDefinedDataTypes::DDT_UNDEF};
+
+    std::vector<CBlockVar*> m_opposites;
+    CBlockVar   *m_opposite{nullptr};
 
     EPinDirection   m_direction{PD_UNDEF};
     CAddData    * add_data;

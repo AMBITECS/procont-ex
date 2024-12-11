@@ -68,7 +68,8 @@ public:
 
     s_selection     get_selection(const QPoint &pos);  //!< searches selected objects
     s_selection *   selected();                        //!<  returns active selection (in function above)
-    std::vector<CLadder*>  * ladders(); //!< returns VISIBLE ladders to show them in QOpenGL
+    std::vector<CLadder*>  * visible_ladders(); //!< returns VISIBLE visible_ladders to show them in QOpenGL
+    std::vector<CLadder*>  * all_ladders();
 
     QUndoStack *    undo_stack();
 

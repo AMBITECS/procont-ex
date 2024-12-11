@@ -118,7 +118,7 @@ void COglWorld::clear_ladders()
     m_ladders->clear();
 }
 
-std::vector<CLadder*>  *COglWorld::ladders()
+std::vector<CLadder*>  *COglWorld::visible_ladders()
 {
     return m_visible_ladders;
 }
@@ -134,7 +134,7 @@ void COglWorld::win_resized(const int &w, const int &h)
 
 void COglWorld::view_hatch_moved(const QPoint &)
 {
-    /// define visible ladders
+    /// define visible visible_ladders
     update_visible_ladders();
 }
 
@@ -259,7 +259,7 @@ QPoint COglWorld::get_visible_range(const QPoint &)
         return {left, right};
     }
 
-    /// Definition of the visible ladders range starts from the range -(minus) "limit" items from defined
+    /// Definition of the visible visible_ladders range starts from the range -(minus) "limit" items from defined
     /// visible item till + "limit" items from defined visible item
 
     int first_number = curr_ladder->number() - limit;
@@ -324,6 +324,7 @@ void COglWorld::load_project()
         object->update_position();
     }
 
+
     /// need to shake projects graphics
     if (!m_ladders->empty())
     {
@@ -345,53 +346,10 @@ void COglWorld::load_project()
         m_ladders->front()->update_real_position();
     }
 
-    /// draw connecting lines
-    CGraphicsLogic connect_logic;
-    CBlockVar * opposite_out;
+    analytics.find_input_data();
 
-    for (auto &ladder : *m_ladders)
-    {
-        for (auto &obj : *ladder->draw_components())
-        {
-            for (auto &pin : *obj->inputs())
-            {
-                bool is_found;
-                bool error = analytics.connect_pin(pin, is_found, &opposite_out);
 
-                if (!is_found || error)
-                {
-                    continue;
-                }
 
-                /// search diagram object
-                for (auto &diag_obj : *obj->parent()->draw_components())
-                {
-                    if (diag_obj->block() != opposite_out->parent())
-                    {
-                        continue;
-                    }
-                    bool is_done = false;
-                    for (auto &out : *diag_obj->outputs())
-                    {
-                        if (out->block_variable() != opposite_out)
-                        {
-                            continue;
-                        }
-                        CConnectLine * line = connect_logic.add_new_line(pin, out);
-                        pin->parent()->parent()->add_line(line);
-
-                        is_done = true;
-                        break;
-                    }
-
-                    if (is_done)
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-    }
 }
 
 void COglWorld::load_later()
@@ -776,7 +734,7 @@ bool COglWorld::check_pins_to_connection(CPin *target_pin, s_compare_types &comp
 
 void COglWorld::connect_pins(CPin *dragged_pin, CPin *target_pin)
 {
-    /// if pin ladders are the same - graphic connection
+    /// if pin visible_ladders are the same - graphic connection
     if (dragged_pin->parent()->parent() == target_pin->parent()->parent())
     {
         CGraphicsLogic connect_logic;
@@ -785,6 +743,11 @@ void COglWorld::connect_pins(CPin *dragged_pin, CPin *target_pin)
     }
 
     emit undo_enabled();
+}
+
+std::vector<CLadder *> *COglWorld::all_ladders()
+{
+    return m_ladders;
 }
 
 /*QPoint COglWorld::start_drag_point() const

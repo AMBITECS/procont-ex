@@ -6,6 +6,7 @@
 #include "../graphics/COglWorld.h"
 #include "../../plc-xml/common/types/CAlias.h"
 #include "../../plc-xml/common/types/CSubrange.h"
+#include "editor/fbd/fbd/graphics/CGrapchicsLogic.h"
 
 
 #include <vector>
@@ -158,12 +159,12 @@ void CVariablesAnalytics::copy_vars(std::vector<CVariable *> *variables,
     }
 }
 
-bool CVariablesAnalytics::find_input_data(CBlockVar *input)
+bool CVariablesAnalytics::find_input_data()
 {
     /// возможные варианты:<br>
-    /// - пин пустой и ни к чему не привязан<br>
+    /// V пин пустой и ни к чему не привязан<br>
     /// - на пине сидит константа<br>
-    /// - на пине графическая связь с другим блоком<br>
+    /// V на пине графическая связь с другим блоком<br>
     /// - пин привязан к интерфейсной переменной<br>
     /// - пин привязан к глобальной переменной (сканить все POU на предмет глобальных переменных)<br>
     /// - пин привязан к переменной из программного POU (пока не обрабатывается)<br>
@@ -172,59 +173,137 @@ bool CVariablesAnalytics::find_input_data(CBlockVar *input)
     /// - в содержимом CBody находитсяCInVariable или CInOutVariable c соответствущим local_id от которой идёт связь на другие ресурсы (выше)<br>
     /// - в содержимом CBody находится CBlock с соответствующим local_id для графической связи
 
-    if (input->point_in()->is_empty())
-    {
-        return true;
-    }
+    CInVariable     * in_variable;
+    CInOutVariable  * in_out_variable;
+    COutVariable    * out_variable;
 
-    /// этот id может ссылаться на любую переменную внутри POU (in/out/in-out var)
-    uint64_t  some_id = input->point_in()->ref_local_id();
-
-    /// suppose this is graphic connection to block
-    auto block = m_diagram_pou->find_block_by_id(some_id);
-    if (block)
-    {
-        auto out_var = block->get_output_by_name(input->point_in()->connections()->front()->formal_parameter());
-        if (out_var)
-        {
-            input->set_opposite(out_var);
-            return true;
-        }
-    }
-
-    /// well its long way. Lets find var
     auto content = get_pou_content();
-    auto var_data = content->get_var_by_local_id(some_id);
+    CGraphicsLogic graphics_logic;
 
-    if (var_data.local_id == some_id)
+    for (auto &ladder : *m_world->all_ladders())
     {
-        CInVariable * in_variable = nullptr;
-        CInOutVariable * in_out_variable = nullptr;
-        COutVariable * out_variable = nullptr;
-
-        switch (var_data.source)
+        for (auto &component : *ladder->draw_components())
         {
-            case PD_INPUT:
-                in_variable = static_cast<CInVariable*>(var_data.variable);
-                break;
-            case PD_OUTPUT:
-                out_variable = static_cast<COutVariable*>(var_data.variable);
-                break;
-            case PD_IN_OUT:
-                in_out_variable = static_cast<CInOutVariable*>(var_data.variable);
-            default:
-                break;
-        }
+            for (auto &pin : *component->inputs())
+            {
+                in_variable = nullptr;
+                in_out_variable = nullptr;
+                out_variable = nullptr;
 
-        if (in_variable || in_out_variable || out_variable)
-        {
-            return true;
+                auto point_in = pin->block_variable()->point_in();
+
+                /// empty pin
+                if (point_in->is_empty())
+                {
+                    continue;
+                }
+
+                uint64_t ref_id = point_in->ref_local_id();
+                QString  in_formal = point_in->formal_param();
+
+                /// suppose graphic connection
+                if (!in_formal.isEmpty())
+                {
+                    CDiagramObject * item = find_object_by_id(ref_id);
+                    CPinOut *out = item->get_output_by_name(in_formal);
+
+                    CConnectLine *line = graphics_logic.add_new_line(pin, out);
+                    if (line)
+                    {
+                        ladder->add_line(line);
+                    }
+
+                    continue;
+                }
+
+                /// Nope. It can be a long way through that damned standard OpenXML.
+                s_variable_data var_data = content->get_var_by_local_id(ref_id);
+
+                if (var_data.local_id != ref_id)
+                {
+                    continue;
+                }
+
+                switch (var_data.source) {
+                    case PD_INPUT:
+                        in_variable = static_cast<CInVariable*>(var_data.variable);
+                        break;
+                    case PD_IN_OUT:
+                        in_out_variable = static_cast<CInOutVariable*>(var_data.variable);
+                        break;
+                    case PD_OUTPUT:
+                        out_variable = static_cast<COutVariable*>(var_data.variable);
+                        break;
+                    default:
+                        throw std::runtime_error("what this??? 'CFbdContent::comb_the_pou'");
+                }
+
+                if (!in_variable && in_out_variable &&out_variable)
+                {
+                    throw std::runtime_error("its impossible??? 'CFbdContent::comb_the_pou'");
+                }
+
+                /// suppose its iface variable from anywhere (local iface/global/program)
+
+                if (in_out_variable)
+                {
+                    CBlockVar * possible_pin = nullptr;
+                    std::vector<CVariable* > poss_iface_var;
+                    auto res = m_diagram_pou->process_in_out(pin->block_variable(),
+                                                              in_out_variable,
+                                                              &possible_pin,
+                                                              &poss_iface_var);
+                    if (res && possible_pin)
+                    {
+                        auto out = find_output(possible_pin);
+
+                        CConnectLine *line = graphics_logic.add_new_line(pin, out);
+                        if (line)
+                        {
+                            ladder->add_line(line);
+                        }
+
+                        continue;
+                    }
+
+                    if (res && !poss_iface_var.empty())
+                    {
+                        pin->connect_iface_variable(poss_iface_var.front());
+
+                        continue;
+                    }
+                }
+
+                /// constant or iface var
+                if (in_variable)
+                {
+                    QString var_express = in_variable->expression()->expression();
+
+                    EDefinedDataTypes type = CFilter::get_type_from_const(var_express.toStdString());
+                    if (type != EDefinedDataTypes::DDT_STRING && !var_express.isEmpty())
+                    {
+                        pin->set_constant(type, var_express.toStdString());
+                        continue;
+                    }
+
+                    /// nope, some iface var
+                    QString additional;
+                    auto iface_var = get_iface_variable(var_express, additional);
+
+                    if (iface_var)
+                    {
+                        pin->connect_iface_variable(iface_var);
+                        continue;
+                    }
+                }
+            }
         }
     }
 
-    /// ok. Its a constant
-    EDefinedDataTypes df_type = CFilter::get_type_from_const(input->point_in()->expression().toStdString());
-    dfsad
+    /// остались COutVariables
+    process_out_variables();
+
+    return true;
 }
 
 void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items, CPin *pin)
@@ -471,7 +550,8 @@ void CVariablesAnalytics::setup_block(CBlock *block)
 
     if (!inst.isNull())
     {
-        templ_block = CBlock(inst);
+        auto pou = CPou(inst);
+        templ_block = pou.get_block();
         is_library = true;
     }
 
@@ -693,5 +773,139 @@ CFbdContent *CVariablesAnalytics::get_pou_content()
 {
     /// эту скромную строку потом нужно расширить для LD/SFC и прочее
     return m_diagram_pou->bodies()->front()->fbd_content();
+}
+
+CDiagramObject * CVariablesAnalytics::find_object_by_id(const uint64_t &local_id)
+{
+    for (auto &ladder : *m_world->m_ladders)
+    {
+        for (auto &object : *ladder->draw_components())
+        {
+            if (object->block()->local_id() == local_id)
+            {
+                return object;
+            }
+        }
+    }
+    return nullptr;
+}
+
+CPinOut *CVariablesAnalytics::find_output(CBlockVar *p_var)
+{
+    uint64_t object_id = p_var->parent()->local_id();
+    std::string  formal_param = p_var->formal_parameter().toStdString();
+
+    CDiagramObject *object = find_object_by_id(object_id);
+
+    if (!object)
+    {
+        return nullptr;
+    }
+
+    auto pin_out = object->get_output_by_name(p_var->formal_parameter());
+
+    return pin_out;
+}
+
+CVariable *CVariablesAnalytics::get_iface_variable(const QString &name, QString &add_name)
+{
+    /// first - find in local iface
+    auto var = m_diagram_interface->get_variable_by_name(name);
+    if (var)
+    {
+        return var;
+    }
+
+    /// may be global?
+    for (auto &glob: *m_global_variables)
+    {
+        if (glob->name() == name)
+        {
+            add_name = "GVL.";
+            return glob;
+        }
+    }
+
+    /// could be program?
+    for (auto &pou : *m_pou_array)
+    {
+        if (pou == m_diagram_pou)
+        {
+            continue;
+        }
+        var = pou->interface()->get_variable_by_name(name);
+
+        if (var)
+        {
+            add_name = pou->name() + ".";
+            return var;
+        }
+    }
+
+    return nullptr;
+}
+
+void CVariablesAnalytics::process_out_variables()
+{
+    auto content = get_pou_content();
+    CConnectionPointIn *point_in;
+    QString express;
+
+    for (auto &out_var : *content->out_variables())
+    {
+        point_in = out_var->point_in();
+
+        uint64_t ref_id = point_in->ref_local_id();
+        express = point_in->expression();
+
+        /// it could be block or InOutVar
+        auto block = content->get_block_by_id(ref_id);
+
+        if (block)
+        {
+
+            continue;
+        }
+
+        s_variable_data data = content->get_var_by_local_id(ref_id);
+
+        if (data.local_id != ref_id)
+        {
+            //content->remove_data(data);
+            continue;
+        }
+
+        if (data.source == PD_IN_OUT)
+        {
+            std::vector<CVariable*> iface_vars;
+
+            QString out_var_express = out_var->expression()->expression();
+            if (!out_var_express.isEmpty())
+            {
+                auto item = m_diagram_interface->get_variable_by_name(out_var_express);
+                iface_vars.push_back(item);
+            }
+
+            CBlockVar * block_var = nullptr;
+            auto *var = static_cast<CInOutVariable*>(data.variable);
+
+
+
+            bool res = m_diagram_pou->recursive_find_front(var,
+                                                           &block_var,
+                                                           &iface_vars);
+            if (res && block_var)
+            {
+                CDiagramObject *object = find_object_by_id(block_var->parent()->local_id());
+                auto pin_out = object->get_output_by_name(block_var->formal_parameter());
+
+                for (auto &i_var : iface_vars)
+                {
+                    pin_out->connect(i_var);
+                }
+                continue;
+            }
+        }
+    }
 }
 

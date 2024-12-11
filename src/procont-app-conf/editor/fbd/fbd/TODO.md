@@ -4,7 +4,7 @@ queue to `In progress...`
 - tuning
   - scaling support
   - put POUs into the `components palette`
-  - Create 1000 ladders with components to test the responsiveness of the GUI
+  - Create 1000 visible_ladders with components to test the responsiveness of the GUI
   - Multiselect support
 - refactoring
 - Adapt the class diagram and data flow in `UML` to the final form

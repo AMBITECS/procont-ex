@@ -383,7 +383,7 @@ void COglWidget::draw_ladders()
     mPainter.beginNativePainting();
 
 
-    for (auto &ladder : *m_ladders) // later need to change all ladders to ladders buffer
+    for (auto &ladder : *m_ladders) // later need to change all ladders to visible_ladders buffer
     {
         /// draw ladder without objects and its text with highlights
         for (auto  &pair : *ladder->draw_ladder())
@@ -391,7 +391,7 @@ void COglWidget::draw_ladders()
             mPainter.drawImage(*pair.first, *pair.second);
         }
 
-        /// draw ladders text
+        /// draw visible_ladders text
         for (auto &item : *ladder->ladder_texts())
         {
             mPainter.setPen(item->color());
@@ -400,7 +400,7 @@ void COglWidget::draw_ladders()
 
 
 
-        /// draw ladders highlights
+        /// draw visible_ladders highlights
         for (auto &hl : ladder->draw_highlights())
         {
             mPainter.drawImage(hl.first, hl.second);

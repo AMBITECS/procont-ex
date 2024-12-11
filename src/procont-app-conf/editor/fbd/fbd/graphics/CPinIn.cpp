@@ -112,6 +112,11 @@ void CPinIn::connect_iface_variable(CVariable * variable)
 {
     /// TODO: connect it
     m_is_connected = true;
+    m_block_variable->set_iface_variable(variable);
+    m_outer_text.set_text(variable->name());
+    set_type(variable->type());
+    QString text = m_block_variable->formal_parameter() + ":" + variable->type();
+    m_pin_name.set_text(text);
 }
 
 void CPinIn::update_condition()
@@ -168,7 +173,22 @@ uint64_t CPinIn::reference_local_id() const
     return m_block_variable->ref_local_id();
 }
 
-CBlockVar *CPinIn::block_variable()
+void CPinIn::set_opposite(CPinOut *opposite)
 {
-    return m_block_variable;
+    if (!opposite)
+    {
+        throw std::runtime_error("Can't connect with null in 'CPinIn::set_opposite'");
+    }
+
+    m_opposite = opposite;
+    m_is_connected = true;
 }
+
+void CPinIn::set_constant(const EDefinedDataTypes &type, const std::string &type_name)
+{
+    m_block_variable->set_constant(type, type_name);
+    m_outer_text.set_text(type_name.c_str());
+    QString text = m_block_variable->formal_parameter() + ":" + base_types_names[type];
+    m_pin_name.set_text(text);
+}
+

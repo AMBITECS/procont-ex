@@ -77,7 +77,7 @@ public:
             CLadder *prev_ladder = nullptr, CLadder *next = nullptr);
     ~CLadder();
 
-    /// change ladders content
+    /// change visible_ladders content
     //void                put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos);
     //CDiagramObject *    remove_object(CDiagramObject *dragged_obj);
     CDiagramObject *    add_object(CBlock * object);

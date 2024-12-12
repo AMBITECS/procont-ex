@@ -131,7 +131,7 @@ void CMoveObject::insert_object(CLadder *dest, CDiagramObject *object, int &to_i
     {
         int  index = 0;
 
-        if (m_dst_index < 0)
+        if (to_index < 0)
         {
             for (auto &obj: *obj_array)
             {
@@ -144,7 +144,7 @@ void CMoveObject::insert_object(CLadder *dest, CDiagramObject *object, int &to_i
                 index++;
             }
 
-            if (index == obj_array->count())
+            if (index >= obj_array->count())
             {
                 obj_array->push_back(object);
             }

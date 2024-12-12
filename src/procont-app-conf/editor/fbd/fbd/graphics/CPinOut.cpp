@@ -2,9 +2,11 @@
 // Created by artem on 12/7/24.
 //
 
+#include <QFontMetrics>
 #include "CPinOut.h"
 #include "CDiagramObject.h"
 #include "CLadder.h"
+#include "../../resources/colors.h"
 
 CPinOut::CPinOut(CDiagramObject *parent, CBlockVar *base, QPoint *parent_tl) : CPin(parent, base, parent_tl)
 {
@@ -18,6 +20,9 @@ CPinOut::CPinOut(CDiagramObject *parent, CBlockVar *base, QPoint *parent_tl) : C
     m_graphic_connections = new std::vector<CPin*>();
     m_iface_vars = new std::vector<CVariable*>();
     m_world = parent->parent()->parent();
+
+    CDiagramColors colors;
+    m_graph_color = colors.ladder_colors().line_color;
 }
 
 CPinOut::~CPinOut()
@@ -43,6 +48,15 @@ void CPinOut::connect(CPin *pin)
 
     m_is_connected = true;
 
+    if (pin->parent()->parent() != m_parent->parent())
+    {
+        auto txt_block = make_outer_text(pin);
+        txt_block->set_color(m_graph_color);
+        m_outer_texts->push_back(txt_block);
+
+        resort_outers();
+    }
+
     m_graphic_connections->push_back(pin);
 }
 
@@ -53,7 +67,14 @@ void CPinOut::connect(CVariable *iface_var)
         throw std::runtime_error("cant connect nullptr in 'void CPinOut::connect(CVariable *iface_var)'");
     }
     m_is_connected = true;
+
+    auto txt = make_outer_text(iface_var);
+    txt->set_color({150,99,9});
+    m_outer_texts->push_back(txt);
+
     m_iface_vars->push_back(iface_var);
+
+    resort_outers();
 }
 
 std::vector<CPin *> * CPinOut::graphic_connections()
@@ -76,12 +97,59 @@ void CPinOut::remove_connection(CVariable *iface_var)
 
 }
 
-CObjectsText CPinOut::make_outer_text(CVariable *variable)
+CObjectsText *CPinOut::make_outer_text(CVariable *variable)
 {
-    
+    auto text = new CObjectsText();
+    text->set_text(variable->name());
+
+    return  text;
 }
 
-void CPinOut::resort_outers()
+int CPinOut::outer_height() const
 {
-
+    return m_out_texts_size.height();
 }
+
+int CPinOut::outer_width() const
+{
+    return m_out_texts_size.width();
+}
+
+void CPinOut::refresh_connections()
+{
+    for (auto &item : *m_outer_texts)
+    {
+        delete item;
+    }
+    m_outer_texts->clear();
+
+    for (auto &iface : *m_iface_vars)
+    {
+        auto txt = make_outer_text(iface);
+        txt->set_color({150,99,9});
+        m_outer_texts->push_back(txt);
+    }
+
+    for (auto &pin : *m_graphic_connections)
+    {
+        if (pin->parent()->parent() == m_parent->parent())
+        {
+            continue;
+        }
+
+        auto txt = make_outer_text(pin);
+        txt->set_color(m_graph_color);
+        m_outer_texts->push_back(txt);
+    }
+
+    resort_outers();
+}
+
+CObjectsText *CPinOut::make_outer_text(CPin *pin)
+{
+    auto txt_block = new CObjectsText();
+    txt_block->set_text(make_pin_text(pin));
+    return txt_block;
+}
+
+

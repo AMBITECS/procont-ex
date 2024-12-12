@@ -2,6 +2,7 @@
 // Created by artem on 12/6/24.
 //
 
+#include <QFontMetrics>
 #include "CPin.h"
 #include "CDiagramObject.h"
 #include "CPinIn.h"
@@ -13,36 +14,54 @@ CPin::CPin(CDiagramObject *parent, CBlockVar *var, QPoint * parent_tl)
     m_block_variable     = var;
     m_relative_parent_tp = parent_tl;
 
+    m_texts = new std::vector<CObjectsText*>();
+    m_outer_texts = new std::vector<CObjectsText*>();
+    m_outs_graphics = new std::vector<CObjectsText*>();
+    m_pin_name = new CObjectsText();
+    m_outer_text = new CObjectsText();
+
+    m_current_ladder     = m_parent->parent();
+
     QString formal_param = m_block_variable->formal_parameter() + ":"+var->derived_type();
-    m_pin_name.set_text(formal_param);
+
+    m_pin_name->set_text(formal_param);
 
     auto iface_var = m_block_variable->get_iface_variable();
     if (!iface_var->is_empty())
     {
-        m_outer_text.set_text(iface_var->name());
+        m_outer_text->set_text(iface_var->name());
         m_is_connected = true;
     }
 
     if (!m_block_variable->constant_value().isEmpty())
     {
-        m_outer_text.set_text(m_block_variable->constant_value());
+        m_outer_text->set_text(m_block_variable->constant_value());
         m_is_connected = true;
     }
 
     CDiagramColors colors;
 
-    m_pin_name.set_color(colors.base_colors().diag_text_alternate);
-    m_outer_text.set_color(colors.base_colors().diag_text_def);
+    m_pin_name->set_color(colors.base_colors().diag_text_alternate);
+    m_outer_text->set_color(colors.base_colors().diag_text_def);
 
-    m_texts.push_back(&m_pin_name);
-    m_texts.push_back(&m_outer_text);
-
-
-
+    m_texts->push_back(m_pin_name);
+    m_texts->push_back(m_outer_text);
 }
 
 CPin::~CPin()
-= default;
+{
+    for (auto &item : *m_texts)
+        delete item;
+    delete m_texts;
+
+    for (auto &item : *m_outer_texts)
+        delete item;
+    delete m_outer_texts;
+
+    for (auto &item : *m_outs_graphics)
+        delete item;
+    delete m_outs_graphics;
+}
 
 CDiagramObject *CPin::parent()
 {
@@ -61,7 +80,7 @@ QRect *CPin::rect()
 
 std::vector<CObjectsText *> *CPin::texts()
 {
-    return &m_texts;
+    return m_texts;
 }
 
 QPoint *CPin::position()
@@ -86,7 +105,7 @@ void CPin::update_position()
     {
         img_pos = QPoint(m_relative_parent_tp->x() + (m_pos.x() - img_sz.width()),
                          m_relative_parent_tp->y() + m_pos.y() - (img_sz.height() / 2));
-        img_exp_x = m_relative_parent_tp->x() + m_pos.x() - m_outer_text.width() - m_draw_image.width() - 2;
+        img_exp_x = m_relative_parent_tp->x() + m_pos.x() - m_outer_text->width() - m_draw_image.width() - 2;
         img_formal_x = m_relative_parent_tp->x() + m_pos.x() + 3;
     }
     else
@@ -94,15 +113,17 @@ void CPin::update_position()
         img_pos = QPoint(m_relative_parent_tp->x() + (m_pos.x()),
                          m_relative_parent_tp->y() + m_pos.y() - (img_sz.height() / 2));
         img_exp_x = m_relative_parent_tp->x() + m_pos.x() + m_draw_image.width() + 3;
-        img_formal_x = m_relative_parent_tp->x() + m_pos.x() - m_pin_name.width() - 3;
+        img_formal_x = m_relative_parent_tp->x() + m_pos.x() - m_pin_name->width() - 3;
     }
 
     m_rect = QRect(img_pos, img_sz);
 
     /// locate texts
-    m_outer_text.set_pos({img_exp_x, img_pos.y() + 12});
+    m_outer_text->set_pos({img_exp_x, img_pos.y() + 12});
     int img_formal_y = img_pos.y() + 10;// - m_pin_name.height() / 2;
-    m_pin_name.set_pos({img_formal_x, img_formal_y});
+    m_pin_name->set_pos({img_formal_x, img_formal_y});
+
+    resort_outers();
 }
 
 bool CPin::is_selected() const
@@ -134,22 +155,22 @@ EPinDirection CPin::direction() const
 
 uint16_t CPin::pin_name_width() const
 {
-    return m_pin_name.width();
+    return m_pin_name->width();
 }
 
 uint16_t CPin::outer_text_width() const
 {
-    return m_outer_text.width();
+    return m_outer_text->width();
 }
 
 QString CPin::pin_name() const
 {
-    return m_pin_name.text();
+    return m_pin_name->text();
 }
 
 void CPin::set_pin_name(const QString &formal)
 {
-    m_pin_name.set_text(formal);
+    m_pin_name->set_text(formal);
 }
 
 QString CPin::type_name() const
@@ -215,5 +236,66 @@ bool CPin::is_connected() const
 CBlockVar *CPin::block_variable()
 {
     return m_block_variable;
+}
+
+void CPin::resort_outers()
+{
+    QPoint top_left = m_rect.bottomLeft();
+    top_left.setX(top_left.x() + 2);
+
+    int height = m_pin_name->height();
+    int Y = top_left.y();
+    int h_in = 0, h_out = 0, h;
+    int w = 0;
+
+    for (auto &txt_block : *m_outer_texts)
+    {
+        h_in += height + OUTER_SHIFT;
+        Y += height + OUTER_SHIFT;
+        txt_block->set_pos({top_left.x(), Y});
+
+        if (txt_block->width() > w)
+        {
+            w = txt_block->width();
+        }
+    }
+
+    for (auto txt_block : *m_outs_graphics)
+    {
+        h_out += height + OUTER_SHIFT;
+        Y += height + OUTER_SHIFT;
+        txt_block->set_pos({top_left.x(), Y});
+        if (txt_block->width() > w)
+        {
+            w = txt_block->width();
+        }
+    }
+
+    h = h_in + h_out;// ? h_in : h_out;
+
+    h += m_rect.height();
+
+    m_out_texts_size = {w, h};
+
+    m_texts->clear();
+
+
+    m_texts->push_back(m_pin_name);
+    m_texts->push_back(m_outer_text);
+    m_texts->insert(m_texts->end(), m_outer_texts->begin(), m_outer_texts->end());
+    m_texts->insert(m_texts->end(), m_outs_graphics->begin(), m_outs_graphics->end());
+
+}
+
+QString CPin::make_pin_text(CPin *pin)
+{
+    QString text;
+
+    QString obj_name = pin->parent()->instance_name().isEmpty() ?
+                       pin->parent()->type_name() :
+                       pin->parent()->instance_name();
+    text = obj_name + "." + pin->block_variable()->formal_parameter();
+
+    return text;
 }
 

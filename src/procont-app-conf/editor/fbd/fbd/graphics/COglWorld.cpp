@@ -98,6 +98,10 @@ CLadder *COglWorld::add_new_ladder()
 bool COglWorld::move_object(CLadder *source, CLadder *destination, CDiagramObject *object, const QPoint &pos)
 {
     source = object->parent();
+
+    /// if last moving to the end
+
+
     auto cmd_move = new CMoveObject(this, source, destination, object, pos);
     m_undo_stack->push(cmd_move);
 
@@ -324,7 +328,7 @@ void COglWorld::load_project()
         object->update_position();
     }
 
-
+    analytics.find_input_data();
     /// need to shake projects graphics
     if (!m_ladders->empty())
     {
@@ -346,7 +350,7 @@ void COglWorld::load_project()
         m_ladders->front()->update_real_position();
     }
 
-    analytics.find_input_data();
+
 
 
 

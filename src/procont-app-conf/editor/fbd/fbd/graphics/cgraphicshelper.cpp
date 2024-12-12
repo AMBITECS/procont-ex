@@ -142,6 +142,13 @@ void CGraphicsHelper::on_drop_event(QDropEvent *event)
         /// moving object
         if (m_dragged_obj && selected.ladder)
         {
+            /// define errors
+            if (m_dragged_obj->bound_graph_rect().contains(event->position().toPoint()))
+            {
+                return;
+            }
+
+
             move_ok = m_graphics_world->move_object(m_object_source,
                                                     selected.ladder,
                                                     m_dragged_obj,

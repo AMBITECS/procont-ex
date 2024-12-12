@@ -33,19 +33,22 @@ public:
 
     /// операции соединения/разъединения
     CPinOut*    opposite();
-    void        set_opposite_name(const bool &set_name);
-    void        set_opposite(CPinOut *opposite);
+    // void        set_opposite(CPinOut *opposite);
     void        connect_pin(CPinOut *pin); //!< графическое соединение (если одна ступень)
     void        disconnect();
     void        connect_iface_variable(CVariable *variable);
     void        set_constant(const EDefinedDataTypes &type, const std::string &type_name);
 
+    void        update_graphic_text();
 
 private:
     QImage      m_img_negated;
     QImage      m_img_rising;
     QImage      m_img_falling;
     CPinOut   * m_opposite{nullptr};
+
+    QColor      m_color_def;
+    QColor      m_color_graph;
 
     void update_condition();
 

@@ -11,9 +11,11 @@
 #include "../../plc-xml/variables/CInputVariables.h"
 #include "../../plc-xml/variables/COutputVariables.h"
 #include "../../plc-xml/fbd/CBlock.h"
+#include <QApplication>
 
 
 class CDiagramObject;
+class CLadder;
 class CPinIn;
 class CPinOut;
 
@@ -84,15 +86,26 @@ protected:
     QImage            m_img_selected;
     QImage            m_img_error;
 
-    CObjectsText      m_pin_name;
-    CObjectsText      m_outer_text;
-    std::vector<CObjectsText*>  m_texts;
+    QFont             m_font{QApplication::font()};
+    CObjectsText    * m_pin_name;
+    CObjectsText    * m_outer_text;
+
+    std::vector<CObjectsText*>  * m_texts;
+    std::vector<CObjectsText*>  * m_outer_texts;
+    std::vector<CObjectsText*>  * m_outs_graphics;    //!< графические соединения в буквенном выражении
+
 
     bool              m_is_selected{false};
     bool              m_is_error{false};
     bool              m_is_connected{false};
     EPinDirection     m_direction{PD_UNDEF};
+    QSize             m_out_texts_size;
 
+    CLadder           * m_current_ladder{nullptr};
+    CLadder           * m_prev_ladder{nullptr};
+
+    void resort_outers();
+    QString  make_pin_text(CPin *pin);
 };
 
 

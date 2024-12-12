@@ -59,9 +59,12 @@ public:
     [[nodiscard]] QImage  bound_image() const;
     [[nodiscard]] QImage drag_image(const bool &is_transparent = false);
 
+    /** @brief if opposite pins on other ladder convert graphic connections to text descriptions */
+    void refresh_graphic_connections();
 
     [[nodiscard]] bool  switch_highlights(const QPoint &pos);
     void  set_selected(const bool & selected);
+
     [[nodiscard]] bool  is_selected() const;
 
     [[nodiscard]] uint64_t    local_id() const;

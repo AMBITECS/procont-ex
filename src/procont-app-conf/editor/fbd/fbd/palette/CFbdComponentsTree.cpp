@@ -47,7 +47,7 @@ void CFbdComponentsTree::build_tree()
         auto group = groups.at(counter);
         for (auto &s_item : group)
         {
-            auto tree_item = new QTreeWidgetItem(top_item, 0);
+            auto tree_item = new QTreeWidgetItem();
             tree_item->setText(0, s_item.name);
             tree_item->setIcon(0, QIcon(element_images[s_item.element]));
             tree_item->setToolTip(0, s_item.hint);
@@ -60,11 +60,13 @@ void CFbdComponentsTree::build_tree()
 
 
     m_widget->expandAll();
+    m_widget->setItemsExpandable(false);
 }
 
 void
 CFbdComponentsTree::clear_tree()
 {
+
     QTreeWidgetItem *item;
     item = m_widget->topLevelItem(0);
     while(item)
@@ -77,6 +79,11 @@ CFbdComponentsTree::clear_tree()
 void
 CFbdComponentsTree::removeItem(QTreeWidgetItem *item)
 {
+    if (!item)
+    {
+        return;
+    }
+
     int count = item->childCount();
     if (count == 0)
     {
@@ -86,8 +93,9 @@ CFbdComponentsTree::removeItem(QTreeWidgetItem *item)
 
     for(int i=0; i<count; i++)
     {
-        QTreeWidgetItem * childitem = item-> child (0); // Delete subtraction
-        removeItem(childitem);
+        QTreeWidgetItem * child_item = item->child(i);
+        removeItem(child_item);
     }
+
     delete item;
 }

@@ -4,6 +4,7 @@
 
 #include "CPinIn.h"
 #include "CDiagramObject.h"
+#include "../../resources/colors.h"
 
 CPinIn::CPinIn(CDiagramObject *parent, CBlockVar *base, QPoint * parent_tl) : CPin(parent, base, parent_tl)
 {
@@ -14,6 +15,11 @@ CPinIn::CPinIn(CDiagramObject *parent, CBlockVar *base, QPoint * parent_tl) : CP
     m_img_falling = QImage("");
     m_img_norm    = QImage(":/codesys/images/codesys/pin_input_norm.png");
     m_draw_image = m_img_norm;
+
+    CDiagramColors colors;
+
+    m_color_def = colors.base_colors().diag_text_def;
+    m_color_graph = colors.ladder_colors().line_color;
 
     update_condition();
 }
@@ -96,9 +102,9 @@ void CPinIn::connect_pin(CPinOut *pin)
     point_in->set_formal_param(pin->pin_name());
 
     if (pin->parent()->parent() == m_parent->parent())
-        m_outer_text.set_text("");
+        m_outer_text->set_text("");
     else
-        m_outer_text.set_text(pin->pin_name());
+        m_outer_text->set_text(pin->pin_name());
 }
 
 void CPinIn::disconnect()
@@ -113,10 +119,10 @@ void CPinIn::connect_iface_variable(CVariable * variable)
     /// TODO: connect it
     m_is_connected = true;
     m_block_variable->set_iface_variable(variable);
-    m_outer_text.set_text(variable->name());
+    m_outer_text->set_text(variable->name());
     set_type(variable->type());
     QString text = m_block_variable->formal_parameter() + ":" + variable->type();
-    m_pin_name.set_text(text);
+    m_pin_name->set_text(text);
 }
 
 void CPinIn::update_condition()
@@ -146,49 +152,37 @@ CPinOut *CPinIn::opposite()
     return m_opposite;
 }
 
-void CPinIn::set_opposite_name(const bool &set_name)
-{
-    if (!m_opposite)
-    {
-        return;
-    }
-
-    QString element = m_opposite->parent()->instance_name().isEmpty() ?
-                      m_opposite->parent()->type_name() :
-                      m_opposite->parent()->instance_name();
-
-    if (!set_name)
-    {
-        m_outer_text.set_text("");
-        return;
-    }
-
-    QString text = element + "." + opposite()->pin_name();
-
-    m_outer_text.set_text(text);
-}
-
 uint64_t CPinIn::reference_local_id() const
 {
     return m_block_variable->ref_local_id();
 }
-
-void CPinIn::set_opposite(CPinOut *opposite)
-{
-    if (!opposite)
-    {
-        throw std::runtime_error("Can't connect with null in 'CPinIn::set_opposite'");
-    }
-
-    m_opposite = opposite;
-    m_is_connected = true;
-}
-
 void CPinIn::set_constant(const EDefinedDataTypes &type, const std::string &type_name)
 {
     m_block_variable->set_constant(type, type_name);
-    m_outer_text.set_text(type_name.c_str());
+    m_outer_text->set_text(type_name.c_str());
+    m_outer_text->set_color(m_color_def);
     QString text = m_block_variable->formal_parameter() + ":" + base_types_names[type];
-    m_pin_name.set_text(text);
+    m_pin_name->set_text(text);
+
+    m_is_connected = true;
+}
+
+void CPinIn::update_graphic_text()
+{
+    if (!m_opposite)
+    {
+        m_outer_text->set_color(m_color_def);
+        return;
+    }
+
+    m_outer_text->set_color(m_color_graph);
+    if (m_opposite->parent()->parent() != m_parent->parent())
+    {
+        m_outer_text->set_text(make_pin_text(m_opposite));
+    }
+    else
+    {
+        m_outer_text->set_text("");
+    }
 }
 

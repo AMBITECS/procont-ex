@@ -118,7 +118,7 @@ QLine  CGraphicsLogic::first_line(CPin *pin, CPin *opp)
                                             bound_rect.right() - pin->rect()->right();
 
     QPoint p1;
-    p1.setX(direction == PD_INPUT ? pin->rect()->left() : pin->rect()->right());
+    p1.setX(direction == PD_INPUT ? pin->rect()->left() : pin->rect()->right() + 3);
     p1.setY(pin->rect()->top() + pin->rect()->width() / 2);
 
     QPoint p2;

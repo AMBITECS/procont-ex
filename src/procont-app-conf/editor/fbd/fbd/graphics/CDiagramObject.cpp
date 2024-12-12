@@ -114,27 +114,30 @@ void CDiagramObject::define_size()
     }
 
     int inner = 0;
-    for (auto *&inp : *m_inputs)
+    int h_in = 0, h_out = 0, h;
+    for (auto *&in : *m_inputs)
     {
-        auto in = dynamic_cast<CPin*>(inp);
-
         inner = in->pin_name_width() + 3;
         if (inner > inner_left_max)
         {
             inner_left_max = inner;
         }
+
+        h_in += in->rect()->height() + PIN_SHIFT;
     }
 
     for (auto &outp : *m_outputs)
     {
-        auto out = dynamic_cast<CPin*>(outp);
-
-        inner = out->pin_name_width() + 3;
+        inner = outp->pin_name_width() + 3;
         if (inner > inner_right_max)
         {
             inner_right_max = inner;
         }
+        int height = outp->outer_height() > PIN_SHIFT ? outp->outer_height() : PIN_SHIFT;
+        h_out += height;
     }
+
+    h = h_in > h_out ? h_in : h_out;
 
     size_t max_pins = m_inputs->size() > m_outputs->size() ? m_inputs->size() : m_outputs->size();
 
@@ -142,7 +145,7 @@ void CDiagramObject::define_size()
                 : inner_left_max + inner_right_max + 20;
 
     m_size.setWidth(def_width);
-    m_size.setHeight(TOP_SHIFT + (max_pins * PIN_SHIFT) + BOTTOM_SHIFT);
+    m_size.setHeight(TOP_SHIFT + (h) + BOTTOM_SHIFT);
     m_rect.setSize(m_size);
 
     m_pins->clear();
@@ -294,6 +297,8 @@ void CDiagramObject::set_ladders_relative_top_left(CLadder *ladder, const QPoint
 
 void CDiagramObject::update_position()
 {
+    locate_pins();
+
     update_rel_position();
 
     for (auto &pin : *m_pins)
@@ -312,6 +317,7 @@ void CDiagramObject::locate_pins()
 {
     int rel_in_y = TOP_SHIFT;
     int rel_out_y = TOP_SHIFT;
+    int h, w_in = 0, w_out = 0, w;
 
     for (auto &pin : *m_pins)
     {
@@ -319,14 +325,34 @@ void CDiagramObject::locate_pins()
         {
             pin->set_rel_position({0, rel_in_y});
             rel_in_y += PIN_SHIFT;
+
+            if(pin->pin_name_width() > w_in)
+                w_in = pin->pin_name_width();
         }
 
         else
         {
             pin->set_rel_position({m_rect.width(), rel_out_y});
-            rel_out_y += PIN_SHIFT;
+
+            int height = pin->output()->outer_height() > PIN_SHIFT ? pin->output()->outer_height() : PIN_SHIFT;
+            rel_out_y += height;
+
+            if (pin->pin_name_width() > w_out)
+                w_out = pin->pin_name_width();
         }
     }
+
+    h = rel_in_y > rel_out_y ? rel_in_y : rel_out_y;
+    w = w_in + w_out + BOTTOM_SHIFT;
+
+    h = m_rect.height() > h ? m_rect.height() : h;
+    w = m_rect.width() > w ? m_rect.width() : w;
+
+    //m_rect.setHeight(h);
+    m_rect = QRect(m_rect.topLeft(), QSize(w, h));
+    m_size = QSize(w, h);
+    m_text_bounds.setHeight(h);
+    m_graph_bounds.setHeight(h);
 }
 
 std::vector<std::pair<QRect, QImage>> *CDiagramObject::highlights()
@@ -358,23 +384,10 @@ void CDiagramObject::update_bound_rect()
     int outer_right = 0;
     int outer_left_gr = 0;
     int outer_right_max = 0;
-    int inp_w, out_w ;
+    int inp_w, out_w, out_t ;
 
     for (auto &in : *m_inputs)
     {
-        if (in->opposite())
-        {
-            if (in->opposite()->parent()->parent() != m_parent)
-            {
-                in->set_opposite_name(true);
-            }
-            else
-            {
-                outer_left_gr += 1;
-                in->set_opposite_name(false);
-            }
-        }
-
         inp_w = in->outer_text_width() + in->image()->width() + 3;
 
         if (inp_w > outer_left)
@@ -387,7 +400,10 @@ void CDiagramObject::update_bound_rect()
 
     for (auto &out : *m_outputs)
     {
-        out_w = out->outer_text_width() + out->image()->width() + 3;
+        out_t = out->outer_text_width() + out->image()->width() + 3;
+        out_w = out->outer_width() + 3;
+        out_w = out_t > out_w ? out_t : out_w;
+
         if (out_w > outer_right)
         {
             outer_right = out_w;
@@ -488,6 +504,27 @@ CPinOut *CDiagramObject::get_output_by_name(const QString &formal)
         }
     }
     return nullptr;
+}
+
+void CDiagramObject::refresh_graphic_connections()
+{
+    for (auto &in : *m_inputs)
+    {
+        if (in->opposite())
+        {
+            in->update_graphic_text();
+        }
+    }
+
+    for (auto &out : *m_outputs)
+    {
+        if (!out->graphic_connections()->empty())
+        {
+            out->refresh_connections();
+        }
+    }
+
+    update_bound_rect();
 }
 
 

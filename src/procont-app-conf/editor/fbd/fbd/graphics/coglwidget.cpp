@@ -47,6 +47,7 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     m_paint_dev = dynamic_cast<QPaintDevice *>(this);
     m_style = new COglStyle();
     m_helper = new CGraphicsHelper(this, ogl_startup->node);
+
     connect(m_helper, &CGraphicsHelper::drag_complete, this, &COglWidget::drag_complete);
     connect(m_helper, &CGraphicsHelper::iface_var_new, this, &COglWidget::iface_new_var);
     connect(m_helper, &CGraphicsHelper::iface_var_rename, this, &COglWidget::iface_ren_var);
@@ -464,7 +465,7 @@ void
 COglWidget::project_loaded()
 {
     update();
-    repaint();
+    //repaint();
 }
 
 void COglWidget::diagram_resized(const int &w, const int &h)

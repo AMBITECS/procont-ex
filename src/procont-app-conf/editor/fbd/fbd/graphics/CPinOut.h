@@ -24,8 +24,10 @@ public:
     std::vector<CVariable*> * iface_variables();
     void    remove_connection(CPinIn *opposite);
     void    remove_connection(CVariable * iface_var);
-    int     outer_height() const;   //!< возвращает высоту занимаемую текстовым перечислением соединений
-    int     outer_width() const;    //!< возвращает ширину занимаемую текстовым перечислением соединений
+    [[nodiscard]] int     outer_height() const;   //!< возвращает высоту занимаемую текстовым перечислением соединений
+    [[nodiscard]] int     outer_width() const;    //!< возвращает ширину занимаемую текстовым перечислением соединений
+
+    void    refresh_connections();
 
 protected:
 
@@ -34,9 +36,10 @@ private:
     std::vector<CPin*>      * m_graphic_connections;
     std::vector<CVariable*> * m_iface_vars;
     COglWorld               * m_world;
+    QColor                    m_graph_color;
 
-    CObjectsText    make_outer_text(CVariable *variable);
-    void            resort_outers();
+    CObjectsText*    make_outer_text(CVariable *variable);
+    CObjectsText*    make_outer_text(CPin *pin);
 
 };
 

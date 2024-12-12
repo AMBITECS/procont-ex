@@ -23,6 +23,7 @@ CLadder::CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size, CL
     m_hatch_size    = hatch_size;
     m_objects       = new QList<CDiagramObject*>();
     m_ladder_draw   = new QVector<QPair<QRect*, QImage*>>();
+    m_texts = new std::vector<CObjectsText*>();
     m_lines = new std::vector<CConnectLine*>();
     m_parent        = world;
 
@@ -44,9 +45,10 @@ CLadder::CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size, CL
     CDiagramColors colors;
 
     m_number = 0;
-    m_num_text.set_text(QString::number(m_number));
-    m_num_text.set_color(colors.ladder_colors().ladder_number);
-    m_texts.push_back(&m_num_text);
+    m_num_text = new CObjectsText();
+    m_num_text->set_text(QString::number(m_number));
+    m_num_text->set_color(colors.ladder_colors().ladder_number);
+    m_texts->push_back(m_num_text);
 
 
 
@@ -81,6 +83,11 @@ CLadder::~CLadder()
     {
         delete obj;
     }
+
+    for (auto &txt : *m_texts)
+        delete txt;
+
+    delete m_texts;
 
     delete m_objects;
     delete m_ladder_draw;
@@ -163,7 +170,7 @@ void CLadder::update_real_position(CLadder *sender)
 
     m_current_height = height;
     m_number = number;
-    m_num_text.set_text(QString::number(m_number));
+    m_num_text->set_text(QString::number(m_number));
     m_current_width = m_ladder_width;
 
     m_next_changed = false;
@@ -207,9 +214,9 @@ QVector<CDiagramObject *> *CLadder::draw_components()
     return m_objects;
 }
 
-QVector<CObjectsText *> *CLadder::ladder_texts()
+std::vector<CObjectsText *> *CLadder::ladder_texts()
 {
-    return &m_texts;
+    return m_texts;
 }
 
 const uint16_t * CLadder::height()
@@ -324,7 +331,7 @@ void CLadder::update_relative_position()
                                m_abs_rects.divider.width(), m_abs_rects.divider.height());
     m_relative_tl = m_relative.base.topLeft();
 
-    m_num_text.set_pos({m_relative.left.right() - m_num_text.width() - 15, m_relative.left.top() + m_num_text.height()});
+    m_num_text->set_pos({m_relative.left.right() - m_num_text->width() - 15, m_relative.left.top() + m_num_text->height()});
 
     for (auto &obj : *m_objects)
     {
@@ -456,6 +463,8 @@ void CLadder::resort()
 
     for (auto & obj : *m_objects)
     {
+        obj->update_bound_rect();
+        obj->update_position();
         difference = obj->rect()->left() - obj->bound_graph_rect().left();
 
         int last_right = index == 0 ?
@@ -474,6 +483,8 @@ void CLadder::resort()
     }
 
     update_real_position();
+
+    refresh_graphic_connections();
 }
 
 void CLadder::get_selected(const QPoint &point, s_selection *p_selection)
@@ -647,7 +658,8 @@ std::vector<CConnectLine *> *CLadder::connections()
 void CLadder::refresh_graphic_connections()
 {
     m_bottom_lines = 0;
-    CPin *opposite;
+    //CPin *opposite;
+
     for (auto &line : *m_lines)
     {
         delete line;
@@ -674,6 +686,7 @@ void CLadder::refresh_graphic_connections()
                 }
             }
         }
+        obj->refresh_graphic_connections();
     }
 }
 

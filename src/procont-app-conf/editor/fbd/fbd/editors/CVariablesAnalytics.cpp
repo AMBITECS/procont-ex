@@ -569,7 +569,9 @@ void CVariablesAnalytics::setup_block(CBlock *block)
 
     if (!is_library && !is_pous)
     {
-        throw std::runtime_error("Project error in 'CVariablesAnalytics::setup_block'");
+        //throw std::runtime_error("Project error in 'CVariablesAnalytics::setup_block'");
+        fprintf(stderr, "FBD ERROR: the block does not belongs not library and not pou in the project\n");
+        return;
     }
 
     block->normalize_block(templ_block);
@@ -849,20 +851,32 @@ void CVariablesAnalytics::process_out_variables()
 {
     auto content = get_pou_content();
     CConnectionPointIn *point_in;
-    QString express;
+    QString var_express;
 
     for (auto &out_var : *content->out_variables())
     {
         point_in = out_var->point_in();
 
         uint64_t ref_id = point_in->ref_local_id();
-        express = point_in->expression();
+        var_express = out_var->expression()->expression();
 
-        /// it could be block or InOutVar
+
+        /// it could be block
         auto block = content->get_block_by_id(ref_id);
 
         if (block)
         {
+            auto iface_var = m_diagram_interface->get_variable_by_name(var_express);
+            auto out_formal = point_in->formal_param();
+
+            if (iface_var->is_empty() || out_formal.isEmpty())
+            {
+                throw std::runtime_error("Here is block, but no iface_var or formal_param in 'CVariablesAnalytics::process_out_variables'");
+            }
+
+            CDiagramObject *obj = find_object_by_id(block->local_id());
+            auto out = obj->get_output_by_name(out_formal);
+            out->connect(iface_var);
 
             continue;
         }
@@ -879,11 +893,13 @@ void CVariablesAnalytics::process_out_variables()
         {
             std::vector<CVariable*> iface_vars;
 
-            QString out_var_express = out_var->expression()->expression();
-            if (!out_var_express.isEmpty())
+            if (!var_express.isEmpty())
             {
-                auto item = m_diagram_interface->get_variable_by_name(out_var_express);
-                iface_vars.push_back(item);
+                auto item = m_diagram_interface->get_variable_by_name(var_express);
+                if (item)
+                {
+                    iface_vars.push_back(item);
+                }
             }
 
             CBlockVar * block_var = nullptr;

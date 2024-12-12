@@ -23,6 +23,8 @@ typedef struct
     QColor  grey_part;
     QColor  landing_strip;
     QColor  landing_brick;
+    QColor  line_color;
+    QColor  line_selected;
 
     struct s_norm_colors
     {

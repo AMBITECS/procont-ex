@@ -4,14 +4,17 @@
 
 #include <QRect>
 #include "CConnectLine.h"
+#include "../../resources/colors.h"
 
 CConnectLine::CConnectLine(QPoint * ladder_tl)
 {
+    CDiagramColors colors;
+
     m_lines = new QList<QLine>();
     m_error = QColor(255, 25, 91);
     m_warn  = QColor(222,217,80);
-    m_selected = QColor(153,48,150);
-    m_norm = QColor(52,95,161);
+    m_selected = colors.ladder_colors().line_selected;
+    m_norm = colors.ladder_colors().line_color;
     m_ladder_tl = ladder_tl;
     m_prev_ltl = *ladder_tl;
     m_base = m_norm;

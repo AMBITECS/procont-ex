@@ -105,8 +105,9 @@ public:
     [[nodiscard]] short   bottom_line_count() const;
 
     CConnectLine* add_line(CConnectLine *line);
-    std::vector<CConnectLine*> * connections();
+    std::vector<CConnectLine*> * connecting_lines();
     CConnectLine* remove_line(CConnectLine *line);
+    CConnectLine* remove_line(CPinIn * pin_input);
 
 
     [[nodiscard]] QPoint              real_bottom_right() const;

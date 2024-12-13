@@ -441,7 +441,7 @@ void COglWidget::draw_ladders()
 
         /// draw connecting lines
         auto def_color = mPainter.pen().color();
-        for (auto &lines : *ladder->connections())
+        for (auto &lines : *ladder->connecting_lines())
         {
             mPainter.setPen(lines->color());
             mPainter.drawLines(*lines->lines());

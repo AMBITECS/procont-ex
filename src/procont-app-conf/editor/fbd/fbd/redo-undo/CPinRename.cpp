@@ -74,12 +74,12 @@ void CPinRename::undo()
 
         if (m_pin->direction() == PD_OUTPUT)
         {
-            m_pin->output()->remove_connection(m_opposite_pin->input());
+            m_pin->output()->disconnect(m_opposite_pin->input());
             m_opposite_pin->input()->disconnect();
         }
         else
         {
-            m_opposite_pin->output()->remove_connection(m_pin->input());
+            m_opposite_pin->output()->disconnect(m_pin->input());
             m_pin->input()->disconnect();
         }
     }

@@ -19,12 +19,13 @@ class COglWorld;
 
 struct s_tree_item
 {
-    uint16_t  id{0};
-    uint16_t  id_parent{0};
-    std::string name;
-    std::string type;
+    uint16_t      id{0};
+    uint16_t      id_parent{0};
+    std::string   name;
+    std::string   type;
     CVariable   * iface_variable{nullptr};
-    CPin *  opposite_pin{nullptr};
+    CPin        * opposite_pin{nullptr};
+    CBlock      * block{nullptr};
 };
 
 struct s_compare_types
@@ -33,6 +34,9 @@ struct s_compare_types
     QString  target_type;
 };
 
+/**
+ * @brief Набор команд для манипуляций (поиск/сравнение и т.д.) с переменными или POU в проекте
+ */
 class CVariablesAnalytics
 {
 public:
@@ -53,13 +57,8 @@ public:
      */
     std::vector<std::pair<QString, EDefinedDataTypes>> get_interface_variables();
 
-    /// find pin connections
-//    void    bind_pins(CPin *pin);
 
-    /** @brief найти и назначить новую переменную */
-    //bool find_target(const std::string &variable, CPin **pin, CVariable ** iface_var);
-
-    /** @brief выяснить типы входов/выходов а если на входе висит соединение, то и его распутаем */
+    /** @brief выяснить типы входов/выходов */
     void setup_block(CBlock *block);
 
     /**
@@ -73,7 +72,7 @@ public:
     CInterface  *  local_pou_interface();
     std::vector<CUserType*>* user_types();
     std::vector<CPou*> * pou_array();
-    CBlock  get_block(const QString &block_type_name);
+    [[nodiscard]] CBlock  get_block_from_library(const QString &block_type_name) const;
 
     bool  connect_pin(CPinIn * input, bool &found, CBlockVar ** opposite_out);  //!< возврат true - означает системную или другую серьёзную ошибку
     bool find_input_data();
@@ -90,12 +89,12 @@ private:
 
     std::vector<std::tuple<CBlockVar*, CBlock*, CBlockVar*>>  m_graph_connections;
 
+    /**@brief эту команду необходимо расширить при реализации LD/SFC и прочее, а тип возврата сделать интерфейсом
+     * или базовым классом */
     CFbdContent *  get_pou_content();
     void clear_pous();
     void clear_variable_sets();
-    static void  copy_vars(std::vector<CVariable*> *variables, std::vector<std::pair<QString, EDefinedDataTypes>> *map);
-
-
+    // static void  copy_vars(std::vector<CVariable*> *variables, std::vector<std::pair<QString, EDefinedDataTypes>> *map);
 
 
     /** @brief обновить данные, которые с течением времени могли измениться */

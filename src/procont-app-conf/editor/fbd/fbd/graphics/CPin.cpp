@@ -165,12 +165,13 @@ uint16_t CPin::outer_text_width() const
 
 QString CPin::pin_name() const
 {
-    return m_pin_name->text();
+    return m_block_variable->formal_parameter();
 }
 
 void CPin::set_pin_name(const QString &formal)
 {
-    m_pin_name->set_text(formal);
+    m_block_variable->set_formal_param(formal);
+    m_pin_name->set_text(formal + ":" + m_block_variable->derived_type());
 }
 
 QString CPin::type_name() const

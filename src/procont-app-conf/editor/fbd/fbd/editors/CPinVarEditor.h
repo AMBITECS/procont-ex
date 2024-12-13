@@ -8,6 +8,9 @@
 #include <QComboBox>
 #include <QWidget>
 #include <QTreeView>
+#include "../graphics/CPin.h"
+#include "CVariablesAnalytics.h"
+
 
 class CPinVarEditor : public QComboBox
 {
@@ -23,6 +26,7 @@ public:
 signals:
     void edit_cancel();
     void new_variable_name(const QString &variable_name);
+    void new_pin_connection(s_tree_item *selected_item, const QString & manual_str);
 
 protected slots:
     void tree_clicked(const QPersistentModelIndex &index);
@@ -36,8 +40,13 @@ protected:
 
 
 private:
-    QTreeView *m_view = nullptr;
-    QString    m_new_variable;
+    QTreeView   * m_view = nullptr;
+    QString       m_new_variable;
+    s_tree_item * m_parent_item{nullptr};
+    s_tree_item * m_selected_item {nullptr};
+
+    void prepare_new_variable();
+    void reset_selection();
 };
 
 

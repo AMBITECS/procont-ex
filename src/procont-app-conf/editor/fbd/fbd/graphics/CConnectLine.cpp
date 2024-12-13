@@ -5,8 +5,9 @@
 #include <QRect>
 #include "CConnectLine.h"
 #include "../../resources/colors.h"
+#include "CPinIn.h"
 
-CConnectLine::CConnectLine(QPoint * ladder_tl)
+CConnectLine::CConnectLine(QPoint * ladder_tl, CPin * pin1, CPin *pin2)
 {
     CDiagramColors colors;
 
@@ -18,6 +19,9 @@ CConnectLine::CConnectLine(QPoint * ladder_tl)
     m_ladder_tl = ladder_tl;
     m_prev_ltl = *ladder_tl;
     m_base = m_norm;
+
+    m_pin_in = pin1->direction() == PD_INPUT ? pin1->input() : pin2->input();
+    m_pin_out = pin1->direction() == PD_OUTPUT ? pin1->output() : pin2->output();
 }
 
 CConnectLine::~CConnectLine()
@@ -144,5 +148,10 @@ void CConnectLine::add_line(const QLine &line)
 void CConnectLine::clear()
 {
     m_lines->clear();
+}
+
+CPinIn *CConnectLine::get_pin_in()
+{
+    return m_pin_in;
 }
 

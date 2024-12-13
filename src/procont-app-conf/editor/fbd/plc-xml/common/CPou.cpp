@@ -203,7 +203,9 @@ CBlock CPou::get_block()
     for (auto &in : *m_interface->input_variables()->variables())
     {
         auto *var = new CBlockVar();
-        var->set_iface_variable(in);
+        //var->set_iface_variable(in);
+        var->set_type(in->type());
+        var->set_formal_param(in->name());
         var->set_direction(EPinDirection::PD_INPUT);
         block.input_variables()->push_back(var);
         inputs += in->type() + " ";
@@ -224,7 +226,9 @@ CBlock CPou::get_block()
         for (auto &in_out : *m_interface->in_out_variables()->variables())
         {
             auto *var = new CBlockVar();
-            var->set_iface_variable(in_out);
+            //var->set_iface_variable(in_out);
+            var->set_type(in_out->type());
+            var->set_formal_param(in_out->name());
             var->set_direction(EPinDirection::PD_IN_OUT);
             block.in_out_variables()->push_back(var);
             inOuts += in_out->type() + " ";
@@ -233,7 +237,9 @@ CBlock CPou::get_block()
         for(auto &out : *m_interface->output_variables()->variables())
         {
             auto var = new CBlockVar();
-            var->set_iface_variable(out);
+            var->set_formal_param(out->name());
+            //var->set_iface_variable(out);
+            var->set_type(out->type());
             var->set_direction(PD_OUTPUT);
             block.output_variables()->push_back(var);
             outputs += out->type();

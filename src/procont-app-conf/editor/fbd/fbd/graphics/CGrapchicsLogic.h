@@ -32,7 +32,7 @@ private:
     void   direct_connection(CConnectLine *conn_line);
 
     static QLine equalizing_line(const QPoint &point1, const QPoint &point2);
-    static int     index_of(std::vector<CPin*> *pins_array, CPin *pin);
+    static int     index_of(std::vector<CPinIn*> *pins_array, CPin *pin);
 };
 
 

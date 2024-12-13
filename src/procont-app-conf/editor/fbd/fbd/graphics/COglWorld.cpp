@@ -185,7 +185,7 @@ s_selection COglWorld::get_selection(const QPoint &pos)
         }
 
         CConnectLine *sel_line = nullptr;
-        for (auto &line : *vis->connections())
+        for (auto &line : *vis->connecting_lines())
         {
             line->set_selected(false);
             if (line->is_clicked_on(pos))
@@ -333,7 +333,7 @@ void COglWorld::load_project()
     if (!m_ladders->empty())
     {
         CLadder *prev = nullptr;
-        CLadder *next = nullptr;
+
         for (auto &ladder : *m_ladders)
         {
             ladder->set_previous(prev);
@@ -349,11 +349,6 @@ void COglWorld::load_project()
 
         m_ladders->front()->update_real_position();
     }
-
-
-
-
-
 }
 
 void COglWorld::load_later()
@@ -468,10 +463,6 @@ void COglWorld::update_visible_ladders()
                               m_ladders->begin() + range.x(),
                               m_ladders->begin() + range.y());
 
-    /*for (int i = range.x(); i < range.y(); i++)
-    {
-        m_ladders->at(i)->update_relative_position();
-    }*/
     for (auto &item : *m_visible_ladders)
     {
         item->update_relative_position();
@@ -533,7 +524,6 @@ void COglWorld::mouse_move(QMouseEvent *event)
     if (!(event->buttons() & Qt::LeftButton) || m_selection.empty())
     {
         return;
-        m_mouse_pressed = {};
     }
 
     if ( (event->pos() - m_mouse_pressed).manhattanLength()
@@ -584,17 +574,7 @@ void COglWorld::mouse_move(QMouseEvent *event)
         m_drag_pin = m_selection.pin;
     }
 
-    Qt::DropAction dropAction = drag->exec(Qt::CopyAction | Qt::MoveAction);
-
-    if (dropAction == Qt::CopyAction || dropAction == Qt::MoveAction)
-    {
-
-    }
-
-    else
-    {
-
-    }
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
 
     emit drag_complete();
 }
@@ -637,6 +617,13 @@ void COglWorld::mouse_dblClicked(QMouseEvent *evt)
         /// pin variable
         if (m_selection.pin->direction() == PD_INPUT && m_selection.pin->is_connected())
         {
+            QtDialogs::warn_user("Пин уже имеет соединение");
+            return;
+        }
+
+        if (m_selection.pin->parent()->instance_name() == "???")
+        {
+            QtDialogs::warn_user("Задайте объекту имя");
             return;
         }
 

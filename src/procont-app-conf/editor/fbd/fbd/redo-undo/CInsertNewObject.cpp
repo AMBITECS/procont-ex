@@ -59,7 +59,8 @@ void CInsertNewObject::insert()
     if (!m_new_obj)
     {
         auto lib_elem_name = pou_item_names.find(m_element).value();
-        CBlock item = analytics.get_block(lib_elem_name);
+        CBlock item = analytics.get_block_from_library(lib_elem_name);
+        analytics.setup_block(&item);
         auto *block = new CBlock(item);
 
         m_new_obj = new CDiagramObject(m_ladder, block);

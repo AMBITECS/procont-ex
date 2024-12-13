@@ -143,7 +143,7 @@ private:
     QPoint  get_visible_range(const QPoint & pos);
     void    load_project();
     CLadder * get_ladder(const unsigned long & id_ladder);
-    void    check_local_id(const uint16_t &local_id);  //!< if loaded items local_id > global variable increase global
+    static void    check_local_id(const uint16_t &local_id);  //!< if loaded items local_id > global variable increase global
     void    init_projects_instances();
 
 

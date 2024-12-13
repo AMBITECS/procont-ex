@@ -39,8 +39,8 @@ protected slots:
     void  cancel_inst_naming();
     void  rename_inst();
     void  insert_new_inst();
-    void   pin_edit_cancel();
-    void   pin_new_variable(const QString &var_name);
+    void  pin_edit_cancel();
+    void  new_pin_connection(s_tree_item * m_selected_item, const QString &m_new_variable);
 
 
 private:

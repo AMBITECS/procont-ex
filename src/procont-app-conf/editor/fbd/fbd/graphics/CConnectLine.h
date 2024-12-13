@@ -16,7 +16,7 @@
 class CConnectLine
 {
 public:
-    CConnectLine(QPoint * ladder_tl);
+    CConnectLine(QPoint * ladder_tl, CPin * pin1, CPin *pin2);
     ~CConnectLine();
 
     QList<QLine>    * lines();
@@ -39,6 +39,9 @@ public:
 
     void    update_position();
 
+    CPinIn *  get_pin_in();
+
+
 private:
     QList<QLine>    * m_lines;
     QColor            m_base;
@@ -52,6 +55,9 @@ private:
     bool     m_is_selected{false};
     bool     m_is_warn{false};
     bool     m_is_error{false};
+
+    CPinIn * m_pin_in;
+    CPinOut* m_pin_out;
 
     bool check_is_norm();
 };

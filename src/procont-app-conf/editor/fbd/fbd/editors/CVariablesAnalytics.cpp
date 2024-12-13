@@ -58,13 +58,11 @@ std::vector<std::pair<QString, EDefinedDataTypes>> CVariablesAnalytics::get_inte
 {
     std::vector<std::pair<QString, EDefinedDataTypes>> existing;
 
-    copy_vars(m_diagram_interface->in_out_variables()->variables(), &existing);
-    copy_vars(m_diagram_interface->input_variables()->variables(), &existing);
-    copy_vars(m_diagram_interface->output_variables()->variables(), &existing);
-    copy_vars(m_diagram_interface->local_variables()->variables(), &existing);
-    copy_vars(m_diagram_interface->global_variables()->variables(), &existing);
-    copy_vars(m_diagram_interface->access_variables()->variables(), &existing);
-    copy_vars(m_diagram_interface->external_variables()->variables(), &existing);
+    for (auto &var : m_diagram_interface->all_variables())
+    {
+        EDefinedDataTypes type = get_type_from_string(var->type().toStdString());
+        existing.emplace_back(var->name(), type);
+    }
 
     return existing;
 }
@@ -149,26 +147,15 @@ void CVariablesAnalytics::clear_variable_sets()
     m_types->clear();
 }
 
-void CVariablesAnalytics::copy_vars(std::vector<CVariable *> *variables,
-                                    std::vector<std::pair<QString, EDefinedDataTypes>> *map)
-{
-    for (auto &var : *variables)
-    {
-        auto type = get_type_from_string(var->type().toStdString());
-        map->emplace_back(var->name(), type);
-    }
-}
-
 bool CVariablesAnalytics::find_input_data()
 {
     /// возможные варианты:<br>
-    /// V пин пустой и ни к чему не привязан<br>
-    /// - на пине сидит константа<br>
-    /// V на пине графическая связь с другим блоком<br>
-    /// - пин привязан к интерфейсной переменной<br>
-    /// - пин привязан к глобальной переменной (сканить все POU на предмет глобальных переменных)<br>
-    /// - пин привязан к переменной из программного POU (пока не обрабатывается)<br>
-    /// - пин привязан к CInOutVariable нашего CBody и этут возможна рекрсия<br>
+    /// V- пин пустой и ни к чему не привязан<br>
+    /// V- на пине сидит константа<br>
+    /// V- на пине графическая связь с другим блоком<br>
+    /// V- пин привязан к интерфейсной переменной<br>
+    /// V- пин привязан к глобальной переменной (сканить все POU на предмет глобальных переменных)<br>
+    /// V- пин привязан к CInOutVariable нашего CBody и тут возможна рекурсия<br>
     /// Эти варианты годны при выполнении одного из двух условий при reference_local_id > 0:<br>
     /// - в содержимом CBody находитсяCInVariable или CInOutVariable c соответствущим local_id от которой идёт связь на другие ресурсы (выше)<br>
     /// - в содержимом CBody находится CBlock с соответствующим local_id для графической связи
@@ -190,7 +177,7 @@ bool CVariablesAnalytics::find_input_data()
                 in_out_variable = nullptr;
                 out_variable = nullptr;
 
-                auto point_in = pin->block_variable()->point_in();
+                CConnectionPointIn* point_in = pin->block_variable()->point_in();
 
                 /// empty pin
                 if (point_in->is_empty())
@@ -371,9 +358,9 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
 }
 
 std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdContent * /*body_content*/,
-                                                                         CPin *pin, uint16_t &id)
+                                                                         CPin *pin_out, uint16_t &id)
 {
-
+    CPinOut * out_pin = pin_out->output();
     std::vector<s_tree_item> tree_items;
 
 
@@ -381,7 +368,7 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
     {
         for (auto &object : *ladder->draw_components())
         {
-            if (object == pin->parent())
+            if (object == out_pin->parent())
             {
                 continue;
             }
@@ -396,11 +383,14 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
             item.name = stdName.toStdString();
             item.type = object->type_name().toStdString();
 
-            tree_items.push_back(item);
+            //tree_items.push_back(item);
+            std::vector<s_tree_item> complex_items;
+            complex_items.push_back(item);
+
 
             for (auto &connector : *object->pins())
             {
-                if (connector->direction() != PD_INPUT)
+                if (connector->direction() == PD_OUTPUT)
                 {
                     continue;
                 }
@@ -411,9 +401,9 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
                 }
 
                 /// info about local pin type
-                QString dragged_pin_type_name = pin->type() == DDT_DERIVED ? pin->type_name() :
-                                                base_types_names[pin->type()];
-                EDefinedDataTypes dragged_pin_type = pin->type();
+                QString dragged_pin_type_name = out_pin->type() == DDT_DERIVED ? out_pin->type_name() :
+                                                base_types_names[out_pin->type()];
+                EDefinedDataTypes dragged_pin_type = out_pin->type();
 
                 /// info about alien pin type
                 QString target_pin_type_name = connector->type() == DDT_DERIVED ? connector->type_name() :
@@ -438,10 +428,29 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
                 sub_item.id = id++;
                 sub_item.id_parent = item.id;
                 sub_item.type = target_pin_type_name.toStdString();
-                sub_item.name = connector->type_name().toStdString();
+                sub_item.name = connector->pin_name().toStdString();
                 sub_item.opposite_pin = connector;
 
-                tree_items.push_back(sub_item);
+                //tree_items.push_back(sub_item);
+                complex_items.push_back(sub_item);
+            }
+
+            if (complex_items.size() > 1)
+            {
+                tree_items.insert(tree_items.end(), complex_items.begin(), complex_items.end());
+            }
+            else
+            {
+                auto unit = complex_items.front();
+                s_compare_types compares;
+                if (check_pin_compatibility(unit.type.c_str(),
+                                            get_type_from_string(unit.type),
+                                            QString::fromStdString(unit.type),
+                                            get_type_from_string(unit.type),
+                                            compares))
+                {
+                    tree_items.push_back(unit);
+                }
             }
         }
 
@@ -451,19 +460,22 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
 }
 
 std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdContent * /*body_content*/,
-                                                                          CPin *pin, uint16_t &id)
+                                                                          CPin *pin_in, uint16_t &id)
 {
     std::vector<s_tree_item> tree_items;
-
+    CPinIn * input_pin = pin_in->input();
 
     for (auto &ladder : *m_world->m_ladders)
     {
         for (auto &object : *ladder->draw_components())
         {
-            if (object == pin->parent())
+            if (object == input_pin->parent())
             {
                 continue;
             }
+
+            /// if POU then put it here with children
+            std::vector<s_tree_item> complex_items;
 
             s_tree_item item;
             item.id = id++;
@@ -474,8 +486,9 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdCo
 
             item.name = stdName.toStdString();
             item.type = object->type_name().toStdString();
+            item.block = object->block();
 
-            tree_items.push_back(item);
+            complex_items.push_back(item);
 
             for (auto &connector : *object->pins())
             {
@@ -484,15 +497,17 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdCo
                     continue;
                 }
 
-                /// info about local pin type
-                QString dragged_pin_type_name = pin->type() == DDT_DERIVED ? pin->type_name() :
-                                                base_types_names[pin->type()];
-                EDefinedDataTypes dragged_pin_type = pin->type();
+                auto pin_out = connector->output();
+
+                /// info about queried pin type
+                QString dragged_pin_type_name = pin_in->type() == DDT_DERIVED ? pin_in->type_name() :
+                                                base_types_names[pin_in->type()];
+                EDefinedDataTypes dragged_pin_type = pin_in->type();
 
                 /// info about alien pin type
-                QString target_pin_type_name = connector->type() == DDT_DERIVED ? connector->type_name() :
-                                               base_types_names[connector->type()];
-                EDefinedDataTypes target_pin_type = connector->type();
+                QString target_pin_type_name = pin_out->type() == DDT_DERIVED ? pin_out->type_name() :
+                                               base_types_names[pin_out->type()];
+                EDefinedDataTypes target_pin_type = pin_out->type();
 
                 s_compare_types compare_types;
                 bool res = check_pin_compatibility(
@@ -513,9 +528,27 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdCo
                 sub_item.id_parent = item.id;
                 sub_item.type = target_pin_type_name.toStdString();
                 sub_item.name = connector->pin_name().toStdString();
-                sub_item.opposite_pin = pin;
+                sub_item.opposite_pin = pin_out;
 
-                tree_items.push_back(sub_item);
+                complex_items.push_back(sub_item);
+            }
+
+            if (complex_items.size() > 1)
+            {
+                tree_items.insert(tree_items.end(), complex_items.begin(), complex_items.end());
+            }
+            else
+            {
+                auto unit = complex_items.front();
+                s_compare_types compares;
+                if (check_pin_compatibility(unit.type.c_str(),
+                                            get_type_from_string(unit.type),
+                                            QString::fromStdString(unit.type),
+                                            get_type_from_string(unit.type),
+                                            compares))
+                {
+                    tree_items.push_back(unit);
+                }
             }
         }
 
@@ -541,36 +574,34 @@ std::vector<CPou *> *CVariablesAnalytics::pou_array()
 
 void CVariablesAnalytics::setup_block(CBlock *block)
 {
-    /// first of all - setup types of the block in-outs
     bool is_library = false;
     bool is_pous = false;
     CBlock templ_block;
 
-    QDomNode inst = m_standard_library->find_pou(block->type_name());
-
-    if (!inst.isNull())
+    /// if block from the projects POU
+    for (auto &pou : *m_pou_array)
     {
-        auto pou = CPou(inst);
-        templ_block = pou.get_block();
-        is_library = true;
+        if (pou->name() == block->type_name())
+        {
+            templ_block = pou->get_block();
+            is_pous = true;
+        }
     }
 
-    if (!is_library)
+    if (!is_pous)
     {
-        for (auto &pou : *m_pou_array)
+        templ_block = get_block_from_library(block->type_name());
+
+        if (!templ_block.is_empty())
         {
-            if (pou->name() == block->type_name())
-            {
-                templ_block = pou->get_block();
-                is_pous = true;
-            }
+            is_library = true;
         }
+
     }
 
     if (!is_library && !is_pous)
     {
-        //throw std::runtime_error("Project error in 'CVariablesAnalytics::setup_block'");
-        fprintf(stderr, "FBD ERROR: the block does not belongs not library and not pou in the project\n");
+        fprintf(stderr, "FBD ERROR: block does not belong to either library or project\n");
         return;
     }
 
@@ -731,7 +762,7 @@ bool CVariablesAnalytics::analyze_base_types(const EDefinedDataTypes &target_typ
     return false;
 }
 
-CBlock CVariablesAnalytics::get_block(const QString &block_type_name)
+CBlock CVariablesAnalytics::get_block_from_library(const QString &block_type_name) const
 {
     auto type_pou = m_standard_library->find_pou(block_type_name);
 

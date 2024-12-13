@@ -90,6 +90,8 @@ void CDiagramObject::define_size()
     int def_width = m_type_name.width() > m_instance_name.width() ? m_type_name.width() : m_instance_name.width();
     int inner_left_max = 0;
     int inner_right_max = 0;
+    int inner = 0;
+    int h_in = 0, h_out = 0, h;
 
     def_width += 2 * NAME_SHIFT;
 
@@ -113,8 +115,7 @@ void CDiagramObject::define_size()
         m_outputs->push_back(pin_out);
     }
 
-    int inner = 0;
-    int h_in = 0, h_out = 0, h;
+
     for (auto *&in : *m_inputs)
     {
         inner = in->pin_name_width() + 3;
@@ -138,8 +139,6 @@ void CDiagramObject::define_size()
     }
 
     h = h_in > h_out ? h_in : h_out;
-
-    size_t max_pins = m_inputs->size() > m_outputs->size() ? m_inputs->size() : m_outputs->size();
 
     def_width = def_width > (inner_left_max + inner_right_max + 20) ? def_width
                 : inner_left_max + inner_right_max + 20;
@@ -175,8 +174,6 @@ void CDiagramObject::update_rel_position(QPoint * relative_tl)
 
     m_base_shift = m_rect.topLeft();
 
-
-    //locate_pins();
     for (auto &pin : *m_pins)
     {
         pin->update_position();
@@ -195,24 +192,24 @@ QImage CDiagramObject::bound_image() const
     return m_bound_img;
 }
 
-void CDiagramObject::draw_bound_rect()
-{
-    m_bound_img = QImage(m_text_bounds.size(), QImage::Format_ARGB32);
-    m_bound_img.fill(QColor(255,255,255,0));
-
-    QPainter painter(&m_bound_img);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setPen(QPen(Qt::blue, 1));
-
-    painter.drawLine(QPointF(0, 0),
-                     QPointF(m_bound_img.width(), 0));
-    painter.drawLine(QPointF(m_bound_img.width(), 0),
-                     QPointF(m_bound_img.width(), m_bound_img.height()));
-    painter.drawLine(QPointF(m_bound_img.width(), m_bound_img.height()),
-                     QPointF(0, m_bound_img.height()));
-    painter.drawLine(QPointF(0, m_bound_img.height()),
-                     QPointF(0, 0));
-}
+//void CDiagramObject::draw_bound_rect()
+//{
+//    m_bound_img = QImage(m_text_bounds.size(), QImage::Format_ARGB32);
+//    m_bound_img.fill(QColor(255,255,255,0));
+//
+//    QPainter painter(&m_bound_img);
+//    painter.setRenderHint(QPainter::Antialiasing, true);
+//    painter.setPen(QPen(Qt::blue, 1));
+//
+//    painter.drawLine(QPointF(0, 0),
+//                     QPointF(m_bound_img.width(), 0));
+//    painter.drawLine(QPointF(m_bound_img.width(), 0),
+//                     QPointF(m_bound_img.width(), m_bound_img.height()));
+//    painter.drawLine(QPointF(m_bound_img.width(), m_bound_img.height()),
+//                     QPointF(0, m_bound_img.height()));
+//    painter.drawLine(QPointF(0, m_bound_img.height()),
+//                     QPointF(0, 0));
+//}
 
 void CDiagramObject::set_selected(const bool &selected)
 {
@@ -233,11 +230,11 @@ QImage CDiagramObject::drag_image(const bool &is_transparent)
     int diff = m_rect.left() - m_text_bounds.left();
 
     QPoint point(-m_rel_x + diff,0);
+    QImage image;
+    QRect rect;
+
     update_rel_position(&point);
 
-    QImage image;
-
-    QRect rect;
     rect.setRect(0, 0, m_text_bounds.width(), m_text_bounds.height() + 40);
     image = QImage(rect.size(), QImage::Format_ARGB32);
 
@@ -257,6 +254,7 @@ QImage CDiagramObject::drag_image(const bool &is_transparent)
     for (auto &cap : *this->m_pins)
     {
         painter.drawImage(*cap->rect(), *cap->image());
+
         for (auto &txt : *cap->texts())
         {
             painter.drawText(txt->pos(), txt->text());
@@ -384,7 +382,7 @@ void CDiagramObject::update_bound_rect()
     int outer_right = 0;
     int outer_left_gr = 0;
     int outer_right_max = 0;
-    int inp_w, out_w, out_t ;
+    int inp_w, out_w, out_t;
 
     for (auto &in : *m_inputs)
     {
@@ -427,7 +425,6 @@ void CDiagramObject::update_bound_rect()
 
     m_text_bound_shift = outer_left;
     m_graph_bound_shift = outer_left_gr;
-    //draw_bound_rect();
 }
 
 QString CDiagramObject::instance_name() const

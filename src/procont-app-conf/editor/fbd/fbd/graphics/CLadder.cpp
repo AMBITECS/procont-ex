@@ -650,7 +650,7 @@ CConnectLine *CLadder::add_line(CConnectLine *line)
     return line;
 }
 
-std::vector<CConnectLine *> *CLadder::connections()
+std::vector<CConnectLine *> *CLadder::connecting_lines()
 {
     return m_lines;
 }
@@ -710,6 +710,21 @@ CConnectLine *CLadder::remove_line(CConnectLine *line)
 COglWorld *CLadder::parent()
 {
     return m_parent;
+}
+
+CConnectLine *CLadder::remove_line(CPinIn *pin_input)
+{
+    int counter = 0;
+    for (auto &line : *m_lines)
+    {
+        if (line->get_pin_in() == pin_input)
+        {
+            m_lines->erase(m_lines->begin() + counter);
+            return line;
+        }
+        counter++;
+    }
+    return nullptr;
 }
 
 

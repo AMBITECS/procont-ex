@@ -7,9 +7,9 @@
 #include <QHeaderView>
 #include <QEvent>
 #include <QKeyEvent>
-#include <QFocusEvent>
 #include <QTimer>
 #include <QLineEdit>
+
 
 CPinVarEditor::CPinVarEditor(QWidget *parent) : QComboBox(parent)
 {
@@ -107,19 +107,22 @@ bool CPinVarEditor::eventFilter(QObject *object, QEvent *event)
 
         if (key == Qt::Key_Escape)
         {
+            reset_selection();
             emit edit_cancel();
             return false;
         }
 
         if (key == Qt::Key_Return || key == Qt::Key_Enter)
         {
-            emit new_variable_name(m_new_variable);
+            prepare_new_variable();
             return false;
         }
+        reset_selection();
     }
 
     if (event->type() == QEvent::FocusOut && this->lineEdit()->text() != "")
     {
+        reset_selection();
         emit edit_cancel();
         return false;
     }
@@ -128,6 +131,7 @@ bool CPinVarEditor::eventFilter(QObject *object, QEvent *event)
 
 void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
 {
+    reset_selection();
     if (!index.isValid())
     {
         return;
@@ -144,12 +148,21 @@ void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
     if (item)
     {
         QPersistentModelIndex parent_index = index.parent();
+        m_selected_item = item->item();
+
+        if (!m_selected_item)
+        {
+            fprintf(stderr, "Algorithm is broken in 'CPinVarEditor::tree_clicked'");
+            return;
+        }
 
         if (parent_index.isValid())
         {
             auto parent_item = static_cast<TreeItem*>(parent_index.internalPointer());
+
             if (parent_item)
             {
+                m_parent_item = parent_item->item();
                 m_new_variable = parent_item->item()->name.c_str() + (QString)".";
             }
         }
@@ -163,4 +176,17 @@ void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
 void CPinVarEditor::show_variable()
 {
     this->setEditText(m_new_variable);
+}
+
+void CPinVarEditor::prepare_new_variable()
+{
+    emit new_pin_connection(m_selected_item, m_new_variable);
+    reset_selection();
+}
+
+void CPinVarEditor::reset_selection()
+{
+    //m_new_variable = {};
+    m_selected_item = nullptr;
+    m_parent_item = nullptr;
 }

@@ -116,7 +116,7 @@ private:
     std::vector<CPin*> * m_pins;
 
     void define_size();
-    void draw_bound_rect();
+    // void draw_bound_rect();
     void locate_pins();
     void  update_rel_position(QPoint * relative_tl = nullptr);
 

@@ -17,12 +17,13 @@ CPinOut::CPinOut(CDiagramObject *parent, CBlockVar *base, QPoint *parent_tl) : C
 
     saturate();
 
-    m_graphic_connections = new std::vector<CPin*>();
+    m_graphic_connections = new std::vector<CPinIn*>();
     m_iface_vars = new std::vector<CVariable*>();
     m_world = parent->parent()->parent();
 
     CDiagramColors colors;
     m_graph_color = colors.ladder_colors().line_color;
+    m_var_color = colors.base_colors().out_pin_variable;
 }
 
 CPinOut::~CPinOut()
@@ -33,14 +34,16 @@ CPinOut::~CPinOut()
 
 void CPinOut::connect(CPin *pin)
 {
-    if (!pin)
+    if (!pin || pin->direction() == PD_OUTPUT)
     {
         throw std::runtime_error("cant connect nullptr in 'void CPinOut::connect(CPin *pin)'");
     }
 
+    CPinIn *in = pin->input();
+
     for (auto &existing : *m_graphic_connections)
     {
-        if (existing == pin)
+        if (existing == in)
         {
             return;
         }
@@ -57,7 +60,8 @@ void CPinOut::connect(CPin *pin)
         resort_outers();
     }
 
-    m_graphic_connections->push_back(pin);
+    m_graphic_connections->push_back(in);
+    refresh_connections();
 }
 
 void CPinOut::connect(CVariable *iface_var)
@@ -69,15 +73,15 @@ void CPinOut::connect(CVariable *iface_var)
     m_is_connected = true;
 
     auto txt = make_outer_text(iface_var);
-    txt->set_color({150,99,9});
+    txt->set_color(m_var_color);
     m_outer_texts->push_back(txt);
 
     m_iface_vars->push_back(iface_var);
 
-    resort_outers();
+    refresh_connections();
 }
 
-std::vector<CPin *> * CPinOut::graphic_connections()
+std::vector<CPinIn *> * CPinOut::graphic_connections()
 {
     return m_graphic_connections;
 }
@@ -85,16 +89,6 @@ std::vector<CPin *> * CPinOut::graphic_connections()
 std::vector<CVariable *> *CPinOut::iface_variables()
 {
     return m_iface_vars;
-}
-
-void CPinOut::remove_connection(CPinIn *opposite)
-{
-
-}
-
-void CPinOut::remove_connection(CVariable *iface_var)
-{
-
 }
 
 CObjectsText *CPinOut::make_outer_text(CVariable *variable)
@@ -126,7 +120,7 @@ void CPinOut::refresh_connections()
     for (auto &iface : *m_iface_vars)
     {
         auto txt = make_outer_text(iface);
-        txt->set_color({150,99,9});
+        txt->set_color(m_var_color);
         m_outer_texts->push_back(txt);
     }
 
@@ -150,6 +144,36 @@ CObjectsText *CPinOut::make_outer_text(CPin *pin)
     auto txt_block = new CObjectsText();
     txt_block->set_text(make_pin_text(pin));
     return txt_block;
+}
+
+void CPinOut::disconnect(CPinIn *in)
+{
+    int counter = 0;
+    for (auto &input : *m_graphic_connections)
+    {
+        if (in == input)
+        {
+            m_graphic_connections->erase(m_graphic_connections->begin() + counter);
+            refresh_connections();
+            return;
+        }
+        counter++;
+    }
+}
+
+void CPinOut::disconnect(CVariable *iface_var)
+{
+    int counter = 0;
+    for (auto &i_var : *m_iface_vars)
+    {
+        if (i_var == iface_var)
+        {
+            m_iface_vars->erase(m_iface_vars->begin() + counter);
+            refresh_connections();
+            return;
+        }
+        counter++;
+    }
 }
 
 

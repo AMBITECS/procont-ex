@@ -30,6 +30,7 @@ void CDiagramColors::update_colors()
     m_ladder_colors.landing_strip = QColor(239,192,136);
     m_ladder_colors.line_color = QColor(89,127,156);
     m_ladder_colors.line_selected = QColor(156,58,156);
+    m_base_colors.out_pin_variable = QColor(177,107,49);
 
     /// тут надо аккуратней
     m_ladder_colors.normal.left_part = m_base_colors.diag_background;

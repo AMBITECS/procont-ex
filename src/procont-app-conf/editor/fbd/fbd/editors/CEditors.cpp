@@ -6,6 +6,7 @@
 #include "../graphics/CDiagramObject.h"
 #include "../graphics/coglwidget.h"
 #include "../redo-undo/CPinRename.h"
+#include "../redo-undo/CPinConnecting.h"
 #include "editor/fbd/resources/colors.h"
 
 CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
@@ -21,14 +22,12 @@ CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
     connect(m_obj_inst_editor, &CInstEditor::escaped,
             this, &CEditors::cancel_inst_naming);
 
-    /*connect(m_obj_inst_editor, &CInstEditor::returnPressed,
-            this, &CEditors::inst_editor_complete);*/
 
     m_pin_var_editor  = new CPinVarEditor(wgt);
     connect(m_pin_var_editor, &CPinVarEditor::edit_cancel,
             this, &CEditors::pin_edit_cancel);
-    connect(m_pin_var_editor, &CPinVarEditor::new_variable_name,
-            this, &CEditors::pin_new_variable);
+    connect(m_pin_var_editor, &CPinVarEditor::new_pin_connection,
+            this, &CEditors::new_pin_connection);
 
     m_obj_inst_editor->setVisible(false);
     m_pin_var_editor->setVisible(false);
@@ -85,7 +84,15 @@ void CEditors::show_combo(CPin *pin)
     m_pin_var_editor->expandAll();
 
     auto rect = pin->rect();
-    QPoint pos = rect->topLeft();
+    QPoint pos;
+    if(pin->direction() == PD_INPUT)
+    {
+        int x = rect->topLeft().x() - m_pin_var_editor->width();
+        pos = rect->topLeft();
+        pos.setX(x);
+    }
+    else
+        pos = rect->topRight();
 
     m_pin_var_editor->move(pos);
     m_pin_var_editor->setVisible(true);
@@ -161,41 +168,51 @@ void CEditors::pin_edit_cancel()
     m_pin_var_editor->hide();
 }
 
-void CEditors::pin_new_variable(const QString &var_name)
+void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var_name)
 {
     /// find opposite side of the variable
     CPin *opposite_pin = nullptr;
     CVariable   *iface_var = nullptr;
+    CBlock *block = nullptr;
     QString opposite_var_name;
 
-    /*if (!var_name.contains("["))
-    {
-        if (!m_var_analytics->find_target(var_name.toStdString(), &opposite_pin, &iface_var))
-        {
-            throw std::runtime_error("What the fuck in 'CEditors::pin_new_variable'");
-        }
-    }*/
 
-    for (auto &item : combo_data)
-    {
-        if (item.name == var_name.toStdString())
-        {
-            opposite_pin = item.opposite_pin;
-            iface_var = item.iface_variable;
-            opposite_var_name = opposite_pin ? opposite_pin->type_name() : iface_var->type();
 
-            break;
-        }
+    if (!selected_item)
+    {
+        /// скорее всего это элемент массива
+    }
+    else
+    {
+        block = selected_item->block;
+        iface_var = selected_item->iface_variable;
+        opposite_pin = selected_item->opposite_pin;
     }
 
-    if (!opposite_pin && !iface_var)
+
+
+    if (opposite_pin && !iface_var && !block)
     {
-        throw std::runtime_error("Can't opposite connection be null in 'void CEditors::pin_new_variable(const QString &var_name)'");
+        auto *cmd = new CPinConnecting(m_world, m_pin, opposite_pin);
+
+        if (!cmd->is_error())
+            m_world->undo_stack()->push(cmd);
+        else
+            delete cmd;
     }
 
-    auto cmd_pin_var = new CPinRename(m_world, m_pin, var_name,
-                                      opposite_pin, opposite_var_name, iface_var);
-    m_world->undo_stack()->push(cmd_pin_var);
+    if (iface_var && !opposite_pin && !block)
+    {
+        auto cmd = new CPinRename(m_world, m_pin, var_name,
+                                          opposite_pin, opposite_var_name, iface_var);
+        m_world->undo_stack()->push(cmd);
+    }
+
+    if (block && !opposite_pin && !iface_var)
+    {
+
+    }
+
 
 
     m_pin = nullptr;

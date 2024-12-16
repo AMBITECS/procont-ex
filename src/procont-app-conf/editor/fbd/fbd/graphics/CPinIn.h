@@ -28,14 +28,18 @@ public:
     [[nodiscard]] bool        is_coil_reset() const;
     void        set_coil_reset(const bool &reset);
 
-    [[nodiscard]] uint64_t    reference_local_id() const;
+    [[nodiscard]] QString      constant() const;
+    CVariable  * iface_variable();
+
 
 
     /// операции соединения/разъединения
     CPinOut*    opposite();
-    // void        set_opposite(CPinOut *opposite);
+    void        load_project_connect_pin(CPinOut *pin_out);
+    void        load_project_connect_iface_var(CVariable *iface_var);
+    void        load_project_connect_const(const EDefinedDataTypes & type, const QString &const_val);
     void        connect_pin(CPinOut *pin); //!< графическое соединение (если одна ступень)
-    void        disconnect();
+    void        disconnect(CPinOut *sender = nullptr);
     void        connect_iface_variable(CVariable *variable);
     void        set_constant(const EDefinedDataTypes &type, const std::string &type_name);
 
@@ -49,6 +53,9 @@ private:
 
     QColor      m_color_def;
     QColor      m_color_graph;
+    CVariable * m_iface_var{nullptr};
+    uint64_t    m_iface_input_var_id{0};
+    QString     m_constant;
 
     void update_condition();
 

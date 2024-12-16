@@ -9,7 +9,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 
-#include "CVariablesAnalytics.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 #include "qvarselectmodel.h"
 #include "CInstEditor.h"
 #include "CPinVarEditor.h"
@@ -52,6 +52,7 @@ private:
     QString       m_inst_old_name;
     QVarSelectModel *m_model;
     COglWorld   * m_world;
+    CFilter     * m_filter;
 
     std::vector<s_tree_item>    combo_data;
 

@@ -49,6 +49,9 @@ public:
 
     s_variable_data     get_var_by_local_id(const uint64_t &id);
     CBlock  *           get_block_by_id(const uint64_t &id);
+    CInVariable*        remove_in_variable_ny_id(const uint64_t &loc_id);
+
+    COutVariable *find_output_var_by_iface_name(const QString &iface_var_name);
 
 private:
     QList<CBlock*>      * m_blocks;

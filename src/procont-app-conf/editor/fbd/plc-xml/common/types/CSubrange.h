@@ -16,7 +16,7 @@ public:
     explicit CSubrange(const QDomNode &);
     ~CSubrange() override;
 
-    [[nodiscard]] QDomNode dom_node() const;
+    [[nodiscard]] QDomNode dom_node() const override;
 
     [[nodiscard]] int     lower() const;
     void    set_lower(const int &lower);

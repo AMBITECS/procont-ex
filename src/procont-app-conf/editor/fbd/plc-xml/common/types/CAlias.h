@@ -16,7 +16,7 @@ public:
     explicit CAlias(const QDomNode &);
     ~CAlias() override;
 
-    QDomNode    dom_node() const;
+    [[nodiscard]] QDomNode    dom_node() const override;
 
     EDefinedDataTypes   base_type() const;
     QString             base_type_name() const;

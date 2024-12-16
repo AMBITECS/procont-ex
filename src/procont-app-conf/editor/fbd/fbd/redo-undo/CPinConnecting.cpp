@@ -25,12 +25,12 @@ CPinConnecting::CPinConnecting(COglWorld *world, CPin *editing_pin, CPin *opposi
     QString pin_edit_name = m_pin_edited->parent()->instance_name().isEmpty() ?
                             m_pin_edited->type_name() :
                             m_pin_edited->parent()->instance_name();
-    pin_edit_name += "." + m_pin_edited->pin_name();
+    pin_edit_name += "." + m_pin_edited->name();
 
     QString pin_opp_name =  m_pin_opposite->parent()->instance_name().isEmpty() ?
                             m_pin_opposite->parent()->type_name() :
                             m_pin_opposite->parent()->instance_name();
-    pin_opp_name += "." + m_pin_opposite->pin_name();
+    pin_opp_name += "." + m_pin_opposite->name();
 
     QString text = "Соединение " + pin_edit_name + " c " + pin_opp_name;
 
@@ -63,6 +63,9 @@ void CPinConnecting::redo()
         in->update_graphic_text();
         out->refresh_connections();
     }
+
+    in->connect_pin(out);
+    out->connect(in);
 
     /// TODO: refresh view
 }

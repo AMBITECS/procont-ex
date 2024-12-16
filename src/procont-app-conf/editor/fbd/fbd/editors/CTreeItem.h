@@ -7,7 +7,7 @@
 
 
 #include <QVariantList>
-#include "CVariablesAnalytics.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 
 
 class TreeItem

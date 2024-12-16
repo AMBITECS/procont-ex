@@ -29,15 +29,20 @@ public:
     QString     type() const;
     void        set_type(const QString & type);
 
-    QDomNode    * sourceDomNode();
 
-    CInterface * interface();
+
+    CInterface      * interface();
     QList<CBody*>   * bodies();
     CActions        * actions();
     CTransitions    * transitions();
     CAddData        * add_data();
     CDocumentation  * documentation();
 
+    /// additional operations
+    QDomNode    * sourceDomNode();
+    void          setSourceDomNode(const QDomNode &dom_node);
+
+    CFbdContent *   get_fbd();
     /// user functions
 
     /**
@@ -49,11 +54,12 @@ public:
     bool             find_block_connecting_info(const uint64_t &ref_id, const QString &formal_param,
                                                 CBlock ** block, CBlockVar **block_var);
     bool             process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                                    CBlockVar **possible_block_var, std::vector<CVariable *> *possible_iface);
+                                    std::vector<CBlockVar*> *possible_block_vars,
+                                    std::vector<CVariable *> *possible_iface);
     CBlock *         find_block_by_id(const uint64_t &ref_id);
 
     bool recursive_find_front(CInOutVariable *in_out_variable,
-                              CBlockVar **p_block_var,std::vector<CVariable *> *possible_iface);
+                              std::vector<CBlockVar *>* in_outs,std::vector<CVariable *> *possible_iface);
 
 private:
     QDomNode    * m_dom_node{nullptr};

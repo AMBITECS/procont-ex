@@ -3,18 +3,19 @@
 //
 
 #include "CInstEditor.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 #include <QPalette>
 #include <QKeyEvent>
 #include <regex>
+#include "../../resources/colors.h"
+#include "../graphics/CDiagramObject.h"
 
-CInstEditor::CInstEditor(QWidget *parent) : QLineEdit(parent)
+CInstEditor::CInstEditor(CFilter *filter, QWidget *parent) : QLineEdit(parent)
 {
-    m_existing = new std::vector<std::pair<QString, EDefinedDataTypes>>();
+    //m_existing = new std::vector<std::pair<QString, EDefinedDataTypes>>();
+    m_filter = filter;
+    m_object = nullptr;
 
-    m_norm_bkg         = this->palette().color(QPalette::ColorRole::Base);
-    m_norm_foreground  = this->palette().color(QPalette::ColorRole::Text);
-    m_error_bkg        = QColor(255, 25, 91);
-    m_error_foreground = QColor(255, 255,255);
 
     connect(this, &CInstEditor::textChanged,   this, &CInstEditor::text_changed);
     connect(this, &CInstEditor::returnPressed, this, &CInstEditor::editing_complete);
@@ -22,47 +23,17 @@ CInstEditor::CInstEditor(QWidget *parent) : QLineEdit(parent)
     this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
     m_type = EDefinedDataTypes::DDT_UNDEF;
+
+    CDiagramColors colors;
+
+    m_error_bkg        = colors.base_colors().err_color; //QColor(255, 25, 91);
+    m_error_foreground = colors.base_colors().diag_text_def; //QColor(255, 255,255);
+    m_norm_bkg         = this->palette().color(QPalette::ColorRole::Base);
+    m_norm_foreground  = this->palette().color(QPalette::ColorRole::Text);
 }
 
 CInstEditor::~CInstEditor()
-{
-    delete m_existing;
-}
-
-void CInstEditor::set_existing(std::vector<std::pair<QString, EDefinedDataTypes>> *existing,
-                               const QString &c_name, const EDefinedDataTypes &type)
-{
-    m_existing->clear();
-    m_type = type;
-
-    m_rename = false;
-    m_rename_required = false;
-    on_exit = false;
-
-    m_old_name = c_name.toStdString();
-
-    /// if renaming current instance
-    for (auto &var : *existing)
-    {
-        if (var.first == c_name && var.second == type)
-        {
-            m_rename = true;
-            continue;
-        }
-        m_existing->push_back(var);
-    }
-
-    int found = find(c_name.toStdString());
-
-    /// renaming because var with other type has the same name
-    if (found > 0)
-    {
-        m_rename = true;
-        m_rename_required = true;
-    }
-
-    this->setText(c_name);
-}
+= default;
 
 void CInstEditor::text_changed(const QString &str)
 {
@@ -70,12 +41,9 @@ void CInstEditor::text_changed(const QString &str)
     {
         return;
     }
+    std::string  var_name = str.toStdString();
 
-    bool not_found = find(str.toStdString()) == 0;
-    bool regex_ok = regex(str.toStdString());
-    bool renaming = !m_rename_required || m_old_name != str.toStdString();
-
-    not_found && regex_ok && renaming ? set_norm() : set_error();
+    check_is_correct(str);
 }
 
 bool CInstEditor::is_error() const
@@ -98,11 +66,12 @@ void CInstEditor::set_norm()
 void CInstEditor::editing_complete()
 {
     on_exit = true;
-    bool not_found = find(text().toStdString()) == 0;
-    bool regex_ok = regex(text().toStdString());
-    bool renaming = !m_rename_required || m_old_name != text().toStdString();
 
-    not_found && regex_ok && renaming ? set_norm() : set_error();
+    std::string  var_name = text().toStdString();
+
+    auto res = m_filter->filter_string(var_name, ff_all_flags);
+
+    res ? set_norm() : set_error();
 
     if (m_old_name != text().toStdString())
     {
@@ -152,25 +121,21 @@ void CInstEditor::keyPressEvent(QKeyEvent *event)
     QLineEdit::keyPressEvent(event);
 }
 
-bool CInstEditor::regex(const std::string &str)
+void CInstEditor::check_is_correct(const QString &str)
 {
-    const char *reg = "[a-zA-Z][a-zA-Z_0-9]*";
-    bool res =  std::regex_match(str, std::regex(reg));
-    return res;
+    std::string var_name = str.toStdString();
+    auto res = m_filter->filter_string(var_name, ff_all_flags);
+
+    res ? set_norm() : set_error();
 }
 
-int CInstEditor::find(const std::string &name)
+void CInstEditor::set_diagram_object(CDiagramObject *object)
 {
-    int count = 0;
-    for (auto &var : *m_existing)
-    {
-        if (var.first.toStdString() == name)
-        {
-            count++;
-        }
-    }
+    m_object = object;
+    check_is_correct(m_object->instance_name());
 
-    return count;
+    this->setText(m_object->instance_name());
+    this->selectAll();
 }
 
 

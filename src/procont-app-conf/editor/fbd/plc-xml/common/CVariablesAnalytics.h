@@ -5,14 +5,15 @@
 #ifndef EDITORSD_CVARIABLESANALYTICS_H
 #define EDITORSD_CVARIABLESANALYTICS_H
 
-#include "../../plc-xml/CInterface.h"
-#include "../../plc-xml/common/CPou.h"
-#include "../variables.h"
-#include "CFilter.h"
-#include "../../plc-xml/common/CUserType.h"
-#include "../../plc-xml/common/types/CArray.h"
-#include "../../../../iec/StandardLibrary.h"
+#include "editor/fbd/plc-xml/CInterface.h"
+#include "CPou.h"
+#include "editor/fbd/fbd/variables.h"
+#include "editor/fbd/fbd/editors/CFilter.h"
+#include "CUserType.h"
+#include "editor/fbd/plc-xml/common/types/CArray.h"
+#include "iec/StandardLibrary.h"
 #include "editor/fbd/fbd/graphics/CPin.h"
+#include "CProject.h"
 
 class COglWorld;
 
@@ -40,9 +41,10 @@ struct s_compare_types
 class CVariablesAnalytics
 {
 public:
-    explicit CVariablesAnalytics(COglWorld * world);
+    static CVariablesAnalytics *   get_instance(const QDomNode &project_node);  //!< QDomNode соответствует тегу \<project xmlns="http...">
     ~CVariablesAnalytics();
 
+    CPou *    set_current_pou(const QString &pou_name, COglWorld *world);
     /**
      * @brief returns all variable names that can be using for block connection
      * @param pin
@@ -75,25 +77,38 @@ public:
     [[nodiscard]] CBlock  get_block_from_library(const QString &block_type_name) const;
 
     bool  connect_pin(CPinIn * input, bool &found, CBlockVar ** opposite_out);  //!< возврат true - означает системную или другую серьёзную ошибку
-    bool find_input_data();
+    bool load_connections();
+
+    bool            remove_input_variable_by_id(const uint64_t &ref_id);
+    CInVariable*    add_input_variable(CInVariable *in_variable);
+    COutVariable*   add_out_variable(COutVariable * out_variable);
+    COutVariable*   remove_out_bloc_by_iface_variable(CVariable *iface_var,
+                                                      uint64_t &ref_id, const QString &out_formal_param);
+
+    [[nodiscard]] bool connect_iface_var(CPinOut *pin_out, CVariable *iface_variable);
+    CVariable *     find_iface_var(const QString &var_name);
+
+    StandardLibrary *       standard_library();
+protected:
+    explicit CVariablesAnalytics(const QDomNode &dom_node);
 private:
 
-    COglWorld           * m_world;
+    COglWorld           * m_world{nullptr};
     CPou                * m_diagram_pou{nullptr};
     CInterface          * m_diagram_interface{nullptr};
     std::vector<CPou*>  * m_pou_array;
     std::vector<CVariable*> * m_global_variables;
-    QDomNode            * m_pous;
     std::vector<CUserType*> *m_types;
     StandardLibrary     * m_standard_library;
+
+    CProject            * m_project;
 
     std::vector<std::tuple<CBlockVar*, CBlock*, CBlockVar*>>  m_graph_connections;
 
     /**@brief эту команду необходимо расширить при реализации LD/SFC и прочее, а тип возврата сделать интерфейсом
      * или базовым классом */
     CFbdContent *  get_pou_content();
-    void clear_pous();
-    void clear_variable_sets();
+
     // static void  copy_vars(std::vector<CVariable*> *variables, std::vector<std::pair<QString, EDefinedDataTypes>> *map);
 
 
@@ -118,6 +133,7 @@ private:
     CPinOut *find_output(CBlockVar *p_var);
 
     void process_out_variables();
+    void connect_inputs(CDiagramObject *object);
 };
 
 

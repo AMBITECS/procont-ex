@@ -40,6 +40,7 @@ public:
     static CUserType * get_user_type(const EUserTypes &type, QDomNode *node = nullptr);
     static EUserTypes  get_user_type(const QDomNode &dom_node);
 
+    [[nodiscard]] virtual QDomNode    dom_node() const = 0;
 
     [[nodiscard]] EUserTypes  type() const;
     [[nodiscard]] QString     name() const;

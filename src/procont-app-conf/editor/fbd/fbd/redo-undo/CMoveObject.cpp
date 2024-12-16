@@ -73,6 +73,7 @@ void CMoveObject::move()
     }
 
     insert_object(m_destination, obj, m_dst_index);
+    obj->block()->set_global_id(QString::number(m_destination->number()));
 }
 
 void CMoveObject::back()
@@ -86,6 +87,7 @@ void CMoveObject::back()
     }
 
     insert_object(m_source, obj, m_src_index);
+    obj->block()->set_global_id(QString::number(m_source->number()));
 }
 
 CDiagramObject *CMoveObject::remove_from_ladder(CLadder *source, CDiagramObject *object, int &from_index)

@@ -8,11 +8,18 @@
 #include "../redo-undo/CPinRename.h"
 #include "../redo-undo/CPinConnecting.h"
 #include "editor/fbd/resources/colors.h"
+#include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/fbd/redo-undo/CConstToPin.h"
+
+extern CVariablesAnalytics * xml_variable_analytic;
 
 CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
 {
     m_pou_node = pou_node;
-    m_obj_inst_editor = new CInstEditor(wgt);
+    m_var_analytics = xml_variable_analytic;
+    m_filter = new CFilter(m_var_analytics);
+
+    m_obj_inst_editor = new CInstEditor(m_filter, wgt);
     connect(m_obj_inst_editor, &CInstEditor::insert_new,
             this, &CEditors::insert_new_inst);
 
@@ -32,7 +39,7 @@ CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
     m_obj_inst_editor->setVisible(false);
     m_pin_var_editor->setVisible(false);
 
-    m_var_analytics = new CVariablesAnalytics(world);
+
     m_wgt = wgt;
     m_world = world;
 
@@ -43,7 +50,7 @@ CEditors::~CEditors()
 {
     delete m_obj_inst_editor;
     delete m_pin_var_editor;
-    delete m_var_analytics;
+    delete m_filter;
 }
 
 void CEditors::show_line_edit(CDiagramObject *obj)
@@ -56,8 +63,8 @@ void CEditors::show_line_edit(CDiagramObject *obj)
     auto exist = m_var_analytics->get_interface_variables();
 
     m_inst_old_name = obj->instance_name();
-
-    m_obj_inst_editor->set_existing(&exist,obj->instance_name(), obj->type());
+    m_obj_inst_editor->set_diagram_object(obj);
+    //m_obj_inst_editor->set_existing(&exist,obj->instance_name(), obj->type());
 
     m_obj_inst_editor->move(pos);
     m_obj_inst_editor->setText(obj->instance_name());
@@ -176,10 +183,26 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
     CBlock *block = nullptr;
     QString opposite_var_name;
 
+    if (!selected_item && var_name.isEmpty())
+    {
+        QtDialogs::info_user("no selected items and combo text in 'CEditors::new_pin_connection'");
+        return;
+    }
+
 
 
     if (!selected_item)
     {
+
+        /// Это может быть константа или переменная набранная вручную
+        auto i_var = m_var_analytics->find_iface_var(var_name);
+        if (!i_var)
+        {
+            auto cmd = new CConstToPin(m_world, m_pin->input(), var_name);
+            m_world->undo_stack()->push(cmd);
+            emit m_world->undo_enabled();
+        }
+        iface_var = i_var;
         /// скорее всего это элемент массива
     }
     else
@@ -189,14 +212,15 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
         opposite_pin = selected_item->opposite_pin;
     }
 
-
-
     if (opposite_pin && !iface_var && !block)
     {
         auto *cmd = new CPinConnecting(m_world, m_pin, opposite_pin);
 
         if (!cmd->is_error())
+        {
             m_world->undo_stack()->push(cmd);
+            emit m_world->undo_enabled();
+        }
         else
             delete cmd;
     }
@@ -206,6 +230,7 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
         auto cmd = new CPinRename(m_world, m_pin, var_name,
                                           opposite_pin, opposite_var_name, iface_var);
         m_world->undo_stack()->push(cmd);
+        emit m_world->undo_enabled();
     }
 
     if (block && !opposite_pin && !iface_var)

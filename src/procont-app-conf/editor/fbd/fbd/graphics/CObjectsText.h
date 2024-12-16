@@ -28,7 +28,7 @@ public:
     [[nodiscard]] QPoint      pos() const;
     void                      set_pos(const QPoint &pos);
 
-    QRect                     text_rect() const;
+    [[nodiscard]] QRect       text_rect() const;
 
 private:
     QColor  m_color;

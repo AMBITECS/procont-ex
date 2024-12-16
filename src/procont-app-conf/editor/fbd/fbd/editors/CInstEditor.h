@@ -7,15 +7,20 @@
 
 #include <QLineEdit>
 #include "../../plc-xml/includes.h"
+#include "CFilter.h"
+
+
+class CDiagramObject;
 
 class CInstEditor : public QLineEdit
 {
     Q_OBJECT
 public:
-    explicit CInstEditor(QWidget *parent = nullptr);
+    explicit CInstEditor(CFilter *filter, QWidget *parent = nullptr);
     ~CInstEditor() override;
 
-    void  set_existing(std::vector<std::pair<QString, EDefinedDataTypes>> *existing, const QString &c_name, const EDefinedDataTypes &type);
+    //void  set_existing(std::vector<std::pair<QString, EDefinedDataTypes>> *existing, const QString &c_name, const EDefinedDataTypes &type);
+    void   set_diagram_object(CDiagramObject *object);
     [[nodiscard]] bool  is_error() const;
     [[nodiscard]] QColor  color() const;
 
@@ -35,7 +40,7 @@ protected:
 
 
 private:
-    std::vector<std::pair<QString, EDefinedDataTypes>> * m_existing;
+    //std::vector<std::pair<QString, EDefinedDataTypes>> * m_existing;
     QColor  m_norm_bkg;
     QColor  m_norm_foreground;
     QColor  m_error_bkg;
@@ -46,14 +51,15 @@ private:
     bool    m_rename_required{false};
     EDefinedDataTypes   m_type;
     std::string  m_old_name;
+    CFilter * m_filter;
+    CDiagramObject * m_object;
 
     bool  on_exit{false};
 
     void    set_norm();
     void    set_error();
 
-    bool regex(const std::string &str);
-    int  find(const std::string &name);
+    void    check_is_correct(const QString &str);
 };
 
 

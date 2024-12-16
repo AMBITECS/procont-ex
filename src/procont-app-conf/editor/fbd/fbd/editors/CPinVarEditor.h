@@ -9,7 +9,7 @@
 #include <QWidget>
 #include <QTreeView>
 #include "../graphics/CPin.h"
-#include "CVariablesAnalytics.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 
 
 class CPinVarEditor : public QComboBox

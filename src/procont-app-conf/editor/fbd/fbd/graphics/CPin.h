@@ -59,7 +59,8 @@ public:
     [[nodiscard]] uint16_t    outer_text_width() const;
 
 
-    [[nodiscard]] QString     pin_name() const;
+    [[nodiscard]] QString     name() const;
+    [[nodiscard]] QString     name_full() const;  //!< with parent name
     void    set_pin_name(const QString & formal);
 
     [[nodiscard]] QString     type_name() const;

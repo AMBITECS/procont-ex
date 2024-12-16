@@ -3,6 +3,7 @@
 //
 
 #include "CFbdContent.h"
+#include "editor/fbd/fbd/editors/CFilter.h"
 
 CFbdContent::CFbdContent()
 {
@@ -292,6 +293,43 @@ CBlock *CFbdContent::get_block_by_id(const uint64_t &id)
         if (block->local_id() == id)
         {
             return block;
+        }
+    }
+    return nullptr;
+}
+
+CInVariable* CFbdContent::remove_in_variable_ny_id(const uint64_t &loc_id)
+{
+    int counter = 0;
+    CInVariable *var = nullptr;
+
+    for (auto &in : *m_inVariables)
+    {
+        if (in->local_id() == loc_id)
+        {
+            var = in;
+            m_inVariables->erase(m_inVariables->cbegin() + counter);
+            return var;
+        }
+        counter++;
+    }
+    return var;
+}
+
+COutVariable *CFbdContent::find_output_var_by_iface_name(const QString &iface_var_name)
+{
+    std::string search_name = iface_var_name.toStdString();
+    CFilter::capitalize_word(search_name);
+    std::string current;
+
+    for (auto &out_var : *m_out_variables)
+    {
+        current = out_var->expression()->expression().toStdString();
+        CFilter::capitalize_word(current);
+
+        if (current == search_name)
+        {
+            return out_var;
         }
     }
     return nullptr;

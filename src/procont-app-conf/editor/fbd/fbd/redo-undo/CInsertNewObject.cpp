@@ -3,7 +3,9 @@
 //
 
 #include "CInsertNewObject.h"
-#include "../palette/DBlock.h"
+#include "../../plc-xml/common/CVariablesAnalytics.h"
+
+extern CVariablesAnalytics *xml_variable_analytic;
 
 CInsertNewObject::CInsertNewObject(COglWorld * world, CFbdContent * fbd, CLadder *p_ladder,
                                    const EPaletteElements &element, const QPoint &pos)
@@ -54,13 +56,11 @@ CDiagramObject *CInsertNewObject::inserted_object()
 
 void CInsertNewObject::insert()
 {
-    CVariablesAnalytics analytics(m_world);
-
     if (!m_new_obj)
     {
         auto lib_elem_name = pou_item_names.find(m_element).value();
-        CBlock item = analytics.get_block_from_library(lib_elem_name);
-        analytics.setup_block(&item);
+        CBlock item = xml_variable_analytic->get_block_from_library(lib_elem_name);
+        xml_variable_analytic->setup_block(&item);
         auto *block = new CBlock(item);
 
         m_new_obj = new CDiagramObject(m_ladder, block);

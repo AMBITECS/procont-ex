@@ -11,7 +11,7 @@
 CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_top_left
 {
     m_block = block;
-    m_block->set_global_id(QString::number(ladder->number() - 1));
+    m_block->set_global_id(QString::number(ladder->number()));
 
     m_ladder_relative_tl = ladder->real_top_left();
     m_parent = ladder;

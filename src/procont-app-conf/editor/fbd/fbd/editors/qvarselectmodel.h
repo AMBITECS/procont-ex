@@ -2,7 +2,7 @@
 #define QVARIABLESSELECT_H
 
 #include <QAbstractItemModel>
-#include "CVariablesAnalytics.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 #include "CTreeItem.h"
 
 

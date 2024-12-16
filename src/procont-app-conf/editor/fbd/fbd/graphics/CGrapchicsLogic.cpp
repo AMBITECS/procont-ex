@@ -27,8 +27,6 @@ CConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
     if (dragged_pin->parent()->parent() == target_pin->parent()->parent())
     {
         m_ladder = dragged_pin->parent()->parent();
-        m_dragged_pin = dragged_pin;
-        m_target_pin = target_pin;
 
         conn_line = new CConnectLine(m_ladder->real_top_left(), dragged_pin, target_pin);
 
@@ -78,12 +76,12 @@ CConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
         m_ladder->update_real_position();
     }
 
-    /// для быстрого пересоединения дадим пинам инфу о пинах на том конце
-    auto input = m_dragged_pin->direction() == PD_INPUT ? m_dragged_pin->input() : m_target_pin->input();
-    auto output = m_dragged_pin->direction() == PD_OUTPUT ? m_dragged_pin->output() : m_target_pin->output();
-
-    output->connect(input);
-    input->connect_pin(output);
+//    /// для быстрого пересоединения дадим пинам инфу о пинах на том конце
+//    auto input = m_dragged_pin->direction() == PD_INPUT ? m_dragged_pin->input() : m_target_pin->input();
+//    auto output = m_dragged_pin->direction() == PD_OUTPUT ? m_dragged_pin->output() : m_target_pin->output();
+//
+//    output->connect(input);
+//    input->connect_pin(output);
 
     return conn_line;
 }

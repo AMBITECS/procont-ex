@@ -44,7 +44,7 @@ public:
     [[nodiscard]] QDomNode        body_node() const;    //!< assembled from members domNode
 
     CFbdContent     * fbd_content();
-    CFbdContent * add_fbd_diagram();    //!< not working yet
+    CFbdContent     * add_fbd_diagram();    //!< not working yet
     CStContent      * st_content();         //!< not working yet
     CLdContent      * ld_content();         //!< not working yet
     CCfcContent     * cfc_content();        //!< not working yet

@@ -6,7 +6,6 @@
 #include "ui_diagramwgt.h"
 #include <QGridLayout>
 #include "../palette/CFbdComponentsTree.h"
-
 #include "editor/fbd/resources/colors.h"
 
 CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object, const bool &is_editable, QWidget *parent)

@@ -207,26 +207,6 @@ CDocumentation *COutVariable::documentation()
 {
     return &m_documentation;
 }
-
-uint64_t COutVariable::reference_id() const
-{
-    return m_point_in.ref_local_id();
-}
-
-void COutVariable::set_reference_id(const uint64_t &id)
-{
-    m_point_in.set_reference_id(id);
-}
-
-QString COutVariable::formal_parameter() const
-{
-    return m_point_in.formal_param();
-}
-
-void COutVariable::set_formal_param(const QString &formal)
-{
-    m_point_in.set_formal_param(formal);
-}
 //----------------------------------------------------------------------------------------------------------------------
 // COutputVariables ----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------

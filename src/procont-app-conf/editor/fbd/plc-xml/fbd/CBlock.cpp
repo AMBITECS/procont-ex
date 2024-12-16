@@ -90,8 +90,8 @@ CBlock::CBlock(CBlock &&other) noexcept
     other.m_out_vars = nullptr;
     other.m_in_vars = nullptr;
 
-    max_local_id++;
-    set_local_id(max_local_id);
+//    max_local_id++;
+//    set_local_id(max_local_id);
 
     m_width         = other.m_width;
     m_height        = other.m_height;

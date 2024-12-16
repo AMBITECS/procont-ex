@@ -7,7 +7,8 @@
 #include <QApplication>
 #include <QDrag>
 #include <QMimeData>
-
+#include <QFile>
+#include <QTextStream>
 
 
 #include "../redo-undo/CAddNewLadder.h"
@@ -18,24 +19,47 @@
 #include "../redo-undo/CRenameInst.h"
 
 #include "coglwidget.h"
-#include "CGrapchicsLogic.h"
 #include "editor/fbd/general/QtDialogs.h"
 #include "../editors/CEditors.h"
+#include "editor/fbd/fbd/redo-undo/CPinConnecting.h"
 
 
 uint16_t    max_local_id;
-
+extern CVariablesAnalytics * xml_variable_analytic;
 
 
 COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
 {
     max_local_id = 0;
 
+    QDomNode project_node = pou->sourceDomNode()->parentNode().parentNode().parentNode();
+    auto analytic = CVariablesAnalytics::get_instance(project_node);
+    analytic->set_current_pou(pou->name(), this);
+
+
+    /// for debug change this POU on loaded
+    //m_pou = pou;
+    {
+        QString pou_file = qApp->applicationDirPath() + "/" + "XML_project.xml";
+        QFile file(pou_file);
+        if (!file.open(QFile::ReadOnly | QFile::Text))
+        {
+            QtDialogs::alarm_user("Can't load pou file. Exiting");
+            exit(0);
+        }
+        QDomDocument doc;
+        doc.setContent(&file);
+        QDomElement root = doc.documentElement();
+
+        m_pou = new CPou(root.firstChild());
+        m_pou->setSourceDomNode(*pou->sourceDomNode());
+    }
+
     m_ladders         = new std::vector<CLadder*> ();
     m_visible_ladders = new std::vector<CLadder*> ();
     m_undo_stack      = new QUndoStack();
     m_hatch_topLeft   = hatch_pos;
-    m_pou = pou;
+
     m_diagram_type = EBodyType::BT_COUNT;
 
     m_editors   = new CEditors(openGLwidget, this, pou->sourceDomNode());
@@ -48,6 +72,8 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
 
     connect(m_editors, &CEditors::pin_variable_renamed,
             this, &COglWorld::pin_variable_rename);
+
+    connect(this, &COglWorld::undo_enabled, this, &COglWorld::convert_to_XML);
 
     init_projects_instances();
 
@@ -312,23 +338,23 @@ QPoint COglWorld::get_visible_range(const QPoint &)
 
 void COglWorld::load_project()
 {
-    CVariablesAnalytics analytics(this);
-
     CLadder *cur_ladder;
 
     /// loading diagram objects and locate them to the corresponding ladder (without connecting lines)
     for (auto &block : *m_fbd_content->blocks())
     {
         check_local_id(block->local_id());
-        cur_ladder = get_ladder(block->global_id().toLong());
+        uint64_t ladder_index = block->global_id().toLong();
+        cur_ladder = get_ladder(ladder_index);
 
-        analytics.setup_block(block);
+        xml_variable_analytic->setup_block(block);
         auto object = cur_ladder->add_object(block);
 
         object->update_position();
     }
 
-    analytics.find_input_data();
+    xml_variable_analytic->load_connections();
+
     /// need to shake projects graphics
     if (!m_ladders->empty())
     {
@@ -471,16 +497,18 @@ void COglWorld::update_visible_ladders()
     emit update_hatch();
 }
 
-CLadder *COglWorld::get_ladder(const unsigned long &id_ladder)
+CLadder *COglWorld::get_ladder(const unsigned long &ied_ladder)
 {
     CLadder *ladder;
 
-    if (id_ladder >= m_ladders->size())
+    uint64_t ladder_index = ied_ladder - 1;
+
+    if (ladder_index >= m_ladders->size())
     {
-        size_t ind = m_ladders->empty() ? 0 : m_ladders->size() - 1;
+        size_t ind = m_ladders->size();
         CLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
 
-        for (auto i = ind; i < (id_ladder + 1); i++)
+        for (auto i = ind; i <= (ladder_index); i++)
         {
             ladder = new CLadder(this, m_hatch_topLeft, &m_hatch_size, prev);
 
@@ -495,7 +523,7 @@ CLadder *COglWorld::get_ladder(const unsigned long &id_ladder)
     }
     else
     {
-        ladder = m_ladders->at(id_ladder);
+        ladder = m_ladders->at(ladder_index);
     }
     return ladder;
 }
@@ -627,7 +655,7 @@ void COglWorld::mouse_dblClicked(QMouseEvent *evt)
             return;
         }
 
-        m_editors->show_combo(m_selection.pin);
+        text_based_connecting_pin(m_selection.pin);
         return;
     }
 
@@ -714,9 +742,8 @@ bool COglWorld::check_pins_to_connection(CPin *target_pin, s_compare_types &comp
     }
 
     /// compatibility check
-    CVariablesAnalytics analytic(this);
 
-    bool res = analytic.check_pin_compatibility(dragged_pin_type_name, dragged_pin_type,
+    bool res = xml_variable_analytic->check_pin_compatibility(dragged_pin_type_name, dragged_pin_type,
                                                 target_pin_type_name, target_pin_type,
                                                 comparable_types);
 
@@ -725,13 +752,12 @@ bool COglWorld::check_pins_to_connection(CPin *target_pin, s_compare_types &comp
 
 void COglWorld::connect_pins(CPin *dragged_pin, CPin *target_pin)
 {
-    /// if pin visible_ladders are the same - graphic connection
-    if (dragged_pin->parent()->parent() == target_pin->parent()->parent())
+    if (dragged_pin->direction() == target_pin->direction())
     {
-        CGraphicsLogic connect_logic;
-        CConnectLine * line = connect_logic.add_new_line(dragged_pin, target_pin);
-        target_pin->parent()->parent()->add_line(line);
+        QtDialogs::warn_user("Не могу соединить пины одной направленности");
     }
+    auto cmd = new CPinConnecting(this, dragged_pin, target_pin);
+    m_undo_stack->push(cmd);
 
     emit undo_enabled();
 }
@@ -741,8 +767,43 @@ std::vector<CLadder *> *COglWorld::all_ladders()
     return m_ladders;
 }
 
-/*QPoint COglWorld::start_drag_point() const
+void COglWorld::text_based_connecting_pin(CPin *selected_pin)
 {
-    return m_mouse_pressed;
-}*/
+    /// connecting itself is in CEditors::new_pin_connection and here we just show comboBox
+    m_editors->show_combo(m_selection.pin);
+}
+
+void COglWorld::convert_to_XML()
+{
+    QDomDocument doc;
+    QDomElement root = doc.documentElement();
+    if (root.isNull())
+    {
+        root = doc.createElement("project_pou");
+        doc.appendChild(root);
+    }
+
+
+    QDomNode node = m_pou->dom_node();
+
+    if (node.isNull())
+    {
+        QtDialogs::warn_user("pou's node is null");
+        return;
+    }
+    root.appendChild(node);
+
+    QString sFilePath = qApp->applicationDirPath() + "/" + "XML_project.xml";
+    QFile file(sFilePath);
+    if (!file.open(QFile::WriteOnly|QFile::Truncate | QFile::Text))
+    {
+        QtDialogs::warn_user("Can't save pou");
+        return;
+    }
+    QTextStream stream( &file );
+    //stream << doc.toString();
+    doc.save(stream, 4);
+    file.close();
+}
+
 

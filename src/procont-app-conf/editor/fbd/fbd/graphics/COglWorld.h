@@ -13,7 +13,7 @@
 #include "CLadder.h"
 #include "../../plc-xml/common/CPou.h"
 #include "../palette/palette.h"
-#include "editor/fbd/fbd/editors/CVariablesAnalytics.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 
 
 class CPin;
@@ -68,21 +68,22 @@ public:
 
     s_selection     get_selection(const QPoint &pos);  //!< searches selected objects
     s_selection *   selected();                        //!<  returns active selection (in function above)
-    std::vector<CLadder*>  * visible_ladders(); //!< returns VISIBLE visible_ladders to show them in QOpenGL
+    std::vector<CLadder*>  * visible_ladders();        //!< returns VISIBLE visible_ladders to show them in QOpenGL
     std::vector<CLadder*>  * all_ladders();
 
     QUndoStack *    undo_stack();
 
     /// here are commands which has to be undo/redo. Note we have to know indexes of objects objects and indexes
     /// of inserted one
-    CLadder *         add_new_ladder();                 /// index of the inserting is result->number()-1
-    CLadder *         insert_new_ladder(CLadder *next); /// index of the inserting is result->number()-1
+    CLadder *         add_new_ladder();                 //!< index of the inserting is result->number()-1
+    CLadder *         insert_new_ladder(CLadder *next); //!< index of the inserting is result->number()-1
     CDiagramObject  * insert_new_component(CLadder *p_ladder, const EPaletteElements &elements, const QPoint &pos);
     void              insert_ladder(CLadder *dragged_ladder, CLadder *before);
     bool              move_object(CLadder * source, CLadder *destination, CDiagramObject *object, const QPoint &pos);
     void              check_diagram_size();
     bool              check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types);
     void              connect_pins(CPin *dragged_pin, CPin *target_pin);
+    void              text_based_connecting_pin(CPin *selected_pin);
 
 signals:
     void    update_hatch();
@@ -102,13 +103,12 @@ public slots:
     void    mouse_dblClicked(QMouseEvent *evt);
     void    pin_variable_rename();
 
-//    void    ladder_size_changed();
-
 protected slots:
     void    iface_new_var(const QString & type,     const QString & name);
     void    iface_rename( const QString & old_name, const QString & new_name);
     void    load_later();
     void    update_visible_ladders();
+    void    convert_to_XML();
 
     friend  CAddNewLadder;
     friend  CInsertNewLadder;
@@ -124,20 +124,21 @@ private:
     uint16_t      m_hatch_height{0};  //!< высота смотрового люка
     QSize         m_hatch_size;
     QPoint      * m_hatch_topLeft{nullptr}; //!< top-left смотрового люка
-    CPou        * m_pou;
+    QSize         m_diagram_size{0,0};
+    QPoint        m_mouse_pressed{};
+
     s_selection   m_selection;
 
     EBodyType     m_diagram_type;
     CFbdContent * m_fbd_content{nullptr};
+    CPou        * m_pou;
 
     std::vector<CLadder*>     * m_ladders;
     std::vector<CLadder*>     * m_visible_ladders;
-    QPoint       m_mouse_pressed{};
 
     CEditors    * m_editors;
 
-    QSize        m_diagram_size{0,0};
-    CPin   * m_drag_pin{nullptr};
+    CPin        * m_drag_pin{nullptr};
 
     void    clear_ladders();
     QPoint  get_visible_range(const QPoint & pos);

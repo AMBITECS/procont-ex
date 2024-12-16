@@ -163,7 +163,7 @@ uint16_t CPin::outer_text_width() const
     return m_outer_text->width();
 }
 
-QString CPin::pin_name() const
+QString CPin::name() const
 {
     return m_block_variable->formal_parameter();
 }
@@ -298,5 +298,12 @@ QString CPin::make_pin_text(CPin *pin)
     text = obj_name + "." + pin->block_variable()->formal_parameter();
 
     return text;
+}
+
+QString CPin::name_full() const
+{
+    QString p_name = m_parent->instance_name().isEmpty() ? m_parent->type_name() : m_parent->instance_name();
+    QString full_name = p_name + "." + m_block_variable->formal_parameter();
+    return full_name;
 }
 

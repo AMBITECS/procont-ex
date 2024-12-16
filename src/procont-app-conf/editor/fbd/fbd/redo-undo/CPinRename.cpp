@@ -17,13 +17,13 @@ CPinRename::CPinRename(COglWorld *ogl_world, CPin *pin, QString  pin_var,
     , m_opposite_var(std::move(opposite_var))
     , m_iface_var(iface_var)
 {
-    m_pin_old_var = m_pin->pin_name();
+    m_pin_old_var = m_pin->name();
 
     m_old_iface_var = m_pin->block_variable()->get_iface_variable();
 
     if (m_opposite_pin)
     {
-        m_opposite_old_var = m_opposite_pin->pin_name();
+        m_opposite_old_var = m_opposite_pin->name();
     }
 }
 
@@ -43,6 +43,12 @@ void CPinRename::redo()
         m_line = logic.add_new_line(m_pin, m_opposite_pin);
         m_pin->parent()->parent()->add_line(m_line);
 
+        auto input = m_pin->direction() == PD_INPUT ? m_pin->input() : m_opposite_pin->input();
+        auto output = m_pin->direction() == PD_OUTPUT ? m_pin->output() : m_opposite_pin->output();
+
+        output->disconnect(input);
+        input->disconnect();
+
         m_line_to_del = nullptr;
     }
 
@@ -50,15 +56,22 @@ void CPinRename::redo()
     {
         if (m_iface_var)
         {
-            m_pin->set_pin_name(m_iface_var->name());
-            m_pin->block_variable()->set_iface_variable(m_iface_var);
+            if (m_pin->direction() == PD_INPUT)
+            {
+                m_pin->input()->connect_iface_variable(m_iface_var);
+            }
+            else
+            {
+                m_pin->output()->connect(m_iface_var);
+            }
         }
 
         else
         {
-            m_pin->set_pin_name(m_pin_var);
-            m_opposite_pin->set_pin_name(m_opposite_var);
-            m_opposite_pin->parent()->update_bound_rect();
+            throw std::runtime_error("Strange conditions in 'CPinRename::redo()'");
+//            m_pin->set_pin_name(m_pin_var);
+//            m_opposite_pin->set_pin_name(m_opposite_var);
+//            m_opposite_pin->parent()->update_bound_rect();
         }
     }
 
@@ -87,14 +100,23 @@ void CPinRename::undo()
     {
         if (m_iface_var)
         {
-            m_pin->block_variable()->set_iface_variable(m_old_iface_var);
+            //m_pin->block_variable()->set_iface_variable(m_old_iface_var);
+            if (m_pin->direction() == PD_INPUT)
+            {
+                m_pin->input()->disconnect();
+            }
+            else
+            {
+                m_pin->output()->disconnect(m_iface_var);
+            }
         }
 
         else
         {
-            m_pin->set_pin_name(m_pin_old_var);
-            m_opposite_pin->set_pin_name(m_opposite_old_var);
-            m_opposite_pin->parent()->update_bound_rect();
+            throw std::runtime_error("Strange conditions in 'CPinRename::undo()'");
+//            m_pin->set_pin_name(m_pin_old_var);
+//            m_opposite_pin->set_pin_name(m_opposite_old_var);
+//            m_opposite_pin->parent()->update_bound_rect();
 
         }
     }

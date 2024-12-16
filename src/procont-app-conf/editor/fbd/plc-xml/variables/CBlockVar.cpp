@@ -200,19 +200,6 @@ void CBlockVar::set_type(const QString &type)
     }
 }
 
-uint64_t CBlockVar::ref_local_id() const
-{
-    return m_point_in->ref_local_id();
-}
-
-void CBlockVar::set_ref_local_id(const uint64_t &ref_local_id)
-{
-    if (!m_point_in->connections()->empty())
-    {
-        m_point_in->connections()->front()->set_ref_local_id(ref_local_id);
-    }
-}
-
 CBlockVar &CBlockVar::operator=(const CBlockVar &rhs)
 {
     if (this == &rhs)
@@ -244,12 +231,6 @@ void CBlockVar::set_iface_variable(CVariable *var)
 {
     *m_variable = *var;    
     this->set_type(var->type());
-}
-
-void CBlockVar::reset_connections()
-{
-    // TODO: update connections
-    //m_point_in->connections()->
 }
 
 void CBlockVar::set_negated(const bool &negated)
@@ -285,60 +266,3 @@ QString CBlockVar::constant_value() const
     return m_constant_value;
 }
 
-void CBlockVar::add_opposite(CBlockVar *opposite)
-{
-    if (m_direction != PD_OUTPUT || !opposite)
-    {
-        throw std::runtime_error("can't add null or wrong direction in 'CBlockVar::add_opposite'");
-    }
-
-    for (auto &var : m_opposites)
-    {
-        if (var == opposite)
-        {
-            return;
-        }
-    }
-
-    m_opposites.push_back(opposite);
-}
-
-CBlockVar* CBlockVar::remove_opposite(CBlockVar *opposite)
-{
-    if (m_direction != PD_OUTPUT)
-    {
-        throw std::runtime_error("wrong direction in 'CBlockVar::remove_opposite'");
-    }
-
-    if (!opposite)
-    {
-        throw std::runtime_error("can't remove nullptr in 'CBlockVar::remove_opposite'");
-    }
-
-    int counter = 0;
-    for (auto &var : m_opposites)
-    {
-        if (var == opposite)
-        {
-            m_opposites.erase(m_opposites.begin() + counter);
-            return opposite;
-        }
-        counter++;
-    }
-    return nullptr;
-}
-
-void CBlockVar::connect_opposite(CBlockVar *opposite)
-{
-    if (m_direction != PD_INPUT)
-    {
-        throw std::runtime_error("wrong direction in 'CBlockVar::connect_opposite'");
-    }
-
-    if (!opposite)
-    {
-        throw std::runtime_error("can't connect nul in 'CBlockVar::connect_opposite'");
-    }
-
-    m_opposite = opposite;
-}

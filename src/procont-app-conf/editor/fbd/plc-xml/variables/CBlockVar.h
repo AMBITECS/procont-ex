@@ -61,47 +61,37 @@ public:
     [[nodiscard]] QString derived_type() const;
     void    set_type(const QString &type);
 
-    [[nodiscard]] uint64_t  ref_local_id() const;
-    void      set_ref_local_id(const uint64_t &ref_local_id);
-
     CVariable   *  get_iface_variable();
     void           set_iface_variable(CVariable *var);
 
-    void           reset_connections();
-
-    QString     constant_value() const;
+    [[nodiscard]] QString     constant_value() const;
 
     void        set_constant(const EDefinedDataTypes &type, const std::string &const_value);
 
-    /// connections for output
-    void        add_opposite(CBlockVar *opposite);
-    CBlockVar * remove_opposite(CBlockVar *opposite);
-
-    /// connection for input
-    void        connect_opposite(CBlockVar *opposite);
-    void        disconnect_opposite();
 
 protected:
-
+    /// standard parameters
     QString m_formal_parameter;
     QString m_constant_value;
 
     QString             m_derived_type;
     CConnectionPointIn  * m_point_in{nullptr};
     CConnectionPointOut * m_point_out{nullptr};
+
     bool    m_is_negated{false};
     EEdge   m_edge_modifier{EEdge::EI_NONE};
     EStorageMode m_store_modifier{EStorageMode::SM_NONE};
-    EDefinedDataTypes   m_type{EDefinedDataTypes::DDT_UNDEF};
-
-    std::vector<CBlockVar*> m_opposites;
-    CBlockVar   *m_opposite{nullptr};
-
-    EPinDirection   m_direction{PD_UNDEF};
     CAddData    * add_data;
+
+    EDefinedDataTypes   m_type{EDefinedDataTypes::DDT_UNDEF};
+    EPinDirection   m_direction{PD_UNDEF};
+
+    /// extended parameters
     CVariable   * m_variable;
     CBlock *m_parent{nullptr};
 
+    //std::vector<CBlockVar*> m_opposites;
+    //CBlockVar   *m_opposite{nullptr};
 };
 
 

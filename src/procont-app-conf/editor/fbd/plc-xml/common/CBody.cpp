@@ -123,6 +123,7 @@ QDomNode CBody::body_node() const
 {
     QDomDocument doc;
     QDomElement root = doc.createElement("body");
+
     if (!m_worksheet_name.isEmpty())
     {
         root.setAttribute("WorksheetName", m_worksheet_name);
@@ -132,9 +133,14 @@ QDomNode CBody::body_node() const
         root.setAttribute("globalId", m_global_ID);
     }
 
-    if (!m_diagram->isNull())
+    /*if (!m_diagram->isNull())
     {
         root.appendChild(*m_diagram);
+    }*/
+
+    if (m_fbd_content)
+    {
+        root.appendChild(m_fbd_content->dom_node());
     }
 
     if (!m_add_data->is_empty())

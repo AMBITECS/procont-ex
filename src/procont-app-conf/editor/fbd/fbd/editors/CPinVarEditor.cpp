@@ -180,13 +180,17 @@ void CPinVarEditor::show_variable()
 
 void CPinVarEditor::prepare_new_variable()
 {
+    if (m_new_variable.isEmpty())
+    {
+        m_new_variable = this->currentText();
+    }
     emit new_pin_connection(m_selected_item, m_new_variable);
     reset_selection();
 }
 
 void CPinVarEditor::reset_selection()
 {
-    //m_new_variable = {};
+    m_new_variable = {};
     m_selected_item = nullptr;
     m_parent_item = nullptr;
 }

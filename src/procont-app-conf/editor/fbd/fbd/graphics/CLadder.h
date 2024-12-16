@@ -78,8 +78,6 @@ public:
     ~CLadder();
 
     /// change visible_ladders content
-    //void                put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos);
-    //CDiagramObject *    remove_object(CDiagramObject *dragged_obj);
     CDiagramObject *    add_object(CBlock * object);
     COglWorld       * parent();
 

@@ -42,7 +42,7 @@ namespace xmln
     static const char * simple_value  = "simpleValue";
     static const char * types_node    = "types";
     static const char * function_pou_type = "function";
-
+    static const char * project_types = "types";
 }
 
 #endif //EDITORSD_VARIABLES_H

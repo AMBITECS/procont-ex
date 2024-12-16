@@ -441,7 +441,7 @@ bool CPou::find_block_connecting_info(const uint64_t &ref_id, const QString &for
 }
 
 bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                          CBlockVar **possible_block_var, std::vector<CVariable *> *possible_iface)
+                          std::vector<CBlockVar*> *possible_block_vars, std::vector<CVariable *> *possible_iface)
 {
     /// возможные варианты наш block_var (должен быть входным) лишь один из задних клиентов проститутствующей in_out_variable<br>
     /// check input of the in_out_var
@@ -451,12 +451,12 @@ bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
         return false;
     }
 
-    bool res = recursive_find_front(in_out_variable, possible_block_var, possible_iface);
+    bool res = recursive_find_front(in_out_variable, possible_block_vars, possible_iface);
     return res;
 }
 
 bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
-                                CBlockVar **p_block_var, std::vector<CVariable *> *possible_iface)
+                                std::vector<CBlockVar *>* in_outs,std::vector<CVariable *> *possible_iface)
 {
     if (!in_out_variable->expression()->expression().isEmpty())
     {
@@ -468,63 +468,84 @@ bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
         }
     }
 
-    uint64_t  ref_local_id = in_out_variable->point_in()->ref_local_id();
-    QString   formal_param = in_out_variable->point_in()->formal_param();
-
-    /// check if block
-    CBlock * block = find_block_by_id(ref_local_id);
-
-    if (block)
+    for (auto &connection : *in_out_variable->point_in()->connections())
     {
-        QList<CBlockVar*> array;
-        array.append(*block->in_out_variables());
-        array.append(*block->output_variables());
+        uint64_t  ref_local_id = connection->ref_local_id();
+        QString   formal_param = connection->formal_parameter();
 
-        for (auto &var : array)
+        /// check if block
+        CBlock * block = find_block_by_id(ref_local_id);
+
+        if (block)
         {
-            if (var->formal_parameter() == formal_param)
+            QList<CBlockVar*> array;
+            array.append(*block->in_out_variables());
+            array.append(*block->output_variables());
+
+            for (auto &var : array)
             {
-                *p_block_var = var;
+                if (var->formal_parameter() == formal_param)
+                {
+                    in_outs->push_back(var);
+                    break;
+                }
+            }
+            continue;
+        }
+
+        /// check interface
+        for (auto &i_var : m_interface->all_variables())
+        {
+            if (i_var->name() == formal_param)
+            {
+                possible_iface->push_back(i_var);
                 return true;
             }
         }
-    }
 
-    /// check interface
-    for (auto &i_var : m_interface->all_variables())
-    {
-        if (i_var->name() == formal_param)
+        /// nope, it damned inOutVariable with possible recursion
+        auto content = get_fbd();
+        if (!content)
         {
-            possible_iface->push_back(i_var);
-            return true;
+            continue;
         }
-    }
 
-    /// очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько.
-    /// И еще нет единого интерфейса для различных языков программирования
-    CBody * body = m_bodies->front();
-
-    CFbdContent * content;
-
-    /// этот кусок костыля по-праву должен быть частью самого CBody, но только когда появится общий интерфейс, а пока такой костыль
-    switch (body->diagram_lang())
-    {
-        case EBodyType::BT_FBD:
-            content = body->fbd_content();
-            if (!content)
-                return false;
-            break;
-        default:
-            return false;
-    }
-    for (auto &in_out : *content->in_out_variables())
-    {
-        if(in_out->local_id() == ref_local_id)
+        auto data_info = content->get_var_by_local_id(ref_local_id);
+        if (data_info.source == PD_IN_OUT)
         {
-            bool res = recursive_find_front(in_out, p_block_var, possible_iface);
+            auto in_out = static_cast<CInOutVariable*>(data_info.variable);
+            bool res = recursive_find_front(in_out, in_outs, possible_iface);
             if (res)
                 return true;
         }
+
+        /// ниже это фантастика
+        if (data_info.source == PD_OUTPUT)
+        {
+            throw std::runtime_error("WTF?! in 'CPou::recursive_find_front'");
+        }
+        if (data_info.source == PD_INPUT)
+        {
+            throw std::runtime_error("WTF?! in 'CPou::recursive_find_front'");
+        }
     }
     return false;
+}
+
+void CPou::setSourceDomNode(const QDomNode &dom_node)
+{
+    *m_dom_node = dom_node;
+}
+
+CFbdContent *CPou::get_fbd()
+{
+    for (auto &body : *m_bodies)
+    {
+        if (body->diagram_lang() == EBodyType::BT_FBD)
+        {
+            return body->fbd_content();
+        }
+    }
+
+    return nullptr;
 }

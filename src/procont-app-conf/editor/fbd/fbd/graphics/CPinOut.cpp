@@ -9,7 +9,7 @@
 #include "COglWorld.h"
 
 extern uint16_t max_local_id;
-extern CVariablesAnalytics * xml_variable_analytic;
+
 
 CPinOut::CPinOut(CDiagramObject *parent, CBlockVar *base, QPoint *parent_tl) : CPin(parent, base, parent_tl)
 {
@@ -47,8 +47,8 @@ CVariable* CPinOut::connect(CVariable *iface_var)
     load_project_connect(iface_var);
 
     /// save to XML
-
-    bool res = xml_variable_analytic->connect_iface_var(this, iface_var);
+    CVariablesAnalytics analytics(m_world, m_world->current_pou()->name());
+    bool res = analytics.connect_iface_var(this, iface_var);
 
 
     return res ? iface_var : nullptr;
@@ -227,8 +227,8 @@ void CPinOut::reset_connections()
 CVariable* CPinOut::disconnect_xml(CVariable *iface_var)
 {
     uint64_t  loc_id = m_parent->local_id();
-
-    auto var = xml_variable_analytic->remove_out_bloc_by_iface_variable(iface_var, loc_id,
+    CVariablesAnalytics analytics(m_world, m_world->current_pou()->name());
+    auto var = analytics.remove_out_bloc_by_iface_variable(iface_var, loc_id,
                                                            m_block_variable->formal_parameter());
     bool res = var;
 
@@ -238,6 +238,30 @@ CVariable* CPinOut::disconnect_xml(CVariable *iface_var)
     }
 
     return !res ? nullptr : iface_var;
+}
+
+bool CPinOut::is_pin_connected_to( CPinIn *in ) const
+{
+    for (auto &out : *m_graphic_connections)
+    {
+        if (out == in)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool CPinOut::is_iface_var_connected_to( CVariable *variable )
+{
+    for (auto &var : *m_iface_vars)
+    {
+        if (var == variable)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 

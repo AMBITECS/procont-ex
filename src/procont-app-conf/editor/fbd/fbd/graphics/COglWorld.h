@@ -84,7 +84,7 @@ public:
     bool              check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types);
     void              connect_pins(CPin *dragged_pin, CPin *target_pin);
     void              text_based_connecting_pin(CPin *selected_pin);
-
+    CPou            * current_pou();
 signals:
     void    update_hatch();
     void    canvas_changed(const int &w, const int &h);     //!< signal for enable/disable/scale QScrollBars.

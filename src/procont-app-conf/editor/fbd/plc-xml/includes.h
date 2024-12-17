@@ -193,7 +193,7 @@ static const int base_type_last = EDefinedDataTypes::DDT_ENUM;
 
 static bool  is_convertible_to_anyint(const EDefinedDataTypes &type)
 {
-    return (type >= DDT_SINT && type <= DDT_ANY_INT) || (type == DDT_ENUM);
+    return (type >= DDT_SINT && type <= DDT_ANY_UINT) || (type == DDT_ENUM);
 }
 
 static bool is_convertible_to_anyuint(const EDefinedDataTypes &type)

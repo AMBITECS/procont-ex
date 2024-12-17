@@ -50,10 +50,6 @@ CPin::CPin(CDiagramObject *parent, CBlockVar *var, QPoint * parent_tl)
 
 CPin::~CPin()
 {
-    for (auto &item : *m_texts)
-        delete item;
-    delete m_texts;
-
     for (auto &item : *m_outer_texts)
         delete item;
     delete m_outer_texts;
@@ -61,6 +57,12 @@ CPin::~CPin()
     for (auto &item : *m_outs_graphics)
         delete item;
     delete m_outs_graphics;
+
+    m_texts->clear();
+    delete m_texts;
+
+    delete m_outer_text;
+    delete m_pin_name;
 }
 
 CDiagramObject *CPin::parent()

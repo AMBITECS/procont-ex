@@ -9,6 +9,7 @@
 #include "CTypes.h"
 
 class CContentHeader;
+static int inst_count{0}; //!< счётчик вызовов
 
 /**
  * @brief парсит почти весь проект и хранит в более-менее читаемом виде. @attention не парсится тэг \<instances>
@@ -16,10 +17,8 @@ class CContentHeader;
 class CProject
 {
 public:
-    CProject();
-    CProject(const CProject &);
-    explicit CProject(const QDomNode &project_node);
-    ~CProject();
+    static CProject * get_instance(const QDomNode &project_node);
+    void Delete();
 
     [[nodiscard]] QDomNode    dom_node() const;
 
@@ -40,7 +39,11 @@ public:
 
     [[nodiscard]] QString     project_version() const;
     void        set_project_version(const QString &version);
-
+protected:
+    CProject();
+    CProject(const CProject &);
+    explicit CProject(const QDomNode &project_node);
+    ~CProject();
 private:
     CTypes      * m_types;
     QString       m_company_name{"Unnamed"};
@@ -54,6 +57,7 @@ private:
     QString       m_xmlns_xsd{};
     QString       m_xmlns_xhtml{};
     QString       m_xmlns_ns1{};
+
 
     void process_file_header(const QDomNode &node);
 

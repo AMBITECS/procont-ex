@@ -13,36 +13,20 @@
 #include <QFile>
 
 extern  uint16_t    max_local_id;
-CVariablesAnalytics * xml_variable_analytic{nullptr};
+extern CProject *project;
 
-CVariablesAnalytics *CVariablesAnalytics::get_instance(const QDomNode &project_node)
+CVariablesAnalytics::CVariablesAnalytics(COglWorld *world ,const QString &pou_name)
 {
-    if (!xml_variable_analytic)
+    m_diagram_pou = project->types()->find_pou_by_name(pou_name);
+    if (m_diagram_pou)
     {
-        xml_variable_analytic = new CVariablesAnalytics(project_node);
+        m_diagram_interface = m_diagram_pou->interface();
     }
-    return xml_variable_analytic;
-}
-
-CVariablesAnalytics::CVariablesAnalytics(const QDomNode &dom_node)
-{
-    if (dom_node.isNull())
-    {
-        m_project = new CProject();
-    }
-    else
-    {
-        m_project = new CProject(dom_node);
-    }
-
-    m_pou_array         = m_project->types()->pous();
-    m_types             = m_project->types()->user_types();
+    m_world = world;
+    m_pou_array         = project->types()->pous();
+    m_types             = project->types()->user_types();
     m_global_variables  = new std::vector<CVariable*>();
     m_standard_library = StandardLibrary::instance();
-
-    m_diagram_interface = nullptr;
-    m_diagram_pou       = nullptr;
-    m_world = nullptr;
 
     /// global variables left
     update_arrays();
@@ -50,10 +34,8 @@ CVariablesAnalytics::CVariablesAnalytics(const QDomNode &dom_node)
 
 CVariablesAnalytics::~CVariablesAnalytics()
 {
-    xml_variable_analytic = nullptr;
 
     delete m_global_variables;
-    delete m_project;
 }
 
 std::vector<s_tree_item> CVariablesAnalytics::query(CPin *pin)
@@ -110,11 +92,6 @@ bool CVariablesAnalytics::load_connections()
     /// Эти варианты годны при выполнении одного из двух условий при reference_local_id > 0:<br>
     /// - в содержимом CBody находитсяCInVariable или CInOutVariable c соответствущим local_id от которой идёт связь на другие ресурсы (выше)<br>
     /// - в содержимом CBody находится CBlock с соответствующим local_id для графической связи
-
-    if (!m_world)
-    {
-        return false;
-    }
 
     for (auto &ladder : *m_world->all_ladders())
     {
@@ -182,6 +159,7 @@ void CVariablesAnalytics::connect_inputs(CDiagramObject *object)
             if (line)
             {
                 in->parent()->parent()->add_line(line);
+
             }
 
             in->load_project_connect_pin(out);
@@ -237,70 +215,75 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
 
     CFilter filter(this);
 
-    /// collecting interface variables
-    for (auto &var : m_diagram_pou->interface()->all_variables())
+    /// collecting interface variables from all correct pous
+    for (auto &pou : *project->types()->pous())
     {
-        if (var->name() == pin->parent()->instance_name())
+        if (pou->type() != "program" && pou != m_diagram_pou)
         {
             continue;
         }
 
-        if (filter.filter_string(var->type().toStdString(), ff_base_types | ff_user_types))
+        for (auto &var : pou->interface()->all_variables())
         {
-            continue;
+            if (var->name() == pin->parent()->instance_name())
+            {
+                continue;
+            }
+
+            s_compare_types c_types;
+
+            bool check = check_pin_compatibility(pin->type_name(),
+                                                 pin->type(),
+                                                 var->type(),
+                                                 get_type_from_string(var->type().toStdString()),
+                                                 c_types);
+
+            if (!check)
+            {
+                continue;
+            }
+
+            if (pin->direction() == PD_OUTPUT)
+            {
+                if (pin->output()->is_iface_var_connected_to(var))
+                {
+                    continue;
+                }
+            }
+
+            if (pou != m_diagram_pou)
+            {
+                var->set_name(pou->name() + "." + var->name());
+            }
+
+            s_tree_item item;
+            item.id = id++;
+            item.id_parent = 0;
+            item.name = var->name().toStdString();
+            item.type = var->type().toStdString();
+            item.iface_variable = var;
+
+            items.push_back(item);
         }
-
-        s_compare_types c_types;
-
-        bool check = check_pin_compatibility(pin->type_name(),
-                                             pin->type(),
-                                             var->type(),
-                                             get_type_from_string(var->type().toStdString()),
-                                             c_types);
-
-        if (!check)
-        {
-            continue;
-        }
-
-        s_tree_item item;
-        item.id = id++;
-        item.id_parent = 0;
-        item.name = var->name().toStdString();
-        item.type = var->type().toStdString();
-        item.iface_variable = var;
-
-        items.push_back(item);
     }
 
+
     /// collecting block's in/outs
-    for (auto &body : *m_diagram_pou->bodies())
+    if (pin->direction() == PD_INPUT)
     {
-        if (body->fbd_content())
-        {
-            if (pin->direction() == PD_INPUT)
-            {
-                items_v = find_fbd_outputs_collection(body->fbd_content(), pin, id);
-            }
-            if(pin->direction() == PD_OUTPUT)
-            {
-                items_v = find_fbd_inputs_collection(body->fbd_content(), pin, id);
-            }
-        }
+        items_v = find_fbd_outputs_collection(pin, id);
+    }
+    if(pin->direction() == PD_OUTPUT)
+    {
+        items_v = find_fbd_inputs_collection(pin, id);
     }
 
     items.insert(items.end(), items_v.begin(), items_v.end());
     tree_items.insert(tree_items.end(), items.begin(), items.end());
 }
 
-std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdContent * /*body_content*/,
-                                                                         CPin *pin_out, uint16_t &id)
+std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CPin *pin_out, uint16_t &id)
 {
-    if (!m_world)
-    {
-        return {};
-    }
-
     CPinOut * out_pin = pin_out->output();
     std::vector<s_tree_item> tree_items;
 
@@ -324,12 +307,11 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
             item.name = stdName.toStdString();
             item.type = object->type_name().toStdString();
 
-            //tree_items.push_back(item);
             std::vector<s_tree_item> complex_items;
             complex_items.push_back(item);
 
-
-            for (auto &connector : *object->pins())
+            CPinOut *pinOut = pin_out->output();
+            for (auto &connector : *object->inputs())
             {
                 if (connector->direction() == PD_OUTPUT)
                 {
@@ -337,6 +319,11 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
                 }
 
                 if (connector->is_connected())
+                {
+                    continue;
+                }
+
+                if (pinOut->is_pin_connected_to(connector))
                 {
                     continue;
                 }
@@ -386,8 +373,8 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
                 s_compare_types compares;
                 if (check_pin_compatibility(unit.type.c_str(),
                                             get_type_from_string(unit.type),
-                                            QString::fromStdString(unit.type),
-                                            get_type_from_string(unit.type),
+                                            pin_out->type_name(),
+                                            pin_out->type(),
                                             compares))
                 {
                     tree_items.push_back(unit);
@@ -400,14 +387,8 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_inputs_collection(CFbdCon
     return tree_items;
 }
 
-std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdContent * /*body_content*/,
-                                                                          CPin *pin_in, uint16_t &id)
+std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CPin *pin_in, uint16_t &id)
 {
-    if (!m_world)
-    {
-        return {};
-    }
-
     std::vector<s_tree_item> tree_items;
     CPinIn * input_pin = pin_in->input();
 
@@ -489,8 +470,8 @@ std::vector<s_tree_item> CVariablesAnalytics::find_fbd_outputs_collection(CFbdCo
                 s_compare_types compares;
                 if (check_pin_compatibility(unit.type.c_str(),
                                             get_type_from_string(unit.type),
-                                            QString::fromStdString(unit.type),
-                                            get_type_from_string(unit.type),
+                                            pin_in->type_name(),
+                                            pin_in->type(),
                                             compares))
                 {
                     tree_items.push_back(unit);
@@ -561,46 +542,70 @@ bool CVariablesAnalytics::check_pin_compatibility(const QString &dragged_pin_typ
                                                   s_compare_types & compare_types,  //!< что бы глянуть на экране, что к чему
                                                   const bool &strict_compliance)
 {
-    QString target_type_pin, dragged_type_pin;
+    compare_types.target_type = target_pin_typename;
+    compare_types.dragged_type = dragged_pin_typename;
 
-    target_type_pin = target_pin_type == DDT_DERIVED ? get_comparable_type(target_pin_typename) : target_pin_typename;
-    dragged_type_pin = dragged_pin_type == DDT_DERIVED ? get_comparable_type(dragged_pin_typename) : dragged_pin_typename;
-
-    if (target_type_pin.isEmpty())
+    if (dragged_pin_type == DDT_ANY || target_pin_type == DDT_ANY)
     {
-        target_type_pin = target_pin_typename;
+        if (dragged_pin_type == DDT_ANY && target_pin_type != DDT_DERIVED && target_pin_type != DDT_UNDEF)
+        {
+            return true;
+        }
+
+        if(target_pin_type == DDT_ANY && dragged_pin_type != DDT_DERIVED && target_pin_type != DDT_UNDEF)
+        {
+            return true;
+        }
+
+        return false;
     }
 
-    if (dragged_type_pin.isEmpty())
+    /*
+    if (dragged_pin_type == DDT_DERIVED)
     {
-        dragged_type_pin = dragged_pin_typename;
+        get_comparable_type(dragged_pin_typename);
     }
 
-    compare_types.target_type = target_type_pin;
-    compare_types.dragged_type = dragged_type_pin;
-
-    if (strict_compliance)
+    if (target_pin_type == DDT_DERIVED)
     {
-        return target_type_pin == dragged_type_pin;
+
+    }
+    */
+
+    if (dragged_pin_type == EDefinedDataTypes::DDT_DERIVED &&
+        target_pin_type == EDefinedDataTypes::DDT_DERIVED)
+    {
+        return dragged_pin_typename == target_pin_typename;
     }
 
-    /// Ok. soft compliance of the base types or POUs
-
-    /// и так если переменные базового типа
-    auto target_var_type = get_type_from_string(target_type_pin.toStdString());
-    auto dragged_var_type = get_type_from_string(dragged_type_pin.toStdString());
-
-
-
-    if (target_var_type != DDT_UNDEF &&
-        dragged_var_type != DDT_UNDEF)
+    if (dragged_pin_type == EDefinedDataTypes::DDT_UNDEF &&
+        target_pin_type == EDefinedDataTypes::DDT_UNDEF)
     {
-        return analyze_base_types(target_var_type,
-                                  dragged_var_type,
-                                  strict_compliance);
+        return dragged_pin_typename == target_pin_typename;
     }
 
-    return target_type_pin == dragged_type_pin;
+    if (dragged_pin_type == EDefinedDataTypes::DDT_DERIVED ||
+        target_pin_type == EDefinedDataTypes::DDT_DERIVED)
+    {
+        return false;
+    }
+
+    if ( is_convertible_to_anyint(dragged_pin_type) && is_convertible_to_anyint(target_pin_type) )
+    {
+        return true;
+    }
+
+    if ( is_convertible_to_anyfloat(dragged_pin_type) && is_convertible_to_anyfloat(target_pin_type) )
+    {
+        return true;
+    }
+
+    if ( is_convertible_to_bool(dragged_pin_type) && is_convertible_to_bool(target_pin_type) )
+    {
+        return true;
+    }
+
+    return false;
 }
 
 QString CVariablesAnalytics::get_comparable_type(const QString &mb_user_type)
@@ -1045,15 +1050,6 @@ CVariable *CVariablesAnalytics::find_iface_var(const QString &var_name)
 StandardLibrary *CVariablesAnalytics::standard_library()
 {
     return m_standard_library;
-}
-
-CPou* CVariablesAnalytics::set_current_pou(const QString &pou_name, COglWorld *world)
-{
-    m_diagram_pou = m_project->types()->find_pou_by_name(pou_name);
-    m_diagram_interface = m_diagram_pou->interface();
-    m_world = world;
-
-    return m_diagram_pou;
 }
 
 

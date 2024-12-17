@@ -57,6 +57,7 @@ void CPinConnecting::redo()
     {
         CLadder * ladder = m_pin_edited->parent()->parent();
         ladder->add_line(line);
+
     }
     else
     {
@@ -67,7 +68,20 @@ void CPinConnecting::redo()
     in->connect_pin(out);
     out->connect(in);
 
-    /// TODO: refresh view
+    if (in->parent()->parent() == out->parent()->parent())
+    {
+        auto ladder = in->parent()->parent();
+        ladder->resort();
+        ladder->refresh_graphic_connections();
+        m_world->update_hatch();
+    }
+    else
+    {
+        in->parent()->parent()->resort();
+        out->parent()->parent()->resort();
+    }
+    m_world->update_hatch();
+
 }
 
 void CPinConnecting::undo()

@@ -3,20 +3,22 @@
 //
 
 #include "CPinVarEditor.h"
-#include "qvarselectmodel.h"
+#include "CTreeItem.h"
 #include <QHeaderView>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QTimer>
 #include <QLineEdit>
 
+extern CProject *project;
 
-CPinVarEditor::CPinVarEditor(QWidget *parent) : QComboBox(parent)
+CPinVarEditor::CPinVarEditor(QWidget *parent) : QComboBox(parent), skipNextHide(false)
 {
     this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     this->installEventFilter(this);
 
     m_view = new QTreeView(parent);
+    m_view->viewport()->installEventFilter(this);
 
     connect(m_view, &QTreeView::clicked, this, &CPinVarEditor::tree_clicked);
 
@@ -26,8 +28,9 @@ CPinVarEditor::CPinVarEditor(QWidget *parent) : QComboBox(parent)
     m_view->setAlternatingRowColors(true);
     m_view->setSelectionBehavior(QTreeView::SelectRows);
     m_view->setRootIsDecorated(false);
-    //m_view->setWordWrap(true);
+    m_view->setWordWrap(false);
     m_view->setAllColumnsShowFocus(true);
+    m_view->expandAll();
     m_view->setItemsExpandable(false);
 
     setView(m_view);
@@ -36,7 +39,6 @@ CPinVarEditor::CPinVarEditor(QWidget *parent) : QComboBox(parent)
 
     QFont font("Helvetica", 8);
     m_view->setFont(font);
-
 
     this->setEditable(true);
 }
@@ -57,27 +59,18 @@ void CPinVarEditor::showPopup()
     for (int i = 0; i < m_view->header()->count(); i++)
         size += m_view->header()->sectionSize(i);
 
-    this->setFixedWidth(size + 5);
+    this->setFixedWidth(size + 15);
 
-    setRootModelIndex(QModelIndex());
+    //setRootModelIndex(QModelIndex());
     QComboBox::showPopup();
 }
 
 void CPinVarEditor::hidePopup()
 {
-    setRootModelIndex(m_view->currentIndex().parent());
-    setCurrentIndex(  m_view->currentIndex().row());
-
-    auto item = static_cast<TreeItem*>(m_view->currentIndex().internalPointer());
-    if (item)
-    {
-        tree_clicked(m_view->currentIndex());
-        //m_new_variable = item->name;
-        /// Этот финт ушами, что бы обойти непонятную очистку QComboBox'а. Иначе поле ввода остаётся пустым
-        QTimer::singleShot(20, this, SLOT(show_variable()));
-    }
-
-    QComboBox::hidePopup();
+    if (skipNextHide)
+        skipNextHide = false;
+    else
+        QComboBox::hidePopup();
 }
 
 void CPinVarEditor::hideColumn(int n)
@@ -99,7 +92,6 @@ void CPinVarEditor::selectIndex(const QModelIndex &index)
 
 bool CPinVarEditor::eventFilter(QObject *object, QEvent *event)
 {
-
     if (event->type() == QEvent::KeyPress)
     {
         auto *evt = dynamic_cast<QKeyEvent*>(event);
@@ -120,6 +112,24 @@ bool CPinVarEditor::eventFilter(QObject *object, QEvent *event)
         reset_selection();
     }
 
+    if (event->type() == QEvent::MouseButtonPress)// && object == view()->viewport())
+    {
+        auto* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        QModelIndex index = view()->indexAt(mouseEvent->pos());
+
+        if (index.isValid())
+        {
+            QPersistentModelIndex idx = index;
+            tree_clicked(idx);
+        }
+
+        if (!view()->visualRect(index).contains(mouseEvent->pos()))
+        {
+            skipNextHide = true;
+        }
+
+    }
+
     if (event->type() == QEvent::FocusOut && this->lineEdit()->text() != "")
     {
         reset_selection();
@@ -132,6 +142,7 @@ bool CPinVarEditor::eventFilter(QObject *object, QEvent *event)
 void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
 {
     reset_selection();
+
     if (!index.isValid())
     {
         return;
@@ -141,8 +152,6 @@ void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
     {
         return;
     }
-
-    m_new_variable = "";
 
     auto * item = static_cast<TreeItem*>(m_view->currentIndex().internalPointer());
     if (item)
@@ -169,7 +178,8 @@ void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
 
         m_new_variable += item->item()->name.c_str();
 
-        this->setEditText(m_new_variable);
+        /// Этот финт ушами, что бы обойти непонятную очистку QComboBox'а. Иначе поле ввода остаётся пустым
+        QTimer::singleShot(150, this, SLOT(show_variable()));
     }
 }
 
@@ -184,7 +194,9 @@ void CPinVarEditor::prepare_new_variable()
     {
         m_new_variable = this->currentText();
     }
+
     emit new_pin_connection(m_selected_item, m_new_variable);
+
     reset_selection();
 }
 

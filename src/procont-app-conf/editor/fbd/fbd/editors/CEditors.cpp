@@ -11,12 +11,11 @@
 #include "editor/fbd/general/QtDialogs.h"
 #include "editor/fbd/fbd/redo-undo/CConstToPin.h"
 
-extern CVariablesAnalytics * xml_variable_analytic;
 
 CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
 {
     m_pou_node = pou_node;
-    m_var_analytics = xml_variable_analytic;
+    m_var_analytics = new CVariablesAnalytics(world, world->current_pou()->name());
     m_filter = new CFilter(m_var_analytics);
 
     m_obj_inst_editor = new CInstEditor(m_filter, wgt);
@@ -198,6 +197,11 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
         auto i_var = m_var_analytics->find_iface_var(var_name);
         if (!i_var)
         {
+            if (m_pin->direction() == PD_OUTPUT)
+            {
+                QtDialogs::warn_user("Не могу на выход посадить константу");
+                return;
+            }
             auto cmd = new CConstToPin(m_world, m_pin->input(), var_name);
             m_world->undo_stack()->push(cmd);
             emit m_world->undo_enabled();

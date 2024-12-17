@@ -34,6 +34,9 @@ public:
     void    refresh_connections();
     void    reset_connections();
 
+    bool    is_pin_connected_to( CPinIn *in) const;
+    bool    is_iface_var_connected_to(CVariable *variable);
+
     [[nodiscard]] int     outer_height() const;   //!< возвращает высоту занимаемую текстовым перечислением соединений
     [[nodiscard]] int     outer_width() const;    //!< возвращает ширину занимаемую текстовым перечислением соединений
 

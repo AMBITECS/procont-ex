@@ -44,6 +44,7 @@ private:
     QString       m_new_variable;
     s_tree_item * m_parent_item{nullptr};
     s_tree_item * m_selected_item {nullptr};
+    bool skipNextHide;
 
     void prepare_new_variable();
     void reset_selection();

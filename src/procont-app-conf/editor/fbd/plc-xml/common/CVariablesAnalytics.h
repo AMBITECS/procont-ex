@@ -41,10 +41,11 @@ struct s_compare_types
 class CVariablesAnalytics
 {
 public:
-    static CVariablesAnalytics *   get_instance(const QDomNode &project_node);  //!< QDomNode соответствует тегу \<project xmlns="http...">
+    //static CVariablesAnalytics *   get_instance(const QDomNode &project_node);  //!< QDomNode соответствует тегу \<project xmlns="http...">
+    explicit CVariablesAnalytics(COglWorld *world, const QString &pou_name);
     ~CVariablesAnalytics();
 
-    CPou *    set_current_pou(const QString &pou_name, COglWorld *world);
+    // CPou *    set_current_pou(const QString &pou_name, COglWorld *world);
     /**
      * @brief returns all variable names that can be using for block connection
      * @param pin
@@ -67,7 +68,7 @@ public:
      * @brief проверка пинов на возможность соединения на предмет их типов. Если задано строгое соответствие,
      * то типы пинов должны быть одинаковы, иначе - подходящие
      */
-    bool  check_pin_compatibility(const QString &dragged_pin_typename, const EDefinedDataTypes &dragged_pin_type,
+    static bool  check_pin_compatibility(const QString &dragged_pin_typename, const EDefinedDataTypes &dragged_pin_type,
                                   const QString &target_pin_typename,  const EDefinedDataTypes &target_pin_type,
                                   s_compare_types & compare_types,     const bool &strict_compliance = false);
 
@@ -90,18 +91,16 @@ public:
 
     StandardLibrary *       standard_library();
 protected:
-    explicit CVariablesAnalytics(const QDomNode &dom_node);
+
 private:
 
-    COglWorld           * m_world{nullptr};
-    CPou                * m_diagram_pou{nullptr};
-    CInterface          * m_diagram_interface{nullptr};
+    COglWorld           * m_world;
+    CPou                * m_diagram_pou;
+    CInterface          * m_diagram_interface;
     std::vector<CPou*>  * m_pou_array;
     std::vector<CVariable*> * m_global_variables;
     std::vector<CUserType*> *m_types;
     StandardLibrary     * m_standard_library;
-
-    CProject            * m_project;
 
     std::vector<std::tuple<CBlockVar*, CBlock*, CBlockVar*>>  m_graph_connections;
 
@@ -118,9 +117,9 @@ private:
 
     void collect_pins_data(std::vector<s_tree_item> &tree_items, CPin *pin);
 
-    std::vector<s_tree_item> find_fbd_inputs_collection(CFbdContent *body_content, CPin *pin, uint16_t &id);
+    std::vector<s_tree_item> find_fbd_inputs_collection(CPin *pin, uint16_t &id);
 
-    std::vector<s_tree_item> find_fbd_outputs_collection(CFbdContent *body_content, CPin *pin, uint16_t &id);
+    std::vector<s_tree_item> find_fbd_outputs_collection(CPin *pin, uint16_t &id);
 
     [[nodiscard]] QString get_comparable_type(const QString &mb_user_type);
     static QString     analyze_array(const QString &variable, CArray * user_type);

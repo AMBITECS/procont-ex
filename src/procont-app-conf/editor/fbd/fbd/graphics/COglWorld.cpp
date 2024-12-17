@@ -25,7 +25,7 @@
 
 
 uint16_t    max_local_id;
-extern CVariablesAnalytics * xml_variable_analytic;
+extern CProject *project;
 
 
 COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
@@ -33,32 +33,22 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
     max_local_id = 0;
 
     QDomNode project_node = pou->sourceDomNode()->parentNode().parentNode().parentNode();
-    auto analytic = CVariablesAnalytics::get_instance(project_node);
-    analytic->set_current_pou(pou->name(), this);
-
-
-    /// for debug change this POU on loaded
-    //m_pou = pou;
+    if (!project)
     {
-        QString pou_file = qApp->applicationDirPath() + "/" + "XML_project.xml";
-        QFile file(pou_file);
-        if (!file.open(QFile::ReadOnly | QFile::Text))
+        project = CProject::get_instance(project_node);
+        if (project_node.isNull())
         {
-            QtDialogs::alarm_user("Can't load pou file. Exiting");
-            exit(0);
+            project->types()->pous()->push_back(pou);
         }
-        QDomDocument doc;
-        doc.setContent(&file);
-        QDomElement root = doc.documentElement();
-
-        m_pou = new CPou(root.firstChild());
-        m_pou->setSourceDomNode(*pou->sourceDomNode());
     }
+
+    m_pou = pou;
 
     m_ladders         = new std::vector<CLadder*> ();
     m_visible_ladders = new std::vector<CLadder*> ();
     m_undo_stack      = new QUndoStack();
     m_hatch_topLeft   = hatch_pos;
+
 
     m_diagram_type = EBodyType::BT_COUNT;
 
@@ -87,6 +77,7 @@ COglWorld::~COglWorld()
     delete m_visible_ladders;
     delete m_undo_stack;
     delete m_editors;
+    project->Delete();
 }
 
 void COglWorld::init_projects_instances()
@@ -339,21 +330,27 @@ QPoint COglWorld::get_visible_range(const QPoint &)
 void COglWorld::load_project()
 {
     CLadder *cur_ladder;
+    CVariablesAnalytics analytics(this, m_pou->name());
 
     /// loading diagram objects and locate them to the corresponding ladder (without connecting lines)
     for (auto &block : *m_fbd_content->blocks())
     {
         check_local_id(block->local_id());
+        if (block->global_id().toLongLong() == 0)
+        {
+            block->set_global_id(QString::number(1));
+        }
         uint64_t ladder_index = block->global_id().toLong();
         cur_ladder = get_ladder(ladder_index);
 
-        xml_variable_analytic->setup_block(block);
+
+        analytics.setup_block(block);
         auto object = cur_ladder->add_object(block);
 
         object->update_position();
     }
 
-    xml_variable_analytic->load_connections();
+    analytics.load_connections();
 
     /// need to shake projects graphics
     if (!m_ladders->empty())
@@ -742,8 +739,8 @@ bool COglWorld::check_pins_to_connection(CPin *target_pin, s_compare_types &comp
     }
 
     /// compatibility check
-
-    bool res = xml_variable_analytic->check_pin_compatibility(dragged_pin_type_name, dragged_pin_type,
+    CVariablesAnalytics analytics(this, m_pou->name());
+    bool res = analytics.check_pin_compatibility(dragged_pin_type_name, dragged_pin_type,
                                                 target_pin_type_name, target_pin_type,
                                                 comparable_types);
 
@@ -804,6 +801,11 @@ void COglWorld::convert_to_XML()
     //stream << doc.toString();
     doc.save(stream, 4);
     file.close();
+}
+
+CPou *COglWorld::current_pou()
+{
+    return m_pou;
 }
 
 

@@ -8,7 +8,7 @@
 #include "COglWorld.h"
 
 extern uint16_t max_local_id;
-extern CVariablesAnalytics * xml_variable_analytic;
+
 
 CPinIn::CPinIn(CDiagramObject *parent, CBlockVar *base, QPoint * parent_tl) : CPin(parent, base, parent_tl)
 {
@@ -175,6 +175,8 @@ void CPinIn::disconnect(CPinOut *sender)
     m_is_connected = false;
     auto point_in = m_block_variable->point_in();
     auto connections = point_in->connections();
+    auto unit = m_parent->parent()->parent();
+    CVariablesAnalytics analytics(unit, unit->current_pou()->name());
 
     /// it could be graphic connection
     if (m_opposite)
@@ -194,7 +196,7 @@ void CPinIn::disconnect(CPinOut *sender)
     {
         COglWorld * world = m_parent->parent()->parent();
 
-        xml_variable_analytic->remove_input_variable_by_id(connections->front()->ref_local_id());
+        analytics.remove_input_variable_by_id(connections->front()->ref_local_id());
 
 
         CVariable var;
@@ -206,7 +208,7 @@ void CPinIn::disconnect(CPinOut *sender)
     if (!m_constant.isEmpty())
     {
 
-        xml_variable_analytic->remove_input_variable_by_id(connections->front()->ref_local_id());
+        analytics.remove_input_variable_by_id(connections->front()->ref_local_id());
         m_iface_input_var_id = 0;
 
         m_constant.clear();
@@ -256,7 +258,9 @@ void CPinIn::connect_iface_variable(CVariable * variable)
 
     m_block_variable->point_in()->connections()->push_back(connection);
 
-    xml_variable_analytic->add_input_variable(in_var);
+    auto unit = m_parent->parent()->parent();
+    CVariablesAnalytics analytics(unit, unit->current_pou()->name());
+    analytics.add_input_variable(in_var);
 
 
     m_iface_var = variable;
@@ -314,9 +318,10 @@ void CPinIn::set_constant(const EDefinedDataTypes &type, const std::string &cons
     conn->set_ref_local_id(in_var->local_id());
     m_block_variable->point_in()->connections()->push_back(conn);
 
+    auto unit = m_parent->parent()->parent();
+    CVariablesAnalytics analytics(unit, unit->current_pou()->name());
 
-
-    xml_variable_analytic->add_input_variable(in_var);
+    analytics.add_input_variable(in_var);
 
 
     m_is_connected = true;

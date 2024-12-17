@@ -4,6 +4,18 @@
 
 #include "CProject.h"
 
+CProject *  project{nullptr};
+
+CProject *CProject::get_instance(const QDomNode &project_node)
+{
+    inst_count++;
+    if (!project)
+    {
+        project = new CProject(project_node);
+    }
+    return project;
+}
+
 CProject::CProject()
 {
     m_types = new CTypes();
@@ -70,6 +82,7 @@ CProject::CProject(const QDomNode &project_node)
 CProject::~CProject()
 {
     delete m_types;
+    project = nullptr;
 }
 
 CTypes *CProject::types()
@@ -179,3 +192,15 @@ QDomNode CProject::dom_node() const
 
     return root;
 }
+
+void CProject::Delete()
+{
+    inst_count--;
+    if (inst_count > 1)
+    {
+        return;
+    }
+    delete this;
+}
+
+

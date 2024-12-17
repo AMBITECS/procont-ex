@@ -42,6 +42,7 @@ void CPinRename::redo()
 
         m_line = logic.add_new_line(m_pin, m_opposite_pin);
         m_pin->parent()->parent()->add_line(m_line);
+        m_pin->parent()->parent()->refresh_graphic_connections();
 
         auto input = m_pin->direction() == PD_INPUT ? m_pin->input() : m_opposite_pin->input();
         auto output = m_pin->direction() == PD_OUTPUT ? m_pin->output() : m_opposite_pin->output();

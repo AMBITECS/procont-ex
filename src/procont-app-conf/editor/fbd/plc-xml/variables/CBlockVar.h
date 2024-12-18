@@ -83,7 +83,7 @@ protected:
     EStorageMode m_store_modifier{EStorageMode::SM_NONE};
     CAddData    * add_data;
 
-    EDefinedDataTypes   m_type{EDefinedDataTypes::DDT_UNDEF};
+    EDefinedDataTypes   m_type{EDefinedDataTypes::DDT_DERIVED};
     EPinDirection   m_direction{PD_UNDEF};
 
     /// extended parameters

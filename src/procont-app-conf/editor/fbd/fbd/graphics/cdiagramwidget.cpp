@@ -27,6 +27,7 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
 
     m_ogl_widget = new COglWidget(&startup);
 
+
     /*connect(tree_object, &CTreeObject::dragging_complete,
             m_ogl_widget, &COglWidget::drag_complete);*/
     connect(m_ogl_widget, &COglWidget::undo_enabled, [this](){emit this->undo_enabled();});
@@ -88,5 +89,7 @@ QUndoStack *CDiagramWidget::undo_stack()
 {
     return m_ogl_widget->undo_stack();
 }
+
+
 
 

@@ -808,4 +808,3 @@ CPou *COglWorld::current_pou()
     return m_pou;
 }
 
-

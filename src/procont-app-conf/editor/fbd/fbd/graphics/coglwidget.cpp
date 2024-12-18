@@ -13,6 +13,7 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     : QOpenGLWidget(parent), m_vertical(ogl_startup->vertical), m_horizontal(ogl_startup->horizontal)
 {
     this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+    installEventFilter(this);
 
     connect(m_vertical, &QScrollBar::valueChanged,
             this, &COglWidget::vertical_scroll_moved);
@@ -589,4 +590,37 @@ void COglWidget::drag_complete()
 {
     m_wrong_type_text = "";
     m_wrong_type_rect = {};
+}
+
+bool COglWidget::eventFilter(QObject *target, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        auto keyEvent = dynamic_cast<QKeyEvent*>(event);
+
+        /// Ctrl+Z
+        if (keyEvent->key() == Qt::Key_Z &&
+            keyEvent->modifiers().testFlag((Qt::ControlModifier)))
+        {
+            if (m_helper->undo_stack()->canUndo())
+            {
+                m_helper->undo_stack()->undo();
+            }
+            return true;
+        }
+
+        /// Ctrl+shift + Z
+        if (keyEvent->key() == Qt::Key_Z &&
+            keyEvent->modifiers().testFlag((Qt::ControlModifier)) &&
+            keyEvent->modifiers().testFlag(Qt::ShiftModifier))
+        {
+            if (m_helper->undo_stack()->canRedo())
+            {
+                m_helper->undo_stack()->redo();
+            }
+            return true;
+        }
+    }
+
+    return QObject::eventFilter(target, event);
 }

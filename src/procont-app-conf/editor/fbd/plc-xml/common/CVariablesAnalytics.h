@@ -87,9 +87,10 @@ public:
                                                       uint64_t &ref_id, const QString &out_formal_param);
 
     [[nodiscard]] bool connect_iface_var(CPinOut *pin_out, CVariable *iface_variable);
-    CVariable *     find_iface_var(const QString &var_name);
+    // CVariable *     find_iface_var(const QString &var_name);
 
     StandardLibrary *       standard_library();
+    CDiagramObject  *       find_object(const QString &name);
 protected:
 
 private:

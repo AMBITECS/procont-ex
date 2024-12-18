@@ -38,6 +38,8 @@ public:
     CUserType   * find_user_type_by_name(const QString &name);
     CUserType   * remove_user_type(CUserType * user_type); //!< don't forget to delete
 
+    CVariable   * find_iface_variable(const QString &name);
+
     bool    is_empty() const;
 
 protected:

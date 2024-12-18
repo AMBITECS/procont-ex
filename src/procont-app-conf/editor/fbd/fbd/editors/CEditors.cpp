@@ -82,7 +82,9 @@ void CEditors::show_combo(CPin *pin)
     }
 
     m_pin = pin;
+    m_pin_var_editor->set_pin(m_pin);
 
+    combo_data.clear();
     combo_data = m_var_analytics->query(pin);
 
     m_model->set_data(&combo_data);
@@ -203,10 +205,22 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
                 return;
             }
             auto cmd = new CConstToPin(m_world, m_pin->input(), var_name);
-            m_world->undo_stack()->push(cmd);
-            emit m_world->undo_enabled();
+            if (cmd->is_error())
+            {
+                delete cmd;
+                return;
+            }
+            else
+            {
+                m_world->undo_stack()->push(cmd);
+                emit m_world->undo_enabled();
+            }
         }
-        iface_var = i_var;
+        else
+        {
+            iface_var = i_var;
+        }
+
         /// скорее всего это элемент массива
     }
     else
@@ -239,7 +253,8 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
 
     if (block && !opposite_pin && !iface_var)
     {
-
+        QtDialogs::warn_user("Понять выполнение условий");
+        return;
     }
 
 

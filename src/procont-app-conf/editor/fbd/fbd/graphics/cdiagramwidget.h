@@ -53,6 +53,8 @@ public:
     ~CDiagramWidget() override;
     void  set_active();
 
+
+
     QUndoStack *    undo_stack();
 
 signals:
@@ -69,7 +71,6 @@ public slots:
     void    updated_interface(const QDomNode &node);//!< interface has been changed. It is time to update diagram variables
 
 protected:
-
 
 
 protected slots:

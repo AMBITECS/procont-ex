@@ -22,7 +22,7 @@ CInstEditor::CInstEditor(CFilter *filter, QWidget *parent) : QLineEdit(parent)
 
     this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
-    m_type = EDefinedDataTypes::DDT_UNDEF;
+    m_type = EDefinedDataTypes::DDT_DERIVED;
 
     CDiagramColors colors;
 

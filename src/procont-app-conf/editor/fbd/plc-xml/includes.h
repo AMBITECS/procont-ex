@@ -133,8 +133,8 @@ enum EDefinedDataTypes
     DDT_WORD,
     DDT_DWORD,
     DDT_LWORD,
-    DDT_DERIVED,        //!< user defined or POU
     DDT_ANY,
+    DDT_DERIVED,        //!< user defined or POU
     DDT_UNDEF,
     DDT_COUNT
 };
@@ -168,8 +168,8 @@ static const QString base_types_names[EDefinedDataTypes::DDT_COUNT]
     "WORD",
     "DWORD",
     "LWORD",
-    "DERIVED",
     "ANY",
+    "DERIVED",
     "UNDEFINED"
 };
 
@@ -184,7 +184,7 @@ static EDefinedDataTypes  get_type_from_string(const std::string & type_s)
         }
         count++;
     }
-    return DDT_UNDEF;
+    return DDT_DERIVED;
 }
 
 

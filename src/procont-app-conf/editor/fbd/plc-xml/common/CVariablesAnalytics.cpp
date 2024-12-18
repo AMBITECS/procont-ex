@@ -212,6 +212,7 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
     uint16_t  id = 1;
     std::vector<s_tree_item> items;
     std::vector<s_tree_item> items_v;
+    QString var_name;
 
     CFilter filter(this);
 
@@ -253,13 +254,17 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
 
             if (pou != m_diagram_pou)
             {
-                var->set_name(pou->name() + "." + var->name());
+                var_name = pou->name() + "." + var->name();
+            }
+            else
+            {
+                var_name = var->name();
             }
 
             s_tree_item item;
             item.id = id++;
             item.id_parent = 0;
-            item.name = var->name().toStdString();
+            item.name = var_name.toStdString();
             item.type = var->type().toStdString();
             item.iface_variable = var;
 
@@ -545,14 +550,19 @@ bool CVariablesAnalytics::check_pin_compatibility(const QString &dragged_pin_typ
     compare_types.target_type = target_pin_typename;
     compare_types.dragged_type = dragged_pin_typename;
 
+    if (dragged_pin_typename == target_pin_typename)
+    {
+        return true;
+    }
+
     if (dragged_pin_type == DDT_ANY || target_pin_type == DDT_ANY)
     {
-        if (dragged_pin_type == DDT_ANY && target_pin_type != DDT_DERIVED && target_pin_type != DDT_UNDEF)
+        if (dragged_pin_type == DDT_ANY && target_pin_type < DDT_DERIVED)
         {
             return true;
         }
 
-        if(target_pin_type == DDT_ANY && dragged_pin_type != DDT_DERIVED && target_pin_type != DDT_UNDEF)
+        if(target_pin_type == DDT_ANY && dragged_pin_type < DDT_DERIVED)
         {
             return true;
         }
@@ -1041,15 +1051,28 @@ bool CVariablesAnalytics::connect_iface_var(CPinOut *pin_out, CVariable *iface_v
     return true;
 }
 
-CVariable *CVariablesAnalytics::find_iface_var(const QString &var_name)
-{
-    QString ext_name;
-    return get_iface_variable(var_name, ext_name);
-}
+//CVariable *CVariablesAnalytics::find_iface_var(const QString &var_name)
+//{
+//    QString ext_name;
+//    return get_iface_variable(var_name, ext_name);
+//}
 
 StandardLibrary *CVariablesAnalytics::standard_library()
 {
     return m_standard_library;
+}
+
+CDiagramObject *CVariablesAnalytics::find_object( const QString &name )
+{
+    for (auto &ladder : *m_world->m_ladders)
+    {
+        for (auto &obj : *ladder->draw_components())
+        {
+            auto obj_name = obj->instance_name().isEmpty() ? obj->type_name() : obj->instance_name();
+
+        }
+    }
+    return nullptr;
 }
 
 

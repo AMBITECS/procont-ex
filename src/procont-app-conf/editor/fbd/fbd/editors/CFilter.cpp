@@ -152,36 +152,36 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
 
 EDefinedDataTypes CFilter::get_type_from_const(const std::string &expression)
 {
-    const char * time_mask = "^(t#|time#){1}[\\d]+(ms|s|h|m){1}$/i";
+    std::regex time_mask("^(t#|time#){1}[0-9]+(ms|s|h|m){1}$", std::regex_constants::icase);
     if (std::regex_match(expression, std::regex(time_mask)))
     {
         return DDT_TIME;
     }
-    const char * date_mask_alien = R"(^(d#|date#){1}[\d]{4}-[\d]{2}-[\d]{2}$)";
+    std::regex date_mask_alien("(^(d#|date#){1}[0-9]{4}-[0-9]{2}-[0-9]{2}$)", std::regex_constants::icase);
     if (std::regex_match(expression, std::regex(date_mask_alien)))
     {
         return DDT_DATE;
     }
 
-    const char * date_mask_rus = R"(^(d#|date#){1}[\d]{2}\.[\d]{2}\.[\d]{4}$)";
+    std::regex date_mask_rus(R"(^(d#|date#){1}[0-9]{2}\.[0-9]{2}\.[0-9]{4}$)", std::regex_constants::icase);
     if (std::regex_match(expression, std::regex(date_mask_rus)))
     {
         return DDT_DATE;
     }
 
-    const char *real_mask = R"(^[+-]?((\d+[\.|\,]+\d+)|([\.|\,]+\d+))$)";
+    std::regex real_mask(R"(^[+-]?(([0-9]+[\.|,]{1}[0-9]+)|([\.|,]{1}[0-9]+))$)");
     if (std::regex_match(expression, std::regex(real_mask)))
     {
         return DDT_REAL;
     }
 
-    const char * int_mask = "^[+|-]?[0-9]+$";
+    std::regex int_mask("^[+|-]?[0-9]+$");
     if (std::regex_match(expression, std::regex(int_mask)))
     {
         return DDT_INT;
     }
 
-    const char * uint_mask = "^[0-9]+$";
+    std::regex uint_mask("^[0-9]+$");
     if (std::regex_match(expression, std::regex(uint_mask)))
     {
         return DDT_UINT;
@@ -194,8 +194,7 @@ EDefinedDataTypes CFilter::get_type_from_const(const std::string &expression)
         return DDT_STRING;
     }
 
-
-    return DDT_UNDEF;
+    return DDT_DERIVED;
 }
 
 

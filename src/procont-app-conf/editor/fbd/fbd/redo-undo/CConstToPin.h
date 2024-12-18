@@ -16,6 +16,7 @@ public:
 
     void    redo() override;
     void    undo() override;
+    [[nodiscard]] bool    is_error() const;
 
 private:
     COglWorld   * m_world;
@@ -26,6 +27,7 @@ private:
     CVariable   * m_iface_var{nullptr};
     CPinOut     * m_opposite{nullptr};
     QString       m_constant;
+    bool          m_is_error{false};
 };
 
 

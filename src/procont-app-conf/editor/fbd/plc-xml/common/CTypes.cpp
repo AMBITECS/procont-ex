@@ -347,3 +347,31 @@ bool CTypes::is_empty() const
 {
     return m_pous->empty() && m_user_types->empty();
 }
+
+CVariable *CTypes::find_iface_variable(const QString &name)
+{
+    std::string  varName = name.toStdString();
+    std::string  pou_name, var_name;
+    size_t pos;
+
+    var_name = name.toStdString();
+
+    if ((pos = varName.find('.')) > 0)
+    {
+        /// pou_name could be as POUs name so and Block name!
+        pou_name = varName.substr(0,pos);
+        var_name = varName.substr(pos+1, varName.length());
+    }
+
+    for (auto &pou : *m_pous)
+    {
+        for (auto &var : pou->interface()->all_variables())
+        {
+            if (var->name().toStdString() == var_name)
+            {
+                return var;
+            }
+        }
+    }
+    return nullptr;
+}

@@ -102,20 +102,20 @@ public slots:
     void    mouse_left_pressed(const QPoint &pos);
     void    mouse_dblClicked(QMouseEvent *evt);
     void    pin_variable_rename();
-
-protected slots:
     void    iface_new_var(const QString & type,     const QString & name);
     void    iface_rename( const QString & old_name, const QString & new_name);
     void    load_later();
     void    update_visible_ladders();
     void    convert_to_XML();
 
+protected:
     friend  CAddNewLadder;
     friend  CInsertNewLadder;
     friend  CInsertNewObject;
     friend  CMoveObject;
     friend  CInsertLadder;
     friend  CVariablesAnalytics;
+
 
 private:
     QUndoStack  * m_undo_stack;

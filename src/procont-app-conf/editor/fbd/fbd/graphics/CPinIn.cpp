@@ -333,8 +333,8 @@ void CPinIn::load_project_connect_const(const EDefinedDataTypes &type, const QSt
     m_outer_text->set_text(const_val);
     m_outer_text->set_color(m_color_def);
 
-    QString text = m_block_variable->formal_parameter() + ":" + base_types_names[type];
-    m_pin_name->set_text(text);
+    //QString text = m_block_variable->formal_parameter() + ":" + base_types_names[type];
+    //m_pin_name->set_text(text);
 
     m_is_connected = true;
     update_position();

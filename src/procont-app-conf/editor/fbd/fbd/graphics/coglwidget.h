@@ -40,7 +40,7 @@ signals:
     void    iface_var_ren(const QString & old_name, const QString & new_name);
 
 protected:
-
+    bool    eventFilter(QObject *target, QEvent *event) override;
 
     /// open GL
     void initializeGL() override;

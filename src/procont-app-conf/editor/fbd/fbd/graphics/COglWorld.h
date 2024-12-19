@@ -80,10 +80,12 @@ public:
     CDiagramObject  * insert_new_component(CLadder *p_ladder, const EPaletteElements &elements, const QPoint &pos);
     void              insert_ladder(CLadder *dragged_ladder, CLadder *before);
     bool              move_object(CLadder * source, CLadder *destination, CDiagramObject *object, const QPoint &pos);
-    void              check_diagram_size();
-    bool              check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types);
+    void              erase_object(CDiagramObject *object);
     void              connect_pins(CPin *dragged_pin, CPin *target_pin);
     void              text_based_connecting_pin(CPin *selected_pin);
+
+    void              check_diagram_size();
+    bool              check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types);
     CPou            * current_pou();
 signals:
     void    update_hatch();

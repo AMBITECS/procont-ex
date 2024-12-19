@@ -57,8 +57,6 @@ CConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
             QLine down_drag_line = down_line(drag_line.p2());
             QLine down_target_line = down_line(target_line.p2());
 
-            m_ladder->bottom_line_count_increase();
-
             QLine last = QLine(down_drag_line.p2(), down_target_line.p2());
 
             conn_line->add_line(drag_line);

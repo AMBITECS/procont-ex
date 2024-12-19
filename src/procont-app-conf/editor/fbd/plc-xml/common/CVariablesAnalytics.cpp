@@ -1064,12 +1064,23 @@ StandardLibrary *CVariablesAnalytics::standard_library()
 
 CDiagramObject *CVariablesAnalytics::find_object( const QString &name )
 {
+    QString obj_name, obj_id_name;
+
     for (auto &ladder : *m_world->m_ladders)
     {
         for (auto &obj : *ladder->draw_components())
         {
-            auto obj_name = obj->instance_name().isEmpty() ? obj->type_name() : obj->instance_name();
+            obj_name = obj->instance_name().isEmpty() ? obj->type_name() : obj->instance_name();
+            obj_id_name = obj_name;
+            if (obj->instance_name().isEmpty())
+            {
+                obj_id_name = obj_name + QString::number(obj->local_id());
+            }
 
+            if (obj_name == name || obj_id_name == name)
+            {
+                return obj;
+            }
         }
     }
     return nullptr;

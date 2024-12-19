@@ -6,10 +6,10 @@
 
 #include <utility>
 
-TreeItem::TreeItem(s_tree_item data, TreeItem *parentItem)
+TreeItem::TreeItem(const s_tree_item &data, TreeItem *parentItem)
     : m_parentItem(parentItem)
 {
-    m_itemData = new s_tree_item(std::move(data));
+    m_itemData = new s_tree_item(data);
 }
 
 TreeItem::~TreeItem()

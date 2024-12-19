@@ -15,8 +15,8 @@ CPinIn::CPinIn(CDiagramObject *parent, CBlockVar *base, QPoint * parent_tl) : CP
     m_direction = EPinDirection::PD_INPUT;
 
     m_img_negated = QImage(":/codesys/images/codesys/pin_input_inv.png");
-    m_img_rising = QImage("");
-    m_img_falling = QImage("");
+    m_img_rising = QImage(":/codesys/images/codesys/pin_input_rising.png");
+    m_img_falling = QImage(":/codesys/images/codesys/pin_input_falling.png");
     m_img_norm    = QImage(":/codesys/images/codesys/pin_input_norm.png");
     m_draw_image = m_img_norm;
 
@@ -120,11 +120,11 @@ void CPinIn::load_project_connect_iface_var(CVariable *variable)
 {
     m_is_connected = true;
 
-    //m_block_variable->set_iface_variable(variable);
     m_outer_text->set_text(variable->name());
     set_type(variable->type());
     QString text = m_block_variable->formal_parameter() + ":" + variable->type();
     m_pin_name->set_text(text);
+    m_iface_var = variable;
     update_position();
 }
 
@@ -190,27 +190,18 @@ void CPinIn::disconnect(CPinOut *sender)
 
         m_parent->parent()->remove_line(this);
     }
+
     /// nope its connected to the interface variable or constant
-    //if (point_in->connections()->front()->formal_parameter().isEmpty() && point_in->connections()->front()->ref_local_id() > 0)
     if (m_iface_var)
     {
-        COglWorld * world = m_parent->parent()->parent();
-
         analytics.remove_input_variable_by_id(connections->front()->ref_local_id());
-
-
-        CVariable var;
-        // m_block_variable->set_iface_variable(&var);
         m_iface_var = nullptr;
     }
 
     /// constant
     if (!m_constant.isEmpty())
     {
-
         analytics.remove_input_variable_by_id(connections->front()->ref_local_id());
-        m_iface_input_var_id = 0;
-
         m_constant.clear();
     }
 
@@ -223,6 +214,8 @@ void CPinIn::disconnect(CPinOut *sender)
         }
         connections->clear();
     }
+
+    m_outer_text->set_text("");
 
     resort_outers();
 }
@@ -261,9 +254,35 @@ void CPinIn::connect_iface_variable(CVariable * variable)
     auto unit = m_parent->parent()->parent();
     CVariablesAnalytics analytics(unit, unit->current_pou()->name());
     analytics.add_input_variable(in_var);
+}
 
+void CPinIn::disconnect_iface()
+{
+    if (!m_iface_var)
+    {
+        return;
+    }
 
-    m_iface_var = variable;
+    m_is_connected = false;
+    m_outer_text->set_text("");
+    update_position();
+
+    /// clear local connect info
+    uint64_t  ref_id;
+    auto connections = m_block_variable->point_in()->connections();
+
+    for (auto &conn: *connections)
+    {
+        ref_id = conn->ref_local_id();
+        delete conn;
+    }
+    connections->clear();
+
+    /// clear connection in XML
+    COglWorld *world = m_parent->parent()->parent();
+    auto *analytics = new CVariablesAnalytics(world, world->current_pou()->name());
+    analytics->remove_input_variable_by_id(ref_id);
+    delete analytics;
 }
 
 void CPinIn::update_condition()
@@ -296,7 +315,6 @@ CPinOut *CPinIn::opposite()
 void CPinIn::set_constant(const EDefinedDataTypes &type, const std::string &const_val)
 {
     load_project_connect_const(type, const_val.c_str());
-    //m_block_variable->set_constant(type, const_val.toStdString()); ???
 
     /// connect in XML<br>
     /// set outside inVariable
@@ -325,17 +343,14 @@ void CPinIn::set_constant(const EDefinedDataTypes &type, const std::string &cons
 
 
     m_is_connected = true;
-    m_constant = const_val.c_str();
+
 }
 
 void CPinIn::load_project_connect_const(const EDefinedDataTypes &type, const QString &const_val)
 {
     m_outer_text->set_text(const_val);
     m_outer_text->set_color(m_color_def);
-
-    //QString text = m_block_variable->formal_parameter() + ":" + base_types_names[type];
-    //m_pin_name->set_text(text);
-
+    m_constant = const_val;
     m_is_connected = true;
     update_position();
 }
@@ -368,6 +383,7 @@ QString CPinIn::constant() const
 {
     return m_constant;
 }
+
 
 
 

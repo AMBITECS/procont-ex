@@ -97,9 +97,7 @@ public:
     [[nodiscard]] bool    is_clicked_here(const QPoint &pos) const;
     void    drag_object(QDragMoveEvent * event);
 
-    /// for graphic connecting info
-    void    bottom_line_count_increase();
-    void    bottom_line_count_decrease();
+
     [[nodiscard]] short   bottom_line_count() const;
 
     CConnectLine* add_line(CConnectLine *line);
@@ -107,15 +105,17 @@ public:
     CConnectLine* remove_line(CConnectLine *line);
     CConnectLine* remove_line(CPinIn * pin_input);
 
+    void  erase_object(CDiagramObject *obj);
 
-    [[nodiscard]] QPoint              real_bottom_right() const;
-    QPoint *    real_top_left();
+
+    [[nodiscard]] QPoint                real_bottom_right() const;
+    QPoint *                            real_top_left();
 
 
     QVector<QPair<QRect*, QImage*>>   * draw_ladder();
     QVector<QPair<QRect, QImage>>       draw_highlights();
     QVector<CDiagramObject*>          * draw_components();
-    std::vector<CObjectsText*>            * ladder_texts();
+    std::vector<CObjectsText*>        * ladder_texts();
     [[nodiscard]] const uint16_t      * height();
     QRect                             * base_relative_rect();
     [[nodiscard]] uint16_t              number() const;

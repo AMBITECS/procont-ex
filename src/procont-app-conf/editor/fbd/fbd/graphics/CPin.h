@@ -87,6 +87,7 @@ protected:
     QImage            m_img_selected;
     QImage            m_img_error;
 
+
     QFont             m_font{QApplication::font()};
     CObjectsText    * m_pin_name;
     CObjectsText    * m_outer_text;

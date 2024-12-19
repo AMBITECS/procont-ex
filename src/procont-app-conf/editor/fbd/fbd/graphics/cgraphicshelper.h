@@ -114,7 +114,6 @@ private:
     COglWorld         * m_graphics_world;
 
     CDiagramObject    * m_dragged_obj{nullptr};
-    CDiagramObject    * m_clip_object{nullptr};
     CPin              * m_dragged_pin{nullptr};
     CLadder           * m_object_source{nullptr};
     CLadder           * m_dragged_ladder{nullptr};

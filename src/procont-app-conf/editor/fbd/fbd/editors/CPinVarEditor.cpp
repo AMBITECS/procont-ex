@@ -10,10 +10,11 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <QLineEdit>
+#include <utility>
 #include "../graphics/CDiagramObject.h"
 #include "../graphics/CLadder.h"
 #include "../graphics/COglWorld.h"
-
+#include "qvarselectmodel.h"
 
 extern CProject *project;
 
@@ -32,7 +33,7 @@ CPinVarEditor::CPinVarEditor(QWidget *parent) : QComboBox(parent), skipNextHide(
     m_view = new QTreeView(parent);
     m_view->viewport()->installEventFilter(this);
 
-    connect(m_view, &QTreeView::clicked, this, &CPinVarEditor::tree_clicked);
+    //connect(m_view, &QTreeView::clicked, this, &CPinVarEditor::tree_clicked);
     connect(this, &QComboBox::editTextChanged, this, &CPinVarEditor::text_changed);
 
     m_view->setFrameShape(QFrame::NoFrame);
@@ -73,7 +74,7 @@ void CPinVarEditor::showPopup()
     for (int i = 0; i < m_view->header()->count(); i++)
         size += m_view->header()->sectionSize(i);
 
-    this->setFixedWidth(size + 15);
+    this->setFixedWidth(size);
 
     //setRootModelIndex(QModelIndex());
     QComboBox::showPopup();
@@ -197,12 +198,13 @@ void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
         m_new_variable += item->item()->name.c_str();
 
         /// Этот финт ушами, что бы обойти непонятную очистку QComboBox'а. Иначе поле ввода остаётся пустым
-        QTimer::singleShot(150, this, SLOT(show_variable()));
+        QTimer::singleShot(150, [=](){show_variable(m_new_variable);});
     }
 }
 
-void CPinVarEditor::show_variable()
+void CPinVarEditor::show_variable(QString text)
 {
+    m_new_variable = std::move(text);
     this->setEditText(m_new_variable);
 }
 
@@ -227,16 +229,21 @@ void CPinVarEditor::reset_selection()
 
 void CPinVarEditor::text_changed(const QString &text)
 {
-    m_selected_item = nullptr;
+    /*m_selected_item = nullptr;
 
 
     if (text.length() < 3)
     {
-        set_error(false);
+        //set_error(false);
         return;
     }
 
-    bool bad_type = false;
+    auto model = dynamic_cast<QVarSelectModel*>(this->model());
+    model->set_text(text);
+    m_new_variable = text;
+    QTimer::singleShot(250, this, SLOT(show_variable(text)));*/
+
+    /*bool bad_type = false;
     CVariable *i_var = nullptr;
     bool compatibility{false};
 
@@ -249,9 +256,10 @@ void CPinVarEditor::text_changed(const QString &text)
         bad_type = true;
         i_var = project->types()->find_iface_variable(text);
 
+        /// or objects pin
         if (!i_var)
         {
-            auto pin = m_analytics->
+            auto obj = m_analytics->find_object(text);
         }
     }
 
@@ -260,7 +268,7 @@ void CPinVarEditor::text_changed(const QString &text)
         compatibility = check_compatibility(i_var, type);
     }
 
-    set_error(!compatibility);
+    set_error(!compatibility);*/
 }
 
 void CPinVarEditor::set_error(const bool &is_error)

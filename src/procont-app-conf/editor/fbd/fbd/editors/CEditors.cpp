@@ -11,6 +11,7 @@
 #include "editor/fbd/general/QtDialogs.h"
 #include "editor/fbd/fbd/redo-undo/CConstToPin.h"
 
+extern CProject * project;
 
 CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
 {
@@ -196,7 +197,7 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
     {
 
         /// Это может быть константа или переменная набранная вручную
-        auto i_var = m_var_analytics->find_iface_var(var_name);
+        auto i_var = project->types()->find_iface_variable(var_name);
         if (!i_var)
         {
             if (m_pin->direction() == PD_OUTPUT)

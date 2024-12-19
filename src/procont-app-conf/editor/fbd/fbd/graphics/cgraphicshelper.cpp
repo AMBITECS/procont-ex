@@ -282,9 +282,9 @@ void CGraphicsHelper::project_complete()
     emit on_project_loaded();
 }
 
-void CGraphicsHelper::object_remove(CLadder *, CDiagramObject *)
+void CGraphicsHelper::object_remove(CLadder *ladder, CDiagramObject *object)
 {
-
+    ladder->erase_object(object);
 }
 
 bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point)
@@ -300,6 +300,40 @@ bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point
     auto p_ladder = selection.ladder;
     auto p_pin = selection.pin;
 
+    /// UNDO / REDO
+    auto *act_undo = new QAction(QIcon(":/24/images/24x24/Undo.png"), "");
+    auto *act_redo = new QAction(QIcon(":/24/images/24x24/Redo.png"), "");
+
+    if (m_graphics_world->undo_stack()->canUndo())
+    {
+        QString text = "Отменить " + m_graphics_world->undo_stack()->undoText();
+        act_undo->setText(text);
+        connect(act_undo, &QAction::triggered, [=](){m_graphics_world->undo_stack()->undo();});
+    }
+    else
+    {
+        act_undo->setText("Отмена");
+        act_undo->setEnabled(false);
+    }
+
+    if (m_graphics_world->undo_stack()->canRedo())
+    {
+        QString text = "Повторить " + m_graphics_world->undo_stack()->redoText() ;
+        act_redo->setText(text);
+        connect(act_redo, &QAction::triggered, [=](){m_graphics_world->undo_stack()->redo();});
+    }
+    else
+    {
+        act_redo->setText(tr("Вернуть"));
+        act_redo->setEnabled(false);
+    }
+
+    p_menu->addAction(act_undo);
+    p_menu->addAction(act_redo);
+    p_menu->addSeparator();
+
+
+    /// Special actions
     if (p_object && p_ladder)
     {
         make_object_menu(p_menu, p_object, p_ladder);
@@ -321,54 +355,27 @@ bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point
 void CGraphicsHelper::make_object_menu(QMenu *p_menu, CDiagramObject *p_object, CLadder *p_ladder)
 {
     auto act_remove = new QAction(p_menu);
-    auto act_cat = new QAction(p_menu);
-
-    QAction * act_paste = nullptr;
-    if (m_clip_object)
-    {
-        act_paste = new QAction(p_menu);
-        act_paste->setEnabled(m_clip_object);
-    }
-
 
 
     QString text = "Удалить " + p_object->type_name() + " " + p_object->instance_name();
     act_remove->setText(text);
 
-    text = "Вырезать " + p_object->type_name() + " " + p_object->instance_name();
-    act_cat->setText(text);
-
-    if (m_clip_object)
-    {
-        //text = "Вставить " + m_clip_object->type_name() + " " + m_clip_object->instance_name();
-        act_paste->setIcon(QIcon(":/24/images/24x24/Paste.png"));
-        //connect()
-    }
-
-
     act_remove->setIcon(QIcon(":/24/images/24x24/Close.png"));
-    connect(act_remove, &QAction::toggled, [=](){
+    connect(act_remove, &QAction::triggered, [=](){
         object_remove(p_ladder, p_object);});
 
-    act_cat->setIcon(QIcon(":/16/images/16x16/cut_red.png"));
-    connect(act_cat, &QAction::toggled, [=](){object_cat(p_ladder, p_object);});
 
     p_menu->addAction(act_remove);
-    p_menu->addAction(act_cat);
-    if(act_paste)
-        p_menu->addAction(act_paste);
 }
 
 void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
 {
-    auto act_find_helper = new QAction(QIcon(":/24/images/24x24/Search.png"),
-                                       "Найти переменную с помощью ассистента...",
-                                       p_menu);
+
     auto act_edit_connect = new QAction(QIcon(":/24/images/24x24/Modify.png"),
                                         "Редактировать соединение",
                                         p_menu);
     auto act_reset_connect = new QAction(QIcon(":/16/images/16x16/chart_organisation_delete.png"),
-                                        "Очистить соединение",
+                                        "Очистить соединения",
                                         p_menu);
 
     QAction * act_inversion = nullptr;
@@ -377,20 +384,44 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
 
     if (p_pin->type() == EDefinedDataTypes::DDT_BOOL && p_pin->direction() == PD_INPUT)
     {
-        act_inversion = new QAction(QIcon(""), "Инвертировать", p_menu);
+        /// negated input
+        QString negated_text = p_pin->input()->is_negated() ? "Сбросить \"инвертирование\"" : "Инвертировать вход";
+        act_inversion = new QAction(QIcon(":/16/images/16x16/contrast.png"), negated_text, p_menu);
         connect(act_inversion, &QAction::toggled, this,
-                [p_pin]{p_pin->input()->set_negated(!p_pin->input()->is_negated());});
+                [=]{
+                    p_pin->input()->set_negated(!p_pin->input()->is_negated());
+                    m_graphics_world->update_visible_ladders();
+                    });
 
-        act_edge_rising = new QAction(QIcon(""), "Нарастающий фронт");
+        /// rising edge
+        QString rising_text = p_pin->input()->is_rising_edge() ? "Сбросить восходящий фронт" : "Установить восходящий фронт";
+        act_edge_rising = new QAction(QIcon(":/24/images/24x24/Raise.png"), rising_text);
+        connect(act_edge_rising, &QAction::triggered, [=](){
+                p_pin->input()->set_rising_edge(!p_pin->input()->is_rising_edge());
+                m_graphics_world->update_visible_ladders();
+                });
+
+        /// falling edge
+        QString falling_text = p_pin->input()->is_falling_edge() ? "Сбросить нисходящий фронт" : "Установить нисходящий фронт";
+        act_edge_falling = new QAction(QIcon(":/24/images/24x24/Fall.png"), falling_text);
+        connect(act_edge_falling, &QAction::triggered, [=](){
+            p_pin->input()->set_falling_edge(!p_pin->input()->is_falling_edge());
+            m_graphics_world->update_visible_ladders();
+            });
+
     }
 
-
-
-
-    p_menu->addAction(act_find_helper);
     p_menu->addAction(act_edit_connect);
     p_menu->addAction(act_reset_connect);
     p_menu->addSeparator();
+
+    if (p_pin->direction() ==PD_INPUT)
+    {
+        p_menu->addAction(act_inversion);
+        p_menu->addAction(act_edge_rising);
+        p_menu->addAction(act_edge_falling);
+        p_menu->addSeparator();
+    }
 
 }
 

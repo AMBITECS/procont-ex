@@ -31,18 +31,14 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    // Add data:
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-
-    // Remove data:
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     void set_data(std::vector<s_tree_item> *variables);
+    void set_text(const QString &text);
 
 private:
     std::vector<TreeItem*> m_rows;
+    std::vector<TreeItem*> m_source;
     TreeItem    * m_root;
     void setup_data(TreeItem *item);
     QFont   m_type_font;

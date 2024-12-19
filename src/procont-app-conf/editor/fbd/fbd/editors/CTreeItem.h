@@ -13,7 +13,7 @@
 class TreeItem
 {
 public:
-    explicit TreeItem(s_tree_item data, TreeItem *parentItem = nullptr);
+    explicit TreeItem(const s_tree_item &data, TreeItem *parentItem = nullptr);
     ~TreeItem();
 
     void appendChild(TreeItem *child);

@@ -11,6 +11,7 @@
 #include "editor/fbd/general/QtDialogs.h"
 #include "CGrapchicsLogic.h"
 #include "editor/fbd/resources/colors.h"
+#include "../redo-undo/CRemoveObject.h"
 
 extern uint16_t    max_local_id;
 
@@ -629,16 +630,6 @@ QPoint *CLadder::real_top_left()
     return &m_relative_tl;
 }
 
-void CLadder::bottom_line_count_increase()
-{
-    m_bottom_lines ++;
-}
-
-void CLadder::bottom_line_count_decrease()
-{
-    m_bottom_lines--;
-}
-
 short CLadder::bottom_line_count() const
 {
     return m_bottom_lines;
@@ -647,6 +638,12 @@ short CLadder::bottom_line_count() const
 CConnectLine *CLadder::add_line(CConnectLine *line)
 {
     m_lines->push_back(line);
+
+    if (line->lines()->size() == 5)
+    {
+        m_bottom_lines ++;
+    }
+
     return line;
 }
 
@@ -700,6 +697,10 @@ CConnectLine *CLadder::remove_line(CConnectLine *line)
         if (item == line)
         {
             m_lines->erase(m_lines->begin() + counter);
+            if (item->lines()->size() == 5)
+            {
+                m_bottom_lines--;
+            }
             return line;
         }
         counter++;
@@ -720,12 +721,31 @@ CConnectLine *CLadder::remove_line(CPinIn *pin_input)
         if (line->get_pin_in() == pin_input)
         {
             m_lines->erase(m_lines->begin() + counter);
+
+            if (line->lines()->size() == 5)
+            {
+                m_bottom_lines--;
+            }
+
             return line;
         }
         counter++;
     }
     return nullptr;
 }
+
+void CLadder::erase_object(CDiagramObject *obj)
+{
+    if (obj->parent() != this)
+    {
+        return;
+    }
+
+    auto cmd = new CRemoveObject(obj);
+    m_parent->undo_stack()->push(cmd);
+}
+
+
 
 
 

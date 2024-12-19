@@ -740,7 +740,7 @@ bool COglWorld::check_pins_to_connection(CPin *target_pin, s_compare_types &comp
 
     /// compatibility check
     CVariablesAnalytics analytics(this, m_pou->name());
-    bool res = analytics.check_pin_compatibility(dragged_pin_type_name, dragged_pin_type,
+    bool res = CVariablesAnalytics::check_pin_compatibility(dragged_pin_type_name, dragged_pin_type,
                                                 target_pin_type_name, target_pin_type,
                                                 comparable_types);
 
@@ -806,5 +806,10 @@ void COglWorld::convert_to_XML()
 CPou *COglWorld::current_pou()
 {
     return m_pou;
+}
+
+void COglWorld::erase_object(CDiagramObject *object)
+{
+    object->parent()->erase_object(object);
 }
 

@@ -31,7 +31,7 @@ signals:
 
 protected slots:
     void tree_clicked(const QPersistentModelIndex &index);
-    void show_variable();
+    void show_variable(QString text);
     void text_changed(const QString &text);
 
 protected:

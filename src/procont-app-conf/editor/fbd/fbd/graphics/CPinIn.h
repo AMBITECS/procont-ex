@@ -41,6 +41,7 @@ public:
     void        connect_pin(CPinOut *pin); //!< графическое соединение (если одна ступень)
     void        disconnect(CPinOut *sender = nullptr);
     void        connect_iface_variable(CVariable *variable);
+    void        disconnect_iface();
     void        set_constant(const EDefinedDataTypes &type, const std::string &type_name);
 
     void        update_graphic_text();
@@ -54,7 +55,6 @@ private:
     QColor      m_color_def;
     QColor      m_color_graph;
     CVariable * m_iface_var{nullptr};
-    uint64_t    m_iface_input_var_id{0};
     QString     m_constant;
 
     void update_condition();

@@ -20,6 +20,12 @@
 
 class CLadder;
 
+enum    EPinTypes
+{
+    EPT_ANY,        //!< ANY/ANY_NUM
+    EPT_ANY_CON,    //!< ANY_INT/ANY_REAL/ANY_BOOL
+    EPT_CONCRETE   //!< REAL/INT/...user type.. POU_type
+};
 
 class CDiagramObject
 {
@@ -81,6 +87,10 @@ public:
     CObjectsText *  inst_text();
 
 private:
+    friend CPin;
+    friend CPinIn;
+    friend CPinOut;
+
 
     CBlock  * m_block;
     CObjectsText    m_type_name;
@@ -114,6 +124,10 @@ private:
     std::vector<CObjectsText*>     m_texts;
     std::vector<std::pair<QRect, QImage>>  * m_highlights;
     std::vector<CPin*> * m_pins;
+    EPinTypes     m_pin_types{EPT_ANY};
+
+    EDefinedDataTypes   m_primary_type;
+    bool          m_set_type_done{false};
 
     void define_size();
     // void draw_bound_rect();
@@ -123,6 +137,13 @@ private:
     CLadder *m_parent;
 
     void update_block_data();
+
+    void    im_connected(const QString &type, CPin *pin);
+    void    im_disconnected(CPin *pin);
+
+    static EPinTypes define_is_concrete_types(const EDefinedDataTypes &type);
+
+    void set_all_pins_any_concrete(const EDefinedDataTypes &types);
 };
 
 

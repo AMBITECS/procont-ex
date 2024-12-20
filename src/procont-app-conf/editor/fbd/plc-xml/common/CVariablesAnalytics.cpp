@@ -557,7 +557,7 @@ bool CVariablesAnalytics::check_pin_compatibility(const QString &dragged_pin_typ
 
     if (dragged_pin_type == DDT_ANY || target_pin_type == DDT_ANY)
     {
-        if (dragged_pin_type == DDT_ANY && target_pin_type < DDT_DERIVED)
+/*        if (dragged_pin_type == DDT_ANY && target_pin_type < DDT_DERIVED)
         {
             return true;
         }
@@ -566,21 +566,24 @@ bool CVariablesAnalytics::check_pin_compatibility(const QString &dragged_pin_typ
         {
             return true;
         }
+*/
+        return true;
+    }
+
+    if (dragged_pin_type == DDT_ANY_NUM || target_pin_type == DDT_ANY_NUM)
+    {
+        if (dragged_pin_type == DDT_ANY_NUM)
+        {
+            return is_convertible_to_any_num(target_pin_type);
+        }
+
+        if (target_pin_type == DDT_ANY_NUM)
+        {
+            return is_convertible_to_any_num(dragged_pin_type);
+        }
 
         return false;
     }
-
-    /*
-    if (dragged_pin_type == DDT_DERIVED)
-    {
-        get_comparable_type(dragged_pin_typename);
-    }
-
-    if (target_pin_type == DDT_DERIVED)
-    {
-
-    }
-    */
 
     if (dragged_pin_type == EDefinedDataTypes::DDT_DERIVED &&
         target_pin_type == EDefinedDataTypes::DDT_DERIVED)

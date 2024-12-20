@@ -58,7 +58,6 @@ private:
     QString     m_constant;
 
     void update_condition();
-
 };
 
 

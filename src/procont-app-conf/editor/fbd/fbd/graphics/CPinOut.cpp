@@ -7,6 +7,7 @@
 #include "CDiagramObject.h"
 #include "../../resources/colors.h"
 #include "COglWorld.h"
+#include "editor/fbd/general/QtDialogs.h"
 
 extern uint16_t max_local_id;
 
@@ -15,10 +16,11 @@ CPinOut::CPinOut(CDiagramObject *parent, CBlockVar *base, QPoint *parent_tl) : C
 {
     m_direction = PD_OUTPUT;
 
-    m_img_norm = QImage(":/codesys/images/codesys/pin_output_norm.png");
-    m_draw_image = m_img_norm;
+    m_img_not_selected = QImage(":/codesys/images/codesys/pin_output_norm.png");
+    m_draw_image = m_img_not_selected;
+    m_img_selected = m_img_not_selected;
 
-    saturate();
+    saturate(&m_img_selected);
 
     m_graphic_connections = new std::vector<CPinIn*>();
     m_iface_vars = new std::vector<CVariable*>();
@@ -67,6 +69,7 @@ void CPinOut::load_project_connect(CPin *pin)
     {
         if (existing == in)
         {
+            refresh_connections();
             return;
         }
     }
@@ -91,6 +94,13 @@ void CPinOut::load_project_connect(CVariable *iface_var)
     {
         throw std::runtime_error("cant connect nullptr in 'void CPinOut::connect(CVariable *iface_var)'");
     }
+
+    if (!check_compatibility(iface_var->type()))
+    {
+        QtDialogs::warn_user("Неподходящий тип");
+        return;
+    }
+
     m_is_connected = true;
 
     auto txt = make_outer_text(iface_var);

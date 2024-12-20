@@ -40,6 +40,9 @@ CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_
     locate_pins();
 
     m_rect.setSize(m_size);
+    m_primary_type = m_inputs->front()->type();
+
+    m_pin_types = define_is_concrete_types(m_inputs->front()->type());
 }
 
 CDiagramObject::~CDiagramObject()
@@ -467,6 +470,24 @@ void CDiagramObject::set_instance_name(const QString &name)
 {
     m_instance_name.set_text(name);
     m_block->set_instance_name(name);
+
+    for (auto &pin : *m_pins)
+    {
+        if (pin->direction() == PD_INPUT)
+        {
+            if (pin->input()->opposite())
+            {
+                pin->input()->opposite()->load_project_connect(pin);
+            }
+        }
+        else
+        {
+            for (auto &opp : *pin->output()->graphic_connections())
+            {
+                opp->load_project_connect_pin(pin->output());
+            }
+        }
+    }
 }
 
 std::vector<CPinOut*> *CDiagramObject::outputs()
@@ -522,6 +543,115 @@ void CDiagramObject::refresh_graphic_connections()
     }
 
     update_bound_rect();
+}
+
+void CDiagramObject::im_connected(const QString &type, CPin *pin)
+{
+    /// решил не приводить типы пинов ко всяким ANY_XXX от ANY, т.к. в одном блоке может быть и ANY и BOOL и INT.
+    /// Да и ADD(+) INT и REAL тоже не лишено логики. Можно поразмышлять на счёт выходов... Позже.
+    return;
+
+
+    auto alien = get_type_from_string(type.toStdString());
+    auto alien_type = define_is_concrete_types(alien);
+
+    /// если чужак менее конкретен чем мы, то выходим
+    if (m_pin_types >= alien_type || m_set_type_done)
+    {
+        return;
+    }
+
+    /// похоже наоборот
+    if (alien_type == EPT_ANY_CON)
+    {
+        set_all_pins_any_concrete(alien);
+        return;
+    }
+
+    /// попробуем привести конкретику к любому ANY_INT/ANY_REAL/ANY_BOOL и сделаем таким всё
+    if (is_convertible_to_any_num(alien))
+    {
+        if (is_convertible_to_bool(alien))
+        {
+            set_all_pins_any_concrete(DDT_ANY_BIT);
+        }
+
+        if (is_convertible_to_anyint(alien))
+        {
+            set_all_pins_any_concrete(DDT_ANY_INT);
+        }
+
+        if(is_convertible_to_anyfloat(alien))
+        {
+            set_all_pins_any_concrete(DDT_ANY_REAL);
+        }
+
+        return;
+    }
+
+    /// тут что-то термоядерное. Садим везде конкретику
+    for (auto &item : *m_pins)
+    {
+        item->set_type(pin->type_name());
+    }
+    m_set_type_done = true;
+}
+
+EPinTypes CDiagramObject::define_is_concrete_types(const EDefinedDataTypes &type)
+{
+    if (type == DDT_ANY ||
+        type == DDT_ANY_NUM ||
+        type == DDT_UNDEF)
+    {
+        return EPT_ANY;
+    }
+
+    if (type == DDT_ANY_INT  ||
+        type == DDT_ANY_REAL ||
+        type == DDT_ANY_BIT  ||
+        type == DDT_ANY_UINT)
+    {
+        return EPT_ANY_CON;
+    }
+
+    return EPT_CONCRETE;
+}
+
+void CDiagramObject::im_disconnected(CPin *pin)
+{
+    bool connected = false;
+
+    for (auto &item : *m_pins)
+    {
+        if (item->is_connected())
+        {
+            connected = true;
+        }
+    }
+    if (connected)
+    {
+        return;
+    }
+
+    m_set_type_done = false;
+
+    set_all_pins_any_concrete(m_primary_type);
+}
+
+void CDiagramObject::set_all_pins_any_concrete(const EDefinedDataTypes &types)
+{
+    for (auto &pin : *m_pins)
+    {
+        auto type_lvl = define_is_concrete_types(pin->type());
+
+        if (type_lvl != EPT_ANY)
+        {
+            continue;
+        }
+
+        pin->set_type(base_types_names[types]);
+    }
+    m_set_type_done = true;
 }
 
 

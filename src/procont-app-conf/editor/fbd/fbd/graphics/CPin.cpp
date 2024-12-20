@@ -7,6 +7,8 @@
 #include "CDiagramObject.h"
 #include "CPinIn.h"
 #include "../../resources/colors.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
+#include "CLadder.h"
 
 CPin::CPin(CDiagramObject *parent, CBlockVar *var, QPoint * parent_tl)
 {
@@ -136,7 +138,7 @@ bool CPin::is_selected() const
 void CPin::set_selected(const bool &selected)
 {
     m_is_selected = selected;
-    m_draw_image = selected ? m_img_selected : m_img_norm;
+    m_draw_image = selected ? m_img_selected : m_img_not_selected;
 }
 
 bool CPin::is_error_state() const
@@ -147,7 +149,7 @@ bool CPin::is_error_state() const
 void CPin::set_error(const bool &is_error)
 {
     m_is_error = is_error;
-    m_draw_image = is_error ? m_img_error : m_img_norm;
+    m_draw_image = is_error ? m_img_error : m_img_not_selected;
 }
 
 EPinDirection CPin::direction() const
@@ -190,6 +192,9 @@ EDefinedDataTypes CPin::type() const
 void CPin::set_type(const QString &type)
 {
     m_block_variable->set_type(type);
+    QString txt = m_direction == PD_INPUT ? m_block_variable->formal_parameter() + ":" + type :
+                                            type + ":" + m_block_variable->formal_parameter();
+    m_pin_name->set_text(txt);
 }
 
 CPinIn *CPin::input()
@@ -204,14 +209,14 @@ CPinOut *CPin::output()
     return dynamic_cast<CPinOut*>(this);
 }
 
-void CPin::saturate()
+void CPin::saturate(QImage *image)
 {
-    m_img_selected = m_img_norm;
-    for (auto x = 0; x < m_img_selected.width(); x++)
+
+    for (auto x = 0; x < image->width(); x++)
     {
-        for (auto y = 0; y < m_img_selected.height(); y++)
+        for (auto y = 0; y < image->height(); y++)
         {
-            QColor color = m_img_selected.pixelColor(x, y);
+            QColor color = image->pixelColor(x, y);
             if (color.alpha() == 0)
             {
                 continue;
@@ -221,7 +226,7 @@ void CPin::saturate()
                           1.0,
                           color.lightnessF());
 
-            m_img_selected.setPixelColor(x, y, color);
+            image->setPixelColor(x, y, color);
         }
     }
 }
@@ -309,3 +314,18 @@ QString CPin::name_full() const
     return full_name;
 }
 
+bool CPin::check_compatibility(const QString &type_name)
+{
+    QString local_type_name = m_block_variable->derived_type();
+    EDefinedDataTypes   alien_type = get_type_from_string(type_name.toStdString());
+    EDefinedDataTypes   local_type = m_block_variable->type();
+
+    auto world = m_parent->m_parent->parent();
+
+    s_compare_types compare_types;
+    return  CVariablesAnalytics::check_pin_compatibility(type_name,
+                                                         alien_type,
+                                                         local_type_name,
+                                                         local_type,
+                                                         compare_types);
+}

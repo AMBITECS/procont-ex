@@ -6,6 +6,7 @@
 #include "CDiagramObject.h"
 #include "../../resources/colors.h"
 #include "COglWorld.h"
+#include "editor/fbd/general/QtDialogs.h"
 
 extern uint16_t max_local_id;
 
@@ -14,11 +15,14 @@ CPinIn::CPinIn(CDiagramObject *parent, CBlockVar *base, QPoint * parent_tl) : CP
 {
     m_direction = EPinDirection::PD_INPUT;
 
-    m_img_negated = QImage(":/codesys/images/codesys/pin_input_inv.png");
-    m_img_rising = QImage(":/codesys/images/codesys/pin_input_rising.png");
-    m_img_falling = QImage(":/codesys/images/codesys/pin_input_falling.png");
-    m_img_norm    = QImage(":/codesys/images/codesys/pin_input_norm.png");
-    m_draw_image = m_img_norm;
+    m_img_negated   = QImage(":/codesys/images/codesys/pin_input_inv.png");
+    m_img_rising    = QImage(":/codesys/images/codesys/pin_input_rising.png");
+    m_img_falling   = QImage(":/codesys/images/codesys/pin_input_falling.png");
+    m_def_image     = QImage(":/codesys/images/codesys/pin_input_norm.png");
+
+    m_img_not_selected = m_def_image;
+    m_img_selected = m_img_not_selected;
+    saturate(&m_img_selected);
 
     CDiagramColors colors;
 
@@ -26,8 +30,6 @@ CPinIn::CPinIn(CDiagramObject *parent, CBlockVar *base, QPoint * parent_tl) : CP
     m_color_graph = colors.ladder_colors().line_color;
 
     update_condition();
-
-
 }
 
 CPinIn::~CPinIn()
@@ -42,7 +44,11 @@ void CPinIn::set_negated(const bool &negated)
 {
     m_block_variable->set_negated(negated);
 
-    m_draw_image = negated ? m_img_negated : m_img_norm;
+    m_img_not_selected = negated ? m_img_negated : m_def_image;
+    m_img_selected = m_img_not_selected;
+    saturate(&m_img_selected);
+
+    set_selected(is_selected());
 }
 
 bool CPinIn::is_rising_edge() const
@@ -52,10 +58,14 @@ bool CPinIn::is_rising_edge() const
 
 void CPinIn::set_rising_edge(const bool &rising)
 {
-    EEdge edge = rising ? edge = EEdge::EI_RISE : EEdge::EI_NONE;
+    EEdge edge = rising ? EEdge::EI_RISE : EEdge::EI_NONE;
     m_block_variable->set_edge(edge);
 
-    m_draw_image = rising ? m_img_rising : m_img_norm;
+    m_img_not_selected = rising ? m_img_rising : m_def_image;
+    m_img_selected = m_img_not_selected;
+    saturate(&m_img_selected);
+
+    set_selected(is_selected());
 }
 
 bool CPinIn::is_falling_edge() const
@@ -68,7 +78,11 @@ void CPinIn::set_falling_edge(const bool &falling)
     EEdge edge = falling ? edge = EEdge::EI_FALL : EEdge::EI_NONE;
     m_block_variable->set_edge(edge);
 
-    m_draw_image = falling ? m_img_falling : m_img_norm;
+    m_img_not_selected = falling ? m_img_falling : m_def_image;
+    m_img_selected = m_img_not_selected;
+    saturate(&m_img_selected);
+
+    set_selected(is_selected());
 }
 
 bool CPinIn::is_coil_set() const
@@ -114,10 +128,23 @@ void CPinIn::load_project_connect_pin(CPinOut *pin)
         m_outer_text->set_text(pin_full_name);
         update_position();
     }
+
+    if (this->type_name() != pin->type_name())
+    {
+        m_parent->im_connected(pin->type_name(), this);
+    }
+
+    m_parent->im_connected(pin->type_name(), this);
 }
 
 void CPinIn::load_project_connect_iface_var(CVariable *variable)
 {
+    if (!check_compatibility(variable->type()))
+    {
+        QtDialogs::warn_user("Не подходящие типы");
+        return;
+    }
+
     m_is_connected = true;
 
     m_outer_text->set_text(variable->name());
@@ -126,6 +153,10 @@ void CPinIn::load_project_connect_iface_var(CVariable *variable)
     m_pin_name->set_text(text);
     m_iface_var = variable;
     update_position();
+
+
+    m_parent->im_connected(variable->type(), this);
+
 }
 
 void CPinIn::connect_pin(CPinOut *pin)
@@ -287,11 +318,10 @@ void CPinIn::disconnect_iface()
 
 void CPinIn::update_condition()
 {
-    saturate();
-
     if (m_block_variable->is_negated())
     {
         set_negated(true);
+        return;
     }
 
     auto edge = m_block_variable->edge_modifier();
@@ -299,12 +329,16 @@ void CPinIn::update_condition()
     if (edge == EEdge::EI_FALL)
     {
         set_falling_edge(true);
+        return;
     }
 
     if (edge == EEdge::EI_RISE)
     {
         set_rising_edge(true);
+        return;
     }
+
+    set_selected(m_is_selected);
 }
 
 CPinOut *CPinIn::opposite()
@@ -348,11 +382,22 @@ void CPinIn::set_constant(const EDefinedDataTypes &type, const std::string &cons
 
 void CPinIn::load_project_connect_const(const EDefinedDataTypes &type, const QString &const_val)
 {
+    QString alien_type_name = base_types_names[type];
+    if (!check_compatibility(alien_type_name))
+    {
+        QtDialogs::warn_user("Не подходящий тип");
+        return;
+    }
+
     m_outer_text->set_text(const_val);
     m_outer_text->set_color(m_color_def);
     m_constant = const_val;
     m_is_connected = true;
     update_position();
+
+    auto d_type = CFilter::get_type_from_const(const_val.toStdString());
+
+    m_parent->im_connected(base_types_names[d_type], this);
 }
 
 void CPinIn::update_graphic_text()
@@ -383,6 +428,8 @@ QString CPinIn::constant() const
 {
     return m_constant;
 }
+
+
 
 
 

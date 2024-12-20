@@ -8,6 +8,10 @@
 //#include "../variables.h"
 #include "coglwidget.h"
 #include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/fbd/redo-undo/CPinInvers.h"
+#include "editor/fbd/fbd/redo-undo/CPinRising.h"
+#include "editor/fbd/fbd/redo-undo/CPinFalling.h"
+#include "editor/fbd/fbd/redo-undo/CResetConnections.h"
 
 CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidget()
 {
@@ -371,12 +375,21 @@ void CGraphicsHelper::make_object_menu(QMenu *p_menu, CDiagramObject *p_object, 
 void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
 {
 
-    auto act_edit_connect = new QAction(QIcon(":/24/images/24x24/Modify.png"),
+    /*auto act_edit_connect = new QAction(QIcon(":/24/images/24x24/Modify.png"),
                                         "Редактировать соединение",
-                                        p_menu);
+                                        p_menu);*/
     auto act_reset_connect = new QAction(QIcon(":/16/images/16x16/chart_organisation_delete.png"),
                                         "Очистить соединения",
                                         p_menu);
+    if (p_pin->is_connected())
+    {
+        connect(act_reset_connect, &QAction::triggered, [=](){
+            auto act = new CResetConnections(p_pin);
+            m_graphics_world->undo_stack()->push(act);
+        });
+    }
+
+    act_reset_connect->setEnabled(p_pin->is_connected());
 
     QAction * act_inversion = nullptr;
     QAction * act_edge_rising = nullptr;
@@ -386,32 +399,33 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
     {
         /// negated input
         QString negated_text = p_pin->input()->is_negated() ? "Сбросить \"инвертирование\"" : "Инвертировать вход";
-        act_inversion = new QAction(QIcon(":/16/images/16x16/contrast.png"), negated_text, p_menu);
-        connect(act_inversion, &QAction::toggled, this,
-                [=]{
-                    p_pin->input()->set_negated(!p_pin->input()->is_negated());
-                    m_graphics_world->update_visible_ladders();
+        act_inversion = new QAction(QIcon(":/16/images/16x16/contrast.png"), negated_text);
+        bool enabled = !p_pin->input()->is_negated();
+        connect(act_inversion, &QAction::triggered,
+                [=](){
+                    auto cmd = new CPinInverse(p_pin->input(), enabled);
+                    m_graphics_world->undo_stack()->push(cmd);
                     });
 
         /// rising edge
         QString rising_text = p_pin->input()->is_rising_edge() ? "Сбросить восходящий фронт" : "Установить восходящий фронт";
         act_edge_rising = new QAction(QIcon(":/24/images/24x24/Raise.png"), rising_text);
         connect(act_edge_rising, &QAction::triggered, [=](){
-                p_pin->input()->set_rising_edge(!p_pin->input()->is_rising_edge());
-                m_graphics_world->update_visible_ladders();
+                auto cmd = new CPinRising(p_pin->input(), !p_pin->input()->is_rising_edge());
+                m_graphics_world->undo_stack()->push(cmd);
                 });
 
         /// falling edge
         QString falling_text = p_pin->input()->is_falling_edge() ? "Сбросить нисходящий фронт" : "Установить нисходящий фронт";
         act_edge_falling = new QAction(QIcon(":/24/images/24x24/Fall.png"), falling_text);
         connect(act_edge_falling, &QAction::triggered, [=](){
-            p_pin->input()->set_falling_edge(!p_pin->input()->is_falling_edge());
-            m_graphics_world->update_visible_ladders();
+            auto cmd = new CPinFalling(p_pin->input(), !p_pin->input()->is_falling_edge());
+            m_graphics_world->undo_stack()->push(cmd);
             });
 
     }
 
-    p_menu->addAction(act_edit_connect);
+    //p_menu->addAction(act_edit_connect);
     p_menu->addAction(act_reset_connect);
     p_menu->addSeparator();
 

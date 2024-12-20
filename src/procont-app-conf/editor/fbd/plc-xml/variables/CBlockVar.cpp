@@ -162,11 +162,15 @@ EStorageMode CBlockVar::storage_modifier() const
 void CBlockVar::set_edge(const EEdge &edge_modifier)
 {
     m_edge_modifier = edge_modifier;
+    m_is_negated = false;
+    m_store_modifier = EStorageMode::SM_NONE;
 }
 
 void CBlockVar::set_storage_modifier(const EStorageMode &storage_modifier)
 {
     m_store_modifier = storage_modifier;
+    m_is_negated = false;
+    m_edge_modifier = EEdge::EI_NONE;
 }
 
 EPinDirection CBlockVar::direction() const
@@ -237,11 +241,8 @@ void CBlockVar::set_negated(const bool &negated)
 {
     m_is_negated = negated;
 
-    if (negated)
-    {
-        m_edge_modifier = EEdge::EI_NONE;
-        m_store_modifier = EStorageMode::SM_NONE;
-    }
+    m_edge_modifier = EEdge::EI_NONE;
+    m_store_modifier = EStorageMode::SM_NONE;
 }
 
 CBlock *CBlockVar::parent()

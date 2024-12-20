@@ -287,64 +287,73 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
     bool is_right_drag  = false;
     bool is_left_drag   = false;
 
-    /// bottom autoscroll
-    if (event->position().toPoint().y() >= m_height-20 &&
-        m_vertical->isEnabled() && (m_vertical->sliderPosition() < m_vertical->maximum())
-    )
-    {
-        is_bottom_drag = true;
-        m_vertical_autoscroll = QImage(":/codesys/images/codesys/bottom_auto.png");
-        m_vertical_auto_rect = QRect(0, m_height - 20, m_width, 20);
-        m_vertical->setValue(m_vertical->value() + 5);
-    }
+    /// define drag source. If source is palette - autoscroll off
+    auto mime = event->mimeData();
 
-    /// upper autoscroll
-    if (event->position().toPoint().y() <= 20 &&
-        m_vertical->isEnabled() && (m_vertical->sliderPosition() > 0)
-    )
-    {
-        is_top_drag = true;
-        m_vertical_autoscroll = QImage(":/codesys/images/codesys/upper_auto.png");
-        m_vertical_auto_rect = QRect(0, 0, m_width, 20);
-        m_vertical->setValue(m_vertical->value() - 5);
-    }
 
-    /// right autoscroll
-    if (event->position().toPoint().x() > m_width - 20 &&
-        m_horizontal->isEnabled() &&
-        m_horizontal->value() < m_horizontal->maximum()
-    )
+    /// enabling or disabling autoscroll
+    if (mime->property(txt_vars::drag_source_prop).toString() != txt_vars::drag_src_palette)
     {
-        is_right_drag = true;
-        m_horizon_auto_rect = QRect(m_width-20, 0, 20, m_height);
-        m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_right.png");
-        //m_horizon_autoscroll.
-        m_horizontal->setValue(m_horizontal->value() + 2);
+        /// bottom autoscroll
+        if (event->position().toPoint().y() >= m_height-20 &&
+            m_vertical->isEnabled() && (m_vertical->sliderPosition() < m_vertical->maximum())
+                )
+        {
+            is_bottom_drag = true;
+            m_vertical_autoscroll = QImage(":/codesys/images/codesys/bottom_auto.png");
+            m_vertical_auto_rect = QRect(0, m_height - 20, m_width, 20);
+            m_vertical->setValue(m_vertical->value() + 5);
+        }
 
-    }
-    /// left autoscroll
-    if (event->position().toPoint().x() < 20 &&
+        /// upper autoscroll
+        if (event->position().toPoint().y() <= 20 &&
+            m_vertical->isEnabled() && (m_vertical->sliderPosition() > 0)
+                )
+        {
+            is_top_drag = true;
+            m_vertical_autoscroll = QImage(":/codesys/images/codesys/upper_auto.png");
+            m_vertical_auto_rect = QRect(0, 0, m_width, 20);
+            m_vertical->setValue(m_vertical->value() - 5);
+        }
+
+        /// right autoscroll
+        if (event->position().toPoint().x() > m_width - 20 &&
+            m_horizontal->isEnabled() &&
+            m_horizontal->value() < m_horizontal->maximum()
+                )
+        {
+            is_right_drag = true;
+            m_horizon_auto_rect = QRect(m_width-20, 0, 20, m_height);
+            m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_right.png");
+            //m_horizon_autoscroll.
+            m_horizontal->setValue(m_horizontal->value() + 2);
+
+        }
+        /// left autoscroll
+        if (event->position().toPoint().x() < 20 &&
             m_horizontal->isEnabled() &&
             m_horizontal->value() > 0
-    )
-    {
-        is_left_drag = true;
-        m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_left.png");
-        m_horizon_auto_rect = QRect(0,0, 20, m_height);
-        m_horizontal->setValue(m_horizontal->value() - 2);
+                )
+        {
+            is_left_drag = true;
+            m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_left.png");
+            m_horizon_auto_rect = QRect(0,0, 20, m_height);
+            m_horizontal->setValue(m_horizontal->value() - 2);
+        }
+
+        if (!is_bottom_drag && !is_top_drag)
+        {
+            m_vertical_autoscroll = QImage();
+            m_vertical_auto_rect = QRect();
+        }
+
+        if (!is_right_drag && !is_left_drag)
+        {
+            m_horizon_auto_rect = QRect();
+            m_horizon_autoscroll = QImage();
+        }
     }
 
-    if (!is_bottom_drag && !is_top_drag)
-    {
-        m_vertical_autoscroll = QImage();
-        m_vertical_auto_rect = QRect();
-    }
-
-    if (!is_right_drag && !is_left_drag)
-    {
-        m_horizon_auto_rect = QRect();
-        m_horizon_autoscroll = QImage();
-    }
 
     QString source = event->mimeData()->property(txt_vars::drag_source_prop).toString();
     // event->mimeData()->property("element").toInt() == EG_CIRCUIT

@@ -75,15 +75,17 @@ protected:
     CBlockVar       * m_block_variable;
     CDiagramObject  * m_parent;
 
-    void    saturate();
+    static void    saturate(QImage *image);
 
     /// drawing data
     QPoint            m_pos;
     QPoint          * m_relative_parent_tp;
     QRect             m_rect;
     QRect             m_bound_rect{};
+
     QImage            m_draw_image;
-    QImage            m_img_norm;
+    QImage            m_def_image;
+    QImage            m_img_not_selected;
     QImage            m_img_selected;
     QImage            m_img_error;
 
@@ -108,6 +110,7 @@ protected:
 
     void resort_outers();
     QString  make_pin_text(CPin *pin);
+    bool    check_compatibility(const QString &type_name);
 };
 
 

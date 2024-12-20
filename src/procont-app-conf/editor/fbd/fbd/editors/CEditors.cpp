@@ -94,6 +94,7 @@ void CEditors::show_combo(CPin *pin)
 
     auto rect = pin->rect();
     QPoint pos;
+
     if(pin->direction() == PD_INPUT)
     {
         int x = rect->topLeft().x() - m_pin_var_editor->width();
@@ -102,6 +103,11 @@ void CEditors::show_combo(CPin *pin)
     }
     else
         pos = rect->topRight();
+
+    if (pos.x() < 0)
+    {
+        pos.setX(0);
+    }
 
     m_pin_var_editor->move(pos);
     m_pin_var_editor->setVisible(true);

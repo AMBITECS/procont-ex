@@ -94,6 +94,7 @@ signals:
     void    iface_var_new(const QString & typeName, const QString & varName);
     void    iface_var_rename(const QString & old, const QString &last);
     void    drag_complete();
+    void    diagram_changed(const QDomNode &node);
 
 
 public slots:

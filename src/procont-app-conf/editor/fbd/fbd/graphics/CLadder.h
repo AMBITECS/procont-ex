@@ -105,8 +105,6 @@ public:
     CConnectLine* remove_line(CConnectLine *line);
     CConnectLine* remove_line(CPinIn * pin_input);
 
-    void  erase_object(CDiagramObject *obj);
-
 
     [[nodiscard]] QPoint                real_bottom_right() const;
     QPoint *                            real_top_left();

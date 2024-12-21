@@ -1,27 +1,16 @@
 ### Todo
 queue to `In progress...`
+- put POUs into the `components palette`
+- удалить сохранение в файл текущего POU
 
-- tuning
-  - scaling support
-  - put POUs into the `components palette`
-  - Create 1000 visible_ladders with components to test the responsiveness of the GUI
-  - Multiselect support
-- refactoring
-- Adapt the class diagram and data flow in `UML` to the final form
+
 
 
 ### In progress...
-- new/edit/reset variables on the components inputs/outputs
+- если пользователь удалил блок, то вот вам данные для удаления соответствующей переменной
 
 #### on pause
-- реализовать сохранение диаграммы и интерфейса посредством сигналов главного виджета:
-  ```c++
-    class CDiagramWidget...
-    signals:
-    void    changed_diagram(const QDomNode & node); //!< diagram was changed
-    void    changed_interface();                    //!< The interface has been changed from the diagram.
-                                                    //!< It needs to be visually updated
-    ```
+
 
 ### Done ✓
 - ...
@@ -31,7 +20,10 @@ queue to `In progress...`
 - realize `localId` to get current max `localId` everywhere. Seems to be `extern`.
 - undo/redo via `Qt's Undo Framework` (с добавлением функционала undo/redo будет пополняться)
 - graphical connecting components.
-- тёмная и светлая темы. Определяется автоматически. Выставлять вручную нельзя (пока) 
+- тёмная и светлая темы. Определяется автоматически. Выставлять вручную нельзя (пока)
+- реализовать сохранение диаграммы и интерфейса посредством сигналов главного виджета
+- new/edit/reset variables on the components inputs/outputs
+- mouse wheel <Ctrl> - scrolling vertical/horizontal
 
 ### не забыть
  очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько 

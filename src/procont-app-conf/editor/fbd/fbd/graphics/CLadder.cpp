@@ -734,16 +734,6 @@ CConnectLine *CLadder::remove_line(CPinIn *pin_input)
     return nullptr;
 }
 
-void CLadder::erase_object(CDiagramObject *obj)
-{
-    if (obj->parent() != this)
-    {
-        return;
-    }
-
-    auto cmd = new CRemoveObject(obj);
-    m_parent->undo_stack()->push(cmd);
-}
 
 
 

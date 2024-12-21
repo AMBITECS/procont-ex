@@ -22,6 +22,9 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
 
     m_graphics_world = new COglWorld(ogl_widget, m_pou, &m_hatch_tl);
 
+    connect(m_graphics_world, &COglWorld::diagram_changed,
+            [=](const QDomNode &node){emit diagram_changed(node);});
+
     connect(m_graphics_world, &COglWorld::drag_complete,
             this, &CGraphicsHelper::drag_process_complete);
 
@@ -288,7 +291,7 @@ void CGraphicsHelper::project_complete()
 
 void CGraphicsHelper::object_remove(CLadder *ladder, CDiagramObject *object)
 {
-    ladder->erase_object(object);
+    m_graphics_world->erase_object(object);
 }
 
 bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point)
@@ -374,10 +377,6 @@ void CGraphicsHelper::make_object_menu(QMenu *p_menu, CDiagramObject *p_object, 
 
 void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
 {
-
-    /*auto act_edit_connect = new QAction(QIcon(":/24/images/24x24/Modify.png"),
-                                        "Редактировать соединение",
-                                        p_menu);*/
     auto act_reset_connect = new QAction(QIcon(":/16/images/16x16/chart_organisation_delete.png"),
                                         "Очистить соединения",
                                         p_menu);
@@ -392,8 +391,8 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
     act_reset_connect->setEnabled(p_pin->is_connected());
 
     QAction * act_inversion = nullptr;
-    QAction * act_edge_rising = nullptr;
-    QAction * act_edge_falling = nullptr;
+    QAction * act_edge_rising;
+    QAction * act_edge_falling;
 
     if (p_pin->type() == EDefinedDataTypes::DDT_BOOL && p_pin->direction() == PD_INPUT)
     {
@@ -429,7 +428,7 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
     p_menu->addAction(act_reset_connect);
     p_menu->addSeparator();
 
-    if (p_pin->direction() ==PD_INPUT)
+    if (act_inversion)
     {
         p_menu->addAction(act_inversion);
         p_menu->addAction(act_edge_rising);

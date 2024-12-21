@@ -48,7 +48,8 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     m_paint_dev = dynamic_cast<QPaintDevice *>(this);
     m_style = new COglStyle();
     m_helper = new CGraphicsHelper(this, ogl_startup->node);
-
+    connect(m_helper, &CGraphicsHelper::diagram_changed,
+            [=](const QDomNode &node){emit diagram_changed(node);});
     connect(m_helper, &CGraphicsHelper::drag_complete, this, &COglWidget::drag_complete);
     connect(m_helper, &CGraphicsHelper::iface_var_new, this, &COglWidget::iface_new_var);
     connect(m_helper, &CGraphicsHelper::iface_var_rename, this, &COglWidget::iface_ren_var);
@@ -373,6 +374,11 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
 
 void COglWidget::vertical_scroll_moved(int position)
 {
+    if (position >= m_vertical->maximum())
+    {
+        return;
+    }
+
     m_Y_scroll = position * m_vertical->pageStep();
     QPoint point(m_X_scroll, m_Y_scroll);
     emit scroll_bars_moving(point);
@@ -381,6 +387,11 @@ void COglWidget::vertical_scroll_moved(int position)
 
 void COglWidget::horizontal_scroll_moved(int position)
 {
+    if (position >= m_horizontal->maximum())
+    {
+        return;
+    }
+
     m_X_scroll = position * m_horizontal->pageStep();
     QPoint point(m_X_scroll, m_Y_scroll);
     emit scroll_bars_moving(point);
@@ -632,4 +643,31 @@ bool COglWidget::eventFilter(QObject *target, QEvent *event)
     }
 
     return QObject::eventFilter(target, event);
+}
+
+void COglWidget::wheelEvent(QWheelEvent *event)
+{
+    int delta_y = event->angleDelta().y() / 10;
+    if (delta_y < 0)
+    {
+        delta_y = std::abs(delta_y);
+    }
+    else
+    {
+        delta_y = -delta_y;
+    }
+
+    if (event->modifiers() & Qt::ControlModifier)
+    {
+        m_horizontal->setValue(m_horizontal->value() + delta_y);
+    }
+    else
+    {
+        if (m_vertical->isEnabled())
+        {
+            m_vertical->setValue(m_vertical->value() + delta_y);
+        }
+    }
+
+    // event->accept();
 }

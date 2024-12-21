@@ -33,7 +33,7 @@ public:
 signals:
     void  scroll_bars_moving(const QPoint & newPos);
     void  drag_moving(QDragMoveEvent *event);
-    void  diagram_changed();        //!< not working. Actually has to be: void diagram_changed(const QDomNode &node);
+    void  diagram_changed(const QDomNode & node);
     void  undo_enabled();           //!< for update undo/redo interface for enabled
     void  mouse_dblClicked(QMouseEvent *evt);
     void    iface_var_new(const QString & type,     const QString & name);
@@ -52,6 +52,7 @@ protected:
     [[nodiscard]] bool is_editable() const;
     void set_editable(const bool &editable);
     void mouseDoubleClickEvent(QMouseEvent * dblEvent) override; //!< for manage variables and link lines
+    void wheelEvent(QWheelEvent *event) override;
 
     /// mouse
     void mousePressEvent(QMouseEvent* event) override;
@@ -69,6 +70,7 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent *event) override;
 public slots:
     void  drag_complete();  //!< когда процесс Drag&Drop закончился с любым исходом
+
 protected slots:
     void  vertical_scroll_moved(int position);
     void  horizontal_scroll_moved(int position);
@@ -78,7 +80,6 @@ protected slots:
     void  iface_new_var(const QString & type,     const QString & name);
     void  iface_ren_var(const QString & old_name, const QString & new_name);
     void  show_wrong_types(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable);
-
 protected:
 
 

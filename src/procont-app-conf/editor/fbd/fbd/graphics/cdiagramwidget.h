@@ -58,17 +58,14 @@ public:
     QUndoStack *    undo_stack();
 
 signals:
-    void    changed_diagram(const QDomNode & node); //!< diagram was changed
-    void    changed_interface();                    //!< The interface has been changed from the diagram.
-                                                    //!< It needs to be visually updated
+    void    changed_diagram(const QDomNode & node);
     void    undo_enabled();
     void    interface_variable_new(const QString &type, const QString &name);
     void    interface_variable_rename(const QString &old_name, const QString &new_name);
     void    instance_removed(const QString &type, const QString &name);
-
 public slots:
-    void    updated_diagram();                      //!< update diagram it is get_interface_variables to assemble QDomNode
-    void    updated_interface(const QDomNode &node);//!< interface has been changed. It is time to update diagram variables
+    /** @brief пользователь ввёл новую переменную. Внутреннее представление обновит данные о локальном интерфейсе */
+    void    update_interface(const QDomNode &node);
 
 protected:
 
@@ -81,9 +78,6 @@ private:
     Ui::Form   *ui;
     COglWidget          * m_ogl_widget;
     CTreeObject         * m_tree_widget;
-    //QTabWidget          * m_parent;
-    //int                   m_this_index{-1};
-    //bool                  m_active{false};
     bool                  m_is_editable{true};
     QDomNode            * m_dom_node;
 

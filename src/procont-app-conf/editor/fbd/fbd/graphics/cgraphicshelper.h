@@ -82,6 +82,7 @@ signals:
     void    types_wrong(const QString &dragged_type, const QString &target_type,
                         const QPoint &pos, const bool &is_comparable);
     void    drag_complete();
+    void    diagram_changed(const QDomNode &pou_node);
 
 
 
@@ -91,6 +92,7 @@ public slots:
     void    object_remove(CLadder *ladder, CDiagramObject *object);
     void    double_clicked(QMouseEvent *evt);
     void    drag_process_complete();
+
 
 
 protected slots:

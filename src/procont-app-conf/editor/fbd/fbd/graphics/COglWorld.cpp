@@ -22,6 +22,7 @@
 #include "editor/fbd/general/QtDialogs.h"
 #include "../editors/CEditors.h"
 #include "editor/fbd/fbd/redo-undo/CPinConnecting.h"
+#include "editor/fbd/fbd/redo-undo/CRemoveObject.h"
 
 
 uint16_t    max_local_id;
@@ -42,7 +43,13 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
         }
     }
 
-    m_pou = pou;
+    m_pou = project->types()->find_pou_by_name(pou->name());
+
+    if (!m_pou)
+    {
+        throw std::runtime_error("all is broken. Im leaving this PC. In 'COglWorld::COglWorld' m_pou is nullptr");
+    }
+
 
     m_ladders         = new std::vector<CLadder*> ();
     m_visible_ladders = new std::vector<CLadder*> ();
@@ -591,6 +598,11 @@ void COglWorld::mouse_move(QMouseEvent *event)
 
     if (m_selection.pin)
     {
+        if (m_selection.pin->parent()->instance_name() == "???")
+        {
+            QtDialogs::warn_user("Задайте объекту корректное имя");
+            return;
+        }
         QPixmap pix = QPixmap::fromImage(*m_selection.pin->image());
         drag->setPixmap(pix);
         mime->setProperty("source", "canvas");
@@ -772,7 +784,10 @@ void COglWorld::text_based_connecting_pin(CPin *selected_pin)
 
 void COglWorld::convert_to_XML()
 {
-    QDomDocument doc;
+    QDomNode pou_node = m_pou->dom_node();
+    emit diagram_changed(pou_node);
+
+    /*QDomDocument doc;
     QDomElement root = doc.documentElement();
     if (root.isNull())
     {
@@ -800,7 +815,7 @@ void COglWorld::convert_to_XML()
     QTextStream stream( &file );
     //stream << doc.toString();
     doc.save(stream, 4);
-    file.close();
+    file.close();*/
 }
 
 CPou *COglWorld::current_pou()
@@ -810,6 +825,12 @@ CPou *COglWorld::current_pou()
 
 void COglWorld::erase_object(CDiagramObject *object)
 {
-    object->parent()->erase_object(object);
+    if (!object)
+    {
+        return;
+    }
+
+    auto cmd = new CRemoveObject(object);
+    m_undo_stack->push(cmd);
 }
 

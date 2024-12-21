@@ -27,14 +27,16 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
 
     m_ogl_widget = new COglWidget(&startup);
 
-
-    /*connect(tree_object, &CTreeObject::dragging_complete,
-            m_ogl_widget, &COglWidget::drag_complete);*/
-    connect(m_ogl_widget, &COglWidget::undo_enabled, [this](){emit this->undo_enabled();});
+    connect(m_ogl_widget, &COglWidget::diagram_changed,
+            [=](const QDomNode &node){emit changed_diagram(node);});
+    connect(m_ogl_widget, &COglWidget::undo_enabled, [this]()
+            {emit this->undo_enabled();});
     connect(m_ogl_widget, &COglWidget::iface_var_new,
-            [this](const QString &t, const QString &n){emit interface_variable_new(t, n);});
+            [this](const QString &t, const QString &n)
+            {emit interface_variable_new(t, n);});
     connect(m_ogl_widget, &COglWidget::iface_var_ren,
-            [this](const QString &o, const QString &n){emit interface_variable_rename(o, n);});
+            [this](const QString &o, const QString &n)
+            {emit interface_variable_rename(o, n);});
 
     /// place OpenGL widget
     {
@@ -42,8 +44,6 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
         lo->addWidget(m_ogl_widget);
         lo->setContentsMargins(0, 0, 0, 0);
     }
-
-    connect(m_ogl_widget, &COglWidget::diagram_changed, this, &CDiagramWidget::updated_diagram);
 
     m_tree_widget = tree_object;
     ui->diagramSplitter->setSizes({33333, 66667});
@@ -74,15 +74,10 @@ void CDiagramWidget::set_active()
     }
 }
 
-void CDiagramWidget::updated_diagram()
-{
-    emit changed_diagram(*m_dom_node);
-}
-
-void CDiagramWidget::updated_interface(const QDomNode &node)
+void CDiagramWidget::update_interface(const QDomNode &node)
 {
     // changing interface
-    emit changed_interface();
+    // emit change_interface();
 }
 
 QUndoStack *CDiagramWidget::undo_stack()

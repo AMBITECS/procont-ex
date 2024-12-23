@@ -680,6 +680,7 @@ void CLadder::refresh_graphic_connections()
                 if (line)
                 {
                     m_lines->push_back(line);
+                    m_bottom_lines++;
                 }
             }
         }
@@ -690,7 +691,6 @@ void CLadder::refresh_graphic_connections()
 CConnectLine *CLadder::remove_line(CConnectLine *line)
 {
     int counter = 0;
-    m_bottom_lines--;   // тут совсем не факт TODO: fix this moment
 
     for (auto &item : *m_lines)
     {

@@ -56,7 +56,7 @@ void CResetConnections::redo()
 
     m_pin->parent()->update_bound_rect();
     m_pin->parent()->parent()->resort();
-    m_world->update_visible_ladders();
+    m_world->update_hatch();
 }
 
 void CResetConnections::undo()
@@ -118,6 +118,5 @@ void CResetConnections::undo()
     m_pin->parent()->update_bound_rect();
     m_pin->parent()->parent()->resort();
     m_pin->parent()->parent()->refresh_graphic_connections();
-    //m_pin->parent()->parent()->update_real_position();
-    m_world->update_visible_ladders();
+    m_world->update_hatch();
 }

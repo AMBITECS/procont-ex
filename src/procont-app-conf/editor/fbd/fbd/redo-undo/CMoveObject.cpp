@@ -25,15 +25,13 @@ void CMoveObject::undo()
 
     CLadder *start = m_source->number() < m_destination->number() ? m_source : m_destination;
 
-    if (m_source == m_destination)
+    if (m_source != m_destination)
     {
-        m_source->refresh_graphic_connections();
-    }
-    else
-    {
-        m_source->refresh_graphic_connections();
         m_destination->refresh_graphic_connections();
+        m_destination->resort();
     }
+    m_source->refresh_graphic_connections();
+    m_source->resort();
 
     start->update_real_position();
     m_source->highlights_off();
@@ -45,15 +43,14 @@ void CMoveObject::redo()
 {
     move();
 
-    if (m_source == m_destination)
+    if (m_source != m_destination)
     {
-        m_source->refresh_graphic_connections();
-    }
-    else
-    {
-        m_source->refresh_graphic_connections();
         m_destination->refresh_graphic_connections();
+        m_destination->resort();
     }
+    m_source->refresh_graphic_connections();
+    m_source->resort();
+
 
     CLadder *start = m_source->number() < m_destination->number() ? m_source : m_destination;
     start->update_real_position();

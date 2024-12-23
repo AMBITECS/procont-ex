@@ -83,17 +83,37 @@ enum EPaletteElements
     EF_EXPT,
 
     EP_FBD,
-    // здесь будут LD элементы
-    // LD_CONTACT_NO
-    // LD_CONTACT_NC
-    // SFC, CFC...
     EP_ST,
-    EP_LD2,
     EP_LD,
     EP_SFC,
     EP_CFC,
     E_COUNT
 };
+
+static EPaletteElements  get_pou_type_from_string(const QString &string)
+{
+    if (string == "FBF")
+    {
+        return EP_FBD;
+    }
+
+    if (string == "ST")
+    {
+        return EP_ST;
+    }
+
+    if (string == "LD")
+    {
+        return EP_LD;
+    }
+
+    if (string == "SFC")
+    {
+        return EP_SFC;
+    }
+
+    return E_COUNT;
+}
 
 /// XML name and corresponding enum
 static QMap<EPaletteElements, QString>  pou_item_names
@@ -170,7 +190,6 @@ static QMap<EPaletteElements, QString>  pou_item_names
 
         {EP_FBD,"FBD"},
         {EP_ST,"ST"},
-        {EP_LD2,"LD2"},
         {EP_LD,"LD"},
         {EP_SFC,"SFC"},
         {EP_CFC,"CFC"}
@@ -298,7 +317,6 @@ static  QString element_images[EPaletteElements::E_COUNT]
 
     ":/codesys/images/codesys/fbd.png",
     ":/codesys/images/codesys/st.png",
-    ":/codesys/images/codesys/ld2.png",
     ":/codesys/images/codesys/ld.png",
     ":/codesys/images/codesys/sfc.png",
     ":/codesys/images/codesys/cfc.png"
@@ -394,6 +412,5 @@ static QVector<s_comp_item> func_blocks_data
     {EPaletteElements::EF_HYSTERESIS, "HYSTERESIS", "Петля гистерезиса"}
 };
 
-#include "components_palette.inc"
 
 #endif //EDITORSD_PALETTE_H

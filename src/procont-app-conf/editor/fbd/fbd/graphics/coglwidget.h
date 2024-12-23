@@ -29,6 +29,7 @@ public:
     ~COglWidget() override;
 
     QUndoStack *    undo_stack();
+    CPou * current_pou();
 
 signals:
     void  scroll_bars_moving(const QPoint & newPos);
@@ -38,6 +39,8 @@ signals:
     void  mouse_dblClicked(QMouseEvent *evt);
     void    iface_var_new(const QString & type,     const QString & name);
     void    iface_var_ren(const QString & old_name, const QString & new_name);
+    void    instance_removed(const QString &type, const QString &name);
+    void    set_current_pou(CPou *pou);
 
 protected:
     bool    eventFilter(QObject *target, QEvent *event) override;
@@ -103,6 +106,7 @@ private:
     QRect                 m_vertical_auto_rect;
     QImage                m_horizon_autoscroll;
     QRect                 m_horizon_auto_rect;
+    CPou                * m_current_pou{nullptr};
 
     /// wrong types - message about not comparable variables types, when try to graphic connect them
     QImage  m_wrong_type_img;

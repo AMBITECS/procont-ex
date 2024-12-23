@@ -10,6 +10,7 @@
 #include "CBody.h"
 #include "../sfc/CActions.h"
 #include "../CTransitions.h"
+#include "editor/fbd/fbd/palette/palette.h"
 
 class CPou
 {
@@ -26,7 +27,8 @@ public:
 
     QString     name() const;
     void        set_name(const QString &name);
-    QString     type() const;
+    QString     type_name() const;
+    EBodyType    body_type() const;
     void        set_type(const QString & type);
 
 
@@ -64,13 +66,14 @@ public:
 private:
     QDomNode    * m_dom_node{nullptr};
     QString       m_name;
-    QString       m_type;
+    QString       m_type_name;
     QString       m_global_id;
     CInterface  * m_interface;
     CActions    * m_actions;
     CTransitions* m_transitions;
     CAddData    * m_add_data;
     CDocumentation * m_doc;
+    EBodyType     m_type;
 
     QList<CBody*>   * m_bodies;
 

@@ -1,13 +1,13 @@
 ### Todo
 queue to `In progress...`
-- put POUs into the `components palette`
-- удалить сохранение в файл текущего POU
+редактирование множественного соединения на выходах. 
+
 
 
 
 
 ### In progress...
-- если пользователь удалил блок, то вот вам данные для удаления соответствующей переменной
+- put POUs into the `components palette`
 
 #### on pause
 
@@ -24,6 +24,8 @@ queue to `In progress...`
 - реализовать сохранение диаграммы и интерфейса посредством сигналов главного виджета
 - new/edit/reset variables on the components inputs/outputs
 - mouse wheel <Ctrl> - scrolling vertical/horizontal
+- удалить сохранение в файл текущего POU
+- если пользователь удалил блок, то вот вам данные для удаления соответствующей переменной
 
 ### не забыть
  очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько 

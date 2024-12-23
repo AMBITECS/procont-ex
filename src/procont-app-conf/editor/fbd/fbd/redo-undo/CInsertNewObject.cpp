@@ -4,15 +4,19 @@
 
 #include "CInsertNewObject.h"
 #include "../../plc-xml/common/CVariablesAnalytics.h"
+#include "../../plc-xml/common/CProject.h"
+
+extern CProject *project;
 
 CInsertNewObject::CInsertNewObject(COglWorld * world, CFbdContent * fbd, CLadder *p_ladder,
-                                   const EPaletteElements &element, const QPoint &pos)
+                                   const EPaletteElements &element, const QString &pou_name, const QPoint &pos)
     : QUndoCommand()
     , m_world(world)
     , m_fbd(fbd)
     , m_ladder(p_ladder)
     , m_element(element)
     , m_pos(pos)
+    , m_pou_name(pou_name)
 {
     setText("Вставка нового объекта из палитры");
 }
@@ -28,9 +32,9 @@ void CInsertNewObject::undo()
 {
     m_to_delete = remove();
 
+    m_ladder->refresh_graphic_connections();
     m_ladder->resort();
     m_ladder->highlights_off();
-    m_ladder->refresh_graphic_connections();
     m_ladder->update_real_position();
     m_world->view_hatch_moved({});
 }
@@ -40,9 +44,9 @@ void CInsertNewObject::redo()
     m_to_delete = nullptr;
     insert();
 
+    m_ladder->refresh_graphic_connections();
     m_ladder->resort();
     m_ladder->highlights_off();
-    m_ladder->refresh_graphic_connections();
     m_ladder->update_real_position();
     m_world->view_hatch_moved({});
 }
@@ -55,13 +59,25 @@ CDiagramObject *CInsertNewObject::inserted_object()
 void CInsertNewObject::insert()
 {
     CVariablesAnalytics analytics(m_world, m_world->m_pou->name());
+    CBlock item;
+
     if (!m_new_obj)
     {
-        auto lib_elem_name = pou_item_names.find(m_element).value();
-        CBlock item = analytics.get_block_from_library(lib_elem_name);
-        analytics.setup_block(&item);
-        auto *block = new CBlock(item);
+        CBlock *block;
 
+        if (m_element >= EP_FBD)
+        {
+            CPou *pou = project->types()->find_pou_by_name(m_pou_name);
+            item = pou->get_block();
+        }
+        else
+        {
+            auto lib_elem_name = pou_item_names.find(m_element).value();
+            item = analytics.get_block_from_library(lib_elem_name);
+        }
+
+        analytics.setup_block(&item);
+        block = new CBlock(item);
         m_new_obj = new CDiagramObject(m_ladder, block);
     }
 

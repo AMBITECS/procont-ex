@@ -21,6 +21,11 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
     m_pou =  node->isNull() ? new CPou() : m_pou = new CPou(*m_pou_node);
 
     m_graphics_world = new COglWorld(ogl_widget, m_pou, &m_hatch_tl);
+    connect(m_graphics_world, &COglWorld::set_current_pou,
+            [=](CPou *pou){emit set_current_pou(pou);});
+
+    connect(m_graphics_world, &COglWorld::instance_removed,
+            [=](const QString &type, const QString &name){ emit instance_removed(type, name); });
 
     connect(m_graphics_world, &COglWorld::diagram_changed,
             [=](const QDomNode &node){emit diagram_changed(node);});
@@ -123,7 +128,8 @@ void CGraphicsHelper::on_drop_event(QDropEvent *event)
         /// new component
         if (type >= EPaletteElements::EL_AND && selected.ladder)
         {
-            m_graphics_world->insert_new_component(selected.ladder, type,
+            QString pou_name = mime->property("name").toString();
+            m_graphics_world->insert_new_component(selected.ladder, type, pou_name,
                                                    event->position().toPoint());
         }
         /// new ladder from palette
@@ -380,6 +386,9 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
     auto act_reset_connect = new QAction(QIcon(":/16/images/16x16/chart_organisation_delete.png"),
                                         "Очистить соединения",
                                         p_menu);
+
+    act_reset_connect->setEnabled(p_pin->is_connected());
+
     if (p_pin->is_connected())
     {
         connect(act_reset_connect, &QAction::triggered, [=](){

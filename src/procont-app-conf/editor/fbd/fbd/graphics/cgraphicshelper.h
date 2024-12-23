@@ -83,6 +83,8 @@ signals:
                         const QPoint &pos, const bool &is_comparable);
     void    drag_complete();
     void    diagram_changed(const QDomNode &pou_node);
+    void    instance_removed(const QString &type, const QString &name);
+    void    set_current_pou(CPou *pou);
 
 
 

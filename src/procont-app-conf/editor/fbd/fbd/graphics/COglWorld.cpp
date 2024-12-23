@@ -50,7 +50,6 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
         throw std::runtime_error("all is broken. Im leaving this PC. In 'COglWorld::COglWorld' m_pou is nullptr");
     }
 
-
     m_ladders         = new std::vector<CLadder*> ();
     m_visible_ladders = new std::vector<CLadder*> ();
     m_undo_stack      = new QUndoStack();
@@ -412,6 +411,8 @@ void COglWorld::load_later()
     check_diagram_size();
     update_visible_ladders();
 
+    emit set_current_pou(m_pou);
+
     emit update_hatch();
 }
 
@@ -447,7 +448,9 @@ CLadder *COglWorld::insert_new_ladder(CLadder *next)
     return cmd_insert_ladder->new_ladder();
 }
 
-CDiagramObject * COglWorld::insert_new_component(CLadder *p_ladder, const EPaletteElements &element, const QPoint &pos)
+CDiagramObject * COglWorld::insert_new_component(CLadder *p_ladder, const EPaletteElements &element,
+                                                 const QString &pou_name,
+                                                 const QPoint &pos)
 {
     if (!m_fbd_content)
     {
@@ -455,18 +458,22 @@ CDiagramObject * COglWorld::insert_new_component(CLadder *p_ladder, const EPalet
         return nullptr;
     }
 
-    if (element < EL_AND || element >= EP_FBD)
+    if (element < EL_AND || element >= E_COUNT)
     {
         QtDialogs::warn_user("Пока компонент не поддерживается.");
         return nullptr;
     }
 
-    auto cmd_insert_obj = new CInsertNewObject(this, m_fbd_content, p_ladder, element, pos);
+    //Не доходит наименование POU;
+    auto cmd_insert_obj = new CInsertNewObject(this, m_fbd_content, p_ladder, element, pou_name, pos);
     m_undo_stack->push(cmd_insert_obj);
+    auto object = cmd_insert_obj->inserted_object();
 
+    convert_to_XML();
     emit undo_enabled();
 
-    return cmd_insert_obj->inserted_object();
+
+    return object;
 }
 
 void COglWorld::update_visible_ladders()
@@ -832,5 +839,8 @@ void COglWorld::erase_object(CDiagramObject *object)
 
     auto cmd = new CRemoveObject(object);
     m_undo_stack->push(cmd);
+
+    if (!object->instance_name().isEmpty())
+        emit instance_removed(object->type_name(), object->instance_name());
 }
 

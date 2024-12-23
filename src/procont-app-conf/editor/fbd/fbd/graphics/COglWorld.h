@@ -77,7 +77,8 @@ public:
     /// of inserted one
     CLadder *         add_new_ladder();                 //!< index of the inserting is result->number()-1
     CLadder *         insert_new_ladder(CLadder *next); //!< index of the inserting is result->number()-1
-    CDiagramObject  * insert_new_component(CLadder *p_ladder, const EPaletteElements &elements, const QPoint &pos);
+    CDiagramObject  * insert_new_component(CLadder *p_ladder, const EPaletteElements &elements, const QString &pou_name,
+                                           const QPoint &pos);
     void              insert_ladder(CLadder *dragged_ladder, CLadder *before);
     bool              move_object(CLadder * source, CLadder *destination, CDiagramObject *object, const QPoint &pos);
     void              erase_object(CDiagramObject *object);
@@ -95,6 +96,8 @@ signals:
     void    iface_var_rename(const QString & old, const QString &last);
     void    drag_complete();
     void    diagram_changed(const QDomNode &node);
+    void    instance_removed(const QString &type, const QString &name);
+    void    set_current_pou(CPou *pou);
 
 
 public slots:

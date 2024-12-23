@@ -22,7 +22,7 @@ typedef struct s_fbd_start_data
     QString pou_to_derive_name;
     QString pou_to_implement_name;
     QDomNode *xml_data{nullptr};
-    CTreeObject *tree;
+    CTreeObject *tree{nullptr};
 } SFbdStartupData;
 
 
@@ -80,6 +80,7 @@ private:
     CTreeObject         * m_tree_widget;
     bool                  m_is_editable{true};
     QDomNode            * m_dom_node;
+    CPou                * m_current_pou{nullptr};
 
 };
 

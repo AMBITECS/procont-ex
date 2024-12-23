@@ -37,7 +37,7 @@ CPou::CPou(const CPou &other)
     }
 
     m_name = other.m_name;
-    m_type = other.m_type;
+    m_type_name = other.m_type_name;
     m_dom_node = new QDomNode(*other.m_dom_node);
 }
 
@@ -46,7 +46,7 @@ CPou::CPou(const QDomNode &dom_node)
     m_dom_node = new QDomNode(dom_node);
     m_bodies = new QList<CBody*>();
     m_name = m_dom_node->attributes().namedItem(xmln::name).toAttr().value();
-    m_type = m_dom_node->attributes().namedItem(xmln::pou_type).toAttr().value();
+    m_type_name = m_dom_node->attributes().namedItem(xmln::pou_type).toAttr().value();
 
     m_interface = new CInterface(m_dom_node->namedItem("interface"));
     m_actions = new CActions(m_dom_node->namedItem("actions"));
@@ -81,7 +81,7 @@ QDomNode CPou::dom_node() const
     QDomDocument doc;
     QDomElement root = doc.createElement("pou");
     root.setAttribute("name", m_name);
-    root.setAttribute("pouType", m_type);
+    root.setAttribute("pouType", m_type_name);
     if (!m_global_id.isEmpty())
     {
         root.setAttribute("globalId", m_global_id);
@@ -140,14 +140,14 @@ void CPou::set_name(const QString &name)
     m_name = name;
 }
 
-QString CPou::type() const
+QString CPou::type_name() const
 {
-    return m_type;
+    return m_type_name;
 }
 
 void CPou::set_type(const QString &type)
 {
-    m_type = type;
+    m_type_name = type;
 }
 
 CInterface *CPou::interface()
@@ -191,7 +191,7 @@ CBlock CPou::get_block()
     block.set_local_id(++max_local_id);
     block.set_type_name(m_name);
 
-    if (m_type != (QString)xmln::function_pou_type)
+    if (m_type_name != (QString)xmln::function_pou_type)
     {
         block.set_instance_name("???");
     }
@@ -212,7 +212,7 @@ CBlock CPou::get_block()
     }
 
     /// if function - there is no output variables, there is return type
-    if (m_type == (QString)xmln::function_pou_type)
+    if (m_type_name == (QString)xmln::function_pou_type)
     {
         auto out = new CBlockVar();
         out->set_formal_param("out");
@@ -548,4 +548,11 @@ CFbdContent *CPou::get_fbd()
     }
 
     return nullptr;
+}
+
+EBodyType CPou::body_type() const
+{
+    if (m_bodies->empty())
+        return EBodyType::BT_COUNT;
+    return m_bodies->front()->diagram_lang();
 }

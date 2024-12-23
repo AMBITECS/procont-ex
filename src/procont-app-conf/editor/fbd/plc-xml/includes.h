@@ -101,6 +101,20 @@ static const QString body_types_names [EBodyType::BT_COUNT]
     "SFC"
 };
 
+static EBodyType body_type_from_string(const QString &str)
+{
+    int counter = 0;
+    for (auto &name : body_types_names)
+    {
+        if (name == str)
+        {
+            return (EBodyType)counter;
+        }
+        counter++;
+    }
+    return EBodyType::BT_COUNT;
+}
+
 /**
  * base types of the system. Arrays, ranges, structs, enum and pointers are extended modifications of thees types
  */

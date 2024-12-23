@@ -100,6 +100,7 @@ void CPinConnecting::undo()
 
     in->disconnect();
     out->disconnect(in);
+    m_world->update_visible_ladders();
 }
 
 bool CPinConnecting::is_error() const

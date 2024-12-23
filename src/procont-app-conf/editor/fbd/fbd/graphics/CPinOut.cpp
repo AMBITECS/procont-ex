@@ -225,7 +225,10 @@ void CPinOut::reset_connections()
     }
     m_graphic_connections->clear();
 
-    for (auto &i_var : *m_iface_vars)
+    std::vector<CVariable*>  tmp_var_to_delete;
+    tmp_var_to_delete.insert(tmp_var_to_delete.end(), m_iface_vars->begin(), m_iface_vars->end());
+
+    for (auto &i_var : tmp_var_to_delete)
     {
         /// блин тут слёзы. Ради одной переменной такое шоу с конями и всё это в цикле. Выход один - весь проект
         /// в глобальную переменную

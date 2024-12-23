@@ -219,7 +219,7 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
     /// collecting interface variables from all correct pous
     for (auto &pou : *project->types()->pous())
     {
-        if (pou->type() != "program" && pou != m_diagram_pou)
+        if (pou->type_name() != "program" && pou != m_diagram_pou)
         {
             continue;
         }

@@ -3,7 +3,9 @@
 //
 
 #include "CFbdComponentsTree.h"
-#include "../palette/palette.h"
+#include "../../plc-xml/common/CProject.h"
+
+extern CProject *project;
 
 CFbdComponentsTree::CFbdComponentsTree(QTreeWidget *widget)
 {
@@ -13,23 +15,17 @@ CFbdComponentsTree::CFbdComponentsTree(QTreeWidget *widget)
 CFbdComponentsTree::~CFbdComponentsTree()
 = default;
 
-void CFbdComponentsTree::build_tree()
+void CFbdComponentsTree::build_tree(CPou *current_pou)
 {
     clear_tree();
 
-    QStringList elements_groups;
-    elements_groups << "Общее"
-                    << "Логические операторы"
-                    << "Мат. операторы"
-                    << "Другие операторы"
-                    << "Функциональные блоки";
+    update_program_pous(current_pou);
 
+    QStringList elements_groups;
     QVector<QVector<s_comp_item>> groups;
-    groups << general_data
-           << bitwise_operators
-            << math_data
-            << other_data
-            << func_blocks_data;
+
+    get_palette_roots(current_pou, elements_groups, groups);
+
 
     QVector<QTreeWidgetItem*>  top_level;
     for (const auto &group_name : elements_groups)
@@ -98,4 +94,72 @@ CFbdComponentsTree::removeItem(QTreeWidgetItem *item)
     }
 
     delete item;
+}
+
+void CFbdComponentsTree::update_program_pous(CPou *current)
+{
+    m_project_pou . clear();
+
+    for (auto &pou : *project->types()->pous())
+    {
+        if (pou == current || pou->type_name() == "program")
+        {
+            continue;
+        }
+
+        s_comp_item item;
+        item.name = pou->name();
+        item.hint = item.name + " " + pou->type_name();
+
+        EPaletteElements element;
+
+        if (pou->body_type() == BT_FBD)
+            element = EPaletteElements::EP_FBD;
+        if (pou->body_type() == BT_LD)
+            element = EPaletteElements::EP_LD;
+        /*if (pou->body_type() == BT_IL)
+            element = EPaletteElements::EP_IL;*/
+        if (pou->body_type() == BT_ST)
+            element = EPaletteElements::EP_ST;
+        if (pou->body_type() == BT_SFC)
+            element = EPaletteElements::EP_SFC;
+
+        item.element = element;
+
+        m_project_pou.push_back(item);
+    }
+}
+
+void CFbdComponentsTree::get_palette_roots(CPou *p_pou, QStringList &list, QVector<QVector<s_comp_item>> &list_1)
+{
+    if (p_pou->body_type() == BT_FBD)
+    {
+        list << "Общее"
+                        << "Логические операторы"
+                        << "Мат. операторы"
+                        << "Другие операторы"
+                        << "Функциональные блоки";
+        if (!m_project_pou.empty())
+            list << "Проектные POU";
+
+        list_1 << general_data
+               << bitwise_operators
+               << math_data
+               << other_data
+               << func_blocks_data
+               << m_project_pou;
+    }
+
+    if (p_pou->body_type() == BT_LD)
+    {
+        list << "Логические операторы"
+             << "Мат. операторы"
+             << "Функциональные блоки"
+             << "Проектные POU";
+
+        list_1 << bitwise_operators
+               << math_data
+               << func_blocks_data
+               << m_project_pou;
+    }
 }

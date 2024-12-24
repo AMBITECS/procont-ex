@@ -3,12 +3,12 @@
 //
 
 #include <QPainter>
-#include "CDiagramObject.h"
-#include "CLadder.h"
+#include "CFbdObject.h"
+#include "CFbdLadder.h"
 #include "editor/fbd/resources/colors.h"
 #include "editor/fbd/fbd/editors/CFilter.h"
 
-CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_top_left
+CFbdObject::CFbdObject(CFbdLadder *ladder, CBlock *block) //QPoint *ladder_top_left
 {
     m_block = block;
     m_block->set_global_id(QString::number(ladder->number()));
@@ -45,7 +45,7 @@ CDiagramObject::CDiagramObject(CLadder *ladder, CBlock *block) //QPoint *ladder_
     m_pin_types = define_is_concrete_types(m_inputs->front()->type());
 }
 
-CDiagramObject::~CDiagramObject()
+CFbdObject::~CFbdObject()
 {
     for (auto &pin : *m_inputs)
     {
@@ -63,27 +63,27 @@ CDiagramObject::~CDiagramObject()
     delete m_highlights;
 }
 
-QRect *CDiagramObject::rect()
+QRect *CFbdObject::rect()
 {
     return &m_rect;
 }
 
-QImage *CDiagramObject::image()
+QImage *CFbdObject::image()
 {
     return &m_image;
 }
 
-std::vector<CPin *> *CDiagramObject::pins()
+std::vector<CPin *> *CFbdObject::pins()
 {
     return m_pins;
 }
 
-std::vector<CObjectsText *> *CDiagramObject::texts()
+std::vector<CObjectText *> *CFbdObject::texts()
 {
     return &m_texts;
 }
 
-void CDiagramObject::define_size()
+void CFbdObject::define_size()
 {
     if (!m_pins->empty())
     {
@@ -158,7 +158,7 @@ void CDiagramObject::define_size()
     m_text_bounds.setSize(m_size);
 }
 
-void CDiagramObject::update_rel_position(QPoint * relative_tl)
+void CFbdObject::update_rel_position(QPoint * relative_tl)
 {
     if (!relative_tl)
     {
@@ -185,12 +185,12 @@ void CDiagramObject::update_rel_position(QPoint * relative_tl)
     update_bound_rect();
 }
 
-QRect CDiagramObject::bound_text_rect() const
+QRect CFbdObject::bound_text_rect() const
 {
     return m_text_bounds;
 }
 
-QImage CDiagramObject::bound_image() const
+QImage CFbdObject::bound_image() const
 {
     return m_bound_img;
 }
@@ -214,7 +214,7 @@ QImage CDiagramObject::bound_image() const
 //                     QPointF(0, 0));
 //}
 
-void CDiagramObject::set_selected(const bool &selected)
+void CFbdObject::set_selected(const bool &selected)
 {
     m_is_selected = selected;
 
@@ -223,12 +223,12 @@ void CDiagramObject::set_selected(const bool &selected)
     m_image.fill(m_color_curr);
 }
 
-bool CDiagramObject::is_selected() const
+bool CFbdObject::is_selected() const
 {
     return m_is_selected;
 }
 
-QImage CDiagramObject::drag_image(const bool &is_transparent)
+QImage CFbdObject::drag_image(const bool &is_transparent)
 {
     int diff = m_rect.left() - m_text_bounds.left();
 
@@ -270,12 +270,12 @@ QImage CDiagramObject::drag_image(const bool &is_transparent)
     return image;
 }
 
-uint64_t CDiagramObject::local_id() const
+uint64_t CFbdObject::local_id() const
 {
     return m_block->local_id();
 }
 
-void CDiagramObject::set_ladders_relative_top_left(CLadder *ladder, const QPoint & rtl_shift)
+void CFbdObject::set_ladders_relative_top_left(CFbdLadder *ladder, const QPoint & rtl_shift)
 {
     if (m_parent != ladder)
     {
@@ -296,7 +296,7 @@ void CDiagramObject::set_ladders_relative_top_left(CLadder *ladder, const QPoint
     m_graph_bounds.setRect(m_rect.x() - m_graph_bound_shift, m_rect.top(), m_graph_bounds.width(), m_rect.height());
 }
 
-void CDiagramObject::update_position()
+void CFbdObject::update_position()
 {
     locate_pins();
 
@@ -314,7 +314,7 @@ void CDiagramObject::update_position()
     m_graph_bounds.setRect(m_rect.x() - m_graph_bound_shift, m_rect.top(), m_graph_bounds.width(), m_rect.height());
 }
 
-void CDiagramObject::locate_pins()
+void CFbdObject::locate_pins()
 {
     int rel_in_y = TOP_SHIFT;
     int rel_out_y = TOP_SHIFT;
@@ -356,12 +356,12 @@ void CDiagramObject::locate_pins()
     m_graph_bounds.setHeight(h);
 }
 
-std::vector<std::pair<QRect, QImage>> *CDiagramObject::highlights()
+std::vector<std::pair<QRect, QImage>> *CFbdObject::highlights()
 {
     return m_highlights;
 }
 
-bool CDiagramObject::switch_highlights(const QPoint &pos)
+bool CFbdObject::switch_highlights(const QPoint &pos)
 {
     m_highlights->clear();
 
@@ -379,7 +379,7 @@ bool CDiagramObject::switch_highlights(const QPoint &pos)
     return found;
 }
 
-void CDiagramObject::update_bound_rect()
+void CFbdObject::update_bound_rect()
 {
     int outer_left = 0;
     int outer_right = 0;
@@ -430,43 +430,43 @@ void CDiagramObject::update_bound_rect()
     m_graph_bound_shift = outer_left_gr;
 }
 
-QString CDiagramObject::instance_name() const
+QString CFbdObject::instance_name() const
 {
     return m_instance_name.text();
 }
 
-QString CDiagramObject::type_name() const
+QString CFbdObject::type_name() const
 {
     return m_type_name.text();
 }
 
-CLadder *CDiagramObject::parent()
+CFbdLadder *CFbdObject::parent()
 {
     return m_parent;
 }
 
-CBlock *CDiagramObject::block()
+CBlock *CFbdObject::block()
 {
     update_block_data();
     return m_block;
 }
 
-void CDiagramObject::update_block_data()
+void CFbdObject::update_block_data()
 {
 
 }
 
-CObjectsText *CDiagramObject::inst_text()
+CObjectText *CFbdObject::inst_text()
 {
     return &m_instance_name;
 }
 
-EDefinedDataTypes CDiagramObject::type() const
+EDefinedDataTypes CFbdObject::type() const
 {
     return get_type_from_string(m_type_name.text().toStdString());
 }
 
-void CDiagramObject::set_instance_name(const QString &name)
+void CFbdObject::set_instance_name(const QString &name)
 {
     m_instance_name.set_text(name);
     m_block->set_instance_name(name);
@@ -490,22 +490,22 @@ void CDiagramObject::set_instance_name(const QString &name)
     }
 }
 
-std::vector<CPinOut*> *CDiagramObject::outputs()
+std::vector<CPinOut*> *CFbdObject::outputs()
 {
     return m_outputs;
 }
 
-std::vector<CPinIn *> *CDiagramObject::inputs()
+std::vector<CPinIn *> *CFbdObject::inputs()
 {
     return m_inputs;
 }
 
-QRect CDiagramObject::bound_graph_rect() const
+QRect CFbdObject::bound_graph_rect() const
 {
     return m_graph_bounds;
 }
 
-CPinOut *CDiagramObject::get_output_by_name(const QString &formal)
+CPinOut *CFbdObject::get_output_by_name(const QString &formal)
 {
     std::string form = formal.toStdString();
     CFilter::capitalize_word(form);
@@ -524,7 +524,7 @@ CPinOut *CDiagramObject::get_output_by_name(const QString &formal)
     return nullptr;
 }
 
-void CDiagramObject::refresh_graphic_connections()
+void CFbdObject::refresh_graphic_connections()
 {
     for (auto &in : *m_inputs)
     {
@@ -545,7 +545,7 @@ void CDiagramObject::refresh_graphic_connections()
     update_bound_rect();
 }
 
-void CDiagramObject::im_connected(const QString &type, CPin *pin)
+void CFbdObject::im_connected(const QString &type, CPin *pin)
 {
     /// решил не приводить типы пинов ко всяким ANY_XXX от ANY, т.к. в одном блоке может быть и ANY и BOOL и INT.
     /// Да и ADD(+) INT и REAL тоже не лишено логики. Можно поразмышлять на счёт выходов... Позже.
@@ -597,7 +597,7 @@ void CDiagramObject::im_connected(const QString &type, CPin *pin)
     m_set_type_done = true;
 }
 
-EPinTypes CDiagramObject::define_is_concrete_types(const EDefinedDataTypes &type)
+EPinTypes CFbdObject::define_is_concrete_types(const EDefinedDataTypes &type)
 {
     if (type == DDT_ANY ||
         type == DDT_ANY_NUM ||
@@ -617,7 +617,7 @@ EPinTypes CDiagramObject::define_is_concrete_types(const EDefinedDataTypes &type
     return EPT_CONCRETE;
 }
 
-void CDiagramObject::im_disconnected(CPin *pin)
+void CFbdObject::im_disconnected(CPin *pin)
 {
     bool connected = false;
 
@@ -638,7 +638,7 @@ void CDiagramObject::im_disconnected(CPin *pin)
     set_all_pins_any_concrete(m_primary_type);
 }
 
-void CDiagramObject::set_all_pins_any_concrete(const EDefinedDataTypes &types)
+void CFbdObject::set_all_pins_any_concrete(const EDefinedDataTypes &types)
 {
     for (auto &pin : *m_pins)
     {

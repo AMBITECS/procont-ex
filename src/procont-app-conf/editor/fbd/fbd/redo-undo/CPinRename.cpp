@@ -19,7 +19,7 @@ CPinRename::CPinRename(COglWorld *ogl_world, CPin *pin, QString  pin_var,
 {
     m_pin_old_var = m_pin->name();
 
-    m_old_iface_var = m_pin->block_variable()->get_iface_variable();
+    //m_old_iface_var = m_pin->block_variable()->get_iface_variable();
 
     if (m_opposite_pin)
     {
@@ -129,8 +129,8 @@ void CPinRename::undo()
 
 void CPinRename::refresh_view()
 {
-    CLadder *base_ladder = m_pin->parent()->parent();
-    CLadder *opposite_ladder = m_opposite_pin ? m_opposite_pin->parent()->parent() : nullptr;
+    CFbdLadder *base_ladder = m_pin->parent()->parent();
+    CFbdLadder *opposite_ladder = m_opposite_pin ? m_opposite_pin->parent()->parent() : nullptr;
 
     if (base_ladder == opposite_ladder)
     {

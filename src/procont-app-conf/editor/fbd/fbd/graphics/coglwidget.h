@@ -87,7 +87,7 @@ protected:
 
 
 private:
-    std::vector<CLadder*>   * m_ladders;
+    std::vector<CFbdLadder*>   * m_ladders;
     CGraphicsHelper         * m_helper;
     QScrollBar              * m_vertical;
     QScrollBar              * m_horizontal;

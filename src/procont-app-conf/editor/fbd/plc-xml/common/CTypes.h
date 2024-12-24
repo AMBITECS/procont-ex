@@ -8,17 +8,20 @@
 #include "CUserType.h"
 #include "editor/fbd/plc-xml/includes.h"
 #include "CPou.h"
-
+class CProject;
 class CTypes
 {
 public:
-    CTypes();
+    explicit CTypes(CProject *project);
     CTypes(const CTypes &);
-    explicit CTypes(const QDomNode &node);
+    explicit CTypes(const QDomNode &node, CProject *parent);
     ~CTypes();
 
     CTypes & operator = (const CTypes &rhs);
     [[nodiscard]] QDomNode    dom_node() const;
+
+    CProject    * parent();
+    void          set_parent(CProject * parent);
 
 
 
@@ -47,6 +50,7 @@ protected:
 private:
     std::vector<CUserType*> * m_user_types;
     std::vector<CPou*>      * m_pous;
+    CProject                * m_parent{nullptr};
 };
 
 

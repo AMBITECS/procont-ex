@@ -107,12 +107,12 @@ bool CVariablesAnalytics::load_connections()
     return true;
 }
 
-void CVariablesAnalytics::connect_inputs(CDiagramObject *object)
+void CVariablesAnalytics::connect_inputs(CFbdObject *object)
 {
     CBlockVar   * block_var;
     CConnection * in_connection;
     CVariable   * iface_var;
-    CConnectLine* line;
+    CFbdConnectLine* line;
     CPinOut     * out;
     CGraphicsLogic logic;
 
@@ -508,7 +508,7 @@ void CVariablesAnalytics::setup_block(CBlock *block)
 {
     bool is_library = false;
     bool is_pous = false;
-    CBlock templ_block;
+    CBlock templ_block(nullptr);
 
     /// if block from the projects POU
     for (auto &pou : *m_pou_array)
@@ -516,6 +516,7 @@ void CVariablesAnalytics::setup_block(CBlock *block)
         if (pou->name() == block->type_name())
         {
             templ_block = pou->get_block();
+            templ_block.set_parent(m_world->m_pou->bodies()->front());
             is_pous = true;
         }
     }
@@ -523,6 +524,7 @@ void CVariablesAnalytics::setup_block(CBlock *block)
     if (!is_pous)
     {
         templ_block = get_block_from_library(block->type_name());
+        templ_block.set_parent(m_world->m_pou->bodies()->front());
 
         if (!templ_block.is_empty())
         {
@@ -732,11 +734,12 @@ CBlock CVariablesAnalytics::get_block_from_library(const QString &block_type_nam
 
     if (type_pou.isNull())
     {
-        return {};
+        return CBlock{nullptr};
     }
 
-    CPou pou(type_pou);
+    CPou pou(type_pou, project->types());
     CBlock block = pou.get_block();
+    block.set_parent(m_world->m_pou->bodies()->front());
 
     return block;
 }
@@ -772,7 +775,7 @@ CFbdContent *CVariablesAnalytics::get_pou_content()
     return m_diagram_pou->bodies()->front()->fbd_content();
 }
 
-CDiagramObject * CVariablesAnalytics::find_object_by_id(const uint64_t &local_id)
+CFbdObject * CVariablesAnalytics::find_object_by_id(const uint64_t &local_id)
 {
     if (!m_world)
     {
@@ -796,7 +799,7 @@ CPinOut *CVariablesAnalytics::find_output(CBlockVar *p_var)
     uint64_t object_id = p_var->parent()->local_id();
     std::string  formal_param = p_var->formal_parameter().toStdString();
 
-    CDiagramObject *object = find_object_by_id(object_id);
+    CFbdObject *object = find_object_by_id(object_id);
 
     if (!object)
     {
@@ -877,7 +880,7 @@ void CVariablesAnalytics::process_out_variables()
                     return;
                 }
 
-                CDiagramObject *obj = find_object_by_id(block->local_id());
+                CFbdObject *obj = find_object_by_id(block->local_id());
                 auto out = obj->get_output_by_name(block_out_name);
                 out->connect(iface_var);
                 continue;
@@ -917,7 +920,7 @@ void CVariablesAnalytics::process_out_variables()
                 {
                     for (auto &block_var : block_variables)
                     {
-                        CDiagramObject *object = find_object_by_id(block_var->parent()->local_id());
+                        CFbdObject *object = find_object_by_id(block_var->parent()->local_id());
                         auto pin_out = object->get_output_by_name(block_var->formal_parameter());
 
                         for (auto &i_var : iface_vars)
@@ -1045,7 +1048,8 @@ bool CVariablesAnalytics::connect_iface_var(CPinOut *pin_out, CVariable *iface_v
         return true;
     }
 
-    out_var = new COutVariable();
+
+    out_var = new COutVariable(m_world->current_pou()->bodies()->front());
     out_var->set_local_id(++max_local_id);
     out_var->point_in()->connections()->push_back(connection);
     out_var->expression()->set_expression(iface_variable->name());
@@ -1065,7 +1069,7 @@ StandardLibrary *CVariablesAnalytics::standard_library()
     return m_standard_library;
 }
 
-CDiagramObject *CVariablesAnalytics::find_object( const QString &name )
+CFbdObject *CVariablesAnalytics::find_object( const QString &name )
 {
     QString obj_name, obj_id_name;
 

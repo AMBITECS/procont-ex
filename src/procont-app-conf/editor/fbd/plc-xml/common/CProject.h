@@ -39,6 +39,8 @@ public:
 
     [[nodiscard]] QString     project_version() const;
     void        set_project_version(const QString &version);
+
+    bool        is_empty() const;
 protected:
     CProject();
     CProject(const CProject &);

@@ -10,14 +10,14 @@
 #include <QRect>
 #include <QImage>
 #include <QDragMoveEvent>
-#include "CDiagramObject.h"
-#include "CObjectsText.h"
+#include "CFbdObject.h"
+#include "editor/fbd/common/CObjectText.h"
 #include "../palette/palette.h"
-#include "CConnectLine.h"
-//#include "COglWorld.h"
+#include "CFbdConnectLine.h"
+#include "editor/fbd/common/CLadder.h"
 
 
-#define  LEFT_WIDTH 50     //!< the width of the left rect
+#define  LEFT_WIDTH 50      //!< the width of the left rect
 #define  DIVIDER_WIDTH 3    //!< divider strip width
 #define  GRAY_WIDTH  20     //!< gray field width
 #define  DEF_HEIGHT 50      //!< empty ladder width
@@ -31,63 +31,30 @@
 
 class s_selection;
 
-struct s_rects
-{
-    QRect   base{};
-    QRect   left{};
-    QRect   right{};
-    QRect   divider{};
-    QRect   field{};
-    QRect   bottom{};
-};
 
-struct  s_colors
-{
-    QColor  def_left;//{255,255,255};
-    QColor  def_right;//{255,255,255};
-    QColor  selected_left;//{247,226,234};
-    QColor  selected_right;//{255,255,224};
-    QColor  divider;//{0, 128, 128};
-    QColor  gray_field;//{240,240,240};
-    QColor  gray_bottom;//{240,240,240};
-    QColor  landing_brick;//{185,238,185};
-    QColor  landing_strip;//{239,192,136};
-};
-
-struct s_images
-{
-    QImage  left{};
-    QImage  right{};
-    QImage  divider{};
-    QImage  gray{};
-    QImage  landing_brick{};
-    QImage  landing_vertical{};
-    QImage  bottom{};
-    QImage  landing_bottom{};
-};
 
 class COglWorld;
 
-class CLadder //: public QObject
+class CFbdLadder //: public QObject
 {
     //Q_OBJECT
 public:
-    CLadder() = delete;
-    CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size,
-            CLadder *prev_ladder = nullptr, CLadder *next = nullptr);
-    ~CLadder();
+    CFbdLadder() = delete;
+    CFbdLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size,
+            CFbdLadder *prev_ladder = nullptr, CFbdLadder *next = nullptr);
+    ~CFbdLadder();
 
     /// change visible_ladders content
-    CDiagramObject *    add_object(CBlock * object);
+    CFbdObject  * add_object(CBlock * object);
     COglWorld       * parent();
 
     /// change and update ladder position
-    void    update_real_position(CLadder *sender = nullptr);
+    void    update_real_position(CFbdLadder *sender = nullptr);
     void    update_relative_position();
 
     /// context
-    void    set_previous(CLadder *ladder);
-    void    set_next(CLadder *ladder);
+    void    set_previous(CFbdLadder *ladder);
+    void    set_next(CFbdLadder *ladder);
     [[nodiscard]] bool    is_visible() const;     //!< is visible via hatch in the current position
 
     void    highlights_off();
@@ -100,10 +67,10 @@ public:
 
     [[nodiscard]] short   bottom_line_count() const;
 
-    CConnectLine* add_line(CConnectLine *line);
-    std::vector<CConnectLine*> * connecting_lines();
-    CConnectLine* remove_line(CConnectLine *line);
-    CConnectLine* remove_line(CPinIn * pin_input);
+    CFbdConnectLine* add_line(CFbdConnectLine *line);
+    std::vector<CFbdConnectLine*> * connecting_lines();
+    CFbdConnectLine* remove_line(CFbdConnectLine *line);
+    CFbdConnectLine* remove_line(CPinIn * pin_input);
 
 
     [[nodiscard]] QPoint                real_bottom_right() const;
@@ -112,8 +79,8 @@ public:
 
     QVector<QPair<QRect*, QImage*>>   * draw_ladder();
     QVector<QPair<QRect, QImage>>       draw_highlights();
-    QVector<CDiagramObject*>          * draw_components();
-    std::vector<CObjectsText*>        * ladder_texts();
+    QVector<CFbdObject*>          * draw_components();
+    std::vector<CObjectText*>        * ladder_texts();
     [[nodiscard]] const uint16_t      * height();
     QRect                             * base_relative_rect();
     [[nodiscard]] uint16_t              number() const;
@@ -121,8 +88,8 @@ public:
     void    resort();
 
     QImage       drag_image();
-    CLadder   *  previous_ladder();
-    CLadder   *  next_ladder();
+    CFbdLadder   *  previous_ladder();
+    CFbdLadder   *  next_ladder();
 
     void    get_selected(const QPoint &point, s_selection *p_selection);
     void    refresh_graphic_connections();
@@ -131,12 +98,12 @@ protected:
 
 
 private:
-    CLadder     * m_previous{nullptr};
-    CLadder     * m_next{nullptr};
+    CFbdLadder     * m_previous{nullptr};
+    CFbdLadder     * m_next{nullptr};
     COglWorld   * m_parent;
 
-    CObjectsText    * m_num_text;
-    std::vector<CConnectLine*> * m_lines;
+    CObjectText    * m_num_text;
+    std::vector<CFbdConnectLine*> * m_lines;
 
     QPoint      * m_hatch_pos{nullptr};
     QSize       * m_hatch_size;
@@ -152,10 +119,10 @@ private:
     QPoint        m_relative_tl{0,0};
     short         m_bottom_lines{0};
 
-    QList<CDiagramObject*>          * m_objects;
+    QList<CFbdObject*>          * m_objects;
     QVector<QPair<QRect, QImage>>     m_highlights;
     QVector<QPair<QRect*, QImage*>> * m_ladder_draw;
-    std::vector<CObjectsText*>      * m_texts;
+    std::vector<CObjectText*>      * m_texts;
 
     uint16_t    m_ladder_width{0};
 

@@ -22,6 +22,8 @@ struct s_variable_data
     EPinDirection   source{PD_UNDEF};
 };
 
+class CBody;
+
 /**
  * @brief These elements are a collection of objects, which are defined in FBD. They can be used in all
  *  graphical bodies.
@@ -30,10 +32,10 @@ struct s_variable_data
 class CFbdContent
 {
 public:
-    CFbdContent();
+    CFbdContent(CBody *parent);
     CFbdContent(const CFbdContent & other);
     CFbdContent(CFbdContent && other) noexcept;
-    explicit CFbdContent(const QDomNode & dom_node);
+    explicit CFbdContent(const QDomNode & dom_node, CBody *parent);
     ~CFbdContent();
 
     [[nodiscard]] QDomNode            dom_node() const;
@@ -54,6 +56,7 @@ public:
     COutVariable *find_output_var_by_iface_name(const QString &iface_var_name);
 
 private:
+    CBody                * m_parent{nullptr};
     QList<CBlock*>      * m_blocks;
     QList<CLabel*>      * m_labels;
     QList<CJump*>       * m_jumps;

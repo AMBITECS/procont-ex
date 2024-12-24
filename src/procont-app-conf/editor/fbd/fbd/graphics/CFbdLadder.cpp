@@ -2,7 +2,7 @@
 // Created by artem on 10/29/24.
 //
 
-#include "CLadder.h"
+#include "CFbdLadder.h"
 
 #include <QPainter>
 #include <QMimeData>
@@ -16,16 +16,16 @@
 extern uint16_t    max_local_id;
 
 
-CLadder::CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size, CLadder *prev_ladder, CLadder *next)
+CFbdLadder::CFbdLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size, CFbdLadder *prev_ladder, CFbdLadder *next)
 {
     m_hatch_pos     = hatch_top_left;
     m_previous      = prev_ladder;
     m_next          = next;
     m_hatch_size    = hatch_size;
-    m_objects       = new QList<CDiagramObject*>();
+    m_objects       = new QList<CFbdObject*>();
     m_ladder_draw   = new QVector<QPair<QRect*, QImage*>>();
-    m_texts = new std::vector<CObjectsText*>();
-    m_lines = new std::vector<CConnectLine*>();
+    m_texts = new std::vector<CObjectText*>();
+    m_lines = new std::vector<CFbdConnectLine*>();
     m_parent        = world;
 
     if (!m_parent)
@@ -46,7 +46,7 @@ CLadder::CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size, CL
     CDiagramColors colors;
 
     m_number = 0;
-    m_num_text = new CObjectsText();
+    m_num_text = new CObjectText();
     m_num_text->set_text(QString::number(m_number));
     m_num_text->set_color(colors.ladder_colors().ladder_number);
     m_texts->push_back(m_num_text);
@@ -72,7 +72,7 @@ CLadder::CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size, CL
     update_real_position();
 }
 
-CLadder::~CLadder()
+CFbdLadder::~CFbdLadder()
 {
     for (auto line : *m_lines)
     {
@@ -94,19 +94,19 @@ CLadder::~CLadder()
     delete m_ladder_draw;
 }
 
-void CLadder::set_previous(CLadder *ladder)
+void CFbdLadder::set_previous(CFbdLadder *ladder)
 {
     m_previous      = ladder;
     m_prev_changed  = true;
 }
 
-void CLadder::set_next(CLadder *ladder)
+void CFbdLadder::set_next(CFbdLadder *ladder)
 {
     m_next          = ladder;
     m_next_changed  = true;
 }
 
-bool CLadder::is_visible() const
+bool CFbdLadder::is_visible() const
 {
     if (m_hatch_size->width() <= 0 || m_hatch_size->height() <= 0)
     {
@@ -128,7 +128,7 @@ bool CLadder::is_visible() const
     return visible; // TODO: not tested situation when single ladder's `height` is more then QOpenGLWidget height
 }
 
-void CLadder::highlights_off()
+void CFbdLadder::highlights_off()
 {
     m_highlights.clear();
 
@@ -148,7 +148,7 @@ void CLadder::highlights_off()
     }
 }
 
-void CLadder::update_real_position(CLadder *sender)
+void CFbdLadder::update_real_position(CFbdLadder *sender)
 {
     if (sender != m_previous && sender != nullptr)
     {
@@ -205,27 +205,27 @@ void CLadder::update_real_position(CLadder *sender)
     }
 }
 
-QVector<QPair<QRect *, QImage *>> *CLadder::draw_ladder()
+QVector<QPair<QRect *, QImage *>> *CFbdLadder::draw_ladder()
 {
     return m_ladder_draw;
 }
 
-QVector<CDiagramObject *> *CLadder::draw_components()
+QVector<CFbdObject *> *CFbdLadder::draw_components()
 {
     return m_objects;
 }
 
-std::vector<CObjectsText *> *CLadder::ladder_texts()
+std::vector<CObjectText *> *CFbdLadder::ladder_texts()
 {
     return m_texts;
 }
 
-const uint16_t * CLadder::height()
+const uint16_t * CFbdLadder::height()
 {
     return &m_current_height;
 }
 
-QRect *CLadder::base_relative_rect()
+QRect *CFbdLadder::base_relative_rect()
 {
     int rel_left = m_abs_rects.base.left() - m_hatch_pos->x();
     int rel_top = m_abs_rects.base.top() - m_hatch_pos->y();
@@ -237,17 +237,17 @@ QRect *CLadder::base_relative_rect()
     return &m_base_rel;
 }
 
-uint16_t CLadder::number() const
+uint16_t CFbdLadder::number() const
 {
     return m_number;
 }
 
-QVector<QPair<QRect, QImage>> CLadder::draw_highlights()
+QVector<QPair<QRect, QImage>> CFbdLadder::draw_highlights()
 {
     return m_highlights;
 }
 
-uint16_t CLadder::define_height() const
+uint16_t CFbdLadder::define_height() const
 {
     uint16_t height = DEF_HEIGHT - HEIGHT_RESERVE;
 
@@ -267,7 +267,7 @@ uint16_t CLadder::define_height() const
     return height;
 }
 
-void CLadder::set_selected(const bool &is_selected)
+void CFbdLadder::set_selected(const bool &is_selected)
 {
     if (is_selected == m_is_selected)
     {
@@ -293,12 +293,12 @@ void CLadder::set_selected(const bool &is_selected)
     m_images.right.fill(is_selected ? m_colors.selected_right : m_colors.def_right);
 }
 
-bool CLadder::is_selected() const
+bool CFbdLadder::is_selected() const
 {
     return m_is_selected;
 }
 
-void CLadder::fill_ladder_image()
+void CFbdLadder::fill_ladder_image()
 {
     m_ladder_draw->push_back({&m_relative.left, &m_images.left});
     m_ladder_draw->push_back({&m_relative.right, &m_images.right});
@@ -316,7 +316,7 @@ void CLadder::fill_ladder_image()
     m_images.landing_bottom.fill(m_colors.landing_strip);
 }
 
-void CLadder::update_relative_position()
+void CFbdLadder::update_relative_position()
 {
     m_relative.base.setRect(-m_hatch_pos->x(), m_abs_rects.left.top() - m_hatch_pos->y(),
                             m_current_width, m_current_height);
@@ -345,12 +345,12 @@ void CLadder::update_relative_position()
     }
 }
 
-bool CLadder::is_clicked_here(const QPoint &pos) const
+bool CFbdLadder::is_clicked_here(const QPoint &pos) const
 {
     return m_relative.base.contains(pos);
 }
 
-void CLadder::drag_object(QDragMoveEvent *event)
+void CFbdLadder::drag_object(QDragMoveEvent *event)
 {
     if (!is_clicked_here(event->position().toPoint()))
     {
@@ -413,14 +413,14 @@ void CLadder::drag_object(QDragMoveEvent *event)
     }
 }
 
-void CLadder::show_landing_highlight()
+void CFbdLadder::show_landing_highlight()
 {
     m_ladder_landing = QRect(m_relative.base.topLeft(),
                              QSize(m_relative.base.width(), BOT_LANDING_HEIGHT));
     m_highlights.push_back({m_ladder_landing, m_images.landing_bottom});
 }
 
-void CLadder::show_brick()
+void CFbdLadder::show_brick()
 {
     QRect rect;
     QImage image;
@@ -443,14 +443,14 @@ void CLadder::show_brick()
     m_highlights.push_back({rect, image});
 }
 
-CDiagramObject *CLadder::add_object(CBlock *object)
+CFbdObject *CFbdLadder::add_object(CBlock *object)
 {
-    m_objects->emplace_back(new CDiagramObject(this, object));
+    m_objects->emplace_back(new CFbdObject(this, object));
     resort();
     return m_objects->back();
 }
 
-void CLadder::resort()
+void CFbdLadder::resort()
 {
     if (m_objects->empty())
     {
@@ -488,7 +488,7 @@ void CLadder::resort()
     refresh_graphic_connections();
 }
 
-void CLadder::get_selected(const QPoint &point, s_selection *p_selection)
+void CFbdLadder::get_selected(const QPoint &point, s_selection *p_selection)
 {
     p_selection->ladder = this;
 
@@ -576,7 +576,7 @@ void CLadder::get_selected(const QPoint &point, s_selection *p_selection)
     return nullptr;
 }*/
 
-QImage CLadder::drag_image()
+QImage CFbdLadder::drag_image()
 {
 
     m_drag_image = QImage({m_hatch_size->width(), static_cast<int>((float)m_current_height*0.6f)}, QImage::Format_ARGB32);
@@ -610,32 +610,32 @@ QImage CLadder::drag_image()
     return m_drag_image;
 }
 
-CLadder * CLadder::previous_ladder()
+CFbdLadder * CFbdLadder::previous_ladder()
 {
     return m_previous;
 }
 
-CLadder * CLadder::next_ladder()
+CFbdLadder * CFbdLadder::next_ladder()
 {
     return m_next;
 }
 
-QPoint CLadder::real_bottom_right() const
+QPoint CFbdLadder::real_bottom_right() const
 {
     return m_abs_rects.base.bottomRight();
 }
 
-QPoint *CLadder::real_top_left()
+QPoint *CFbdLadder::real_top_left()
 {
     return &m_relative_tl;
 }
 
-short CLadder::bottom_line_count() const
+short CFbdLadder::bottom_line_count() const
 {
     return m_bottom_lines;
 }
 
-CConnectLine *CLadder::add_line(CConnectLine *line)
+CFbdConnectLine *CFbdLadder::add_line(CFbdConnectLine *line)
 {
     m_lines->push_back(line);
 
@@ -647,12 +647,12 @@ CConnectLine *CLadder::add_line(CConnectLine *line)
     return line;
 }
 
-std::vector<CConnectLine *> *CLadder::connecting_lines()
+std::vector<CFbdConnectLine *> *CFbdLadder::connecting_lines()
 {
     return m_lines;
 }
 
-void CLadder::refresh_graphic_connections()
+void CFbdLadder::refresh_graphic_connections()
 {
     m_bottom_lines = 0;
     //CPin *opposite;
@@ -688,7 +688,7 @@ void CLadder::refresh_graphic_connections()
     }
 }
 
-CConnectLine *CLadder::remove_line(CConnectLine *line)
+CFbdConnectLine *CFbdLadder::remove_line(CFbdConnectLine *line)
 {
     int counter = 0;
 
@@ -708,12 +708,12 @@ CConnectLine *CLadder::remove_line(CConnectLine *line)
     return nullptr;
 }
 
-COglWorld *CLadder::parent()
+COglWorld *CFbdLadder::parent()
 {
     return m_parent;
 }
 
-CConnectLine *CLadder::remove_line(CPinIn *pin_input)
+CFbdConnectLine *CFbdLadder::remove_line(CPinIn *pin_input)
 {
     int counter = 0;
     for (auto &line : *m_lines)

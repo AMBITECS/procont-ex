@@ -4,8 +4,9 @@
 
 #include "CFbdContent.h"
 #include "editor/fbd/fbd/editors/CFilter.h"
+#include "../common/CBody.h"
 
-CFbdContent::CFbdContent()
+CFbdContent::CFbdContent(CBody *parent)
 {
     m_blocks            = new QList<CBlock*>();
     m_labels            = new QList<CLabel*>();
@@ -15,7 +16,7 @@ CFbdContent::CFbdContent()
     m_inVariables       = new QList<CInVariable*>();
     m_out_variables     = new QList<COutVariable*>();
     m_in_out_variables  = new QList<CInOutVariable*>();
-
+    m_parent = parent;
 }
 
 CFbdContent::CFbdContent(const CFbdContent &other)
@@ -28,6 +29,7 @@ CFbdContent::CFbdContent(const CFbdContent &other)
     m_returns           = new QList<CReturn*>(*other.m_returns);
     m_inVariables       = new QList<CInVariable*>(*other.m_inVariables);
     m_comments          = new QList<CComment*>(*other.m_comments);
+    m_parent            = other.m_parent;
 }
 
 CFbdContent::CFbdContent(CFbdContent &&other) noexcept
@@ -40,6 +42,7 @@ CFbdContent::CFbdContent(CFbdContent &&other) noexcept
     m_returns           = other.m_returns;
     m_inVariables       = other.m_inVariables;
     m_comments          = other.m_comments;
+    m_parent            = other.m_parent;
 
     other.m_blocks              = nullptr;
     other.m_labels              = nullptr;
@@ -51,7 +54,7 @@ CFbdContent::CFbdContent(CFbdContent &&other) noexcept
     other.m_comments            = nullptr;
 }
 
-CFbdContent::CFbdContent(const QDomNode &dom_node)
+CFbdContent::CFbdContent(const QDomNode &dom_node, CBody *parent)
 {
     /// suppose root tag is <FBD> - like
 
@@ -68,6 +71,7 @@ CFbdContent::CFbdContent(const QDomNode &dom_node)
     m_inVariables       = new QList<CInVariable*>();
     m_out_variables     = new QList<COutVariable*>();
     m_in_out_variables  = new QList<CInOutVariable*>();
+    m_parent            = parent;
 
     for (uint16_t i = 0; i < dom_node.childNodes().count(); ++i)
     {
@@ -75,11 +79,11 @@ CFbdContent::CFbdContent(const QDomNode &dom_node)
 
         if (child.nodeName() == "outVariable")
         {
-            m_out_variables->emplace_back(new COutVariable(child));
+            m_out_variables->emplace_back(new COutVariable(child, m_parent));
         }
         if (child.nodeName() == "block")
         {
-            m_blocks->emplace_back(new CBlock(child));
+            m_blocks->emplace_back(new CBlock(child, m_parent));
         }
         if (child.nodeName() == "inVariable")
         {

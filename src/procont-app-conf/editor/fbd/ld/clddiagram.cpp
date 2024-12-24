@@ -78,7 +78,7 @@ QDomNode CLdDiagram::get_project_node(const QDomNode &node)
 
 void CLdDiagram::define_diagram_pou(const QDomNode &pou_node)
 {
-    CPou local_pou(pou_node);
+    CPou local_pou(pou_node, project->types());
     QString pou_name = local_pou.name();
 
     if (project == nullptr)
@@ -88,7 +88,7 @@ void CLdDiagram::define_diagram_pou(const QDomNode &pou_node)
 
         if (project->is_empty())
         {
-            m_diagram_pou = new CPou(pou_node);
+            m_diagram_pou = new CPou(pou_node, project->types());
             project->types()->pous()->push_back(m_diagram_pou);
         }
     }
@@ -98,7 +98,7 @@ void CLdDiagram::define_diagram_pou(const QDomNode &pou_node)
 
         if (!m_diagram_pou)
         {
-            m_diagram_pou = new CPou(pou_node);
+            m_diagram_pou = new CPou(pou_node, project->types());
             project->types()->pous()->push_back(m_diagram_pou);
         }
     }

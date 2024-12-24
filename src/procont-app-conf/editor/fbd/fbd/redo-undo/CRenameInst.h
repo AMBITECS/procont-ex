@@ -11,7 +11,7 @@
 class CRenameInst : public  QUndoCommand
 {
 public:
-    CRenameInst(COglWorld * wgt, CDiagramObject * obj, const QString &oldName, const QString &newName);
+    CRenameInst(COglWorld * wgt, CFbdObject * obj, const QString &oldName, const QString &newName);
     ~CRenameInst() override;
 
     void  redo() override;
@@ -19,7 +19,7 @@ public:
 
 private:
     COglWorld       * m_ogl_widget;
-    CDiagramObject  * m_object;
+    CFbdObject  * m_object;
     QString           m_old;
     QString           m_new;
 };

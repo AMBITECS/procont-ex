@@ -3,22 +3,26 @@
 //
 
 #include "CIfaceVars.h"
+#include "../common/CPou.h"
 
-CIfaceVars::CIfaceVars()
+CIfaceVars::CIfaceVars(CPou *parent)
 {
     m_variables = new std::vector<CVariable*>();
+    m_parent = parent;
 }
 
 CIfaceVars::CIfaceVars(const CIfaceVars &other)
 {
     m_variables = new std::vector<CVariable*>(*other.m_variables);
     m_var_type = other.m_var_type;
+    m_parent = other.m_parent;
 }
 
-CIfaceVars::CIfaceVars(const QDomNode &dom_node)
+CIfaceVars::CIfaceVars(const QDomNode &dom_node, CPou *parent)
 {
     m_var_type = dom_node.nodeName();
     m_variables = new std::vector<CVariable*>();
+    m_parent    = parent;
 
     m_name = dom_node.attributes().namedItem("name").toAttr().value();
     m_constant = dom_node.attributes().namedItem("constant").toAttr().value().toInt();
@@ -28,7 +32,7 @@ CIfaceVars::CIfaceVars(const QDomNode &dom_node)
     for (uint16_t i = 0; i < dom_node.childNodes().count(); ++i)
     {
         QDomNode child = dom_node.childNodes().at(i);
-        auto var = new CVariable(child);
+        auto var = new CVariable(child, parent->interface());
         m_variables->push_back(var);
     }
 }
@@ -38,6 +42,7 @@ CIfaceVars::CIfaceVars(CIfaceVars &&other) noexcept
 {
     m_variables = other.m_variables;
     other.m_variables = nullptr;
+    m_parent = other.m_parent;
 }
 
 CIfaceVars::~CIfaceVars()
@@ -144,7 +149,7 @@ bool CIfaceVars::is_empty() const
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-CAccessVars::CAccessVars() : CIfaceVars()
+CAccessVars::CAccessVars(CPou *parent) : CIfaceVars(parent)
 {
     m_var_type = "accessVars";
 }
@@ -155,7 +160,7 @@ CAccessVars::~CAccessVars()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-CLocalVars::CLocalVars() : CIfaceVars()
+CLocalVars::CLocalVars(CPou *parent) : CIfaceVars(parent)
 {
     m_var_type = "localVars";
 }
@@ -165,7 +170,7 @@ CLocalVars::~CLocalVars()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-CGlobalVars::CGlobalVars() : CIfaceVars()
+CGlobalVars::CGlobalVars(CPou *parent) : CIfaceVars(parent)
 {
     m_var_type = "globalVars";
 }
@@ -175,7 +180,7 @@ CGlobalVars::~CGlobalVars()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-CExternalVars::CExternalVars() : CIfaceVars()
+CExternalVars::CExternalVars(CPou *parent) : CIfaceVars(parent)
 {
     m_var_type = "externalVars";
 }
@@ -185,7 +190,7 @@ CExternalVars::~CExternalVars()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-CTempVars::CTempVars()
+CTempVars::CTempVars(CPou *parent) : CIfaceVars(parent)
 {
     m_var_type = "tempVars";
 }
@@ -195,7 +200,7 @@ CTempVars::~CTempVars()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-CInVars::CInVars()
+CInVars::CInVars(CPou *parent) : CIfaceVars(parent)
 {
     m_var_type = "inputVars";
 }
@@ -205,7 +210,7 @@ CInVars::~CInVars()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-COutVars::COutVars() : CIfaceVars()
+COutVars::COutVars(CPou *parent) : CIfaceVars(parent)
 {
     m_var_type = "outputVars";
 }
@@ -215,7 +220,7 @@ COutVars::~COutVars()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-CInOutVars::CInOutVars() : CIfaceVars()
+CInOutVars::CInOutVars(CPou *parent) : CIfaceVars(parent)
 {
     m_var_type = "inOutVars";
 }

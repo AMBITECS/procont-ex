@@ -9,15 +9,15 @@
 #include <QDragMoveEvent>
 #include <QUndoStack>
 #include "QObject"
-#include "CDiagramObject.h"
-#include "CLadder.h"
+#include "CFbdObject.h"
+#include "CFbdLadder.h"
 #include "../../plc-xml/common/CPou.h"
 #include "../palette/palette.h"
 #include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 
 
 class CPin;
-class CConnectLine;
+class CFbdConnectLine;
 class COglWidget;
 class CEditors;
 
@@ -33,10 +33,10 @@ class CInsertLadder;
  */
 struct s_selection
 {
-    CLadder * ladder{nullptr};
-    CDiagramObject  * object{nullptr};
+    CFbdLadder * ladder{nullptr};
+    CFbdObject  * object{nullptr};
     CPin   * pin{nullptr};
-    CConnectLine    * connection_line{nullptr};
+    CFbdConnectLine    * connection_line{nullptr};
     void reset()
     {
         ladder = nullptr;
@@ -68,20 +68,20 @@ public:
 
     s_selection     get_selection(const QPoint &pos);  //!< searches selected objects
     s_selection *   selected();                        //!<  returns active selection (in function above)
-    std::vector<CLadder*>  * visible_ladders();        //!< returns VISIBLE visible_ladders to show them in QOpenGL
-    std::vector<CLadder*>  * all_ladders();
+    std::vector<CFbdLadder*>  * visible_ladders();        //!< returns VISIBLE visible_ladders to show them in QOpenGL
+    std::vector<CFbdLadder*>  * all_ladders();
 
     QUndoStack *    undo_stack();
 
     /// here are commands which has to be undo/redo. Note we have to know indexes of objects objects and indexes
     /// of inserted one
-    CLadder *         add_new_ladder();                 //!< index of the inserting is result->number()-1
-    CLadder *         insert_new_ladder(CLadder *next); //!< index of the inserting is result->number()-1
-    CDiagramObject  * insert_new_component(CLadder *p_ladder, const EPaletteElements &elements, const QString &pou_name,
+    CFbdLadder *         add_new_ladder();                 //!< index of the inserting is result->number()-1
+    CFbdLadder *         insert_new_ladder(CFbdLadder *next); //!< index of the inserting is result->number()-1
+    CFbdObject  * insert_new_component(CFbdLadder *p_ladder, const EPaletteElements &elements, const QString &pou_name,
                                            const QPoint &pos);
-    void              insert_ladder(CLadder *dragged_ladder, CLadder *before);
-    bool              move_object(CLadder * source, CLadder *destination, CDiagramObject *object, const QPoint &pos);
-    void              erase_object(CDiagramObject *object);
+    void              insert_ladder(CFbdLadder *dragged_ladder, CFbdLadder *before);
+    bool              move_object(CFbdLadder * source, CFbdLadder *destination, CFbdObject *object, const QPoint &pos);
+    void              erase_object(CFbdObject *object);
     void              connect_pins(CPin *dragged_pin, CPin *target_pin);
     void              text_based_connecting_pin(CPin *selected_pin);
 
@@ -139,8 +139,8 @@ private:
     CFbdContent * m_fbd_content{nullptr};
     CPou        * m_pou;
 
-    std::vector<CLadder*>     * m_ladders;
-    std::vector<CLadder*>     * m_visible_ladders;
+    std::vector<CFbdLadder*>     * m_ladders;
+    std::vector<CFbdLadder*>     * m_visible_ladders;
 
     CEditors    * m_editors;
 
@@ -149,7 +149,7 @@ private:
     void    clear_ladders();
     QPoint  get_visible_range(const QPoint & pos);
     void    load_project();
-    CLadder * get_ladder(const unsigned long & id_ladder);
+    CFbdLadder * get_ladder(const unsigned long & id_ladder);
     static void    check_local_id(const uint16_t &local_id);  //!< if loaded items local_id > global variable increase global
     void    init_projects_instances();
 

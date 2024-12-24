@@ -3,11 +3,11 @@
 //
 
 #include <QRect>
-#include "CConnectLine.h"
+#include "CFbdConnectLine.h"
 #include "../../resources/colors.h"
 #include "CPinIn.h"
 
-CConnectLine::CConnectLine(QPoint * ladder_tl, CPin * pin1, CPin *pin2)
+CFbdConnectLine::CFbdConnectLine(QPoint * ladder_tl, CPin * pin1, CPin *pin2)
 {
     CDiagramColors colors;
 
@@ -24,17 +24,17 @@ CConnectLine::CConnectLine(QPoint * ladder_tl, CPin * pin1, CPin *pin2)
     m_pin_out = pin1->direction() == PD_OUTPUT ? pin1->output() : pin2->output();
 }
 
-CConnectLine::~CConnectLine()
+CFbdConnectLine::~CFbdConnectLine()
 {
     delete m_lines;
 }
 
-QList<QLine> *CConnectLine::lines()
+QList<QLine> *CFbdConnectLine::lines()
 {
     return m_lines;
 }
 
-bool CConnectLine::is_clicked_on(const QPoint &pos)
+bool CFbdConnectLine::is_clicked_on(const QPoint &pos)
 {
     QRect rect;
 
@@ -67,7 +67,7 @@ bool CConnectLine::is_clicked_on(const QPoint &pos)
     return false;
 }
 
-void CConnectLine::set_selected(const bool &is_selected)
+void CFbdConnectLine::set_selected(const bool &is_selected)
 {
     m_is_selected = is_selected;
 
@@ -78,12 +78,12 @@ void CConnectLine::set_selected(const bool &is_selected)
     check_is_norm();
 }
 
-bool CConnectLine::is_selected() const
+bool CFbdConnectLine::is_selected() const
 {
     return m_is_selected;
 }
 
-void CConnectLine::set_warning(const bool &is_warning)
+void CFbdConnectLine::set_warning(const bool &is_warning)
 {
     m_is_warn = is_warning;
     if (is_warning)
@@ -93,12 +93,12 @@ void CConnectLine::set_warning(const bool &is_warning)
     check_is_norm();
 }
 
-bool CConnectLine::is_warning() const
+bool CFbdConnectLine::is_warning() const
 {
     return m_is_warn;
 }
 
-void CConnectLine::set_is_error(const bool &is_error)
+void CFbdConnectLine::set_is_error(const bool &is_error)
 {
     m_is_error = is_error;
     if (is_error)
@@ -108,17 +108,17 @@ void CConnectLine::set_is_error(const bool &is_error)
     check_is_norm();
 }
 
-bool CConnectLine::is_error() const
+bool CFbdConnectLine::is_error() const
 {
     return m_is_error;
 }
 
-QColor CConnectLine::color()
+QColor CFbdConnectLine::color()
 {
     return m_base;
 }
 
-bool CConnectLine::check_is_norm()
+bool CFbdConnectLine::check_is_norm()
 {
     if (!m_is_error && !m_is_warn && !m_is_selected)
     {
@@ -127,7 +127,7 @@ bool CConnectLine::check_is_norm()
     return true;
 }
 
-void CConnectLine::update_position()
+void CFbdConnectLine::update_position()
 {
     QPoint diff = *m_ladder_tl - m_prev_ltl;
 
@@ -140,17 +140,17 @@ void CConnectLine::update_position()
     m_prev_ltl = *m_ladder_tl;
 }
 
-void CConnectLine::add_line(const QLine &line)
+void CFbdConnectLine::add_line(const QLine &line)
 {
     m_lines->push_back(line);
 }
 
-void CConnectLine::clear()
+void CFbdConnectLine::clear()
 {
     m_lines->clear();
 }
 
-CPinIn *CConnectLine::get_pin_in()
+CPinIn *CFbdConnectLine::get_pin_in()
 {
     return m_pin_in;
 }

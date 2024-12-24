@@ -4,7 +4,7 @@
 
 #include "CRenameInst.h"
 
-CRenameInst::CRenameInst(COglWorld *wgt, CDiagramObject *obj, const QString &oldName, const QString &newName)
+CRenameInst::CRenameInst(COglWorld *wgt, CFbdObject *obj, const QString &oldName, const QString &newName)
 {
     m_ogl_widget = wgt;
     m_object = obj;

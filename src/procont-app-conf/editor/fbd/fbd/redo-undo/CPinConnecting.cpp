@@ -55,7 +55,7 @@ void CPinConnecting::redo()
 
     if (line)
     {
-        CLadder * ladder = m_pin_edited->parent()->parent();
+        CFbdLadder * ladder = m_pin_edited->parent()->parent();
         ladder->add_line(line);
 
     }

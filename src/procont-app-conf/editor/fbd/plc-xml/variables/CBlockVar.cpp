@@ -3,13 +3,19 @@
 //
 
 #include "CBlockVar.h"
+#include "../fbd/CBlock.h"
+#include "../common/CBody.h"
+#include "../common/CPou.h"
 
 CBlockVar::CBlockVar(CBlock *parent)
 {
     m_point_in  = new CConnectionPointIn();
     m_point_out = new CConnectionPointOut();
     add_data = new CAddData();
-    m_variable = new CVariable();
+//    if (parent && parent->parent())
+//        m_variable = new CVariable(parent->parent()->parent()->interface());
+//    else
+//        m_variable = new CVariable(nullptr);
     m_parent = parent;
 }
 
@@ -17,7 +23,7 @@ CBlockVar::CBlockVar(const CBlockVar &other)
 {
     m_point_in = new CConnectionPointIn(*other.m_point_in);
     m_point_out = new CConnectionPointOut(*other.m_point_out);
-    m_variable = new CVariable(*other.m_variable);
+    //m_variable = new CVariable(*other.m_variable);
 
     m_formal_parameter = other.m_formal_parameter;
     m_is_negated = other.m_is_negated;
@@ -73,14 +79,14 @@ CBlockVar::CBlockVar(CBlock *parent, const QDomNode &domNode)
         m_direction = EPinDirection::PD_INPUT;
     }
 
-    m_variable = new CVariable();
+    //m_variable = new CVariable(m_parent->parent()->parent()->interface());
 }
 
 CBlockVar::~CBlockVar()
 {
     delete m_point_out;
     delete m_point_in;
-    delete m_variable;
+    // delete m_variable;
 }
 
 QDomNode CBlockVar::dom_node() const
@@ -226,7 +232,7 @@ CBlockVar &CBlockVar::operator=(const CBlockVar &rhs)
     return *this;
 }
 
-CVariable *CBlockVar::get_iface_variable()
+/*CVariable *CBlockVar::get_iface_variable()
 {
     return m_variable;
 }
@@ -235,7 +241,7 @@ void CBlockVar::set_iface_variable(CVariable *var)
 {
     *m_variable = *var;    
     this->set_type(var->type());
-}
+}*/
 
 void CBlockVar::set_negated(const bool &negated)
 {

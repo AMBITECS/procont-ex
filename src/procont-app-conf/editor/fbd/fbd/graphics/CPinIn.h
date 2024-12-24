@@ -10,7 +10,7 @@
 class CPinIn : public CPin
 {
 public:
-    CPinIn(CDiagramObject * parent, CBlockVar *base, QPoint * parent_tl);
+    CPinIn(CFbdObject * parent, CBlockVar *base, QPoint * parent_tl);
     ~CPinIn() override;
 
     [[nodiscard]] bool    is_negated() const;

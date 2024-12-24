@@ -8,7 +8,7 @@
 
 extern CProject *project;
 
-CInsertNewObject::CInsertNewObject(COglWorld * world, CFbdContent * fbd, CLadder *p_ladder,
+CInsertNewObject::CInsertNewObject(COglWorld * world, CFbdContent * fbd, CFbdLadder *p_ladder,
                                    const EPaletteElements &element, const QString &pou_name, const QPoint &pos)
     : QUndoCommand()
     , m_world(world)
@@ -51,7 +51,7 @@ void CInsertNewObject::redo()
     m_world->view_hatch_moved({});
 }
 
-CDiagramObject *CInsertNewObject::inserted_object()
+CFbdObject *CInsertNewObject::inserted_object()
 {
     return m_new_obj;
 }
@@ -59,7 +59,7 @@ CDiagramObject *CInsertNewObject::inserted_object()
 void CInsertNewObject::insert()
 {
     CVariablesAnalytics analytics(m_world, m_world->m_pou->name());
-    CBlock item;
+    CBlock item(m_world->m_pou->bodies()->front());
 
     if (!m_new_obj)
     {
@@ -69,6 +69,7 @@ void CInsertNewObject::insert()
         {
             CPou *pou = project->types()->find_pou_by_name(m_pou_name);
             item = pou->get_block();
+            item.set_parent(m_world->m_pou->bodies()->front());
         }
         else
         {
@@ -78,13 +79,13 @@ void CInsertNewObject::insert()
 
         analytics.setup_block(&item);
         block = new CBlock(item);
-        m_new_obj = new CDiagramObject(m_ladder, block);
+        m_new_obj = new CFbdObject(m_ladder, block);
     }
 
     /// add to the deep state
     m_fbd->blocks()->push_back(m_new_obj->block());
 
-    QVector<CDiagramObject*> * obj_array = m_ladder->draw_components();
+    QVector<CFbdObject*> * obj_array = m_ladder->draw_components();
 
     /// add to the ladder
     if (obj_array->empty())
@@ -113,7 +114,7 @@ void CInsertNewObject::insert()
     }
 }
 
-CDiagramObject *CInsertNewObject::remove()
+CFbdObject *CInsertNewObject::remove()
 {
     /// remove from deep state
     int index = 0;
@@ -130,7 +131,7 @@ CDiagramObject *CInsertNewObject::remove()
     }
 
     /// remove from target ladder
-    QVector<CDiagramObject*> * obj_array = m_ladder->draw_components();
+    QVector<CFbdObject*> * obj_array = m_ladder->draw_components();
     index = 0;
 
     for (auto &item : *obj_array)

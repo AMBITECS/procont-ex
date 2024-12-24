@@ -3,7 +3,7 @@
 //
 
 #include "CPinIn.h"
-#include "CDiagramObject.h"
+#include "CFbdObject.h"
 #include "../../resources/colors.h"
 #include "COglWorld.h"
 #include "editor/fbd/general/QtDialogs.h"
@@ -11,7 +11,7 @@
 extern uint16_t max_local_id;
 
 
-CPinIn::CPinIn(CDiagramObject *parent, CBlockVar *base, QPoint * parent_tl) : CPin(parent, base, parent_tl)
+CPinIn::CPinIn(CFbdObject *parent, CBlockVar *base, QPoint * parent_tl) : CPin(parent, base, parent_tl)
 {
     m_direction = EPinDirection::PD_INPUT;
 
@@ -147,7 +147,18 @@ void CPinIn::load_project_connect_iface_var(CVariable *variable)
 
     m_is_connected = true;
 
-    m_outer_text->set_text(variable->name());
+    if (variable->parent() != m_block_variable->parent()->parent()->parent()->interface())
+    {
+        QString txt = variable->parent()->parent()->name() + "." + variable->name();
+        m_outer_text->set_text(txt);
+    }
+    else
+    {
+        m_outer_text->set_text(variable->name());
+    }
+
+
+
     set_type(variable->type());
     QString text = m_block_variable->formal_parameter() + ":" + variable->type();
     m_pin_name->set_text(text);

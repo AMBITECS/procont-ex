@@ -90,7 +90,7 @@ public:
     // CVariable *     find_iface_var(const QString &var_name);
 
     StandardLibrary *       standard_library();
-    CDiagramObject  *       find_object(const QString &name);
+    CFbdObject  *       find_object(const QString &name);
 protected:
 
 private:
@@ -127,13 +127,13 @@ private:
 
     static bool analyze_base_types(const EDefinedDataTypes &target_type, const EDefinedDataTypes &dragged_type,
                             const bool &is_strict_compliance);
-    CDiagramObject *    find_object_by_id(const uint64_t & local_id);
+    CFbdObject *    find_object_by_id(const uint64_t & local_id);
     CVariable *get_iface_variable(const QString &name, QString &add_name);
 
     CPinOut *find_output(CBlockVar *p_var);
 
     void process_out_variables();
-    void connect_inputs(CDiagramObject *object);
+    void connect_inputs(CFbdObject *object);
 };
 
 

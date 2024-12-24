@@ -10,11 +10,11 @@
 #include <QPoint>
 #include <QFont>
 
-class CObjectsText
+class CObjectText
 {
 public:
-    CObjectsText();
-    ~CObjectsText();
+    CObjectText();
+    ~CObjectText();
 
     [[nodiscard]] QColor      color() const;
     void                      set_color(const QColor &color);

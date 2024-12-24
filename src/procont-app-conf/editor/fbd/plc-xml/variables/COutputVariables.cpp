@@ -5,15 +5,18 @@
 #include "COutputVariables.h"
 #include <QList>
 
-COutVariable::COutVariable()
-= default;
+COutVariable::COutVariable(CBody *parent)
+{
+    m_parent = parent;
+}
 
 COutVariable::COutVariable(const COutVariable &other)
 {
+
     *this = other;
 }
 
-COutVariable::COutVariable(const QDomNode &dom_node)
+COutVariable::COutVariable(const QDomNode &dom_node, CBody *parent)
 {
     m_local_id      = dom_node.attributes().namedItem("localId").toAttr().value().toULongLong();
     m_height        = dom_node.attributes().namedItem("height").toAttr().value().toFloat();
@@ -29,6 +32,7 @@ COutVariable::COutVariable(const QDomNode &dom_node)
     m_point_in      = CConnectionPointIn(dom_node.namedItem("connectionPointIn"));
     m_add_data      = CAddData(dom_node.namedItem("addData"));
     m_documentation = CDocumentation(dom_node.namedItem("documentation"));
+    m_parent        = parent;
 }
 
 COutVariable::~COutVariable()
@@ -49,6 +53,7 @@ COutVariable &COutVariable::operator=(const COutVariable &rhs)
     m_negated       = rhs.m_negated;
     m_edge          = rhs.m_edge;
     m_storage       = rhs.m_storage;
+    m_parent        = rhs.m_parent;
 
     m_position      = rhs.m_position;
     m_expression    = rhs.m_expression;
@@ -207,18 +212,30 @@ CDocumentation *COutVariable::documentation()
 {
     return &m_documentation;
 }
+
+CBody *COutVariable::parent()
+{
+    return m_parent;
+}
+
+void COutVariable::set_parent(CBody *parent)
+{
+    m_parent = parent;
+}
 //----------------------------------------------------------------------------------------------------------------------
 // COutputVariables ----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 
-COutputVariables::COutputVariables()
+COutputVariables::COutputVariables(CBody *parent)
 {
     m_variables = new QList<COutVariable*>();
+    m_parent    = parent;
 }
 
 COutputVariables::COutputVariables(const COutputVariables &other)
 {
     m_variables = new QList<COutVariable*>();
+    m_parent    = other.m_parent;
 
     for (auto &alien : *other.m_variables)
     {
@@ -229,12 +246,14 @@ COutputVariables::COutputVariables(const COutputVariables &other)
 
 COutputVariables::COutputVariables(COutputVariables &&other) noexcept
 {
+    m_parent    = other.m_parent;
     m_variables = other.m_variables;
     other.m_variables = nullptr;
 }
 
-COutputVariables::COutputVariables(const QDomNode &dom_node)
+COutputVariables::COutputVariables(const QDomNode &dom_node, CBody *parent)
 {
+    m_parent = parent;
     QString name = dom_node.nodeName();
     if (name != "outputVariables")
     {
@@ -246,7 +265,7 @@ COutputVariables::COutputVariables(const QDomNode &dom_node)
     for (uint16_t i = 0; i < dom_node.childNodes().count(); ++i)
     {
         QDomNode child = dom_node.childNodes().at(i);
-        auto var = new COutVariable(child);
+        auto var = new COutVariable(child, m_parent);
         m_variables->push_back(var);
     }
 }
@@ -291,4 +310,14 @@ void COutputVariables::clean()
         delete item;
     }
     m_variables->clear();
+}
+
+CBody *COutputVariables::parent()
+{
+    return m_parent;
+}
+
+void COutputVariables::set_parent(CBody *parent)
+{
+    m_parent = parent;
 }

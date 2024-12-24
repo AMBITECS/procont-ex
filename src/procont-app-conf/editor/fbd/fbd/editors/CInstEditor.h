@@ -10,7 +10,7 @@
 #include "CFilter.h"
 
 
-class CDiagramObject;
+class CFbdObject;
 
 class CInstEditor : public QLineEdit
 {
@@ -20,7 +20,7 @@ public:
     ~CInstEditor() override;
 
     //void  set_existing(std::vector<std::pair<QString, EDefinedDataTypes>> *existing, const QString &c_name, const EDefinedDataTypes &type);
-    void   set_diagram_object(CDiagramObject *object);
+    void   set_diagram_object(CFbdObject *object);
     [[nodiscard]] bool  is_error() const;
     [[nodiscard]] QColor  color() const;
 
@@ -52,7 +52,7 @@ private:
     EDefinedDataTypes   m_type;
     std::string  m_old_name;
     CFilter * m_filter;
-    CDiagramObject * m_object;
+    CFbdObject * m_object;
 
     bool  on_exit{false};
 

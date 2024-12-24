@@ -11,28 +11,28 @@
 class CInsertNewObject : public QUndoCommand
 {
 public:
-    CInsertNewObject(COglWorld * world, CFbdContent* fbd, CLadder *p_ladder,
+    CInsertNewObject(COglWorld * world, CFbdContent* fbd, CFbdLadder *p_ladder,
                      const EPaletteElements &element, const QString &pou_name, const QPoint &pos);
     ~CInsertNewObject() override;
 
     void    undo() override;
     void    redo() override;
 
-    CDiagramObject * inserted_object();
+    CFbdObject * inserted_object();
 
 private:
 
-    CLadder *m_ladder;
+    CFbdLadder *m_ladder;
     EPaletteElements  m_element;
     QPoint m_pos;
-    CDiagramObject * m_new_obj{nullptr};
-    CDiagramObject * m_to_delete{nullptr};
+    CFbdObject * m_new_obj{nullptr};
+    CFbdObject * m_to_delete{nullptr};
     CFbdContent    * m_fbd;
     COglWorld      * m_world;
     QString          m_pou_name;
 
     void insert();
-    CDiagramObject* remove();
+    CFbdObject* remove();
 };
 
 

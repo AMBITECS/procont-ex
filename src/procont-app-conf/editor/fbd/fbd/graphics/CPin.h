@@ -6,7 +6,7 @@
 #define PROCONT_CPIN_H
 
 #include <QImage>
-#include "CObjectsText.h"
+#include "editor/fbd/common/CObjectText.h"
 #include "../../plc-xml/variables/CBlockVar.h"
 #include "../../plc-xml/variables/CInputVariables.h"
 #include "../../plc-xml/variables/COutputVariables.h"
@@ -14,8 +14,8 @@
 #include <QApplication>
 
 
-class CDiagramObject;
-class CLadder;
+class CFbdObject;
+class CFbdLadder;
 class CPinIn;
 class CPinOut;
 
@@ -26,7 +26,7 @@ public:
     virtual ~CPin();
 
     /// base data
-    CDiagramObject   *  parent();
+    CFbdObject   *  parent();
     CBlockVar * block_variable();
 
     /// to avoid dynamic_cast<CPinXXX>(pin)
@@ -36,7 +36,7 @@ public:
     /// drawing object
     QImage  * image();
     QRect   * rect();
-    std::vector<CObjectsText*> * texts();
+    std::vector<CObjectText*> * texts();
     QPoint  * position();
 
     /// update object coordinates
@@ -70,10 +70,10 @@ public:
 
 
 protected:
-    CPin(CDiagramObject* parent, CBlockVar* var, QPoint * parent_tl);
+    CPin(CFbdObject* parent, CBlockVar* var, QPoint * parent_tl);
 
     CBlockVar       * m_block_variable;
-    CDiagramObject  * m_parent;
+    CFbdObject  * m_parent;
 
     static void    saturate(QImage *image);
 
@@ -91,12 +91,12 @@ protected:
 
 
     QFont             m_font{QApplication::font()};
-    CObjectsText    * m_pin_name;
-    CObjectsText    * m_outer_text;
+    CObjectText    * m_pin_name;
+    CObjectText    * m_outer_text;
 
-    std::vector<CObjectsText*>  * m_texts;
-    std::vector<CObjectsText*>  * m_outer_texts;
-    std::vector<CObjectsText*>  * m_outs_graphics;    //!< графические соединения в буквенном выражении
+    std::vector<CObjectText*>  * m_texts;
+    std::vector<CObjectText*>  * m_outer_texts;
+    std::vector<CObjectText*>  * m_outs_graphics;    //!< графические соединения в буквенном выражении
 
 
     bool              m_is_selected{false};
@@ -105,8 +105,8 @@ protected:
     EPinDirection     m_direction{PD_UNDEF};
     QSize             m_out_texts_size;
 
-    CLadder           * m_current_ladder{nullptr};
-    CLadder           * m_prev_ladder{nullptr};
+    CFbdLadder           * m_current_ladder{nullptr};
+    CFbdLadder           * m_prev_ladder{nullptr};
 
     void resort_outers();
     QString  make_pin_text(CPin *pin);

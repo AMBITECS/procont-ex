@@ -5,7 +5,7 @@
 #include "CRemoveObject.h"
 #include "../graphics/CGrapchicsLogic.h"
 
-CRemoveObject::CRemoveObject( CDiagramObject *object )
+CRemoveObject::CRemoveObject( CFbdObject *object )
 {
     m_world = object->parent()->parent();
     m_object = object;
@@ -159,10 +159,10 @@ void CRemoveObject::undo()
     m_object->parent()->parent()->update_visible_ladders();
 }
 
-int CRemoveObject::remove_object(CDiagramObject *object)
+int CRemoveObject::remove_object(CFbdObject *object)
 {
-    CLadder * ladder = m_object->parent();
-    QVector<CDiagramObject*> *arr = ladder->draw_components();
+    CFbdLadder * ladder = m_object->parent();
+    QVector<CFbdObject*> *arr = ladder->draw_components();
     int counter = 0;
 
     for (auto &obj : *arr)
@@ -177,10 +177,10 @@ int CRemoveObject::remove_object(CDiagramObject *object)
     return -1;
 }
 
-void CRemoveObject::insert_object(CDiagramObject *object, const int &index)
+void CRemoveObject::insert_object(CFbdObject *object, const int &index)
 {
-    CLadder * ladder = m_object->parent();
-    QVector<CDiagramObject*> *arr = ladder->draw_components();
+    CFbdLadder * ladder = m_object->parent();
+    QVector<CFbdObject*> *arr = ladder->draw_components();
 
     if (index >= arr->size())
     {

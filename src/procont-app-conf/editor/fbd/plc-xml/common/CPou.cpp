@@ -9,15 +9,16 @@ extern  uint16_t    max_local_id;
 #include "editor/fbd/fbd/variables.h"
 #include "editor/fbd/fbd/editors/CFilter.h"
 
-CPou::CPou()
+CPou::CPou(CTypes * parent)
 {
-    m_interface = new CInterface();
+    m_interface = new CInterface(this);
     m_actions = new CActions();
     m_transitions = new CTransitions();
     m_add_data = new CAddData();
     m_doc = new CDocumentation();
     m_bodies = new QList<CBody*>();
     m_dom_node = new QDomNode();
+    m_parent = parent;
 }
 
 CPou::CPou(const CPou &other)
@@ -39,16 +40,17 @@ CPou::CPou(const CPou &other)
     m_name = other.m_name;
     m_type_name = other.m_type_name;
     m_dom_node = new QDomNode(*other.m_dom_node);
+    m_parent = other.m_parent;
 }
 
-CPou::CPou(const QDomNode &dom_node)
+CPou::CPou(const QDomNode &dom_node, CTypes * parent)
 {
     m_dom_node = new QDomNode(dom_node);
     m_bodies = new QList<CBody*>();
     m_name = m_dom_node->attributes().namedItem(xmln::name).toAttr().value();
     m_type_name = m_dom_node->attributes().namedItem(xmln::pou_type).toAttr().value();
 
-    m_interface = new CInterface(m_dom_node->namedItem("interface"));
+    m_interface = new CInterface(m_dom_node->namedItem("interface"), this);
     m_actions = new CActions(m_dom_node->namedItem("actions"));
     m_transitions = new CTransitions(dom_node.namedItem("transitions"));
     m_add_data = new CAddData(dom_node.namedItem("addData"));
@@ -60,10 +62,10 @@ CPou::CPou(const QDomNode &dom_node)
         auto child = dom_node.childNodes().at(i);
         if (child.nodeName() == "body")
         {
-            m_bodies->emplace_back(new CBody(child));
+            m_bodies->emplace_back(new CBody(child, this));
         }
     }
-
+    m_parent = parent;
 }
 
 CPou::~CPou()
@@ -187,7 +189,7 @@ QDomNode *CPou::sourceDomNode()
 
 CBlock CPou::get_block()
 {
-    CBlock block{};
+    CBlock block(nullptr);
     block.set_local_id(++max_local_id);
     block.set_type_name(m_name);
 
@@ -202,7 +204,7 @@ CBlock CPou::get_block()
 
     for (auto &in : *m_interface->input_variables()->variables())
     {
-        auto *var = new CBlockVar();
+        auto *var = new CBlockVar(&block);
         //var->set_iface_variable(in);
         var->set_type(in->type());
         var->set_formal_param(in->name());
@@ -214,7 +216,7 @@ CBlock CPou::get_block()
     /// if function - there is no output variables, there is return type
     if (m_type_name == (QString)xmln::function_pou_type)
     {
-        auto out = new CBlockVar();
+        auto out = new CBlockVar(&block);
         out->set_formal_param("out");
         out->set_type(m_interface->return_type());
         out->set_direction(EPinDirection::PD_OUTPUT);
@@ -225,7 +227,7 @@ CBlock CPou::get_block()
     {
         for (auto &in_out : *m_interface->in_out_variables()->variables())
         {
-            auto *var = new CBlockVar();
+            auto *var = new CBlockVar(&block);
             //var->set_iface_variable(in_out);
             var->set_type(in_out->type());
             var->set_formal_param(in_out->name());
@@ -236,7 +238,7 @@ CBlock CPou::get_block()
 
         for(auto &out : *m_interface->output_variables()->variables())
         {
-            auto var = new CBlockVar();
+            auto var = new CBlockVar(&block);
             var->set_formal_param(out->name());
             //var->set_iface_variable(out);
             var->set_type(out->type());
@@ -555,4 +557,14 @@ EBodyType CPou::body_type() const
     if (m_bodies->empty())
         return EBodyType::BT_COUNT;
     return m_bodies->front()->diagram_lang();
+}
+
+CTypes *CPou::parent()
+{
+    return m_parent;
+}
+
+void CPou::set_parent(CTypes *parent)
+{
+    m_parent = parent;
 }

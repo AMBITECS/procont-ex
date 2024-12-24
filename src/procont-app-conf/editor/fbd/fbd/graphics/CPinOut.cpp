@@ -4,7 +4,7 @@
 
 #include <QFontMetrics>
 #include "CPinOut.h"
-#include "CDiagramObject.h"
+#include "CFbdObject.h"
 #include "../../resources/colors.h"
 #include "COglWorld.h"
 #include "editor/fbd/general/QtDialogs.h"
@@ -12,7 +12,7 @@
 extern uint16_t max_local_id;
 
 
-CPinOut::CPinOut(CDiagramObject *parent, CBlockVar *base, QPoint *parent_tl) : CPin(parent, base, parent_tl)
+CPinOut::CPinOut(CFbdObject *parent, CBlockVar *base, QPoint *parent_tl) : CPin(parent, base, parent_tl)
 {
     m_direction = PD_OUTPUT;
 
@@ -101,6 +101,8 @@ void CPinOut::load_project_connect(CVariable *iface_var)
         return;
     }
 
+
+
     m_is_connected = true;
 
     auto txt = make_outer_text(iface_var);
@@ -122,10 +124,19 @@ std::vector<CVariable *> *CPinOut::iface_variables()
     return m_iface_vars;
 }
 
-CObjectsText *CPinOut::make_outer_text(CVariable *variable)
+CObjectText *CPinOut::make_outer_text(CVariable *variable)
 {
-    auto text = new CObjectsText();
-    text->set_text(variable->name());
+    auto text = new CObjectText();
+
+    if (variable->parent() != m_world->current_pou()->interface())
+    {
+        QString txt = variable->parent()->parent()->name() + "." + variable->name();
+        text->set_text(txt);
+    }
+    else
+    {
+        text->set_text(variable->name());
+    }
 
     return  text;
 }
@@ -170,9 +181,9 @@ void CPinOut::refresh_connections()
     resort_outers();
 }
 
-CObjectsText *CPinOut::make_outer_text(CPin *pin)
+CObjectText *CPinOut::make_outer_text(CPin *pin)
 {
-    auto txt_block = new CObjectsText();
+    auto txt_block = new CObjectText();
     txt_block->set_text(make_pin_text(pin));
     return txt_block;
 }

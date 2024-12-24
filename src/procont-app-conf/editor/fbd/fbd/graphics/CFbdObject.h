@@ -8,7 +8,7 @@
 
 #include <QImage>
 #include "CPin.h"
-#include "CObjectsText.h"
+#include "editor/fbd/common/CObjectText.h"
 #include "../../plc-xml/fbd/CBlock.h"
 #include "CPinIn.h"
 #include "CPinOut.h"
@@ -18,7 +18,7 @@
 #define NAME_SHIFT 5
 #define BOTTOM_SHIFT 10
 
-class CLadder;
+class CFbdLadder;
 
 enum    EPinTypes
 {
@@ -27,18 +27,18 @@ enum    EPinTypes
     EPT_CONCRETE   //!< REAL/INT/...user type.. POU_type
 };
 
-class CDiagramObject
+class CFbdObject
 {
 public:
-    CDiagramObject(CLadder *ladder, CBlock *block);
-    ~CDiagramObject();
+    CFbdObject(CFbdLadder *ladder, CBlock *block);
+    ~CFbdObject();
 
     /**
      * @brief   sitting up objects position in the ladder when insert, create or moved with ladder change.
      * @param[in] ladder_rtl    relative top-left of the ladder
      * @param[in] rtl_shift     top-left of the objects body shifted from the ladder_rtl
      */
-    void    set_ladders_relative_top_left(CLadder *ladder, const QPoint & rtl_shift);
+    void    set_ladders_relative_top_left(CFbdLadder *ladder, const QPoint & rtl_shift);
 
     /**
      * @brief using when ladder has moved
@@ -58,7 +58,7 @@ public:
     std::vector<CPin*> * pins();
     std::vector<CPinOut*> * outputs();
     std::vector<CPinIn*> * inputs();
-    std::vector<CObjectsText*>  * texts();
+    std::vector<CObjectText*>  * texts();
 
     [[nodiscard]] QRect   bound_text_rect() const;
     [[nodiscard]] QRect   bound_graph_rect() const; //!< границы образуемые графическими соединениями
@@ -79,12 +79,12 @@ public:
     [[nodiscard]] QString     type_name() const;
     [[nodiscard]] EDefinedDataTypes         type() const;
 
-    CLadder * parent();
+    CFbdLadder * parent();
     CBlock  * block();
 
     CPinOut * get_output_by_name(const QString & formal);
 
-    CObjectsText *  inst_text();
+    CObjectText *  inst_text();
 
 private:
     friend CPin;
@@ -93,8 +93,8 @@ private:
 
 
     CBlock  * m_block;
-    CObjectsText    m_type_name;
-    CObjectsText    m_instance_name;
+    CObjectText    m_type_name;
+    CObjectText    m_instance_name;
     QSize           m_size;
     QSize           m_bound_size;
 
@@ -121,7 +121,7 @@ private:
 
     std::vector<CPinIn*>  * m_inputs;
     std::vector<CPinOut*>  * m_outputs;
-    std::vector<CObjectsText*>     m_texts;
+    std::vector<CObjectText*>     m_texts;
     std::vector<std::pair<QRect, QImage>>  * m_highlights;
     std::vector<CPin*> * m_pins;
     EPinTypes     m_pin_types{EPT_ANY};
@@ -134,7 +134,7 @@ private:
     void locate_pins();
     void  update_rel_position(QPoint * relative_tl = nullptr);
 
-    CLadder *m_parent;
+    CFbdLadder *m_parent;
 
     void update_block_data();
 

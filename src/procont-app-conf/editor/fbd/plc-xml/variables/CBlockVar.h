@@ -28,7 +28,7 @@ enum EPinDirection
 class CBlockVar
 {
 public:
-    explicit CBlockVar(CBlock *parent = nullptr);
+    explicit CBlockVar(CBlock *parent);
     CBlockVar(const CBlockVar & other);
     explicit CBlockVar(CBlock *parent, const QDomNode & domNode);
     ~CBlockVar();
@@ -61,8 +61,8 @@ public:
     [[nodiscard]] QString derived_type() const;
     void    set_type(const QString &type);
 
-    CVariable   *  get_iface_variable();
-    void           set_iface_variable(CVariable *var);
+    // CVariable   *  get_iface_variable();
+    // void           set_iface_variable(CVariable *var);
 
     [[nodiscard]] QString     constant_value() const;
 
@@ -87,11 +87,9 @@ protected:
     EPinDirection   m_direction{PD_UNDEF};
 
     /// extended parameters
-    CVariable   * m_variable;
+    //CVariable   * m_variable;
     CBlock *m_parent{nullptr};
 
-    //std::vector<CBlockVar*> m_opposites;
-    //CBlockVar   *m_opposite{nullptr};
 };
 
 

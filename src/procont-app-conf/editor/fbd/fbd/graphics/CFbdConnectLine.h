@@ -13,11 +13,11 @@
 #define  DIFFERENCE 2   //!< +- pixels for selecting line
 
 
-class CConnectLine
+class CFbdConnectLine
 {
 public:
-    CConnectLine(QPoint * ladder_tl, CPin * pin1, CPin *pin2);
-    ~CConnectLine();
+    CFbdConnectLine(QPoint * ladder_tl, CPin * pin1, CPin *pin2);
+    ~CFbdConnectLine();
 
     QList<QLine>    * lines();
     QColor            color();

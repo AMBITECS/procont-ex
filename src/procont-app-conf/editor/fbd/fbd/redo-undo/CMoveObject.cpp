@@ -4,8 +4,8 @@
 
 #include "CMoveObject.h"
 
-CMoveObject::CMoveObject(COglWorld * ogl_world, CLadder *source, CLadder *destination,
-                         CDiagramObject *object, const QPoint &pos)
+CMoveObject::CMoveObject(COglWorld * ogl_world, CFbdLadder *source, CFbdLadder *destination,
+                         CFbdObject *object, const QPoint &pos)
         : QUndoCommand()
         , m_ogl_world(ogl_world)
         , m_source(source)
@@ -23,7 +23,7 @@ void CMoveObject::undo()
 {
     back();
 
-    CLadder *start = m_source->number() < m_destination->number() ? m_source : m_destination;
+    CFbdLadder *start = m_source->number() < m_destination->number() ? m_source : m_destination;
 
     if (m_source != m_destination)
     {
@@ -52,7 +52,7 @@ void CMoveObject::redo()
     m_source->resort();
 
 
-    CLadder *start = m_source->number() < m_destination->number() ? m_source : m_destination;
+    CFbdLadder *start = m_source->number() < m_destination->number() ? m_source : m_destination;
     start->update_real_position();
     m_source->highlights_off();
 
@@ -87,9 +87,9 @@ void CMoveObject::back()
     obj->block()->set_global_id(QString::number(m_source->number()));
 }
 
-CDiagramObject *CMoveObject::remove_from_ladder(CLadder *source, CDiagramObject *object, int &from_index)
+CFbdObject *CMoveObject::remove_from_ladder(CFbdLadder *source, CFbdObject *object, int &from_index)
 {
-    QVector<CDiagramObject*> * obj_array = source->draw_components();
+    QVector<CFbdObject*> * obj_array = source->draw_components();
     int index = 0;
 
     if (from_index < 0)
@@ -117,7 +117,7 @@ CDiagramObject *CMoveObject::remove_from_ladder(CLadder *source, CDiagramObject 
     return object;
 }
 
-void CMoveObject::insert_object(CLadder *dest, CDiagramObject *object, int &to_index)
+void CMoveObject::insert_object(CFbdLadder *dest, CFbdObject *object, int &to_index)
 {
     auto obj_array = dest->draw_components();
 

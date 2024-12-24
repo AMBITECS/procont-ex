@@ -17,17 +17,22 @@
 #define  INS "inputs"
 #define  OUTS "outputs"
 
+
+
 /**
  * XML Format for IEC 61131-3 page 47
  */
 class CBlock
 {
 public:
-    CBlock();
+    explicit CBlock(CBody *parent);
     CBlock(const CBlock & other);
     CBlock(CBlock && other) noexcept;
-    explicit CBlock(const QDomNode &dom_node);
+    explicit CBlock(const QDomNode &dom_node, CBody *parent);
     virtual ~CBlock();
+
+    CBody * parent();
+    void    set_parent(CBody *parent);
 
     CBlock& operator=(const CBlock &block);
 
@@ -72,6 +77,8 @@ protected:
     QString           m_instance_name;
     uint16_t          m_exec_order{0};
     QString           m_global_id;
+
+    CBody           * m_parent{nullptr};
 
     CPosition         m_position;
     QList<CBlockVar*> * m_in_vars;

@@ -10,10 +10,11 @@
 #include "types/CStruct.h"
 #include "editor/fbd/fbd/editors/CFilter.h"
 
-CTypes::CTypes()
+CTypes::CTypes(CProject *parent)
 {
     m_user_types = new std::vector<CUserType*>();
     m_pous       = new std::vector<CPou*>();
+    m_parent     = parent;
 }
 
 CTypes::CTypes(const CTypes &src)
@@ -24,10 +25,11 @@ CTypes::CTypes(const CTypes &src)
     *this = src;
 }
 
-CTypes::CTypes(const QDomNode &node)
+CTypes::CTypes(const QDomNode &node, CProject *parent)
 {
     m_user_types = new std::vector<CUserType*>();
     m_pous       = new std::vector<CPou*>();
+    m_parent     = parent;
 
     /// check node
     if (node.nodeName() != xmln::project_types)
@@ -52,7 +54,7 @@ CTypes::CTypes(const QDomNode &node)
     for (int i = 0; i < pous_node.childNodes().count(); i++)
     {
         auto pou_node = pous_node.childNodes().at(i);
-        auto pou = new CPou(pou_node);
+        auto pou = new CPou(pou_node, this);
         m_pous->push_back(pou);
     }
 }
@@ -90,6 +92,8 @@ CTypes &CTypes::operator=(const CTypes &rhs)
     CEnum       *a_enum, *n_enum;
     CStruct     *a_struct, *n_struct;
     CSubrange   *a_subrange, *n_subrange;
+
+    m_parent     = rhs.m_parent;
 
     for (auto &ut : *rhs.m_user_types)
     {
@@ -191,7 +195,7 @@ CPou *CTypes::add_pou(const QString &pou_name)
         }
     }
 
-    auto pou = new CPou();
+    auto pou = new CPou(this);
     pou->set_name(pou_name);
     m_pous->push_back(pou);
 
@@ -205,6 +209,8 @@ CPou *CTypes::add_pou(CPou *pou)
         return nullptr;
     }
 
+    pou->set_parent(this);
+
     m_pous->push_back(pou);
     return m_pous->back();
 }
@@ -216,7 +222,7 @@ CPou *CTypes::add_pou(const QDomNode &pou_node)
         return nullptr;
     }
 
-    auto pou = new CPou(pou_node);
+    auto pou = new CPou(pou_node, this);
     m_pous->push_back(pou);
 
     return m_pous->back();
@@ -374,4 +380,14 @@ CVariable *CTypes::find_iface_variable(const QString &name)
         }
     }
     return nullptr;
+}
+
+CProject *CTypes::parent()
+{
+    return m_parent;
+}
+
+void CTypes::set_parent(CProject *parent)
+{
+    m_parent = parent;
 }

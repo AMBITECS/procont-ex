@@ -5,7 +5,7 @@
 #include <QTimer>
 #include <QMenu>
 
-//#include "../variables.h"
+
 #include "coglwidget.h"
 #include "editor/fbd/general/QtDialogs.h"
 #include "editor/fbd/fbd/redo-undo/CPinInvers.h"
@@ -13,12 +13,15 @@
 #include "editor/fbd/fbd/redo-undo/CPinFalling.h"
 #include "editor/fbd/fbd/redo-undo/CResetConnections.h"
 
+extern CProject *project;
+
 CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidget()
 {
+    get_project(node);
     m_pou_node = node;
     m_opengl_widget = ogl_widget;
 
-    m_pou =  node->isNull() ? new CPou() : m_pou = new CPou(*m_pou_node);
+    m_pou =  node->isNull() ? new CPou(project->types()) : m_pou = new CPou(*m_pou_node, project->types());
 
     m_graphics_world = new COglWorld(ogl_widget, m_pou, &m_hatch_tl);
     connect(m_graphics_world, &COglWorld::set_current_pou,
@@ -78,7 +81,7 @@ CGraphicsHelper::~CGraphicsHelper()
     delete m_pou;
 }
 
-std::vector<CLadder*>  * CGraphicsHelper::ladders()
+std::vector<CFbdLadder*>  * CGraphicsHelper::ladders()
 {
     return m_ladders;
 }
@@ -295,7 +298,7 @@ void CGraphicsHelper::project_complete()
     emit on_project_loaded();
 }
 
-void CGraphicsHelper::object_remove(CLadder *ladder, CDiagramObject *object)
+void CGraphicsHelper::object_remove(CFbdLadder *ladder, CFbdObject *object)
 {
     m_graphics_world->erase_object(object);
 }
@@ -365,7 +368,7 @@ bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point
     return true;
 }
 
-void CGraphicsHelper::make_object_menu(QMenu *p_menu, CDiagramObject *p_object, CLadder *p_ladder)
+void CGraphicsHelper::make_object_menu(QMenu *p_menu, CFbdObject *p_object, CFbdLadder *p_ladder)
 {
     auto act_remove = new QAction(p_menu);
 
@@ -447,12 +450,12 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
 
 }
 
-void CGraphicsHelper::make_ladder_menu(QMenu *p_menu, CLadder *p_ladder)
+void CGraphicsHelper::make_ladder_menu(QMenu *p_menu, CFbdLadder *p_ladder)
 {
 
 }
 
-void CGraphicsHelper::object_cat(CLadder *p_ladder, CDiagramObject *p_object)
+void CGraphicsHelper::object_cat(CFbdLadder *p_ladder, CFbdObject *p_object)
 {
 
 }
@@ -522,6 +525,13 @@ void CGraphicsHelper::on_drag_pin(QDragMoveEvent *event)
 void CGraphicsHelper::drag_process_complete()
 {
     emit drag_complete();
+}
+
+void CGraphicsHelper::get_project(QDomNode *project_node)
+{
+    QDomNode prj_node = project_node->parentNode().parentNode().parentNode();
+
+    CProject::get_instance(prj_node);
 }
 
 

@@ -11,8 +11,8 @@
 #include <QTimer>
 #include <QLineEdit>
 #include <utility>
-#include "../graphics/CDiagramObject.h"
-#include "../graphics/CLadder.h"
+#include "../graphics/CFbdObject.h"
+#include "../graphics/CFbdLadder.h"
 #include "../graphics/COglWorld.h"
 #include "qvarselectmodel.h"
 

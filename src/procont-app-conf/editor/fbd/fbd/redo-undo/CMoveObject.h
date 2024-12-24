@@ -11,7 +11,7 @@
 class CMoveObject : public QUndoCommand
 {
 public:
-    CMoveObject(COglWorld * ogl_world, CLadder *source, CLadder *destination, CDiagramObject *object, const QPoint &pos);
+    CMoveObject(COglWorld * ogl_world, CFbdLadder *source, CFbdLadder *destination, CFbdObject *object, const QPoint &pos);
     ~CMoveObject() override;
 
     void  undo() override;
@@ -19,10 +19,10 @@ public:
     [[nodiscard]] bool  is_error() const;
 
 private:
-    CLadder         * m_source;
-    CLadder         * m_destination;
+    CFbdLadder         * m_source;
+    CFbdLadder         * m_destination;
     QPoint            m_ins_pos;
-    CDiagramObject  * m_object;
+    CFbdObject  * m_object;
     COglWorld       * m_ogl_world;
 
     bool            m_error{false};
@@ -33,8 +33,8 @@ private:
     void move();
     void back();
 
-    CDiagramObject *    remove_from_ladder(CLadder * source, CDiagramObject * object, int &from_index);
-    void                insert_object(CLadder *dest, CDiagramObject *object, int &to_index);
+    CFbdObject *    remove_from_ladder(CFbdLadder * source, CFbdObject * object, int &from_index);
+    void                insert_object(CFbdLadder *dest, CFbdObject *object, int &to_index);
 };
 
 

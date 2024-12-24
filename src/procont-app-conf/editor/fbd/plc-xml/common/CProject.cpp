@@ -18,7 +18,7 @@ CProject *CProject::get_instance(const QDomNode &project_node)
 
 CProject::CProject()
 {
-    m_types = new CTypes();
+    m_types = new CTypes(this);
 }
 
 CProject::CProject(const CProject &src)
@@ -42,7 +42,7 @@ CProject::CProject(const QDomNode &project_node)
 {
     if (project_node.isNull())
     {
-        m_types = new CTypes();
+        m_types = new CTypes(this);
         return;
     }
 
@@ -68,11 +68,11 @@ CProject::CProject(const QDomNode &project_node)
     QDomNode types = project_node.namedItem("types");
     if (!types.isNull())
     {
-        m_types = new CTypes(types);
+        m_types = new CTypes(types, this);
     }
     else
     {
-        m_types = new CTypes();
+        m_types = new CTypes(this);
     }
 
 
@@ -201,6 +201,11 @@ void CProject::Delete()
         return;
     }
     delete this;
+}
+
+bool CProject::is_empty() const
+{
+    return m_types->is_empty();
 }
 
 

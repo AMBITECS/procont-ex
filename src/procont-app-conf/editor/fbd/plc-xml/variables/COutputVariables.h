@@ -9,16 +9,21 @@
 #include "../CConnectionPointIn.h"
 #include "../CPosition.h"
 
+class CBody;
+
 /**
  * @brief this variable is located in the body's inner environment
  */
 class COutVariable
 {
 public:
-    COutVariable();
+    COutVariable(CBody *parent);
     COutVariable(const COutVariable & other);
-    explicit COutVariable(const QDomNode &dom_node);
+    explicit COutVariable(const QDomNode &dom_node, CBody *body);
     ~COutVariable();
+
+    CBody * parent();
+    void    set_parent(CBody *parent);
 
     COutVariable & operator=(const COutVariable & rhs);
 
@@ -73,16 +78,20 @@ private:
     CConnectionPointIn m_point_in;
     CAddData        m_add_data;
     CDocumentation  m_documentation;
+    CBody         * m_parent{nullptr};
 };
 
 class COutputVariables
 {
 public:
-    COutputVariables();
+    COutputVariables(CBody *parent);
     COutputVariables(const COutputVariables & other);
     COutputVariables(COutputVariables && other) noexcept;
-    explicit COutputVariables(const QDomNode & dom_node);
+    explicit COutputVariables(const QDomNode & dom_node, CBody *parent);
     ~COutputVariables();
+
+    CBody * parent();
+    void    set_parent(CBody *parent);
 
     [[nodiscard]] QDomNode        dom_node() const;
     [[nodiscard]] bool            is_empty() const;
@@ -92,7 +101,7 @@ public:
 
 private:
     QList<COutVariable*>    * m_variables;
-
+    CBody * m_parent{nullptr};
 };
 
 

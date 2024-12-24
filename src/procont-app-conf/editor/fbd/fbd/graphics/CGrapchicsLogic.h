@@ -6,8 +6,8 @@
 #define EDITORSD_CGRAPCHICSLOGIC_H
 
 
-#include "CLadder.h"
-#include "CConnectLine.h"
+#include "CFbdLadder.h"
+#include "CFbdConnectLine.h"
 
 class CGraphicsLogic
 {
@@ -16,10 +16,10 @@ public:
     ~CGraphicsLogic();
 
     /**@brief соединяет пины одной ступени иначе возвращает nullptr.  @attention возвращает объект во владение */
-    CConnectLine*    add_new_line(CPin *dragged_pin, CPin *target_pin);
+    CFbdConnectLine*    add_new_line(CPin *dragged_pin, CPin *target_pin);
 
 private:
-    CLadder * m_ladder{nullptr};
+    CFbdLadder * m_ladder{nullptr};
     CPin    * m_dragged_pin{nullptr};
     CPin    * m_target_pin{nullptr};
     int object_bottom_max{0};
@@ -29,7 +29,7 @@ private:
     /** @brief рисует линии-опуски от точек ЗА bound_text_rect до низа ступени (зависит от кол-ва линий внизу) */
     QLine down_line(const QPoint &upper_point);
     bool are_objects_near();
-    void   direct_connection(CConnectLine *conn_line);
+    void   direct_connection(CFbdConnectLine *conn_line);
 
     static QLine equalizing_line(const QPoint &point1, const QPoint &point2);
     static int     index_of(std::vector<CPinIn*> *pins_array, CPin *pin);

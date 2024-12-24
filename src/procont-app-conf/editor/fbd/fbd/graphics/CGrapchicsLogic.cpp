@@ -12,7 +12,7 @@ CGraphicsLogic::CGraphicsLogic()
 CGraphicsLogic::~CGraphicsLogic()
 = default;
 
-CConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
+CFbdConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
 {
     if (dragged_pin->direction() == target_pin->direction())
     {
@@ -22,21 +22,21 @@ CConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
     m_dragged_pin = dragged_pin;
     m_target_pin = target_pin;
 
-    CConnectLine * conn_line = nullptr;
+    CFbdConnectLine * conn_line = nullptr;
 
     if (dragged_pin->parent()->parent() == target_pin->parent()->parent())
     {
         m_ladder = dragged_pin->parent()->parent();
 
-        conn_line = new CConnectLine(m_ladder->real_top_left(), dragged_pin, target_pin);
+        conn_line = new CFbdConnectLine(m_ladder->real_top_left(), dragged_pin, target_pin);
 
         bool near = are_objects_near();
 
         /// it could be near but not face to ass
         if (near)
         {
-            CDiagramObject* drag_obj = m_dragged_pin->parent();
-            CDiagramObject* target_obj = m_target_pin->parent();
+            CFbdObject* drag_obj = m_dragged_pin->parent();
+            CFbdObject* target_obj = m_target_pin->parent();
 
             auto left_ob = drag_obj->rect()->left() < target_obj->rect()->left() ? drag_obj : target_obj;
             auto right_ob = drag_obj->rect()->left() > target_obj->rect()->left() ? drag_obj : target_obj;
@@ -144,15 +144,15 @@ QLine CGraphicsLogic::down_line(const QPoint &upper_point)
 
 bool CGraphicsLogic::are_objects_near()
 {
-    CDiagramObject* drag_obj = m_dragged_pin->parent();
-    CDiagramObject* target_obj = m_target_pin->parent();
+    CFbdObject* drag_obj = m_dragged_pin->parent();
+    CFbdObject* target_obj = m_target_pin->parent();
 
     int index_d = -1,
         index_t = -1,
         counter = 0;
     object_bottom_max = 0;
 
-    for (CDiagramObject* &obj : *m_ladder->draw_components())
+    for (CFbdObject* &obj : *m_ladder->draw_components())
     {
         if (obj == drag_obj)
         {
@@ -179,7 +179,7 @@ bool CGraphicsLogic::are_objects_near()
     return false;
 }
 
-void CGraphicsLogic::direct_connection(CConnectLine *conn_line)
+void CGraphicsLogic::direct_connection(CFbdConnectLine *conn_line)
 {
     QLine drag_line = first_line(m_dragged_pin, m_target_pin);
     QLine target_line = first_line(m_target_pin, m_dragged_pin);

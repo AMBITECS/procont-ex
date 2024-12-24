@@ -7,11 +7,13 @@
 
 extern uint16_t max_local_id;
 
-CBlock::CBlock()
+CBlock::CBlock(CBody *parent)
 {
     m_in_vars       = new QList<CBlockVar*>();
     m_in_out_vars   = new QList<CBlockVar*>();
     m_out_vars      = new QList<CBlockVar*>();
+
+    m_parent = parent;
 
     max_local_id++;
     set_local_id(max_local_id);
@@ -22,6 +24,7 @@ CBlock::CBlock(const CBlock &other)
     m_in_vars       = new QList<CBlockVar*>();
     m_in_out_vars   = new QList<CBlockVar*>();
     m_out_vars      = new QList<CBlockVar*>();
+    m_parent        = other.m_parent;
 
     *this = other;
 }
@@ -31,6 +34,7 @@ CBlock &CBlock::operator=(const CBlock &  other)
     if (this == &other)
         return *this;
 
+    m_parent = other.m_parent;
 
     for (auto &alien : *other.m_in_vars)
     {
@@ -80,6 +84,7 @@ CBlock::CBlock(CBlock &&other) noexcept
     , m_add_data(other.m_add_data)
     , m_inputs(std::move(other.m_inputs))
     , m_outputs(std::move(other.m_outputs))
+    , m_parent(other.m_parent)
 
 {
     m_in_vars       = other.m_in_vars;
@@ -100,9 +105,10 @@ CBlock::CBlock(CBlock &&other) noexcept
     m_documentation = CDocumentation( other.m_documentation );
 }
 
-CBlock::CBlock(const QDomNode &dom_node)
+CBlock::CBlock(const QDomNode &dom_node, CBody *parent)
 {
     m_local_id  = dom_node.attributes().namedItem("localId").toAttr().value().toULongLong();
+    m_parent    = parent;
 
     if (m_local_id == 0)
     {
@@ -468,6 +474,26 @@ CBlockVar *CBlock::get_output_by_name(const QString &name)
     }
 
     return nullptr;
+}
+
+CBody *CBlock::parent()
+{
+    return m_parent;
+}
+
+void CBlock::set_parent(CBody *parent)
+{
+    m_parent = parent;
+
+    for (auto &in : *m_in_vars)
+    {
+        in->set_parent(this);
+    }
+
+    for (auto &out : *m_out_vars)
+    {
+        out->set_parent(this);
+    }
 }
 
 

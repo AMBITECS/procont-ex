@@ -11,6 +11,7 @@
 
 #include "../fbd/CFbdContent.h"
 
+class CPou;
 class CLdContent;
 class CSfcContent;
 class CCfcContent;
@@ -23,11 +24,14 @@ class CStContent;
 class CBody
 {
 public:
-    CBody();
+    CBody(CPou * parent);
     CBody(const CBody & other);
     CBody(CBody && other) noexcept;
-    explicit CBody(const QDomNode &dom_node);
+    explicit CBody(const QDomNode &dom_node, CPou *parent);
     ~CBody();
+
+    CPou *  parent();
+    void    set_parent(CPou *parent);
 
     [[nodiscard]] QString         worksheet_name() const;
     void            set_worksheet_name(const QString & worksheet_name);
@@ -60,6 +64,7 @@ private:
     CLdContent  * m_ld_content{nullptr};
     CCfcContent * m_cfc_content{nullptr};
     CSfcContent * m_sfc_content{nullptr};
+    CPou        * m_parent{nullptr};
 
     /// body's children
     EBodyType         m_body_type{BT_COUNT};  //!< main child-container for body itself. required

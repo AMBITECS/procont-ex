@@ -15,7 +15,7 @@ class CPinOut : public CPin
 {
 public:
     CPinOut() = delete;
-    CPinOut(CDiagramObject * parent, CBlockVar *base, QPoint * parent_tl);
+    CPinOut(CFbdObject * parent, CBlockVar *base, QPoint * parent_tl);
     ~CPinOut() override;
 
     /** @brief when loading project we have not create or edit any instances in XML - they are existing */
@@ -50,8 +50,8 @@ private:
     QColor                    m_graph_color;
     QColor                    m_var_color;
 
-    static CObjectsText*    make_outer_text(CVariable *variable);
-    CObjectsText*           make_outer_text(CPin *pin);
+    CObjectText*    make_outer_text(CVariable *variable);
+    CObjectText*           make_outer_text(CPin *pin);
 
     CVariable*    disconnect_xml(CVariable *iface_var);
 

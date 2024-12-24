@@ -12,23 +12,23 @@
 class CInsertNewLadder : public QUndoCommand
 {
 public:
-    CInsertNewLadder(COglWorld *ogl_world, CLadder *next);
+    CInsertNewLadder(COglWorld *ogl_world, CFbdLadder *next);
     ~CInsertNewLadder() override;
 
     void  undo() override;
     void  redo() override;
 
-    CLadder *  new_ladder();
+    CFbdLadder *  new_ladder();
 
 private:
-    CLadder * m_new_ladder{nullptr};
-    CLadder * m_to_delete{nullptr};
+    CFbdLadder * m_new_ladder{nullptr};
+    CFbdLadder * m_to_delete{nullptr};
     int  m_index{-1};
     COglWorld * m_ogl_world;
-    CLadder * m_next{nullptr};
+    CFbdLadder * m_next{nullptr};
 
     void      insert();
-    CLadder * remove();
+    CFbdLadder * remove();
 };
 
 

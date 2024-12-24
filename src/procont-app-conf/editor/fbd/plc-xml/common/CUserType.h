@@ -8,6 +8,7 @@
 #include <QDomNode>
 #include "editor/fbd/fbd/variables.h"
 
+
 enum EUserTypes
 {
     UT_ENUM,

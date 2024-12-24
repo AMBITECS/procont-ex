@@ -10,17 +10,19 @@
 #include "CAddData.h"
 
 class CDocumentation;
+class CPou;
 
 class CInterface
 {
 public:
-    CInterface();
+    explicit CInterface(CPou * parent);
     CInterface(const CInterface &);
     CInterface(CInterface &&) noexcept;
-    explicit CInterface(const QDomNode &node);
+    explicit CInterface(const QDomNode &node, CPou *parent);
     ~CInterface();
 
-    //CInterface&         operator=(const CInterface &rhs);
+    CPou    * parent();
+    void      set_parent(CPou *pou);
 
     QDomNode            dom_node();
     bool                is_empty() const;
@@ -49,6 +51,7 @@ private:
     QString               m_return_type;    //!< костыль
     CAddData              m_add_data;
     CDocumentation      * m_documentation{nullptr};
+    CPou                * m_parent{nullptr};
 
     /// required interface content is one of listed items
     CLocalVars      * m_local_vars;

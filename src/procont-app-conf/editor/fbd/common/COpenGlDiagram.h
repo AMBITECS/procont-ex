@@ -11,7 +11,7 @@ class COpenGlDiagram : public QOpenGLWidget
 {
     Q_OBJECT
 public:
-    COpenGlDiagram(QWidget *parent = nullptr);
+    explicit COpenGlDiagram(QWidget *parent = nullptr);
     ~COpenGlDiagram() override;
 
 

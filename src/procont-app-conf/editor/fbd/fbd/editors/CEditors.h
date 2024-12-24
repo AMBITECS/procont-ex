@@ -23,7 +23,7 @@ public:
     explicit CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node);
     ~CEditors() override;
 
-    void    show_line_edit(CDiagramObject *obj);
+    void    show_line_edit(CFbdObject *obj);
     void    show_combo(CPin *pin);
 
 signals:
@@ -56,7 +56,7 @@ private:
 
     std::vector<s_tree_item>    combo_data;
 
-    CDiagramObject  * m_diagram_object{nullptr};
+    CFbdObject  * m_diagram_object{nullptr};
     CPin   * m_pin{nullptr};
 };
 

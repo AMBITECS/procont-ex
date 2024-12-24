@@ -3,7 +3,7 @@
 //
 
 #include "CEditors.h"
-#include "../graphics/CDiagramObject.h"
+#include "../graphics/CFbdObject.h"
 #include "../graphics/coglwidget.h"
 #include "../redo-undo/CPinRename.h"
 #include "../redo-undo/CPinConnecting.h"
@@ -53,7 +53,7 @@ CEditors::~CEditors()
     delete m_filter;
 }
 
-void CEditors::show_line_edit(CDiagramObject *obj)
+void CEditors::show_line_edit(CFbdObject *obj)
 {
 
     QRect rect = obj->inst_text()->text_rect();

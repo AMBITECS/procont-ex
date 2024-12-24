@@ -12,6 +12,8 @@
 #include "../CConnectionPointOut.h"
 
 
+class CInterface;
+
 /**
  * @brief  part of derived CInVar and so on.
  * @details source details in XML Format for IEC 61131-3 page 29
@@ -19,11 +21,14 @@
 class CVariable
 {
 public:
-    CVariable();
+    CVariable(CInterface *parent);
     CVariable(const CVariable &);
     CVariable(CVariable &&) noexcept;
-    explicit CVariable(const QDomNode &node);
+    explicit CVariable(const QDomNode &node, CInterface *parent);
     ~CVariable();
+
+    CInterface * parent();
+    void         set_parent(CInterface *parent);
 
     QDomNode    dom_node();
 
@@ -53,6 +58,7 @@ public:
     bool        is_empty() const;
 
 private:
+    CInterface *m_parent{nullptr};
     QString     m_attr_name{""};   // required
     QString     m_attr_addr{};
     QString     m_attr_global_id{};

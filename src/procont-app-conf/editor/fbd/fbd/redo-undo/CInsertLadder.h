@@ -12,7 +12,7 @@
 class CInsertLadder : public QUndoCommand
 {
 public:
-    CInsertLadder(COglWorld * world, CLadder *dragged_ladder, CLadder *before);
+    CInsertLadder(COglWorld * world, CFbdLadder *dragged_ladder, CFbdLadder *before);
     ~CInsertLadder() override;
 
     void    redo() override;
@@ -21,8 +21,8 @@ public:
 private:
     int       m_source_index{-1};
     int       m_dest_index{-1};
-    CLadder * m_walking_ladder;
-    CLadder * m_init_dest;
+    CFbdLadder * m_walking_ladder;
+    CFbdLadder * m_init_dest;
     COglWorld   * m_world;
 
     void      remove_from_position(int & position);

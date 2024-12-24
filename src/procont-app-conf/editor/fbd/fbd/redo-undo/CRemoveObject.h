@@ -26,15 +26,15 @@ struct s_output_connection
 class CRemoveObject : public QUndoCommand
 {
 public:
-    explicit CRemoveObject(CDiagramObject * object);
+    explicit CRemoveObject(CFbdObject * object);
     ~CRemoveObject() override;
 
     void redo() override;
     void undo() override;
 
 private:
-    CDiagramObject  * m_object;
-    CDiagramObject  * m_obj_to_delete{nullptr};
+    CFbdObject  * m_object;
+    CFbdObject  * m_obj_to_delete{nullptr};
     COglWorld       * m_world;
 
     int               m_object_index{0};
@@ -42,8 +42,8 @@ private:
     std::vector<s_input_connection>     m_input_connections;
     std::vector<s_output_connection>    m_output_connections;
 
-    int     remove_object(CDiagramObject *object);
-    void    insert_object(CDiagramObject *object, const int &index);
+    int     remove_object(CFbdObject *object);
+    void    insert_object(CFbdObject *object, const int &index);
 
 };
 

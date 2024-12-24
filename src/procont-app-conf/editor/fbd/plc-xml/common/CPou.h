@@ -12,23 +12,27 @@
 #include "../CTransitions.h"
 #include "editor/fbd/fbd/palette/palette.h"
 
+class CTypes;
 class CPou
 {
 public:
-    CPou();
+    explicit CPou(CTypes *parent);
     CPou(const CPou & other);
-    explicit CPou(const QDomNode & dom_node);
+    explicit CPou(const QDomNode & dom_node, CTypes * parent);
     ~CPou();
 
-    QDomNode    dom_node() const;
-    bool        is_empty() const;
+    CTypes  * parent();
+    void    set_parent(CTypes *parent);
+
+    [[nodiscard]] QDomNode    dom_node() const;
+    [[nodiscard]] bool        is_empty() const;
 
     CBlock      get_block();
 
-    QString     name() const;
+    [[nodiscard]] QString     name() const;
     void        set_name(const QString &name);
-    QString     type_name() const;
-    EBodyType    body_type() const;
+    [[nodiscard]] QString     type_name() const;
+    [[nodiscard]] EBodyType    body_type() const;
     void        set_type(const QString & type);
 
 
@@ -74,6 +78,7 @@ private:
     CAddData    * m_add_data;
     CDocumentation * m_doc;
     EBodyType     m_type;
+    CTypes      * m_parent{nullptr};
 
     QList<CBody*>   * m_bodies;
 

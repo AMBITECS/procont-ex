@@ -8,7 +8,7 @@
 #include <QKeyEvent>
 #include <regex>
 #include "../../resources/colors.h"
-#include "../graphics/CDiagramObject.h"
+#include "../graphics/CFbdObject.h"
 
 CInstEditor::CInstEditor(CFilter *filter, QWidget *parent) : QLineEdit(parent)
 {
@@ -129,7 +129,7 @@ void CInstEditor::check_is_correct(const QString &str)
     res ? set_norm() : set_error();
 }
 
-void CInstEditor::set_diagram_object(CDiagramObject *object)
+void CInstEditor::set_diagram_object(CFbdObject *object)
 {
     m_object = object;
     check_is_correct(m_object->instance_name());

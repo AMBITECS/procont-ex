@@ -4,23 +4,23 @@
 
 #include <QFontMetrics>
 #include "CPin.h"
-#include "CDiagramObject.h"
+#include "CFbdObject.h"
 #include "CPinIn.h"
 #include "../../resources/colors.h"
 #include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
-#include "CLadder.h"
+#include "CFbdLadder.h"
 
-CPin::CPin(CDiagramObject *parent, CBlockVar *var, QPoint * parent_tl)
+CPin::CPin(CFbdObject *parent, CBlockVar *var, QPoint * parent_tl)
 {
     m_parent             = parent;
     m_block_variable     = var;
     m_relative_parent_tp = parent_tl;
 
-    m_texts = new std::vector<CObjectsText*>();
-    m_outer_texts = new std::vector<CObjectsText*>();
-    m_outs_graphics = new std::vector<CObjectsText*>();
-    m_pin_name = new CObjectsText();
-    m_outer_text = new CObjectsText();
+    m_texts = new std::vector<CObjectText*>();
+    m_outer_texts = new std::vector<CObjectText*>();
+    m_outs_graphics = new std::vector<CObjectText*>();
+    m_pin_name = new CObjectText();
+    m_outer_text = new CObjectText();
 
     m_current_ladder     = m_parent->parent();
 
@@ -28,12 +28,12 @@ CPin::CPin(CDiagramObject *parent, CBlockVar *var, QPoint * parent_tl)
 
     m_pin_name->set_text(formal_param);
 
-    auto iface_var = m_block_variable->get_iface_variable();
+    /*auto iface_var = m_block_variable->get_iface_variable();
     if (!iface_var->is_empty())
     {
         m_outer_text->set_text(iface_var->name());
         m_is_connected = true;
-    }
+    }*/
 
     if (!m_block_variable->constant_value().isEmpty())
     {
@@ -67,7 +67,7 @@ CPin::~CPin()
     delete m_pin_name;
 }
 
-CDiagramObject *CPin::parent()
+CFbdObject *CPin::parent()
 {
     return m_parent;
 }
@@ -82,7 +82,7 @@ QRect *CPin::rect()
     return &m_rect;
 }
 
-std::vector<CObjectsText *> *CPin::texts()
+std::vector<CObjectText *> *CPin::texts()
 {
     return m_texts;
 }

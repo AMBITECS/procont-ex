@@ -4,11 +4,12 @@
 
 #include "CBody.h"
 
-CBody::CBody()
+CBody::CBody(CPou *parent)
 {
     m_diagram = new QDomNode();
     m_add_data = new CAddData();
     m_document = new CDocumentation();
+    m_parent   = parent;
 }
 
 CBody::CBody(const CBody &other)
@@ -18,6 +19,8 @@ CBody::CBody(const CBody &other)
     m_document = new CDocumentation(*other.m_document);
     m_worksheet_name = other.m_worksheet_name;
     m_global_ID = other.m_global_ID;
+    m_parent    = other.m_parent;
+
 }
 
 CBody::CBody(CBody &&other) noexcept
@@ -25,6 +28,7 @@ CBody::CBody(CBody &&other) noexcept
     m_diagram = other.m_diagram;
     m_add_data = other.m_add_data;
     m_document = other.m_document;
+    m_parent = other.m_parent;
 
     other.m_diagram = nullptr;
     other.m_add_data = nullptr;
@@ -34,7 +38,7 @@ CBody::CBody(CBody &&other) noexcept
     m_global_ID = other.m_global_ID;
 }
 
-CBody::CBody(const QDomNode &dom_node)
+CBody::CBody(const QDomNode &dom_node, CPou *parent)
 {
     if (dom_node.nodeName() != "body")
     {
@@ -45,12 +49,13 @@ CBody::CBody(const QDomNode &dom_node)
     m_add_data = new CAddData(dom_node.namedItem("addData"));
     m_document = new CDocumentation(dom_node.namedItem("documentation"));
     m_diagram = new QDomNode(dom_node);
+    m_parent   = parent;
 
     /// process body
     define_diagram_type();
     switch (m_body_type) {
         case EBodyType::BT_FBD:
-            m_fbd_content = new CFbdContent(m_diagram->firstChild());
+            m_fbd_content = new CFbdContent(m_diagram->firstChild(), this);
             break;
         default:
             break;
@@ -184,7 +189,7 @@ CSfcContent *CBody::sfc_content()
 CFbdContent * CBody::add_fbd_diagram()
 {
     delete m_fbd_content;
-    m_fbd_content = new CFbdContent();
+    m_fbd_content = new CFbdContent(this);
     return  m_fbd_content;
 }
 
@@ -208,4 +213,14 @@ void CBody::define_diagram_type()
         }
         i++;
     }
+}
+
+CPou *CBody::parent()
+{
+    return m_parent;
+}
+
+void CBody::set_parent(CPou *parent)
+{
+    m_parent = parent;
 }

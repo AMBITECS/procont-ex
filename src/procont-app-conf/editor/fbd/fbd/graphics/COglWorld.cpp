@@ -50,8 +50,8 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
         throw std::runtime_error("all is broken. Im leaving this PC. In 'COglWorld::COglWorld' m_pou is nullptr");
     }
 
-    m_ladders         = new std::vector<CLadder*> ();
-    m_visible_ladders = new std::vector<CLadder*> ();
+    m_ladders         = new std::vector<CFbdLadder*> ();
+    m_visible_ladders = new std::vector<CFbdLadder*> ();
     m_undo_stack      = new QUndoStack();
     m_hatch_topLeft   = hatch_pos;
 
@@ -102,13 +102,13 @@ void COglWorld::init_projects_instances()
         return;
     }
 
-    auto body = new CBody();
+    auto body = new CBody(m_pou);
     m_pou->bodies()->push_back(body);
     m_fbd_content = body->add_fbd_diagram();
     m_diagram_type = BT_FBD;
 }
 
-CLadder *COglWorld::add_new_ladder()
+CFbdLadder *COglWorld::add_new_ladder()
 {
     auto cmd_new_ladder = new CAddNewLadder(this);
     m_undo_stack->push(cmd_new_ladder);
@@ -118,7 +118,7 @@ CLadder *COglWorld::add_new_ladder()
     return cmd_new_ladder->new_ladder();
 }
 
-bool COglWorld::move_object(CLadder *source, CLadder *destination, CDiagramObject *object, const QPoint &pos)
+bool COglWorld::move_object(CFbdLadder *source, CFbdLadder *destination, CFbdObject *object, const QPoint &pos)
 {
     source = object->parent();
 
@@ -145,7 +145,7 @@ void COglWorld::clear_ladders()
     m_ladders->clear();
 }
 
-std::vector<CLadder*>  *COglWorld::visible_ladders()
+std::vector<CFbdLadder*>  *COglWorld::visible_ladders()
 {
     return m_visible_ladders;
 }
@@ -207,7 +207,7 @@ s_selection COglWorld::get_selection(const QPoint &pos)
                 break;
         }
 
-        CConnectLine *sel_line = nullptr;
+        CFbdConnectLine *sel_line = nullptr;
         for (auto &line : *vis->connecting_lines())
         {
             line->set_selected(false);
@@ -245,7 +245,7 @@ QPoint COglWorld::get_visible_range(const QPoint &)
     int right = count - 1;
     int mid;
 
-    CLadder * curr_ladder = m_ladders->at(index);
+    CFbdLadder * curr_ladder = m_ladders->at(index);
 
     /// define one of visible by binary search method
     while ((right > left))
@@ -335,7 +335,7 @@ QPoint COglWorld::get_visible_range(const QPoint &)
 
 void COglWorld::load_project()
 {
-    CLadder *cur_ladder;
+    CFbdLadder *cur_ladder;
     CVariablesAnalytics analytics(this, m_pou->name());
 
     /// loading diagram objects and locate them to the corresponding ladder (without connecting lines)
@@ -361,7 +361,7 @@ void COglWorld::load_project()
     /// need to shake projects graphics
     if (!m_ladders->empty())
     {
-        CLadder *prev = nullptr;
+        CFbdLadder *prev = nullptr;
 
         for (auto &ladder : *m_ladders)
         {
@@ -398,8 +398,8 @@ void COglWorld::load_later()
 
     if (m_ladders->empty())
     {
-        CLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
-        auto last = new CLadder(this,m_hatch_topLeft, &m_hatch_size, prev);
+        CFbdLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
+        auto last = new CFbdLadder(this,m_hatch_topLeft, &m_hatch_size, prev);
 
         m_ladders->push_back(last);
         if (prev)
@@ -438,7 +438,7 @@ void COglWorld::shutdown_highlights()
     }
 }
 
-CLadder *COglWorld::insert_new_ladder(CLadder *next)
+CFbdLadder *COglWorld::insert_new_ladder(CFbdLadder *next)
 {
     auto cmd_insert_ladder = new CInsertNewLadder(this, next);
     m_undo_stack->push(cmd_insert_ladder);
@@ -448,7 +448,7 @@ CLadder *COglWorld::insert_new_ladder(CLadder *next)
     return cmd_insert_ladder->new_ladder();
 }
 
-CDiagramObject * COglWorld::insert_new_component(CLadder *p_ladder, const EPaletteElements &element,
+CFbdObject * COglWorld::insert_new_component(CFbdLadder *p_ladder, const EPaletteElements &element,
                                                  const QString &pou_name,
                                                  const QPoint &pos)
 {
@@ -508,20 +508,20 @@ void COglWorld::update_visible_ladders()
     emit update_hatch();
 }
 
-CLadder *COglWorld::get_ladder(const unsigned long &ied_ladder)
+CFbdLadder *COglWorld::get_ladder(const unsigned long &ied_ladder)
 {
-    CLadder *ladder;
+    CFbdLadder *ladder;
 
     uint64_t ladder_index = ied_ladder - 1;
 
     if (ladder_index >= m_ladders->size())
     {
         size_t ind = m_ladders->size();
-        CLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
+        CFbdLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
 
         for (auto i = ind; i <= (ladder_index); i++)
         {
-            ladder = new CLadder(this, m_hatch_topLeft, &m_hatch_size, prev);
+            ladder = new CFbdLadder(this, m_hatch_topLeft, &m_hatch_size, prev);
 
             if (prev)
             {
@@ -628,7 +628,7 @@ s_selection *COglWorld::selected()
     return &m_selection;
 }
 
-void COglWorld::insert_ladder(CLadder *dragged_ladder, CLadder *before)
+void COglWorld::insert_ladder(CFbdLadder *dragged_ladder, CFbdLadder *before)
 {
     if (m_ladders->size() == 1 || before == dragged_ladder)
     {
@@ -778,7 +778,7 @@ void COglWorld::connect_pins(CPin *dragged_pin, CPin *target_pin)
     emit undo_enabled();
 }
 
-std::vector<CLadder *> *COglWorld::all_ladders()
+std::vector<CFbdLadder *> *COglWorld::all_ladders()
 {
     return m_ladders;
 }
@@ -830,7 +830,7 @@ CPou *COglWorld::current_pou()
     return m_pou;
 }
 
-void COglWorld::erase_object(CDiagramObject *object)
+void COglWorld::erase_object(CFbdObject *object)
 {
     if (!object)
     {

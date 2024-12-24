@@ -10,7 +10,7 @@
 #include <QDomNode>
 #include "editor/fbd/general/ctreeobject.h"
 #include "editor/fbd/plc-xml/common/CProject.h"
-#include "graphics/COpenGlDiagram.h"
+#include "editor/fbd/common/COpenGlDiagram.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui

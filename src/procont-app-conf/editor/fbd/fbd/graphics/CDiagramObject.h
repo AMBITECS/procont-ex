@@ -7,10 +7,11 @@
 
 
 #include <QImage>
-#include "CConnectorPin.h"
+#include "CPin.h"
 #include "CObjectsText.h"
 #include "../../plc-xml/fbd/CBlock.h"
-#include "CConnectorPin.h"
+#include "CPinIn.h"
+#include "CPinOut.h"
 
 #define TOP_SHIFT 40
 #define PIN_SHIFT 20
@@ -48,9 +49,9 @@ public:
     QRect   * rect();
     QImage  * image();
     std::vector<std::pair<QRect, QImage>>  * highlights();
-    std::vector<CConnectorPin*> * pins();
-    std::vector<CConnectorPin*> * outputs();
-    std::vector<CConnectorPin*> * inputs();
+    std::vector<CPin*> * pins();
+    std::vector<CPinOut*> * outputs();
+    std::vector<CPinIn*> * inputs();
     std::vector<CObjectsText*>  * texts();
 
     [[nodiscard]] QRect   bound_text_rect() const;
@@ -85,9 +86,9 @@ private:
     QImage          m_image;
     QImage          m_bound_img;
     bool            m_is_selected{false};
-    QColor          m_color_norm{226, 234, 247};
-    QColor          m_color_sel{80,176,243};
-    QColor          m_color_curr{m_color_norm};
+    QColor          m_color_norm;//{226, 234, 247};
+    QColor          m_color_sel;//{80,176,243};
+    QColor          m_color_curr;//{m_color_norm};
 
     bool            bound_complete{false};
 
@@ -103,11 +104,11 @@ private:
     QRect         m_text_bounds;
     QRect         m_graph_bounds; //!< граница образуемая графическими соединениями
 
-    std::vector<CConnectorPin*>  * m_inputs;
-    std::vector<CConnectorPin*>  * m_outputs;
+    std::vector<CPinIn*>  * m_inputs;
+    std::vector<CPinOut*>  * m_outputs;
     std::vector<CObjectsText*>     m_texts;
     std::vector<std::pair<QRect, QImage>>  * m_highlights;
-    std::vector<CConnectorPin*> * m_pins;
+    std::vector<CPin*> * m_pins;
 
     void define_size();
     void draw_bound_rect();

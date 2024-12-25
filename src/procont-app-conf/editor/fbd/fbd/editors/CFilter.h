@@ -48,11 +48,18 @@ public:
      */
     [[nodiscard]] bool    filter_string(const std::string &string, const int & flags);
 
+    static void inline capitalize_word(std::string &word)
+    {
+        for (auto &sym : word)
+        {
+            sym = static_cast<char>(std::toupper(sym));
+        }
+    }
+
 private:
     bool    m_is_case_insensitive{true};
-    CVariablesAnalytics *m_analitics;
+    CVariablesAnalytics *m_analytics;
 
-    void inline capitalize_word(std::string &word);
 };
 
 

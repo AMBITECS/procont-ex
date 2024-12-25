@@ -14,6 +14,7 @@
 #include "CObjectsText.h"
 #include "../palette/palette.h"
 #include "CConnectLine.h"
+//#include "COglWorld.h"
 
 
 #define  LEFT_WIDTH 50     //!< the width of the left rect
@@ -42,15 +43,15 @@ struct s_rects
 
 struct  s_colors
 {
-    QColor  def_left{255,255,255};
-    QColor  def_right{255,255,255};
-    QColor  selected_left{247,226,234};
-    QColor  selected_right{255,255,224};
-    QColor  divider{0, 128, 128};
-    QColor  gray_field{240,240,240};
-    QColor  gray_bottom{240,240,240};
-    QColor  landing_brick{185,238,185};
-    QColor  landing_strip{239,192,136};
+    QColor  def_left;//{255,255,255};
+    QColor  def_right;//{255,255,255};
+    QColor  selected_left;//{247,226,234};
+    QColor  selected_right;//{255,255,224};
+    QColor  divider;//{0, 128, 128};
+    QColor  gray_field;//{240,240,240};
+    QColor  gray_bottom;//{240,240,240};
+    QColor  landing_brick;//{185,238,185};
+    QColor  landing_strip;//{239,192,136};
 };
 
 struct s_images
@@ -65,19 +66,22 @@ struct s_images
     QImage  landing_bottom{};
 };
 
+class COglWorld;
 
 class CLadder //: public QObject
 {
     //Q_OBJECT
 public:
     CLadder() = delete;
-    CLadder(QPoint * hatch_top_left, QSize * hatch_size, CLadder * prev_ladder = nullptr, CLadder *next = nullptr);
+    CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size,
+            CLadder *prev_ladder = nullptr, CLadder *next = nullptr);
     ~CLadder();
 
     /// change ladders content
     //void                put_dragged_object(CDiagramObject *dragged_obj, const QPoint &pos);
     //CDiagramObject *    remove_object(CDiagramObject *dragged_obj);
     CDiagramObject *    add_object(CBlock * object);
+    COglWorld       * parent();
 
     /// change and update ladder position
     void    update_real_position(CLadder *sender = nullptr);
@@ -99,8 +103,10 @@ public:
     void    bottom_line_count_increase();
     void    bottom_line_count_decrease();
     [[nodiscard]] short   bottom_line_count() const;
+
     CConnectLine* add_line(CConnectLine *line);
     std::vector<CConnectLine*> * connections();
+    CConnectLine* remove_line(CConnectLine *line);
 
 
     [[nodiscard]] QPoint              real_bottom_right() const;
@@ -130,6 +136,7 @@ protected:
 private:
     CLadder     * m_previous{nullptr};
     CLadder     * m_next{nullptr};
+    COglWorld   * m_parent;
 
     CObjectsText    m_num_text;
     std::vector<CConnectLine*> * m_lines;

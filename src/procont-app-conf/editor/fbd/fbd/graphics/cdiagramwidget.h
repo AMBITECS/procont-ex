@@ -62,6 +62,7 @@ signals:
     void    undo_enabled();
     void    interface_variable_new(const QString &type, const QString &name);
     void    interface_variable_rename(const QString &old_name, const QString &new_name);
+    void    instance_removed(const QString &type, const QString &name);
 
 public slots:
     void    updated_diagram();                      //!< update diagram it is get_interface_variables to assemble QDomNode

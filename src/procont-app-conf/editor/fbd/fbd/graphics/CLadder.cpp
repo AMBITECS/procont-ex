@@ -9,13 +9,13 @@
 
 #include "COglWorld.h"
 #include "editor/fbd/general/QtDialogs.h"
-#include "../variables.h"
 #include "CGrapchicsLogic.h"
+#include "editor/fbd/resources/colors.h"
 
 extern uint16_t    max_local_id;
 
 
-CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladder, CLadder *next)
+CLadder::CLadder(COglWorld *world, QPoint *hatch_top_left, QSize *hatch_size, CLadder *prev_ladder, CLadder *next)
 {
     m_hatch_pos     = hatch_top_left;
     m_previous      = prev_ladder;
@@ -24,6 +24,12 @@ CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladde
     m_objects       = new QList<CDiagramObject*>();
     m_ladder_draw   = new QVector<QPair<QRect*, QImage*>>();
     m_lines = new std::vector<CConnectLine*>();
+    m_parent        = world;
+
+    if (!m_parent)
+    {
+        throw std::runtime_error("parent is null in 'CLadder::CLadder(...)'");
+    }
 
     if (m_previous)
     {
@@ -35,10 +41,24 @@ CLadder::CLadder(QPoint *hatch_top_left, QSize * hatch_size, CLadder *prev_ladde
         m_next->set_previous(this);
     }
 
+    CDiagramColors colors;
+
     m_number = 0;
     m_num_text.set_text(QString::number(m_number));
+    m_num_text.set_color(colors.ladder_colors().ladder_number);
     m_texts.push_back(&m_num_text);
-    m_num_text.set_color(m_colors.divider);
+
+
+
+    m_colors.def_left = colors.ladder_colors().normal.left_part;
+    m_colors.def_right = colors.ladder_colors().normal.base_part;
+    m_colors.selected_left = colors.ladder_colors().selected.left_part;
+    m_colors.selected_right = colors.ladder_colors().selected.base_part;
+    m_colors.divider = colors.ladder_colors().rail;
+    m_colors.gray_field = colors.ladder_colors().grey_part;
+    m_colors.gray_bottom = m_colors.gray_field;
+    m_colors.landing_brick = colors.ladder_colors().landing_brick;
+    m_colors.landing_strip = colors.ladder_colors().landing_strip;
 
     fill_ladder_image();
     set_selected(false);
@@ -627,7 +647,7 @@ std::vector<CConnectLine *> *CLadder::connections()
 void CLadder::refresh_graphic_connections()
 {
     m_bottom_lines = 0;
-    CConnectorPin *opposite;
+    CPin *opposite;
     for (auto &line : *m_lines)
     {
         delete line;
@@ -640,12 +660,12 @@ void CLadder::refresh_graphic_connections()
     {
         for (auto &pin : *obj->outputs())
         {
-            if (pin->opposites()->empty())
+            if (pin->graphic_connections()->empty())
             {
                 continue;
             }
 
-            for (auto &conn : *pin->opposites())
+            for (auto &conn : *pin->graphic_connections())
             {
                 auto line = connect_algo.add_new_line(conn, pin);
                 if (line)
@@ -655,6 +675,28 @@ void CLadder::refresh_graphic_connections()
             }
         }
     }
+}
+
+CConnectLine *CLadder::remove_line(CConnectLine *line)
+{
+    int counter = 0;
+    m_bottom_lines--;   // тут совсем не факт TODO: fix this moment
+
+    for (auto &item : *m_lines)
+    {
+        if (item == line)
+        {
+            m_lines->erase(m_lines->begin() + counter);
+            return line;
+        }
+        counter++;
+    }
+    return nullptr;
+}
+
+COglWorld *CLadder::parent()
+{
+    return m_parent;
 }
 
 

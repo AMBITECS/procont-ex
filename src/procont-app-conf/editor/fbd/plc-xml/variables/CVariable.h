@@ -51,9 +51,9 @@ public:
     //[[nodiscard]] CConnectionPointOut* connection_point_out() const;
 
 private:
-    QString     m_attr_name;   // required
-    QString     m_attr_addr;
-    QString     m_attr_global_id;
+    QString     m_attr_name{""};   // required
+    QString     m_attr_addr{};
+    QString     m_attr_global_id{};
 
     QString     m_type;           // EBaseTypes or other POUs
     QString     m_derived_name;

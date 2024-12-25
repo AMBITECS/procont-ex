@@ -11,7 +11,7 @@
 CFilter::CFilter(CVariablesAnalytics *var_analytics, const bool &case_insensitive)
 {
     m_is_case_insensitive = case_insensitive;
-    m_analitics = var_analytics;
+    m_analytics = var_analytics;
 }
 
 CFilter::~CFilter()
@@ -73,7 +73,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
 
     if ((flags & ff_local_env) == ff_local_env)
     {
-        auto iface = m_analitics->local_pou_interface();
+        auto iface = m_analytics->local_pou_interface();
         for (auto &var : iface->all_variables())
         {
             std::string var_name = var->name().toStdString();
@@ -94,7 +94,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
 
     if ((flags & ff_user_types) == ff_user_types)
     {
-        for (auto &u_type : *m_analitics->user_types())
+        for (auto &u_type : *m_analytics->user_types())
         {
             std::string utype_name = u_type->name().toStdString();
 
@@ -115,7 +115,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
 
     if ((flags & ff_pou_names) == ff_pou_names)
     {
-        for (auto &pou : *m_analitics->pou_array())
+        for (auto &pou : *m_analytics->pou_array())
         {
             std::string  pou_name = pou->name().toStdString();
 
@@ -177,11 +177,4 @@ EDefinedDataTypes CFilter::get_type_from_const(const std::string &expression)
     return DDT_ANY_NUM;
 }
 
-void inline CFilter::capitalize_word(std::string &word)
-{
-    for (auto &sym : word)
-    {
-        sym = std::toupper(sym);
-    }
-}
 

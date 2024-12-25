@@ -8,7 +8,7 @@
 #include "../../plc-xml/fbd/CBlock.h"
 #include "init-data.h"
 
-
+/*
 class DBlock : public CBlock
 {
 public:
@@ -16,5 +16,5 @@ public:
     ~DBlock() override;
 };
 
-
+*/
 #endif //EDITORSD_DBLOCK_H

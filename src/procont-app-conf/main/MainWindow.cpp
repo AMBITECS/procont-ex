@@ -8,12 +8,21 @@
 #include "log/Logger.h"
 #include "iec/StandardLibrary.h"
 #include "view/TreeView.h"
+
 #include "dialog/InputDialog.h"
 #include "dialog/AddPOUDialog.h"
 #include "dialog/AddDUTDialog.h"
+#include "dialog/RenameDialog.h"
+
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
+
 #include "editor/fbd/general/ctreeobject.h"
+
+#include "undo/cundocommand_remove.h"
+#include "undo/cundocommand_insert.h"
+
+#include "tr/translation.h"
 
 #include <QDockWidget>
 #include <QTreeView>
@@ -25,6 +34,7 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QMessageBox>
+#include <QUndoStack>
 
 #include <QDebug>
 
@@ -35,7 +45,8 @@ QString MainWindow::_m_base_directory = QString();
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     _m_proxy_pou(new ProxyModelTree_pou),
-    _m_proxy_dev(new ProxyModelTree_dev)
+    _m_proxy_dev(new ProxyModelTree_dev),
+    _m_undo_stack(new QUndoStack)
 {
     setMinimumSize(QSize(1440, 900));
 
@@ -60,6 +71,14 @@ MainWindow::MainWindow(QWidget *parent) :
         _m_config_filepath = QString("%1/etc/procont.ini").arg(_m_base_directory);
 
     _m_settings = new QSettings(_m_config_filepath, QSettings::IniFormat);
+
+    if(!QFileInfo::exists(_m_config_filepath))
+    {
+        QString etc_dir_ = QString("%1/etc").arg(_m_base_directory);
+        if(!QFileInfo::exists(etc_dir_))
+            QDir(_m_base_directory).mkdir(etc_dir_);
+        _m_settings->setValue("Compiler/matiec_path", QString("%1/matiec").arg(_m_base_directory));
+    }
 }
 
 void MainWindow::setConfig(const QString &filepath_)
@@ -78,6 +97,11 @@ MainWindow * MainWindow::instance()
         _m_instance = new MainWindow;
 
     return _m_instance;
+}
+
+QUndoStack * MainWindow::undoStack() const
+{
+    return _m_undo_stack;
 }
 
 void MainWindow::createWidgets()
@@ -126,6 +150,8 @@ void MainWindow::createWidgets()
     // right area
     _m_toolWidget = new CTreeObject(this);
     _m_toolWidget->setMinimumSize(200, 500);
+    QStringList treeHeaderLabels; treeHeaderLabels << tr("Components");
+    _m_toolWidget->setHeaderLabels(treeHeaderLabels);
     auto pDock = new QDockWidget(tr("ToolBar"), this);
     pDock->setTitleBarWidget(new QWidget());
     pDock->setAllowedAreas(Qt::RightDockWidgetArea);
@@ -133,10 +159,12 @@ void MainWindow::createWidgets()
     addDockWidget(Qt::RightDockWidgetArea, pDock);
 
     // bottom area
+    _m_widget_protocol = new CWidgetProtocol(undoStack());
+    _m_widget_protocol->setMinimumHeight(300);
     pDock = new QDockWidget(tr("Protocol"), this);
     pDock->setTitleBarWidget(new QWidget());
     pDock->setAllowedAreas(Qt::BottomDockWidgetArea);
-    pDock->setWidget(CWidgetProtocol::instance());
+    pDock->setWidget(_m_widget_protocol);
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
 }
 
@@ -153,10 +181,24 @@ void MainWindow::createMenu()
     fileMenu->addAction(tr("Exit"), QKeySequence::Quit, this, &QWidget::close);
 
     auto editMenu = menuBar()->addMenu(tr("Edit"));
-    auto edit_undo_act = editMenu->addAction(QIcon(":/icon/images/undo1.svg"), tr("Undo"), QKeySequence::Undo, this, &MainWindow::slot_undo);
-    edit_undo_act->setEnabled(false);
-    auto edit_redo_act = editMenu->addAction(QIcon(":/icon/images/redo1.svg"), tr("Redo"), QKeySequence::Redo, this, &MainWindow::slot_redo);
-    edit_redo_act->setEnabled(false);
+    auto edit_undo_act = undoStack()->createUndoAction(this);
+    edit_undo_act->setText(tr("Undo"));
+    edit_undo_act->setIcon(QIcon(":/icon/images/undo1.svg"));
+    edit_undo_act->setShortcuts(QKeySequence::Undo);
+    edit_undo_act->setStatusTip(tr("Undo action"));
+
+    auto edit_redo_act = undoStack()->createRedoAction(this);
+    edit_redo_act->setText(tr("Redo"));
+    edit_redo_act->setIcon(QIcon(":/icon/images/redo1.svg"));
+    edit_redo_act->setShortcuts(QKeySequence::Redo);
+    edit_redo_act->setStatusTip(tr("Redo action"));
+
+    //     editMenu->addAction(QIcon(":/icon/images/undo1.svg"), tr("Undo"), QKeySequence::Undo, this, &MainWindow::slot_undo);
+    // edit_undo_act->setEnabled(false);
+
+    //     auto edit_redo_act = editMenu->addAction(QIcon(":/icon/images/redo1.svg"), tr("Redo"), QKeySequence::Redo, this, &MainWindow::slot_redo);
+    // edit_redo_act->setEnabled(false);
+
     editMenu->addSeparator();
     auto edit_cut_act = editMenu->addAction(QIcon(":/icon/images/cut.svg"), tr("Cut"), QKeySequence::Cut, this, &MainWindow::slot_cut);
     _m_dynamic_actions.insert("dataType", DynamicAction(edit_cut_act, {_m_tree_pou}));
@@ -220,13 +262,13 @@ void MainWindow::createMenu()
     _m_button->setPopupMode(QToolButton::InstantPopup);
     toolbar->addSeparator();
     toolbar->addAction(compile_build_act);
-    toolbar->setIconSize(QSize(24, 24));
+    toolbar->setIconSize(QSize(32, 32));
 }
 
 void MainWindow::createDynamicActions()
 {
     // rename
-    auto act = new QAction(tr("Rename"));
+    auto act = new QAction(QIcon(":/icon/images/rename.svg"), tr("Rename"));
     connect(act, &QAction::triggered, this, &MainWindow::slot_rename);
     _m_dynamic_actions.insert("dataType", DynamicAction(act, {_m_tree_pou}, true));
     _m_dynamic_actions.insert("pou", DynamicAction(act, {_m_tree_pou}, true));
@@ -236,7 +278,7 @@ void MainWindow::createDynamicActions()
     _m_dynamic_actions.insert("pouInstance", DynamicAction(act, {_m_tree_dev}, true));
 
     // properties
-    act = new QAction(tr("Properties"));
+    act = new QAction(QIcon(":/icon/images/config.svg"), tr("Properties"));
     connect(act, &QAction::triggered, this, &MainWindow::slot_properties);
     _m_dynamic_actions.insert("dataType", DynamicAction(act, {_m_tree_pou}, true));
     _m_dynamic_actions.insert("pou", DynamicAction(act, {_m_tree_pou}, true));
@@ -273,7 +315,7 @@ void MainWindow::createDynamicActions()
     _m_dynamic_actions.insert("task", DynamicAction(act, {_m_tree_dev}, tr("Add object")));
 
     // add device
-    act = new QAction(tr("Add device"));
+    act = new QAction(tr("Add device..."));
     connect(act, &QAction::triggered, this, &MainWindow::slot_add_device);
     _m_dynamic_actions.insert("project", DynamicAction(act, {_m_tree_dev}));
     _m_dynamic_actions.insert("configuration", DynamicAction(act, {_m_tree_dev}));
@@ -292,7 +334,7 @@ void MainWindow::createContextMenu(const QPoint &pos_, const QTreeView *tree_)
             QList<QMenu *> subs_;
             std::reverse(acts.begin(), acts.end());
             auto c = 0;
-            for(auto i : std::as_const(acts))
+            for(const auto & i : std::as_const(acts))
             {
                 if(!i._m_views.contains(tree_))
                     continue;
@@ -319,6 +361,11 @@ void MainWindow::createContextMenu(const QPoint &pos_, const QTreeView *tree_)
             menu->exec(tree_->viewport()->mapToGlobal(pos_));
         }
     }
+}
+
+QDomDocument & MainWindow::document()
+{
+    return _m_project_document;
 }
 
 void MainWindow::slot_pouCustomContextMenu(const QPoint &pos_)
@@ -397,13 +444,9 @@ void MainWindow::slot_add_DUT()
     AddDUTDialog dlg;
     if(dlg.exec() == QDialog::Accepted)
     {
-        auto model = reinterpret_cast<QAbstractProxyModel*>(_m_tree_pou->model());
-        auto indexes = model->sourceModel()->match(model->sourceModel()->index(0, 0), Qt::DecorationRole, "dataTypes", -1, Qt::MatchRecursive);
-        auto parentIndex = indexes.at(0);
-        auto parentItem = reinterpret_cast<DomItem *>(parentIndex.internalPointer());
-
-        parentItem->addNode(dlg.getNode().toDocument().documentElement());
-        model->sourceModel()->insertRow(parentItem->rowCount(), parentIndex);
+        auto model = reinterpret_cast<QAbstractProxyModel*>(_m_tree_pou->model())->sourceModel();
+        auto parentIndex = s_index(_m_tree_pou->currentIndex());
+        undoStack()->push(new CUndoCommand_insert(dlg.getNode().toDocument().documentElement(), parentIndex, model));
     }
 }
 
@@ -412,13 +455,9 @@ void MainWindow::slot_add_POU()
     AddPOUDialog dlg;
     if(dlg.exec() == QDialog::Accepted)
     {
-        auto model = reinterpret_cast<QAbstractProxyModel*>(_m_tree_pou->model());
-        auto indexes = model->sourceModel()->match(model->sourceModel()->index(0, 0), Qt::DecorationRole, "pous", -1, Qt::MatchRecursive);
-        auto parentIndex = indexes.at(0);
-        auto parentItem = reinterpret_cast<DomItem *>(parentIndex.internalPointer());
-
-        parentItem->addNode(dlg.getNode().toDocument().documentElement());
-        model->sourceModel()->insertRow(parentItem->rowCount(), parentIndex);
+        auto model = reinterpret_cast<QAbstractProxyModel*>(_m_tree_pou->model())->sourceModel();
+        auto parentIndex = s_index(_m_tree_pou->currentIndex());
+        undoStack()->push(new CUndoCommand_insert(dlg.getNode().toDocument().documentElement(), parentIndex, model));
     }
 }
 
@@ -465,7 +504,7 @@ void MainWindow::open(const QString & filePath)
     if(_filePath.isEmpty())
         default_file = true;
     else
-        info(
+        m_info(
             QStringList()
             << QString(tr("open project %1")).arg(_fileName)
             << QString(tr("project file: %1")).arg(_filePath)
@@ -473,7 +512,7 @@ void MainWindow::open(const QString & filePath)
 
     if(!default_file && !QFileInfo::exists(_filePath))
     {
-        warn(
+        m_warn(
             QStringList()
             << QString(tr("can't open project %1")).arg(_fileName)
             << QString(tr("file not found: %1").arg(_filePath))
@@ -484,9 +523,9 @@ void MainWindow::open(const QString & filePath)
 
     if(default_file)
     {
-        _filePath = ":/proj/proj/plc-e.xml";
+        _filePath = ":/proj/proj/plc-1.xml";
         _fileName = QFileInfo(_filePath.right(_filePath.size()-1)).fileName();
-        info(
+        m_info(
             QStringList()
             << QString(tr("open project %1")).arg(_fileName)
             << QString(tr("project file: %1")).arg(_filePath)
@@ -497,7 +536,7 @@ void MainWindow::open(const QString & filePath)
     QFile file(_filePath);
     if(!file.open(QIODevice::ReadOnly))
     {
-        crit(
+        m_crit(
             QStringList()
             << QString(tr("can't open project %1")).arg(_fileName)
             << QString(tr("can't open file for read: %1").arg(_filePath))
@@ -510,7 +549,7 @@ void MainWindow::open(const QString & filePath)
 
     if(!result)
     {
-        warn(
+        m_warn(
             QStringList()
             << QString(tr("can't open project %1")).arg(_fileName)
             << QString(tr("file parse error: %1").arg(_filePath))
@@ -548,7 +587,7 @@ void MainWindow::open(const QString & filePath)
             _m_tree_dev->resizeColumnToContents(i);
     }
 
-    info(
+    m_info(
         QStringList()
         << QString(tr("project opened %1")).arg(_fileName)
         << QString(tr("project file: %1")).arg(_filePath)
@@ -566,6 +605,8 @@ void MainWindow::save(const QString & filePath)
 {
     if (!filePath.isEmpty())
     {
+        undoStack()->clear();
+
         QFile file(filePath);
         if (file.open(QIODevice::WriteOnly))
         {
@@ -598,13 +639,13 @@ void MainWindow::slot_currentViewChanged(const QModelIndex &index)
     }
 }
 
-void MainWindow::slot_undo()
-{
-}
+// void MainWindow::slot_undo()
+// {
+// }
 
-void MainWindow::slot_redo()
-{
-}
+// void MainWindow::slot_redo()
+// {
+// }
 
 void MainWindow::slot_cut()
 {
@@ -636,22 +677,14 @@ void MainWindow::slot_delete()
                 _type = "DUT";
 
             auto _name = item(index)->node().toElement().attribute("name");
-            if
-                (
-                    QMessageBox::Yes ==
-                    QMessageBox::question
+            auto _result = QMessageBox::question
                     (
                         this,
                         tr("Attention"),
                         QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
-                        )
-                    )
-            {
-                TabWidgetEditor::instance()->closeTab(index);
-                item(index)->parentItem()->removeChild(s_index(index).row(), 0, item(index)->node());
-                proxy(_m_tree_pou->model())->sourceModel()->
-                    removeRow(s_index(index).row(), s_index(index.parent()));
-            }
+                );
+            if(QMessageBox::Yes == _result)
+                undoStack()->push(new CUndoCommand_remove(s_index(index), proxy(_m_tree_pou->model())->sourceModel()));
         }
     }
     // dev tree
@@ -664,7 +697,7 @@ void MainWindow::slot_delete()
 
             QString _type = {};
             if(item(index)->parentItem()->node().nodeName() == "project")
-                _type = tr("configuration");
+                _type = "configuration";
             if(item(index)->parentItem()->node().nodeName() == "configuration")
                 _type = "resource";
             if(item(index)->parentItem()->node().nodeName() == "resource")
@@ -673,29 +706,55 @@ void MainWindow::slot_delete()
                 _type = "POU instance";
 
             auto _name = item(index)->node().toElement().attribute("name");
-            if
+            auto _result = QMessageBox::question
                 (
-                    QMessageBox::Yes ==
-                    QMessageBox::question
-                    (
-                        this,
-                        tr("Attention"),
-                        QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
-                        )
-                    )
-            {
-                TabWidgetEditor::instance()->closeTab(index);
-                item(index)->parentItem()->removeChild(s_index(index).row(), 0, item(index)->node());
-                proxy(_m_tree_dev->model())->sourceModel()->
-                    removeRow(s_index(index).row(), s_index(index.parent()));
-            }
+                    this,
+                    tr("Attention"),
+                    QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
+                );
+            if(QMessageBox::Yes == _result)
+                undoStack()->push(new CUndoCommand_remove(s_index(index), proxy(_m_tree_pou->model())->sourceModel()));
         }
     }
 }
 
 void MainWindow::slot_rename()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    QTreeView * _tree = nullptr;
+
+    if(QApplication::focusWidget() == _m_tree_pou)
+        _tree = _m_tree_pou;
+    if(QApplication::focusWidget() == _m_tree_dev)
+        _tree = _m_tree_dev;
+
+    if(_tree == nullptr)
+        return;
+
+    for(auto index : _tree->selectionModel()->selectedRows())
+    {
+        // rename dialog
+        RenameDialog dlg(item(index)->node().toElement().attribute("name"));
+        auto _result = dlg.exec();
+        if(_result == QDialog::Accepted)
+        {
+            // question
+            QDomElement _node = item(index)->node().toElement();
+            auto _result = QMessageBox::question
+                (
+                    this,
+                    tr("Attention"),
+                    QString(tr("Do you really want rename %1 from '%2' to '%3'"))
+                        .arg(_node.nodeName(), _node.attribute("name"), dlg.new_name())
+                );
+            if(QMessageBox::Yes == _result)
+            {
+                // переименовать node
+                item(index)->node().toElement().setAttribute("name", dlg.new_name());
+                // переименовать tab
+                TabWidgetEditor::instance()->renameTab(index);
+            }
+        }
+    }
 }
 
 void MainWindow::slot_properties()
@@ -705,7 +764,7 @@ void MainWindow::slot_properties()
 
 void MainWindow::slot_input_assistant()
 {
-    InputDialog dlg(InputDialog::eCT_TYPE);
+    InputDialog dlg(InputDialog::eCT_POU);
     dlg.exec();
     qDebug() << dlg.selectedType().toElement().attribute("name");
 }
@@ -715,9 +774,7 @@ void MainWindow::slot_compile()
 }
 
 void MainWindow::slot_build()
-{    
-    b_command(CCmd::eCT_Show);
-
+{
     // *** подготовка ST-файла
     // создание папки для сборки
     auto _buildDir = QString("%1/build").arg(_m_base_directory);
@@ -744,7 +801,8 @@ void MainWindow::slot_build()
                 _buildDir,
                 _m_settings->value("Compiler/matiec_path").toString()
             );
-    _m_compiler->compile();
+    if( 0 == _m_compiler->compile())
+        b_command(CCmd::eCT_Show);
     // ***
 }
 

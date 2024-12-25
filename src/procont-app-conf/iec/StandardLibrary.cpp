@@ -63,6 +63,7 @@ void StandardLibrary::add(const QString & name_, QDomDocument * doc_, const QStr
 {
     if(_m_libs.contains(name_))
         delete _m_libs.value(name_);
+
     _m_libs.insert(name_, new ILibrary(name_, doc_, _name_user));
 }
 

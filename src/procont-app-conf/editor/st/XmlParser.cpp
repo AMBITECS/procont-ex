@@ -228,16 +228,6 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         for (const auto & var : pou.interface.inputVars)
         {
             result += Variable::covertObjToString(var);
-            /*
-            result += "\t" + var.name + ": " + var.type;
-
-            if (var.initialValue.simpleValue.value != "")
-            {
-                result += " := " + var.initialValue.simpleValue.value + "\n";
-            } else {
-                result += "\n";
-            }
-*/
         }
         result += QString("END_VAR") + "\n";
     }
@@ -248,15 +238,6 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         for (const auto & var : pou.interface.outputVars)
         {
             result += Variable::covertObjToString(var);
-            /*
-            result += "\t" + var.name + ": " + var.type;
-            if (var.initialValue.simpleValue.value != "")
-            {
-                result += " := " + var.initialValue.simpleValue.value + "\n";
-            } else {
-                result += "\n";
-            }
-*/
         }
         result += QString("END_VAR") + "\n";
     }
@@ -267,18 +248,30 @@ QString XmlParser::getPouVarsText(const QDomNode& node)
         for (const auto & var : pou.interface.localVars)
         {
             result += Variable::covertObjToString(var);
-            /*
-            result += "\t" + var.name + ": " + var.type;
-            if (var.initialValue.simpleValue.value != "")
-            {
-                result += " := " + var.initialValue.simpleValue.value + "\n";
-            } else {
-                result += "\n";
-            }
-*/
         }
         result += QString("END_VAR") + "\n";
     }
+
+    if (!pou.interface.externalVars.empty())
+    {
+        result += QString("VAR_EXTERNAL") + "\n";
+        for (const auto & var : pou.interface.externalVars)
+        {
+            result += Variable::covertObjToString(var);
+        }
+        result += QString("END_VAR") + "\n";
+    }
+
+    if (!pou.interface.globalVars.empty())
+    {
+        result += QString("VAR_GLOBAL") + "\n";
+        for (const auto & var : pou.interface.globalVars)
+        {
+            result += Variable::covertObjToString(var);
+        }
+        result += QString("END_VAR") + "\n";
+    }
+
     return result;
 }
 

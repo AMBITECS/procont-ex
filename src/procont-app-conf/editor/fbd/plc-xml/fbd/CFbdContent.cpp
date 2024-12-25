@@ -3,8 +3,10 @@
 //
 
 #include "CFbdContent.h"
+#include "editor/fbd/fbd/editors/CFilter.h"
+#include "../common/CBody.h"
 
-CFbdContent::CFbdContent()
+CFbdContent::CFbdContent(CBody *parent)
 {
     m_blocks            = new QList<CBlock*>();
     m_labels            = new QList<CLabel*>();
@@ -14,7 +16,7 @@ CFbdContent::CFbdContent()
     m_inVariables       = new QList<CInVariable*>();
     m_out_variables     = new QList<COutVariable*>();
     m_in_out_variables  = new QList<CInOutVariable*>();
-
+    m_parent = parent;
 }
 
 CFbdContent::CFbdContent(const CFbdContent &other)
@@ -27,6 +29,7 @@ CFbdContent::CFbdContent(const CFbdContent &other)
     m_returns           = new QList<CReturn*>(*other.m_returns);
     m_inVariables       = new QList<CInVariable*>(*other.m_inVariables);
     m_comments          = new QList<CComment*>(*other.m_comments);
+    m_parent            = other.m_parent;
 }
 
 CFbdContent::CFbdContent(CFbdContent &&other) noexcept
@@ -39,6 +42,7 @@ CFbdContent::CFbdContent(CFbdContent &&other) noexcept
     m_returns           = other.m_returns;
     m_inVariables       = other.m_inVariables;
     m_comments          = other.m_comments;
+    m_parent            = other.m_parent;
 
     other.m_blocks              = nullptr;
     other.m_labels              = nullptr;
@@ -50,7 +54,7 @@ CFbdContent::CFbdContent(CFbdContent &&other) noexcept
     other.m_comments            = nullptr;
 }
 
-CFbdContent::CFbdContent(const QDomNode &dom_node)
+CFbdContent::CFbdContent(const QDomNode &dom_node, CBody *parent)
 {
     /// suppose root tag is <FBD> - like
 
@@ -67,6 +71,7 @@ CFbdContent::CFbdContent(const QDomNode &dom_node)
     m_inVariables       = new QList<CInVariable*>();
     m_out_variables     = new QList<COutVariable*>();
     m_in_out_variables  = new QList<CInOutVariable*>();
+    m_parent            = parent;
 
     for (uint16_t i = 0; i < dom_node.childNodes().count(); ++i)
     {
@@ -74,11 +79,11 @@ CFbdContent::CFbdContent(const QDomNode &dom_node)
 
         if (child.nodeName() == "outVariable")
         {
-            m_out_variables->emplace_back(new COutVariable(child));
+            m_out_variables->emplace_back(new COutVariable(child, m_parent));
         }
         if (child.nodeName() == "block")
         {
-            m_blocks->emplace_back(new CBlock(child));
+            m_blocks->emplace_back(new CBlock(child, m_parent));
         }
         if (child.nodeName() == "inVariable")
         {
@@ -240,4 +245,96 @@ QDomNode CFbdContent::dom_node() const
 QList<CComment *> *CFbdContent::comments()
 {
     return m_comments;
+}
+
+s_variable_data CFbdContent::get_var_by_local_id(const uint64_t &id)
+{
+    s_variable_data data;
+
+    for (auto &var : *m_in_out_variables)
+    {
+        if (var->local_id() == id)
+        {
+            data.source = PD_IN_OUT;
+            data.variable = var;
+            data.local_id = id;
+
+            return data;
+        }
+    }
+
+    for (auto &var : *m_inVariables)
+    {
+        if (var->local_id() == id)
+        {
+            data.source = PD_INPUT;
+            data.variable = var;
+            data.local_id = id;
+
+            return data;
+        }
+    }
+
+    for (auto &var : *m_out_variables)
+    {
+        if (var->local_id() == id)
+        {
+            data.source = PD_OUTPUT;
+            data.variable = var;
+            data.local_id = id;
+
+            return data;
+        }
+    }
+
+    return data;
+}
+
+CBlock *CFbdContent::get_block_by_id(const uint64_t &id)
+{
+    for (auto &block : *m_blocks)
+    {
+        if (block->local_id() == id)
+        {
+            return block;
+        }
+    }
+    return nullptr;
+}
+
+CInVariable* CFbdContent::remove_in_variable_ny_id(const uint64_t &loc_id)
+{
+    int counter = 0;
+    CInVariable *var = nullptr;
+
+    for (auto &in : *m_inVariables)
+    {
+        if (in->local_id() == loc_id)
+        {
+            var = in;
+            m_inVariables->erase(m_inVariables->cbegin() + counter);
+            return var;
+        }
+        counter++;
+    }
+    return var;
+}
+
+COutVariable *CFbdContent::find_output_var_by_iface_name(const QString &iface_var_name)
+{
+    std::string search_name = iface_var_name.toStdString();
+    CFilter::capitalize_word(search_name);
+    std::string current;
+
+    for (auto &out_var : *m_out_variables)
+    {
+        current = out_var->expression()->expression().toStdString();
+        CFilter::capitalize_word(current);
+
+        if (current == search_name)
+        {
+            return out_var;
+        }
+    }
+    return nullptr;
 }

@@ -20,6 +20,8 @@ private slots:
     void slot_rowsRemoved(const QModelIndex &parent, int first, int last);
     void slot_rowsInserted(const QModelIndex &parent, int first, int last);
 
+    bool edit(const QModelIndex &index, QAbstractItemView::EditTrigger trigger, QEvent *event) override;
+
 signals:
     void signal_tableChanged();
 };

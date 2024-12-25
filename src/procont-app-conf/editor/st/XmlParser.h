@@ -4,6 +4,8 @@
 #include <QList>
 #include "CommonStTypes.h"
 
+#include "item/DomItem.h"
+
 enum textBlockType
 {
     VARS,
@@ -30,6 +32,20 @@ public:
     static QString getPouVarsText(const QDomNode& node);
     static QDomNode getPouNode(const QString& _text_vars, const QString&, const QDomNode &_parent);
     static QDomNode getDataTypeNode(const QString& _text_vars, const QString&, const QDomNode &_parent);
+
+    static QStringList getPousListName(const QDomNode& node)
+    {
+        QStringList result;
+        auto parent = node.parentNode();
+        QDomNode domNode = parent.firstChild();
+        while(!domNode.isNull()) {
+            if (!domNode.toElement().attribute("name").isEmpty())
+                result.append(domNode.toElement().attribute("name"));
+            domNode = domNode.nextSibling();
+        }
+
+        return result;
+    }
 
 private:
     // xml to text

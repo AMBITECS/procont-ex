@@ -56,11 +56,6 @@ CAddData::CAddData(const QDomNode &node)
 
 CAddData::~CAddData()
 {
-    /*if (!m_data_list)
-    {
-        return;
-    }*/
-
     if (!m_data_list->empty())
         clean();
     delete m_data_list;

@@ -85,9 +85,11 @@ DomItem * TabWidgetEditor::item(const QModelIndex &index, QAbstractItemModel * p
 
 void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
 {
-    if(_hWidgets.contains(index))
+    QModelIndex _index = s_index(index);
+
+    if(_hWidgets.contains(_index))
     {
-        setCurrentWidget(_hWidgets.value(index));
+        setCurrentWidget(_hWidgets.value(_index));
         return;
     }
 
@@ -101,35 +103,47 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
             editor = new WidgetEditor_st(index, proxyModel(type));
         if(!item(index)->node().toElement().namedItem("body").namedItem("FBD").isNull())
             editor = new WidgetEditor_fbd(index, proxyModel(type));
+        if(!item(index)->node().toElement().namedItem("body").namedItem("LD").isNull())
+            editor = new WidgetEditor_ld(index, proxyModel(type));
 
         if(editor != nullptr)
-            _hWidgets.insert(index, editor);
+            _hWidgets.insert(_index, editor);
         else
-            _hWidgets.insert(index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
+            _hWidgets.insert(_index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
 
     }
     break;
     case DomItem::typeType:
     {
-        _hWidgets.insert(index, new WidgetEditor_type(index, proxyModel(type)));
+        _hWidgets.insert(_index, new WidgetEditor_type(index, proxyModel(type)));
     }
     break;
     case DomItem::typeVar:
     {
-        _hWidgets.insert(index, new WidgetEditor_vars(index, proxyModel(type)));
+        _hWidgets.insert(_index, new WidgetEditor_vars(index, proxyModel(type)));
     }
     break;
     default:
-        _hWidgets.insert(index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
+        _hWidgets.insert(_index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
     break;
     }
 
-    addTab(_hWidgets.value(index), index.data().toString());
-    setCurrentWidget(_hWidgets.value(index));
+    addTab(_hWidgets.value(_index), index.data().toString());
+    setCurrentWidget(_hWidgets.value(_index));
 }
 
-void TabWidgetEditor::closeTab(const QModelIndex &index)
+void TabWidgetEditor::renameTab(const QModelIndex &index_)
 {
+    QModelIndex index = s_index(index_);
+
+    if(_hWidgets.contains(index))
+        setTabText(indexOf(_hWidgets.value(index)), index.data().toString());
+}
+
+void TabWidgetEditor::closeTab(const QModelIndex &index_, bool source_)
+{
+    QModelIndex index = source_ ? index_ : s_index(index_);
+
     if(_hWidgets.contains(index))
         slot_closeTab(indexOf(_hWidgets.value(index)));
 }
@@ -141,8 +155,8 @@ void TabWidgetEditor::slot_currentTabChanged(int index)
     else
         emit signal_currentTabChanged(QModelIndex());
 
-    if(dynamic_cast<WidgetEditor_fbd*>(widget(index)))
-        reinterpret_cast<WidgetEditor_fbd*>(widget(index))->activate();
+    // if(dynamic_cast<WidgetEditor_fbd*>(widget(index)))
+    //     reinterpret_cast<WidgetEditor_fbd*>(widget(index))->activate();
 }
 
 void TabWidgetEditor::slot_closeTab(int index)

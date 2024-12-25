@@ -22,15 +22,15 @@ public:
     ~CAction();
 
     CAction&    operator=(const CAction & other);
-    QDomNode    dom_node() const;
+    [[nodiscard]] QDomNode    dom_node() const;
 
-    uint64_t    local_id() const;
+    [[nodiscard]] uint64_t    local_id() const;
     void        set_local_id(const uint64_t &local_id);
 
-    QString     qualifier() const;
+    [[nodiscard]] QString     qualifier() const;
     void        set_qualifier(const QString &qualifier);
 
-    float       width() const;
+    [[nodiscard]] float       width() const;
     void        set_width(const float &width);
 
     float       height() const;

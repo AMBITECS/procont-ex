@@ -31,7 +31,7 @@ public:
     [[nodiscard]] DomItem * insertChild(int row, int column, const QDomNode & node, int shift = 0);
     void removeChild(int row, int column, const QDomNode & childNode);
     void removeChildren();
-    virtual void updateNode(const QDomNode &) {;}
+    virtual void updateNode(const QDomNode &);
     virtual void addNode(const QDomNode & = QDomNode());
 
     [[nodiscard]] DomItem * parentItem() const;
@@ -39,7 +39,7 @@ public:
     [[nodiscard]] int rowCount();
     [[nodiscard]] int columnCount();
 
-    [[nodiscard]] virtual QVariant data(int role) const override;
+    [[nodiscard]] virtual QVariant data(int role = Qt::DisplayRole) const override;
     virtual void setData(const QVariant &value, int role) override;
     [[nodiscard]] int type() const override { return m_itemType; }
 
@@ -91,6 +91,29 @@ public:
 
         return node().attributes().namedItem("name").nodeValue();
     }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** DomItemType
+class DomItemType : public DomItemName
+{
+public:
+    DomItemType(const QDomNode &node) :
+        DomItemName(node)
+    {}
+
+    void updateNode(const QDomNode &new_node_)
+    {
+        qDebug() << __PRETTY_FUNCTION__;
+
+        if(new_node_.nodeName() == "baseType")
+        {
+            node().removeChild(node().namedItem("baseType"));
+            node().appendChild(new_node_.cloneNode());
+        }
+    }
+
 };
 // ----------------------------------------------------------------------------
 
@@ -159,6 +182,15 @@ public:
 // ----------------------------------------------------------------------------
 // *** DomItemName_creator
 class DomItemName_creator : public DomItem_creator
+{
+public:
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** DomItemType_creator
+class DomItemType_creator : public DomItem_creator
 {
 public:
     [[nodiscard]] virtual DomItem * create(const QDomNode &node);

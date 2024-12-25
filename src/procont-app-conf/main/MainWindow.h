@@ -11,6 +11,7 @@ QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
 QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 QT_FORWARD_DECLARE_CLASS(QSettings)
+QT_FORWARD_DECLARE_CLASS(QUndoStack)
 
 QT_FORWARD_DECLARE_CLASS(DomModel)
 QT_FORWARD_DECLARE_CLASS(DomItem)
@@ -19,6 +20,7 @@ QT_FORWARD_DECLARE_CLASS(ProxyModelTree_pou)
 QT_FORWARD_DECLARE_CLASS(ProxyModelTree_dev)
 QT_FORWARD_DECLARE_CLASS(Compiler)
 QT_FORWARD_DECLARE_CLASS(CTreeObject)
+QT_FORWARD_DECLARE_CLASS(CWidgetProtocol)
 
 class MainWindow : public QMainWindow
 {
@@ -58,10 +60,13 @@ public:
 
     CTreeObject * toolWidget() const;
 
+    static QString config_file() { return _m_config_filepath; }
     static void setConfig(const QString &);
     static void setDirectory(const QString &);
 
-    const QDomDocument & document() const;
+    QDomDocument & document();
+
+    QUndoStack * undoStack() const;
 
 private:
     void open(const QString & filePath = {});
@@ -75,8 +80,8 @@ private:
 private slots:
     void slot_open();
     void slot_save();
-    void slot_undo();
-    void slot_redo();
+    // void slot_undo();
+    // void slot_redo();
     void slot_cut();
     void slot_copy();
     void slot_paste();
@@ -113,23 +118,23 @@ private:
     static DomItem * item(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
 
 private:
-    QDockWidget * dockPou = nullptr;
-    QDockWidget * dockDev = nullptr;
+    QDockWidget * dockPou{nullptr};
+    QDockWidget * dockDev{nullptr};
 
-    // QTreeView * view = nullptr;
-    QTreeView * _m_tree_dev = nullptr;
-    TreeView * _m_tree_pou = nullptr;
+    // QTreeView * view{nullptr};
+    QTreeView * _m_tree_dev{nullptr};
+    TreeView * _m_tree_pou{nullptr};
 
-    DomModel * _m_model_project = nullptr;
-    ProxyModelTree_pou * _m_proxy_pou = nullptr;
-    ProxyModelTree_dev * _m_proxy_dev = nullptr;
+    DomModel * _m_model_project{nullptr};
+    ProxyModelTree_pou * _m_proxy_pou{nullptr};
+    ProxyModelTree_dev * _m_proxy_dev{nullptr};
 
-    QString _m_proj_dir = {};
+    QString _m_proj_dir{};
 
-    Compiler * _m_compiler = nullptr;
+    Compiler * _m_compiler{nullptr};
 
     QMultiHash<QString, DynamicAction> _m_dynamic_actions;
-    QMenu * _m_addobject_menu = nullptr;
+    QMenu * _m_addobject_menu{nullptr};
 
     QToolButton * _m_button{nullptr};
 
@@ -141,6 +146,9 @@ private:
     static QString _m_base_directory;
 
     QDomDocument _m_project_document;
+
+    CWidgetProtocol * _m_widget_protocol{nullptr};
+    QUndoStack * _m_undo_stack{nullptr};
 
 private:
     static MainWindow * _m_instance;

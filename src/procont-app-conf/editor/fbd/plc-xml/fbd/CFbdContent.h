@@ -15,6 +15,15 @@
 #include "CReturn.h"
 #include "../common/CComment.h"
 
+struct s_variable_data
+{
+    void    * variable{nullptr};
+    uint64_t  local_id{0};
+    EPinDirection   source{PD_UNDEF};
+};
+
+class CBody;
+
 /**
  * @brief These elements are a collection of objects, which are defined in FBD. They can be used in all
  *  graphical bodies.
@@ -23,10 +32,10 @@
 class CFbdContent
 {
 public:
-    CFbdContent();
+    CFbdContent(CBody *parent);
     CFbdContent(const CFbdContent & other);
     CFbdContent(CFbdContent && other) noexcept;
-    explicit CFbdContent(const QDomNode & dom_node);
+    explicit CFbdContent(const QDomNode & dom_node, CBody *parent);
     ~CFbdContent();
 
     [[nodiscard]] QDomNode            dom_node() const;
@@ -40,7 +49,14 @@ public:
     QList<CReturn*>     * returns();
     QList<CComment*>    * comments();
 
+    s_variable_data     get_var_by_local_id(const uint64_t &id);
+    CBlock  *           get_block_by_id(const uint64_t &id);
+    CInVariable*        remove_in_variable_ny_id(const uint64_t &loc_id);
+
+    COutVariable *find_output_var_by_iface_name(const QString &iface_var_name);
+
 private:
+    CBody                * m_parent{nullptr};
     QList<CBlock*>      * m_blocks;
     QList<CLabel*>      * m_labels;
     QList<CJump*>       * m_jumps;

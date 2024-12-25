@@ -1165,5 +1165,7 @@
         <file>images/codesys/pin_output_inv.png</file>
         <file>images/codesys/pin_output_norm.png</file>
         <file>images/Procont.jpg</file>
+        <file>images/codesys/pin_input_falling.png</file>
+        <file>images/codesys/pin_input_rising.png</file>
     </qresource>
 </RCC>

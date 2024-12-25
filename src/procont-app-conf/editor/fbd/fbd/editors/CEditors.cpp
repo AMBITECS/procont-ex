@@ -13,9 +13,9 @@
 
 extern CProject * project;
 
-CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
+CEditors::CEditors(COglWidget *wgt, COglWorld *world)
 {
-    m_pou_node = pou_node;
+    //m_pou_node = pou_node;
     m_var_analytics = new CVariablesAnalytics(world, world->current_pou()->name());
     m_filter = new CFilter(m_var_analytics);
 
@@ -48,9 +48,11 @@ CEditors::CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node)
 
 CEditors::~CEditors()
 {
+    delete m_model;
     delete m_obj_inst_editor;
-    delete m_pin_var_editor;
     delete m_filter;
+    delete m_pin_var_editor;
+    delete m_var_analytics;
 }
 
 void CEditors::show_line_edit(CFbdObject *obj)

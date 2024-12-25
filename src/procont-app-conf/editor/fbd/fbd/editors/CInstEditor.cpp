@@ -6,6 +6,7 @@
 #include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 #include <QPalette>
 #include <QKeyEvent>
+#include <QTimer>
 #include <regex>
 #include "../../resources/colors.h"
 #include "../graphics/CFbdObject.h"
@@ -24,12 +25,14 @@ CInstEditor::CInstEditor(CFilter *filter, QWidget *parent) : QLineEdit(parent)
 
     m_type = EDefinedDataTypes::DDT_DERIVED;
 
-    CDiagramColors colors;
+    auto colors = new CDiagramColors();
 
-    m_error_bkg        = colors.base_colors().err_color; //QColor(255, 25, 91);
-    m_error_foreground = colors.base_colors().diag_text_def; //QColor(255, 255,255);
+    m_error_bkg        = colors->base_colors().err_color; //QColor(255, 25, 91);
+    m_error_foreground = colors->base_colors().diag_text_def; //QColor(255, 255,255);
     m_norm_bkg         = this->palette().color(QPalette::ColorRole::Base);
     m_norm_foreground  = this->palette().color(QPalette::ColorRole::Text);
+
+    delete colors;
 }
 
 CInstEditor::~CInstEditor()
@@ -136,6 +139,12 @@ void CInstEditor::set_diagram_object(CFbdObject *object)
 
     this->setText(m_object->instance_name());
     this->selectAll();
+}
+
+void CInstEditor::focusInEvent(QFocusEvent *event)
+{
+    QLineEdit::focusInEvent(event);
+    QTimer::singleShot(0, this, &QLineEdit::selectAll);
 }
 
 

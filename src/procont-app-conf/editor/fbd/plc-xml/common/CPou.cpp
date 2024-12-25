@@ -70,6 +70,12 @@ CPou::CPou(const QDomNode &dom_node, CTypes * parent)
 
 CPou::~CPou()
 {
+    for (auto &body : *m_bodies)
+    {
+        delete body;
+    }
+    delete m_bodies;
+
     delete m_dom_node;
     delete m_interface;
     delete m_actions;
@@ -198,19 +204,20 @@ CBlock CPou::get_block()
         block.set_instance_name("???");
     }
 
+    /*
     QString inputs;
     QString outputs;
     QString inOuts;
+    */
 
     for (auto &in : *m_interface->input_variables()->variables())
     {
         auto *var = new CBlockVar(&block);
-        //var->set_iface_variable(in);
         var->set_type(in->type());
         var->set_formal_param(in->name());
         var->set_direction(EPinDirection::PD_INPUT);
         block.input_variables()->push_back(var);
-        inputs += in->type() + " ";
+        //inputs += in->type() + " ";
     }
 
     /// if function - there is no output variables, there is return type
@@ -233,7 +240,7 @@ CBlock CPou::get_block()
             var->set_formal_param(in_out->name());
             var->set_direction(EPinDirection::PD_IN_OUT);
             block.in_out_variables()->push_back(var);
-            inOuts += in_out->type() + " ";
+            //inOuts += in_out->type() + " ";
         }
 
         for(auto &out : *m_interface->output_variables()->variables())
@@ -244,13 +251,13 @@ CBlock CPou::get_block()
             var->set_type(out->type());
             var->set_direction(PD_OUTPUT);
             block.output_variables()->push_back(var);
-            outputs += out->type();
+            //outputs += out->type();
         }
     }
 
 
     /// create CodeSys crutch
-    QDomDocument doc;
+    /*QDomDocument doc;
     auto *inp_data = new CData();
     auto *out_data = new CData();
     auto * in_out_data = new CData();
@@ -283,7 +290,7 @@ CBlock CPou::get_block()
         in_out_data->set_any_node(types);
 
         block.add_data()->append_data(in_out_data);
-    }
+    }*/
 
     return block;
 }

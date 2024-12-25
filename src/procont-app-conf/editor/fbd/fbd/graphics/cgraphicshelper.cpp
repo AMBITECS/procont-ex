@@ -21,8 +21,6 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
     m_pou_node = node;
     m_opengl_widget = ogl_widget;
 
-    m_pou =  node->isNull() ? new CPou(project->types()) : m_pou = new CPou(*m_pou_node, project->types());
-
     m_graphics_world = new COglWorld(ogl_widget, m_pou, &m_hatch_tl);
     connect(m_graphics_world, &COglWorld::set_current_pou,
             [=](CPou *pou){emit set_current_pou(pou);});
@@ -77,8 +75,8 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
 
 CGraphicsHelper::~CGraphicsHelper()
 {
+    project->Delete();
     delete m_graphics_world;
-    delete m_pou;
 }
 
 std::vector<CFbdLadder*>  * CGraphicsHelper::ladders()
@@ -527,11 +525,26 @@ void CGraphicsHelper::drag_process_complete()
     emit drag_complete();
 }
 
-void CGraphicsHelper::get_project(QDomNode *project_node)
+void CGraphicsHelper::get_project(QDomNode *pou_node)
 {
-    QDomNode prj_node = project_node->parentNode().parentNode().parentNode();
+
+    QDomNode node = *pou_node;
+    QDomNode prj_node = pou_node->parentNode().parentNode().parentNode();
 
     CProject::get_instance(prj_node);
+
+    m_pou =  new CPou(node, project->types());
+    auto exist_pou = project->types()->find_pou_by_name(m_pou->name());
+
+    if (!exist_pou)
+    {
+        project->types()->add_pou(m_pou);
+    }
+    else
+    {
+        delete m_pou;
+        m_pou = exist_pou;
+    }
 }
 
 

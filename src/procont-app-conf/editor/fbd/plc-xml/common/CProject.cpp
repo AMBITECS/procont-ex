@@ -40,7 +40,7 @@ CProject::CProject(const CProject &src)
 
 CProject::CProject(const QDomNode &project_node)
 {
-    if (project_node.isNull())
+    if (project_node.isNull() || project_node.nodeName() != "project")
     {
         m_types = new CTypes(this);
         return;
@@ -196,7 +196,7 @@ QDomNode CProject::dom_node() const
 void CProject::Delete()
 {
     inst_count--;
-    if (inst_count > 1)
+    if (inst_count > 0)
     {
         return;
     }

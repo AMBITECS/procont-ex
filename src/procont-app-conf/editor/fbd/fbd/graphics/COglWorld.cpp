@@ -33,23 +33,7 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
 {
     max_local_id = 0;
 
-    QDomNode project_node = pou->sourceDomNode()->parentNode().parentNode().parentNode();
-    if (!project)
-    {
-        project = CProject::get_instance(project_node);
-        if (project_node.isNull())
-        {
-            project->types()->pous()->push_back(pou);
-        }
-    }
-
-    m_pou = project->types()->find_pou_by_name(pou->name());
-
-    if (!m_pou)
-    {
-        throw std::runtime_error("all is broken. Im leaving this PC. In 'COglWorld::COglWorld' m_pou is nullptr");
-    }
-
+    m_pou = pou;
     m_ladders         = new std::vector<CFbdLadder*> ();
     m_visible_ladders = new std::vector<CFbdLadder*> ();
     m_undo_stack      = new QUndoStack();
@@ -58,7 +42,7 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
 
     m_diagram_type = EBodyType::BT_COUNT;
 
-    m_editors   = new CEditors(openGLwidget, this, pou->sourceDomNode());
+    m_editors   = new CEditors(openGLwidget, this);
 
     connect(m_editors, &CEditors::interface_new_var, this, &COglWorld::iface_new_var);
 
@@ -78,12 +62,11 @@ COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
 
 COglWorld::~COglWorld()
 {
+    delete m_editors;
     clear_ladders();
     delete m_ladders;
     delete m_visible_ladders;
     delete m_undo_stack;
-    delete m_editors;
-    project->Delete();
 }
 
 void COglWorld::init_projects_instances()

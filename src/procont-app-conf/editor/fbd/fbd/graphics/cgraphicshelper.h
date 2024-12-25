@@ -130,7 +130,7 @@ private:
     void object_cat(CFbdLadder *p_ladder, CFbdObject *p_object);
     void reset_dragged_objects();
 
-    void get_project(QDomNode *project_node);
+    void get_project(QDomNode *pou_node);
 };
 
 #endif // CGRAPHICSHELPER_H

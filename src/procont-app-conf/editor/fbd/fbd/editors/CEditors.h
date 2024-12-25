@@ -20,7 +20,7 @@ class CEditors : public QObject
 {
     Q_OBJECT
 public:
-    explicit CEditors(COglWidget *wgt, COglWorld *world, QDomNode *pou_node);
+    CEditors(COglWidget *wgt, COglWorld *world);
     ~CEditors() override;
 
     void    show_line_edit(CFbdObject *obj);
@@ -46,7 +46,7 @@ protected slots:
 private:
     CPinVarEditor   * m_pin_var_editor;
     CInstEditor * m_obj_inst_editor;
-    QDomNode    * m_pou_node;
+    //QDomNode    * m_pou_node;
     CVariablesAnalytics * m_var_analytics;
     COglWidget  * m_wgt;
     QString       m_inst_old_name;

@@ -37,20 +37,21 @@ protected slots:
 protected:
     void    keyPressEvent(QKeyEvent *event) override;
     void    focusOutEvent(QFocusEvent* event) override;
+    void    focusInEvent(QFocusEvent *event) override;
 
 
 private:
     //std::vector<std::pair<QString, EDefinedDataTypes>> * m_existing;
-    QColor  m_norm_bkg;
-    QColor  m_norm_foreground;
-    QColor  m_error_bkg;
-    QColor  m_error_foreground;
+    QColor  m_norm_bkg{};
+    QColor  m_norm_foreground{};
+    QColor  m_error_bkg{};
+    QColor  m_error_foreground{};
     bool    m_is_error{false};
     bool    m_not_process{false};
     bool    m_rename{false};
     bool    m_rename_required{false};
-    EDefinedDataTypes   m_type;
-    std::string  m_old_name;
+    EDefinedDataTypes   m_type{EDefinedDataTypes::DDT_UNDEF};
+    std::string  m_old_name{};
     CFilter * m_filter;
     CFbdObject * m_object;
 

@@ -10,34 +10,45 @@
 #include "CBody.h"
 #include "../sfc/CActions.h"
 #include "../CTransitions.h"
+#include "editor/fbd/fbd/palette/palette.h"
 
+class CTypes;
 class CPou
 {
 public:
-    CPou();
+    explicit CPou(CTypes *parent);
     CPou(const CPou & other);
-    explicit CPou(const QDomNode & dom_node);
+    explicit CPou(const QDomNode & dom_node, CTypes * parent);
     ~CPou();
 
-    QDomNode    dom_node() const;
-    bool        is_empty() const;
+    CTypes  * parent();
+    void    set_parent(CTypes *parent);
+
+    [[nodiscard]] QDomNode    dom_node() const;
+    [[nodiscard]] bool        is_empty() const;
 
     CBlock      get_block();
 
-    QString     name() const;
+    [[nodiscard]] QString     name() const;
     void        set_name(const QString &name);
-    QString     type() const;
+    [[nodiscard]] QString     type_name() const;
+    [[nodiscard]] EBodyType    body_type() const;
     void        set_type(const QString & type);
 
-    QDomNode    * sourceDomNode();
 
-    CInterface * interface();
+
+    CInterface      * interface();
     QList<CBody*>   * bodies();
     CActions        * actions();
     CTransitions    * transitions();
     CAddData        * add_data();
     CDocumentation  * documentation();
 
+    /// additional operations
+    QDomNode    * sourceDomNode();
+    void          setSourceDomNode(const QDomNode &dom_node);
+
+    CFbdContent *   get_fbd();
     /// user functions
 
     /**
@@ -49,24 +60,29 @@ public:
     bool             find_block_connecting_info(const uint64_t &ref_id, const QString &formal_param,
                                                 CBlock ** block, CBlockVar **block_var);
     bool             process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                                    CBlockVar **possible_block_var, CVariable **possible_iface);
+                                    std::vector<CBlockVar*> *possible_block_vars,
+                                    std::vector<CVariable *> *possible_iface);
     CBlock *         find_block_by_id(const uint64_t &ref_id);
+
+    bool recursive_find_front(CInOutVariable *in_out_variable,
+                              std::vector<CBlockVar *>* in_outs,std::vector<CVariable *> *possible_iface);
 
 private:
     QDomNode    * m_dom_node{nullptr};
     QString       m_name;
-    QString       m_type;
+    QString       m_type_name;
     QString       m_global_id;
     CInterface  * m_interface;
     CActions    * m_actions;
     CTransitions* m_transitions;
     CAddData    * m_add_data;
     CDocumentation * m_doc;
+    EBodyType     m_type;
+    CTypes      * m_parent{nullptr};
 
     QList<CBody*>   * m_bodies;
 
-    bool recursive_find_front(CInOutVariable *in_out_variable,
-                              CBlockVar **p_block_var, CVariable ** p_iface_var);
+
 };
 
 

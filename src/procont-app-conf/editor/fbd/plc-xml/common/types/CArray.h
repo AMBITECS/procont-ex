@@ -16,7 +16,7 @@ public:
     explicit CArray(const QDomNode &);
     ~CArray() override;
 
-    [[nodiscard]] QDomNode    dom_node() const;
+    [[nodiscard]] QDomNode    dom_node() const override;
 
     [[nodiscard]] EDefinedDataTypes  base_type() const;
     [[nodiscard]] QString            base_type_name() const;

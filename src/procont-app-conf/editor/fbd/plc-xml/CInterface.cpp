@@ -5,17 +5,18 @@
 #include "CInterface.h"
 #include "../fbd/variables.h"
 
-CInterface::CInterface()
+CInterface::CInterface(CPou * parent)
 {
-    m_local_vars    = new CLocalVars();
-    m_temp_vars     = new CTempVars();
-    m_input_vars    = new CInVars();
-    m_output_vars   = new COutVars();
-    m_in_out_vars   = new CInOutVars();
-    m_external_vars = new CExternalVars();
-    m_global_vars   = new CGlobalVars();
-    m_access_vars   = new CAccessVars();
+    m_local_vars    = new CLocalVars(parent);
+    m_temp_vars     = new CTempVars(parent);
+    m_input_vars    = new CInVars(parent);
+    m_output_vars   = new COutVars(parent);
+    m_in_out_vars   = new CInOutVars(parent);
+    m_external_vars = new CExternalVars(parent);
+    m_global_vars   = new CGlobalVars(parent);
+    m_access_vars   = new CAccessVars(parent);
     m_documentation = new CDocumentation();
+    m_parent        = parent;
 
 }
 
@@ -33,6 +34,7 @@ CInterface::CInterface(const CInterface &src)
 
     m_add_data      = src.m_add_data;
     m_return_type   = src.m_return_type;
+    m_parent        = src.m_parent;
 }
 
 CInterface::CInterface(CInterface &&tmp) noexcept
@@ -47,6 +49,7 @@ CInterface::CInterface(CInterface &&tmp) noexcept
     m_global_vars   = tmp.m_global_vars;
     m_access_vars   = tmp.m_access_vars;
     m_documentation = tmp.m_documentation;
+    m_parent        = tmp.m_parent;
 
     tmp.m_local_vars    = nullptr;
     tmp.m_temp_vars     = nullptr;
@@ -61,7 +64,7 @@ CInterface::CInterface(CInterface &&tmp) noexcept
     m_add_data          = tmp.m_add_data;
 }
 
-CInterface::CInterface(const QDomNode &node)
+CInterface::CInterface(const QDomNode &node, CPou * parent)
 {
     /*
     if (node.nodeName() != "interface")
@@ -69,14 +72,15 @@ CInterface::CInterface(const QDomNode &node)
         throw std::runtime_error("in 'CInterface::CInterface(const QDomNode &node)' wrong node name");
     }*/
 
-    m_local_vars    = new CLocalVars();
-    m_temp_vars     = new CTempVars();
-    m_input_vars    = new CInVars();
-    m_output_vars   = new COutVars();
-    m_in_out_vars   = new CInOutVars();
-    m_external_vars = new CExternalVars();
-    m_global_vars   = new CGlobalVars();
-    m_access_vars   = new CAccessVars();
+    m_local_vars    = new CLocalVars(parent);
+    m_temp_vars     = new CTempVars(parent);
+    m_input_vars    = new CInVars(parent);
+    m_output_vars   = new COutVars(parent);
+    m_in_out_vars   = new CInOutVars(parent);
+    m_external_vars = new CExternalVars(parent);
+    m_global_vars   = new CGlobalVars(parent);
+    m_access_vars   = new CAccessVars(parent);
+    m_parent        = parent;
 
 
     for (uint16_t i = 0; i < node.childNodes().count(); ++i)
@@ -223,7 +227,7 @@ void CInterface::extract_child_nodes(QDomNode &node, CIfaceVars *p_vars, const Q
     {
         for (uint16_t c = 0; c < node.childNodes().count(); ++c)
         {
-            auto varNode = new CVariable(node.childNodes().at(c));
+            auto varNode = new CVariable(node.childNodes().at(c), this);
             p_vars->variables()->push_back(varNode);
         }
     }
@@ -259,7 +263,7 @@ std::vector<CVariable *>  CInterface::all_variables()
     return p_variables;
 }
 
-void CInterface::gather_variables(QList<CVariable *> *source_variables, std::vector<CVariable *> *dest_vars)
+void CInterface::gather_variables(std::vector<CVariable *> *source_variables, std::vector<CVariable *> *dest_vars)
 {
     if (!source_variables->empty())
         dest_vars->insert(dest_vars->end(), source_variables->begin(), source_variables->end());
@@ -291,5 +295,27 @@ std::vector<CVariable *> CInterface::p_outputs()
 bool CInterface::is_derived() const
 {
     return m_is_derived;
+}
+
+CVariable *CInterface::get_variable_by_name(const QString &name)
+{
+    for (auto &var : all_variables())
+    {
+        if (var->name() == name)
+        {
+            return var;
+        }
+    }
+    return nullptr;
+}
+
+CPou *CInterface::parent()
+{
+    return m_parent;
+}
+
+void CInterface::set_parent(CPou *pou)
+{
+    m_parent = pou;
 }
 

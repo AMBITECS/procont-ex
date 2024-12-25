@@ -101,6 +101,20 @@ static const QString body_types_names [EBodyType::BT_COUNT]
     "SFC"
 };
 
+static EBodyType body_type_from_string(const QString &str)
+{
+    int counter = 0;
+    for (auto &name : body_types_names)
+    {
+        if (name == str)
+        {
+            return (EBodyType)counter;
+        }
+        counter++;
+    }
+    return EBodyType::BT_COUNT;
+}
+
 /**
  * base types of the system. Arrays, ranges, structs, enum and pointers are extended modifications of thees types
  */
@@ -133,8 +147,8 @@ enum EDefinedDataTypes
     DDT_WORD,
     DDT_DWORD,
     DDT_LWORD,
-    DDT_DERIVED,        //!< user defined or POU
     DDT_ANY,
+    DDT_DERIVED,        //!< user defined or POU
     DDT_UNDEF,
     DDT_COUNT
 };
@@ -168,8 +182,8 @@ static const QString base_types_names[EDefinedDataTypes::DDT_COUNT]
     "WORD",
     "DWORD",
     "LWORD",
-    "DERIVED",
     "ANY",
+    "DERIVED",
     "UNDEFINED"
 };
 
@@ -184,7 +198,7 @@ static EDefinedDataTypes  get_type_from_string(const std::string & type_s)
         }
         count++;
     }
-    return DDT_UNDEF;
+    return DDT_DERIVED;
 }
 
 
@@ -193,7 +207,7 @@ static const int base_type_last = EDefinedDataTypes::DDT_ENUM;
 
 static bool  is_convertible_to_anyint(const EDefinedDataTypes &type)
 {
-    return (type >= DDT_SINT && type <= DDT_ANY_INT) || (type == DDT_ENUM);
+    return (type >= DDT_SINT && type <= DDT_ANY_UINT) || (type == DDT_ENUM);
 }
 
 static bool is_convertible_to_anyuint(const EDefinedDataTypes &type)

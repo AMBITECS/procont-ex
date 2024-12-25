@@ -3,13 +3,19 @@
 //
 
 #include "CBlockVar.h"
+#include "../fbd/CBlock.h"
+#include "../common/CBody.h"
+#include "../common/CPou.h"
 
 CBlockVar::CBlockVar(CBlock *parent)
 {
     m_point_in  = new CConnectionPointIn();
     m_point_out = new CConnectionPointOut();
     add_data = new CAddData();
-    m_variable = new CVariable();
+//    if (parent && parent->parent())
+//        m_variable = new CVariable(parent->parent()->parent()->interface());
+//    else
+//        m_variable = new CVariable(nullptr);
     m_parent = parent;
 }
 
@@ -17,7 +23,7 @@ CBlockVar::CBlockVar(const CBlockVar &other)
 {
     m_point_in = new CConnectionPointIn(*other.m_point_in);
     m_point_out = new CConnectionPointOut(*other.m_point_out);
-    m_variable = new CVariable(*other.m_variable);
+    //m_variable = new CVariable(*other.m_variable);
 
     m_formal_parameter = other.m_formal_parameter;
     m_is_negated = other.m_is_negated;
@@ -73,14 +79,14 @@ CBlockVar::CBlockVar(CBlock *parent, const QDomNode &domNode)
         m_direction = EPinDirection::PD_INPUT;
     }
 
-    m_variable = new CVariable();
+    //m_variable = new CVariable(m_parent->parent()->parent()->interface());
 }
 
 CBlockVar::~CBlockVar()
 {
     delete m_point_out;
     delete m_point_in;
-    delete m_variable;
+    // delete m_variable;
 }
 
 QDomNode CBlockVar::dom_node() const
@@ -162,11 +168,15 @@ EStorageMode CBlockVar::storage_modifier() const
 void CBlockVar::set_edge(const EEdge &edge_modifier)
 {
     m_edge_modifier = edge_modifier;
+    m_is_negated = false;
+    m_store_modifier = EStorageMode::SM_NONE;
 }
 
 void CBlockVar::set_storage_modifier(const EStorageMode &storage_modifier)
 {
     m_store_modifier = storage_modifier;
+    m_is_negated = false;
+    m_edge_modifier = EEdge::EI_NONE;
 }
 
 EPinDirection CBlockVar::direction() const
@@ -191,26 +201,12 @@ QString CBlockVar::derived_type() const
 
 void CBlockVar::set_type(const QString &type)
 {
-    m_derived_type = "";
+    m_derived_type = type;
     m_type = get_type_from_string(type.toStdString());
 
     if (m_type == DDT_UNDEF || m_type == DDT_DERIVED)
     {
         m_type = DDT_DERIVED;
-        m_derived_type = type;
-    }
-}
-
-uint64_t CBlockVar::ref_local_id() const
-{
-    return m_point_in->ref_local_id();
-}
-
-void CBlockVar::set_ref_local_id(const uint64_t &ref_local_id)
-{
-    if (!m_point_in->connections()->empty())
-    {
-        m_point_in->connections()->front()->set_ref_local_id(ref_local_id);
     }
 }
 
@@ -236,7 +232,7 @@ CBlockVar &CBlockVar::operator=(const CBlockVar &rhs)
     return *this;
 }
 
-CVariable *CBlockVar::get_iface_variable()
+/*CVariable *CBlockVar::get_iface_variable()
 {
     return m_variable;
 }
@@ -245,23 +241,14 @@ void CBlockVar::set_iface_variable(CVariable *var)
 {
     *m_variable = *var;    
     this->set_type(var->type());
-}
-
-void CBlockVar::reset_connections()
-{
-    // TODO: update connections
-    //m_point_in->connections()->
-}
+}*/
 
 void CBlockVar::set_negated(const bool &negated)
 {
     m_is_negated = negated;
 
-    if (negated)
-    {
-        m_edge_modifier = EEdge::EI_NONE;
-        m_store_modifier = EStorageMode::SM_NONE;
-    }
+    m_edge_modifier = EEdge::EI_NONE;
+    m_store_modifier = EStorageMode::SM_NONE;
 }
 
 CBlock *CBlockVar::parent()
@@ -285,3 +272,4 @@ QString CBlockVar::constant_value() const
 {
     return m_constant_value;
 }
+

@@ -18,7 +18,7 @@ public:
     ~CStruct() override;
 
     [[nodiscard]] bool is_empty() const;
-    [[nodiscard]] QDomNode  dom_node() const;
+    [[nodiscard]] QDomNode  dom_node() const override;
 
     void  add_variable(const std::string &name, const EDefinedDataTypes &var_type, const std::string &init_value);
     void  remove_value(const std::string &name);

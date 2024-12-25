@@ -10,17 +10,19 @@
 #include "CAddData.h"
 
 class CDocumentation;
+class CPou;
 
 class CInterface
 {
 public:
-    CInterface();
+    explicit CInterface(CPou * parent);
     CInterface(const CInterface &);
     CInterface(CInterface &&) noexcept;
-    explicit CInterface(const QDomNode &node);
+    explicit CInterface(const QDomNode &node, CPou *parent);
     ~CInterface();
 
-    //CInterface&         operator=(const CInterface &rhs);
+    CPou    * parent();
+    void      set_parent(CPou *pou);
 
     QDomNode            dom_node();
     bool                is_empty() const;
@@ -42,11 +44,14 @@ public:
     std::vector<CVariable*>     p_inputs();
     std::vector<CVariable*>     p_outputs();
 
+    CVariable *     get_variable_by_name(const QString &name);
+
 private:
     // return type
     QString               m_return_type;    //!< костыль
     CAddData              m_add_data;
     CDocumentation      * m_documentation{nullptr};
+    CPou                * m_parent{nullptr};
 
     /// required interface content is one of listed items
     CLocalVars      * m_local_vars;
@@ -62,7 +67,7 @@ private:
     void add_child(QDomElement & element, CIfaceVars *p_vars);
 
     void extract_child_nodes(QDomNode &node, CIfaceVars *p_vars, const QString &node_name);
-    void gather_variables(QList<CVariable*> * source_variables, std::vector<CVariable*> * dest_vars);
+    void gather_variables(std::vector<CVariable*> * source_variables, std::vector<CVariable*> * dest_vars);
 };
 
 

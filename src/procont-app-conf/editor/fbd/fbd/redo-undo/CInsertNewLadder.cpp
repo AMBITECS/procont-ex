@@ -4,7 +4,7 @@
 
 #include "CInsertNewLadder.h"
 
-CInsertNewLadder::CInsertNewLadder(COglWorld *ogl_world, CLadder *next)
+CInsertNewLadder::CInsertNewLadder(COglWorld *ogl_world, CFbdLadder *next)
     : QUndoCommand(), m_ogl_world(ogl_world), m_next(next)
 {
     setText("Вставить новую ступень");
@@ -20,7 +20,7 @@ void CInsertNewLadder::undo()
     m_to_delete = remove();
 
     /// update
-    CLadder *start = m_new_ladder->previous_ladder() ?
+    CFbdLadder *start = m_new_ladder->previous_ladder() ?
                      m_new_ladder->previous_ladder() :
                      m_new_ladder->next_ladder();
 
@@ -35,7 +35,7 @@ void CInsertNewLadder::redo()
     m_to_delete = nullptr;
     insert();
 
-    CLadder * start =  m_new_ladder->previous_ladder() ?
+    CFbdLadder * start =  m_new_ladder->previous_ladder() ?
                        m_new_ladder->previous_ladder() :
                        m_new_ladder;
 
@@ -44,7 +44,7 @@ void CInsertNewLadder::redo()
     m_ogl_world->check_diagram_size();
 }
 
-CLadder *CInsertNewLadder::new_ladder()
+CFbdLadder *CInsertNewLadder::new_ladder()
 {
     return m_new_ladder;
 }
@@ -56,18 +56,18 @@ void CInsertNewLadder::insert()
         m_index = m_next ? m_next->number() - 1 : m_ogl_world->m_ladders->size();
     }
 
-    CLadder *prev = m_index - 1 < 0 ? nullptr : m_ogl_world->m_ladders->at(m_index-1);
+    CFbdLadder *prev = m_index - 1 < 0 ? nullptr : m_ogl_world->m_ladders->at(m_index-1);
 
     if (!m_new_ladder)
     {
-        m_new_ladder = new CLadder(m_ogl_world, m_ogl_world->m_hatch_topLeft,
+        m_new_ladder = new CFbdLadder(m_ogl_world, m_ogl_world->m_hatch_topLeft,
                                    &m_ogl_world->m_hatch_size,
                                    prev,
                                    m_next);
     }
 
-    CLadder *prev_l = m_new_ladder->previous_ladder();
-    CLadder *next_l = m_next;
+    CFbdLadder *prev_l = m_new_ladder->previous_ladder();
+    CFbdLadder *next_l = m_next;
 
     /// for walk on chine
     m_new_ladder->set_previous(prev_l);
@@ -85,7 +85,7 @@ void CInsertNewLadder::insert()
         m_ogl_world->m_ladders->push_back(m_new_ladder);
 }
 
-CLadder* CInsertNewLadder::remove()
+CFbdLadder* CInsertNewLadder::remove()
 {
     /// склеить разрыв
     if (m_new_ladder->previous_ladder())

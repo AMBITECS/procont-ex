@@ -13,6 +13,7 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     : QOpenGLWidget(parent), m_vertical(ogl_startup->vertical), m_horizontal(ogl_startup->horizontal)
 {
     this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+    installEventFilter(this);
 
     connect(m_vertical, &QScrollBar::valueChanged,
             this, &COglWidget::vertical_scroll_moved);
@@ -47,6 +48,13 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     m_paint_dev = dynamic_cast<QPaintDevice *>(this);
     m_style = new COglStyle();
     m_helper = new CGraphicsHelper(this, ogl_startup->node);
+
+    connect (m_helper, &CGraphicsHelper::set_current_pou,
+             [this](CPou* pou){m_current_pou = pou; emit set_current_pou(pou);});
+    connect(m_helper, &CGraphicsHelper::diagram_changed,
+            [=](const QDomNode &node){emit diagram_changed(node);});
+    connect(m_helper, &CGraphicsHelper::instance_removed,
+            [=](const QString &type, const QString &name){emit instance_removed(type, name); });
     connect(m_helper, &CGraphicsHelper::drag_complete, this, &COglWidget::drag_complete);
     connect(m_helper, &CGraphicsHelper::iface_var_new, this, &COglWidget::iface_new_var);
     connect(m_helper, &CGraphicsHelper::iface_var_rename, this, &COglWidget::iface_ren_var);
@@ -285,64 +293,73 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
     bool is_right_drag  = false;
     bool is_left_drag   = false;
 
-    /// bottom autoscroll
-    if (event->position().toPoint().y() >= m_height-20 &&
-        m_vertical->isEnabled() && (m_vertical->sliderPosition() < m_vertical->maximum())
-    )
-    {
-        is_bottom_drag = true;
-        m_vertical_autoscroll = QImage(":/codesys/images/codesys/bottom_auto.png");
-        m_vertical_auto_rect = QRect(0, m_height - 20, m_width, 20);
-        m_vertical->setValue(m_vertical->value() + 5);
-    }
+    /// define drag source. If source is palette - autoscroll off
+    auto mime = event->mimeData();
 
-    /// upper autoscroll
-    if (event->position().toPoint().y() <= 20 &&
-        m_vertical->isEnabled() && (m_vertical->sliderPosition() > 0)
-    )
-    {
-        is_top_drag = true;
-        m_vertical_autoscroll = QImage(":/codesys/images/codesys/upper_auto.png");
-        m_vertical_auto_rect = QRect(0, 0, m_width, 20);
-        m_vertical->setValue(m_vertical->value() - 5);
-    }
 
-    /// right autoscroll
-    if (event->position().toPoint().x() > m_width - 20 &&
-        m_horizontal->isEnabled() &&
-        m_horizontal->value() < m_horizontal->maximum()
-    )
+    /// enabling or disabling autoscroll
+    if (mime->property(txt_vars::drag_source_prop).toString() != txt_vars::drag_src_palette)
     {
-        is_right_drag = true;
-        m_horizon_auto_rect = QRect(m_width-20, 0, 20, m_height);
-        m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_right.png");
-        //m_horizon_autoscroll.
-        m_horizontal->setValue(m_horizontal->value() + 2);
+        /// bottom autoscroll
+        if (event->position().toPoint().y() >= m_height-20 &&
+            m_vertical->isEnabled() && (m_vertical->sliderPosition() < m_vertical->maximum())
+                )
+        {
+            is_bottom_drag = true;
+            m_vertical_autoscroll = QImage(":/codesys/images/codesys/bottom_auto.png");
+            m_vertical_auto_rect = QRect(0, m_height - 20, m_width, 20);
+            m_vertical->setValue(m_vertical->value() + 5);
+        }
 
-    }
-    /// left autoscroll
-    if (event->position().toPoint().x() < 20 &&
+        /// upper autoscroll
+        if (event->position().toPoint().y() <= 20 &&
+            m_vertical->isEnabled() && (m_vertical->sliderPosition() > 0)
+                )
+        {
+            is_top_drag = true;
+            m_vertical_autoscroll = QImage(":/codesys/images/codesys/upper_auto.png");
+            m_vertical_auto_rect = QRect(0, 0, m_width, 20);
+            m_vertical->setValue(m_vertical->value() - 5);
+        }
+
+        /// right autoscroll
+        if (event->position().toPoint().x() > m_width - 20 &&
+            m_horizontal->isEnabled() &&
+            m_horizontal->value() < m_horizontal->maximum()
+                )
+        {
+            is_right_drag = true;
+            m_horizon_auto_rect = QRect(m_width-20, 0, 20, m_height);
+            m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_right.png");
+            //m_horizon_autoscroll.
+            m_horizontal->setValue(m_horizontal->value() + 2);
+
+        }
+        /// left autoscroll
+        if (event->position().toPoint().x() < 20 &&
             m_horizontal->isEnabled() &&
             m_horizontal->value() > 0
-    )
-    {
-        is_left_drag = true;
-        m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_left.png");
-        m_horizon_auto_rect = QRect(0,0, 20, m_height);
-        m_horizontal->setValue(m_horizontal->value() - 2);
+                )
+        {
+            is_left_drag = true;
+            m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_left.png");
+            m_horizon_auto_rect = QRect(0,0, 20, m_height);
+            m_horizontal->setValue(m_horizontal->value() - 2);
+        }
+
+        if (!is_bottom_drag && !is_top_drag)
+        {
+            m_vertical_autoscroll = QImage();
+            m_vertical_auto_rect = QRect();
+        }
+
+        if (!is_right_drag && !is_left_drag)
+        {
+            m_horizon_auto_rect = QRect();
+            m_horizon_autoscroll = QImage();
+        }
     }
 
-    if (!is_bottom_drag && !is_top_drag)
-    {
-        m_vertical_autoscroll = QImage();
-        m_vertical_auto_rect = QRect();
-    }
-
-    if (!is_right_drag && !is_left_drag)
-    {
-        m_horizon_auto_rect = QRect();
-        m_horizon_autoscroll = QImage();
-    }
 
     QString source = event->mimeData()->property(txt_vars::drag_source_prop).toString();
     // event->mimeData()->property("element").toInt() == EG_CIRCUIT
@@ -362,6 +379,11 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
 
 void COglWidget::vertical_scroll_moved(int position)
 {
+    if (position >= m_vertical->maximum())
+    {
+        return;
+    }
+
     m_Y_scroll = position * m_vertical->pageStep();
     QPoint point(m_X_scroll, m_Y_scroll);
     emit scroll_bars_moving(point);
@@ -370,6 +392,11 @@ void COglWidget::vertical_scroll_moved(int position)
 
 void COglWidget::horizontal_scroll_moved(int position)
 {
+    if (position >= m_horizontal->maximum())
+    {
+        return;
+    }
+
     m_X_scroll = position * m_horizontal->pageStep();
     QPoint point(m_X_scroll, m_Y_scroll);
     emit scroll_bars_moving(point);
@@ -383,7 +410,7 @@ void COglWidget::draw_ladders()
     mPainter.beginNativePainting();
 
 
-    for (auto &ladder : *m_ladders) // later need to change all ladders to ladders buffer
+    for (auto &ladder : *m_ladders) // later need to change all ladders to visible_ladders buffer
     {
         /// draw ladder without objects and its text with highlights
         for (auto  &pair : *ladder->draw_ladder())
@@ -391,7 +418,7 @@ void COglWidget::draw_ladders()
             mPainter.drawImage(*pair.first, *pair.second);
         }
 
-        /// draw ladders text
+        /// draw visible_ladders text
         for (auto &item : *ladder->ladder_texts())
         {
             mPainter.setPen(item->color());
@@ -400,7 +427,7 @@ void COglWidget::draw_ladders()
 
 
 
-        /// draw ladders highlights
+        /// draw visible_ladders highlights
         for (auto &hl : ladder->draw_highlights())
         {
             mPainter.drawImage(hl.first, hl.second);
@@ -440,7 +467,7 @@ void COglWidget::draw_ladders()
 
         /// draw connecting lines
         auto def_color = mPainter.pen().color();
-        for (auto &lines : *ladder->connections())
+        for (auto &lines : *ladder->connecting_lines())
         {
             mPainter.setPen(lines->color());
             mPainter.drawLines(*lines->lines());
@@ -464,7 +491,7 @@ void
 COglWidget::project_loaded()
 {
     update();
-    repaint();
+    //repaint();
 }
 
 void COglWidget::diagram_resized(const int &w, const int &h)
@@ -588,4 +615,69 @@ void COglWidget::drag_complete()
 {
     m_wrong_type_text = "";
     m_wrong_type_rect = {};
+}
+
+bool COglWidget::eventFilter(QObject *target, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        auto keyEvent = dynamic_cast<QKeyEvent*>(event);
+
+        /// Ctrl+Z
+        if (keyEvent->key() == Qt::Key_Z &&
+            keyEvent->modifiers().testFlag((Qt::ControlModifier)))
+        {
+            if (m_helper->undo_stack()->canUndo())
+            {
+                m_helper->undo_stack()->undo();
+            }
+            return true;
+        }
+
+        /// Ctrl+shift + Z
+        if (keyEvent->key() == Qt::Key_Z &&
+            keyEvent->modifiers().testFlag((Qt::ControlModifier)) &&
+            keyEvent->modifiers().testFlag(Qt::ShiftModifier))
+        {
+            if (m_helper->undo_stack()->canRedo())
+            {
+                m_helper->undo_stack()->redo();
+            }
+            return true;
+        }
+    }
+
+    return QObject::eventFilter(target, event);
+}
+
+void COglWidget::wheelEvent(QWheelEvent *event)
+{
+    int delta_y = event->angleDelta().y() / 10;
+    if (delta_y < 0)
+    {
+        delta_y = std::abs(delta_y);
+    }
+    else
+    {
+        delta_y = -delta_y;
+    }
+
+    if (event->modifiers() & Qt::ControlModifier)
+    {
+        m_horizontal->setValue(m_horizontal->value() + delta_y);
+    }
+    else
+    {
+        if (m_vertical->isEnabled())
+        {
+            m_vertical->setValue(m_vertical->value() + delta_y);
+        }
+    }
+
+    // event->accept();
+}
+
+CPou *COglWidget::current_pou()
+{
+    return m_current_pou;
 }

@@ -5,7 +5,7 @@
 #include "CFilter.h"
 #include <algorithm>
 #include <regex>
-#include "CVariablesAnalytics.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 
 
 CFilter::CFilter(CVariablesAnalytics *var_analytics, const bool &case_insensitive)
@@ -24,6 +24,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
           naming = true,
           local_env = true,
           user_types = true,
+          libary_type = true,
           pou_names = true;
 
     std::string compare_str = string;
@@ -33,13 +34,8 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
         capitalize_word(compare_str);
     }
 
-    if ((flags & ff_service_names) == ff_service_names)
+    if ((flags & ff_service_names) == ff_service_names || (flags & ff_all_flags) == ff_all_flags)
     {
-        /*auto res = std::any_of(service_words->begin(),
-                               service_words->end(),
-                               [compare_str](const QString &word)
-                                    {return compare_str == word.toStdString();});
-        service = !res;*/
         for (auto &word : service_words)
         {
             if (compare_str != word.toStdString())
@@ -51,7 +47,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
         }
     }
 
-    if ((flags & ff_base_types) == ff_base_types)
+    if ((flags & ff_base_types) == ff_base_types  || (flags & ff_all_flags) == ff_all_flags)
     {
         QString compare = compare_str.c_str();
         for (auto &type : base_types_names)
@@ -65,13 +61,13 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
         }
     }
 
-    if ((flags & ff_naming) == ff_naming)
+    if ((flags & ff_naming) == ff_naming  || (flags & ff_all_flags) == ff_all_flags)
     {
         const char *reg = "[a-zA-Z][a-zA-Z0-9_]*";
         naming =  std::regex_match(compare_str, std::regex(reg));
     }
 
-    if ((flags & ff_local_env) == ff_local_env)
+    if ((flags & ff_local_env) == ff_local_env  || (flags & ff_all_flags) == ff_all_flags)
     {
         auto iface = m_analytics->local_pou_interface();
         for (auto &var : iface->all_variables())
@@ -92,7 +88,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
         }
     }
 
-    if ((flags & ff_user_types) == ff_user_types)
+    if ((flags & ff_user_types) == ff_user_types  || (flags & ff_all_flags) == ff_all_flags)
     {
         for (auto &u_type : *m_analytics->user_types())
         {
@@ -113,7 +109,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
         }
     }
 
-    if ((flags & ff_pou_names) == ff_pou_names)
+    if ((flags & ff_pou_names) == ff_pou_names  || (flags & ff_all_flags) == ff_all_flags)
     {
         for (auto &pou : *m_analytics->pou_array())
         {
@@ -133,48 +129,72 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
         }
     }
 
-    return service && base_type && naming && local_env && user_types && pou_names;
+    if ((flags & ff_library) == ff_library || (flags & ff_all_flags) == ff_all_flags)
+    {
+        auto lib = m_analytics->standard_library();
+        for (auto name : lib->objects())
+        {
+            std::string comp_name = name.toStdString();
+            if (m_is_case_insensitive)
+            {
+                capitalize_word(comp_name);
+            }
+            if (comp_name == compare_str)
+            {
+                libary_type = false;
+                break;
+            }
+        }
+    }
+
+    return service && base_type && naming && local_env && user_types && pou_names && libary_type;
 }
 
 EDefinedDataTypes CFilter::get_type_from_const(const std::string &expression)
 {
-    /// check if letters
-    const char * not_str = "\\D+";
-    if (std::regex_match(expression, std::regex(not_str)))
-    {
-        return DDT_STRING;
-    }
-
-    const char * time_mask = "/^(T#)[0-9]+(ms|s|h|m)?$/i";
+    std::regex time_mask("^(t#|time#){1}[0-9]+(ms|s|h|m){1}$", std::regex_constants::icase);
     if (std::regex_match(expression, std::regex(time_mask)))
     {
         return DDT_TIME;
     }
-    const char * date_mask = "^[0-9]{2}(?:/|\\.)[0-9]{2}(?:/|\\.)[0-9]{4}$";
-    if (std::regex_match(expression, std::regex(date_mask)))
+    std::regex date_mask_alien("(^(d#|date#){1}[0-9]{4}-[0-9]{2}-[0-9]{2}$)", std::regex_constants::icase);
+    if (std::regex_match(expression, std::regex(date_mask_alien)))
     {
         return DDT_DATE;
     }
 
-    const char *real_mask = R"([+-]?(([1-9]\d*\.\d*)|(0\.\d*[1-9]\d*)))";
+    std::regex date_mask_rus(R"(^(d#|date#){1}[0-9]{2}\.[0-9]{2}\.[0-9]{4}$)", std::regex_constants::icase);
+    if (std::regex_match(expression, std::regex(date_mask_rus)))
+    {
+        return DDT_DATE;
+    }
+
+    std::regex real_mask(R"(^[+-]?(([0-9]+[\.|,]{1}[0-9]+)|([\.|,]{1}[0-9]+))$)");
     if (std::regex_match(expression, std::regex(real_mask)))
     {
         return DDT_REAL;
     }
 
-    const char * int_mask = "(\\\\+|-)?[0-9]+";
+    std::regex int_mask("^[+|-]?[0-9]+$");
     if (std::regex_match(expression, std::regex(int_mask)))
     {
         return DDT_INT;
     }
 
-    const char * uint_mask = "[0-9]+";
+    std::regex uint_mask("^[0-9]+$");
     if (std::regex_match(expression, std::regex(uint_mask)))
     {
         return DDT_UINT;
     }
 
-    return DDT_ANY_NUM;
+    /// check if letters
+    const char * not_str = "^\\D+$";
+    if (std::regex_match(expression, std::regex(not_str)))
+    {
+        return DDT_STRING;
+    }
+
+    return DDT_DERIVED;
 }
 
 

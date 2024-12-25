@@ -51,7 +51,7 @@ CStruct::CStruct(const QDomNode &node)
     for (int i = 0; i < struct_node.childNodes().count(); i++)
     {
         auto child = struct_node.childNodes().at(i);
-        auto var = new CVariable(child);
+        auto var = new CVariable(child, nullptr);
         m_variables->push_back(var);
     }
 }
@@ -93,7 +93,7 @@ QDomNode CStruct::dom_node() const
 
 void CStruct::add_variable(const std::string &name, const EDefinedDataTypes &var_type, const std::string &init_value)
 {
-    auto var = new CVariable();
+    auto var = new CVariable(nullptr);
 
     var->set_type(UserTypeName[var_type]);
     var->set_name(name.c_str());

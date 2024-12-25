@@ -4,7 +4,7 @@
 
 #include "CInsertLadder.h"
 
-CInsertLadder::CInsertLadder(COglWorld *world, CLadder *dragged_ladder, CLadder *before)
+CInsertLadder::CInsertLadder(COglWorld *world, CFbdLadder *dragged_ladder, CFbdLadder *before)
     : QUndoCommand()
     , m_world(world)
     , m_walking_ladder(dragged_ladder)
@@ -22,7 +22,7 @@ void CInsertLadder::redo()
 
     remove_from_position(m_source_index);
 
-    CLadder * start_refresh = m_walking_ladder->previous_ladder() ?
+    CFbdLadder * start_refresh = m_walking_ladder->previous_ladder() ?
                               m_walking_ladder->previous_ladder() :
                               m_walking_ladder->next_ladder();
 
@@ -46,7 +46,7 @@ void CInsertLadder::undo()
     insert_to_position(m_source_index);
 
     /// update view
-    CLadder * start_refresh = ! m_walking_ladder->previous_ladder() ?
+    CFbdLadder * start_refresh = ! m_walking_ladder->previous_ladder() ?
                                 m_walking_ladder :
                                 m_walking_ladder->previous_ladder();
 
@@ -101,7 +101,7 @@ void CInsertLadder::stitch()
 void CInsertLadder::incision(int &position)
 {
     /// куда (начало конец середина) вставка - там "разрезаем"<BR>
-    CLadder *before = position >= m_world->m_ladders->size() ? nullptr : m_world->m_ladders->at(position);
+    CFbdLadder *before = position >= m_world->m_ladders->size() ? nullptr : m_world->m_ladders->at(position);
 
     /// to the end
     if (!before)
@@ -119,7 +119,7 @@ void CInsertLadder::incision(int &position)
         m_walking_ladder->set_previous(before->previous_ladder());
         m_walking_ladder->set_next(before);
 
-        /// setup old ladders new prev and next
+        /// setup old visible_ladders new prev and next
         before->previous_ladder()->set_next(m_walking_ladder);
         before->set_previous(m_walking_ladder);
 

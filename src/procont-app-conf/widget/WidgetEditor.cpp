@@ -517,27 +517,6 @@ void WidgetEditor_fbd::slot_interfaceVariableDel(const QString &type, const QStr
         proxy(_vars_table->model())->sourceModel()->
             removeRow(s_index(var_index).row(), s_index(_vars_table->rootIndex()));
     }
-
-    auto parent = item(_vars_table->rootIndex());
-
-    auto parentNode = item(_vars_table->rootIndex())->node();
-    QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
-    el_variable.setAttribute("name", name);
-    QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
-    QDomElement el_variable_type_derived = parentNode.ownerDocument().createElement("derived");
-    el_variable_type_derived.setAttribute("name", type);
-    el_variable_type.appendChild(el_variable_type_derived);
-    el_variable.appendChild(el_variable_type);
-    QDomNode el_localVars = parentNode.namedItem("interface").namedItem("localVars");
-    if(el_localVars.isNull())
-    {
-        el_localVars = parentNode.ownerDocument().createElement("localVars");
-        parentNode.namedItem("interface").appendChild(el_localVars);
-    }
-    el_localVars.appendChild(el_variable);
-
-    // add item
-    _proxy->sourceModel()->insertRow(parent->rowCount(), s_index(_vars_table->rootIndex()));
 }
 
 void WidgetEditor_fbd::slot_interfaceVariableRename(const QString &old_name, const QString &new_name)

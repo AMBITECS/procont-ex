@@ -3,7 +3,9 @@
 //
 
 #include "CFbdComponentsTree.h"
-#include "../palette/palette.h"
+#include "../../plc-xml/common/CProject.h"
+
+extern CProject *project;
 
 CFbdComponentsTree::CFbdComponentsTree(QTreeWidget *widget)
 {
@@ -13,23 +15,17 @@ CFbdComponentsTree::CFbdComponentsTree(QTreeWidget *widget)
 CFbdComponentsTree::~CFbdComponentsTree()
 = default;
 
-void CFbdComponentsTree::build_tree()
+void CFbdComponentsTree::build_tree(CPou *current_pou)
 {
     clear_tree();
 
-    QStringList elements_groups;
-    elements_groups << "Общее"
-                    << "Логические операторы"
-                    << "Мат. операторы"
-                    << "Другие операторы"
-                    << "Функциональные блоки";
+    update_program_pous(current_pou);
 
+    QStringList elements_groups;
     QVector<QVector<s_comp_item>> groups;
-    groups << general_data
-           << bitwise_operators
-            << math_data
-            << other_data
-            << func_blocks_data;
+
+    get_palette_roots(current_pou, elements_groups, groups);
+
 
     QVector<QTreeWidgetItem*>  top_level;
     for (const auto &group_name : elements_groups)
@@ -47,7 +43,7 @@ void CFbdComponentsTree::build_tree()
         auto group = groups.at(counter);
         for (auto &s_item : group)
         {
-            auto tree_item = new QTreeWidgetItem(top_item, 0);
+            auto tree_item = new QTreeWidgetItem();
             tree_item->setText(0, s_item.name);
             tree_item->setIcon(0, QIcon(element_images[s_item.element]));
             tree_item->setToolTip(0, s_item.hint);
@@ -60,11 +56,13 @@ void CFbdComponentsTree::build_tree()
 
 
     m_widget->expandAll();
+    m_widget->setItemsExpandable(false);
 }
 
 void
 CFbdComponentsTree::clear_tree()
 {
+
     QTreeWidgetItem *item;
     item = m_widget->topLevelItem(0);
     while(item)
@@ -77,6 +75,11 @@ CFbdComponentsTree::clear_tree()
 void
 CFbdComponentsTree::removeItem(QTreeWidgetItem *item)
 {
+    if (!item)
+    {
+        return;
+    }
+
     int count = item->childCount();
     if (count == 0)
     {
@@ -86,8 +89,77 @@ CFbdComponentsTree::removeItem(QTreeWidgetItem *item)
 
     for(int i=0; i<count; i++)
     {
-        QTreeWidgetItem * childitem = item-> child (0); // Delete subtraction
-        removeItem(childitem);
+        QTreeWidgetItem * child_item = item->child(i);
+        removeItem(child_item);
     }
+
     delete item;
+}
+
+void CFbdComponentsTree::update_program_pous(CPou *current)
+{
+    m_project_pou . clear();
+
+    for (auto &pou : *project->types()->pous())
+    {
+        if (pou == current || pou->type_name() == "program")
+        {
+            continue;
+        }
+
+        s_comp_item item;
+        item.name = pou->name();
+        item.hint = item.name + " " + pou->type_name();
+
+        EPaletteElements element;
+
+        if (pou->body_type() == BT_FBD)
+            element = EPaletteElements::EP_FBD;
+        if (pou->body_type() == BT_LD)
+            element = EPaletteElements::EP_LD;
+        /*if (pou->body_type() == BT_IL)
+            element = EPaletteElements::EP_IL;*/
+        if (pou->body_type() == BT_ST)
+            element = EPaletteElements::EP_ST;
+        if (pou->body_type() == BT_SFC)
+            element = EPaletteElements::EP_SFC;
+
+        item.element = element;
+
+        m_project_pou.push_back(item);
+    }
+}
+
+void CFbdComponentsTree::get_palette_roots(CPou *p_pou, QStringList &list, QVector<QVector<s_comp_item>> &list_1)
+{
+    if (p_pou->body_type() == BT_FBD)
+    {
+        list << "Общее"
+                        << "Логические операторы"
+                        << "Мат. операторы"
+                        << "Другие операторы"
+                        << "Функциональные блоки";
+        if (!m_project_pou.empty())
+            list << "Проектные POU";
+
+        list_1 << general_data
+               << bitwise_operators
+               << math_data
+               << other_data
+               << func_blocks_data
+               << m_project_pou;
+    }
+
+    if (p_pou->body_type() == BT_LD)
+    {
+        list << "Логические операторы"
+             << "Мат. операторы"
+             << "Функциональные блоки"
+             << "Проектные POU";
+
+        list_1 << bitwise_operators
+               << math_data
+               << func_blocks_data
+               << m_project_pou;
+    }
 }

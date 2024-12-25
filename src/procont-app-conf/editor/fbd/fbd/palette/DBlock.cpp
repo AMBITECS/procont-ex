@@ -4,6 +4,7 @@
 
 #include "DBlock.h"
 
+/*
 extern uint16_t    max_local_id;
 
 DBlock::DBlock(const s_init_block &init_block)
@@ -33,3 +34,4 @@ DBlock::DBlock(const s_init_block &init_block)
 
 DBlock::~DBlock()
 = default;
+*/

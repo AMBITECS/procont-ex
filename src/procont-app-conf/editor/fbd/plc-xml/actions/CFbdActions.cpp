@@ -3,7 +3,7 @@
 //
 
 #include "CFbdActions.h"
-#include "../../fbd/graphics/CDiagramObject.h"
+#include "../../fbd/graphics/CFbdObject.h"
 
 CFbdActions::CFbdActions(COglWorld *project_content)
 {

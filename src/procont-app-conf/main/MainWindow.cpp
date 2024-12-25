@@ -148,7 +148,7 @@ void MainWindow::createWidgets()
     tabifyDockWidget(dockDev, dockPou);
 
     // right area
-    _m_toolWidget = new CTreeObject(this);
+    _m_toolWidget = new CTreeObject;
     _m_toolWidget->setMinimumSize(200, 500);
     QStringList treeHeaderLabels; treeHeaderLabels << tr("Components");
     _m_toolWidget->setHeaderLabels(treeHeaderLabels);

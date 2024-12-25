@@ -113,7 +113,6 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     auto container = new QWidget(this);
     m_pErrorPlainTextWidget = new QPlainTextEdit(this);
     m_pErrorPlainTextWidget->setReadOnly(true);
-    m_pErrorPlainTextWidget->setMinimumHeight(250);
     m_pErrorTreeWidget = new QTreeWidget(this);
     m_pErrorTreeWidget->setColumnCount(4);
     m_pErrorTreeWidget->header()->resizeSection(0, 900);
@@ -122,10 +121,8 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     m_pErrorTreeWidget->header()->resizeSection(3, 200);
     m_pErrorTreeWidget->setHeaderLabels(QStringList() << tr("Message") << tr("Project") << tr("Object") << tr("Position"));
     m_pErrorTreeWidget->setWordWrap(true);
-    m_pErrorTreeWidget->setMinimumHeight(250);
     m_pErrorTreeWidget->hide();
     m_pCodePlainTextWidget = new CodeEditorWidget(this);
-    m_pCodePlainTextWidget->setMinimumHeight(250);
     m_pCodePlainTextWidget->hide();
     auto hb = new QHBoxLayout;
     hb->addWidget(m_pErrorPlainTextWidget);

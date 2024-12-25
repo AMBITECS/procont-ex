@@ -10,7 +10,7 @@
 class CPinIn : public CPin
 {
 public:
-    CPinIn(CDiagramObject * parent, CBlockVar *base, QPoint * parent_tl);
+    CPinIn(CFbdObject * parent, CBlockVar *base, QPoint * parent_tl);
     ~CPinIn() override;
 
     [[nodiscard]] bool    is_negated() const;
@@ -28,16 +28,23 @@ public:
     [[nodiscard]] bool        is_coil_reset() const;
     void        set_coil_reset(const bool &reset);
 
-    uint64_t    reference_local_id() const;
-    CBlockVar * block_variable();
+    [[nodiscard]] QString      constant() const;
+    CVariable  * iface_variable();
+
+
 
     /// операции соединения/разъединения
     CPinOut*    opposite();
-    void        set_opposite_name(const bool &set_name);
+    void        load_project_connect_pin(CPinOut *pin_out);
+    void        load_project_connect_iface_var(CVariable *iface_var);
+    void        load_project_connect_const(const EDefinedDataTypes & type, const QString &const_val);
     void        connect_pin(CPinOut *pin); //!< графическое соединение (если одна ступень)
-    void        disconnect();
+    void        disconnect(CPinOut *sender = nullptr);
     void        connect_iface_variable(CVariable *variable);
+    void        disconnect_iface();
+    void        set_constant(const EDefinedDataTypes &type, const std::string &type_name);
 
+    void        update_graphic_text();
 
 private:
     QImage      m_img_negated;
@@ -45,8 +52,12 @@ private:
     QImage      m_img_falling;
     CPinOut   * m_opposite{nullptr};
 
-    void update_condition();
+    QColor      m_color_def;
+    QColor      m_color_graph;
+    CVariable * m_iface_var{nullptr};
+    QString     m_constant;
 
+    void update_condition();
 };
 
 

@@ -12,70 +12,74 @@ CGraphicsLogic::CGraphicsLogic()
 CGraphicsLogic::~CGraphicsLogic()
 = default;
 
-CConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
+CFbdConnectLine *CGraphicsLogic::add_new_line(CPin *dragged_pin, CPin *target_pin)
 {
-    if (dragged_pin->parent()->parent() != target_pin->parent()->parent())
+    if (dragged_pin->direction() == target_pin->direction())
     {
-        return nullptr;
+        throw std::runtime_error("can't connect pins with the same direction in 'CGraphicsLogic::add_new_line'");
     }
 
-    m_ladder = dragged_pin->parent()->parent();
     m_dragged_pin = dragged_pin;
     m_target_pin = target_pin;
 
-    auto conn_line = new CConnectLine(m_ladder->real_top_left());
+    CFbdConnectLine * conn_line = nullptr;
 
-    bool near = are_objects_near();
-
-    /// it could be near but not face to ass
-    if (near)
+    if (dragged_pin->parent()->parent() == target_pin->parent()->parent())
     {
-        CDiagramObject* drag_obj = m_dragged_pin->parent();
-        CDiagramObject* target_obj = m_target_pin->parent();
-        auto left_ob = drag_obj->rect()->left() < target_obj->rect()->left() ? drag_obj : target_obj;
-        auto right_ob = drag_obj->rect()->left() > target_obj->rect()->left() ? drag_obj : target_obj;
+        m_ladder = dragged_pin->parent()->parent();
 
-        if (left_ob == drag_obj && m_dragged_pin->direction() == PD_INPUT ||
-            right_ob == drag_obj && m_dragged_pin->direction() == PD_OUTPUT )
+        conn_line = new CFbdConnectLine(m_ladder->real_top_left(), dragged_pin, target_pin);
+
+        bool near = are_objects_near();
+
+        /// it could be near but not face to ass
+        if (near)
         {
-            near = false;
+            CFbdObject* drag_obj = m_dragged_pin->parent();
+            CFbdObject* target_obj = m_target_pin->parent();
+
+            auto left_ob = drag_obj->rect()->left() < target_obj->rect()->left() ? drag_obj : target_obj;
+            auto right_ob = drag_obj->rect()->left() > target_obj->rect()->left() ? drag_obj : target_obj;
+
+            if (left_ob == drag_obj && m_dragged_pin->direction() == PD_INPUT ||
+                right_ob == drag_obj && m_dragged_pin->direction() == PD_OUTPUT )
+            {
+                near = false;
+            }
         }
+
+        /// если компоненты не рядом
+        if (!near)
+        {
+            QLine drag_line = first_line(m_dragged_pin, m_target_pin);
+            QLine target_line = first_line(m_target_pin, m_dragged_pin);
+
+            QLine down_drag_line = down_line(drag_line.p2());
+            QLine down_target_line = down_line(target_line.p2());
+
+            QLine last = QLine(down_drag_line.p2(), down_target_line.p2());
+
+            conn_line->add_line(drag_line);
+            conn_line->add_line(target_line);
+            conn_line->add_line(down_drag_line);
+            conn_line->add_line(down_target_line);
+            conn_line->add_line(last);
+        }
+
+            /// рядом - линия без опуска вниз
+        else
+        {
+            direct_connection(conn_line);
+        }
+        m_ladder->update_real_position();
     }
 
-    /// если компоненты не рядом
-    if (!near)
-    {
-        QLine drag_line = first_line(m_dragged_pin, m_target_pin);
-        QLine target_line = first_line(m_target_pin, m_dragged_pin);
-
-        QLine down_drag_line = down_line(drag_line.p2());
-        QLine down_target_line = down_line(target_line.p2());
-
-        m_ladder->bottom_line_count_increase();
-
-        QLine last = QLine(down_drag_line.p2(), down_target_line.p2());
-
-        conn_line->add_line(drag_line);
-        conn_line->add_line(target_line);
-        conn_line->add_line(down_drag_line);
-        conn_line->add_line(down_target_line);
-        conn_line->add_line(last);
-    }
-
-    /// рядом - линия без опуска вниз
-    else
-    {
-        direct_connection(conn_line);
-    }
-
-    /// для быстрого пересоединения дадим пинам инфу о пинах на том конце
-    auto input = m_dragged_pin->direction() == PD_INPUT ? m_dragged_pin->input() : m_target_pin->input();
-    auto output = m_dragged_pin->direction() == PD_OUTPUT ? m_dragged_pin->output() : m_target_pin->output();
-
-    output->connect(input);
-    input->connect_pin(output);
-
-    m_ladder->update_real_position();
+//    /// для быстрого пересоединения дадим пинам инфу о пинах на том конце
+//    auto input = m_dragged_pin->direction() == PD_INPUT ? m_dragged_pin->input() : m_target_pin->input();
+//    auto output = m_dragged_pin->direction() == PD_OUTPUT ? m_dragged_pin->output() : m_target_pin->output();
+//
+//    output->connect(input);
+//    input->connect_pin(output);
 
     return conn_line;
 }
@@ -118,7 +122,7 @@ QLine  CGraphicsLogic::first_line(CPin *pin, CPin *opp)
                                             bound_rect.right() - pin->rect()->right();
 
     QPoint p1;
-    p1.setX(direction == PD_INPUT ? pin->rect()->left() : pin->rect()->right());
+    p1.setX(direction == PD_INPUT ? pin->rect()->left() : pin->rect()->right() + 3);
     p1.setY(pin->rect()->top() + pin->rect()->width() / 2);
 
     QPoint p2;
@@ -140,15 +144,15 @@ QLine CGraphicsLogic::down_line(const QPoint &upper_point)
 
 bool CGraphicsLogic::are_objects_near()
 {
-    CDiagramObject* drag_obj = m_dragged_pin->parent();
-    CDiagramObject* target_obj = m_target_pin->parent();
+    CFbdObject* drag_obj = m_dragged_pin->parent();
+    CFbdObject* target_obj = m_target_pin->parent();
 
     int index_d = -1,
         index_t = -1,
         counter = 0;
     object_bottom_max = 0;
 
-    for (CDiagramObject* &obj : *m_ladder->draw_components())
+    for (CFbdObject* &obj : *m_ladder->draw_components())
     {
         if (obj == drag_obj)
         {
@@ -175,7 +179,7 @@ bool CGraphicsLogic::are_objects_near()
     return false;
 }
 
-void CGraphicsLogic::direct_connection(CConnectLine *conn_line)
+void CGraphicsLogic::direct_connection(CFbdConnectLine *conn_line)
 {
     QLine drag_line = first_line(m_dragged_pin, m_target_pin);
     QLine target_line = first_line(m_target_pin, m_dragged_pin);
@@ -219,7 +223,7 @@ QLine CGraphicsLogic::equalizing_line(const QPoint &point1, const QPoint &point2
     return {p1, p2};
 }
 
-int CGraphicsLogic::index_of(std::vector<CPin *> *pins_array, CPin *pin)
+int CGraphicsLogic::index_of(std::vector<CPinIn *> *pins_array, CPin *pin)
 {
     int index = 0;
     for (auto &item : *pins_array)

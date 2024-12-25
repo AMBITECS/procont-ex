@@ -19,7 +19,7 @@ public:
     bool  add_value(const std::string &value);
     void  remove_value(const std::string &value);
 
-    [[nodiscard]] QDomNode    dom_node() const;
+    [[nodiscard]] QDomNode    dom_node() const override;
 
     std::vector<std::string> * values();
 

@@ -7,10 +7,7 @@
 
 
 CTreeObject::CTreeObject(QWidget *parent) : QTreeWidget(parent)
-{
-    QStringList columnsName; columnsName << tr("Components");
-    setHeaderLabels(columnsName);
-}
+{}
 
 CTreeObject::~CTreeObject()
 = default;
@@ -43,6 +40,7 @@ void CTreeObject::mouseMoveEvent(QMouseEvent *event)
     auto* mimeData = new QMimeData();
     mimeData->setProperty("source", "palette");
     mimeData->setProperty("element", m_drag_item->data(0, Qt::UserRole).toInt());
+    mimeData->setProperty("name", m_drag_item->data(0, Qt::DisplayRole));
     m_drag->setMimeData( mimeData );
     QPixmap pix = m_drag_item->icon(0).pixmap(16,16);
     m_drag->setPixmap( pix );

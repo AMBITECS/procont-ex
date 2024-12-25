@@ -23,6 +23,14 @@ QVarSelectModel::QVarSelectModel(QObject *parent)
 QVarSelectModel::~QVarSelectModel()
 {
     delete m_root;
+    for (auto &item : m_rows)
+    {
+        delete item;
+    }
+    for (auto &item : m_source)
+    {
+        delete item;
+    }
 }
 
 QVariant QVarSelectModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -110,23 +118,6 @@ QVariant QVarSelectModel::data(const QModelIndex &index, int role) const
     return item->data(index.column());
 }
 
-bool QVarSelectModel::insertRows(int row, int count, const QModelIndex &parent)
-{
-    return false;
-    /*beginInsertRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    endInsertRows();
-    return true;*/
-}
-
-bool QVarSelectModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    /*beginRemoveRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    endRemoveRows();*/
-    return false;
-}
-
 QVarSelectModel::QVarSelectModel(const QVarSelectModel &other) : QAbstractItemModel()
 {
     for (auto &item : other.m_rows)
@@ -163,31 +154,38 @@ void QVarSelectModel::set_data(std::vector<s_tree_item> *variables)
     delete m_root;
     m_root = new TreeItem({});
 
+    for (auto &item : m_source)
+    {
+        delete item;
+    }
+    m_source.clear();
+
     for (auto &item : m_rows)
     {
         delete item;
     }
-
     m_rows.clear();
 
     if (variables)
     {
         std::string name, type;
-        bool is_complex;
+        TreeItem *data;
 
         for (auto &item: *variables)
         {
             if (item.id_parent == 0)
             {
-                auto data = new TreeItem(item);
+                data = new TreeItem(item);
                 m_root->appendChild(data);
-                m_rows.push_back(data);
             }
             else
             {
-                auto data = new TreeItem(item);
+                data = new TreeItem(item);
                 setup_data(data);
             }
+
+            m_rows.push_back(data);
+            m_source.emplace_back(new TreeItem(item));
         }
     }
     endResetModel();
@@ -216,4 +214,47 @@ Qt::ItemFlags QVarSelectModel::flags(const QModelIndex &index) const
     }
 
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
+void QVarSelectModel::set_text( const QString &text )
+{
+    beginResetModel();
+
+    delete m_root;
+    m_root = new TreeItem({});
+
+    for (auto &item : m_rows)
+    {
+        delete item;
+    }
+    m_rows.clear();
+
+    for (auto &tree_item : m_source)
+    {
+        auto item = tree_item->item();
+
+        if (item->id_parent == 0 && !text.isEmpty())
+        {
+            QString str = item->name.c_str();
+            if (!str.contains(text))
+            {
+                continue;
+            }
+        }
+
+        if (item->id_parent == 0)
+        {
+            auto data = new TreeItem(*item);
+            m_root->appendChild(data);
+            m_rows.push_back(data);
+        }
+        else
+        {
+            auto data = new TreeItem(*item);
+            setup_data(data);
+            //
+            m_rows.push_back(data);
+        }
+    }
+    endResetModel();
 }

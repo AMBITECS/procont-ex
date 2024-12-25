@@ -4,8 +4,10 @@
 
 #include "CVariable.h"
 
-CVariable::CVariable()
-= default;
+CVariable::CVariable(CInterface *parent)
+{
+    m_parent = parent;
+}
 
 CVariable::CVariable(const CVariable &src)
 {
@@ -28,10 +30,12 @@ CVariable::CVariable(CVariable &&tmp) noexcept
     , m_attr_name(std::move(tmp.m_attr_name))
     , m_init_value(std::move(tmp.m_init_value))
     , m_doc(tmp.m_doc)
+    , m_parent(tmp.m_parent)
 {}
 
-CVariable::CVariable(const QDomNode &node)
+CVariable::CVariable(const QDomNode &node, CInterface *parent)
 {
+    m_parent = parent;
     if (!node.attributes().namedItem("name").toAttr().isNull())
         m_attr_name = node.attributes().namedItem("name").toAttr().value();
     m_attr_addr = node.attributes().namedItem("address").toAttr().value();
@@ -115,6 +119,7 @@ CVariable::operator=(const CVariable &rhs)
     m_attr_name     = rhs.m_attr_name;
     m_init_value    = rhs.m_init_value;
     m_doc           = rhs.m_doc;
+    m_parent        = rhs.m_parent;
 
     return *this;
 }
@@ -189,6 +194,21 @@ QString CVariable::comment() const
 void CVariable::set_comment(const QString &comment)
 {
     m_doc.set_document(comment);
+}
+
+bool CVariable::is_empty() const
+{
+    return m_attr_name.isEmpty();
+}
+
+CInterface *CVariable::parent()
+{
+    return m_parent;
+}
+
+void CVariable::set_parent(CInterface *parent)
+{
+    m_parent = parent;
 }
 
 

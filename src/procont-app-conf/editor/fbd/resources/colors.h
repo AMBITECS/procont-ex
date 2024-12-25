@@ -14,6 +14,7 @@ typedef struct s_base_diagram_colors
     QColor  diag_text_def;
     QColor  diag_text_alternate;
     QColor  err_color;
+    QColor  out_pin_variable;
 }SDiagramBaseColors;
 
 typedef struct
@@ -23,6 +24,9 @@ typedef struct
     QColor  grey_part;
     QColor  landing_strip;
     QColor  landing_brick;
+    QColor  line_color;
+    QColor  line_selected;
+
 
     struct s_norm_colors
     {

@@ -3,14 +3,17 @@
 //
 
 #include "CBlock.h"
+#include "editor/fbd/fbd/editors/CFilter.h"
 
 extern uint16_t max_local_id;
 
-CBlock::CBlock()
+CBlock::CBlock(CBody *parent)
 {
     m_in_vars       = new QList<CBlockVar*>();
     m_in_out_vars   = new QList<CBlockVar*>();
     m_out_vars      = new QList<CBlockVar*>();
+
+    m_parent = parent;
 
     max_local_id++;
     set_local_id(max_local_id);
@@ -19,6 +22,20 @@ CBlock::CBlock()
 CBlock::CBlock(const CBlock &other)
 {
     m_in_vars       = new QList<CBlockVar*>();
+    m_in_out_vars   = new QList<CBlockVar*>();
+    m_out_vars      = new QList<CBlockVar*>();
+    m_parent        = other.m_parent;
+
+    *this = other;
+}
+
+CBlock &CBlock::operator=(const CBlock &  other)
+{
+    if (this == &other)
+        return *this;
+
+    m_parent = other.m_parent;
+
     for (auto &alien : *other.m_in_vars)
     {
         auto var = new CBlockVar(*alien);
@@ -26,14 +43,14 @@ CBlock::CBlock(const CBlock &other)
         m_in_vars->push_back(var);
     }
 
-    m_in_out_vars   = new QList<CBlockVar*>();
+
     for (auto &alien : *other.m_in_out_vars)
     {
         auto var = new CBlockVar(*alien);
         var->set_parent(this);
         m_in_out_vars->push_back(var);
     }
-    m_out_vars      = new QList<CBlockVar*>();
+
     for (auto &alien : *other.m_out_vars)
     {
         auto var = new CBlockVar(*alien);
@@ -41,8 +58,8 @@ CBlock::CBlock(const CBlock &other)
         m_out_vars->push_back(var);
     }
 
-    max_local_id++;
-    set_local_id(max_local_id);
+//    max_local_id++;
+//    set_local_id(max_local_id);
 
     m_width         = other.m_width;
     m_height        = other.m_height;
@@ -56,6 +73,8 @@ CBlock::CBlock(const CBlock &other)
     m_documentation = CDocumentation(other.m_documentation);
     m_inputs        = other.m_inputs;
     m_outputs       = other.m_outputs;
+
+    return *this;
 }
 
 CBlock::CBlock(CBlock &&other) noexcept
@@ -65,6 +84,7 @@ CBlock::CBlock(CBlock &&other) noexcept
     , m_add_data(other.m_add_data)
     , m_inputs(std::move(other.m_inputs))
     , m_outputs(std::move(other.m_outputs))
+    , m_parent(other.m_parent)
 
 {
     m_in_vars       = other.m_in_vars;
@@ -75,8 +95,8 @@ CBlock::CBlock(CBlock &&other) noexcept
     other.m_out_vars = nullptr;
     other.m_in_vars = nullptr;
 
-    max_local_id++;
-    set_local_id(max_local_id);
+//    max_local_id++;
+//    set_local_id(max_local_id);
 
     m_width         = other.m_width;
     m_height        = other.m_height;
@@ -85,9 +105,10 @@ CBlock::CBlock(CBlock &&other) noexcept
     m_documentation = CDocumentation( other.m_documentation );
 }
 
-CBlock::CBlock(const QDomNode &dom_node)
+CBlock::CBlock(const QDomNode &dom_node, CBody *parent)
 {
     m_local_id  = dom_node.attributes().namedItem("localId").toAttr().value().toULongLong();
+    m_parent    = parent;
 
     if (m_local_id == 0)
     {
@@ -116,6 +137,8 @@ CBlock::CBlock(const QDomNode &dom_node)
     extract_vars("in_out", dom_node.namedItem("inOutVariables"));
     extract_vars("out", dom_node.namedItem("outputVariables"));
 }
+
+
 
 CBlock::~CBlock()
 {
@@ -380,4 +403,98 @@ void CBlock::extract_pin_params(const std::string &direction, const std::string 
     vect->clear();
     vect->insert(vect->end(), type_list.begin(), type_list.end());
 }
+
+bool CBlock::normalize_block(const CBlock &n_block)
+{
+    if (m_in_vars->size() != n_block.m_in_vars->size() ||
+        m_in_out_vars->size() != n_block.m_in_out_vars->size() ||
+        m_out_vars->size() != n_block.m_out_vars->size()
+    )
+    {
+        return false;
+    }
+
+    int counter = 0;
+    for (auto &var : *n_block.m_in_out_vars)
+    {
+        auto local = m_in_out_vars->at(counter);
+        local->set_type(var->derived_type());
+
+        counter++;
+    }
+
+    counter = 0;
+    for (auto &var : *n_block.m_in_vars)
+    {
+        auto local = m_in_vars->at(counter);
+        local->set_type(var->derived_type());
+
+        counter++;
+    }
+
+    counter = 0;
+    for (auto &var : *n_block.m_out_vars)
+    {
+        auto local = m_out_vars->at(counter);
+        local->set_type(var->derived_type());
+
+        counter++;
+    }
+
+    return true;
+}
+
+CBlockVar *CBlock::get_output_by_name(const QString &name)
+{
+    std::string formal = name.toStdString();
+    std::string pin_name;
+
+    CFilter::capitalize_word(formal);
+
+    for (auto &pin : *m_in_out_vars)
+    {
+        pin_name = pin->formal_parameter().toStdString();
+        CFilter::capitalize_word(pin_name);
+
+        if (pin_name == formal)
+        {
+            return pin;
+        }
+    }
+
+    for (auto &pin : *m_out_vars)
+    {
+        pin_name = pin->formal_parameter().toStdString();
+        CFilter::capitalize_word(pin_name);
+
+        if (pin_name == formal)
+        {
+            return pin;
+        }
+    }
+
+    return nullptr;
+}
+
+CBody *CBlock::parent()
+{
+    return m_parent;
+}
+
+void CBlock::set_parent(CBody *parent)
+{
+    m_parent = parent;
+
+    for (auto &in : *m_in_vars)
+    {
+        in->set_parent(this);
+    }
+
+    for (auto &out : *m_out_vars)
+    {
+        out->set_parent(this);
+    }
+}
+
+
 

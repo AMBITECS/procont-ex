@@ -9,15 +9,15 @@
 #include <QDragMoveEvent>
 #include <QUndoStack>
 #include "QObject"
-#include "CDiagramObject.h"
-#include "CLadder.h"
+#include "CFbdObject.h"
+#include "CFbdLadder.h"
 #include "../../plc-xml/common/CPou.h"
 #include "../palette/palette.h"
-#include "editor/fbd/fbd/editors/CVariablesAnalytics.h"
+#include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 
 
 class CPin;
-class CConnectLine;
+class CFbdConnectLine;
 class COglWidget;
 class CEditors;
 
@@ -33,10 +33,10 @@ class CInsertLadder;
  */
 struct s_selection
 {
-    CLadder * ladder{nullptr};
-    CDiagramObject  * object{nullptr};
+    CFbdLadder * ladder{nullptr};
+    CFbdObject  * object{nullptr};
     CPin   * pin{nullptr};
-    CConnectLine    * connection_line{nullptr};
+    CFbdConnectLine    * connection_line{nullptr};
     void reset()
     {
         ladder = nullptr;
@@ -68,21 +68,26 @@ public:
 
     s_selection     get_selection(const QPoint &pos);  //!< searches selected objects
     s_selection *   selected();                        //!<  returns active selection (in function above)
-    std::vector<CLadder*>  * ladders(); //!< returns VISIBLE ladders to show them in QOpenGL
+    std::vector<CFbdLadder*>  * visible_ladders();        //!< returns VISIBLE visible_ladders to show them in QOpenGL
+    std::vector<CFbdLadder*>  * all_ladders();
 
     QUndoStack *    undo_stack();
 
     /// here are commands which has to be undo/redo. Note we have to know indexes of objects objects and indexes
     /// of inserted one
-    CLadder *         add_new_ladder();                 /// index of the inserting is result->number()-1
-    CLadder *         insert_new_ladder(CLadder *next); /// index of the inserting is result->number()-1
-    CDiagramObject  * insert_new_component(CLadder *p_ladder, const EPaletteElements &elements, const QPoint &pos);
-    void              insert_ladder(CLadder *dragged_ladder, CLadder *before);
-    bool              move_object(CLadder * source, CLadder *destination, CDiagramObject *object, const QPoint &pos);
+    CFbdLadder *         add_new_ladder();                 //!< index of the inserting is result->number()-1
+    CFbdLadder *         insert_new_ladder(CFbdLadder *next); //!< index of the inserting is result->number()-1
+    CFbdObject  * insert_new_component(CFbdLadder *p_ladder, const EPaletteElements &elements, const QString &pou_name,
+                                           const QPoint &pos);
+    void              insert_ladder(CFbdLadder *dragged_ladder, CFbdLadder *before);
+    bool              move_object(CFbdLadder * source, CFbdLadder *destination, CFbdObject *object, const QPoint &pos);
+    void              erase_object(CFbdObject *object);
+    void              connect_pins(CPin *dragged_pin, CPin *target_pin);
+    void              text_based_connecting_pin(CPin *selected_pin);
+
     void              check_diagram_size();
     bool              check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types);
-    void              connect_pins(CPin *dragged_pin, CPin *target_pin);
-
+    CPou            * current_pou();
 signals:
     void    update_hatch();
     void    canvas_changed(const int &w, const int &h);     //!< signal for enable/disable/scale QScrollBars.
@@ -90,6 +95,9 @@ signals:
     void    iface_var_new(const QString & typeName, const QString & varName);
     void    iface_var_rename(const QString & old, const QString &last);
     void    drag_complete();
+    void    diagram_changed(const QDomNode &node);
+    void    instance_removed(const QString &type, const QString &name);
+    void    set_current_pou(CPou *pou);
 
 
 public slots:
@@ -100,21 +108,20 @@ public slots:
     void    mouse_left_pressed(const QPoint &pos);
     void    mouse_dblClicked(QMouseEvent *evt);
     void    pin_variable_rename();
-
-//    void    ladder_size_changed();
-
-protected slots:
     void    iface_new_var(const QString & type,     const QString & name);
     void    iface_rename( const QString & old_name, const QString & new_name);
     void    load_later();
     void    update_visible_ladders();
+    void    convert_to_XML();
 
+protected:
     friend  CAddNewLadder;
     friend  CInsertNewLadder;
     friend  CInsertNewObject;
     friend  CMoveObject;
     friend  CInsertLadder;
     friend  CVariablesAnalytics;
+
 
 private:
     QUndoStack  * m_undo_stack;
@@ -123,26 +130,27 @@ private:
     uint16_t      m_hatch_height{0};  //!< высота смотрового люка
     QSize         m_hatch_size;
     QPoint      * m_hatch_topLeft{nullptr}; //!< top-left смотрового люка
-    CPou        * m_pou;
+    QSize         m_diagram_size{0,0};
+    QPoint        m_mouse_pressed{};
+
     s_selection   m_selection;
 
     EBodyType     m_diagram_type;
     CFbdContent * m_fbd_content{nullptr};
+    CPou        * m_pou;
 
-    std::vector<CLadder*>     * m_ladders;
-    std::vector<CLadder*>     * m_visible_ladders;
-    QPoint       m_mouse_pressed{};
+    std::vector<CFbdLadder*>     * m_ladders;
+    std::vector<CFbdLadder*>     * m_visible_ladders;
 
     CEditors    * m_editors;
 
-    QSize        m_diagram_size{0,0};
-    CPin   * m_drag_pin{nullptr};
+    CPin        * m_drag_pin{nullptr};
 
     void    clear_ladders();
     QPoint  get_visible_range(const QPoint & pos);
     void    load_project();
-    CLadder * get_ladder(const unsigned long & id_ladder);
-    void    check_local_id(const uint16_t &local_id);  //!< if loaded items local_id > global variable increase global
+    CFbdLadder * get_ladder(const unsigned long & id_ladder);
+    static void    check_local_id(const uint16_t &local_id);  //!< if loaded items local_id > global variable increase global
     void    init_projects_instances();
 
 

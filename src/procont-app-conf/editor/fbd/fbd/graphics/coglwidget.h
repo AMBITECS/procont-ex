@@ -29,18 +29,21 @@ public:
     ~COglWidget() override;
 
     QUndoStack *    undo_stack();
+    CPou * current_pou();
 
 signals:
     void  scroll_bars_moving(const QPoint & newPos);
     void  drag_moving(QDragMoveEvent *event);
-    void  diagram_changed();        //!< not working. Actually has to be: void diagram_changed(const QDomNode &node);
+    void  diagram_changed(const QDomNode & node);
     void  undo_enabled();           //!< for update undo/redo interface for enabled
     void  mouse_dblClicked(QMouseEvent *evt);
     void    iface_var_new(const QString & type,     const QString & name);
     void    iface_var_ren(const QString & old_name, const QString & new_name);
+    void    instance_removed(const QString &type, const QString &name);
+    void    set_current_pou(CPou *pou);
 
 protected:
-
+    bool    eventFilter(QObject *target, QEvent *event) override;
 
     /// open GL
     void initializeGL() override;
@@ -52,6 +55,7 @@ protected:
     [[nodiscard]] bool is_editable() const;
     void set_editable(const bool &editable);
     void mouseDoubleClickEvent(QMouseEvent * dblEvent) override; //!< for manage variables and link lines
+    void wheelEvent(QWheelEvent *event) override;
 
     /// mouse
     void mousePressEvent(QMouseEvent* event) override;
@@ -69,6 +73,7 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent *event) override;
 public slots:
     void  drag_complete();  //!< когда процесс Drag&Drop закончился с любым исходом
+
 protected slots:
     void  vertical_scroll_moved(int position);
     void  horizontal_scroll_moved(int position);
@@ -78,12 +83,11 @@ protected slots:
     void  iface_new_var(const QString & type,     const QString & name);
     void  iface_ren_var(const QString & old_name, const QString & new_name);
     void  show_wrong_types(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable);
-
 protected:
 
 
 private:
-    std::vector<CLadder*>   * m_ladders;
+    std::vector<CFbdLadder*>   * m_ladders;
     CGraphicsHelper         * m_helper;
     QScrollBar              * m_vertical;
     QScrollBar              * m_horizontal;
@@ -102,6 +106,7 @@ private:
     QRect                 m_vertical_auto_rect;
     QImage                m_horizon_autoscroll;
     QRect                 m_horizon_auto_rect;
+    CPou                * m_current_pou{nullptr};
 
     /// wrong types - message about not comparable variables types, when try to graphic connect them
     QImage  m_wrong_type_img;

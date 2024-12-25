@@ -9,15 +9,16 @@ extern  uint16_t    max_local_id;
 #include "editor/fbd/fbd/variables.h"
 #include "editor/fbd/fbd/editors/CFilter.h"
 
-CPou::CPou()
+CPou::CPou(CTypes * parent)
 {
-    m_interface = new CInterface();
+    m_interface = new CInterface(this);
     m_actions = new CActions();
     m_transitions = new CTransitions();
     m_add_data = new CAddData();
     m_doc = new CDocumentation();
     m_bodies = new QList<CBody*>();
     m_dom_node = new QDomNode();
+    m_parent = parent;
 }
 
 CPou::CPou(const CPou &other)
@@ -37,18 +38,19 @@ CPou::CPou(const CPou &other)
     }
 
     m_name = other.m_name;
-    m_type = other.m_type;
+    m_type_name = other.m_type_name;
     m_dom_node = new QDomNode(*other.m_dom_node);
+    m_parent = other.m_parent;
 }
 
-CPou::CPou(const QDomNode &dom_node)
+CPou::CPou(const QDomNode &dom_node, CTypes * parent)
 {
     m_dom_node = new QDomNode(dom_node);
     m_bodies = new QList<CBody*>();
     m_name = m_dom_node->attributes().namedItem(xmln::name).toAttr().value();
-    m_type = m_dom_node->attributes().namedItem(xmln::pou_type).toAttr().value();
+    m_type_name = m_dom_node->attributes().namedItem(xmln::pou_type).toAttr().value();
 
-    m_interface = new CInterface(m_dom_node->namedItem("interface"));
+    m_interface = new CInterface(m_dom_node->namedItem("interface"), this);
     m_actions = new CActions(m_dom_node->namedItem("actions"));
     m_transitions = new CTransitions(dom_node.namedItem("transitions"));
     m_add_data = new CAddData(dom_node.namedItem("addData"));
@@ -60,14 +62,20 @@ CPou::CPou(const QDomNode &dom_node)
         auto child = dom_node.childNodes().at(i);
         if (child.nodeName() == "body")
         {
-            m_bodies->emplace_back(new CBody(child));
+            m_bodies->emplace_back(new CBody(child, this));
         }
     }
-
+    m_parent = parent;
 }
 
 CPou::~CPou()
 {
+    for (auto &body : *m_bodies)
+    {
+        delete body;
+    }
+    delete m_bodies;
+
     delete m_dom_node;
     delete m_interface;
     delete m_actions;
@@ -81,7 +89,7 @@ QDomNode CPou::dom_node() const
     QDomDocument doc;
     QDomElement root = doc.createElement("pou");
     root.setAttribute("name", m_name);
-    root.setAttribute("pouType", m_type);
+    root.setAttribute("pouType", m_type_name);
     if (!m_global_id.isEmpty())
     {
         root.setAttribute("globalId", m_global_id);
@@ -140,14 +148,14 @@ void CPou::set_name(const QString &name)
     m_name = name;
 }
 
-QString CPou::type() const
+QString CPou::type_name() const
 {
-    return m_type;
+    return m_type_name;
 }
 
 void CPou::set_type(const QString &type)
 {
-    m_type = type;
+    m_type_name = type;
 }
 
 CInterface *CPou::interface()
@@ -187,32 +195,35 @@ QDomNode *CPou::sourceDomNode()
 
 CBlock CPou::get_block()
 {
-    CBlock block{};
+    CBlock block(nullptr);
     block.set_local_id(++max_local_id);
     block.set_type_name(m_name);
 
-    if (m_type != (QString)xmln::function_pou_type)
+    if (m_type_name != (QString)xmln::function_pou_type)
     {
         block.set_instance_name("???");
     }
 
+    /*
     QString inputs;
     QString outputs;
     QString inOuts;
+    */
 
     for (auto &in : *m_interface->input_variables()->variables())
     {
-        auto *var = new CBlockVar();
-        var->set_iface_variable(in);
+        auto *var = new CBlockVar(&block);
+        var->set_type(in->type());
+        var->set_formal_param(in->name());
         var->set_direction(EPinDirection::PD_INPUT);
         block.input_variables()->push_back(var);
-        inputs += in->type() + " ";
+        //inputs += in->type() + " ";
     }
 
     /// if function - there is no output variables, there is return type
-    if (m_type == (QString)xmln::function_pou_type)
+    if (m_type_name == (QString)xmln::function_pou_type)
     {
-        auto out = new CBlockVar();
+        auto out = new CBlockVar(&block);
         out->set_formal_param("out");
         out->set_type(m_interface->return_type());
         out->set_direction(EPinDirection::PD_OUTPUT);
@@ -223,26 +234,30 @@ CBlock CPou::get_block()
     {
         for (auto &in_out : *m_interface->in_out_variables()->variables())
         {
-            auto *var = new CBlockVar();
-            var->set_iface_variable(in_out);
+            auto *var = new CBlockVar(&block);
+            //var->set_iface_variable(in_out);
+            var->set_type(in_out->type());
+            var->set_formal_param(in_out->name());
             var->set_direction(EPinDirection::PD_IN_OUT);
             block.in_out_variables()->push_back(var);
-            inOuts += in_out->type() + " ";
+            //inOuts += in_out->type() + " ";
         }
 
         for(auto &out : *m_interface->output_variables()->variables())
         {
-            auto var = new CBlockVar();
-            var->set_iface_variable(out);
+            auto var = new CBlockVar(&block);
+            var->set_formal_param(out->name());
+            //var->set_iface_variable(out);
+            var->set_type(out->type());
             var->set_direction(PD_OUTPUT);
             block.output_variables()->push_back(var);
-            outputs += out->type();
+            //outputs += out->type();
         }
     }
 
 
     /// create CodeSys crutch
-    QDomDocument doc;
+    /*QDomDocument doc;
     auto *inp_data = new CData();
     auto *out_data = new CData();
     auto * in_out_data = new CData();
@@ -275,7 +290,7 @@ CBlock CPou::get_block()
         in_out_data->set_any_node(types);
 
         block.add_data()->append_data(in_out_data);
-    }
+    }*/
 
     return block;
 }
@@ -435,7 +450,7 @@ bool CPou::find_block_connecting_info(const uint64_t &ref_id, const QString &for
 }
 
 bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                          CBlockVar **possible_block_var, CVariable **possible_iface)
+                          std::vector<CBlockVar*> *possible_block_vars, std::vector<CVariable *> *possible_iface)
 {
     /// возможные варианты наш block_var (должен быть входным) лишь один из задних клиентов проститутствующей in_out_variable<br>
     /// check input of the in_out_var
@@ -445,70 +460,118 @@ bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
         return false;
     }
 
-    bool res = recursive_find_front(in_out_variable, possible_block_var, possible_iface);
+    bool res = recursive_find_front(in_out_variable, possible_block_vars, possible_iface);
     return res;
 }
 
 bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
-                                CBlockVar **p_block_var, CVariable ** p_iface_var)
+                                std::vector<CBlockVar *>* in_outs,std::vector<CVariable *> *possible_iface)
 {
-    uint64_t  ref_local_id = in_out_variable->point_in()->ref_local_id();
-    QString   formal_param = in_out_variable->point_in()->formal_param();
-
-    /// check if block
-    CBlock * block = find_block_by_id(ref_local_id);
-
-    if (block)
+    if (!in_out_variable->expression()->expression().isEmpty())
     {
-        QList<CBlockVar*> array;
-        array.append(*block->in_out_variables());
-        array.append(*block->output_variables());
+        auto var = m_interface->get_variable_by_name(in_out_variable->expression()->expression());
 
-        for (auto &var : array)
+        if (var)
         {
-            if (var->formal_parameter() == formal_param)
+            possible_iface->push_back(var);
+        }
+    }
+
+    for (auto &connection : *in_out_variable->point_in()->connections())
+    {
+        uint64_t  ref_local_id = connection->ref_local_id();
+        QString   formal_param = connection->formal_parameter();
+
+        /// check if block
+        CBlock * block = find_block_by_id(ref_local_id);
+
+        if (block)
+        {
+            QList<CBlockVar*> array;
+            array.append(*block->in_out_variables());
+            array.append(*block->output_variables());
+
+            for (auto &var : array)
             {
-                *p_block_var = var;
+                if (var->formal_parameter() == formal_param)
+                {
+                    in_outs->push_back(var);
+                    break;
+                }
+            }
+            continue;
+        }
+
+        /// check interface
+        for (auto &i_var : m_interface->all_variables())
+        {
+            if (i_var->name() == formal_param)
+            {
+                possible_iface->push_back(i_var);
                 return true;
             }
         }
-    }
 
-    /// check interface
-    for (auto &i_var : m_interface->all_variables())
-    {
-        if (i_var->name() == formal_param)
+        /// nope, it damned inOutVariable with possible recursion
+        auto content = get_fbd();
+        if (!content)
         {
-            *p_iface_var = i_var;
-            return true;
+            continue;
         }
-    }
 
-    /// очень тонкий момент - в программе никак не отражен тот факт, что CBody в одном POU может быть несколько.
-    /// И еще нет единого интерфейса для различных языков программирования
-    CBody * body = m_bodies->front();
-
-    CFbdContent * content;
-
-    /// этот кусок костыля по-праву должен быть частью самого CBody, но только когда появится общий интерфейс, а пока такой костыль
-    switch (body->diagram_lang())
-    {
-        case EBodyType::BT_FBD:
-            content = body->fbd_content();
-            if (!content)
-                return false;
-            break;
-        default:
-            return false;
-    }
-    for (auto &in_out : *content->in_out_variables())
-    {
-        if(in_out->local_id() == ref_local_id)
+        auto data_info = content->get_var_by_local_id(ref_local_id);
+        if (data_info.source == PD_IN_OUT)
         {
-            bool res = recursive_find_front(in_out, p_block_var, p_iface_var);
+            auto in_out = static_cast<CInOutVariable*>(data_info.variable);
+            bool res = recursive_find_front(in_out, in_outs, possible_iface);
             if (res)
                 return true;
         }
+
+        /// ниже это фантастика
+        if (data_info.source == PD_OUTPUT)
+        {
+            throw std::runtime_error("WTF?! in 'CPou::recursive_find_front'");
+        }
+        if (data_info.source == PD_INPUT)
+        {
+            throw std::runtime_error("WTF?! in 'CPou::recursive_find_front'");
+        }
     }
     return false;
+}
+
+void CPou::setSourceDomNode(const QDomNode &dom_node)
+{
+    *m_dom_node = dom_node;
+}
+
+CFbdContent *CPou::get_fbd()
+{
+    for (auto &body : *m_bodies)
+    {
+        if (body->diagram_lang() == EBodyType::BT_FBD)
+        {
+            return body->fbd_content();
+        }
+    }
+
+    return nullptr;
+}
+
+EBodyType CPou::body_type() const
+{
+    if (m_bodies->empty())
+        return EBodyType::BT_COUNT;
+    return m_bodies->front()->diagram_lang();
+}
+
+CTypes *CPou::parent()
+{
+    return m_parent;
+}
+
+void CPou::set_parent(CTypes *parent)
+{
+    m_parent = parent;
 }

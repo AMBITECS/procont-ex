@@ -15,7 +15,9 @@ enum FilterFlags
     ff_naming = 4,
     ff_local_env = 8,
     ff_user_types = 16,
-    ff_pou_names = 32
+    ff_pou_names = 32,
+    ff_library = 64,
+    ff_all_flags = 128
 };
 
 class CVariablesAnalytics;

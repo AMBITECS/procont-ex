@@ -16,16 +16,16 @@ public:
 
     void    redo() override;
     void    undo() override;
-    CLadder *  new_ladder();
+    CFbdLadder *  new_ladder();
 
 private:
-    CLadder     * m_new_ladder{nullptr};
-    CLadder     * m_to_delete{nullptr};
+    CFbdLadder     * m_new_ladder{nullptr};
+    CFbdLadder     * m_to_delete{nullptr};
     COglWorld   * m_ogl_world;
     int           m_index{-1};
 
     void  add();
-    CLadder *  remove();
+    CFbdLadder *  remove();
 };
 
 

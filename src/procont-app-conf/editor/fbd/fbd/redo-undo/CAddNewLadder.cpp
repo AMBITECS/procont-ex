@@ -26,18 +26,18 @@ void CAddNewLadder::undo()
     m_to_delete = remove();
 }
 
-CLadder *CAddNewLadder::new_ladder()
+CFbdLadder *CAddNewLadder::new_ladder()
 {
     return m_new_ladder;
 }
 
 void CAddNewLadder::add()
 {
-    CLadder *prev = m_ogl_world->m_ladders->empty() ? nullptr : m_ogl_world->m_ladders->back();
+    CFbdLadder *prev = m_ogl_world->m_ladders->empty() ? nullptr : m_ogl_world->m_ladders->back();
 
     if (!m_new_ladder)
     {
-        m_new_ladder = new CLadder(m_ogl_world, m_ogl_world->m_hatch_topLeft,
+        m_new_ladder = new CFbdLadder(m_ogl_world, m_ogl_world->m_hatch_topLeft,
                                    &m_ogl_world->m_hatch_size,
                                    prev, nullptr);
     }
@@ -49,7 +49,7 @@ void CAddNewLadder::add()
 
     m_ogl_world->m_ladders->push_back(m_new_ladder);
 
-    CLadder *start = prev == nullptr ? m_new_ladder : prev;
+    CFbdLadder *start = prev == nullptr ? m_new_ladder : prev;
     start->update_real_position();
 
     m_ogl_world->check_diagram_size();
@@ -57,16 +57,16 @@ void CAddNewLadder::add()
 
 }
 
-CLadder *CAddNewLadder::remove()
+CFbdLadder *CAddNewLadder::remove()
 {
     if (!m_new_ladder)
         return nullptr;
 
     m_index = m_new_ladder->number() - 1;
-    CLadder *found = nullptr;
+    CFbdLadder *found = nullptr;
 
     int index = 0;
-    for (CLadder *&item : *m_ogl_world->m_ladders)
+    for (CFbdLadder *&item : *m_ogl_world->m_ladders)
     {
         if (item == m_new_ladder)
         {
@@ -79,9 +79,9 @@ CLadder *CAddNewLadder::remove()
 
     if (found)
     {
-        CLadder *prev = m_new_ladder->previous_ladder();
-        CLadder *next = m_new_ladder->next_ladder();
-        CLadder *start = prev ? prev : next;
+        CFbdLadder *prev = m_new_ladder->previous_ladder();
+        CFbdLadder *next = m_new_ladder->next_ladder();
+        CFbdLadder *start = prev ? prev : next;
 
         /// from begin
         if (!prev && next)

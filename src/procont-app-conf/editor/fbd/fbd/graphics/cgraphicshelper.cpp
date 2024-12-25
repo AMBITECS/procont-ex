@@ -5,18 +5,31 @@
 #include <QTimer>
 #include <QMenu>
 
-//#include "../variables.h"
+
 #include "coglwidget.h"
 #include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/fbd/redo-undo/CPinInvers.h"
+#include "editor/fbd/fbd/redo-undo/CPinRising.h"
+#include "editor/fbd/fbd/redo-undo/CPinFalling.h"
+#include "editor/fbd/fbd/redo-undo/CResetConnections.h"
+
+extern CProject *project;
 
 CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidget()
 {
+    get_project(node);
     m_pou_node = node;
     m_opengl_widget = ogl_widget;
 
-    m_pou =  node->isNull() ? new CPou() : m_pou = new CPou(*m_pou_node);
-
     m_graphics_world = new COglWorld(ogl_widget, m_pou, &m_hatch_tl);
+    connect(m_graphics_world, &COglWorld::set_current_pou,
+            [=](CPou *pou){emit set_current_pou(pou);});
+
+    connect(m_graphics_world, &COglWorld::instance_removed,
+            [=](const QString &type, const QString &name){ emit instance_removed(type, name); });
+
+    connect(m_graphics_world, &COglWorld::diagram_changed,
+            [=](const QDomNode &node){emit diagram_changed(node);});
 
     connect(m_graphics_world, &COglWorld::drag_complete,
             this, &CGraphicsHelper::drag_process_complete);
@@ -57,16 +70,16 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
     connect(this, &CGraphicsHelper::mouse_dblClicked,
             this, &CGraphicsHelper::double_clicked);
 
-    m_ladders = m_graphics_world->ladders();
+    m_ladders = m_graphics_world->visible_ladders();
 }
 
 CGraphicsHelper::~CGraphicsHelper()
 {
+    project->Delete();
     delete m_graphics_world;
-    delete m_pou;
 }
 
-std::vector<CLadder*>  * CGraphicsHelper::ladders()
+std::vector<CFbdLadder*>  * CGraphicsHelper::ladders()
 {
     return m_ladders;
 }
@@ -116,7 +129,8 @@ void CGraphicsHelper::on_drop_event(QDropEvent *event)
         /// new component
         if (type >= EPaletteElements::EL_AND && selected.ladder)
         {
-            m_graphics_world->insert_new_component(selected.ladder, type,
+            QString pou_name = mime->property("name").toString();
+            m_graphics_world->insert_new_component(selected.ladder, type, pou_name,
                                                    event->position().toPoint());
         }
         /// new ladder from palette
@@ -142,6 +156,13 @@ void CGraphicsHelper::on_drop_event(QDropEvent *event)
         /// moving object
         if (m_dragged_obj && selected.ladder)
         {
+            /// define errors
+            if (m_dragged_obj->bound_graph_rect().contains(event->position().toPoint()))
+            {
+                return;
+            }
+
+
             move_ok = m_graphics_world->move_object(m_object_source,
                                                     selected.ladder,
                                                     m_dragged_obj,
@@ -206,7 +227,7 @@ CGraphicsHelper::on_drag_enter_event(QDragEnterEvent *event)
 
 void CGraphicsHelper::on_drag_move_event(QDragMoveEvent *event)
 {
-    /// check all visible ladders
+    /// check all visible visible_ladders
 
     if (event->mimeData()->property(txt_vars::drag_obj_prop_name) == txt_vars::drag_pin)
     {
@@ -275,9 +296,9 @@ void CGraphicsHelper::project_complete()
     emit on_project_loaded();
 }
 
-void CGraphicsHelper::object_remove(CLadder *, CDiagramObject *)
+void CGraphicsHelper::object_remove(CFbdLadder *ladder, CFbdObject *object)
 {
-
+    m_graphics_world->erase_object(object);
 }
 
 bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point)
@@ -293,6 +314,40 @@ bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point
     auto p_ladder = selection.ladder;
     auto p_pin = selection.pin;
 
+    /// UNDO / REDO
+    auto *act_undo = new QAction(QIcon(":/24/images/24x24/Undo.png"), "");
+    auto *act_redo = new QAction(QIcon(":/24/images/24x24/Redo.png"), "");
+
+    if (m_graphics_world->undo_stack()->canUndo())
+    {
+        QString text = "Отменить " + m_graphics_world->undo_stack()->undoText();
+        act_undo->setText(text);
+        connect(act_undo, &QAction::triggered, [=](){m_graphics_world->undo_stack()->undo();});
+    }
+    else
+    {
+        act_undo->setText("Отмена");
+        act_undo->setEnabled(false);
+    }
+
+    if (m_graphics_world->undo_stack()->canRedo())
+    {
+        QString text = "Повторить " + m_graphics_world->undo_stack()->redoText() ;
+        act_redo->setText(text);
+        connect(act_redo, &QAction::triggered, [=](){m_graphics_world->undo_stack()->redo();});
+    }
+    else
+    {
+        act_redo->setText(tr("Вернуть"));
+        act_redo->setEnabled(false);
+    }
+
+    p_menu->addAction(act_undo);
+    p_menu->addAction(act_redo);
+    p_menu->addSeparator();
+
+
+    /// Special actions
     if (p_object && p_ladder)
     {
         make_object_menu(p_menu, p_object, p_ladder);
@@ -311,88 +366,94 @@ bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point
     return true;
 }
 
-void CGraphicsHelper::make_object_menu(QMenu *p_menu, CDiagramObject *p_object, CLadder *p_ladder)
+void CGraphicsHelper::make_object_menu(QMenu *p_menu, CFbdObject *p_object, CFbdLadder *p_ladder)
 {
     auto act_remove = new QAction(p_menu);
-    auto act_cat = new QAction(p_menu);
-
-    QAction * act_paste = nullptr;
-    if (m_clip_object)
-    {
-        act_paste = new QAction(p_menu);
-        act_paste->setEnabled(m_clip_object);
-    }
-
 
 
     QString text = "Удалить " + p_object->type_name() + " " + p_object->instance_name();
     act_remove->setText(text);
 
-    text = "Вырезать " + p_object->type_name() + " " + p_object->instance_name();
-    act_cat->setText(text);
-
-    if (m_clip_object)
-    {
-        //text = "Вставить " + m_clip_object->type_name() + " " + m_clip_object->instance_name();
-        act_paste->setIcon(QIcon(":/24/images/24x24/Paste.png"));
-        //connect()
-    }
-
-
     act_remove->setIcon(QIcon(":/24/images/24x24/Close.png"));
-    connect(act_remove, &QAction::toggled, [=](){
+    connect(act_remove, &QAction::triggered, [=](){
         object_remove(p_ladder, p_object);});
 
-    act_cat->setIcon(QIcon(":/16/images/16x16/cut_red.png"));
-    connect(act_cat, &QAction::toggled, [=](){object_cat(p_ladder, p_object);});
 
     p_menu->addAction(act_remove);
-    p_menu->addAction(act_cat);
-    if(act_paste)
-        p_menu->addAction(act_paste);
 }
 
 void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
 {
-    auto act_find_helper = new QAction(QIcon(":/24/images/24x24/Search.png"),
-                                       "Найти переменную с помощью ассистента...",
-                                       p_menu);
-    auto act_edit_connect = new QAction(QIcon(":/24/images/24x24/Modify.png"),
-                                        "Редактировать соединение",
-                                        p_menu);
     auto act_reset_connect = new QAction(QIcon(":/16/images/16x16/chart_organisation_delete.png"),
-                                        "Очистить соединение",
+                                        "Очистить соединения",
                                         p_menu);
 
+    act_reset_connect->setEnabled(p_pin->is_connected());
+
+    if (p_pin->is_connected())
+    {
+        connect(act_reset_connect, &QAction::triggered, [=](){
+            auto act = new CResetConnections(p_pin);
+            m_graphics_world->undo_stack()->push(act);
+        });
+    }
+
+    act_reset_connect->setEnabled(p_pin->is_connected());
+
     QAction * act_inversion = nullptr;
-    QAction * act_edge_rising = nullptr;
-    QAction * act_edge_falling = nullptr;
+    QAction * act_edge_rising;
+    QAction * act_edge_falling;
 
     if (p_pin->type() == EDefinedDataTypes::DDT_BOOL && p_pin->direction() == PD_INPUT)
     {
-        act_inversion = new QAction(QIcon(""), "Инвертировать", p_menu);
-        connect(act_inversion, &QAction::toggled, this,
-                [p_pin]{p_pin->input()->set_negated(!p_pin->input()->is_negated());});
+        /// negated input
+        QString negated_text = p_pin->input()->is_negated() ? "Сбросить \"инвертирование\"" : "Инвертировать вход";
+        act_inversion = new QAction(QIcon(":/16/images/16x16/contrast.png"), negated_text);
+        bool enabled = !p_pin->input()->is_negated();
+        connect(act_inversion, &QAction::triggered,
+                [=](){
+                    auto cmd = new CPinInverse(p_pin->input(), enabled);
+                    m_graphics_world->undo_stack()->push(cmd);
+                    });
 
-        act_edge_rising = new QAction(QIcon(""), "Нарастающий фронт");
+        /// rising edge
+        QString rising_text = p_pin->input()->is_rising_edge() ? "Сбросить восходящий фронт" : "Установить восходящий фронт";
+        act_edge_rising = new QAction(QIcon(":/24/images/24x24/Raise.png"), rising_text);
+        connect(act_edge_rising, &QAction::triggered, [=](){
+                auto cmd = new CPinRising(p_pin->input(), !p_pin->input()->is_rising_edge());
+                m_graphics_world->undo_stack()->push(cmd);
+                });
+
+        /// falling edge
+        QString falling_text = p_pin->input()->is_falling_edge() ? "Сбросить нисходящий фронт" : "Установить нисходящий фронт";
+        act_edge_falling = new QAction(QIcon(":/24/images/24x24/Fall.png"), falling_text);
+        connect(act_edge_falling, &QAction::triggered, [=](){
+            auto cmd = new CPinFalling(p_pin->input(), !p_pin->input()->is_falling_edge());
+            m_graphics_world->undo_stack()->push(cmd);
+            });
+
     }
 
-
-
-
-    p_menu->addAction(act_find_helper);
-    p_menu->addAction(act_edit_connect);
+    //p_menu->addAction(act_edit_connect);
     p_menu->addAction(act_reset_connect);
     p_menu->addSeparator();
 
+    if (act_inversion)
+    {
+        p_menu->addAction(act_inversion);
+        p_menu->addAction(act_edge_rising);
+        p_menu->addAction(act_edge_falling);
+        p_menu->addSeparator();
+    }
+
 }
 
-void CGraphicsHelper::make_ladder_menu(QMenu *p_menu, CLadder *p_ladder)
+void CGraphicsHelper::make_ladder_menu(QMenu *p_menu, CFbdLadder *p_ladder)
 {
 
 }
 
-void CGraphicsHelper::object_cat(CLadder *p_ladder, CDiagramObject *p_object)
+void CGraphicsHelper::object_cat(CFbdLadder *p_ladder, CFbdObject *p_object)
 {
 
 }
@@ -462,6 +523,28 @@ void CGraphicsHelper::on_drag_pin(QDragMoveEvent *event)
 void CGraphicsHelper::drag_process_complete()
 {
     emit drag_complete();
+}
+
+void CGraphicsHelper::get_project(QDomNode *pou_node)
+{
+
+    QDomNode node = *pou_node;
+    QDomNode prj_node = pou_node->parentNode().parentNode().parentNode();
+
+    CProject::get_instance(prj_node);
+
+    m_pou =  new CPou(node, project->types());
+    auto exist_pou = project->types()->find_pou_by_name(m_pou->name());
+
+    if (!exist_pou)
+    {
+        project->types()->add_pou(m_pou);
+    }
+    else
+    {
+        delete m_pou;
+        m_pou = exist_pou;
+    }
 }
 
 

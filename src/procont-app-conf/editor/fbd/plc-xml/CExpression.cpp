@@ -5,17 +5,34 @@
 #include "CExpression.h"
 
 CExpression::CExpression()
-= default;
+{
+    m_expression = "";
+}
 
 CExpression::CExpression(const CExpression &other)
- = default;
+{
+    m_expression = "";
+    if (other.m_expression.empty())
+    {
+        return;
+    }
+
+    m_expression = other.m_expression;
+}
 
 CExpression::CExpression(CExpression &&other) noexcept
-    : m_expression(std::move(other.m_expression))
-{}
+{
+    if (other.m_expression.empty())
+    {
+        return;
+    }
+    m_expression = std::move(other.m_expression);
+}
 
 CExpression::CExpression(const QDomNode &dom_node)
 {
+    m_expression = "";
+
     if (dom_node.isNull())
     {
         // fprintf(stderr, "CExpression::CExpression(const QDomNode &dom_node) is null\n");
@@ -30,7 +47,8 @@ CExpression::CExpression(const QDomNode &dom_node)
     if (dom_node.isElement())
     {
         QDomElement elem = dom_node.toElement();
-        m_expression = elem.text();
+        if (!elem.text().isNull() && !elem.text().isEmpty())
+            m_expression = elem.text().toStdString();
     }
 }
 
@@ -44,32 +62,39 @@ CExpression &CExpression::operator=(const CExpression &expression)
         return *this;
     }
 
-    m_expression = expression.m_expression;
+    if (!expression.m_expression.empty())
+    {
+        m_expression = expression.m_expression;
+    }
     return *this;
 }
 
 QDomNode CExpression::dom_node() const
 {
-    if (m_expression.isNull())
+    if (m_expression.empty())
     {
         return {};
     }
 
     QDomDocument doc;
     QDomNode root = doc.createElement("expression");
-    QDomText text = doc.createTextNode(m_expression);
+    QDomText text = doc.createTextNode(m_expression.c_str());
     root.appendChild(text);
     return root;
 }
 
 QString CExpression::expression() const
 {
-    return m_expression;
+    return m_expression.empty() ? "" : m_expression.c_str();
 }
 
 void CExpression::set_expression(const QString &expression)
 {
-    m_expression = expression;
+    if (expression.length() > 0)
+    {
+        m_expression = expression.toStdString();
+    }
+
 }
 
 bool  operator==(const CExpression &lhs, const CExpression &rhs)
@@ -79,5 +104,5 @@ bool  operator==(const CExpression &lhs, const CExpression &rhs)
 
 bool CExpression::is_empty() const
 {
-    return m_expression.isEmpty();
+    return m_expression.empty();
 }

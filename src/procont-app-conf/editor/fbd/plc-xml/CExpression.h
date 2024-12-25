@@ -25,10 +25,10 @@ public:
 
     friend  bool  operator==(const CExpression &lhs, const CExpression &rhs);
 
-    bool    is_empty() const;
+    [[nodiscard]] bool    is_empty() const;
 
 private:
-    QString     m_expression;
+    std::string    m_expression{};
 };
 
 

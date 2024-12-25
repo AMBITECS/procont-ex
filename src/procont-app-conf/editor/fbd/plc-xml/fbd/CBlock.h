@@ -87,15 +87,14 @@ protected:
     CAddData          m_add_data;
     CDocumentation    m_documentation;
 
-    std::vector<EDefinedDataTypes>  m_inputs;
-    std::vector<EDefinedDataTypes>  m_outputs;
-
     void
     extract_vars(const QString &direction,
                  const QDomNode &node);
-    void extract_params();
 
-    void extract_pin_params(const std::string &direction, const std::string &types_string);
+    void    clear_variables();
+    //void extract_params();
+
+    //void extract_pin_params(const std::string &direction, const std::string &types_string);
 };
 
 

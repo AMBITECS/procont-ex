@@ -329,13 +329,17 @@ void DomItemPou::addNode(const QDomNode &node_)
 
 void DomItemPou::updateNode(const QDomNode & new_node_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
     if(new_node_.nodeName() == "interface")
     {
+        qDebug() << "interface" << __PRETTY_FUNCTION__;
+
         node().removeChild(node().namedItem("interface"));
         node().appendChild(new_node_.cloneNode());
     }
+
+    qDebug() << "2" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
     if
         (
@@ -343,9 +347,13 @@ void DomItemPou::updateNode(const QDomNode & new_node_)
         node().namedItem("body").firstChild().nodeName() == new_node_.firstChild().nodeName()
         )
     {
+        qDebug() << "body" << __PRETTY_FUNCTION__;
+
         node().removeChild(node().namedItem("body"));
         node().appendChild(new_node_.cloneNode());
     }
+
+    qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 }
 
 QDomNodeList DomItemPou::filterChildren(const QDomNode &node) const

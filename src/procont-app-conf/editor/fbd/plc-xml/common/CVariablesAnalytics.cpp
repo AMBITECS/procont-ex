@@ -737,9 +737,12 @@ CBlock CVariablesAnalytics::get_block_from_library(const QString &block_type_nam
         return CBlock{nullptr};
     }
 
-    CPou pou(type_pou, project->types());
-    CBlock block = pou.get_block();
+    auto lib_pou = new CPou(type_pou, project->types());
+
+    CBlock block = lib_pou->get_block();
     block.set_parent(m_world->m_pou->bodies()->front());
+
+    delete lib_pou;
 
     return block;
 }

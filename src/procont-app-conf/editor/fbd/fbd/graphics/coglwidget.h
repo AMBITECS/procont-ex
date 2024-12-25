@@ -93,7 +93,7 @@ private:
     QScrollBar              * m_horizontal;
 
     QPaintDevice            * m_paint_dev;
-    COglStyle               * m_style;
+    //COglStyle               * m_style;
 
     int                   m_X_scroll{0};
     int                   m_Y_scroll{0};

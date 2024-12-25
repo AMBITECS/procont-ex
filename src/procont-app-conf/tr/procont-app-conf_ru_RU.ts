@@ -1183,28 +1183,28 @@ Enter a new name</source>
 <context>
     <name>WidgetEditor_ld</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="643"/>
+        <location filename="../widget/WidgetEditor.cpp" line="646"/>
         <source>Add</source>
         <translation type="unfinished">Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="645"/>
+        <location filename="../widget/WidgetEditor.cpp" line="648"/>
         <source>Remove</source>
         <translation type="unfinished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="676"/>
-        <location filename="../widget/WidgetEditor.cpp" line="765"/>
+        <location filename="../widget/WidgetEditor.cpp" line="679"/>
+        <location filename="../widget/WidgetEditor.cpp" line="768"/>
         <source>Text</source>
         <translation type="unfinished">Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="679"/>
+        <location filename="../widget/WidgetEditor.cpp" line="682"/>
         <source>Table</source>
         <translation type="unfinished">Таблица</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="768"/>
+        <location filename="../widget/WidgetEditor.cpp" line="771"/>
         <source>Schema</source>
         <translation type="unfinished">Схема</translation>
     </message>

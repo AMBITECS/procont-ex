@@ -459,12 +459,17 @@ void WidgetEditor_fbd::slot_codeTxtViewToggled(bool)
 
 void WidgetEditor_fbd::slot_codeShmChanged(const QDomNode &new_node_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
     // qDebug() << DomItem::printNode(new_node_);
 
     QDomDocument doc = item(_vars_table->rootIndex())->node().ownerDocument();
+
+    qDebug() << "2" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+
     item(_vars_table->rootIndex())->updateNode(doc.importNode(new_node_, true).namedItem("body"));
+
+    qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 }
 
 void WidgetEditor_fbd::slot_interfaceVariableAdd(const QString &type, const QString &name)
@@ -478,7 +483,7 @@ void WidgetEditor_fbd::slot_interfaceVariableAdd(const QString &type, const QStr
     el_variable.setAttribute("name", name);
     QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
     QDomElement el_variable_type_derived = parentNode.ownerDocument().createElement("derived");
-    el_variable_type_derived.setAttribute("name", name);
+    el_variable_type_derived.setAttribute("name", type);
     el_variable_type.appendChild(el_variable_type_derived);
     el_variable.appendChild(el_variable_type);
     QDomNode el_localVars = parentNode.namedItem("interface").namedItem("localVars");
@@ -511,8 +516,6 @@ void WidgetEditor_fbd::slot_interfaceVariableDel(const QString &type, const QStr
 
     if(var_index.isValid())
     {
-        qDebug() << item(var_index)->node().nodeName();
-
         item(_vars_table->rootIndex())->removeChild(s_index(var_index).row(), 0, item(var_index)->node().parentNode());
         proxy(_vars_table->model())->sourceModel()->
             removeRow(s_index(var_index).row(), s_index(_vars_table->rootIndex()));

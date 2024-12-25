@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _m_proxy_dev(new ProxyModelTree_dev),
     _m_undo_stack(new QUndoStack)
 {
-    setMinimumSize(QSize(1440, 900));
+    setMinimumSize(QSize(1920, 1080));
 
     setWindowIcon(QIcon(":/icon/images/pro.svg"));
 
@@ -113,7 +113,7 @@ void MainWindow::createWidgets()
     // left area
     _m_tree_dev = new QTreeView();
     _m_tree_dev->setExpandsOnDoubleClick(false);
-    _m_tree_dev->setMinimumSize(250, 400);
+    _m_tree_dev->setMinimumSize(300, 400);
     _m_tree_dev->setHeaderHidden(true);
     _m_tree_dev->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(_m_tree_dev, &QTreeView::customContextMenuRequested, this, &MainWindow::slot_devCustomContextMenu);

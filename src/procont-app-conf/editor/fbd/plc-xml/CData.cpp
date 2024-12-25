@@ -18,7 +18,8 @@ CData::CData(CData &&tmp) noexcept
     : m_name(std::move(tmp.m_name))
     , m_handle_undef(std::move(tmp.m_handle_undef))
     , m_any(tmp.m_any)
-{}*/
+{}
+*/
 
 CData::CData(const QDomNode &node)
 {

@@ -30,11 +30,11 @@ CPinVarEditor::CPinVarEditor(QWidget *parent) : QComboBox(parent), skipNextHide(
     m_foreground_norm = this->palette().color(QPalette::ColorRole::Text);
     m_background_norm = this->palette().color(QPalette::ColorRole::Base);
 
-    m_view = new QTreeView(parent);
+    m_view = new QTreeView(/*parent*/);
     m_view->viewport()->installEventFilter(this);
 
     //connect(m_view, &QTreeView::clicked, this, &CPinVarEditor::tree_clicked);
-    connect(this, &QComboBox::editTextChanged, this, &CPinVarEditor::text_changed);
+    //connect(this, &QComboBox::editTextChanged, this, &CPinVarEditor::text_changed);
 
     m_view->setFrameShape(QFrame::NoFrame);
 
@@ -67,14 +67,18 @@ void CPinVarEditor::showPopup()
 {
     for (int i = 0; i < m_view->header()->count(); i++)
     {
-        m_view->header()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
+        m_view->resizeColumnToContents(i);
+        //m_view->header()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
     }
 
-    int size = 0;
-    for (int i = 0; i < m_view->header()->count(); i++)
-        size += m_view->header()->sectionSize(i);
+    m_view->setColumnWidth(1, 100);
+    int f_col = m_view->columnWidth(0);
+
+    int size = f_col + 100;
 
     this->setFixedWidth(size);
+
+
 
     //setRootModelIndex(QModelIndex());
     QComboBox::showPopup();
@@ -227,50 +231,6 @@ void CPinVarEditor::reset_selection()
     m_parent_item = nullptr;
 }
 
-void CPinVarEditor::text_changed(const QString &text)
-{
-    /*m_selected_item = nullptr;
-
-
-    if (text.length() < 3)
-    {
-        //set_error(false);
-        return;
-    }
-
-    auto model = dynamic_cast<QVarSelectModel*>(this->model());
-    model->set_text(text);
-    m_new_variable = text;
-    QTimer::singleShot(250, this, SLOT(show_variable(text)));*/
-
-    /*bool bad_type = false;
-    CVariable *i_var = nullptr;
-    bool compatibility{false};
-
-    /// suppose text is constant, lets define type
-    auto type = CFilter::get_type_from_const(text.toStdString());
-
-    if (type == DDT_UNDEF || type == DDT_STRING || type == DDT_DERIVED)
-    {
-        /// ups... may be iface variable? Lets find it
-        bad_type = true;
-        i_var = project->types()->find_iface_variable(text);
-
-        /// or objects pin
-        if (!i_var)
-        {
-            auto obj = m_analytics->find_object(text);
-        }
-    }
-
-    if (i_var || !bad_type)
-    {
-        compatibility = check_compatibility(i_var, type);
-    }
-
-    set_error(!compatibility);*/
-}
-
 void CPinVarEditor::set_error(const bool &is_error)
 {
     QPalette palette;
@@ -327,5 +287,49 @@ void CPinVarEditor::set_pin(CPin *pin)
         auto world = pin->parent()->parent()->parent();
         m_analytics = new CVariablesAnalytics(world, world->current_pou()->name());
     }
+}
 
+void CPinVarEditor::editTextChanged(const QString &text)
+{
+    QComboBox::editTextChanged(text);
+    /*m_selected_item = nullptr;
+
+
+if (text.length() < 3)
+{
+    //set_error(false);
+    return;
+}
+
+auto model = dynamic_cast<QVarSelectModel*>(this->model());
+model->set_text(text);
+m_new_variable = text;
+QTimer::singleShot(250, this, SLOT(show_variable(text)));*/
+
+    /*bool bad_type = false;
+    CVariable *i_var = nullptr;
+    bool compatibility{false};
+
+    /// suppose text is constant, lets define type
+    auto type = CFilter::get_type_from_const(text.toStdString());
+
+    if (type == DDT_UNDEF || type == DDT_STRING || type == DDT_DERIVED)
+    {
+        /// ups... may be iface variable? Lets find it
+        bad_type = true;
+        i_var = project->types()->find_iface_variable(text);
+
+        /// or objects pin
+        if (!i_var)
+        {
+            auto obj = m_analytics->find_object(text);
+        }
+    }
+
+    if (i_var || !bad_type)
+    {
+        compatibility = check_compatibility(i_var, type);
+    }
+
+    set_error(!compatibility);*/
 }

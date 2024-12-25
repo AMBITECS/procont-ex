@@ -328,6 +328,11 @@ COutVariable *CFbdContent::find_output_var_by_iface_name(const QString &iface_va
 
     for (auto &out_var : *m_out_variables)
     {
+        if (out_var->expression()->is_empty())
+        {
+            continue;
+        }
+
         current = out_var->expression()->expression().toStdString();
         CFilter::capitalize_word(current);
 

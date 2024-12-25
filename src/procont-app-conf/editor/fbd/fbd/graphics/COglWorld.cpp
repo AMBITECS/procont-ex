@@ -638,6 +638,11 @@ QUndoStack *COglWorld::undo_stack()
 
 void COglWorld::mouse_dblClicked(QMouseEvent *evt)
 {
+    if (m_selection.empty() || !m_selection.ladder)
+    {
+        return;
+    }
+
     /// define pin's variable or object's instance name
     if (m_selection.pin)
     {

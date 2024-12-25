@@ -114,7 +114,8 @@ CData *CAddData::remove_data(CData *data)
     return nullptr;
 }
 
-CData *CAddData::remove_data(const uint16_t &index)
+CData *
+CAddData::remove_data(const uint16_t &index)
 {
     if (index >= m_data_list->count())
     {

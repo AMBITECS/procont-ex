@@ -196,6 +196,7 @@ QDomNode *CPou::sourceDomNode()
 CBlock CPou::get_block()
 {
     CBlock block(nullptr);
+
     block.set_local_id(++max_local_id);
     block.set_type_name(m_name);
 

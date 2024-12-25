@@ -18,7 +18,7 @@
 #include <QFile>
 #include <QStringListModel>
 
-QCompleter * CodeEditor::_completer = nullptr;
+//QCompleter * CodeEditor::_completer = nullptr;
 
 CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 {
@@ -55,6 +55,27 @@ int CodeEditor::lineNumberAreaWidth()
     int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 
     return space;
+}
+
+void CodeEditor::setPousListName(QStringList list)
+{
+    syntaxHighlighter->setNewWords(list);
+    for (const auto word : list)
+    {
+        if (!words_.contains(word))
+        {
+            qDebug() << word;
+            words_.append(word);
+        }
+    }
+
+    words_.sort();
+    _completer->setModel(new QStringListModel(words_, completer()));
+    _completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+    _completer->setCaseSensitivity(Qt::CaseInsensitive);
+    _completer->setWrapAround(false);
+    _completer->setCompletionMode(QCompleter::PopupCompletion);
+    _completer->setCaseSensitivity(Qt::CaseInsensitive);
 }
 
 // void CodeEditor::initCompleter(/*QCompleter *completer*/)
@@ -114,20 +135,21 @@ QAbstractItemModel *CodeEditor::modelFromFile(const QString& fileName)
 #ifndef QT_NO_CURSOR
     QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 #endif
-    QStringList words;
+    //QStringList words;
 
     while (!file.atEnd()) {
         QByteArray line = file.readLine();
         if (!line.isEmpty())
-            words << QString::fromUtf8(line.trimmed());
+            words_ << QString::fromUtf8(line.trimmed());
     }
 
-    words.sort();
+    words_.sort();
 
 #ifndef QT_NO_CURSOR
     QGuiApplication::restoreOverrideCursor();
+
 #endif
-    return new QStringListModel(words, completer());
+    return new QStringListModel(words_, completer());
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)

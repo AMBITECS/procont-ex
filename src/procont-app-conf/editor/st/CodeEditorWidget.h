@@ -16,6 +16,7 @@ public:
 
     QString toPlainText() const;
     void setPlainText(const QString &text);
+    void setPousListName(QStringList list);
 
 Q_SIGNALS:
     void textChanged();

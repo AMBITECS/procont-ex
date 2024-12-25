@@ -3,6 +3,8 @@
 #include "ItemValue.h"
 #include "ItemValueVariableTable.h"
 
+#include "tr/translation.h"
+
 #include <QtXml>
 
 // ----------------------------------------------------------------------------
@@ -21,6 +23,15 @@ DomItem::ItemType DomItem::assignType(const QDomNode &node)
 {
     if(node.nodeName() == "pou")
         return DomItem::typePou;
+    if(node.nodeName() == "project")
+        return DomItem::typeProject;
+    if(
+        node.nodeName() == "configuration" ||
+        node.nodeName() == "resource" ||
+        node.nodeName() == "task" ||
+        node.nodeName() == "pouInstance"
+        )
+        return DomItem::typeName;
     if(node.nodeName() == "dataType")
         return DomItem::typeType;
     if(node.nodeName() == "globalVars")
@@ -136,13 +147,11 @@ QVariant DomItem::data(int role) const
     // if(role == Qt::DecorationRole)
     //     return QIcon(":/icon/images/diagram.svg");
 
-    return m_value->get();
+    return tr_str::instance()->ru(m_value->get());
 }
 
 void DomItem::setData(const QVariant &value, int role)
 {
-    Q_UNUSED(role);
-
     m_value->set(value.toString());
 }
 
@@ -153,8 +162,16 @@ void DomItem::setItemValue(ItemValue *pointer)
 
 void DomItem::addNode(const QDomNode & node_)
 {
+    qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << DomItem::printNode(node_);
+
     auto _node = node().ownerDocument().importNode(node_, true);
     node().appendChild(_node);
+}
+
+void DomItem::updateNode(const QDomNode &)
+{
+    qDebug() << __PRETTY_FUNCTION__;
 }
 
 QString DomItem::print() const
@@ -165,6 +182,7 @@ QString DomItem::print() const
 QString DomItem::printNode(const QDomNode &node_)
 {
     QDomDocument _doc;
+
     _doc.appendChild(_doc.importNode(node_, true));
 
     return _doc.toString();
@@ -182,6 +200,7 @@ void DomItemVar::addNode(const QDomNode &)
 {
     QDomNode parentNode = node();
     QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
+    el_variable.setAttribute("name", "globalVar1");
     QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
     QDomElement el_variable_type_int = parentNode.ownerDocument().createElement("WORD");
     el_variable_type.appendChild(el_variable_type_int);
@@ -288,11 +307,13 @@ QVariant DomItemPou::data(int role) const
     return QString("%1 (%2)").arg(node().attributes().namedItem("name").nodeValue(), _pou_type);
 }
 
-void DomItemPou::addNode(const QDomNode &)
+void DomItemPou::addNode(const QDomNode &node_)
 {
+
+
     QDomNode parentNode = node();
     QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
-    el_variable.setAttribute("name", "localVar");
+    el_variable.setAttribute("name", "localVar1");
     QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
     QDomElement el_variable_type_int = parentNode.ownerDocument().createElement("INT");
     el_variable_type.appendChild(el_variable_type_int);
@@ -307,15 +328,23 @@ void DomItemPou::addNode(const QDomNode &)
 }
 
 void DomItemPou::updateNode(const QDomNode & new_node_)
-{        
-    node().removeChild(node().toElement().namedItem("interface"));
-    node().appendChild(new_node_.toElement().namedItem("interface").cloneNode());
+{
+    qDebug() << __PRETTY_FUNCTION__;
 
-    // !!! remove this if when all editors will be integrated
-    if(!node().toElement().namedItem("body").namedItem("ST").isNull())
+    if(new_node_.nodeName() == "interface")
     {
-        node().removeChild(node().toElement().namedItem("body"));
-        node().appendChild(new_node_.toElement().namedItem("body").cloneNode());
+        node().removeChild(node().namedItem("interface"));
+        node().appendChild(new_node_.cloneNode());
+    }
+
+    if
+        (
+        new_node_.nodeName() == "body" &&
+        node().namedItem("body").firstChild().nodeName() == new_node_.firstChild().nodeName()
+        )
+    {
+        node().removeChild(node().namedItem("body"));
+        node().appendChild(new_node_.cloneNode());
     }
 }
 
@@ -374,6 +403,15 @@ DomItem * DomItemName_creator::create(const QDomNode &node)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemType_creator ***
+DomItem * DomItemType_creator::create(const QDomNode &node)
+{
+    return new DomItemType(node);
+}
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
 // *** DomItemVar_creator ***
 DomItem * DomItemVar_creator::create(const QDomNode &node)
 {
@@ -390,13 +428,23 @@ DomItem * DomItemPou_creator::create(const QDomNode &node)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemProject_creator ***
+DomItem * DomItemProject_creator::create(const QDomNode &node)
+{
+    return new DomItemProject(node);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** DomItem_builder ***
 DomItem_builder::DomItem_builder()
 {
     m_creators.insert(DomItem::typeItem, new DomItem_creator);
-    m_creators.insert(DomItem::typeType, new DomItemName_creator);
+    m_creators.insert(DomItem::typeType, new DomItemType_creator);
     m_creators.insert(DomItem::typeVar, new DomItemVar_creator);
     m_creators.insert(DomItem::typePou, new DomItemPou_creator);
+    m_creators.insert(DomItem::typeName, new DomItemName_creator);
+    m_creators.insert(DomItem::typeProject, new DomItemProject_creator);
 }
 
 DomItem_builder::~DomItem_builder()

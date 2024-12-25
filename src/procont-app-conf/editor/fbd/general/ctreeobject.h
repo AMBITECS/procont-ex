@@ -8,7 +8,7 @@ class CTreeObject : public QTreeWidget
 {
     Q_OBJECT
 public:
-    explicit CTreeObject(QWidget *parent);
+    explicit CTreeObject(QWidget *parent = nullptr);
     ~CTreeObject() override;
 
 signals:

@@ -65,6 +65,7 @@ private:
     QString _m_name_user {};
     const QString _m_filePath {};
     QDomDocument * _m_library { nullptr };
+    bool _m_external_doc{ false };
 };
 
 #endif // LIBRARY_H

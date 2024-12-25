@@ -20,6 +20,8 @@ public:
         typeVar     = QStandardItem::UserType + 2,
         typePou     = QStandardItem::UserType + 3,
         typeType    = QStandardItem::UserType + 4,
+        typeName    = QStandardItem::UserType + 5,
+        typeProject = QStandardItem::UserType + 6
     };
 public:
     DomItem(const QDomNode &node);
@@ -29,7 +31,7 @@ public:
     [[nodiscard]] DomItem * insertChild(int row, int column, const QDomNode & node, int shift = 0);
     void removeChild(int row, int column, const QDomNode & childNode);
     void removeChildren();
-    virtual void updateNode(const QDomNode &) {;}
+    virtual void updateNode(const QDomNode &);
     virtual void addNode(const QDomNode & = QDomNode());
 
     [[nodiscard]] DomItem * parentItem() const;
@@ -37,7 +39,7 @@ public:
     [[nodiscard]] int rowCount();
     [[nodiscard]] int columnCount();
 
-    [[nodiscard]] virtual QVariant data(int role) const override;
+    [[nodiscard]] virtual QVariant data(int role = Qt::DisplayRole) const override;
     virtual void setData(const QVariant &value, int role) override;
     [[nodiscard]] int type() const override { return m_itemType; }
 
@@ -89,13 +91,46 @@ public:
 
         return node().attributes().namedItem("name").nodeValue();
     }
+};
+// ----------------------------------------------------------------------------
 
-    virtual void updateNode(const QDomNode & new_node_) override
+// ----------------------------------------------------------------------------
+// *** DomItemType
+class DomItemType : public DomItemName
+{
+public:
+    DomItemType(const QDomNode &node) :
+        DomItemName(node)
+    {}
+
+    void updateNode(const QDomNode &new_node_)
     {
-        // qDebug() << node().nodeName() << node().parentNode().nodeName();
+        qDebug() << __PRETTY_FUNCTION__;
 
-        // node().parentNode().appendChild(new_node_.cloneNode());
-        // node().parentNode().removeChild(node());
+        if(new_node_.nodeName() == "baseType")
+        {
+            node().removeChild(node().namedItem("baseType"));
+            node().appendChild(new_node_.cloneNode());
+        }
+    }
+
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** DomItemProject
+class DomItemProject : public DomItem
+{
+public:
+    DomItemProject(const QDomNode &node) :
+        DomItem(node)
+    {}
+
+    [[nodiscard]] QVariant data(int role) const override
+    {
+        Q_UNUSED(role);
+
+        return node().namedItem("contentHeader").toElement().attribute("name");
     }
 };
 // ----------------------------------------------------------------------------
@@ -154,6 +189,15 @@ public:
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemType_creator
+class DomItemType_creator : public DomItem_creator
+{
+public:
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** DomItemVar_creator
 class DomItemVar_creator : public DomItem_creator
 {
@@ -165,6 +209,15 @@ public:
 // ----------------------------------------------------------------------------
 // *** DomItemPou_creator
 class DomItemPou_creator : public DomItem_creator
+{
+public:
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** DomItemProject_creator
+class DomItemProject_creator : public DomItem_creator
 {
 public:
     [[nodiscard]] virtual DomItem * create(const QDomNode &node);

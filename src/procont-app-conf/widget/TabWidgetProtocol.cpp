@@ -5,6 +5,8 @@
 
 #include "log/Logger.h"
 
+#include "main/MainWindow.h"
+
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QUndoView>
@@ -111,7 +113,6 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     auto container = new QWidget(this);
     m_pErrorPlainTextWidget = new QPlainTextEdit(this);
     m_pErrorPlainTextWidget->setReadOnly(true);
-    m_pErrorPlainTextWidget->setMinimumHeight(250);
     m_pErrorTreeWidget = new QTreeWidget(this);
     m_pErrorTreeWidget->setColumnCount(4);
     m_pErrorTreeWidget->header()->resizeSection(0, 900);
@@ -120,10 +121,8 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     m_pErrorTreeWidget->header()->resizeSection(3, 200);
     m_pErrorTreeWidget->setHeaderLabels(QStringList() << tr("Message") << tr("Project") << tr("Object") << tr("Position"));
     m_pErrorTreeWidget->setWordWrap(true);
-    m_pErrorTreeWidget->setMinimumHeight(250);
     m_pErrorTreeWidget->hide();
     m_pCodePlainTextWidget = new CodeEditorWidget(this);
-    m_pCodePlainTextWidget->setMinimumHeight(250);
     m_pCodePlainTextWidget->hide();
     auto hb = new QHBoxLayout;
     hb->addWidget(m_pErrorPlainTextWidget);
@@ -237,9 +236,9 @@ void CWidgetProtocolTab_build::set(const CText &text_)
 // *** CWidgetProtocol ***
 //
 
-CWidgetProtocol * CWidgetProtocol::m_pInstance = nullptr;
+// CWidgetProtocol * CWidgetProtocol::m_pInstance = nullptr;
 
-CWidgetProtocol::CWidgetProtocol(QWidget *parent) :
+CWidgetProtocol::CWidgetProtocol(QUndoStack *undoStack_, QWidget *parent) :
     QTabWidget{parent}
 {
     m_pWidgetMessage = new CWidgetProtocolTab_message(this);
@@ -249,7 +248,7 @@ CWidgetProtocol::CWidgetProtocol(QWidget *parent) :
     addTab(m_pWidgetBuild, tr("Build"));
 
     m_pWidgetAction = new QUndoView(this);
-    // m_pActionUndoView->setStack(CWidgetProject::instance()->undoStack());
+    m_pWidgetAction->setStack(undoStack_);
     addTab(m_pWidgetAction, tr("Actions"));
 
     setMinimumHeight(200);
@@ -266,13 +265,13 @@ CWidgetProtocol::~CWidgetProtocol()
 {
 }
 
-CWidgetProtocol * CWidgetProtocol::instance()
-{
-    if(!m_pInstance)
-        m_pInstance = new CWidgetProtocol;
+// CWidgetProtocol * CWidgetProtocol::instance()
+// {
+//     if(!m_pInstance)
+//         m_pInstance = new CWidgetProtocol;
 
-    return  m_pInstance;
-}
+//     return  m_pInstance;
+// }
 
 void CWidgetProtocol::slot_add_msg(const CMessage &message_)
 {

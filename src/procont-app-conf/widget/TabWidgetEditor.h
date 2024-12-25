@@ -26,7 +26,8 @@ public:
 
     void addIntro();
 
-    void closeTab(const QModelIndex &);
+    void renameTab(const QModelIndex &);
+    void closeTab(const QModelIndex &, bool = false);
 
 public slots:
     void slot_addTabWidget(const QModelIndex &index);

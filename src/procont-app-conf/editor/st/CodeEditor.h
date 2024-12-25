@@ -17,8 +17,11 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
-    static QCompleter * completer();
+    void setPousListName(QStringList list);
+
+    QCompleter * completer();
     Highlighter * highliter() const { return syntaxHighlighter; }
+
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -27,7 +30,7 @@ protected:
     void focusInEvent(QFocusEvent *event) override;
 
 protected:
-    static QAbstractItemModel * modelFromFile(const QString& fileName);
+    QAbstractItemModel * modelFromFile(const QString& fileName);
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -41,8 +44,9 @@ private:
 private:
     QWidget *lineNumberArea;
     int currentPositionBlock;
+    QStringList words_;
 
     Highlighter * syntaxHighlighter;
 
-    static QCompleter * _completer;
+    QCompleter * _completer = nullptr;
 };

@@ -17,6 +17,9 @@ public:
     {
         typeST,
         typeFBD,
+        typeSFC,
+        typeLD,
+        typeIL,
         typeUnknown
     };
 public:
@@ -57,6 +60,54 @@ class Translator_POU_FBD : public ITranslator_POU
 {
 public:
     Translator_POU_FBD(const QDomNode &node_);
+
+    QString translate() const override;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_SFC ***
+
+/*!
+ * \brief The Translator_POU_SFC class
+ */
+
+class Translator_POU_SFC : public ITranslator_POU
+{
+public:
+    Translator_POU_SFC(const QDomNode &node_);
+
+    QString translate() const override;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_LD ***
+
+/*!
+ * \brief The Translator_POU_LD class
+ */
+
+class Translator_POU_LD : public ITranslator_POU
+{
+public:
+    Translator_POU_LD(const QDomNode &node_);
+
+    QString translate() const override;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_IL ***
+
+/*!
+ * \brief The Translator_POU_IL class
+ */
+
+class Translator_POU_IL : public ITranslator_POU
+{
+public:
+    Translator_POU_IL(const QDomNode &node_);
 
     QString translate() const override;
 };
@@ -106,6 +157,54 @@ class Translator_POU_creator_FBD : public ITranslator_POU_creator
 {
 public:
     Translator_POU_creator_FBD() = default;
+
+    ITranslator_POU * create(const QDomNode &node_) const override;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_creator_SFC ***
+
+/*!
+ * \brief The Translator_POU_creator_SFC class
+ */
+
+class Translator_POU_creator_SFC : public ITranslator_POU_creator
+{
+public:
+    Translator_POU_creator_SFC() = default;
+
+    ITranslator_POU * create(const QDomNode &node_) const override;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_creator_LD ***
+
+/*!
+ * \brief The Translator_POU_creator_LD class
+ */
+
+class Translator_POU_creator_LD : public ITranslator_POU_creator
+{
+public:
+    Translator_POU_creator_LD() = default;
+
+    ITranslator_POU * create(const QDomNode &node_) const override;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_creator_IL ***
+
+/*!
+ * \brief The Translator_POU_creator_IL class
+ */
+
+class Translator_POU_creator_IL : public ITranslator_POU_creator
+{
+public:
+    Translator_POU_creator_IL() = default;
 
     ITranslator_POU * create(const QDomNode &node_) const override;
 };

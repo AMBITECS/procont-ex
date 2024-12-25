@@ -25,23 +25,21 @@ class WidgetEditor : public QSplitter
 public:
     WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
-    virtual void activate() const {;}
-
-protected:
+ protected:
     static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
     static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
     static QAbstractProxyModel * proxy(QAbstractItemModel *);
     static DomItem * item(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
 
-private slots:
-    void slot_addVariable();
-    void slot_delVariable();
-    void slot_txtViewToggled(bool);
-    void slot_tblViewToggled(bool);
+protected slots:
+    void slot_varTxtViewToggled(bool);
+    void slot_varTblViewToggled(bool);
+    void slot_varAddVariable();
+    void slot_varDelVariable();
+    virtual void slot_varTxtVarChanged();
+    virtual void slot_varTblVarChanged();
 
-    void slot_codeChanged();
-    void slot_txtVarChanged();
-    void slot_tblVarChanged();
+    void slot_codeTxtChanged();
 
 protected:
     void updateTblView();
@@ -98,7 +96,6 @@ public:
  * \brief The WidgetEditor_fbd class
  */
 
-// QT_FORWARD_DECLARE_CLASS(FBDviewer)
 QT_FORWARD_DECLARE_CLASS(CDiagramWidget)
 
 class WidgetEditor_fbd : public WidgetEditor
@@ -107,19 +104,64 @@ class WidgetEditor_fbd : public WidgetEditor
 public:
     WidgetEditor_fbd(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
-    virtual void activate() const override { _m_fbd_view->set_active(); }
-
 protected:
-    virtual QWidget * createCodeEditor() override;
+    QWidget * createCodeEditor() override;
+    QWidget * createVarsEditor() override;
 
-private slots:
-    void slot_shmViewToggled(bool);
-    void slot_txtViewToggled(bool);
+protected slots:
+    void slot_codeShmViewToggled(bool);
+    void slot_codeTxtViewToggled(bool);
+    void slot_codeShmChanged(const QDomNode &);
+    void slot_interfaceVariableAdd(const QString &type, const QString &name);
+    void slot_interfaceVariableDel(const QString &type, const QString &name);
+    void slot_interfaceVariableRename(const QString &old_name, const QString &new_name);
+
+    void slot_varAddVariable();
+    void slot_varDelVariable();
+    void slot_varTxtVarChanged() override;
+    void slot_varTblVarChanged() override;
 
 private:
-    QWidget * _txt_view = nullptr;
-    // FBDviewer * _fbd_view = nullptr;
     CDiagramWidget * _m_fbd_view = nullptr;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetEditor_ld ***
+
+#include "editor/fbd/ld/clddiagram.h"
+
+/*!
+ * \brief The WidgetEditor_ld class
+ */
+
+QT_FORWARD_DECLARE_CLASS(CDiagramWidget)
+
+class WidgetEditor_ld : public WidgetEditor
+{
+    Q_OBJECT
+public:
+    WidgetEditor_ld(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
+
+protected:
+    QWidget * createCodeEditor() override;
+    QWidget * createVarsEditor() override;
+
+protected slots:
+    void slot_codeShmViewToggled(bool);
+    void slot_codeTxtViewToggled(bool);
+    void slot_codeShmChanged(const QDomNode &);
+    void slot_interfaceVariableAdd(const QString &type, const QString &name);
+    void slot_interfaceVariableDel(const QString &type, const QString &name);
+    void slot_interfaceVariableRename(const QString &old_name, const QString &new_name);
+
+    void slot_varAddVariable();
+    void slot_varDelVariable();
+    void slot_varTxtVarChanged() override;
+    void slot_varTblVarChanged() override;
+
+private:
+    CLdDiagram * _m_ld_view = nullptr;
 };
 // ----------------------------------------------------------------------------
 
@@ -136,7 +178,10 @@ public:
     WidgetEditor_type(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
 private slots:
-    void slot_codeChanged();
+    void slot_codeTxtChanged();
+
+    void slot_varTxtVarChanged() override;
+    void slot_varTblVarChanged() override;
 
 protected:
     virtual QWidget * createCodeEditor();

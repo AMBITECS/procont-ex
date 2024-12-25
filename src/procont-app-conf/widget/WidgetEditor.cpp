@@ -747,12 +747,12 @@ QWidget * WidgetEditor_ld::createCodeEditor()
     // contauner for variables editor widgets
     auto container = new QWidget;
     // fbd view
-    // _m_ld_view = new CLdDiagram(item(_index)->node(), MainWindow::instance()->toolWidget());
+    _m_ld_view = new CLdDiagram(item(_index)->node(), MainWindow::instance()->toolWidget());
+    _m_ld_view->setMinimumSize(500, 250);
     // connect(_m_ld_view, &CLdDiagram::changed_diagram, this, &WidgetEditor_ld::slot_codeShmChanged);
     // connect(_m_ld_view, &CLdDiagram::interface_variable_new, this, &WidgetEditor_ld::slot_interfaceVariableAdd);
     // connect(_m_ld_view, &CLdDiagram::instance_removed, this, &WidgetEditor_ld::slot_interfaceVariableDel);
     // connect(_m_ld_view, &CLdDiagram::interface_variable_rename, this, &WidgetEditor_ld::slot_interfaceVariableRename);
-    // _m_ld_view->setMinimumSize(500, 250);
     // variables editor code editor
     _body_text = new CodeEditorWidget(this);
     _body_text->setMinimumSize(500, 250);

@@ -1131,22 +1131,22 @@ Enter a new name</source>
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="38"/>
+        <location filename="../widget/WidgetEditor.cpp" line="39"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="40"/>
+        <location filename="../widget/WidgetEditor.cpp" line="41"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="71"/>
+        <location filename="../widget/WidgetEditor.cpp" line="72"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="74"/>
+        <location filename="../widget/WidgetEditor.cpp" line="75"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -1154,28 +1154,28 @@ Enter a new name</source>
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="294"/>
+        <location filename="../widget/WidgetEditor.cpp" line="295"/>
         <source>Add</source>
         <translation type="unfinished">Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="296"/>
+        <location filename="../widget/WidgetEditor.cpp" line="297"/>
         <source>Remove</source>
         <translation type="unfinished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="327"/>
-        <location filename="../widget/WidgetEditor.cpp" line="421"/>
+        <location filename="../widget/WidgetEditor.cpp" line="328"/>
+        <location filename="../widget/WidgetEditor.cpp" line="422"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="330"/>
+        <location filename="../widget/WidgetEditor.cpp" line="331"/>
         <source>Table</source>
         <translation type="unfinished">Таблица</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="424"/>
+        <location filename="../widget/WidgetEditor.cpp" line="425"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>
@@ -1183,28 +1183,28 @@ Enter a new name</source>
 <context>
     <name>WidgetEditor_ld</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="646"/>
+        <location filename="../widget/WidgetEditor.cpp" line="647"/>
         <source>Add</source>
         <translation type="unfinished">Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="648"/>
+        <location filename="../widget/WidgetEditor.cpp" line="649"/>
         <source>Remove</source>
         <translation type="unfinished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="679"/>
-        <location filename="../widget/WidgetEditor.cpp" line="768"/>
+        <location filename="../widget/WidgetEditor.cpp" line="680"/>
+        <location filename="../widget/WidgetEditor.cpp" line="769"/>
         <source>Text</source>
         <translation type="unfinished">Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="682"/>
+        <location filename="../widget/WidgetEditor.cpp" line="683"/>
         <source>Table</source>
         <translation type="unfinished">Таблица</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="771"/>
+        <location filename="../widget/WidgetEditor.cpp" line="772"/>
         <source>Schema</source>
         <translation type="unfinished">Схема</translation>
     </message>

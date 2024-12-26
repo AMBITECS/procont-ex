@@ -15,6 +15,7 @@
 #include "editor/st/XmlParser.h"
 #include "translator/SchemaViewer.h"
 #include "translator/TranslatorFbd.h"
+#include "translator/TranslatorLD.h"
 #include "main/MainWindow.h"
 #include "log/Logger.h"
 
@@ -792,15 +793,15 @@ QWidget * WidgetEditor_ld::createCodeEditor()
 void WidgetEditor_ld::slot_codeShmViewToggled(bool)
 {
     _body_text->hide();
-    // _m_ld_view->show();
+    _m_ld_view->show();
 }
 
 void WidgetEditor_ld::slot_codeTxtViewToggled(bool)
 {
-    TranslatorFBD translator;
+    TranslatorLD translator;
     _body_text->setPlainText(translator.getSTCode_pou(item(_index)->node()));
 
-    // _m_ld_view->hide();
+    _m_ld_view->hide();
     _body_text->show();
 }
 

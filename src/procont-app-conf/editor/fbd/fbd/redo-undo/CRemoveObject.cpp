@@ -82,6 +82,8 @@ void CRemoveObject::redo()
     m_object->parent()->refresh_graphic_connections();
     m_object->parent()->update_real_position();
     m_object->parent()->parent()->update_visible_ladders();
+
+    emit m_world->instance_removed(m_object->type_name(), m_object->instance_name());
 }
 
 void CRemoveObject::undo()
@@ -157,6 +159,8 @@ void CRemoveObject::undo()
     m_object->parent()->refresh_graphic_connections();
     m_object->parent()->update_real_position();
     m_object->parent()->parent()->update_visible_ladders();
+
+    emit m_world->iface_var_new(m_object->type_name(), m_object->instance_name());
 }
 
 int CRemoveObject::remove_object(CFbdObject *object)

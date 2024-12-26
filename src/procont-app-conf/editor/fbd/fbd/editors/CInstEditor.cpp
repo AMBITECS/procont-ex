@@ -8,7 +8,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <regex>
-#include "../../resources/colors.h"
+#include "../../common/resources/colors.h"
 #include "../graphics/CFbdObject.h"
 
 CInstEditor::CInstEditor(CFilter *filter, QWidget *parent) : QLineEdit(parent)

@@ -19,7 +19,9 @@ CPinRename::CPinRename(COglWorld *ogl_world, CPin *pin, QString  pin_var,
 {
     m_pin_old_var = m_pin->name();
 
-    //m_old_iface_var = m_pin->block_variable()->get_iface_variable();
+    QString txt = "Присвоить пину " + pin->name_full() + " переменную";
+    setText(txt);
+
 
     if (m_opposite_pin)
     {

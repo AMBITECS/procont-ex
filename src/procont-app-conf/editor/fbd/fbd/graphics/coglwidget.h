@@ -9,7 +9,7 @@
 
 #include "cgraphicshelper.h"
 #include "COglStyle.h"
-#include "editor/fbd/general/ctreeobject.h"
+#include "editor/fbd/common/general/ctreeobject.h"
 
 
 struct s_ogl_startup

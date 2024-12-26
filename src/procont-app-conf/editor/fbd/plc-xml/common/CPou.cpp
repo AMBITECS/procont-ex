@@ -450,23 +450,23 @@ bool CPou::find_block_connecting_info(const uint64_t &ref_id, const QString &for
     return res;
 }
 
-bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                          std::vector<CBlockVar*> *possible_block_vars, std::vector<CVariable *> *possible_iface)
-{
-    /// возможные варианты наш block_var (должен быть входным) лишь один из задних клиентов проститутствующей in_out_variable<br>
-    /// check input of the in_out_var
+//bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
+//                          std::vector<CBlockVar*> *possible_block_vars, std::vector<CVariable *> *possible_iface)
+//{
+//    /// возможные варианты наш block_var (должен быть входным) лишь один из задних клиентов проститутствующей in_out_variable<br>
+//    /// check input of the in_out_var
+//
+//    if (in_out_variable->point_in()->is_empty())
+//    {
+//        return false;
+//    }
+//
+//    bool res = recursive_find_in_out_top(in_out_variable, possible_block_vars, possible_iface);
+//    return res;
+//}
 
-    if (in_out_variable->point_in()->is_empty())
-    {
-        return false;
-    }
-
-    bool res = recursive_find_front(in_out_variable, possible_block_vars, possible_iface);
-    return res;
-}
-
-bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
-                                std::vector<CBlockVar *>* in_outs,std::vector<CVariable *> *possible_iface)
+bool CPou::recursive_find_in_out_top(CInOutVariable *in_out_variable,
+                                     std::vector<CBlockVar *>* in_outs, std::vector<CVariable *> *possible_iface)
 {
     if (!in_out_variable->expression()->expression().isEmpty())
     {
@@ -524,7 +524,7 @@ bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
         if (data_info.source == PD_IN_OUT)
         {
             auto in_out = static_cast<CInOutVariable*>(data_info.variable);
-            bool res = recursive_find_front(in_out, in_outs, possible_iface);
+            bool res = recursive_find_in_out_top(in_out, in_outs, possible_iface);
             if (res)
                 return true;
         }
@@ -532,11 +532,11 @@ bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
         /// ниже это фантастика
         if (data_info.source == PD_OUTPUT)
         {
-            throw std::runtime_error("WTF?! in 'CPou::recursive_find_front'");
+            throw std::runtime_error("WTF?! in 'CPou::recursive_find_in_out_top'");
         }
         if (data_info.source == PD_INPUT)
         {
-            throw std::runtime_error("WTF?! in 'CPou::recursive_find_front'");
+            throw std::runtime_error("WTF?! in 'CPou::recursive_find_in_out_top'");
         }
     }
     return false;
@@ -575,4 +575,14 @@ CTypes *CPou::parent()
 void CPou::set_parent(CTypes *parent)
 {
     m_parent = parent;
+}
+
+CLdContent *CPou::get_ld()
+{
+    return nullptr;
+}
+
+CSfcContent *CPou::get_sfc()
+{
+    return nullptr;
 }

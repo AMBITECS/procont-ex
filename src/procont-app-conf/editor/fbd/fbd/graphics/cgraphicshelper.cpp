@@ -7,7 +7,7 @@
 
 
 #include "coglwidget.h"
-#include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/common/general/QtDialogs.h"
 #include "editor/fbd/fbd/redo-undo/CPinInvers.h"
 #include "editor/fbd/fbd/redo-undo/CPinRising.h"
 #include "editor/fbd/fbd/redo-undo/CPinFalling.h"

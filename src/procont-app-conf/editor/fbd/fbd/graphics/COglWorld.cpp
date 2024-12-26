@@ -7,7 +7,6 @@
 #include <QApplication>
 #include <QDrag>
 #include <QMimeData>
-#include <QFile>
 #include <QTextStream>
 
 
@@ -19,7 +18,7 @@
 #include "../redo-undo/CRenameInst.h"
 
 #include "coglwidget.h"
-#include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/common/general/QtDialogs.h"
 #include "../editors/CEditors.h"
 #include "editor/fbd/fbd/redo-undo/CPinConnecting.h"
 #include "editor/fbd/fbd/redo-undo/CRemoveObject.h"
@@ -781,6 +780,11 @@ void COglWorld::convert_to_XML()
 {
     QDomNode pou_node = m_pou->dom_node();
     emit diagram_changed(pou_node);
+
+    QUndoStack loc_stack;
+
+    /// когда из диаграммы
+
 
     /*QDomDocument doc;
     QDomElement root = doc.documentElement();

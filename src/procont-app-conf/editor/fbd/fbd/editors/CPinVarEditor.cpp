@@ -4,7 +4,7 @@
 
 #include "CPinVarEditor.h"
 #include "CTreeItem.h"
-#include "editor/fbd/resources/colors.h"
+#include "editor/fbd/common/resources/colors.h"
 #include <QHeaderView>
 #include <QEvent>
 #include <QKeyEvent>

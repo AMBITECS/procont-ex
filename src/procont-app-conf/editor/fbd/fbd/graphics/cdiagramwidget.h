@@ -10,9 +10,9 @@
 #include <QTreeWidget>
 #include <QDomNode>
 
-#include "editor/fbd/general/types.h"
+#include "editor/fbd/common/general/types.h"
 #include "coglwidget.h"
-#include "editor/fbd/general/ctreeobject.h"
+#include "editor/fbd/common/general/ctreeobject.h"
 
 typedef struct s_fbd_start_data
 {

@@ -8,9 +8,9 @@
 #include <QMimeData>
 
 #include "COglWorld.h"
-#include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/common/general/QtDialogs.h"
 #include "CGrapchicsLogic.h"
-#include "editor/fbd/resources/colors.h"
+#include "editor/fbd/common/resources/colors.h"
 #include "../redo-undo/CRemoveObject.h"
 
 extern uint16_t    max_local_id;

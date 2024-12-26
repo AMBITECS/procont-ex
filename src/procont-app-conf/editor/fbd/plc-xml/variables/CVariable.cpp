@@ -211,4 +211,19 @@ void CVariable::set_parent(CInterface *parent)
     m_parent = parent;
 }
 
+bool CVariable::is_global() const
+{
+    return m_glob_parent != nullptr;
+}
+
+CResource *CVariable::resource()
+{
+    return m_glob_parent;
+}
+
+void CVariable::set_global_parent(CResource *resource)
+{
+    m_glob_parent = resource;
+}
+
 

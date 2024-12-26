@@ -6,7 +6,7 @@
 #include "CPin.h"
 #include "CFbdObject.h"
 #include "CPinIn.h"
-#include "../../resources/colors.h"
+#include "../../common/resources/colors.h"
 #include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
 #include "CFbdLadder.h"
 

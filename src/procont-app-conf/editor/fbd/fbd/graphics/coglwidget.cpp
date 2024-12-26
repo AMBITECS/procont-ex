@@ -5,8 +5,8 @@
 #include <QPainter>
 #include <QMenu>
 #include <QApplication>
-#include "editor/fbd/general/QtDialogs.h"
-#include "editor/fbd/resources/colors.h"
+#include "editor/fbd/common/general/QtDialogs.h"
+#include "editor/fbd/common/resources/colors.h"
 
 
 COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)

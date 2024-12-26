@@ -5,7 +5,7 @@
 #include <QPainter>
 #include "CFbdObject.h"
 #include "CFbdLadder.h"
-#include "editor/fbd/resources/colors.h"
+#include "editor/fbd/common/resources/colors.h"
 #include "editor/fbd/fbd/editors/CFilter.h"
 
 CFbdObject::CFbdObject(CFbdLadder *ladder, CBlock *block) //QPoint *ladder_top_left

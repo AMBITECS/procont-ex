@@ -7,8 +7,8 @@
 #include "../graphics/coglwidget.h"
 #include "../redo-undo/CPinRename.h"
 #include "../redo-undo/CPinConnecting.h"
-#include "editor/fbd/resources/colors.h"
-#include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/common/resources/colors.h"
+#include "editor/fbd/common/general/QtDialogs.h"
 #include "editor/fbd/fbd/redo-undo/CConstToPin.h"
 
 extern CProject * project;

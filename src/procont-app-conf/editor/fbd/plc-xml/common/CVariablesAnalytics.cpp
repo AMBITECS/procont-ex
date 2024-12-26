@@ -916,9 +916,9 @@ void CVariablesAnalytics::process_out_variables()
 
 
 
-                bool res = m_diagram_pou->recursive_find_front(var,
-                                                               &block_variables,
-                                                               &iface_vars);
+                bool res = m_diagram_pou->recursive_find_in_out_top(var,
+                                                                    &block_variables,
+                                                                    &iface_vars);
                 if (res && !block_variables.empty())
                 {
                     for (auto &block_var : block_variables)

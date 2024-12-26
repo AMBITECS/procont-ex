@@ -46,6 +46,27 @@
           </struct>
         </baseType>
       </dataType>
+      <dataType name="datatype1">
+        <baseType>
+          <struct>
+            <variable name="Var1">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="Var2">
+              <type>
+                <array>
+                  <dimension lower="0" upper="4"/>
+                  <baseType>
+                    <WORD/>
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+          </struct>
+        </baseType>
+      </dataType>
     </dataTypes>
     <pous>
       <pou name="st-editor" pouType="function">
@@ -92,6 +113,11 @@
                 <xhtml:p><![CDATA[Количество входных значений]]></xhtml:p>
               </documentation>
             </variable>
+            <variable name="newVar0">
+              <type>
+                <derived name="datatype1"/>
+              </type>
+            </variable>
             <variable name="newVar1">
               <type>
                 <array>
@@ -101,8 +127,33 @@
                   </baseType>
                 </array>
               </type>
+              <initialValue>
+                <arrayValue>
+                  <value>
+                    <simpleValue value="1" />
+                  </value>
+                  <value>
+                    <simpleValue value="2" />
+                  </value>
+                  <value repetitionValue="3">
+                    <simpleValue value="0" />
+                  </value>
+                  <value>
+                    <simpleValue value="6" />
+                  </value>
+                  <value>
+                    <simpleValue value="7" />
+                  </value>
+                  <value repetitionValue="2">
+                    <simpleValue value="0" />
+                  </value>
+                  <value>
+                    <simpleValue value="10" />
+                  </value>
+                </arrayValue>
+              </initialValue>
             </variable>
-             <variable name="newVar2">
+            <variable name="newVar2">
               <type>
                 <array>
                   <dimension lower="0" upper="4" />
@@ -111,6 +162,54 @@
                   </baseType>
                 </array>
               </type>
+              <initialValue>
+                <arrayValue>
+                  <value>
+                    <structValue>
+                      <value member="Q">
+                        <simpleValue value="TRUE" />
+                      </value>
+                      <value member="ET">
+                        <simpleValue value="TIME#5ms" />
+                      </value>
+                    </structValue>
+                  </value>
+                  <value repetitionValue="2">
+                    <structValue />
+                  </value>
+                  <value>
+                    <structValue>
+                      <value member="IN">
+                        <simpleValue value="TRUE" />
+                      </value>
+                      <value member="PT">
+                        <simpleValue value="TIME#9ms" />
+                      </value>
+                    </structValue>
+                  </value>
+                  <value>
+                    <structValue />
+                  </value>
+                </arrayValue>
+              </initialValue>
+            </variable>
+            <variable name="newVar3">
+              <type>
+                <derived name="TON" />
+              </type>
+              <initialValue>
+                <structValue>
+                  <value member="IN">
+                    <simpleValue value="TRUE" />
+                  </value>
+                  <value member="ET">
+                    <simpleValue value="TIME#5ms" />
+                  </value>
+                </structValue>
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">The temperature is decreased on a time delay, when the comepressor has been activated</xhtml>
+              </documentation>
             </variable>
           </localVars>
           <localVars persistent="true" constant="true" retain="true">

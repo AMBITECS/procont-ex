@@ -90,7 +90,7 @@ public:
     // CVariable *     find_iface_var(const QString &var_name);
 
     StandardLibrary *       standard_library();
-    CFbdObject  *       find_object(const QString &name);
+    CFbdObject  *           find_object(const QString &name);
 protected:
 
 private:

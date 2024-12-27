@@ -7,6 +7,8 @@
 
 #include "../../plc-xml/includes.h"
 
+class COglWorld;
+
 /// for bitwise 'or' in parameter support
 enum FilterFlags
 {
@@ -19,6 +21,25 @@ enum FilterFlags
     ff_library = 64,
     ff_all_flags = 128
 };
+
+enum ETimeMeasure
+{
+    ET_HOUR,
+    ET_MINUTE,
+    ET_SEC,
+    ET_MS,
+    ET_COUNT
+};
+
+const std::string time_measere_str[ET_COUNT]
+{
+    "h",
+    "m",
+    "s",
+    "ms"
+};
+
+
 
 class CVariablesAnalytics;
 
@@ -40,6 +61,7 @@ public:
     CFilter() = delete;
     CFilter(const CFilter &) = delete;
     explicit CFilter(CVariablesAnalytics *var_analytics, const bool & case_insensitive = true);
+    explicit CFilter(COglWorld *world, const bool & case_insensitive = true);
     ~CFilter();
 
     static EDefinedDataTypes get_type_from_const(const std::string &expression);
@@ -50,19 +72,26 @@ public:
      */
     [[nodiscard]] bool    filter_string(const std::string &string, const int & flags);
 
-    static void inline capitalize_word(std::string &word)
-    {
-        for (auto &sym : word)
-        {
-            sym = static_cast<char>(std::toupper(sym));
-        }
-    }
+    static void inline capitalize_word(std::string &word);
+
+    /**
+     *
+     * @param[out] t_measure detected time measure (ms/s/h)
+     * @param[in] time_str something like "T#451ms"
+     * @param[out] is_err if translate error detected
+     * @return uint16_t time value
+     */
+    static uint32_t time_to_int(ETimeMeasure & t_measure, const QString & time_str, bool * is_err = nullptr);
+
+    static QString int_to_time(const ETimeMeasure & measure, uint16_t period);
+    static ETimeMeasure time_meas_from_str(const std::string &meas_str);
 
 private:
     bool    m_is_case_insensitive{true};
     CVariablesAnalytics *m_analytics;
-
+    bool is_local_analytic;
 };
+
 
 
 static const QString service_words[32]

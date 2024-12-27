@@ -19,11 +19,13 @@ CProject *CProject::get_instance(const QDomNode &project_node)
 CProject::CProject()
 {
     m_types = new CTypes(this);
+    m_instances = new CInstances(this);
 }
 
 CProject::CProject(const CProject &src)
 {
     m_types = new CTypes(*src.m_types);
+    m_instances = new CInstances(*src.m_instances);
 
     m_company_name = src.m_company_name;
     m_content_header_name = src.m_content_header_name;
@@ -43,6 +45,7 @@ CProject::CProject(const QDomNode &project_node)
     if (project_node.isNull() || project_node.nodeName() != "project")
     {
         m_types = new CTypes(this);
+        m_instances = new CInstances(this);
         return;
     }
 
@@ -66,22 +69,17 @@ CProject::CProject(const QDomNode &project_node)
 
 
     QDomNode types = project_node.namedItem("types");
-    if (!types.isNull())
-    {
-        m_types = new CTypes(types, this);
-    }
-    else
-    {
-        m_types = new CTypes(this);
-    }
 
+    m_types = types.isNull() ? new CTypes(this) : new CTypes(types, this);
 
-    //QDomNode instances = project_node.namedItem("instances");
+    QDomNode inst = project_node.namedItem("instances");
+    m_instances = new CInstances(this, inst);
 }
 
 CProject::~CProject()
 {
     delete m_types;
+    delete m_instances;
     project = nullptr;
 }
 
@@ -205,7 +203,36 @@ void CProject::Delete()
 
 bool CProject::is_empty() const
 {
-    return m_types->is_empty();
+    return m_types->is_empty() && m_instances->is_empty();
+}
+
+CInstances *CProject::instances()
+{
+    return m_instances;
+}
+
+CVariable *CProject::find_global_variable(const QString &name)
+{
+    if (m_instances->configurations()->empty())
+    {
+        return nullptr;
+    }
+
+    for (auto &config : *m_instances->configurations())
+    {
+        for (auto &res : *config->resources())
+        {
+            for (auto &item : *res->global_vars()->variables())
+            {
+                if (item->name() == name)
+                {
+                    return item;
+                }
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 

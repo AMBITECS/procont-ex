@@ -19,6 +19,7 @@ CPou::CPou(CTypes * parent)
     m_bodies = new QList<CBody*>();
     m_dom_node = new QDomNode();
     m_parent = parent;
+    m_type = EBodyType::BT_COUNT;
 }
 
 CPou::CPou(const CPou &other)
@@ -28,6 +29,8 @@ CPou::CPou(const CPou &other)
     m_transitions = new CTransitions(*other.m_transitions);
     m_add_data = new CAddData(*other.m_add_data);
     m_doc = new CDocumentation(*other.m_doc);
+
+    m_type = other.m_type;
 
     m_bodies = new QList<CBody*>();
 
@@ -65,6 +68,9 @@ CPou::CPou(const QDomNode &dom_node, CTypes * parent)
             m_bodies->emplace_back(new CBody(child, this));
         }
     }
+
+    m_type = m_bodies->empty() ? EBodyType::BT_COUNT : m_bodies->front()->diagram_lang();
+
     m_parent = parent;
 }
 
@@ -560,13 +566,6 @@ CFbdContent *CPou::get_fbd()
     return nullptr;
 }
 
-EBodyType CPou::body_type() const
-{
-    if (m_bodies->empty())
-        return EBodyType::BT_COUNT;
-    return m_bodies->front()->diagram_lang();
-}
-
 CTypes *CPou::parent()
 {
     return m_parent;
@@ -585,4 +584,9 @@ CLdContent *CPou::get_ld()
 CSfcContent *CPou::get_sfc()
 {
     return nullptr;
+}
+
+EBodyType CPou::type() const
+{
+    return m_type;
 }

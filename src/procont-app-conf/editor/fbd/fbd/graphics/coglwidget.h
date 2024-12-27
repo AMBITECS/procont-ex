@@ -102,9 +102,15 @@ private:
     bool                  m_is_editable{true};
 
     /// drag autoscroll
-    QImage                m_vertical_autoscroll;
+    QImage                m_vert_top_autoscroll;
+    QImage                m_vert_top_templ;
+    QImage                m_vert_bottom_autoscroll;
+    QImage                m_vert_bottom_templ;
     QRect                 m_vertical_auto_rect;
-    QImage                m_horizon_autoscroll;
+    QImage                m_horiz_right_autoscroll;
+    QImage                m_horiz_left_templ;
+    QImage                m_horiz_left_autoscroll;
+    QImage                m_horiz_right_templ;
     QRect                 m_horizon_auto_rect;
     CPou                * m_current_pou{nullptr};
 
@@ -120,6 +126,8 @@ private:
     //void make_wrong_message(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable);
 
     void draw_type_message();
+
+    void make_gradient_images();
 };
 
 

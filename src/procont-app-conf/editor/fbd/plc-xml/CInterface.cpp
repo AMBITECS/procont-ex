@@ -13,7 +13,7 @@ CInterface::CInterface(CPou * parent)
     m_output_vars   = new COutVars(parent);
     m_in_out_vars   = new CInOutVars(parent);
     m_external_vars = new CExternalVars(parent);
-    m_global_vars   = new CGlobalVars(parent);
+    //m_global_vars   = new CGlobalVars(parent);
     m_access_vars   = new CAccessVars(parent);
     m_documentation = new CDocumentation();
     m_parent        = parent;
@@ -28,7 +28,7 @@ CInterface::CInterface(const CInterface &src)
     m_output_vars   = new COutVars(*src.m_output_vars);
     m_in_out_vars   = new CInOutVars(*src.m_in_out_vars);
     m_external_vars = new CExternalVars(*src.m_external_vars);
-    m_global_vars   = new CGlobalVars(*src.m_global_vars);
+    //m_global_vars   = new CGlobalVars(*src.m_global_vars);
     m_access_vars   = new CAccessVars(*src.m_access_vars);
     m_documentation = new CDocumentation(*src.m_documentation);
 
@@ -46,7 +46,7 @@ CInterface::CInterface(CInterface &&tmp) noexcept
     m_output_vars   = tmp.m_output_vars;
     m_in_out_vars   = tmp.m_in_out_vars;
     m_external_vars = tmp.m_external_vars;
-    m_global_vars   = tmp.m_global_vars;
+    //m_global_vars   = tmp.m_global_vars;
     m_access_vars   = tmp.m_access_vars;
     m_documentation = tmp.m_documentation;
     m_parent        = tmp.m_parent;
@@ -57,7 +57,7 @@ CInterface::CInterface(CInterface &&tmp) noexcept
     tmp.m_output_vars   = nullptr;
     tmp.m_in_out_vars   = nullptr;
     tmp.m_external_vars = nullptr;
-    tmp.m_global_vars   = nullptr;
+    //tmp.m_global_vars   = nullptr;
     tmp.m_access_vars   = nullptr;
     tmp.m_documentation = nullptr;
 
@@ -78,7 +78,7 @@ CInterface::CInterface(const QDomNode &node, CPou * parent)
     m_output_vars   = new COutVars(parent);
     m_in_out_vars   = new CInOutVars(parent);
     m_external_vars = new CExternalVars(parent);
-    m_global_vars   = new CGlobalVars(parent);
+    //m_global_vars   = new CGlobalVars(parent);
     m_access_vars   = new CAccessVars(parent);
     m_parent        = parent;
 
@@ -107,7 +107,7 @@ CInterface::CInterface(const QDomNode &node, CPou * parent)
         extract_child_nodes(child, m_output_vars, "outputVars");
         extract_child_nodes(child, m_in_out_vars, "inOutVars");
         extract_child_nodes(child, m_external_vars, "externalVars");
-        extract_child_nodes(child, m_global_vars, "globalVars");
+        //extract_child_nodes(child, m_global_vars, "globalVars");
         extract_child_nodes(child, m_access_vars, "accessVars");
     }
     m_documentation = new CDocumentation(node.namedItem("documentation"));
@@ -121,7 +121,7 @@ CInterface::~CInterface()
     delete m_output_vars;
     delete m_in_out_vars;
     delete m_external_vars;
-    delete m_global_vars;
+    //delete m_global_vars;
     delete m_access_vars;
     delete m_documentation;
 }
@@ -138,7 +138,7 @@ CInterface::dom_node()
     add_child(root, m_output_vars);
     add_child(root, m_in_out_vars);
     add_child(root, m_external_vars);
-    add_child(root, m_global_vars);
+    //add_child(root, m_global_vars);
     add_child(root, m_access_vars);
 
     if (!m_add_data.is_empty())
@@ -201,12 +201,6 @@ CInterface::external_variables()
     return m_external_vars;
 }
 
-CGlobalVars *
-CInterface::global_variables()
-{
-    return m_global_vars;
-}
-
 CAccessVars *
 CInterface::access_variables()
 {
@@ -243,7 +237,7 @@ bool CInterface::is_empty() const
                  m_output_vars->is_empty() &&
                  m_in_out_vars->is_empty() &&
                  m_external_vars->is_empty() &&
-                 m_global_vars->is_empty() &&
+//                 m_global_vars->is_empty() &&
                  m_access_vars->is_empty();
     return empty;
 }
@@ -252,7 +246,7 @@ std::vector<CVariable *>  CInterface::all_variables()
 {
     std::vector<CVariable*> p_variables;
 
-    gather_variables(m_global_vars->variables(), &p_variables);
+//    gather_variables(m_global_vars->variables(), &p_variables);
     gather_variables(m_external_vars->variables(), &p_variables);
     gather_variables(m_access_vars->variables(), &p_variables);
     gather_variables(m_in_out_vars->variables(), &p_variables);

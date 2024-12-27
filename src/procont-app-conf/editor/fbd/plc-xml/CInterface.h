@@ -8,6 +8,7 @@
 #include "includes.h"
 #include "variables/CIfaceVars.h"
 #include "CAddData.h"
+//#include"editor/fbd/plc-xml/common/CGlobalVars.h"
 
 class CDocumentation;
 class CPou;
@@ -37,7 +38,7 @@ public:
     COutVars        * output_variables();
     CInOutVars      * in_out_variables();
     CExternalVars   * external_variables();
-    CGlobalVars     * global_variables();
+    //CGlobalVars     * global_variables();
     CAccessVars     * access_variables();
 
     std::vector<CVariable*>     all_variables();
@@ -60,7 +61,7 @@ private:
     COutVars        * m_output_vars;
     CInOutVars      * m_in_out_vars;
     CExternalVars   * m_external_vars;
-    CGlobalVars     * m_global_vars;
+    //CGlobalVars     * m_global_vars;
     CAccessVars     * m_access_vars;
     bool              m_is_derived{false};
 

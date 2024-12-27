@@ -103,5 +103,5 @@ void CLdDiagram::define_diagram_pou(const QDomNode &pou_node)
         }
     }
 
-    m_diagram_language = m_diagram_pou->body_type();
+    m_diagram_language = m_diagram_pou->type();
 }

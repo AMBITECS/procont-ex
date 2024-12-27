@@ -55,10 +55,7 @@ QDomNode CResource::dom_node() const
         root.appendChild(m_global_vars->dom_node());
     }
 
-    if (!m_task->is_empty())
-    {
-        root.appendChild(m_task->dom_node());
-    }
+    root.appendChild(m_task->dom_node());
 
     return root;
 }

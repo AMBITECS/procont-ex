@@ -6,16 +6,30 @@
 #include <algorithm>
 #include <regex>
 #include "editor/fbd/plc-xml/common/CVariablesAnalytics.h"
+#include "editor/fbd/fbd/graphics/COglWorld.h"
 
 
 CFilter::CFilter(CVariablesAnalytics *var_analytics, const bool &case_insensitive)
 {
     m_is_case_insensitive = case_insensitive;
     m_analytics = var_analytics;
+    is_local_analytic = false;
+}
+
+CFilter::CFilter(COglWorld *world, const bool &case_insensitive)
+{
+    m_is_case_insensitive = case_insensitive;
+    m_analytics = new CVariablesAnalytics(world, world->current_pou()->name());
+    is_local_analytic = true;
 }
 
 CFilter::~CFilter()
-= default;
+{
+    if (is_local_analytic)
+    {
+        delete m_analytics;
+    }
+}
 
 bool CFilter::filter_string(const std::string &string, const int &flags)
 {
@@ -24,7 +38,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
           naming = true,
           local_env = true,
           user_types = true,
-          libary_type = true,
+          library_type = true,
           pou_names = true;
 
     std::string compare_str = string;
@@ -132,7 +146,7 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
     if ((flags & ff_library) == ff_library || (flags & ff_all_flags) == ff_all_flags)
     {
         auto lib = m_analytics->standard_library();
-        for (auto name : lib->objects())
+        for (auto &name : lib->objects())
         {
             std::string comp_name = name.toStdString();
             if (m_is_case_insensitive)
@@ -141,13 +155,13 @@ bool CFilter::filter_string(const std::string &string, const int &flags)
             }
             if (comp_name == compare_str)
             {
-                libary_type = false;
+                library_type = false;
                 break;
             }
         }
     }
 
-    return service && base_type && naming && local_env && user_types && pou_names && libary_type;
+    return service && base_type && naming && local_env && user_types && pou_names && library_type;
 }
 
 EDefinedDataTypes CFilter::get_type_from_const(const std::string &expression)
@@ -195,6 +209,83 @@ EDefinedDataTypes CFilter::get_type_from_const(const std::string &expression)
     }
 
     return DDT_DERIVED;
+}
+
+uint32_t CFilter::time_to_int(ETimeMeasure &t_measure, const QString &time_str, bool * is_err)
+{
+    if (is_err)
+    {
+        *is_err = false;
+    }
+    /// explode text
+    std::string text = time_str.toStdString();
+
+    size_t f_digit_pos = text.find('#');
+
+    size_t l_digit_pos = text.length();
+    for (auto riter = text.rbegin(); riter < text.rend(); riter++)
+    {
+        l_digit_pos--;
+
+        if (!std::isdigit(*riter))
+        {
+            continue;
+        }
+        break;
+    }
+
+    std::string val_str = text.substr(f_digit_pos + 1, (l_digit_pos - f_digit_pos));
+    std::string measure_str = text.substr(l_digit_pos + 1, text.length());
+
+    ETimeMeasure t_mes =time_meas_from_str(measure_str);
+    int  period_value = stoi(val_str);
+
+    if (t_mes == ETimeMeasure::ET_COUNT)
+    {
+        if (is_err)
+            *is_err = true;
+        return 0;
+    }
+
+    t_measure = t_mes;
+
+    return period_value;
+}
+
+ETimeMeasure CFilter::time_meas_from_str(const std::string &meas_str)
+{
+    std::string str_cap = meas_str;
+    CFilter::capitalize_word(str_cap);
+    std::string meas_cap = str_cap;
+    int counter = 0;
+
+    for (auto &str : time_measere_str)
+    {
+        str_cap = str;
+        CFilter::capitalize_word(str_cap);
+
+        if (str_cap == meas_cap)
+        {
+            return (ETimeMeasure)counter;
+        }
+
+        counter++;
+    }
+
+    return ETimeMeasure::ET_COUNT;
+}
+
+QString CFilter::int_to_time(const ETimeMeasure & measure, uint16_t period)
+{
+    return QString();
+}
+
+void inline CFilter::capitalize_word(std::string &word)
+{
+    for (auto &sym : word)
+    {
+        sym = static_cast<char>(std::toupper(sym));
+    }
 }
 
 

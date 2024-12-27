@@ -73,10 +73,7 @@ void CVariablesAnalytics::update_arrays()
     {
         auto iface = pou->interface();
 
-        for (auto &var : *iface->global_variables()->variables())
-        {
-            m_global_variables->push_back(var);
-        }
+        //
     }
 }
 

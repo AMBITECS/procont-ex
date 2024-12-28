@@ -68,15 +68,15 @@ void CInsertNewObject::insert()
         if (m_element >= EP_FBD)
         {
             CPou *pou = project->types()->find_pou_by_name(m_pou_name);
-            item = pou->get_block();
-            item.set_parent(m_world->m_pou->bodies()->front());
+            item = pou->get_block();            
         }
         else
         {
             auto lib_elem_name = pou_item_names.find(m_element).value();
-            item = analytics.get_block_from_library(lib_elem_name);
+            item = analytics.get_block_from_library(lib_elem_name);            
         }
 
+        item.set_parent(m_world->m_pou->bodies()->front());
         analytics.setup_block(&item);
         block = new CBlock(item);
         m_new_obj = new CFbdObject(m_ladder, block);

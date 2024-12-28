@@ -62,7 +62,7 @@ void CEditors::show_line_edit(CFbdObject *obj)
     QPoint pos = obj->inst_text()->pos();
     pos.setY(pos.y() - rect.height());
 
-    auto exist = m_var_analytics->get_interface_variables();
+    auto exist = m_var_analytics->get_diag_interface_variables();
 
     m_inst_old_name = obj->instance_name();
     m_obj_inst_editor->set_diagram_object(obj);

@@ -686,7 +686,7 @@ void COglWorld::iface_new_var(const QString &type, const QString &name)
     m_selection.reset();
 
     emit undo_enabled();
-    emit iface_var_new(type, name);
+    //emit iface_var_new(type, name);
 }
 
 void COglWorld::iface_rename(const QString &old_name, const QString &new_name)
@@ -697,7 +697,6 @@ void COglWorld::iface_rename(const QString &old_name, const QString &new_name)
     m_selection.reset();
 
     emit undo_enabled();
-    emit iface_var_rename(old_name, new_name);
 }
 
 void COglWorld::pin_variable_rename()

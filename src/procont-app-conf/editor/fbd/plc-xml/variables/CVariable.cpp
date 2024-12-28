@@ -3,6 +3,8 @@
 //
 
 #include "CVariable.h"
+#include "../CInterface.h"
+#include "../common/CPou.h"
 
 CVariable::CVariable(CInterface *parent)
 {
@@ -224,6 +226,12 @@ CResource *CVariable::resource()
 void CVariable::set_global_parent(CResource *resource)
 {
     m_glob_parent = resource;
+}
+
+QString CVariable::full_name() const
+{
+    QString txt = m_parent == nullptr ? "glob." : m_parent->parent()->name() + ".";
+    return txt + name();
 }
 
 

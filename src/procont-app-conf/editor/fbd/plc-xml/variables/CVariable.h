@@ -39,6 +39,7 @@ public:
     void        set_type(const QString &type);
 
     [[nodiscard]] QString     name() const;
+    [[nodiscard]] QString     full_name() const;
     void        set_name(const QString &name);
 
     [[nodiscard]] QString     address() const;

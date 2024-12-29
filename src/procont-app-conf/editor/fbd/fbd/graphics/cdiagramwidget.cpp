@@ -26,6 +26,9 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
 
     m_ogl_widget = new COglWidget(&startup);
 
+    connect(m_ogl_widget, &COglWidget::object_selected,
+            this, &CDiagramWidget::diagram_object_is_selected);
+
     connect(m_ogl_widget, &COglWidget::set_current_pou,
             [this](CPou *pou){m_current_pou = pou; build_tree();});
 
@@ -88,6 +91,16 @@ void CDiagramWidget::update_interface(const QDomNode &node)
 QUndoStack *CDiagramWidget::undo_stack()
 {
     return m_ogl_widget->undo_stack();
+}
+
+void CDiagramWidget::diagram_object_is_selected()
+{
+    emit object_selected();
+}
+
+void CDiagramWidget::delete_selected_object()
+{
+    m_ogl_widget->delete_selected();
 }
 
 

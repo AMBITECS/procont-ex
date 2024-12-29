@@ -31,6 +31,8 @@ public:
     QUndoStack *    undo_stack();
     CPou * current_pou();
 
+    void    delete_selected();
+
 signals:
     void  scroll_bars_moving(const QPoint & newPos);
     void  drag_moving(QDragMoveEvent *event);
@@ -41,6 +43,7 @@ signals:
     void    iface_var_ren(const QString & old_name, const QString & new_name);
     void    instance_removed(const QString &type, const QString &name);
     void    set_current_pou(CPou *pou);
+    void    object_selected();
 
 protected:
     bool    eventFilter(QObject *target, QEvent *event) override;

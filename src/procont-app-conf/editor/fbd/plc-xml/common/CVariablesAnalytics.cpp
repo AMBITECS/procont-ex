@@ -116,9 +116,6 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
     CInVariable     * inVar;
     CVariable       * iface_var;
 
-
-    CFbdContent* content = get_pou_content();
-
     for (auto &in : *object->inputs())
     {
         block_var = in->block_variable();
@@ -130,10 +127,15 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
         }
 
         in_connection = block_var->point_in()->connections()->front();
+        uint64_t ref_id = in_connection->ref_local_id();
 
         /// undefined error
-        if (in_connection->ref_local_id() == 0)
+        if (ref_id== 0)
         {
+            fprintf(stderr, "Strange: objectID=%lu; objectType=%s; pinName=%s; refLocalId=0;\n",
+                    in->parent()->local_id(),
+                    in->parent()->type_name().toStdString().c_str(),
+                    in->name_full().toStdString().c_str());
             continue;
         }
 
@@ -141,16 +143,21 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
         /// graphic connection
         if (!in_connection->formal_parameter().isEmpty())
         {
-            auto diag_obj = find_object_by_id(in_connection->ref_local_id());
+            auto diag_obj = find_object_by_id(ref_id);
 
             if(!diag_obj)
             {
+                fprintf(stderr, "Strange: graphic connection without target block: refLocalId=%lu\n",
+                        in_connection->ref_local_id());
                 continue;
             }
 
             out = diag_obj->get_output_by_name(in_connection->formal_parameter());
             if (!out)
             {
+                fprintf(stderr, "Strange: graphic connection with bloc_ID=%lu and nou output name=%s\n",
+                        diag_obj->local_id(),
+                        in_connection->formal_parameter().toStdString().c_str());
                 continue;
             }
 
@@ -171,7 +178,6 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
         /// interface variable connection or constant
         if (in_connection->formal_parameter().isEmpty())
         {
-            auto ref_id = in_connection->ref_local_id();
 
             if (ref_id == 0)
             {
@@ -193,6 +199,7 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
             if (iface_var)
             {
                 in->connect_iface_variable(iface_var);
+                continue;
             }
 
             /// constant
@@ -201,6 +208,7 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
             if (type < DDT_STRING)
             {
                 in->set_constant(type, expression.toStdString());
+                continue;
             }
 
             fprintf(stderr, "Logic broken: can't find anything by ref_id=%lu and expression=%s\n",

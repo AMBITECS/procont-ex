@@ -529,12 +529,17 @@ void COglWorld::mouse_left_pressed(const QPoint &pos)
     for (auto &ladder : *m_ladders)
     {
         ladder->set_selected(false);
+    }
 
-        if (ladder == m_selection.ladder)
-        {
-            ladder->get_selected(pos, &m_selection);
-            ladder->set_selected(true);
-        }
+    if (m_selection.ladder)
+    {
+        m_selection.ladder->set_selected(true);
+    }
+
+    if (m_selection.object)
+    {
+        m_selection.object->set_selected(true);
+        emit  object_selected();
     }
 
     m_mouse_pressed = pos;
@@ -833,5 +838,20 @@ void COglWorld::erase_object(CFbdObject *object)
 
     if (!object->instance_name().isEmpty())
         emit instance_removed(object->type_name(), object->instance_name());
+}
+
+void COglWorld::delete_selected()
+{
+    if (m_selection.object || m_selection.connection_line)
+    {
+        if (m_selection.object)
+        {
+            erase_object(m_selection.object);
+        }
+        if (m_selection.connection_line)
+        {
+
+        }
+    }
 }
 

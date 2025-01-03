@@ -127,31 +127,6 @@
                   </baseType>
                 </array>
               </type>
-              <initialValue>
-                <arrayValue>
-                  <value>
-                    <simpleValue value="1" />
-                  </value>
-                  <value>
-                    <simpleValue value="2" />
-                  </value>
-                  <value repetitionValue="3">
-                    <simpleValue value="0" />
-                  </value>
-                  <value>
-                    <simpleValue value="6" />
-                  </value>
-                  <value>
-                    <simpleValue value="7" />
-                  </value>
-                  <value repetitionValue="2">
-                    <simpleValue value="0" />
-                  </value>
-                  <value>
-                    <simpleValue value="10" />
-                  </value>
-                </arrayValue>
-              </initialValue>
             </variable>
             <variable name="newVar2">
               <type>

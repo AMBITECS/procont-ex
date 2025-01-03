@@ -12,6 +12,7 @@ QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 QT_FORWARD_DECLARE_CLASS(QSettings)
 QT_FORWARD_DECLARE_CLASS(QUndoStack)
+QT_FORWARD_DECLARE_CLASS(QUndoGroup)
 
 QT_FORWARD_DECLARE_CLASS(DomModel)
 QT_FORWARD_DECLARE_CLASS(DomItem)
@@ -66,7 +67,13 @@ public:
 
     QDomDocument & document();
 
+    QUndoGroup * undoGroup() const;
+    // void registerUndoStackWidget(QWidget *);
     QUndoStack * undoStack() const;
+    QUndoStack * emptyStack() const;
+
+signals:
+    void signal_activateUndoStack(QWidget *);
 
 private:
     void open(const QString & filePath = {});
@@ -108,14 +115,10 @@ private slots:
     void slot_pouCustomContextMenu(const QPoint &);
     void slot_devCustomContextMenu(const QPoint &);
 
-private:
-    void createContextMenu(const QPoint &pos_, const QTreeView *tree_);
+    void slot_focusChanged(QWidget *, QWidget *);
 
 private:
-    static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
-    static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
-    static QAbstractProxyModel * proxy(QAbstractItemModel *);
-    static DomItem * item(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
+    void createContextMenu(const QPoint &pos_, const QTreeView *tree_);
 
 private:
     QDockWidget * dockPou{nullptr};
@@ -133,6 +136,7 @@ private:
 
     Compiler * _m_compiler{nullptr};
 
+    QMenu * _m_view_menu{nullptr};
     QMultiHash<QString, DynamicAction> _m_dynamic_actions;
     QMenu * _m_addobject_menu{nullptr};
 
@@ -148,7 +152,9 @@ private:
     QDomDocument _m_project_document;
 
     CWidgetProtocol * _m_widget_protocol{nullptr};
+    QUndoGroup * _m_undo_group{nullptr};
     QUndoStack * _m_undo_stack{nullptr};
+    QUndoStack * _m_empty_stack{nullptr};
 
 private:
     static MainWindow * _m_instance;

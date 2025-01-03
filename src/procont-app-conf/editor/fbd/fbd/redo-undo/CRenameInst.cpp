@@ -21,7 +21,10 @@ void CRenameInst::redo()
     m_object->set_instance_name(m_new);
     m_ogl_widget->update_hatch();
 
-    emit m_ogl_widget->iface_var_rename(m_old, m_new);
+    if (m_old != "???")
+        emit m_ogl_widget->iface_var_rename(m_old, m_new);
+    else
+        emit m_ogl_widget->iface_new_var(m_object->type_name(), m_new);
 }
 
 void CRenameInst::undo()
@@ -29,5 +32,8 @@ void CRenameInst::undo()
     m_object->set_instance_name(m_old);
     m_ogl_widget->update_hatch();
 
-    emit m_ogl_widget->iface_var_rename(m_new, m_old);
+    if (m_old != "???")
+        emit m_ogl_widget->iface_var_rename(m_new, m_old);
+    else
+        emit m_ogl_widget->instance_removed(m_object->type_name(), m_new);
 }

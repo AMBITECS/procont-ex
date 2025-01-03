@@ -4,7 +4,7 @@ set(NAME ${PNME}-conf-app)
 
 project(${NAME} VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -96,7 +96,11 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-        undo/cundocommand_edit.cpp undo/cundocommand_edit.h undo/cundocommand_insert.cpp undo/cundocommand_insert.h undo/cundocommand_remove.cpp undo/cundocommand_remove.h undo/iundocommand.cpp undo/iundocommand.h
+        undo/cundocommand_edit.cpp undo/cundocommand_edit.h undo/cundocommand_insert_tree.cpp undo/cundocommand_insert_tree.h undo/cundocommand_remove_tree.cpp undo/cundocommand_remove_tree.h undo/iundocommand.cpp undo/iundocommand.h
+        widget/WidgetEditor_fbd.cpp widget/WidgetEditor_fbd.h
+        widget/WidgetEditor_inherit.cpp widget/WidgetEditor_inherit.h
+        main/Settings.h
+        undo/cundocommand_insert_table.cpp undo/cundocommand_insert_table.h undo/cundocommand_remove_table.cpp undo/cundocommand_remove_table.h
    )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

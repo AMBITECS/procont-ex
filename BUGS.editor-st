@@ -1,7 +1,6 @@
 20240919
 преобразование xml->text
-	? обрабатываются только <l
-	ocalVars> и без учета атрибутов (retain, contastant, persistent)
+	? обрабатываются только <localVars> и без учета атрибутов (retain, contastant, persistent)
 	- не обрабатывается <documentation>
 	? обрабатываются только некоторые типы elementary и derived
 преобразование text->xml

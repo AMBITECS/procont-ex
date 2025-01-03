@@ -32,14 +32,13 @@ signals:
 protected slots:
     void tree_clicked(const QPersistentModelIndex &index);
     void show_variable(QString text);
-    void text_changed(const QString &text);
 
 protected:
     void showPopup() override;
     void hidePopup() override;
     bool eventFilter(QObject* object, QEvent* event) override;
 
-
+    void editTextChanged(const QString &text);
 
 private:
     QTreeView   * m_view = nullptr;

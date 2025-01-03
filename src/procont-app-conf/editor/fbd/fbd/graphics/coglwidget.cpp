@@ -46,7 +46,7 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
 
 
     m_paint_dev = dynamic_cast<QPaintDevice *>(this);
-    m_style = new COglStyle();
+    //m_style = new COglStyle();
     m_helper = new CGraphicsHelper(this, ogl_startup->node);
 
     connect (m_helper, &CGraphicsHelper::set_current_pou,
@@ -81,7 +81,7 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
 
 COglWidget::~COglWidget()
 {
-    delete m_style;
+    //delete m_style;
     delete m_helper;
 }
 

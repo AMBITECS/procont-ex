@@ -12,10 +12,6 @@ CBlockVar::CBlockVar(CBlock *parent)
     m_point_in  = new CConnectionPointIn();
     m_point_out = new CConnectionPointOut();
     add_data = new CAddData();
-//    if (parent && parent->parent())
-//        m_variable = new CVariable(parent->parent()->parent()->interface());
-//    else
-//        m_variable = new CVariable(nullptr);
     m_parent = parent;
 }
 
@@ -23,14 +19,14 @@ CBlockVar::CBlockVar(const CBlockVar &other)
 {
     m_point_in = new CConnectionPointIn(*other.m_point_in);
     m_point_out = new CConnectionPointOut(*other.m_point_out);
-    //m_variable = new CVariable(*other.m_variable);
+    add_data = new CAddData(*other.add_data);
 
     m_formal_parameter = other.m_formal_parameter;
     m_is_negated = other.m_is_negated;
     m_edge_modifier = other.m_edge_modifier;
     m_store_modifier = other.m_store_modifier;
     m_type = other.m_type;
-    add_data = new CAddData(*other.add_data);
+
     m_direction = other.m_direction;
     m_derived_type = other.m_derived_type;
     m_parent = other.m_parent;
@@ -86,7 +82,7 @@ CBlockVar::~CBlockVar()
 {
     delete m_point_out;
     delete m_point_in;
-    // delete m_variable;
+    delete add_data;
 }
 
 QDomNode CBlockVar::dom_node() const

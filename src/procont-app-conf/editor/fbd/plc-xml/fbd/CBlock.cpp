@@ -36,6 +36,9 @@ CBlock &CBlock::operator=(const CBlock &  other)
 
     m_parent = other.m_parent;
 
+    clear_variables();
+
+
     for (auto &alien : *other.m_in_vars)
     {
         auto var = new CBlockVar(*alien);
@@ -71,8 +74,6 @@ CBlock &CBlock::operator=(const CBlock &  other)
     m_position      = CPosition(other.m_position);
     m_add_data      = CAddData(other.m_add_data);
     m_documentation = CDocumentation(other.m_documentation);
-    m_inputs        = other.m_inputs;
-    m_outputs       = other.m_outputs;
 
     return *this;
 }
@@ -82,8 +83,6 @@ CBlock::CBlock(CBlock &&other) noexcept
     , m_instance_name(std::move(other.m_instance_name))
     , m_global_id(std::move(other.m_global_id))
     , m_add_data(other.m_add_data)
-    , m_inputs(std::move(other.m_inputs))
-    , m_outputs(std::move(other.m_outputs))
     , m_parent(other.m_parent)
 
 {
@@ -94,9 +93,6 @@ CBlock::CBlock(CBlock &&other) noexcept
     other.m_in_out_vars = nullptr;
     other.m_out_vars = nullptr;
     other.m_in_vars = nullptr;
-
-//    max_local_id++;
-//    set_local_id(max_local_id);
 
     m_width         = other.m_width;
     m_height        = other.m_height;
@@ -125,7 +121,7 @@ CBlock::CBlock(const QDomNode &dom_node, CBody *parent)
 
     m_position      = CPosition(dom_node.namedItem("position") );
     m_add_data      = CAddData(dom_node.namedItem("addData"));
-    extract_params();
+    //extract_params();
 
     m_documentation = CDocumentation(dom_node.namedItem("documentation"));
 
@@ -146,6 +142,8 @@ CBlock::~CBlock()
     {
         return;
     }
+
+    clear_variables();
 
     delete m_in_out_vars;
     delete m_in_vars;
@@ -347,12 +345,15 @@ CBlock::extract_vars(const QString &direction, const QDomNode &node)
         auto child = node.childNodes().at(i);
         auto var = new CBlockVar(this, child);
         var->set_direction(dir);
+
         vars->push_back(var);
     }
 }
 
+/*
 void CBlock::extract_params()
 {
+
     if (m_add_data.is_empty())
     {
         return;
@@ -372,7 +373,7 @@ void CBlock::extract_params()
             std::string types_s = de.text().toStdString();
             extract_pin_params(OUTS, types_s);
         }
-    }
+
 }
 
 void CBlock::extract_pin_params(const std::string &direction, const std::string &types_string)
@@ -403,6 +404,7 @@ void CBlock::extract_pin_params(const std::string &direction, const std::string 
     vect->clear();
     vect->insert(vect->end(), type_list.begin(), type_list.end());
 }
+*/
 
 bool CBlock::normalize_block(const CBlock &n_block)
 {
@@ -494,6 +496,32 @@ void CBlock::set_parent(CBody *parent)
     {
         out->set_parent(this);
     }
+
+    for (auto &item : *m_in_out_vars)
+    {
+        item->set_parent(this);
+    }
+}
+
+void CBlock::clear_variables()
+{
+    for (auto &in : *m_in_vars)
+    {
+        delete in;
+    }
+    m_in_vars->clear();
+
+    for (auto &out : *m_out_vars)
+    {
+        delete out;
+    }
+    m_out_vars->clear();
+
+    for (auto &item : *m_in_out_vars)
+    {
+        delete item;
+    }
+    m_in_out_vars->clear();
 }
 
 

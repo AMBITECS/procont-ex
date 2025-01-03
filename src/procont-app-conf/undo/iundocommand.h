@@ -21,7 +21,7 @@ public:
     bool isRedo() const { return m_redo; }
 
 protected:
-    static DomItem * item(const QModelIndex &index);
+    static DomItem * toItem(const QModelIndex &index);
 
 protected:
     QPersistentModelIndex _m_index;

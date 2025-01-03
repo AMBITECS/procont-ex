@@ -146,3 +146,28 @@ bool DomModel::removeRows(int position, int rows, const QModelIndex &parent)
 
     return true;
 }
+
+#include <QAbstractProxyModel>
+
+QModelIndex DomModel::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
+{
+    if(proxy == nullptr)
+        return reinterpret_cast<const QAbstractProxyModel*>(index.model())->mapToSource(index);
+
+    return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapToSource(index);
+}
+
+QModelIndex DomModel::p_index(const QModelIndex &index, QAbstractItemModel * proxy)
+{
+    return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapFromSource(index);
+}
+
+QAbstractProxyModel * DomModel::toProxy(QAbstractItemModel *model)
+{
+    return reinterpret_cast<QAbstractProxyModel*>(model);
+}
+
+DomItem * DomModel::toItem(const QModelIndex &index, QAbstractItemModel * proxy)
+{
+    return reinterpret_cast<DomItem *>(s_index(index, proxy).internalPointer());
+}

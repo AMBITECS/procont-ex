@@ -31,8 +31,9 @@ public:
     [[nodiscard]] DomItem * insertChild(int row, int column, const QDomNode & node, int shift = 0);
     void removeChild(int row, int column, const QDomNode & childNode);
     void removeChildren();
+
     virtual void updateNode(const QDomNode &);
-    virtual void addNode(const QDomNode & = QDomNode());
+    virtual QDomNode defaultNode() const { return QDomNode(); }
 
     [[nodiscard]] DomItem * parentItem() const;
     [[nodiscard]] QDomNode node() const;
@@ -49,14 +50,13 @@ public:
     [[nodiscard]] static ItemType assignType(const QDomNode &node);
     [[nodiscard]] static QString printNode(const QDomNode &);
 
-public:
-    [[nodiscard]] std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
+protected:
     void setItemValue(ItemValue *item);
 
 protected:
+    [[nodiscard]] std::pair<int, int> insertChildren(const QDomNode & parentNode, int shift = 0);
     [[nodiscard]] virtual QDomNodeList filterChildren(const QDomNode &node) const;
     virtual void buildChildren(const QDomNode &node, int row, int shift = 0);
-    virtual void setupChildren(const QDomNode &) {;}
 
 protected:
     static QScopedPointer<DomItem_builder> m_ItemBuilder;
@@ -67,8 +67,8 @@ protected:
     QScopedPointer<ItemValue> m_value;
 
 protected:
-    QList<QDomNode> m_lChildNodes;
-    QList<bool> m_lChildCreated;
+    std::vector<QDomNode> _v_child_nodes;
+    std::vector<bool> _v_child_creation;
 
 private:
     static QStringList m_discard;
@@ -142,13 +142,14 @@ class DomItemVar : public DomItem
 public:
     DomItemVar(const QDomNode &node);
 
-    virtual void addNode(const QDomNode & = QDomNode()) override;
+    virtual QDomNode defaultNode() const override;
 
 protected:
     virtual void buildChildren(const QDomNode &node, int row, int shift = 0) override;
     void buildChild(const QDomNode &node, int row);
-    virtual void setupChildren(const QDomNode &) override;
-    void setupChild(const QDomNode & node, const QString & name);
+    virtual void setupChildren(const QDomNode &, int row);
+    [[nodiscard]] int countChildren(const QDomNode &node_) const;
+    [[nodiscard]] virtual QDomNodeList listChildren(const QDomNode &node_) const;
 };
 // ----------------------------------------------------------------------------
 
@@ -161,12 +162,12 @@ public:
 
     [[nodiscard]] QVariant data(int role) const override;
 
-    virtual void addNode(const QDomNode & = QDomNode()) override;
+    virtual QDomNode defaultNode() const override;
     virtual void updateNode(const QDomNode &) override;
 
 protected:
     [[nodiscard]] virtual QDomNodeList filterChildren(const QDomNode &node) const override;
-    virtual void setupChildren(const QDomNode &) override;
+    [[nodiscard]] virtual QDomNodeList listChildren(const QDomNode &node_) const override;
 };
 // ----------------------------------------------------------------------------
 

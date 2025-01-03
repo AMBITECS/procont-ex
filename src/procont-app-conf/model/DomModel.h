@@ -5,7 +5,9 @@
 #include <QDomDocument>
 #include <QModelIndex>
 
-class DomItem;
+QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
+
+QT_FORWARD_DECLARE_CLASS(DomItem)
 
 class DomModel : public QAbstractItemModel
 {
@@ -27,6 +29,12 @@ public:
     [[nodiscard]] bool hasChildren(const QModelIndex &index) const override;
     [[nodiscard]] bool insertRows(int position, int rows, const QModelIndex &parent = {}) override;
     [[nodiscard]] bool removeRows(int position, int rows, const QModelIndex &parent = {}) override;
+
+public:
+    static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
+    static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
+    static QAbstractProxyModel * toProxy(QAbstractItemModel *);
+    static DomItem * toItem(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
 
 private:
     const QDomDocument & domDocument;

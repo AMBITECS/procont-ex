@@ -25,8 +25,6 @@ bool TableView::edit(const QModelIndex &index, QAbstractItemView::EditTrigger tr
     Q_UNUSED(trigger);
     Q_UNUSED(event);
 
-    // qDebug() << "editor activated";
-
     return QTableView::edit(index, trigger, event);
 }
 
@@ -36,7 +34,7 @@ void TableView::slot_dataChanged(const QModelIndex &topLeft, const QModelIndex &
     Q_UNUSED(bottomRight);
     Q_UNUSED(roles);
 
-    qDebug() << "data changed";
+    qDebug() << "slot_dataChanged" << topLeft << bottomRight;
 
     emit signal_tableChanged();
 }
@@ -47,6 +45,8 @@ void TableView::slot_rowsRemoved(const QModelIndex &parent, int first, int last)
     Q_UNUSED(first);
     Q_UNUSED(last);
 
+    qDebug() << "slot_rowsRemoved" << parent << first << first;
+
     emit signal_tableChanged();
 }
 
@@ -55,6 +55,8 @@ void TableView::slot_rowsInserted(const QModelIndex &parent, int first, int last
     Q_UNUSED(parent);
     Q_UNUSED(first);
     Q_UNUSED(last);
+
+    qDebug() << "slot_rowsInserted" << parent << first << first;
 
     emit signal_tableChanged();
 }

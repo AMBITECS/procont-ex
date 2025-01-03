@@ -211,13 +211,13 @@ void AddDUTDialog::accept()
 
 QDomNode AddDUTDialog::getNode() const
 {
-    QDomDocument doc_;
-    auto dataType_ = doc_.createElement("dataType"); doc_.appendChild(dataType_);
-    dataType_.setAttribute("name", _m_lineEdit_name->text());
-    auto baseType_ = doc_.createElement("baseType"); dataType_.appendChild(baseType_);
-    baseType_.appendChild(doc_.createElement(pouType2Str(radioId2enumType(_m_buttonGroup_type->checkedId()))));
+    QDomDocument _doc;
+    auto _dataType = _doc.createElement("dataType"); _doc.appendChild(_dataType);
+    _dataType.setAttribute("name", _m_lineEdit_name->text());
+    auto _baseType = _doc.createElement("baseType"); _dataType.appendChild(_baseType);
+    _baseType.appendChild(_doc.createElement(pouType2Str(radioId2enumType(_m_buttonGroup_type->checkedId()))));
 
-    return doc_;
+    return _doc;
 }
 
 AddDUTDialog::eDUTType AddDUTDialog::radioId2enumType(int id_)

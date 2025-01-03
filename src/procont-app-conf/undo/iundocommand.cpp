@@ -21,7 +21,7 @@ void IUndoCommand::redo()
     m_redo = true;
 }
 
-DomItem * IUndoCommand::item(const QModelIndex &index)
+DomItem * IUndoCommand::toItem(const QModelIndex &index)
 {
     return reinterpret_cast<DomItem *>(index.internalPointer());
 }

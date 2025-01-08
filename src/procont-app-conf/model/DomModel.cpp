@@ -167,7 +167,14 @@ QAbstractProxyModel * DomModel::toProxy(QAbstractItemModel *model)
     return reinterpret_cast<QAbstractProxyModel*>(model);
 }
 
-DomItem * DomModel::toItem(const QModelIndex &index, QAbstractItemModel * proxy)
+DomItem * DomModel::toItem(const QModelIndex &index, bool source, QAbstractItemModel * proxy)
 {
-    return reinterpret_cast<DomItem *>(s_index(index, proxy).internalPointer());
+    auto _index = source ? index : s_index(index, proxy);
+
+    return reinterpret_cast<DomItem *>(_index.internalPointer());
+}
+
+DomModel * DomModel::toModel(QAbstractItemModel *model_)
+{
+    return reinterpret_cast<DomModel *>(model_);
 }

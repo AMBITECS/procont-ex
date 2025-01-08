@@ -20,9 +20,9 @@ TabWidgetEditor::TabWidgetEditor()
 
     if(_hProxyModels.size() == 0)
     {
-        _hProxyModels.insert(DomItem::typePou, new ProxyModelTable_var);
-        _hProxyModels.insert(DomItem::typeVar, new ProxyModelTable_global);
-        _hProxyModels.insert(DomItem::typeType, new ProxyModelTable_var);
+        _hProxyModels.insert(DomItem::typePou, new ProxyModelTable_var(nullptr));
+        _hProxyModels.insert(DomItem::typeVar, new ProxyModelTable_global(nullptr));
+        _hProxyModels.insert(DomItem::typeType, new ProxyModelTable_var(nullptr));
     }
 
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slot_closeTab(int)));
@@ -117,7 +117,10 @@ void TabWidgetEditor::renameTab(const QModelIndex &index_)
     QModelIndex index = DomModel::s_index(index_);
 
     if(_hWidgets.contains(index))
+    {
+        qDebug() << __PRETTY_FUNCTION__;
         setTabText(indexOf(_hWidgets.value(index)), index.data().toString());
+    }
 }
 
 void TabWidgetEditor::closeTab(const QModelIndex &index_, bool source_)
@@ -125,7 +128,10 @@ void TabWidgetEditor::closeTab(const QModelIndex &index_, bool source_)
     QModelIndex index = source_ ? index_ : DomModel::s_index(index_);
 
     if(_hWidgets.contains(index))
+    {
+        qDebug() << __PRETTY_FUNCTION__;
         slot_closeTab(indexOf(_hWidgets.value(index)));
+    }
 }
 
 void TabWidgetEditor::slot_currentTabChanged(int index)

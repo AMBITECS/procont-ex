@@ -30,11 +30,14 @@ public:
     [[nodiscard]] bool insertRows(int position, int rows, const QModelIndex &parent = {}) override;
     [[nodiscard]] bool removeRows(int position, int rows, const QModelIndex &parent = {}) override;
 
+    void update(const QModelIndex &index_) { emit dataChanged(index_, index_, {Qt::DisplayRole, Qt::EditRole}); }
+
 public:
     static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
     static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
     static QAbstractProxyModel * toProxy(QAbstractItemModel *);
-    static DomItem * toItem(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
+    static DomItem * toItem(const QModelIndex &index, bool source = false, QAbstractItemModel * proxy = nullptr);
+    static DomModel * toModel(QAbstractItemModel *);
 
 private:
     const QDomDocument & domDocument;

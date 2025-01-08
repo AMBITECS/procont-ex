@@ -17,8 +17,9 @@
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
 #include "editor/fbd/general/ctreeobject.h"
-#include "undo/cundocommand_remove_tree.h"
-#include "undo/cundocommand_insert_tree.h"
+#include "undo/cundocommand_remove.h"
+#include "undo/cundocommand_insert.h"
+#include "undo/cundocommand_edit.h"
 #include "tr/translation.h"
 
 #include <QDockWidget>
@@ -51,6 +52,9 @@ MainWindow::MainWindow(QWidget *parent) :
     undoGroup()->addStack(undoStack());
     undoGroup()->addStack(emptyStack());
     undoGroup()->setActiveStack(undoStack());
+
+    _m_proxy_pou->setUndoStack(undoStack());
+    _m_proxy_dev->setUndoStack(undoStack());
 
     if(!QFileInfo::exists(_m_base_directory))
         _m_base_directory = QFileInfo(QDir::currentPath()).absolutePath();
@@ -417,11 +421,10 @@ void MainWindow::slot_devCustomContextMenu(const QPoint &pos_)
 
 void MainWindow::slot_focusChanged(QWidget *, QWidget *new_)
 {
+    qDebug() << new_;
+
     if(new_ == _m_tree_pou || new_ == _m_tree_dev)
-    {
-        qDebug() << __PRETTY_FUNCTION__;
         undoStack()->setActive();
-    }
     else
         emit signal_activateUndoStack(new_);
 }
@@ -435,7 +438,7 @@ void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModel
         QList<DynamicAction> acts = _m_dynamic_actions.values(node.nodeName());
         if(acts.size())
         {
-            for(auto i : std::as_const(acts))
+            for(const auto & i : std::as_const(acts))
             {
                 if(i._m_views.contains(_m_tree_pou) && i._m_menu == tr("Add object"))
                     _m_addobject_menu->addAction(i._m_act);
@@ -443,8 +446,6 @@ void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModel
         }
     }
     _m_button->setMenu(_m_addobject_menu);
-
-    qDebug() << __PRETTY_FUNCTION__;
 }
 
 void MainWindow::slot_devCurrentChanged(const QModelIndex &current, const QModelIndex &)
@@ -456,7 +457,7 @@ void MainWindow::slot_devCurrentChanged(const QModelIndex &current, const QModel
         QList<DynamicAction> acts = _m_dynamic_actions.values(node.nodeName());
         if(acts.size())
         {
-            for(auto i : std::as_const(acts))
+            for(const auto & i : std::as_const(acts))
             {
                 if(i._m_views.contains(_m_tree_dev) && i._m_menu == tr("Add object"))
                     _m_addobject_menu->addAction(i._m_act);
@@ -471,11 +472,11 @@ void MainWindow::slot_add_DUT()
     AddDUTDialog dlg;
     if(dlg.exec() == QDialog::Accepted)
     {
-        auto model = reinterpret_cast<QAbstractProxyModel*>(_m_tree_pou->model())->sourceModel();
-        auto parentIndex = DomModel::s_index(_m_tree_pou->currentIndex());
-        auto cmd = new CUndoCommand_insert_tree(dlg.getNode().toDocument().documentElement(), parentIndex, model);
+        auto cmd = new CUndoCommand_insert_tree(_m_model_project, DomModel::s_index(_m_tree_pou->currentIndex()), dlg.getNode().toDocument().documentElement());
+        connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_selectRow_tree);
         undoStack()->push(cmd);
     }
+    _m_tree_pou->setFocus();
 }
 
 void MainWindow::slot_add_POU()
@@ -483,10 +484,23 @@ void MainWindow::slot_add_POU()
     AddPOUDialog dlg;
     if(dlg.exec() == QDialog::Accepted)
     {
-        auto model = reinterpret_cast<QAbstractProxyModel*>(_m_tree_pou->model())->sourceModel();
-        auto parentIndex = DomModel::s_index(_m_tree_pou->currentIndex());
-        auto cmd = new CUndoCommand_insert_tree(dlg.getNode().toDocument().documentElement(), parentIndex, model);
+        auto cmd = new CUndoCommand_insert_tree(_m_model_project, DomModel::s_index(_m_tree_pou->currentIndex()), dlg.getNode().toDocument().documentElement());
+        connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_selectRow_tree);
         undoStack()->push(cmd);
+    }
+
+    _m_tree_pou->setFocus();
+}
+
+void MainWindow::slot_selectRow_tree(const QModelIndex &index_)
+{
+    qDebug() << __PRETTY_FUNCTION__;
+
+    if(index_.model() == _m_proxy_pou)
+    {
+        _m_tree_pou->clearSelection();
+        _m_tree_pou->setCurrentIndex(QModelIndex());
+        _m_tree_pou->selectionModel()->select(index_, QItemSelectionModel::Select);
     }
 }
 
@@ -591,7 +605,7 @@ void MainWindow::open(const QString & filePath)
     {
         auto newModel = new DomModel(_m_project_document, this);
 
-        StandardLibrary::instance()->add("User types", &_m_project_document, tr("User types"));
+        StandardLibrary::instance()->add("User defined", &_m_project_document, tr("User defined"));
 
         // view->setModel(newModel);
 
@@ -713,10 +727,7 @@ void MainWindow::slot_delete()
                         QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
                 );
             if(QMessageBox::Yes == _result)
-            {
-                auto cmd = new CUndoCommand_remove_tree(DomModel::s_index(index), DomModel::toProxy(_m_tree_pou->model())->sourceModel());
-                undoStack()->push(cmd);
-            }
+                undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));
         }
     }
     // dev tree
@@ -745,10 +756,7 @@ void MainWindow::slot_delete()
                     QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
                 );
             if(QMessageBox::Yes == _result)
-            {
-                auto cmd = new CUndoCommand_remove_tree(DomModel::s_index(index), DomModel::toProxy(_m_tree_pou->model())->sourceModel());
-                undoStack()->push(cmd);
-            }
+                undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));
         }
     }
 }
@@ -783,10 +791,19 @@ void MainWindow::slot_rename()
                 );
             if(QMessageBox::Yes == _result)
             {
-                // переименовать node
-                DomModel::toItem(index)->node().toElement().setAttribute("name", dlg.new_name());
-                // переименовать tab
-                TabWidgetEditor::instance()->renameTab(index);
+                // QDomDocument _doc;
+                // auto _node_old = /*_doc.importNode(*/DomModel::toItem(index)->node().cloneNode()/*, true)*/;
+                // auto _node_new = /*_doc.importNode(*/DomModel::toItem(index)->node().cloneNode()/*, true)*/;
+                // _node_new.attributes().namedItem("name").setNodeValue(dlg.new_name());
+
+                // undoStack()->push(
+                //     new CUndoCommand_edit_tree(_m_model_project, DomModel::s_index(index), index, _node_old, _node_new));
+
+                Q_ASSERT(_tree->model());
+                Q_ASSERT(index.isValid());
+                Q_ASSERT(DomModel::s_index(index).isValid());
+
+                _tree->model()->setData(index, QVariant(dlg.new_name()), Qt::EditRole);
             }
         }
     }

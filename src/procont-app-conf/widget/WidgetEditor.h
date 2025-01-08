@@ -40,15 +40,17 @@ protected slots:
 
     void slot_activateUndoStack(QWidget *);
 
+    void slot_selectRow_tree(const QModelIndex &index_, bool);
+
 protected:
     void updateTblView();
     virtual QWidget * createVarsEditor();
     virtual QWidget * createCodeEditor();
 
 protected:
-    QModelIndex _index{};
-    QDomNode _node{};
-    QAbstractProxyModel * _proxy{nullptr};
+    QModelIndex _m_index{};
+    DomItem * _m_item{nullptr};
+    QAbstractProxyModel * _m_proxy{nullptr};
 
 protected:
     TableView * _vars_table{nullptr};

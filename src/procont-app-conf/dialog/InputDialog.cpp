@@ -69,7 +69,7 @@ InputDialog::InputDialog(eType type_) :
             if(!_m_categories.contains(type) && accept_category(type, _m_type))
             {
                 _m_categories.append(type);
-                _categories_ru.append(tr_str::instance()->ru(type));
+                _categories_ru.append(tr_str::instance()->ru(type, tr_str::eTranslateLetters::eTL_Capital));
             }
         }
 
@@ -125,7 +125,7 @@ InputDialog::InputDialog(eType type_) :
                 continue;
             auto items = QList<QStandardItem *>();
             items << new QStandardItem(info.name)
-                  << new QStandardItem(tr_str::instance()->ru(info.type))
+                  << new QStandardItem(tr_str::instance()->ru(info.type, tr_str::eTranslateLetters::eTL_Capital))
                   << new QStandardItem(info.source);
             source->insertRow(0, items);
         }
@@ -230,7 +230,7 @@ void InputDialog::slot_categoryCurrentChanged(const QModelIndex &current, const 
 
                 auto items = QList<QStandardItem *>();
                 items << new QStandardItem(info.name)
-                      << new QStandardItem(tr_str::instance()->ru(info.type))
+                      << new QStandardItem(tr_str::instance()->ru(info.type, tr_str::eTranslateLetters::eTL_Capital))
                       << new QStandardItem(info.source);
                 _topItems[info.category]->insertRow(0, items);
             }

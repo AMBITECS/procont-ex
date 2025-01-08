@@ -31,8 +31,9 @@ public:
     [[nodiscard]] DomItem * insertChild(int row, int column, const QDomNode & node, int shift = 0);
     void removeChild(int row, int column, const QDomNode & childNode);
     void removeChildren();
+    [[nodiscard]] virtual bool hasChild(const QString & name_, int row = -1);
 
-    virtual void updateNode(const QDomNode &);
+    virtual void updateNode(const QDomNode &new_node_);
     virtual QDomNode defaultNode() const { return QDomNode(); }
 
     [[nodiscard]] DomItem * parentItem() const;
@@ -111,7 +112,11 @@ public:
         {
             node().removeChild(node().namedItem("baseType"));
             node().appendChild(new_node_.cloneNode());
+
+            return;
         }
+
+        DomItem::updateNode(new_node_);
     }
 
 };
@@ -150,6 +155,9 @@ protected:
     virtual void setupChildren(const QDomNode &, int row);
     [[nodiscard]] int countChildren(const QDomNode &node_) const;
     [[nodiscard]] virtual QDomNodeList listChildren(const QDomNode &node_) const;
+
+protected:
+    [[nodiscard]] static QString getDefaultVariableName(const QDomNodeList &list_);
 };
 // ----------------------------------------------------------------------------
 
@@ -163,7 +171,7 @@ public:
     [[nodiscard]] QVariant data(int role) const override;
 
     virtual QDomNode defaultNode() const override;
-    virtual void updateNode(const QDomNode &) override;
+    virtual void updateNode(const QDomNode &new_node_) override;
 
 protected:
     [[nodiscard]] virtual QDomNodeList filterChildren(const QDomNode &node) const override;

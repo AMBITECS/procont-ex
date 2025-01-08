@@ -31,8 +31,9 @@ QString ItemValue_Default::get() const
     return node().nodeName();
 }
 
-void ItemValue_Default::set(const QString &)
+void ItemValue_Default::set(const QString &value_)
 {
+    node().toElement().setAttribute("name", value_);
 }
 // ----------------------------------------------------------------------------
 

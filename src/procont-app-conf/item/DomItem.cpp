@@ -138,6 +138,21 @@ void DomItem::removeChildren()
     _v_child_creation.clear();
 }
 
+bool DomItem::hasChild(const QString & name_, int row)
+{
+    for(auto i=0;i<rowCount();i++)
+    {
+        if(i == row)
+            continue;
+
+        auto _name = reinterpret_cast<DomItem*>(child(i, 0))->node().toElement().attribute("name");
+        if(_name == name_)
+            return true;
+    }
+
+    return false;
+}
+
 void DomItem::buildChildren(const QDomNode &node_, int row, int shift)
 {
     auto childNode = node_.childNodes().item(row);
@@ -157,6 +172,8 @@ QVariant DomItem::data(int role) const
 
 void DomItem::setData(const QVariant &value, int role)
 {
+    qDebug() << __PRETTY_FUNCTION__ << m_value.get();
+
     m_value->set(value.toString());
 }
 
@@ -165,9 +182,14 @@ void DomItem::setItemValue(ItemValue *pointer)
     m_value.reset(pointer);
 }
 
-void DomItem::updateNode(const QDomNode &)
+void DomItem::updateNode(const QDomNode &new_node_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
+
+    auto parent = node().parentNode();
+    parent.removeChild(node());
+    auto _node = parent.appendChild(new_node_);
+    m_value->updateNode(_node);
 }
 
 QString DomItem::print() const
@@ -201,7 +223,7 @@ QDomNode DomItemVar::defaultNode() const
     _variable_type.appendChild(_variable_type_int);
     auto _variable = _doc.createElement("variable");
     _variable.appendChild(_variable_type);
-    _variable.setAttribute("name", "globalVar1");
+    _variable.setAttribute("name", getDefaultVariableName(listChildren(node())));
 
     _doc.appendChild(_variable);
 
@@ -210,7 +232,7 @@ QDomNode DomItemVar::defaultNode() const
 
 void DomItemVar::buildChildren(const QDomNode &node_, int row, int)
 {
-    qDebug() << __PRETTY_FUNCTION__ << node_.nodeName() << row << countChildren(node_) << _v_child_nodes.size();
+    // qDebug() << __PRETTY_FUNCTION__ << node_.nodeName() << row << countChildren(node_) << _v_child_nodes.size();
 
     if(_v_child_nodes.size() < countChildren(node_))
         setupChildren(node_, row);
@@ -237,13 +259,13 @@ int DomItemVar::countChildren(const QDomNode &node_) const
 
 void DomItemVar::setupChildren(const QDomNode &node_, int row)
 {
-    qDebug() << __PRETTY_FUNCTION__ << node_.nodeName() << row;
+    // qDebug() << __PRETTY_FUNCTION__ << node_.nodeName() << row;
 
     auto vars = listChildren(node_);
 
     if(!_v_child_nodes.size())
     {
-        qDebug() << __PRETTY_FUNCTION__ << "1";
+        // qDebug() << __PRETTY_FUNCTION__ << "1";
 
         for(auto i=0;i<vars.count();i++)
         {
@@ -253,7 +275,7 @@ void DomItemVar::setupChildren(const QDomNode &node_, int row)
     }
     else
     {
-        qDebug() << __PRETTY_FUNCTION__ << "2";
+        // qDebug() << __PRETTY_FUNCTION__ << "2";
 
         QDomNode _new_node = {};
         for(auto i=0;i<vars.count();i++)
@@ -276,7 +298,7 @@ void DomItemVar::setupChildren(const QDomNode &node_, int row)
 
 void DomItemVar::buildChild(const QDomNode &node, int row)
 {
-    qDebug() << __PRETTY_FUNCTION__ << row;
+    // qDebug() << __PRETTY_FUNCTION__ << row;
 
     // item
     auto childNode = node;
@@ -318,6 +340,32 @@ void DomItemVar::buildChild(const QDomNode &node, int row)
     childItem = itemBuilder()->build({});
     setChild(row, 8, childItem);
 }
+
+QString DomItemVar::getDefaultVariableName(const QDomNodeList &list_)
+{
+    QString _var_name = {};
+    for(auto i=1;i<std::numeric_limits<int>::max();i++)
+    {
+        auto _tmp_name = QString("newVar%1").arg(i);
+        for(auto j=0;j<list_.count();j++)
+        {
+            if(_tmp_name == list_.at(j).toElement().attribute("name"))
+            {
+                _tmp_name.clear();
+                break;
+            }
+        }
+
+        if(!_tmp_name.isEmpty())
+        {
+            _var_name = _tmp_name;
+            break;
+        }
+    }
+
+    return _var_name;
+}
+
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -351,42 +399,46 @@ QDomNode DomItemPou::defaultNode() const
     _variable_type.appendChild(_variable_type_int);
     auto _variable = _doc.createElement("variable");
     _variable.appendChild(_variable_type);
-    _variable.setAttribute("name", "localVar1");
-    auto _localVars = _doc.createElement("localVars");
-    _localVars.appendChild(_variable);
+    _variable.setAttribute("name", getDefaultVariableName(listChildren(node())));
+    // auto _localVars = _doc.createElement("localVars");
+    // _localVars.appendChild(_variable);
 
-    _doc.appendChild(_localVars);
+    _doc.appendChild(_variable);
 
     return _doc;
 }
 
-void DomItemPou::updateNode(const QDomNode & new_node_)
+void DomItemPou::updateNode(const QDomNode &new_node_)
 {
-    qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    // qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
     if(new_node_.nodeName() == "interface")
     {
-        qDebug() << "interface" << __PRETTY_FUNCTION__;
+        // qDebug() << "interface" << __PRETTY_FUNCTION__;
 
         node().removeChild(node().namedItem("interface"));
         node().appendChild(new_node_.cloneNode());
+
+        return;
     }
 
-    qDebug() << "2" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    // qDebug() << "2" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
-    if
-        (
-        new_node_.nodeName() == "body" &&
-        node().namedItem("body").firstChild().nodeName() == new_node_.firstChild().nodeName()
-        )
+    if( new_node_.nodeName() == "body"
+        &&
+        node().namedItem("body").firstChild().nodeName() == new_node_.firstChild().nodeName())
     {
-        qDebug() << "body" << __PRETTY_FUNCTION__;
+        // qDebug() << "body" << __PRETTY_FUNCTION__;
 
         node().removeChild(node().namedItem("body"));
         node().appendChild(new_node_.cloneNode());
+
+        return;
     }
 
-    qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    // qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+
+    DomItem::updateNode(new_node_);
 }
 
 QDomNodeList DomItemPou::filterChildren(const QDomNode &node) const

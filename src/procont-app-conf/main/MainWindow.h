@@ -60,6 +60,8 @@ public:
     static MainWindow * instance();
 
     CTreeObject * toolWidget() const;
+    TreeView * pouWidget() const { return _m_tree_pou; }
+    ProxyModelTree_pou * pouProxy() const { return _m_proxy_pou; }
 
     static QString config_file() { return _m_config_filepath; }
     static void setConfig(const QString &);
@@ -116,6 +118,8 @@ private slots:
     void slot_devCustomContextMenu(const QPoint &);
 
     void slot_focusChanged(QWidget *, QWidget *);
+
+    void slot_selectRow_tree(const QModelIndex &index_);
 
 private:
     void createContextMenu(const QPoint &pos_, const QTreeView *tree_);

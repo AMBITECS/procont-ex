@@ -1,28 +1,9 @@
 #include "iundocommand.h"
 
-IUndoCommand::IUndoCommand(const QModelIndex &index_, QAbstractItemModel *model_, QUndoCommand * cmd_) :
-    QUndoCommand(cmd_),
-    _m_index(index_),
-    _m_model(model_)
+IUndoCommand::IUndoCommand(int row_, int column_, const QModelIndex &index_parent_, QUndoCommand * cmd_) :  QUndoCommand(cmd_),
+    _m_row(row_),
+    _m_column(column_),
+    _m_index_parent(index_parent_)
 {
-}
-
-IUndoCommand::~IUndoCommand()
-{
-}
-
-void IUndoCommand::undo()
-{
-    m_redo = false;
-}
-
-void IUndoCommand::redo()
-{
-    m_redo = true;
-}
-
-DomItem * IUndoCommand::toItem(const QModelIndex &index)
-{
-    return reinterpret_cast<DomItem *>(index.internalPointer());
 }
 

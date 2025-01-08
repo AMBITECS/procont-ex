@@ -51,8 +51,8 @@ QWidget * WidgetEditor_fbd::createVarsEditor()
     // variables editor table
     _vars_table = new TableView;
     _vars_table->setMinimumSize(500, 200);
-    _vars_table->setModel(_proxy);
-    _vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_index), _proxy));
+    _vars_table->setModel(_m_proxy);
+    _vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_m_index), _m_proxy));
     _vars_table->setColumnHidden(0, true);
     _vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     _vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -69,7 +69,7 @@ QWidget * WidgetEditor_fbd::createVarsEditor()
     // variables editor code editor
     _vars_text = new CodeEditorWidget(this);
     _vars_text->setMinimumSize(500, 200);
-    _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_index)->node()));
+    _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_m_index)->node()));
     connect(_vars_text, &CodeEditorWidget::textChanged, this, &WidgetEditor_fbd::slot_varTxtVarChanged);
     _vars_text->hide();
     // variables editor toolbar for switch view
@@ -153,7 +153,7 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     // _fbd_view = new FBDviewer;
     // _fbd_view->setMinimumSize(500, 250);
     // _fbd_view->showNode(item(_index)->node());
-    _m_fbd_view = new CDiagramWidget(DomModel::toItem(_index)->node(), MainWindow::instance()->toolWidget());
+    _m_fbd_view = new CDiagramWidget(DomModel::toItem(_m_index)->node(), MainWindow::instance()->toolWidget());
     connect(_m_fbd_view, &CDiagramWidget::changed_diagram, this, &WidgetEditor_fbd::slot_codeShmChanged);
     connect(_m_fbd_view, &CDiagramWidget::interface_variable_new, this, &WidgetEditor_fbd::slot_interfaceVariableAdd);
     connect(_m_fbd_view, &CDiagramWidget::instance_removed, this, &WidgetEditor_fbd::slot_interfaceVariableDel);
@@ -164,7 +164,7 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     // _txt_view = WidgetEditor::createCodeEditor();
     _body_text = new CodeEditorWidget(this);
     _body_text->setMinimumSize(500, 250);
-    _body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_index)->node()));
+    _body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
     _body_text->hide();
     // variables editor toolbar for switch view
     auto toolbar_view = new QToolBar();
@@ -203,7 +203,7 @@ void WidgetEditor_fbd::slot_codeShmViewToggled(bool)
 void WidgetEditor_fbd::slot_codeTxtViewToggled(bool)
 {
     TranslatorFBD translator;
-    _body_text->setPlainText(translator.getSTCode_pou(DomModel::toItem(_index)->node()));
+    _body_text->setPlainText(translator.getSTCode_pou(DomModel::toItem(_m_index)->node()));
 
     _m_fbd_view->hide();
     _body_text->show();
@@ -247,7 +247,7 @@ void WidgetEditor_fbd::slot_interfaceVariableAdd(const QString &type, const QStr
     el_localVars.appendChild(el_variable);
 
     // add item
-    _proxy->sourceModel()->insertRow(parent->rowCount(), DomModel::s_index(_vars_table->rootIndex()));
+    _m_proxy->sourceModel()->insertRow(parent->rowCount(), DomModel::s_index(_vars_table->rootIndex()));
 }
 
 void WidgetEditor_fbd::slot_interfaceVariableDel(const QString &type, const QString &name)

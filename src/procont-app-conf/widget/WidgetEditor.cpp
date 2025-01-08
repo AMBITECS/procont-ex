@@ -11,24 +11,27 @@
 #include <QUndoGroup>
 
 #include "model/DomModel.h"
+#include "model/ProxyModel.h"
 #include "view/TableView.h"
 #include "view/ItemDelegate.h"
 #include "editor/st/CodeEditorWidget.h"
 #include "editor/st/XmlParser.h"
-// #include "translator/TranslatorLD.h"
 #include "main/MainWindow.h"
-#include "undo/cundocommand_insert_table.h"
-#include "undo/cundocommand_remove_table.h"
+#include "undo/cundocommand_insert.h"
+#include "undo/cundocommand_remove.h"
+#include "undo/cundocommand_edit.h"
 #include "log/Logger.h"
 
 WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_)
     : QSplitter(Qt::Vertical, parent_),
-    _index(index_),
-    _node(DomModel::toItem(_index)->node()),
-    _proxy(proxy_),
+    _m_index(index_),
+    _m_item(DomModel::toItem(_m_index)),
+    _m_proxy(proxy_),
     _m_undo_stack(new QUndoStack)
 {
     setChildrenCollapsible(false);
+
+    reinterpret_cast<ProxyModelTable_var*>(proxy_)->setUndoStack(_m_undo_stack);
 
     MainWindow::instance()->undoGroup()->addStack(undoStack());
     connect(MainWindow::instance(), &MainWindow::signal_activateUndoStack, this, &WidgetEditor::slot_activateUndoStack);
@@ -42,10 +45,7 @@ QUndoStack * WidgetEditor::undoStack() const
 void WidgetEditor::slot_activateUndoStack(QWidget *widget_)
 {
     if(widget_ == _vars_table)
-    {
-        qDebug() << __PRETTY_FUNCTION__;
         undoStack()->setActive();
-    }
 }
 
 QWidget * WidgetEditor::createVarsEditor()
@@ -65,8 +65,9 @@ QWidget * WidgetEditor::createVarsEditor()
     _vars_table = new TableView;
     // MainWindow::registerUndoStackWidget(_vars_table);
     _vars_table->setMinimumSize(500, 200);
-    _vars_table->setModel(_proxy);
-    _vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_index), _proxy));
+    _vars_table->setItemDelegateForColumn(3, new CLineEditDelegate);
+    _vars_table->setModel(_m_proxy);
+    _vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_m_index), _m_proxy));
     _vars_table->setColumnHidden(0, true);
     _vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     _vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -83,7 +84,7 @@ QWidget * WidgetEditor::createVarsEditor()
     // variables editor code editor
     _vars_text = new CodeEditorWidget(this);
     _vars_text->setMinimumSize(500, 200);
-    _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_index)->node()));
+    _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_m_index)->node()));
     connect(_vars_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_varTxtVarChanged);
     _vars_text->hide();
     // variables editor toolbar for switch view
@@ -116,12 +117,21 @@ QWidget * WidgetEditor::createVarsEditor()
     return container;
 }
 
+void WidgetEditor::slot_selectRow_tree(const QModelIndex &index_, bool first_)
+{
+    _vars_table->clearSelection();
+    _vars_table->setCurrentIndex(QModelIndex());
+    QModelIndex index = _vars_table->model()->index(index_.row(), 3, index_.parent());
+    _vars_table->setCurrentIndex(index);
+    if(first_) _vars_table->edit(index);
+}
+
 QWidget * WidgetEditor::createCodeEditor()
 {
     // *  code editor widgets
     _body_text = new CodeEditorWidget(this);
     _body_text->setMinimumSize(500, 250);
-    _body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_index)->node()));
+    _body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
     connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_codeTxtChanged);
     // ***
 
@@ -153,37 +163,32 @@ void WidgetEditor::slot_codeTxtChanged()
         (
         _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
         _body_text != nullptr ? _body_text->toPlainText() : QString(),
-        DomModel::toItem(_vars_table->rootIndex())->node()
+        _m_item->node()
         );
 
-    // qDebug() << DomItem::printNode(new_node);
-
-    DomModel::toItem(_vars_table->rootIndex())->updateNode(new_node.namedItem("body"));
+    _m_item->updateNode(new_node.namedItem("body"));
 }
 
 void WidgetEditor::updateTblView()
 {
-    qDebug() << __PRETTY_FUNCTION__;
-
     // get new node form txt view
     QDomNode new_node = XmlParser::getPouNode
         (
         _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
         _body_text != nullptr ? _body_text->toPlainText() : QString(),
-        DomModel::toItem(_vars_table->rootIndex())->node()
+        _m_item->node()
         );
 
     // remove old variables from item
-    DomModel::toItem(_vars_table->rootIndex())->removeChildren();
+    _m_item->removeChildren();
     // remove rows from model
-    DomModel::toProxy(_vars_table->model())->sourceModel()->
-        removeRows(0, DomModel::toItem(_vars_table->rootIndex())->rowCount(), DomModel::s_index(_vars_table->rootIndex()));
+    _m_proxy->sourceModel()->removeRows(0, _m_item->rowCount(), DomModel::s_index(_m_index));
 
     // set new node to item
-    DomModel::toItem(_vars_table->rootIndex())->updateNode(new_node.namedItem("interface"));
+    _m_item->updateNode(new_node.namedItem("interface"));
     // add rows to model
     auto count = new_node.namedItem("interface").toElement().elementsByTagName("variable").count();
-    _proxy->sourceModel()->insertRows(0, count, DomModel::s_index(_vars_table->rootIndex()));
+    _m_proxy->sourceModel()->insertRows(0, count, DomModel::s_index(_m_index));
 }
 
 void WidgetEditor::slot_varTxtVarChanged()
@@ -209,7 +214,7 @@ void WidgetEditor::slot_varTblVarChanged()
             _vars_table->selectionModel()->clearSelection();
 
         // set new text to text view
-        _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_index)->node()));
+        _vars_text->setPlainText(XmlParser::getPouVarsText(_m_item->node()));
     }
 }
 
@@ -217,38 +222,34 @@ void WidgetEditor::slot_varAddVariable()
 {
     qDebug() << __PRETTY_FUNCTION__;
 
-    auto parent = DomModel::toItem(_vars_table->rootIndex());
-    auto index_parent = DomModel::s_index(_vars_table->rootIndex());
-    auto node = parent->node().namedItem("interface");
-
     auto current = _vars_table->selectionModel()->selectedRows();
-    auto index = (current.count() == 1) ? current.at(0) : QModelIndex();
+    auto node = _m_item->node().namedItem("interface").namedItem("localVars").isNull() ? _m_item->node() :
+                    _m_item->node().namedItem("interface").namedItem("localVars");
 
-    undoStack()->push(
-        new CUndoCommand_insert_table(parent->defaultNode().toDocument().documentElement(), node, index, index_parent, _proxy->sourceModel()));
-
+    auto cmd =  new CUndoCommand_insert_table(
+        // DomModel::toModel(_m_proxy->sourceModel()),
+        _m_proxy,
+        (current.count() == 1) ? current.at(0) : QModelIndex(),
+        DomModel::s_index(_m_index),
+        _m_item->defaultNode().toDocument().documentElement(),
+        node);
+    connect(cmd, &CUndoCommand_insert_table::signal_insertRow, this, &WidgetEditor::slot_selectRow_tree);
+    undoStack()->push(cmd);
 }
 
 void WidgetEditor::slot_varDelVariable()
 {
     qDebug() << __PRETTY_FUNCTION__;
 
-    // for every selected rows
-    // !!! don't work for multiselection
-    for(auto index : _vars_table->selectionModel()->selectedRows())
-    {
-        // delete node
-        // DomModel::toItem(_vars_table->rootIndex())->removeChild(DomModel::s_index(index).row(), 0, DomModel::toItem(index)->node());
+    auto current = _vars_table->selectionModel()->selectedRows();
 
-        // delete item
-        // DomModel::toProxy(_vars_table->model())->sourceModel()->
-        //     removeRow(DomModel::s_index(index).row(), DomModel::s_index(_vars_table->rootIndex()));
+    if(current.count() != 1)
+        return;
 
-        // qDebug() << DomModel::toProxy(_vars_table->model())->sourceModel()->rowCount(DomModel::s_index(_vars_table->rootIndex()))
-        //          << DomModel::s_index(index).row();
-
-        undoStack()->push(
-            new CUndoCommand_remove_table(DomModel::s_index(index), DomModel::s_index(_vars_table->rootIndex()), _proxy->sourceModel()));
-    }
+    undoStack()->push(
+        new CUndoCommand_remove_table(
+            DomModel::toModel(_m_proxy->sourceModel()),
+            DomModel::s_index(current.at(0)),
+            DomModel::s_index(_m_index)));
 }
 // ----------------------------------------------------------------------------

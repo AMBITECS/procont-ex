@@ -81,7 +81,7 @@ QWidget * WidgetEditor_type::createCodeEditor()
     // *  code editor widgets
     _body_text = new CodeEditorWidget(this);
     _body_text->setMinimumSize(500, 250);
-    _body_text->setPlainText(XmlParser::getDataTypeText(DomModel::toItem(_index)->node()));
+    _body_text->setPlainText(XmlParser::getDataTypeText(DomModel::toItem(_m_index)->node()));
     connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor_type::slot_codeTxtChanged);
     // ***
 
@@ -140,8 +140,8 @@ QWidget * WidgetEditor_ld::createVarsEditor()
     // variables editor table
     _vars_table = new TableView;
     _vars_table->setMinimumSize(500, 200);
-    _vars_table->setModel(_proxy);
-    _vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_index), _proxy));
+    _vars_table->setModel(_m_proxy);
+    _vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_m_index), _m_proxy));
     _vars_table->setColumnHidden(0, true);
     _vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     _vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -158,7 +158,7 @@ QWidget * WidgetEditor_ld::createVarsEditor()
     // variables editor code editor
     _vars_text = new CodeEditorWidget(this);
     _vars_text->setMinimumSize(500, 200);
-    _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_index)->node()));
+    _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_m_index)->node()));
     connect(_vars_text, &CodeEditorWidget::textChanged, this, &WidgetEditor_ld::slot_varTxtVarChanged);
     _vars_text->hide();
     // variables editor toolbar for switch view
@@ -239,7 +239,7 @@ QWidget * WidgetEditor_ld::createCodeEditor()
     // contauner for variables editor widgets
     auto container = new QWidget;
     // fbd view
-    _m_ld_view = new CLdDiagram(DomModel::toItem(_index)->node(), MainWindow::instance()->toolWidget());
+    _m_ld_view = new CLdDiagram(DomModel::toItem(_m_index)->node(), MainWindow::instance()->toolWidget());
     _m_ld_view->setMinimumSize(500, 250);
     // connect(_m_ld_view, &CLdDiagram::changed_diagram, this, &WidgetEditor_ld::slot_codeShmChanged);
     // connect(_m_ld_view, &CLdDiagram::interface_variable_new, this, &WidgetEditor_ld::slot_interfaceVariableAdd);
@@ -248,7 +248,7 @@ QWidget * WidgetEditor_ld::createCodeEditor()
     // variables editor code editor
     _body_text = new CodeEditorWidget(this);
     _body_text->setMinimumSize(500, 250);
-    _body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_index)->node()));
+    _body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
     _body_text->hide();
     // variables editor toolbar for switch view
     auto toolbar_view = new QToolBar();
@@ -287,7 +287,7 @@ void WidgetEditor_ld::slot_codeShmViewToggled(bool)
 void WidgetEditor_ld::slot_codeTxtViewToggled(bool)
 {
     TranslatorLD translator;
-    _body_text->setPlainText(translator.getSTCode_pou(DomModel::toItem(_index)->node()));
+    _body_text->setPlainText(translator.getSTCode_pou(DomModel::toItem(_m_index)->node()));
 
     _m_ld_view->hide();
     _body_text->show();

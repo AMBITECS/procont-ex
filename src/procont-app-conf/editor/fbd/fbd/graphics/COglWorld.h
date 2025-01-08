@@ -134,19 +134,20 @@ private:
     QPoint      * m_hatch_topLeft{nullptr}; //!< top-left смотрового люка
     QSize         m_diagram_size{0,0};
     QPoint        m_mouse_pressed{};
-
-    s_selection   m_selection;
-
-    EBodyType     m_diagram_type;
     CFbdContent * m_fbd_content{nullptr};
     CPou        * m_pou;
+    CEditors    * m_editors;
+    CPin        * m_drag_pin{nullptr};
+
+    s_selection   m_selection;
+    EBodyType     m_diagram_type;
+    bool          m_project_loading{false};
+
 
     std::vector<CFbdLadder*>     * m_ladders;
     std::vector<CFbdLadder*>     * m_visible_ladders;
 
-    CEditors    * m_editors;
 
-    CPin        * m_drag_pin{nullptr};
 
     void    clear_ladders();
     QPoint  get_visible_range(const QPoint & pos);

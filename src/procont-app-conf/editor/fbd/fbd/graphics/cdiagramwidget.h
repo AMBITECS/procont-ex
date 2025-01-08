@@ -75,6 +75,7 @@ protected:
 protected slots:
     void build_tree();
     void diagram_object_is_selected();
+    void diagram_has_changed(const QDomNode &node);
 
 
 private:

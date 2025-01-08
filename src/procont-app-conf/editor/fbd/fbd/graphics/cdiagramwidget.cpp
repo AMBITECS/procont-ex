@@ -35,7 +35,7 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     connect(m_ogl_widget, &COglWidget::instance_removed,
             [this](const QString &type, const QString &name){emit instance_removed(type, name); });
     connect(m_ogl_widget, &COglWidget::diagram_changed,
-            [this](const QDomNode &node){emit changed_diagram(node);});
+            this, &CDiagramWidget::diagram_has_changed);
     connect(m_ogl_widget, &COglWidget::undo_enabled, [this]()
             {emit this->undo_enabled();});
     connect(m_ogl_widget, &COglWidget::iface_var_new,
@@ -101,6 +101,11 @@ void CDiagramWidget::diagram_object_is_selected()
 void CDiagramWidget::delete_selected_object()
 {
     m_ogl_widget->delete_selected();
+}
+
+void CDiagramWidget::diagram_has_changed(const QDomNode &node)
+{
+    emit changed_diagram(node);
 }
 
 

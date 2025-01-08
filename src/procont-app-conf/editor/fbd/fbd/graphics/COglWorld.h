@@ -70,14 +70,14 @@ public:
     s_selection *   selected();                        //!<  returns active selection (in function above)
     std::vector<CFbdLadder*>  * visible_ladders();        //!< returns VISIBLE visible_ladders to show them in QOpenGL
     std::vector<CFbdLadder*>  * all_ladders();
-
     QUndoStack *    undo_stack();
+    void            delete_selected();
 
     /// here are commands which has to be undo/redo. Note we have to know indexes of objects objects and indexes
     /// of inserted one
-    CFbdLadder *         add_new_ladder();                 //!< index of the inserting is result->number()-1
-    CFbdLadder *         insert_new_ladder(CFbdLadder *next); //!< index of the inserting is result->number()-1
-    CFbdObject  * insert_new_component(CFbdLadder *p_ladder, const EPaletteElements &elements, const QString &pou_name,
+    CFbdLadder *        add_new_ladder();                 //!< index of the inserting is result->number()-1
+    CFbdLadder *        insert_new_ladder(CFbdLadder *next); //!< index of the inserting is result->number()-1
+    CFbdObject  *       insert_new_component(CFbdLadder *p_ladder, const EPaletteElements &elements, const QString &pou_name,
                                            const QPoint &pos);
     void              insert_ladder(CFbdLadder *dragged_ladder, CFbdLadder *before);
     bool              move_object(CFbdLadder * source, CFbdLadder *destination, CFbdObject *object, const QPoint &pos);
@@ -88,6 +88,7 @@ public:
     void              check_diagram_size();
     bool              check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types);
     CPou            * current_pou();
+
 signals:
     void    update_hatch();
     void    canvas_changed(const int &w, const int &h);     //!< signal for enable/disable/scale QScrollBars.
@@ -98,6 +99,7 @@ signals:
     void    diagram_changed(const QDomNode &node);
     void    instance_removed(const QString &type, const QString &name);
     void    set_current_pou(CPou *pou);
+    void    object_selected();
 
 
 public slots:

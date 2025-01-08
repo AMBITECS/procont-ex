@@ -19,6 +19,7 @@ CPou::CPou(CTypes * parent)
     m_bodies = new QList<CBody*>();
     m_dom_node = new QDomNode();
     m_parent = parent;
+    m_type = EBodyType::BT_COUNT;
 }
 
 CPou::CPou(const CPou &other)
@@ -28,6 +29,8 @@ CPou::CPou(const CPou &other)
     m_transitions = new CTransitions(*other.m_transitions);
     m_add_data = new CAddData(*other.m_add_data);
     m_doc = new CDocumentation(*other.m_doc);
+
+    m_type = other.m_type;
 
     m_bodies = new QList<CBody*>();
 
@@ -65,6 +68,9 @@ CPou::CPou(const QDomNode &dom_node, CTypes * parent)
             m_bodies->emplace_back(new CBody(child, this));
         }
     }
+
+    m_type = m_bodies->empty() ? EBodyType::BT_COUNT : m_bodies->front()->diagram_lang();
+
     m_parent = parent;
 }
 
@@ -450,23 +456,23 @@ bool CPou::find_block_connecting_info(const uint64_t &ref_id, const QString &for
     return res;
 }
 
-bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                          std::vector<CBlockVar*> *possible_block_vars, std::vector<CVariable *> *possible_iface)
-{
-    /// возможные варианты наш block_var (должен быть входным) лишь один из задних клиентов проститутствующей in_out_variable<br>
-    /// check input of the in_out_var
+//bool CPou::process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
+//                          std::vector<CBlockVar*> *possible_block_vars, std::vector<CVariable *> *possible_iface)
+//{
+//    /// возможные варианты наш block_var (должен быть входным) лишь один из задних клиентов проститутствующей in_out_variable<br>
+//    /// check input of the in_out_var
+//
+//    if (in_out_variable->point_in()->is_empty())
+//    {
+//        return false;
+//    }
+//
+//    bool res = recursive_find_in_out_top(in_out_variable, possible_block_vars, possible_iface);
+//    return res;
+//}
 
-    if (in_out_variable->point_in()->is_empty())
-    {
-        return false;
-    }
-
-    bool res = recursive_find_front(in_out_variable, possible_block_vars, possible_iface);
-    return res;
-}
-
-bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
-                                std::vector<CBlockVar *>* in_outs,std::vector<CVariable *> *possible_iface)
+bool CPou::recursive_find_in_out_top(CInOutVariable *in_out_variable,
+                                     std::vector<CBlockVar *>* in_outs, std::vector<CVariable *> *possible_iface)
 {
     if (!in_out_variable->expression()->expression().isEmpty())
     {
@@ -524,7 +530,7 @@ bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
         if (data_info.source == PD_IN_OUT)
         {
             auto in_out = static_cast<CInOutVariable*>(data_info.variable);
-            bool res = recursive_find_front(in_out, in_outs, possible_iface);
+            bool res = recursive_find_in_out_top(in_out, in_outs, possible_iface);
             if (res)
                 return true;
         }
@@ -532,11 +538,11 @@ bool CPou::recursive_find_front(CInOutVariable *in_out_variable,
         /// ниже это фантастика
         if (data_info.source == PD_OUTPUT)
         {
-            throw std::runtime_error("WTF?! in 'CPou::recursive_find_front'");
+            throw std::runtime_error("WTF?! in 'CPou::recursive_find_in_out_top'");
         }
         if (data_info.source == PD_INPUT)
         {
-            throw std::runtime_error("WTF?! in 'CPou::recursive_find_front'");
+            throw std::runtime_error("WTF?! in 'CPou::recursive_find_in_out_top'");
         }
     }
     return false;
@@ -560,13 +566,6 @@ CFbdContent *CPou::get_fbd()
     return nullptr;
 }
 
-EBodyType CPou::body_type() const
-{
-    if (m_bodies->empty())
-        return EBodyType::BT_COUNT;
-    return m_bodies->front()->diagram_lang();
-}
-
 CTypes *CPou::parent()
 {
     return m_parent;
@@ -575,4 +574,19 @@ CTypes *CPou::parent()
 void CPou::set_parent(CTypes *parent)
 {
     m_parent = parent;
+}
+
+CLdContent *CPou::get_ld()
+{
+    return nullptr;
+}
+
+CSfcContent *CPou::get_sfc()
+{
+    return nullptr;
+}
+
+EBodyType CPou::type() const
+{
+    return m_type;
 }

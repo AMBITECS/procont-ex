@@ -7,6 +7,7 @@
 
 #include "editor/fbd/plc-xml/includes.h"
 #include "CTypes.h"
+#include "CInstances.h"
 
 class CContentHeader;
 static int inst_count{0}; //!< счётчик вызовов
@@ -22,8 +23,10 @@ public:
 
     [[nodiscard]] QDomNode    dom_node() const;
 
-    CTypes  * types();
-    //CContentHeader * content_header(){ return nullptr;}
+    CTypes      * types();
+    CInstances  * instances();
+
+    CVariable *   find_global_variable(const QString &name);
 
     [[nodiscard]] QString     company_name() const;
     void        set_company_name(const QString &name);
@@ -40,7 +43,7 @@ public:
     [[nodiscard]] QString     project_version() const;
     void        set_project_version(const QString &version);
 
-    bool        is_empty() const;
+    [[nodiscard]] bool        is_empty() const;
 protected:
     CProject();
     CProject(const CProject &);
@@ -48,6 +51,7 @@ protected:
     ~CProject();
 private:
     CTypes      * m_types;
+    CInstances  * m_instances;
     QString       m_company_name{"Unnamed"};
     QString       m_content_header_name{"Unnamed"};
     QString       m_version{};

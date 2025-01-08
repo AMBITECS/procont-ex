@@ -10,9 +10,9 @@
 #include <QTreeWidget>
 #include <QDomNode>
 
-#include "editor/fbd/general/types.h"
+#include "editor/fbd/common/general/types.h"
 #include "coglwidget.h"
-#include "editor/fbd/general/ctreeobject.h"
+#include "editor/fbd/common/general/ctreeobject.h"
 
 typedef struct s_fbd_start_data
 {
@@ -63,15 +63,18 @@ signals:
     void    interface_variable_new(const QString &type, const QString &name);
     void    interface_variable_rename(const QString &old_name, const QString &new_name);
     void    instance_removed(const QString &type, const QString &name);
+    void    object_selected();
 public slots:
     /** @brief пользователь ввёл новую переменную. Необходимо обновить данные о локальном интерфейсе */
     void    update_interface(const QDomNode &node);
+    void    delete_selected_object();
 
 protected:
 
 
 protected slots:
     void build_tree();
+    void diagram_object_is_selected();
 
 
 private:

@@ -230,7 +230,7 @@
 <context>
     <name>CGraphicsHelper</name>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="341"/>
+        <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="345"/>
         <source>Вернуть</source>
         <translation type="unfinished"></translation>
     </message>

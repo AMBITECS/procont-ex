@@ -74,13 +74,6 @@ public:
     ~CLocalVars() override;
 };
 
-class CGlobalVars : public CIfaceVars
-{
-public:
-    CGlobalVars(CPou *parent);
-    ~CGlobalVars() override;
-};
-
 class CExternalVars : public CIfaceVars
 {
 public:

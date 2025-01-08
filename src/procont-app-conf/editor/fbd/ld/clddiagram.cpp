@@ -87,7 +87,7 @@ void CLdDiagram::define_diagram_pou(const QDomNode &pou_node)
         if (project->is_empty())
         {
             m_diagram_pou = new CPou(pou_node, project->types());
-            project->types()->pous()->push_back(m_diagram_pou);
+            project->types()->add_pou(m_diagram_pou);
         }
     }
     else
@@ -99,9 +99,9 @@ void CLdDiagram::define_diagram_pou(const QDomNode &pou_node)
         if (!m_diagram_pou)
         {
             m_diagram_pou = new CPou(pou_node, project->types());
-            project->types()->pous()->push_back(m_diagram_pou);
+            project->types()->add_pou(m_diagram_pou);
         }
     }
 
-    m_diagram_language = m_diagram_pou->body_type();
+    m_diagram_language = m_diagram_pou->type();
 }

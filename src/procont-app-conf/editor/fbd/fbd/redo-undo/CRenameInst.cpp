@@ -24,7 +24,7 @@ void CRenameInst::redo()
     if (m_old != "???")
         emit m_ogl_widget->iface_var_rename(m_old, m_new);
     else
-        emit m_ogl_widget->iface_new_var(m_object->type_name(), m_new);
+        emit m_ogl_widget->iface_var_new(m_object->type_name(), m_new);
 }
 
 void CRenameInst::undo()

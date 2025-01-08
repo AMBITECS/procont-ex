@@ -6,7 +6,7 @@
 
 #include "model/DomModel.h"
 #include "model/ProxyModel.h"
-#include "editor/fbd/general/OglWidget.h"
+#include "editor/fbd/common/general/OglWidget.h"
 #include "main/MainWindow.h"
 
 #include <QLabel>

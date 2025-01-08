@@ -7,7 +7,6 @@
 #include <QApplication>
 #include <QDrag>
 #include <QMimeData>
-#include <QFile>
 #include <QTextStream>
 
 
@@ -19,7 +18,7 @@
 #include "../redo-undo/CRenameInst.h"
 
 #include "coglwidget.h"
-#include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/common/general/QtDialogs.h"
 #include "../editors/CEditors.h"
 #include "editor/fbd/fbd/redo-undo/CPinConnecting.h"
 #include "editor/fbd/fbd/redo-undo/CRemoveObject.h"
@@ -530,12 +529,17 @@ void COglWorld::mouse_left_pressed(const QPoint &pos)
     for (auto &ladder : *m_ladders)
     {
         ladder->set_selected(false);
+    }
 
-        if (ladder == m_selection.ladder)
-        {
-            ladder->get_selected(pos, &m_selection);
-            ladder->set_selected(true);
-        }
+    if (m_selection.ladder)
+    {
+        m_selection.ladder->set_selected(true);
+    }
+
+    if (m_selection.object)
+    {
+        m_selection.object->set_selected(true);
+        emit  object_selected();
     }
 
     m_mouse_pressed = pos;
@@ -687,7 +691,7 @@ void COglWorld::iface_new_var(const QString &type, const QString &name)
     m_selection.reset();
 
     emit undo_enabled();
-    emit iface_var_new(type, name);
+    //emit iface_var_new(type, name);
 }
 
 void COglWorld::iface_rename(const QString &old_name, const QString &new_name)
@@ -698,7 +702,6 @@ void COglWorld::iface_rename(const QString &old_name, const QString &new_name)
     m_selection.reset();
 
     emit undo_enabled();
-    emit iface_var_rename(old_name, new_name);
 }
 
 void COglWorld::pin_variable_rename()
@@ -782,6 +785,11 @@ void COglWorld::convert_to_XML()
     QDomNode pou_node = m_pou->dom_node();
     emit diagram_changed(pou_node);
 
+    QUndoStack loc_stack;
+
+    /// когда из диаграммы
+
+
     /*QDomDocument doc;
     QDomElement root = doc.documentElement();
     if (root.isNull())
@@ -830,5 +838,20 @@ void COglWorld::erase_object(CFbdObject *object)
 
     if (!object->instance_name().isEmpty())
         emit instance_removed(object->type_name(), object->instance_name());
+}
+
+void COglWorld::delete_selected()
+{
+    if (m_selection.object || m_selection.connection_line)
+    {
+        if (m_selection.object)
+        {
+            erase_object(m_selection.object);
+        }
+        if (m_selection.connection_line)
+        {
+
+        }
+    }
 }
 

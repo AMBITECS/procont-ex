@@ -59,6 +59,7 @@ public:
     void    resized(const int &w, const int &h);
     std::vector<CFbdLadder*>    * ladders();
     bool make_menu(COglWidget *p_widget, QMenu *p_menu, const QPoint &point);
+    void remove_selected_object();
 
     QUndoStack *    undo_stack();
 
@@ -85,6 +86,7 @@ signals:
     void    diagram_changed(const QDomNode &pou_node);
     void    instance_removed(const QString &type, const QString &name);
     void    set_current_pou(CPou *pou);
+    void    object_selected();
 
 
 
@@ -110,7 +112,7 @@ private:
                       * m_ladders;
 
     QDomNode          * m_pou_node;
-    CPou              * m_pou;
+    CPou              * m_pou{nullptr};
     QPoint              m_hatch_tl{0,0};
 
 

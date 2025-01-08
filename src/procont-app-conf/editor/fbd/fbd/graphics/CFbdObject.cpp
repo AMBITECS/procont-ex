@@ -5,7 +5,7 @@
 #include <QPainter>
 #include "CFbdObject.h"
 #include "CFbdLadder.h"
-#include "editor/fbd/resources/colors.h"
+#include "editor/fbd/common/resources/colors.h"
 #include "editor/fbd/fbd/editors/CFilter.h"
 
 CFbdObject::CFbdObject(CFbdLadder *ladder, CBlock *block) //QPoint *ladder_top_left
@@ -40,9 +40,13 @@ CFbdObject::CFbdObject(CFbdLadder *ladder, CBlock *block) //QPoint *ladder_top_l
     locate_pins();
 
     m_rect.setSize(m_size);
-    m_primary_type = m_inputs->front()->type();
 
-    m_pin_types = define_is_concrete_types(m_inputs->front()->type());
+    m_primary_type = m_inputs->empty() ? EDefinedDataTypes::DDT_ANY : m_inputs->front()->type();
+
+    if (!m_inputs->empty())
+    {
+        m_pin_types = define_is_concrete_types(m_inputs->front()->type());
+    }
 }
 
 CFbdObject::~CFbdObject()

@@ -7,7 +7,10 @@
 
 
 CTreeObject::CTreeObject(QWidget *parent) : QTreeWidget(parent)
-{}
+{
+    setSelectionMode(SelectionMode::SingleSelection);
+    setSelectionBehavior(SelectionBehavior::SelectRows);
+}
 
 CTreeObject::~CTreeObject()
 = default;
@@ -16,6 +19,8 @@ void CTreeObject::mousePressEvent(QMouseEvent *event)
 {
     m_dragStart = event->pos();
     m_drag_item = this->itemAt(m_dragStart);
+
+    QTreeWidget::mousePressEvent(event);
 }
 
 void CTreeObject::mouseMoveEvent(QMouseEvent *event)

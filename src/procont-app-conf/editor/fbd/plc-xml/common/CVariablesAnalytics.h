@@ -41,11 +41,10 @@ struct s_compare_types
 class CVariablesAnalytics
 {
 public:
-    //static CVariablesAnalytics *   get_instance(const QDomNode &project_node);  //!< QDomNode соответствует тегу \<project xmlns="http...">
     explicit CVariablesAnalytics(COglWorld *world, const QString &pou_name);
     ~CVariablesAnalytics();
 
-    // CPou *    set_current_pou(const QString &pou_name, COglWorld *world);
+
     /**
      * @brief returns all variable names that can be using for block connection
      * @param pin
@@ -58,7 +57,7 @@ public:
      * @param [in] CDiagramObject* naming object
      * @return std::map<QString, EDefinedDataTypes> existing variables with types
      */
-    std::vector<std::pair<QString, EDefinedDataTypes>> get_interface_variables();
+    std::vector<std::pair<QString, EDefinedDataTypes>> get_diag_interface_variables();
 
 
     /** @brief выяснить типы входов/выходов */
@@ -86,11 +85,14 @@ public:
     COutVariable*   remove_out_bloc_by_iface_variable(CVariable *iface_var,
                                                       uint64_t &ref_id, const QString &out_formal_param);
 
+    CVariable*      find_variable_by_name(const QString &name);
+    CInVariable *   find_inVariable_by_id(const uint64_t &ref_id);
+
     [[nodiscard]] bool connect_iface_var(CPinOut *pin_out, CVariable *iface_variable);
     // CVariable *     find_iface_var(const QString &var_name);
 
     StandardLibrary *       standard_library();
-    CFbdObject  *       find_object(const QString &name);
+    CFbdObject  *           find_object(const QString &name);
 protected:
 
 private:
@@ -113,27 +115,28 @@ private:
 
 
     /** @brief обновить данные, которые с течением времени могли измениться */
-    void update_arrays();
+    void update_global_vars();
 
 
-    void collect_pins_data(std::vector<s_tree_item> &tree_items, CPin *pin);
+    void                        collect_pins_data(std::vector<s_tree_item> &tree_items, CPin *pin);
 
-    std::vector<s_tree_item> find_fbd_inputs_collection(CPin *pin, uint16_t &id);
+    std::vector<s_tree_item>    find_fbd_inputs_collection(CPin *pin, uint16_t &id);
 
-    std::vector<s_tree_item> find_fbd_outputs_collection(CPin *pin, uint16_t &id);
+    std::vector<s_tree_item>    find_fbd_outputs_collection(CPin *pin, uint16_t &id);
 
-    [[nodiscard]] QString get_comparable_type(const QString &mb_user_type);
-    static QString     analyze_array(const QString &variable, CArray * user_type);
+    [[nodiscard]] QString       get_comparable_type(const QString &mb_user_type);
+    static QString              analyze_array(const QString &variable, CArray * user_type);
 
-    static bool analyze_base_types(const EDefinedDataTypes &target_type, const EDefinedDataTypes &dragged_type,
-                            const bool &is_strict_compliance);
-    CFbdObject *    find_object_by_id(const uint64_t & local_id);
-    CVariable *get_iface_variable(const QString &name, QString &add_name);
+    static bool                 analyze_base_types(const EDefinedDataTypes &target_type, const EDefinedDataTypes &dragged_type,
+                                const bool &is_strict_compliance);
+    CFbdObject *                find_object_by_id(const uint64_t & local_id);
 
-    CPinOut *find_output(CBlockVar *p_var);
+    CPinOut         *           find_output(CBlockVar *p_var);
 
-    void process_out_variables();
-    void connect_inputs(CFbdObject *object);
+    void                        process_out_variables();
+    void                        connect_inputs(CFbdObject *object);
+
+
 };
 
 

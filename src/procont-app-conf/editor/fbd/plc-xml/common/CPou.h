@@ -13,6 +13,8 @@
 #include "editor/fbd/fbd/palette/palette.h"
 
 class CTypes;
+class CProject;
+
 class CPou
 {
 public:
@@ -32,10 +34,8 @@ public:
     [[nodiscard]] QString     name() const;
     void        set_name(const QString &name);
     [[nodiscard]] QString     type_name() const;
-    [[nodiscard]] EBodyType    body_type() const;
     void        set_type(const QString & type);
-
-
+    [[nodiscard]] EBodyType   type() const;
 
     CInterface      * interface();
     QList<CBody*>   * bodies();
@@ -49,23 +49,24 @@ public:
     void          setSourceDomNode(const QDomNode &dom_node);
 
     CFbdContent *   get_fbd();
+    CLdContent  *   get_ld();
+    CSfcContent *   get_sfc();
     /// user functions
 
     /**
      * @brief ищет в body CInVariable, соответствующий ref_id входа блока
      */
     bool    find_body_input_variable(const uint64_t & reference_id, CInVariable ** in_var, CInOutVariable ** in_out);
-    /// ищет CBlock по reference_id
 
-    bool             find_block_connecting_info(const uint64_t &ref_id, const QString &formal_param,
+    /// ищет CBlock по reference_id. Using for connecting base classes (not graphical)
+    bool    find_block_connecting_info(const uint64_t &ref_id, const QString &formal_param,
                                                 CBlock ** block, CBlockVar **block_var);
-    bool             process_in_out(CBlockVar *block_var, CInOutVariable *in_out_variable,
-                                    std::vector<CBlockVar*> *possible_block_vars,
-                                    std::vector<CVariable *> *possible_iface);
-    CBlock *         find_block_by_id(const uint64_t &ref_id);
+    /// рекурсия для развертки переменных inOutVariable
+    CBlock *   find_block_by_id(const uint64_t &ref_id);
 
-    bool recursive_find_front(CInOutVariable *in_out_variable,
-                              std::vector<CBlockVar *>* in_outs,std::vector<CVariable *> *possible_iface);
+    bool       recursive_find_in_out_top(CInOutVariable *in_out_variable,
+                                         std::vector<CBlockVar *>* in_outs,
+                                         std::vector<CVariable *> *possible_iface);
 
 private:
     QDomNode    * m_dom_node{nullptr};
@@ -79,6 +80,7 @@ private:
     CDocumentation * m_doc;
     EBodyType     m_type;
     CTypes      * m_parent{nullptr};
+    CProject    * m_project{nullptr};
 
     QList<CBody*>   * m_bodies;
 

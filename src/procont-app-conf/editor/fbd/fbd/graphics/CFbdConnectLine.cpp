@@ -4,7 +4,7 @@
 
 #include <QRect>
 #include "CFbdConnectLine.h"
-#include "../../resources/colors.h"
+#include "../../common/resources/colors.h"
 #include "CPinIn.h"
 
 CFbdConnectLine::CFbdConnectLine(QPoint * ladder_tl, CPin * pin1, CPin *pin2)

@@ -16,7 +16,7 @@
 #include "dialog/RenameDialog.h"
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
-#include "editor/fbd/general/ctreeobject.h"
+#include "editor/fbd/common/general/ctreeobject.h"
 #include "undo/cundocommand_remove.h"
 #include "undo/cundocommand_insert.h"
 #include "undo/cundocommand_edit.h"

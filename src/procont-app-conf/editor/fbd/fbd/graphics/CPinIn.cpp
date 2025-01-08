@@ -4,9 +4,9 @@
 
 #include "CPinIn.h"
 #include "CFbdObject.h"
-#include "../../resources/colors.h"
+#include "../../common/resources/colors.h"
 #include "COglWorld.h"
-#include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/common/general/QtDialogs.h"
 
 extern uint16_t max_local_id;
 

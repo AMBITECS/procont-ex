@@ -7,7 +7,7 @@
 
 
 #include "coglwidget.h"
-#include "editor/fbd/general/QtDialogs.h"
+#include "editor/fbd/common/general/QtDialogs.h"
 #include "editor/fbd/fbd/redo-undo/CPinInvers.h"
 #include "editor/fbd/fbd/redo-undo/CPinRising.h"
 #include "editor/fbd/fbd/redo-undo/CPinFalling.h"
@@ -22,6 +22,10 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
     m_opengl_widget = ogl_widget;
 
     m_graphics_world = new COglWorld(ogl_widget, m_pou, &m_hatch_tl);
+
+    connect(m_graphics_world, &COglWorld::object_selected,
+            [this](){emit object_selected();});
+
     connect(m_graphics_world, &COglWorld::set_current_pou,
             [=](CPou *pou){emit set_current_pou(pou);});
 
@@ -545,6 +549,11 @@ void CGraphicsHelper::get_project(QDomNode *pou_node)
         delete m_pou;
         m_pou = exist_pou;
     }
+}
+
+void CGraphicsHelper::remove_selected_object()
+{
+    m_graphics_world->delete_selected();
 }
 
 

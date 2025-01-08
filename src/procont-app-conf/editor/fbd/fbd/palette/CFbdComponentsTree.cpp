@@ -113,15 +113,15 @@ void CFbdComponentsTree::update_program_pous(CPou *current)
 
         EPaletteElements element;
 
-        if (pou->body_type() == BT_FBD)
+        if (pou->type() == BT_FBD)
             element = EPaletteElements::EP_FBD;
-        if (pou->body_type() == BT_LD)
+        if (pou->type() == BT_LD)
             element = EPaletteElements::EP_LD;
         /*if (pou->body_type() == BT_IL)
             element = EPaletteElements::EP_IL;*/
-        if (pou->body_type() == BT_ST)
+        if (pou->type() == BT_ST)
             element = EPaletteElements::EP_ST;
-        if (pou->body_type() == BT_SFC)
+        if (pou->type() == BT_SFC)
             element = EPaletteElements::EP_SFC;
 
         item.element = element;
@@ -132,7 +132,7 @@ void CFbdComponentsTree::update_program_pous(CPou *current)
 
 void CFbdComponentsTree::get_palette_roots(CPou *p_pou, QStringList &list, QVector<QVector<s_comp_item>> &list_1)
 {
-    if (p_pou->body_type() == BT_FBD)
+    if (p_pou->type() == BT_FBD)
     {
         list << "Общее"
                         << "Логические операторы"
@@ -150,7 +150,7 @@ void CFbdComponentsTree::get_palette_roots(CPou *p_pou, QStringList &list, QVect
                << m_project_pou;
     }
 
-    if (p_pou->body_type() == BT_LD)
+    if (p_pou->type() == BT_LD)
     {
         list << "Логические операторы"
              << "Мат. операторы"

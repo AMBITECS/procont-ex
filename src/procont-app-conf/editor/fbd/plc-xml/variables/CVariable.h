@@ -13,6 +13,7 @@
 
 
 class CInterface;
+class CResource;
 
 /**
  * @brief  part of derived CInVar and so on.
@@ -21,10 +22,10 @@ class CInterface;
 class CVariable
 {
 public:
-    CVariable(CInterface *parent);
+    explicit CVariable(CInterface *parent);
     CVariable(const CVariable &);
     CVariable(CVariable &&) noexcept;
-    explicit CVariable(const QDomNode &node, CInterface *parent);
+    CVariable(const QDomNode &node, CInterface *parent);
     ~CVariable();
 
     CInterface * parent();
@@ -38,6 +39,7 @@ public:
     void        set_type(const QString &type);
 
     [[nodiscard]] QString     name() const;
+    [[nodiscard]] QString     full_name() const;
     void        set_name(const QString &name);
 
     [[nodiscard]] QString     address() const;
@@ -49,16 +51,19 @@ public:
     [[nodiscard]] QString     init_value() const;
     void        set_init_value(const QString &str);
 
-    QString     comment() const;
+    [[nodiscard]] QString     comment() const;
     void        set_comment(const QString &comment);
 
-    //[[nodiscard]] CConnectionPointIn * connection_point_in() const;
-    //[[nodiscard]] CConnectionPointOut* connection_point_out() const;
+    [[nodiscard]] bool        is_empty() const;
 
-    bool        is_empty() const;
+    void        set_global_parent(CResource *resource);
+
+    [[nodiscard]] bool          is_global() const;
+    CResource     * resource();
 
 private:
-    CInterface *m_parent{nullptr};
+    CInterface * m_parent{nullptr};
+    CResource  * m_glob_parent{nullptr};
     QString     m_attr_name{""};   // required
     QString     m_attr_addr{};
     QString     m_attr_global_id{};

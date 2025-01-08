@@ -9,7 +9,7 @@
 
 #include "cgraphicshelper.h"
 #include "COglStyle.h"
-#include "editor/fbd/general/ctreeobject.h"
+#include "editor/fbd/common/general/ctreeobject.h"
 
 
 struct s_ogl_startup
@@ -31,6 +31,8 @@ public:
     QUndoStack *    undo_stack();
     CPou * current_pou();
 
+    void    delete_selected();
+
 signals:
     void  scroll_bars_moving(const QPoint & newPos);
     void  drag_moving(QDragMoveEvent *event);
@@ -41,6 +43,7 @@ signals:
     void    iface_var_ren(const QString & old_name, const QString & new_name);
     void    instance_removed(const QString &type, const QString &name);
     void    set_current_pou(CPou *pou);
+    void    object_selected();
 
 protected:
     bool    eventFilter(QObject *target, QEvent *event) override;
@@ -102,9 +105,15 @@ private:
     bool                  m_is_editable{true};
 
     /// drag autoscroll
-    QImage                m_vertical_autoscroll;
+    QImage                m_vert_top_autoscroll;
+    QImage                m_vert_top_templ;
+    QImage                m_vert_bottom_autoscroll;
+    QImage                m_vert_bottom_templ;
     QRect                 m_vertical_auto_rect;
-    QImage                m_horizon_autoscroll;
+    QImage                m_horiz_right_autoscroll;
+    QImage                m_horiz_left_templ;
+    QImage                m_horiz_left_autoscroll;
+    QImage                m_horiz_right_templ;
     QRect                 m_horizon_auto_rect;
     CPou                * m_current_pou{nullptr};
 
@@ -120,6 +129,8 @@ private:
     //void make_wrong_message(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable);
 
     void draw_type_message();
+
+    void make_gradient_images();
 };
 
 

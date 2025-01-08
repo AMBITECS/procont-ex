@@ -8,7 +8,7 @@
 #include <QWidget>
 #include <QUndoStack>
 #include <QDomNode>
-#include "editor/fbd/general/ctreeobject.h"
+#include "editor/fbd/common/general/ctreeobject.h"
 #include "editor/fbd/plc-xml/common/CProject.h"
 #include "editor/fbd/common/COpenGlDiagram.h"
 

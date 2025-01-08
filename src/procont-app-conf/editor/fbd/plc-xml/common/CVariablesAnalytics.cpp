@@ -29,7 +29,7 @@ CVariablesAnalytics::CVariablesAnalytics(COglWorld *world ,const QString &pou_na
     m_standard_library = StandardLibrary::instance();
 
     /// global variables left
-    update_arrays();
+    update_global_vars();
 }
 
 CVariablesAnalytics::~CVariablesAnalytics()
@@ -52,7 +52,7 @@ std::vector<s_tree_item> CVariablesAnalytics::query(CPin *pin)
     return tree_items;
 }
 
-std::vector<std::pair<QString, EDefinedDataTypes>> CVariablesAnalytics::get_interface_variables()
+std::vector<std::pair<QString, EDefinedDataTypes>> CVariablesAnalytics::get_diag_interface_variables()
 {
     std::vector<std::pair<QString, EDefinedDataTypes>> existing;
 
@@ -65,17 +65,16 @@ std::vector<std::pair<QString, EDefinedDataTypes>> CVariablesAnalytics::get_inte
     return existing;
 }
 
-void CVariablesAnalytics::update_arrays()
+void CVariablesAnalytics::update_global_vars()
 {
-    /// global variables
-    m_global_variables->clear();
-    for (auto &pou : *m_pou_array)
+    for (auto &config : *project->instances()->configurations())
     {
-        auto iface = pou->interface();
-
-        for (auto &var : *iface->global_variables()->variables())
+        for (auto &res : *config->resources())
         {
-            m_global_variables->push_back(var);
+            for (auto item : *res->global_vars()->variables())
+            {
+                m_global_variables->push_back(item);
+            }
         }
     }
 }
@@ -109,15 +108,13 @@ bool CVariablesAnalytics::load_connections()
 
 void CVariablesAnalytics::connect_inputs(CFbdObject *object)
 {
-    CBlockVar   * block_var;
-    CConnection * in_connection;
-    CVariable   * iface_var;
-    CFbdConnectLine* line;
-    CPinOut     * out;
-    CGraphicsLogic logic;
-
-
-    CFbdContent* content = get_pou_content();
+    CBlockVar       * block_var;
+    CConnection     * in_connection;
+    CFbdConnectLine * line;
+    CPinOut         * out;
+    CGraphicsLogic    logic;
+    CInVariable     * inVar;
+    CVariable       * iface_var;
 
     for (auto &in : *object->inputs())
     {
@@ -130,10 +127,15 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
         }
 
         in_connection = block_var->point_in()->connections()->front();
+        uint64_t ref_id = in_connection->ref_local_id();
 
         /// undefined error
-        if (in_connection->ref_local_id() == 0)
+        if (ref_id== 0)
         {
+            fprintf(stderr, "Strange: objectID=%lu; objectType=%s; pinName=%s; refLocalId=0;\n",
+                    in->parent()->local_id(),
+                    in->parent()->type_name().toStdString().c_str(),
+                    in->name_full().toStdString().c_str());
             continue;
         }
 
@@ -141,16 +143,21 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
         /// graphic connection
         if (!in_connection->formal_parameter().isEmpty())
         {
-            auto diag_obj = find_object_by_id(in_connection->ref_local_id());
+            auto diag_obj = find_object_by_id(ref_id);
 
             if(!diag_obj)
             {
+                fprintf(stderr, "Strange: graphic connection without target block: refLocalId=%lu\n",
+                        in_connection->ref_local_id());
                 continue;
             }
 
             out = diag_obj->get_output_by_name(in_connection->formal_parameter());
             if (!out)
             {
+                fprintf(stderr, "Strange: graphic connection with bloc_ID=%lu and nou output name=%s\n",
+                        diag_obj->local_id(),
+                        in_connection->formal_parameter().toStdString().c_str());
                 continue;
             }
 
@@ -171,38 +178,41 @@ void CVariablesAnalytics::connect_inputs(CFbdObject *object)
         /// interface variable connection or constant
         if (in_connection->formal_parameter().isEmpty())
         {
-            s_variable_data var_data = content->get_var_by_local_id(in_connection->ref_local_id());
 
-            if (var_data.source != PD_INPUT)
+            if (ref_id == 0)
             {
                 continue;
             }
 
-            auto inVar = static_cast<CInVariable*>(var_data.variable);
+            inVar = find_inVariable_by_id(ref_id);
             if (!inVar)
             {
+                fprintf(stderr, "Logic broken: can't find CInVariable with id=%lu\n", ref_id);
                 continue;
             }
 
-            iface_var = m_diagram_interface->get_variable_by_name(inVar->expression()->expression());
+            QString expression =inVar->expression()->expression();
 
+            iface_var = find_variable_by_name(expression);
+
+            /// interface variable. No matter local/global/prog POUs
             if (iface_var)
             {
-                in->load_project_connect_iface_var(iface_var);
+                in->connect_iface_variable(iface_var);
                 continue;
             }
 
             /// constant
-            std::string const_str = inVar->expression()->expression().toStdString();
-            auto type = CFilter::get_type_from_const(const_str);
+            auto type = CFilter::get_type_from_const(expression.toStdString());
 
-            /// если же можно поставить строку как константу, то проверить на наличие кавычек.. позже
-            if (type == EDefinedDataTypes::DDT_UNDEF || type == EDefinedDataTypes::DDT_STRING)
+            if (type < DDT_STRING)
             {
+                in->set_constant(type, expression.toStdString());
                 continue;
             }
 
-            in->load_project_connect_const(type, inVar->expression()->expression());
+            fprintf(stderr, "Logic broken: can't find anything by ref_id=%lu and expression=%s\n",
+                    ref_id, expression.toStdString().c_str());
         }
     }
 }
@@ -814,44 +824,6 @@ CPinOut *CVariablesAnalytics::find_output(CBlockVar *p_var)
     return pin_out;
 }
 
-CVariable *CVariablesAnalytics::get_iface_variable(const QString &name, QString &add_name)
-{
-    /// first - find in local iface
-    auto var = m_diagram_interface->get_variable_by_name(name);
-    if (var)
-    {
-        return var;
-    }
-
-    /// may be global?
-    for (auto &glob: *m_global_variables)
-    {
-        if (glob->name() == name)
-        {
-            add_name = "GVL.";
-            return glob;
-        }
-    }
-
-    /// could be program?
-    for (auto &pou : *m_pou_array)
-    {
-        if (pou == m_diagram_pou)
-        {
-            continue;
-        }
-        var = pou->interface()->get_variable_by_name(name);
-
-        if (var)
-        {
-            add_name = pou->name() + ".";
-            return var;
-        }
-    }
-
-    return nullptr;
-}
-
 void CVariablesAnalytics::process_out_variables()
 {
     auto content = get_pou_content();
@@ -916,9 +888,9 @@ void CVariablesAnalytics::process_out_variables()
 
 
 
-                bool res = m_diagram_pou->recursive_find_front(var,
-                                                               &block_variables,
-                                                               &iface_vars);
+                bool res = m_diagram_pou->recursive_find_in_out_top(var,
+                                                                    &block_variables,
+                                                                    &iface_vars);
                 if (res && !block_variables.empty())
                 {
                     for (auto &block_var : block_variables)
@@ -1090,6 +1062,65 @@ CFbdObject *CVariablesAnalytics::find_object( const QString &name )
             if (obj_name == name || obj_id_name == name)
             {
                 return obj;
+            }
+        }
+    }
+    return nullptr;
+}
+
+CVariable *CVariablesAnalytics::find_variable_by_name(const QString &name)
+{
+    /// possible places: current interface, global variables, program pous
+
+    CInterface *local_iface = local_pou_interface();
+    CPou    * current_pou = m_world->current_pou();
+
+    /// local variables
+    for (auto &var : local_iface->all_variables())
+    {
+        if (var->name() == name)
+        {
+            return var;
+        }
+    }
+
+    /// program pous variables
+    for (auto &pou : *project->types()->pous())
+    {
+        if (pou == current_pou || pou->type_name() != "program")
+        {
+            continue;
+        }
+
+        for (auto &var : pou->interface()->all_variables())
+        {
+            if (var->name() == name)
+            {
+                return var;
+            }
+        }
+    }
+
+    /// global variables
+    for (auto &glob : *m_global_variables)
+    {
+        if (glob->name() == name)
+        {
+            return glob;
+        }
+    }
+    return nullptr;
+}
+
+CInVariable *CVariablesAnalytics::find_inVariable_by_id(const uint64_t &ref_id)
+{
+    for (auto &body : *m_diagram_pou->bodies())
+    {
+        for (auto &invar : *body->fbd_content()->inVariables())
+        {
+            if (invar->local_id() == ref_id)
+            {
+                return invar;
             }
         }
     }

@@ -29,6 +29,8 @@ protected slots:
     void slot_interfaceVariableAdd(const QString &type, const QString &name);
     void slot_interfaceVariableDel(const QString &type, const QString &name);
     void slot_interfaceVariableRename(const QString &old_name, const QString &new_name);
+    void slot_undo_enabled();
+    void slot_object_selected();
 
     void slot_varAddVariable();
     void slot_varDelVariable();

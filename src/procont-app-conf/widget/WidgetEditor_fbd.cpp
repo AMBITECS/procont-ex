@@ -108,7 +108,7 @@ void WidgetEditor_fbd::slot_varAddVariable()
 
     qDebug() << __PRETTY_FUNCTION__;
 
-    _m_fbd_view->update_interface(DomModel::toItem(_vars_table->rootIndex())->node());
+    // _m_fbd_view->update_interface(DomModel::toItem(_vars_table->rootIndex())->node());
 }
 
 void WidgetEditor_fbd::slot_varDelVariable()
@@ -117,7 +117,7 @@ void WidgetEditor_fbd::slot_varDelVariable()
 
     qDebug() << __PRETTY_FUNCTION__;
 
-    _m_fbd_view->update_interface(DomModel::toItem(_vars_table->rootIndex())->node());
+    // _m_fbd_view->update_interface(DomModel::toItem(_vars_table->rootIndex())->node());
 }
 
 void WidgetEditor_fbd::slot_varTxtVarChanged()
@@ -128,7 +128,7 @@ void WidgetEditor_fbd::slot_varTxtVarChanged()
     {
         qDebug() << __PRETTY_FUNCTION__;
 
-        _m_fbd_view->update_interface(DomModel::toItem(_vars_table->rootIndex())->node());
+        // _m_fbd_view->update_interface(DomModel::toItem(_vars_table->rootIndex())->node());
     }
 }
 
@@ -140,7 +140,7 @@ void WidgetEditor_fbd::slot_varTblVarChanged()
     {
         qDebug() << __PRETTY_FUNCTION__;
 
-        _m_fbd_view->update_interface(DomModel::toItem(_vars_table->rootIndex())->node());
+        // _m_fbd_view->update_interface(DomModel::toItem(_vars_table->rootIndex())->node());
     }
 }
 
@@ -158,6 +158,8 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     connect(_m_fbd_view, &CDiagramWidget::interface_variable_new, this, &WidgetEditor_fbd::slot_interfaceVariableAdd);
     connect(_m_fbd_view, &CDiagramWidget::instance_removed, this, &WidgetEditor_fbd::slot_interfaceVariableDel);
     connect(_m_fbd_view, &CDiagramWidget::interface_variable_rename, this, &WidgetEditor_fbd::slot_interfaceVariableRename);
+    connect(_m_fbd_view, &CDiagramWidget::undo_enabled, this, &WidgetEditor_fbd::slot_undo_enabled);
+    connect(_m_fbd_view, &CDiagramWidget::object_selected, this, &WidgetEditor_fbd::slot_object_selected);
     // _m_fbd_view->set_active();
     _m_fbd_view->setMinimumSize(500, 250);
     // variables editor code editor
@@ -211,90 +213,104 @@ void WidgetEditor_fbd::slot_codeTxtViewToggled(bool)
 
 void WidgetEditor_fbd::slot_codeShmChanged(const QDomNode &new_node_)
 {
-    qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 
-    // qDebug() << DomItem::printNode(new_node_);
+    // qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
-    QDomDocument doc = DomModel::toItem(_vars_table->rootIndex())->node().ownerDocument();
+    // // qDebug() << DomItem::printNode(new_node_);
 
-    qDebug() << "2" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    // QDomDocument doc = DomModel::toItem(_vars_table->rootIndex())->node().ownerDocument();
 
-    DomModel::toItem(_vars_table->rootIndex())->updateNode(doc.importNode(new_node_, true).namedItem("body"));
+    // qDebug() << "2" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
-    qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    // DomModel::toItem(_vars_table->rootIndex())->updateNode(doc.importNode(new_node_, true).namedItem("body"));
+
+    // qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 }
 
 void WidgetEditor_fbd::slot_interfaceVariableAdd(const QString &type, const QString &name)
 {
     qDebug() << __PRETTY_FUNCTION__;
 
-    auto parent = DomModel::toItem(_vars_table->rootIndex());
+    // auto parent = DomModel::toItem(_vars_table->rootIndex());
 
-    auto parentNode = DomModel::toItem(_vars_table->rootIndex())->node();
-    QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
-    el_variable.setAttribute("name", name);
-    QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
-    QDomElement el_variable_type_derived = parentNode.ownerDocument().createElement("derived");
-    el_variable_type_derived.setAttribute("name", type);
-    el_variable_type.appendChild(el_variable_type_derived);
-    el_variable.appendChild(el_variable_type);
-    QDomNode el_localVars = parentNode.namedItem("interface").namedItem("localVars");
-    if(el_localVars.isNull())
-    {
-        el_localVars = parentNode.ownerDocument().createElement("localVars");
-        parentNode.namedItem("interface").appendChild(el_localVars);
-    }
-    el_localVars.appendChild(el_variable);
+    // auto parentNode = DomModel::toItem(_vars_table->rootIndex())->node();
+    // QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
+    // el_variable.setAttribute("name", name);
+    // QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
+    // QDomElement el_variable_type_derived = parentNode.ownerDocument().createElement("derived");
+    // el_variable_type_derived.setAttribute("name", type);
+    // el_variable_type.appendChild(el_variable_type_derived);
+    // el_variable.appendChild(el_variable_type);
+    // QDomNode el_localVars = parentNode.namedItem("interface").namedItem("localVars");
+    // if(el_localVars.isNull())
+    // {
+    //     el_localVars = parentNode.ownerDocument().createElement("localVars");
+    //     parentNode.namedItem("interface").appendChild(el_localVars);
+    // }
+    // el_localVars.appendChild(el_variable);
 
-    // add item
-    _m_proxy->sourceModel()->insertRow(parent->rowCount(), DomModel::s_index(_vars_table->rootIndex()));
+    // // add item
+    // _m_proxy->sourceModel()->insertRow(parent->rowCount(), DomModel::s_index(_vars_table->rootIndex()));
 }
 
 void WidgetEditor_fbd::slot_interfaceVariableDel(const QString &type, const QString &name)
 {
     qDebug() << __PRETTY_FUNCTION__;
 
-    QModelIndex var_index;
-    for(auto i = 0;i<DomModel::toItem(_vars_table->rootIndex())->rowCount();i++)
-    {
-        auto index_name = _vars_table->model()->index(i, 3, _vars_table->rootIndex());
-        auto index_type = _vars_table->model()->index(i, 5, _vars_table->rootIndex());
-        if(index_name.data() == name && index_type.data() == type)
-        {
-            var_index = index_name;
-            break;
-        }
-    }
+    // QModelIndex var_index;
+    // for(auto i = 0;i<DomModel::toItem(_vars_table->rootIndex())->rowCount();i++)
+    // {
+    //     auto index_name = _vars_table->model()->index(i, 3, _vars_table->rootIndex());
+    //     auto index_type = _vars_table->model()->index(i, 5, _vars_table->rootIndex());
+    //     if(index_name.data() == name && index_type.data() == type)
+    //     {
+    //         var_index = index_name;
+    //         break;
+    //     }
+    // }
 
-    if(var_index.isValid())
-    {
-        DomModel::toItem(_vars_table->rootIndex())->
-            removeChild(DomModel::s_index(var_index).row(), 0, DomModel::toItem(var_index)->node().parentNode());
-        DomModel::toProxy(_vars_table->model())->sourceModel()->
-            removeRow(DomModel::s_index(var_index).row(), DomModel::s_index(_vars_table->rootIndex()));
-    }
+    // if(var_index.isValid())
+    // {
+    //     DomModel::toItem(_vars_table->rootIndex())->
+    //         removeChild(DomModel::s_index(var_index).row(), 0, DomModel::toItem(var_index)->node().parentNode());
+    //     DomModel::toProxy(_vars_table->model())->sourceModel()->
+    //         removeRow(DomModel::s_index(var_index).row(), DomModel::s_index(_vars_table->rootIndex()));
+    // }
 }
 
 void WidgetEditor_fbd::slot_interfaceVariableRename(const QString &old_name, const QString &new_name)
 {
     qDebug() << __PRETTY_FUNCTION__;
 
-    QModelIndex var_index;
-    for(auto i = 0;i<DomModel::toItem(_vars_table->rootIndex())->rowCount();i++)
-    {
-        auto index = _vars_table->model()->index(i, 3, _vars_table->rootIndex());
-        if(index.data() == old_name)
-        {
-            var_index = index;
-            break;
-        }
-    }
+    // QModelIndex var_index;
+    // for(auto i = 0;i<DomModel::toItem(_vars_table->rootIndex())->rowCount();i++)
+    // {
+    //     auto index = _vars_table->model()->index(i, 3, _vars_table->rootIndex());
+    //     if(index.data() == old_name)
+    //     {
+    //         var_index = index;
+    //         break;
+    //     }
+    // }
 
-    if(var_index.isValid())
-    {
-        DomModel::toItem(var_index)->setData(new_name, Qt::DisplayRole);
-        _vars_table->setFocus();
-        _m_fbd_view->setFocus();
-    }
+    // if(var_index.isValid())
+    // {
+    //     DomModel::toItem(var_index)->setData(new_name, Qt::DisplayRole);
+    //     _vars_table->setFocus();
+    //     _m_fbd_view->setFocus();
+    // }
+}
+
+void WidgetEditor_fbd::slot_undo_enabled()
+{
+    qDebug() << __PRETTY_FUNCTION__;
+
+}
+
+void WidgetEditor_fbd::slot_object_selected()
+{
+    qDebug() << __PRETTY_FUNCTION__;
+
 }
 // ----------------------------------------------------------------------------

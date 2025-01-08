@@ -1252,7 +1252,7 @@ Enter a new name</source>
     </message>
     <message>
         <location filename="../widget/WidgetEditor_fbd.cpp" line="79"/>
-        <location filename="../widget/WidgetEditor_fbd.cpp" line="173"/>
+        <location filename="../widget/WidgetEditor_fbd.cpp" line="175"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
@@ -1262,7 +1262,7 @@ Enter a new name</source>
         <translation type="unfinished">Таблица</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor_fbd.cpp" line="176"/>
+        <location filename="../widget/WidgetEditor_fbd.cpp" line="178"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

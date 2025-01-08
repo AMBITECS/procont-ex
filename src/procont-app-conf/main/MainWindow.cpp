@@ -421,7 +421,7 @@ void MainWindow::slot_devCustomContextMenu(const QPoint &pos_)
 
 void MainWindow::slot_focusChanged(QWidget *, QWidget *new_)
 {
-    qDebug() << new_;
+    // qDebug() << new_;
 
     if(new_ == _m_tree_pou || new_ == _m_tree_dev)
         undoStack()->setActive();

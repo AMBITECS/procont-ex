@@ -83,7 +83,8 @@ void CRemoveObject::redo()
     m_object->parent()->update_real_position();
     m_object->parent()->parent()->update_visible_ladders();
 
-    emit m_world->instance_removed(m_object->type_name(), m_object->instance_name());
+    if (!m_object->instance_name().isEmpty())
+        emit m_world->instance_removed(m_object->type_name(), m_object->instance_name());
 }
 
 void CRemoveObject::undo()

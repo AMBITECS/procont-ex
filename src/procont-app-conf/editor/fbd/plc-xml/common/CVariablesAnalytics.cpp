@@ -226,13 +226,46 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
 
     CFilter filter(this);
 
+
+    /// collect our interface if it's not "program" else we collect variables later
+    if (m_diagram_pou->type_name() != "program")
+    {
+        for (auto &var : m_diagram_pou->interface()->all_variables())
+        {
+            s_compare_types c_types;
+
+            bool check = check_pin_compatibility(pin->type_name(),
+                                                 pin->type(),
+                                                 var->type(),
+                                                 get_type_from_string(var->type().toStdString()),
+                                                 c_types);
+            if (!check)
+            {
+                continue;
+            }
+
+            var_name = var->name();
+
+            s_tree_item item;
+            item.id = id++;
+            item.id_parent = 0;
+            item.name = var_name.toStdString();
+            item.type = var->type().toStdString();
+            item.iface_variable = var;
+
+            items.push_back(item);
+        }
+    }
+
     /// collecting interface variables from all correct pous
     for (auto &pou : *project->types()->pous())
     {
-        if (pou->type_name() != "program" && pou != m_diagram_pou)
+        if (pou->type_name() != "program")
         {
             continue;
         }
+
+        /// current POU could be our POU even it is "program"
 
         for (auto &var : pou->interface()->all_variables())
         {
@@ -264,7 +297,7 @@ void CVariablesAnalytics::collect_pins_data(std::vector<s_tree_item> &tree_items
 
             if (pou != m_diagram_pou)
             {
-                var_name = pou->name() + "." + var->name();
+                var_name = var->full_name();
             }
             else
             {
@@ -569,7 +602,7 @@ bool CVariablesAnalytics::check_pin_compatibility(const QString &dragged_pin_typ
 
     if (dragged_pin_type == DDT_ANY || target_pin_type == DDT_ANY)
     {
-/*        if (dragged_pin_type == DDT_ANY && target_pin_type < DDT_DERIVED)
+        if (dragged_pin_type == DDT_ANY && target_pin_type < DDT_DERIVED)
         {
             return true;
         }
@@ -578,8 +611,8 @@ bool CVariablesAnalytics::check_pin_compatibility(const QString &dragged_pin_typ
         {
             return true;
         }
-*/
-        return true;
+
+        return false;
     }
 
     if (dragged_pin_type == DDT_ANY_NUM || target_pin_type == DDT_ANY_NUM)

@@ -2,7 +2,7 @@
 
 #include "item/DomItem.h"
 
-#include <QtXml>
+#include <QAbstractProxyModel>
 
 DomModel::DomModel(const QDomDocument &document, QObject *parent)
     : QAbstractItemModel(parent),
@@ -146,8 +146,6 @@ bool DomModel::removeRows(int position, int rows, const QModelIndex &parent)
 
     return true;
 }
-
-#include <QAbstractProxyModel>
 
 QModelIndex DomModel::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
 {

@@ -145,10 +145,10 @@ QString ItemValue_Attr_opt::get() const
 }
 
 void ItemValue_Attr_opt::set(const QString &value)
-{   
+{
     if(value.isEmpty())
     {
-        QDomAttr attr = node().namedItem(m_name).toAttr();
+        QDomAttr attr = node().toElement().attributeNode(m_name);
         if(!attr.isNull())
             node().toElement().removeAttributeNode(attr);
     }

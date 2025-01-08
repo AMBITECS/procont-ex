@@ -242,7 +242,12 @@ bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &valu
     if(index.data() == value)
         return false;
 
-    undoStack()->push(new CUndoCommand_edit_table(this, index, index.data(), value));
+    auto _index = this->index(index.row(), 0, index.parent());
+    auto _item = DomModel::toItem(_index);
+
+    Q_ASSERT(_item);
+
+    undoStack()->push(new CUndoCommand_edit_table(this, index, index.data(), value, _item->node().toElement().attribute("name")));
 
     return true;
 }

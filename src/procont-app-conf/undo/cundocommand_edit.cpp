@@ -20,7 +20,9 @@ CUndoCommand_edit::CUndoCommand_edit(QAbstractProxyModel *model_, const QModelIn
 
 void CUndoCommand_edit::undo()
 {
-   _m_index_current = _m_model->index(_m_row, _m_column, _m_index_parent);
+    qDebug() << __PRETTY_FUNCTION__ << _m_value_old;
+
+    _m_index_current = _m_model->index(_m_row, _m_column, _m_index_parent);
 
     Q_ASSERT(DomModel::toItem(_m_index_current));
 
@@ -86,13 +88,12 @@ void CUndoCommand_edit_tree::redo()
 // ***
 
 // *** CUndoCommand_edit_table
-CUndoCommand_edit_table::CUndoCommand_edit_table(QAbstractProxyModel *model_, const QModelIndex &index_, QVariant value_old_, QVariant value_new_, QUndoCommand *cmd_) :
+CUndoCommand_edit_table::CUndoCommand_edit_table(QAbstractProxyModel *model_, const QModelIndex &index_, QVariant value_old_, QVariant value_new_, const QString &name_, QUndoCommand *cmd_) :
     CUndoCommand_edit(model_, index_, value_old_, value_new_, cmd_)
 {
     _m_type = (_m_item->node().nodeName() == "name") ? eEditType::eET_Rename : eEditType::eET_Edit;
 
-    _m_name_ru = QString(QObject::tr("%1 \'%2\'"))
-                     .arg(tr_str::instance()->ru(_m_item->node().parentNode().nodeName()), _m_item->node().parentNode().toElement().attribute("name"));
+    _m_name_ru = QString(QObject::tr("%1 \'%2\'")).arg(tr_str::instance()->ru("variable"), name_);
 
     setText(QString(QObject::tr("%1 %2"))
                 .arg((_m_type == eEditType::eET_Edit) ? QObject::tr("Edit") : QObject::tr("Rename"), _m_name_ru));

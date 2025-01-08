@@ -14,6 +14,7 @@
 #include "model/ProxyModel.h"
 #include "view/TableView.h"
 #include "view/ItemDelegate.h"
+#include "view/ItemDelegate_combobox.h"
 #include "editor/st/CodeEditorWidget.h"
 #include "editor/st/XmlParser.h"
 #include "main/MainWindow.h"
@@ -73,6 +74,19 @@ QWidget * WidgetEditor::createVarsEditor()
     _vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
     _vars_table->horizontalHeader()->setHighlightSections(false);
     _vars_table->setItemDelegateForColumn(7, new CTextEditDelegate);
+    QStringList varTypes = {"Scope",
+                            "VAR",
+                            "VAR_INPUT",
+                            "VAR_OUTPUT",
+                            "VAR_IN_OUT",
+                            "VAR_TEMP",
+                            "VAR_EXTERNAL",
+                            "VAR_GLOBAL",
+                            "Flags",
+                            "CONSTANT",
+                            "PERSISTENT",
+                            "RETAIN"};
+    _vars_table->setItemDelegateForColumn(2, new CComboBoxDelegate_variable_type(varTypes));
     connect(_vars_table, &TableView::signal_tableChanged, this, &WidgetEditor::slot_varTblVarChanged);
     auto vb_table = new QVBoxLayout;
     vb_table->addWidget(toolbar_table);
@@ -227,7 +241,6 @@ void WidgetEditor::slot_varAddVariable()
                     _m_item->node().namedItem("interface").namedItem("localVars");
 
     auto cmd =  new CUndoCommand_insert_table(
-        // DomModel::toModel(_m_proxy->sourceModel()),
         _m_proxy,
         (current.count() == 1) ? current.at(0) : QModelIndex(),
         DomModel::s_index(_m_index),

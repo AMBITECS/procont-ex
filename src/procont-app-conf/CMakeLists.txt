@@ -56,6 +56,8 @@ set(PROJECT_SOURCES
     view/ItemDelegate.h view/ItemDelegate.cpp
     view/SpinBoxMultiRange.h view/SpinBoxMultiRange.cpp
     view/TableView.h view/TableView.cpp
+    view/ComboBoxMultiListWidget.h view/ComboBoxMultiListWidget.cpp
+    view/ItemDelegate_combobox.h view/ItemDelegate_combobox.cpp
 
     translator/SchemaViewer.cpp translator/SchemaViewer.h
     translator/GlobalType.h

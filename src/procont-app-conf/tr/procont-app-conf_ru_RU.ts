@@ -1090,46 +1090,46 @@ Please, enter different variable name</source>
         <translation>Удаление %1</translation>
     </message>
     <message>
-        <location filename="../undo/cundocommand_edit.cpp" line="66"/>
-        <location filename="../undo/cundocommand_edit.cpp" line="94"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="68"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="96"/>
         <source>%1 &apos;%2&apos;</source>
         <translation>%1 &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../undo/cundocommand_edit.cpp" line="69"/>
-        <location filename="../undo/cundocommand_edit.cpp" line="97"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="71"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="98"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../undo/cundocommand_edit.cpp" line="35"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="37"/>
         <source>renaming of the %1 to &apos;%2&apos; has been canceled</source>
         <translation>переименование %1 в &apos;%2&apos; отменено</translation>
     </message>
     <message>
-        <location filename="../undo/cundocommand_edit.cpp" line="54"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="56"/>
         <source>the %1 has been renamed to &apos;%2&apos;</source>
         <translation>%1 переименовано в &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../undo/cundocommand_edit.cpp" line="70"/>
-        <location filename="../undo/cundocommand_edit.cpp" line="98"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="72"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="99"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../undo/cundocommand_edit.cpp" line="70"/>
-        <location filename="../undo/cundocommand_edit.cpp" line="98"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="72"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="99"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../undo/cundocommand_edit.cpp" line="33"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="35"/>
         <source>editing of the %1 has been canceled</source>
         <translation>редактирование %1 отменено</translation>
     </message>
     <message>
-        <location filename="../undo/cundocommand_edit.cpp" line="52"/>
+        <location filename="../undo/cundocommand_edit.cpp" line="54"/>
         <source>the %1 has been edited</source>
         <translation>%1 отредактировано</translation>
     </message>
@@ -1218,22 +1218,22 @@ Enter a new name</source>
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="59"/>
+        <location filename="../widget/WidgetEditor.cpp" line="60"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="61"/>
+        <location filename="../widget/WidgetEditor.cpp" line="62"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="94"/>
+        <location filename="../widget/WidgetEditor.cpp" line="108"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="97"/>
+        <location filename="../widget/WidgetEditor.cpp" line="111"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>

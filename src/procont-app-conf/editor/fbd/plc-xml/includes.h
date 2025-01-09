@@ -46,6 +46,20 @@ static const QString edge_types_names[EI_COUNT]
     "falling",
 };
 
+static EEdge get_edge_from_string(const QString & str)
+{
+    int i_type = 0;
+    for (auto &item : edge_types_names)
+    {
+        if (item == str)
+        {
+            return (EEdge)i_type;
+        }
+        i_type++;
+    }
+    return EEdge::EI_NONE;
+}
+
 enum EStorageMode
 {
     SM_NONE,
@@ -60,6 +74,20 @@ static const QString storage_behaviour_names[SM_COUNT]
     "set",
     "reset"
 };
+
+static EStorageMode get_storage_from_str(const QString &string)
+{
+    int i_store = 0;
+    for (auto &item : storage_behaviour_names)
+    {
+        if (item == string)
+        {
+            return (EStorageMode)i_store;
+        }
+        i_store++;
+    }
+    return EStorageMode::SM_NONE;
+}
 
 static const QString bool_str[2]
 {

@@ -8,6 +8,7 @@
 #include <QHBoxLayout>
 
 #include "model/DomModel.h"
+#include "model/ProxyModel.h"
 #include "view/TableView.h"
 #include "view/ItemDelegate.h"
 #include "editor/st/CodeEditorWidget.h"
@@ -52,6 +53,7 @@ QWidget * WidgetEditor_fbd::createVarsEditor()
     _vars_table = new TableView;
     _vars_table->setMinimumSize(500, 200);
     _vars_table->setModel(_m_proxy);
+    reinterpret_cast<ProxyModelTable_var*>(_m_proxy)->setUndoStack(_vars_table->undoStack());
     _vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_m_index), _m_proxy));
     _vars_table->setColumnHidden(0, true);
     _vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -64,9 +66,7 @@ QWidget * WidgetEditor_fbd::createVarsEditor()
     vb_table->addWidget(_vars_table);
     _m_table_container = new QWidget;
     _m_table_container->setLayout(vb_table);
-    // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
-    // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
-    // variables editor code editor
+    // variables editor text
     _vars_text = new CodeEditorWidget(this);
     _vars_text->setMinimumSize(500, 200);
     _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_m_index)->node()));
@@ -149,19 +149,16 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     // *  variables editor widgets
     // contauner for variables editor widgets
     auto container = new QWidget;
-    // fbd view
-    // _fbd_view = new FBDviewer;
-    // _fbd_view->setMinimumSize(500, 250);
-    // _fbd_view->showNode(item(_index)->node());
+    // fbd editor
     _m_fbd_view = new CDiagramWidget(DomModel::toItem(_m_index)->node(), MainWindow::instance()->toolWidget());
     connect(_m_fbd_view, &CDiagramWidget::changed_diagram, this, &WidgetEditor_fbd::slot_codeShmChanged);
     connect(_m_fbd_view, &CDiagramWidget::interface_variable_new, this, &WidgetEditor_fbd::slot_interfaceVariableAdd);
     connect(_m_fbd_view, &CDiagramWidget::instance_removed, this, &WidgetEditor_fbd::slot_interfaceVariableDel);
     connect(_m_fbd_view, &CDiagramWidget::interface_variable_rename, this, &WidgetEditor_fbd::slot_interfaceVariableRename);
-    connect(_m_fbd_view, &CDiagramWidget::undo_enabled, this, &WidgetEditor_fbd::slot_undo_enabled);
+    // connect(_m_fbd_view, &CDiagramWidget::undo_enabled, this, &WidgetEditor_fbd::slot_undo_enabled);
     connect(_m_fbd_view, &CDiagramWidget::object_selected, this, &WidgetEditor_fbd::slot_object_selected);
-    // _m_fbd_view->set_active();
-    _m_fbd_view->setMinimumSize(500, 250);
+    connect(_m_fbd_view, &CDiagramWidget::user_clicked, this, &WidgetEditor_fbd::slot_user_clicked);
+   _m_fbd_view->setMinimumSize(500, 250);
     // variables editor code editor
     // _txt_view = WidgetEditor::createCodeEditor();
     _body_text = new CodeEditorWidget(this);
@@ -196,6 +193,17 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     return container;
 }
 
+void WidgetEditor_fbd::slot_user_clicked()
+{
+    qDebug() << __PRETTY_FUNCTION__;
+
+    // _vars_table->clearFocus();
+    emit qApp->focusChanged(qApp->focusWidget(), 0x0);
+    // _vars_table->clearSelection();
+    // _vars_table->setCurrentIndex(QModelIndex());
+    _vars_table->closeOpenedEditor();
+}
+
 void WidgetEditor_fbd::slot_codeShmViewToggled(bool)
 {
     _body_text->hide();
@@ -213,7 +221,7 @@ void WidgetEditor_fbd::slot_codeTxtViewToggled(bool)
 
 void WidgetEditor_fbd::slot_codeShmChanged(const QDomNode &new_node_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__ << new_node_.nodeName();
 
     // qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
@@ -228,89 +236,89 @@ void WidgetEditor_fbd::slot_codeShmChanged(const QDomNode &new_node_)
     // qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 }
 
-void WidgetEditor_fbd::slot_interfaceVariableAdd(const QString &type, const QString &name)
+void WidgetEditor_fbd::slot_interfaceVariableAdd(const QString &type_, const QString &name_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
-
-    // auto parent = DomModel::toItem(_vars_table->rootIndex());
-
-    // auto parentNode = DomModel::toItem(_vars_table->rootIndex())->node();
-    // QDomElement el_variable = parentNode.ownerDocument().createElement("variable");
-    // el_variable.setAttribute("name", name);
-    // QDomElement el_variable_type = parentNode.ownerDocument().createElement("type");
-    // QDomElement el_variable_type_derived = parentNode.ownerDocument().createElement("derived");
-    // el_variable_type_derived.setAttribute("name", type);
-    // el_variable_type.appendChild(el_variable_type_derived);
-    // el_variable.appendChild(el_variable_type);
-    // QDomNode el_localVars = parentNode.namedItem("interface").namedItem("localVars");
-    // if(el_localVars.isNull())
-    // {
-    //     el_localVars = parentNode.ownerDocument().createElement("localVars");
-    //     parentNode.namedItem("interface").appendChild(el_localVars);
-    // }
-    // el_localVars.appendChild(el_variable);
-
-    // // add item
-    // _m_proxy->sourceModel()->insertRow(parent->rowCount(), DomModel::s_index(_vars_table->rootIndex()));
+    // create variable node
+    auto _parent = DomModel::toItem(_vars_table->rootIndex());
+    auto _node_parent = DomModel::toItem(_vars_table->rootIndex())->node();
+    auto _node_variable_type_derived = _node_parent.ownerDocument().createElement("derived");
+    _node_variable_type_derived.setAttribute("name", type_);
+    auto _node_variable_type = _node_parent.ownerDocument().createElement("type");
+    _node_variable_type.appendChild(_node_variable_type_derived);
+    auto _node_variable = _node_parent.ownerDocument().createElement("variable");
+    _node_variable.setAttribute("name", name_);
+    _node_variable.appendChild(_node_variable_type);
+    // add variable to localVar node
+    auto _node_localVars = _node_parent.namedItem("interface").namedItem("localVars");
+    if(_node_localVars.isNull())
+    {
+        _node_localVars = _node_parent.ownerDocument().createElement("localVars");
+        _node_parent.namedItem("interface").appendChild(_node_localVars);
+    }
+    _node_localVars.appendChild(_node_variable);
+    // add row to model
+    _m_proxy->sourceModel()->insertRow(_parent->rowCount(), DomModel::s_index(_vars_table->rootIndex()));
 }
 
-void WidgetEditor_fbd::slot_interfaceVariableDel(const QString &type, const QString &name)
+void WidgetEditor_fbd::slot_interfaceVariableDel(const QString &type_, const QString &name_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__ << type_ << name_;
 
-    // QModelIndex var_index;
-    // for(auto i = 0;i<DomModel::toItem(_vars_table->rootIndex())->rowCount();i++)
-    // {
-    //     auto index_name = _vars_table->model()->index(i, 3, _vars_table->rootIndex());
-    //     auto index_type = _vars_table->model()->index(i, 5, _vars_table->rootIndex());
-    //     if(index_name.data() == name && index_type.data() == type)
-    //     {
-    //         var_index = index_name;
-    //         break;
-    //     }
-    // }
+    QModelIndex _index;
+    for(auto i = 0;i<DomModel::toItem(_vars_table->rootIndex())->rowCount();i++)
+    {
+        auto _index_root = _vars_table->model()->index(i, 0, _vars_table->rootIndex());
+        auto _index_name = _vars_table->model()->index(i, 3, _vars_table->rootIndex());
+        auto _index_type = _vars_table->model()->index(i, 5, _vars_table->rootIndex());
+        if(_index_name.data() == name_ && _index_type.data() == type_)
+        {
+            _index = _index_root;
+            break;
+        }
+    }
 
-    // if(var_index.isValid())
-    // {
-    //     DomModel::toItem(_vars_table->rootIndex())->
-    //         removeChild(DomModel::s_index(var_index).row(), 0, DomModel::toItem(var_index)->node().parentNode());
-    //     DomModel::toProxy(_vars_table->model())->sourceModel()->
-    //         removeRow(DomModel::s_index(var_index).row(), DomModel::s_index(_vars_table->rootIndex()));
-    // }
+    if(_index.isValid())
+    {
+        DomModel::toItem(_vars_table->rootIndex())->
+            removeChild(DomModel::s_index(_index).row(), 0, DomModel::toItem(_index)->node());
+
+        _m_proxy->sourceModel()->
+            removeRow(DomModel::s_index(_index).row(), DomModel::s_index(_vars_table->rootIndex()));
+    }
 }
 
-void WidgetEditor_fbd::slot_interfaceVariableRename(const QString &old_name, const QString &new_name)
+void WidgetEditor_fbd::slot_interfaceVariableRename(const QString &old_name_, const QString &new_name_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__ << old_name_ << new_name_;
 
-    // QModelIndex var_index;
-    // for(auto i = 0;i<DomModel::toItem(_vars_table->rootIndex())->rowCount();i++)
-    // {
-    //     auto index = _vars_table->model()->index(i, 3, _vars_table->rootIndex());
-    //     if(index.data() == old_name)
-    //     {
-    //         var_index = index;
-    //         break;
-    //     }
-    // }
+    QModelIndex _index;
+    for(auto i = 0;i<DomModel::toItem(_vars_table->rootIndex())->rowCount();i++)
+    {
+        auto _index_name = _vars_table->model()->index(i, 3, _vars_table->rootIndex());
+        if(_index_name.data() == old_name_)
+        {
+            _index = _index_name;
+            break;
+        }
+    }
 
-    // if(var_index.isValid())
-    // {
-    //     DomModel::toItem(var_index)->setData(new_name, Qt::DisplayRole);
-    //     _vars_table->setFocus();
-    //     _m_fbd_view->setFocus();
-    // }
+    if(_index.isValid())
+    {
+        _m_proxy->setData(_index, new_name_, Qt::EditRole);
+
+        emit _m_proxy->dataChanged(_index, _index, {Qt::DisplayRole, Qt::EditRole});
+    }
 }
 
-void WidgetEditor_fbd::slot_undo_enabled()
-{
-    qDebug() << __PRETTY_FUNCTION__;
+// void WidgetEditor_fbd::slot_undo_enabled()
+// {
+//     // qDebug() << __PRETTY_FUNCTION__;
 
-}
+// }
 
 void WidgetEditor_fbd::slot_object_selected()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
 }
 // ----------------------------------------------------------------------------

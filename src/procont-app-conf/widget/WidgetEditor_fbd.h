@@ -25,12 +25,13 @@ protected:
 protected slots:
     void slot_codeShmViewToggled(bool);
     void slot_codeTxtViewToggled(bool);
-    void slot_codeShmChanged(const QDomNode &);
-    void slot_interfaceVariableAdd(const QString &type, const QString &name);
-    void slot_interfaceVariableDel(const QString &type, const QString &name);
-    void slot_interfaceVariableRename(const QString &old_name, const QString &new_name);
-    void slot_undo_enabled();
+    void slot_codeShmChanged(const QDomNode &new_node_);
+    void slot_interfaceVariableAdd(const QString &type_, const QString &name_);
+    void slot_interfaceVariableDel(const QString &type_, const QString &name_);
+    void slot_interfaceVariableRename(const QString &old_name_, const QString &new_name_);
+    // void slot_undo_enabled();
     void slot_object_selected();
+    void slot_user_clicked();
 
     void slot_varAddVariable();
     void slot_varDelVariable();

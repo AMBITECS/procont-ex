@@ -60,6 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
         _m_base_directory = QFileInfo(QDir::currentPath()).absolutePath();
     _m_proj_dir = QString("%1/proj").arg(_m_base_directory);
 
+    CMessanger::set_log_dir(QString("%1/log").arg(_m_base_directory));
+
     if(!QFileInfo::exists(_m_config_filepath))
         _m_config_filepath = QString("%1/etc/procont.ini").arg(_m_base_directory);
 
@@ -146,7 +148,6 @@ void MainWindow::createWidgets()
 
     // left area
     _m_tree_dev = new QTreeView();
-    // registerUndoStackWidget(_m_tree_dev);
     _m_tree_dev->setExpandsOnDoubleClick(false);
     _m_tree_dev->setMinimumSize(300, 400);
     _m_tree_dev->setHeaderHidden(true);
@@ -160,7 +161,6 @@ void MainWindow::createWidgets()
     _m_view_menu->addAction(dockDev->toggleViewAction());
 
     _m_tree_pou = new TreeView();
-    // registerUndoStackWidget(_m_tree_pou);
     _m_tree_pou->setExpandsOnDoubleClick(false);
     _m_tree_pou->setMinimumSize(250, 400);
     _m_tree_pou->setHeaderHidden(true);

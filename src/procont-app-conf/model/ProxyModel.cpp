@@ -246,6 +246,7 @@ bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &valu
     auto _item = DomModel::toItem(_index);
 
     Q_ASSERT(_item);
+    Q_ASSERT(undoStack());
 
     undoStack()->push(new CUndoCommand_edit_table(this, index, index.data(), value, _item->node().toElement().attribute("name")));
 

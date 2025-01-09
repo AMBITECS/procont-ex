@@ -12,18 +12,19 @@
 #include <QLabel>
 
 TabWidgetEditor * TabWidgetEditor::_instance = nullptr;
-QHash<DomItem::ItemType, QAbstractProxyModel*> TabWidgetEditor::_hProxyModels;
+// QHash<DomItem::ItemType, QAbstractProxyModel*> TabWidgetEditor::_hProxyModels;
+QAbstractItemModel * TabWidgetEditor::_m_model = nullptr;
 
 TabWidgetEditor::TabWidgetEditor()
 {
     setTabsClosable(true);
 
-    if(_hProxyModels.size() == 0)
-    {
-        _hProxyModels.insert(DomItem::typePou, new ProxyModelTable_var(nullptr));
-        _hProxyModels.insert(DomItem::typeVar, new ProxyModelTable_global(nullptr));
-        _hProxyModels.insert(DomItem::typeType, new ProxyModelTable_var(nullptr));
-    }
+    // if(_hProxyModels.size() == 0)
+    // {
+    //     _hProxyModels.insert(DomItem::typePou, new ProxyModelTable_var(nullptr));
+    //     _hProxyModels.insert(DomItem::typeVar, new ProxyModelTable_global(nullptr));
+    //     _hProxyModels.insert(DomItem::typeType, new ProxyModelTable_var(nullptr));
+    // }
 
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slot_closeTab(int)));
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(slot_currentTabChanged(int)));
@@ -46,16 +47,35 @@ TabWidgetEditor * TabWidgetEditor::instance()
 
 void TabWidgetEditor::setModel(QAbstractItemModel *model_)
 {
-    for(auto i : std::as_const(_hProxyModels))
-        i->setSourceModel(model_);
+    _m_model = model_;
+
+    // for(auto i : std::as_const(_hProxyModels))
+    //     i->setSourceModel(model_);
 }
 
 QAbstractProxyModel * TabWidgetEditor::proxyModel(DomItem::ItemType type)
 {
-    if(_hProxyModels.contains(type))
-        return _hProxyModels.value(type);
+    // if(_hProxyModels.contains(type))
+    //     return _hProxyModels.value(type);
 
-    return nullptr;
+     QAbstractProxyModel * _proxy = nullptr;
+    switch(type)
+    {
+    case DomItem::typePou:
+        _proxy = new ProxyModelTable_var(nullptr);
+        break;
+    case DomItem::typeVar:
+         _proxy = new ProxyModelTable_global(nullptr);
+            break;
+    case DomItem::typeType:
+        _proxy = new ProxyModelTable_var(nullptr);
+        break;
+    }
+
+    if(_proxy)
+        _proxy->setSourceModel(_m_model);
+
+    return _proxy;
 }
 
 QAbstractProxyModel * TabWidgetEditor::proxyModel(int type)
@@ -117,10 +137,7 @@ void TabWidgetEditor::renameTab(const QModelIndex &index_)
     QModelIndex index = DomModel::s_index(index_);
 
     if(_hWidgets.contains(index))
-    {
-        qDebug() << __PRETTY_FUNCTION__;
         setTabText(indexOf(_hWidgets.value(index)), index.data().toString());
-    }
 }
 
 void TabWidgetEditor::closeTab(const QModelIndex &index_, bool source_)
@@ -128,10 +145,7 @@ void TabWidgetEditor::closeTab(const QModelIndex &index_, bool source_)
     QModelIndex index = source_ ? index_ : DomModel::s_index(index_);
 
     if(_hWidgets.contains(index))
-    {
-        qDebug() << __PRETTY_FUNCTION__;
         slot_closeTab(indexOf(_hWidgets.value(index)));
-    }
 }
 
 void TabWidgetEditor::slot_currentTabChanged(int index)
@@ -141,8 +155,8 @@ void TabWidgetEditor::slot_currentTabChanged(int index)
     else
         emit signal_currentTabChanged(QModelIndex());
 
-    // if(dynamic_cast<WidgetEditor_fbd*>(widget(index)))
-    //     reinterpret_cast<WidgetEditor_fbd*>(widget(index))->activate();
+    if(dynamic_cast<WidgetEditor*>(widget(index)))
+        reinterpret_cast<WidgetEditor*>(widget(index))->initFocus();
 }
 
 void TabWidgetEditor::slot_closeTab(int index)

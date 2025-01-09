@@ -230,7 +230,7 @@
 <context>
     <name>CGraphicsHelper</name>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="345"/>
+        <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="347"/>
         <source>Вернуть</source>
         <translation type="unfinished"></translation>
     </message>
@@ -521,7 +521,7 @@ Please, enter different variable name</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../main/MainWindow.cpp" line="155"/>
+        <location filename="../main/MainWindow.cpp" line="156"/>
         <source>Device</source>
         <translation>Устройства</translation>
     </message>
@@ -1085,7 +1085,7 @@ Please, enter different variable name</source>
     </message>
     <message>
         <location filename="../undo/cundocommand_remove.cpp" line="58"/>
-        <location filename="../undo/cundocommand_remove.cpp" line="94"/>
+        <location filename="../undo/cundocommand_remove.cpp" line="92"/>
         <source>Delete %1</source>
         <translation>Удаление %1</translation>
     </message>
@@ -1188,7 +1188,7 @@ Enter a new name</source>
         <translation type="vanished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="35"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="36"/>
         <source>Intro</source>
         <translation>Обзор</translation>
     </message>
@@ -1218,22 +1218,22 @@ Enter a new name</source>
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="60"/>
+        <location filename="../widget/WidgetEditor.cpp" line="49"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="62"/>
+        <location filename="../widget/WidgetEditor.cpp" line="51"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="108"/>
+        <location filename="../widget/WidgetEditor.cpp" line="97"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="111"/>
+        <location filename="../widget/WidgetEditor.cpp" line="100"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -1241,18 +1241,18 @@ Enter a new name</source>
 <context>
     <name>WidgetEditor_fbd</name>
     <message>
-        <location filename="../widget/WidgetEditor_fbd.cpp" line="46"/>
+        <location filename="../widget/WidgetEditor_fbd.cpp" line="47"/>
         <source>Add</source>
         <translation type="unfinished">Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor_fbd.cpp" line="48"/>
+        <location filename="../widget/WidgetEditor_fbd.cpp" line="49"/>
         <source>Remove</source>
         <translation type="unfinished">Удалить</translation>
     </message>
     <message>
         <location filename="../widget/WidgetEditor_fbd.cpp" line="79"/>
-        <location filename="../widget/WidgetEditor_fbd.cpp" line="175"/>
+        <location filename="../widget/WidgetEditor_fbd.cpp" line="172"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
@@ -1262,7 +1262,7 @@ Enter a new name</source>
         <translation type="unfinished">Таблица</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor_fbd.cpp" line="178"/>
+        <location filename="../widget/WidgetEditor_fbd.cpp" line="175"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

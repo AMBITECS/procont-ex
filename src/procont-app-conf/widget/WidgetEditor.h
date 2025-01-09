@@ -26,7 +26,7 @@ class WidgetEditor : public QSplitter
 public:
     WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
-    QUndoStack * undoStack() const;
+    void initFocus() const;
 
 protected slots:
     void slot_varTxtViewToggled(bool);
@@ -37,8 +37,6 @@ protected slots:
     virtual void slot_varTblVarChanged();
 
     void slot_codeTxtChanged();
-
-    void slot_activateUndoStack(QWidget *);
 
     void slot_selectRow_tree(const QModelIndex &index_, bool);
 
@@ -57,8 +55,6 @@ protected:
     CodeEditorWidget * _vars_text{nullptr};
     CodeEditorWidget * _body_text{nullptr};
     QWidget * _m_table_container{nullptr};
-
-    QUndoStack * _m_undo_stack{nullptr};
 };
 // ----------------------------------------------------------------------------
 

@@ -49,6 +49,8 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
 
     m_helper = new CGraphicsHelper(this, ogl_startup->node);
 
+    connect(m_helper, &CGraphicsHelper::user_clicked, [this](){emit user_clicked(); });
+
     connect(m_helper, &CGraphicsHelper::object_selected,
             [this](){ emit object_selected(); });
 

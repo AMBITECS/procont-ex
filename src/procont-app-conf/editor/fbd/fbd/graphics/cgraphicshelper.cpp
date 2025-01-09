@@ -23,6 +23,8 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
 
     m_graphics_world = new COglWorld(ogl_widget, m_pou, &m_hatch_tl);
 
+    connect(m_graphics_world, &COglWorld::user_clicked, [this](){emit user_clicked();});
+
     connect(m_graphics_world, &COglWorld::object_selected,
             [this](){emit object_selected();});
 

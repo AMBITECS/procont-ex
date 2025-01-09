@@ -44,6 +44,7 @@ signals:
     void    instance_removed(const QString &type, const QString &name);
     void    set_current_pou(CPou *pou);
     void    object_selected();
+    void    user_clicked();
 
 protected:
     bool    eventFilter(QObject *target, QEvent *event) override;

@@ -95,7 +95,10 @@ CFbdLadder *COglWorld::add_new_ladder()
     auto cmd_new_ladder = new CAddNewLadder(this);
     m_undo_stack->push(cmd_new_ladder);
 
-    emit undo_enabled();
+    if (!m_project_loading)
+    {
+        emit undo_enabled();
+    }
 
     return cmd_new_ladder->new_ladder();
 }
@@ -317,6 +320,8 @@ QPoint COglWorld::get_visible_range(const QPoint &)
 
 void COglWorld::load_project()
 {
+    m_project_loading = true;
+
     CFbdLadder *cur_ladder;
     CVariablesAnalytics analytics(this, m_pou->name());
 
@@ -360,6 +365,8 @@ void COglWorld::load_project()
 
         m_ladders->front()->update_real_position();
     }
+
+    m_project_loading = false;
 }
 
 void COglWorld::load_later()
@@ -451,9 +458,11 @@ CFbdObject * COglWorld::insert_new_component(CFbdLadder *p_ladder, const EPalett
     m_undo_stack->push(cmd_insert_obj);
     auto object = cmd_insert_obj->inserted_object();
 
-    convert_to_XML();
-    emit undo_enabled();
-
+    if (!m_project_loading)
+    {
+        convert_to_XML();
+        emit undo_enabled();
+    }
 
     return object;
 }
@@ -543,6 +552,7 @@ void COglWorld::mouse_left_pressed(const QPoint &pos)
     }
 
     m_mouse_pressed = pos;
+    emit  user_clicked();
 }
 
 void COglWorld::mouse_move(QMouseEvent *event)
@@ -766,7 +776,10 @@ void COglWorld::connect_pins(CPin *dragged_pin, CPin *target_pin)
     auto cmd = new CPinConnecting(this, dragged_pin, target_pin);
     m_undo_stack->push(cmd);
 
-    emit undo_enabled();
+    if (!m_project_loading)
+    {
+        emit undo_enabled();
+    }
 }
 
 std::vector<CFbdLadder *> *COglWorld::all_ladders()

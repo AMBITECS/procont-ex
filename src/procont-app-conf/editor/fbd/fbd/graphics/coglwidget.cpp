@@ -5,8 +5,8 @@
 #include <QPainter>
 #include <QMenu>
 #include <QApplication>
-#include "editor/fbd/general/QtDialogs.h"
-#include "editor/fbd/resources/colors.h"
+#include "editor/fbd/common/general/QtDialogs.h"
+#include "editor/fbd/common/resources/colors.h"
 
 
 COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
@@ -46,8 +46,13 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
 
 
     m_paint_dev = dynamic_cast<QPaintDevice *>(this);
-    //m_style = new COglStyle();
+
     m_helper = new CGraphicsHelper(this, ogl_startup->node);
+
+    connect(m_helper, &CGraphicsHelper::user_clicked, [this](){emit user_clicked(); });
+
+    connect(m_helper, &CGraphicsHelper::object_selected,
+            [this](){ emit object_selected(); });
 
     connect (m_helper, &CGraphicsHelper::set_current_pou,
              [this](CPou* pou){m_current_pou = pou; emit set_current_pou(pou);});
@@ -77,6 +82,8 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     connect(m_helper, &CGraphicsHelper::on_project_loaded, this, &COglWidget::project_loaded);
 
     this->setAcceptDrops(m_is_editable);
+
+    make_gradient_images();
 }
 
 COglWidget::~COglWidget()
@@ -212,9 +219,9 @@ COglWidget::dropEvent(QDropEvent *event)
 
     /// reset possible autoscroll gradients
     m_vertical_auto_rect = QRect();
-    m_vertical_autoscroll = QImage();
+    m_vert_top_autoscroll = QImage();
     m_horizon_auto_rect = {};
-    m_horizon_autoscroll = {};
+    m_horiz_right_autoscroll = {};
     m_wrong_type_rect = QRect();
     m_wrong_type_text = "";
 
@@ -306,8 +313,8 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
                 )
         {
             is_bottom_drag = true;
-            m_vertical_autoscroll = QImage(":/codesys/images/codesys/bottom_auto.png");
-            m_vertical_auto_rect = QRect(0, m_height - 20, m_width, 20);
+            m_vert_top_autoscroll = m_vert_bottom_templ;
+            m_vertical_auto_rect = QRect(0, m_height - 40, m_width, 40);
             m_vertical->setValue(m_vertical->value() + 5);
         }
 
@@ -317,8 +324,8 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
                 )
         {
             is_top_drag = true;
-            m_vertical_autoscroll = QImage(":/codesys/images/codesys/upper_auto.png");
-            m_vertical_auto_rect = QRect(0, 0, m_width, 20);
+            m_vert_top_autoscroll = m_vert_top_templ;
+            m_vertical_auto_rect = QRect(0, 0, m_width, 40);
             m_vertical->setValue(m_vertical->value() - 5);
         }
 
@@ -329,8 +336,8 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
                 )
         {
             is_right_drag = true;
-            m_horizon_auto_rect = QRect(m_width-20, 0, 20, m_height);
-            m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_right.png");
+            m_horizon_auto_rect = QRect(m_width-40, 0, 40, m_height);
+            m_horiz_right_autoscroll = m_horiz_right_templ;
             //m_horizon_autoscroll.
             m_horizontal->setValue(m_horizontal->value() + 2);
 
@@ -342,21 +349,21 @@ COglWidget::dragMoveEvent(QDragMoveEvent *event)
                 )
         {
             is_left_drag = true;
-            m_horizon_autoscroll = QImage(":/codesys/images/codesys/auto_left.png");
-            m_horizon_auto_rect = QRect(0,0, 20, m_height);
+            m_horiz_right_autoscroll = m_horiz_left_templ;
+            m_horizon_auto_rect = QRect(0,0, 40, m_height);
             m_horizontal->setValue(m_horizontal->value() - 2);
         }
 
         if (!is_bottom_drag && !is_top_drag)
         {
-            m_vertical_autoscroll = QImage();
+            m_vert_top_autoscroll = QImage();
             m_vertical_auto_rect = QRect();
         }
 
         if (!is_right_drag && !is_left_drag)
         {
             m_horizon_auto_rect = QRect();
-            m_horizon_autoscroll = QImage();
+            m_horiz_right_autoscroll = QImage();
         }
     }
 
@@ -480,7 +487,7 @@ void COglWidget::draw_ladders()
 
 void COglWidget::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    m_vertical_autoscroll = QImage();
+    m_vert_top_autoscroll = QImage();
     m_vertical_auto_rect = QRect();
     m_helper->on_drag_exit(event);
     //QWidget::dragLeaveEvent(event);
@@ -529,8 +536,8 @@ void COglWidget::draw_drag_bottom_upper()
 {
     QPainter mPainter(m_paint_dev);
     mPainter.beginNativePainting();
-    mPainter.drawImage(m_vertical_auto_rect, m_vertical_autoscroll);
-    mPainter.drawImage(m_horizon_auto_rect, m_horizon_autoscroll);
+    mPainter.drawImage(m_vertical_auto_rect, m_vert_top_autoscroll);
+    mPainter.drawImage(m_horizon_auto_rect, m_horiz_right_autoscroll);
     mPainter.endNativePainting();
 }
 
@@ -680,4 +687,83 @@ void COglWidget::wheelEvent(QWheelEvent *event)
 CPou *COglWidget::current_pou()
 {
     return m_current_pou;
+}
+
+void COglWidget::make_gradient_images()
+{
+    CDiagramColors colors;
+
+    QColor transparent, solid;
+
+    transparent = colors.base_colors().diag_background;
+    transparent.setAlpha(0);
+
+    solid   = colors.base_colors().diag_background;
+
+    QPainter painter;
+
+    /// vertical top autoscroll
+    {
+        m_vert_top_templ = QImage({QSize(1, 40)}, QImage::Format_ARGB32);
+        m_vert_top_templ.fill(transparent);
+
+        painter.begin(&m_vert_top_templ);
+
+        QLinearGradient gr(0, 0, 0, 40);
+        gr.setColorAt(0, solid);
+        gr.setColorAt(1, transparent);
+        painter.fillRect(QRect(0,0,1,40), gr);
+
+        painter.end();
+    }
+
+    /// vertical bottom autoscroll
+    {
+        m_vert_bottom_templ = QImage({QSize(3, 40)}, QImage::Format_ARGB32);
+        m_vert_bottom_templ.fill(transparent);
+
+        painter.begin(&m_vert_bottom_templ);
+
+        QLinearGradient gr(0, 0, 0, 40);
+        gr.setColorAt(0, transparent);
+        gr.setColorAt(1, solid);
+        painter.fillRect(QRect(0, 0, 3, 40), gr);
+
+        painter.end();
+    }
+
+    /// horizontal right autoscroll
+    {
+        m_horiz_right_templ = QImage({QSize(40, 1)}, QImage::Format_ARGB32);
+        m_horiz_right_templ.fill(transparent);
+
+        painter.begin(&m_horiz_right_templ);
+
+        QLinearGradient gr(0, 0, 40, 0);
+        gr.setColorAt(0, transparent);
+        gr.setColorAt(1, solid);
+        painter.fillRect(QRect(0,0,40,1), gr);
+
+        painter.end();
+    }
+
+    {
+        m_horiz_left_templ = QImage(QSize(40,1), QImage::Format_ARGB32);
+        m_horiz_left_templ.fill(transparent);
+
+        painter.begin(&m_horiz_left_templ);
+
+        QLinearGradient gr(0,0,40,0);
+        gr.setColorAt(0, solid);
+        gr.setColorAt(1, transparent);
+        painter.fillRect(QRect(0,0,40,1), gr);
+
+        painter.end();
+    }
+
+}
+
+void COglWidget::delete_selected()
+{
+    m_helper->remove_selected_object();
 }

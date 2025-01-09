@@ -552,6 +552,7 @@ void COglWorld::mouse_left_pressed(const QPoint &pos)
     }
 
     m_mouse_pressed = pos;
+    emit  user_clicked();
 }
 
 void COglWorld::mouse_move(QMouseEvent *event)

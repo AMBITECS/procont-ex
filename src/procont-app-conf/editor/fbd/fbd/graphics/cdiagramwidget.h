@@ -64,6 +64,7 @@ signals:
     void    interface_variable_rename(const QString &old_name, const QString &new_name);
     void    instance_removed(const QString &type, const QString &name);
     void    object_selected();
+    void    user_clicked();
 public slots:
     /** @brief пользователь ввёл новую переменную. Необходимо обновить данные о локальном интерфейсе */
     void    update_interface(const QDomNode &node);

@@ -1,5 +1,8 @@
 #include "TableView.h"
 
+#include "model/DomModel.h"
+#include "item/DomItem.h"
+
 #include <QMouseEvent>
 
 TableView::TableView(QWidget *parent) : QTableView(parent)
@@ -19,24 +22,11 @@ void TableView::mousePressEvent(QMouseEvent *event)
     QTableView::mousePressEvent(event);
 }
 
-bool TableView::edit(const QModelIndex &index, QAbstractItemView::EditTrigger trigger, QEvent *event)
-{
-    Q_UNUSED(index);
-    Q_UNUSED(trigger);
-    Q_UNUSED(event);
-
-    // qDebug() << "editor activated";
-
-    return QTableView::edit(index, trigger, event);
-}
-
 void TableView::slot_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QList<int> &roles)
 {
     Q_UNUSED(topLeft);
     Q_UNUSED(bottomRight);
     Q_UNUSED(roles);
-
-    qDebug() << "data changed";
 
     emit signal_tableChanged();
 }

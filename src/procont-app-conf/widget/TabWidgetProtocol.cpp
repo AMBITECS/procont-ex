@@ -17,6 +17,7 @@
 #include <QToolBar>
 #include <QActionGroup>
 #include <QFileInfo>
+#include <QUndoStack>
 
 #include <QDebug>
 
@@ -238,7 +239,7 @@ void CWidgetProtocolTab_build::set(const CText &text_)
 
 // CWidgetProtocol * CWidgetProtocol::m_pInstance = nullptr;
 
-CWidgetProtocol::CWidgetProtocol(QUndoStack *undoStack_, QWidget *parent) :
+CWidgetProtocol::CWidgetProtocol(QUndoGroup *undoGroup_, QWidget *parent) :
     QTabWidget{parent}
 {
     m_pWidgetMessage = new CWidgetProtocolTab_message(this);
@@ -248,7 +249,7 @@ CWidgetProtocol::CWidgetProtocol(QUndoStack *undoStack_, QWidget *parent) :
     addTab(m_pWidgetBuild, tr("Build"));
 
     m_pWidgetAction = new QUndoView(this);
-    m_pWidgetAction->setStack(undoStack_);
+    m_pWidgetAction->setGroup(undoGroup_);
     addTab(m_pWidgetAction, tr("Actions"));
 
     setMinimumHeight(200);
@@ -272,6 +273,15 @@ CWidgetProtocol::~CWidgetProtocol()
 
 //     return  m_pInstance;
 // }
+
+void CWidgetProtocol::slot_activateUndoStack(QWidget *widget_)
+{
+    if(widget_ == m_pWidgetMessage || widget_ == m_pWidgetBuild || widget_ == m_pWidgetAction)
+    {
+        qDebug() << __PRETTY_FUNCTION__;
+        MainWindow::instance()->emptyStack()->setActive();
+    }
+}
 
 void CWidgetProtocol::slot_add_msg(const CMessage &message_)
 {

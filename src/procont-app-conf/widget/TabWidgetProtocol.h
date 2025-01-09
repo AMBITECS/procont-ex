@@ -93,7 +93,7 @@ private:
 #include <QTabWidget>
 
 QT_FORWARD_DECLARE_CLASS(QUndoView)
-QT_FORWARD_DECLARE_CLASS(QUndoStack)
+QT_FORWARD_DECLARE_CLASS(QUndoGroup)
 
 /*!
  * \brief The CWidgetProtocol class
@@ -103,11 +103,14 @@ class CWidgetProtocol : public QTabWidget
 {
     Q_OBJECT
 public:
-    explicit CWidgetProtocol(QUndoStack *, QWidget *parent = nullptr);
+    explicit CWidgetProtocol(QUndoGroup*, QWidget *parent = nullptr);
     virtual ~CWidgetProtocol();
 
 // public:
 //     static CWidgetProtocol * instance();
+
+public slots:
+    void slot_activateUndoStack(QWidget *);
 
 private slots:
     void slot_add_msg(const CMessage &);

@@ -1,5 +1,7 @@
 #include "MainWindow.h"
 
+#include "Settings.h"
+
 #include "item/DomItem.h"
 #include "model/DomModel.h"
 #include "model/ProxyModel.h"
@@ -8,20 +10,16 @@
 #include "log/Logger.h"
 #include "iec/StandardLibrary.h"
 #include "view/TreeView.h"
-
 #include "dialog/InputDialog.h"
 #include "dialog/AddPOUDialog.h"
 #include "dialog/AddDUTDialog.h"
 #include "dialog/RenameDialog.h"
-
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
-
 #include "editor/fbd/general/ctreeobject.h"
-
 #include "undo/cundocommand_remove.h"
 #include "undo/cundocommand_insert.h"
-
+#include "undo/cundocommand_edit.h"
 #include "tr/translation.h"
 
 #include <QDockWidget>
@@ -35,33 +33,28 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QUndoStack>
+#include <QUndoGroup>
 
 #include <QDebug>
 
 MainWindow * MainWindow::_m_instance = nullptr;
-QString MainWindow::_m_config_filepath = QString();
-QString MainWindow::_m_base_directory = QString();
+QString MainWindow::_m_config_filepath = {};
+QString MainWindow::_m_base_directory = {};
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     _m_proxy_pou(new ProxyModelTree_pou),
     _m_proxy_dev(new ProxyModelTree_dev),
-    _m_undo_stack(new QUndoStack)
+    _m_undo_stack(new QUndoStack),
+    _m_empty_stack(new QUndoStack),
+    _m_undo_group(new QUndoGroup)
 {
-    setMinimumSize(QSize(1440, 900));
+    undoGroup()->addStack(undoStack());
+    undoGroup()->addStack(emptyStack());
+    undoGroup()->setActiveStack(undoStack());
 
-    setWindowIcon(QIcon(":/icon/images/pro.svg"));
-
-    createWidgets();
-
-    createMenu();
-
-    createDynamicActions();
-
-    StandardLibrary::instance()->load(/*m_baseDir*/);
-    // StandardLibrary::instance()->test();
-
-    open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
+    _m_proxy_pou->setUndoStack(undoStack());
+    _m_proxy_dev->setUndoStack(undoStack());
 
     if(!QFileInfo::exists(_m_base_directory))
         _m_base_directory = QFileInfo(QDir::currentPath()).absolutePath();
@@ -77,8 +70,40 @@ MainWindow::MainWindow(QWidget *parent) :
         QString etc_dir_ = QString("%1/etc").arg(_m_base_directory);
         if(!QFileInfo::exists(etc_dir_))
             QDir(_m_base_directory).mkdir(etc_dir_);
+
+        for(const auto& [key, value] : _g_settings_def)
+            _m_settings->setValue(key, value);
+
         _m_settings->setValue("Compiler/matiec_path", QString("%1/matiec").arg(_m_base_directory));
     }
+
+    auto width_min_def = _m_settings->value("Geometry/mainwindow_width_min").toInt();
+    auto width_min_min = _g_settings_min.value("Geometry/mainwindow_width_min").toInt();
+    width_min_def = (width_min_def > width_min_min) ? width_min_def : width_min_min;
+    auto width_def = _m_settings->value("Geometry/mainwindow_width_def").toInt();
+    width_def = (width_def > width_min_def) ? width_def : width_min_def;
+
+    auto height_min_def = _m_settings->value("Geometry/mainwindow_height_min").toInt();
+    auto height_min_min = _g_settings_min.value("Geometry/mainwindow_height_min").toInt();
+    height_min_def = (height_min_def > height_min_min) ? height_min_def : height_min_min;
+    auto height_def = _m_settings->value("Geometry/mainwindow_height_def").toInt();
+    height_def = (height_def > height_min_def) ? height_def : height_min_def;
+    setMinimumSize(QSize(width_def, height_def));
+
+    setWindowIcon(QIcon(":/icon/images/pro.svg"));
+
+    createMenu();
+
+    createWidgets();
+
+    createDynamicActions();
+
+    StandardLibrary::instance()->load(/*m_baseDir*/);
+    // StandardLibrary::instance()->test();
+
+    open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
+
+    connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(slot_focusChanged(QWidget *, QWidget *)));
 }
 
 void MainWindow::setConfig(const QString &filepath_)
@@ -104,36 +129,49 @@ QUndoStack * MainWindow::undoStack() const
     return _m_undo_stack;
 }
 
+QUndoStack * MainWindow::emptyStack() const
+{
+    return _m_empty_stack;
+}
+
+QUndoGroup* MainWindow::undoGroup() const
+{
+    return _m_undo_group;
+}
+
 void MainWindow::createWidgets()
 {
-    // central
     setCentralWidget(TabWidgetEditor::instance());
     connect(TabWidgetEditor::instance(), &TabWidgetEditor::signal_currentTabChanged, this, &MainWindow::slot_currentViewChanged);
 
     // left area
     _m_tree_dev = new QTreeView();
+    // registerUndoStackWidget(_m_tree_dev);
     _m_tree_dev->setExpandsOnDoubleClick(false);
-    _m_tree_dev->setMinimumSize(250, 400);
+    _m_tree_dev->setMinimumSize(300, 400);
     _m_tree_dev->setHeaderHidden(true);
     _m_tree_dev->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(_m_tree_dev, &QTreeView::customContextMenuRequested, this, &MainWindow::slot_devCustomContextMenu);
     dockDev = new QDockWidget(tr("Device"), this);
-    dockDev->setTitleBarWidget(new QWidget());
+    // dockDev->setTitleBarWidget(new QWidget());
     dockDev->setAllowedAreas(Qt::LeftDockWidgetArea);
     dockDev->setWidget(_m_tree_dev);
     addDockWidget(Qt::LeftDockWidgetArea, dockDev);
+    _m_view_menu->addAction(dockDev->toggleViewAction());
 
     _m_tree_pou = new TreeView();
+    // registerUndoStackWidget(_m_tree_pou);
     _m_tree_pou->setExpandsOnDoubleClick(false);
     _m_tree_pou->setMinimumSize(250, 400);
     _m_tree_pou->setHeaderHidden(true);
     _m_tree_pou->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(_m_tree_pou, &QTreeView::customContextMenuRequested, this, &MainWindow::slot_pouCustomContextMenu);
     dockPou = new QDockWidget(tr("POU"), this);
-    dockPou->setTitleBarWidget(new QWidget());
+    // dockPou->setTitleBarWidget(new QWidget());
     dockPou->setAllowedAreas(Qt::LeftDockWidgetArea);
     dockPou->setWidget(_m_tree_pou);
     addDockWidget(Qt::LeftDockWidgetArea, dockPou);
+    _m_view_menu->addAction(dockPou->toggleViewAction());
 
     // view = new QTreeView();
     // view->setMinimumSize(250, 400);
@@ -153,19 +191,22 @@ void MainWindow::createWidgets()
     QStringList treeHeaderLabels; treeHeaderLabels << tr("Components");
     _m_toolWidget->setHeaderLabels(treeHeaderLabels);
     auto pDock = new QDockWidget(tr("ToolBar"), this);
-    pDock->setTitleBarWidget(new QWidget());
+    // pDock->setTitleBarWidget(new QWidget());
     pDock->setAllowedAreas(Qt::RightDockWidgetArea);
     pDock->setWidget(_m_toolWidget);
     addDockWidget(Qt::RightDockWidgetArea, pDock);
+    _m_view_menu->addAction(pDock->toggleViewAction());
 
     // bottom area
-    _m_widget_protocol = new CWidgetProtocol(undoStack());
+    _m_widget_protocol = new CWidgetProtocol(undoGroup());
+    connect(this, &MainWindow::signal_activateUndoStack, _m_widget_protocol, &CWidgetProtocol::slot_activateUndoStack);
     _m_widget_protocol->setMinimumHeight(300);
     pDock = new QDockWidget(tr("Protocol"), this);
-    pDock->setTitleBarWidget(new QWidget());
+    // pDock->setTitleBarWidget(new QWidget());
     pDock->setAllowedAreas(Qt::BottomDockWidgetArea);
     pDock->setWidget(_m_widget_protocol);
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
+    _m_view_menu->addAction(pDock->toggleViewAction());
 }
 
 CTreeObject * MainWindow::toolWidget() const
@@ -181,13 +222,13 @@ void MainWindow::createMenu()
     fileMenu->addAction(tr("Exit"), QKeySequence::Quit, this, &QWidget::close);
 
     auto editMenu = menuBar()->addMenu(tr("Edit"));
-    auto edit_undo_act = undoStack()->createUndoAction(this);
+    auto edit_undo_act = undoGroup()->createUndoAction(this);
     edit_undo_act->setText(tr("Undo"));
     edit_undo_act->setIcon(QIcon(":/icon/images/undo1.svg"));
     edit_undo_act->setShortcuts(QKeySequence::Undo);
     edit_undo_act->setStatusTip(tr("Undo action"));
 
-    auto edit_redo_act = undoStack()->createRedoAction(this);
+    auto edit_redo_act = undoGroup()->createRedoAction(this);
     edit_redo_act->setText(tr("Redo"));
     edit_redo_act->setIcon(QIcon(":/icon/images/redo1.svg"));
     edit_redo_act->setShortcuts(QKeySequence::Redo);
@@ -234,7 +275,7 @@ void MainWindow::createMenu()
     editMenu->addSeparator();
     auto edit_input_assistant_act = editMenu->addAction(QIcon(":/icon/images/hierarchy.svg"), tr("Input assistant..."), QKeySequence(tr("F2")), this, &MainWindow::slot_input_assistant);
 
-    auto viewMenu = menuBar()->addMenu(tr("View"));
+    _m_view_menu = menuBar()->addMenu(tr("View"));
 
     auto projectMenu = menuBar()->addMenu(tr("Project"));
     _m_addobject_menu = new QMenu(tr("Add object"));
@@ -326,7 +367,7 @@ void MainWindow::createContextMenu(const QPoint &pos_, const QTreeView *tree_)
     QModelIndex index = tree_->indexAt(pos_);
     if(index.isValid())
     {
-        QDomNode node = item(index)->node();
+        auto node = DomModel::toItem(index)->node();
         QList<DynamicAction> acts = _m_dynamic_actions.values(node.nodeName());
         if(acts.size())
         {
@@ -378,16 +419,26 @@ void MainWindow::slot_devCustomContextMenu(const QPoint &pos_)
     createContextMenu(pos_, _m_tree_dev);
 }
 
+void MainWindow::slot_focusChanged(QWidget *, QWidget *new_)
+{
+    qDebug() << new_;
+
+    if(new_ == _m_tree_pou || new_ == _m_tree_dev)
+        undoStack()->setActive();
+    else
+        emit signal_activateUndoStack(new_);
+}
+
 void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModelIndex &)
 {
     _m_addobject_menu->clear();
     if(current.isValid())
     {
-        QDomNode node = item(current)->node();
+        auto node = DomModel::toItem(current)->node();
         QList<DynamicAction> acts = _m_dynamic_actions.values(node.nodeName());
         if(acts.size())
         {
-            for(auto i : std::as_const(acts))
+            for(const auto & i : std::as_const(acts))
             {
                 if(i._m_views.contains(_m_tree_pou) && i._m_menu == tr("Add object"))
                     _m_addobject_menu->addAction(i._m_act);
@@ -402,11 +453,11 @@ void MainWindow::slot_devCurrentChanged(const QModelIndex &current, const QModel
     _m_addobject_menu->clear();
     if(current.isValid())
     {
-        QDomNode node = item(current)->node();
+        auto node = DomModel::toItem(current)->node();
         QList<DynamicAction> acts = _m_dynamic_actions.values(node.nodeName());
         if(acts.size())
         {
-            for(auto i : std::as_const(acts))
+            for(const auto & i : std::as_const(acts))
             {
                 if(i._m_views.contains(_m_tree_dev) && i._m_menu == tr("Add object"))
                     _m_addobject_menu->addAction(i._m_act);
@@ -416,38 +467,16 @@ void MainWindow::slot_devCurrentChanged(const QModelIndex &current, const QModel
     _m_button->setMenu(_m_addobject_menu);
 }
 
-QModelIndex MainWindow::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
-{
-    if(proxy == nullptr)
-        return reinterpret_cast<const QAbstractProxyModel*>(index.model())->mapToSource(index);
-
-    return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapToSource(index);
-}
-
-QModelIndex MainWindow::p_index(const QModelIndex &index, QAbstractItemModel * proxy)
-{
-    return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapFromSource(index);
-}
-
-QAbstractProxyModel * MainWindow::proxy(QAbstractItemModel *model)
-{
-    return reinterpret_cast<QAbstractProxyModel*>(model);
-}
-
-DomItem * MainWindow::item(const QModelIndex &index, QAbstractItemModel * proxy)
-{
-    return reinterpret_cast<DomItem *>(s_index(index, proxy).internalPointer());
-}
-
 void MainWindow::slot_add_DUT()
 {
     AddDUTDialog dlg;
     if(dlg.exec() == QDialog::Accepted)
     {
-        auto model = reinterpret_cast<QAbstractProxyModel*>(_m_tree_pou->model())->sourceModel();
-        auto parentIndex = s_index(_m_tree_pou->currentIndex());
-        undoStack()->push(new CUndoCommand_insert(dlg.getNode().toDocument().documentElement(), parentIndex, model));
+        auto cmd = new CUndoCommand_insert_tree(_m_model_project, DomModel::s_index(_m_tree_pou->currentIndex()), dlg.getNode().toDocument().documentElement());
+        connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_selectRow_tree);
+        undoStack()->push(cmd);
     }
+    _m_tree_pou->setFocus();
 }
 
 void MainWindow::slot_add_POU()
@@ -455,9 +484,23 @@ void MainWindow::slot_add_POU()
     AddPOUDialog dlg;
     if(dlg.exec() == QDialog::Accepted)
     {
-        auto model = reinterpret_cast<QAbstractProxyModel*>(_m_tree_pou->model())->sourceModel();
-        auto parentIndex = s_index(_m_tree_pou->currentIndex());
-        undoStack()->push(new CUndoCommand_insert(dlg.getNode().toDocument().documentElement(), parentIndex, model));
+        auto cmd = new CUndoCommand_insert_tree(_m_model_project, DomModel::s_index(_m_tree_pou->currentIndex()), dlg.getNode().toDocument().documentElement());
+        connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_selectRow_tree);
+        undoStack()->push(cmd);
+    }
+
+    _m_tree_pou->setFocus();
+}
+
+void MainWindow::slot_selectRow_tree(const QModelIndex &index_)
+{
+    qDebug() << __PRETTY_FUNCTION__;
+
+    if(index_.model() == _m_proxy_pou)
+    {
+        _m_tree_pou->clearSelection();
+        _m_tree_pou->setCurrentIndex(QModelIndex());
+        _m_tree_pou->selectionModel()->select(index_, QItemSelectionModel::Select);
     }
 }
 
@@ -562,7 +605,7 @@ void MainWindow::open(const QString & filePath)
     {
         auto newModel = new DomModel(_m_project_document, this);
 
-        StandardLibrary::instance()->add("User types", &_m_project_document, tr("User types"));
+        StandardLibrary::instance()->add("User defined", &_m_project_document, tr("User defined"));
 
         // view->setModel(newModel);
 
@@ -667,16 +710,16 @@ void MainWindow::slot_delete()
     {
         for(auto index : _m_tree_pou->selectionModel()->selectedRows())
         {
-            if(listViewExclude.contains(item(index)->node().nodeName()))
+            if(listViewExclude.contains(DomModel::toItem(index)->node().nodeName()))
                 continue;
 
             QString _type = {};
-            if(item(index)->parentItem()->node().nodeName() == "pous")
+            if(DomModel::toItem(index)->parentItem()->node().nodeName() == "pous")
                 _type = "POU";
-            if(item(index)->parentItem()->node().nodeName() == "dataTypes")
+            if(DomModel::toItem(index)->parentItem()->node().nodeName() == "dataTypes")
                 _type = "DUT";
 
-            auto _name = item(index)->node().toElement().attribute("name");
+            auto _name = DomModel::toItem(index)->node().toElement().attribute("name");
             auto _result = QMessageBox::question
                     (
                         this,
@@ -684,7 +727,7 @@ void MainWindow::slot_delete()
                         QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
                 );
             if(QMessageBox::Yes == _result)
-                undoStack()->push(new CUndoCommand_remove(s_index(index), proxy(_m_tree_pou->model())->sourceModel()));
+                undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));
         }
     }
     // dev tree
@@ -692,20 +735,20 @@ void MainWindow::slot_delete()
     {
         for(auto index : _m_tree_dev->selectionModel()->selectedRows())
         {
-            if(listViewExclude.contains(item(index)->node().nodeName()))
+            if(listViewExclude.contains(DomModel::toItem(index)->node().nodeName()))
                 continue;
 
             QString _type = {};
-            if(item(index)->parentItem()->node().nodeName() == "project")
+            if(DomModel::toItem(index)->parentItem()->node().nodeName() == "project")
                 _type = "configuration";
-            if(item(index)->parentItem()->node().nodeName() == "configuration")
+            if(DomModel::toItem(index)->parentItem()->node().nodeName() == "configuration")
                 _type = "resource";
-            if(item(index)->parentItem()->node().nodeName() == "resource")
+            if(DomModel::toItem(index)->parentItem()->node().nodeName() == "resource")
                 _type = "task";
-            if(item(index)->parentItem()->node().nodeName() == "task")
+            if(DomModel::toItem(index)->parentItem()->node().nodeName() == "task")
                 _type = "POU instance";
 
-            auto _name = item(index)->node().toElement().attribute("name");
+            auto _name = DomModel::toItem(index)->node().toElement().attribute("name");
             auto _result = QMessageBox::question
                 (
                     this,
@@ -713,7 +756,7 @@ void MainWindow::slot_delete()
                     QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
                 );
             if(QMessageBox::Yes == _result)
-                undoStack()->push(new CUndoCommand_remove(s_index(index), proxy(_m_tree_pou->model())->sourceModel()));
+                undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));
         }
     }
 }
@@ -733,12 +776,12 @@ void MainWindow::slot_rename()
     for(auto index : _tree->selectionModel()->selectedRows())
     {
         // rename dialog
-        RenameDialog dlg(item(index)->node().toElement().attribute("name"));
+        RenameDialog dlg(DomModel::toItem(index)->node().toElement().attribute("name"));
         auto _result = dlg.exec();
         if(_result == QDialog::Accepted)
         {
             // question
-            QDomElement _node = item(index)->node().toElement();
+            auto _node = DomModel::toItem(index)->node().toElement();
             auto _result = QMessageBox::question
                 (
                     this,
@@ -748,10 +791,19 @@ void MainWindow::slot_rename()
                 );
             if(QMessageBox::Yes == _result)
             {
-                // переименовать node
-                item(index)->node().toElement().setAttribute("name", dlg.new_name());
-                // переименовать tab
-                TabWidgetEditor::instance()->renameTab(index);
+                // QDomDocument _doc;
+                // auto _node_old = /*_doc.importNode(*/DomModel::toItem(index)->node().cloneNode()/*, true)*/;
+                // auto _node_new = /*_doc.importNode(*/DomModel::toItem(index)->node().cloneNode()/*, true)*/;
+                // _node_new.attributes().namedItem("name").setNodeValue(dlg.new_name());
+
+                // undoStack()->push(
+                //     new CUndoCommand_edit_tree(_m_model_project, DomModel::s_index(index), index, _node_old, _node_new));
+
+                Q_ASSERT(_tree->model());
+                Q_ASSERT(index.isValid());
+                Q_ASSERT(DomModel::s_index(index).isValid());
+
+                _tree->model()->setData(index, QVariant(dlg.new_name()), Qt::EditRole);
             }
         }
     }

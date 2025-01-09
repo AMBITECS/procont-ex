@@ -7,7 +7,8 @@
 
 QHash<QString, QString> ItemValue_Type::m_types = {
     {"localVars", "VAR"}, {"inputVars", "VAR_INPUT"}, {"outputVars", "VAR_OUTPUT"},
-    {"inOutVars", "VAR_IN_OUT"}, {"tempVars", "VAR_TEMP"}, {"externalVars", "VAR_EXTERNAL"}, {"globalVars", "VAR_GLOBAL"} };
+    {"inOutVars", "VAR_IN_OUT"}, {"tempVars", "VAR_TEMP"}, {"accessVars", "VAR_ACCESS"},
+    {"externalVars", "VAR_EXTERNAL"}, {"globalVars", "VAR_GLOBAL"} };
 
 QHash<QString, QString> ItemValue_Type::m_modifiers_i = {
     {"constant", "CONSTANT"}, {"persistent", "PERSISTENT"}, {"nonpersistent", "PERSISTENT"},

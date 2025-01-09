@@ -16,7 +16,7 @@
   </contentHeader>
   <types>
     <dataTypes>
-          <dataType name="datatype0">
+      <dataType name="datatype0">
         <baseType>
           <struct>
             <variable name="id">
@@ -46,8 +46,218 @@
           </struct>
         </baseType>
       </dataType>
+      <dataType name="datatype1">
+        <baseType>
+          <struct>
+            <variable name="Var1">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="Var2">
+              <type>
+                <array>
+                  <dimension lower="0" upper="4"/>
+                  <baseType>
+                    <WORD/>
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+          </struct>
+        </baseType>
+      </dataType>
     </dataTypes>
     <pous>
+      <pou name="st-editor" pouType="function">
+        <interface>
+          <returnType>
+            <REAL/>
+          </returnType>
+          <inputVars>
+            <variable name="Cnt1">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="Cnt2">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="Cnt3">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="Cnt4">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="Cnt5">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </inputVars>
+          <localVars>
+            <variable name="InputsNumber">
+              <type>
+                <REAL/>
+              </type>
+              <initialValue>
+                <simpleValue value="5.0"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Количество входных значений]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="newVar0">
+              <type>
+                <derived name="datatype1"/>
+              </type>
+            </variable>
+            <variable name="newVar1">
+              <type>
+                <array>
+                  <dimension lower="0" upper="9" />
+                  <baseType>
+                    <BYTE />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="newVar2">
+              <type>
+                <array>
+                  <dimension lower="0" upper="4" />
+                  <baseType>
+                    <derived name="TON" />
+                  </baseType>
+                </array>
+              </type>
+              <initialValue>
+                <arrayValue>
+                  <value>
+                    <structValue>
+                      <value member="Q">
+                        <simpleValue value="TRUE" />
+                      </value>
+                      <value member="ET">
+                        <simpleValue value="TIME#5ms" />
+                      </value>
+                    </structValue>
+                  </value>
+                  <value repetitionValue="2">
+                    <structValue />
+                  </value>
+                  <value>
+                    <structValue>
+                      <value member="IN">
+                        <simpleValue value="TRUE" />
+                      </value>
+                      <value member="PT">
+                        <simpleValue value="TIME#9ms" />
+                      </value>
+                    </structValue>
+                  </value>
+                  <value>
+                    <structValue />
+                  </value>
+                </arrayValue>
+              </initialValue>
+            </variable>
+            <variable name="newVar3">
+              <type>
+                <derived name="TON" />
+              </type>
+              <initialValue>
+                <structValue>
+                  <value member="IN">
+                    <simpleValue value="TRUE" />
+                  </value>
+                  <value member="ET">
+                    <simpleValue value="TIME#5ms" />
+                  </value>
+                </structValue>
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">The temperature is decreased on a time delay, when the comepressor has been activated</xhtml>
+              </documentation>
+            </variable>
+          </localVars>
+          <localVars persistent="true" constant="true" retain="true">
+            <variable name="Var1">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="51"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Локальная переменная с прямыми флагами модификаторами]]></xhtml:p>
+              </documentation>
+            </variable>
+          </localVars>
+          <localVars nonpersistent="false" constant="false" nonretain="false">
+            <variable name="Var2">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="52"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Локальная переменная с обратными флагами модификаторами]]></xhtml:p>
+              </documentation>
+            </variable>
+          </localVars>
+          <tempVars nonpersistent="true" constant="true" nonretain="true">
+            <variable name="Var3">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="53"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Временная переменная с обратными флагами модификаторами]]></xhtml:p>
+              </documentation>
+            </variable>
+          </tempVars>
+          <inOutVars>
+            <variable name="Var4">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="54"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Входная и выходная переменная без флагов модификаторов]]></xhtml:p>
+              </documentation>
+            </variable>
+          </inOutVars>
+          <accessVars>
+            <variable name="Var5">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="55"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Переменная пути доступа без флагов модификаторов]]></xhtml:p>
+              </documentation>
+            </variable>
+          </accessVars>        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[AverageVal := INT_TO_REAL(Cnt1+Cnt2+Cnt3+Cnt4+Cnt5)/InputsNumber;]]></xhtml:p>
+          </ST>
+        </body>
+      </pou>
       <pou name="AverageVal" pouType="function">
         <interface>
           <returnType>

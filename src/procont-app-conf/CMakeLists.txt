@@ -4,7 +4,7 @@ set(NAME ${PNME}-conf-app)
 
 project(${NAME} VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -34,6 +34,7 @@ file(GLOB_RECURSE st-editor
 set(PROJECT_SOURCES
     main/MainApp.cpp
     main/MainWindow.cpp main/MainWindow.h
+    main/Settings.h
 
     model/DomModel.h model/DomModel.cpp
     model/ProxyModel.cpp model/ProxyModel.h
@@ -46,6 +47,8 @@ set(PROJECT_SOURCES
     widget/TabWidgetTree.h widget/TabWidgetTree.cpp
     widget/TabWidgetProtocol.cpp widget/TabWidgetProtocol.h
     widget/WidgetEditor.h widget/WidgetEditor.cpp
+    widget/WidgetEditor_fbd.cpp widget/WidgetEditor_fbd.h
+    widget/WidgetEditor_inherit.cpp widget/WidgetEditor_inherit.h
 
     log/Logger.h log/Logger.cpp log/Message.h log/Message.cpp
 
@@ -53,6 +56,8 @@ set(PROJECT_SOURCES
     view/ItemDelegate.h view/ItemDelegate.cpp
     view/SpinBoxMultiRange.h view/SpinBoxMultiRange.cpp
     view/TableView.h view/TableView.cpp
+    view/ComboBoxMultiListWidget.h view/ComboBoxMultiListWidget.cpp
+    view/ItemDelegate_combobox.h view/ItemDelegate_combobox.cpp
 
     translator/SchemaViewer.cpp translator/SchemaViewer.h
     translator/GlobalType.h
@@ -81,6 +86,11 @@ set(PROJECT_SOURCES
 
     xml/PLCopenXML.cpp xml/PLCopenXML.h
 
+    undo/iundocommand.cpp undo/iundocommand.h
+    undo/cundocommand_edit.cpp undo/cundocommand_edit.h
+    undo/cundocommand_remove.h undo/cundocommand_remove.cpp
+    undo/cundocommand_insert.h undo/cundocommand_insert.cpp
+
     ${st-editor}
 
     ${fbd-editor}
@@ -96,7 +106,6 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-        undo/cundocommand_edit.cpp undo/cundocommand_edit.h undo/cundocommand_insert.cpp undo/cundocommand_insert.h undo/cundocommand_remove.cpp undo/cundocommand_remove.h undo/iundocommand.cpp undo/iundocommand.h
    )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

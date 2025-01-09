@@ -3,30 +3,27 @@
 
 #include <QUndoCommand>
 #include <QPersistentModelIndex>
+#include <QDomNode>
+#include <QObject>
 
 QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
 
+QT_FORWARD_DECLARE_CLASS(DomModel)
 QT_FORWARD_DECLARE_CLASS(DomItem)
 
 // *** IUndoCommand
-class IUndoCommand : public QUndoCommand
+class IUndoCommand : public QObject, public QUndoCommand
 {
+    Q_OBJECT
 public:
-    IUndoCommand(const QModelIndex &index_, QAbstractItemModel *model_, QUndoCommand * = nullptr);
-    virtual ~IUndoCommand();
-
-    virtual void undo() override;
-    virtual void redo() override;
-
-    bool isRedo() const { return m_redo; }
+    IUndoCommand(int row_, int column_, const QModelIndex &index_parent_ = QModelIndex(), QUndoCommand * = nullptr);
 
 protected:
-    static DomItem * item(const QModelIndex &index);
-
-protected:
-    QPersistentModelIndex _m_index;
-    QAbstractItemModel * _m_model{nullptr};
-    bool m_redo;
+    int _m_row{-1};
+    int _m_column{-1};
+    QPersistentModelIndex _m_index_current;
+    QPersistentModelIndex _m_index_parent;
+    QString _m_name_ru{};
 };
 // ***
 

@@ -121,7 +121,6 @@ QString FilesManager::getBodyData(const QModelIndex &index)
 
 void FilesManager::delteStFolder()
 {
-    qDebug() << "DELETE";
     _stFilesDir->removeRecursively();
 }
 

@@ -137,20 +137,40 @@ typedef enum
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
-typedef struct
+typedef enum
 {
-    QString _name;
-    QString _type;
-    QString _code;
-    QString _out;
+    MT_NONE = 0,
+    MT_CONTACT_NOT,
+    MT_CONTACT_RISING,
+    MT_CONTACT_FALLING,
+    MT_COIL_NOT,
+    MT_COIL_RISING,
+    MT_COIL_FALLING,
+    MT_COIL_SET,
+    MT_COIL_RESET
+}T_MODIFICATOR_TYPE;
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+typedef struct T_MODIFICATOR
+{
+    bool                _is_used = false;
+    qint32              _localId = -1;
+    QString             _name = "";
+    QString             _type = "";
+    QString             _code = "";
+    QString             _out = "";
+    QString             _var_declaration = "";
+    QString             _code_declaration = "";
+    T_MODIFICATOR_TYPE  _mod_type = MT_NONE;
 }T_MODIFICATOR;
 
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
-typedef struct
+typedef struct T_INITIAL_VALUE
 {
-    QString _simpleValue;
+    QString _simpleValue = "";
 }T_INITIAL_VALUE;
 
 //-----------------------------------------------------------------------------------
@@ -216,6 +236,7 @@ typedef struct T_CONNECTION_VAR
     bool    _is_modificator = false;
     quint64 _id             = 0;
     QString _name           = "";
+    QString _code           = "";
     QString _type           = "";
 }T_CONNECTION_VAR;
 
@@ -231,12 +252,12 @@ typedef struct T_POU_FBD_ITEM
     QRect   _rect;
     // ------------
 
-    T_FBD_ITEM_TYPE _type   = IT_FBD_NOT_DEFINED;
-    quint64 _localId        = 0;
-    QString _name;
-    QString _typeName;
-    QString _instanceName;
-    quint64 _executionOrderId;
+    T_FBD_ITEM_TYPE _type       = IT_FBD_NOT_DEFINED;
+    quint64 _localId            = 0;
+    QString _name               = "";
+    QString _typeName           = "";
+    QString _instanceName       = "";
+    quint64 _executionOrderId   = 0;
     quint32 _pos_x;
     quint32 _pos_y;
     quint64 _width;
@@ -245,8 +266,8 @@ typedef struct T_POU_FBD_ITEM
     bool    _negated;
     bool    _negatedOut;
     bool    _negatedIn;
-    QString _expression;
-    QString _return_type;
+    QString _expression         = "";
+    QString _return_type        = "";
 
     struct {
         quint32 _x;
@@ -370,10 +391,10 @@ typedef struct T_POU_SFC_ITEM
     quint64 _width              = 0;
     quint64 _height             = 0;
 
-    quint32 _position_x;
-    quint32 _position_y;
+    quint32 _position_x         = 0;
+    quint32 _position_y         = 0;
 
-    QString _comment_content;
+    QString _comment_content    = "";
 
     T_SFC_ITEM_CONNECTION   _in_connection = IT_SFC_NOT_CONNECTION;
     T_SFC_ITEM_CONNECTION   _out_connection = IT_SFC_NOT_CONNECTION;
@@ -391,25 +412,27 @@ typedef struct T_POU_SFC_ITEM
 //-----------------------------------------------------------------------------------
 typedef struct T_POU_LD_ITEM
 {
-    bool            _is_used    = false;
-    T_LD_ITEM_TYPE  _type   = IT_LD_NOT_DEFINED;
-    qint32          _localId;
-    QString         _name;
-    QString         _typeName;
-    QString         _instanceName;
-    quint64         _executionOrderId;
+    bool            _is_used            = false;
+    bool            _is_chain_used      = false;
+    T_LD_ITEM_TYPE  _type               = IT_LD_NOT_DEFINED;
+    qint32          _localId            = 0;
+    QString         _name               = "";
+    QString         _typeName           = "";
+    QString         _instanceName       = "";
+    quint64         _executionOrderId   = 0;
     quint32         _pos_x;
     quint32         _pos_y;
     quint64         _width;
     quint64         _height;
 
-    bool    _negated        = false;
-    bool    _negatedOut     = false;;
-    bool    _negatedIn      = false;;
-    QString _edge           = "";
-    QString _storage        = "";
-    QString _expression     = "";
-    QString _return_type    = "";
+    bool            _negated        = false;
+    bool            _negatedOut     = false;;
+    bool            _negatedIn      = false;;
+    QString         _edge           = "";
+    QString         _storage        = "";
+    QString         _expression     = "";
+    QString         _return_type    = "";
+    quint32         _modificator_id = 0;
 
     struct {
         quint32 _x;

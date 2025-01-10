@@ -14,8 +14,8 @@ public:
     explicit CTransitions(const QDomNode & dom_node);
     ~CTransitions();
 
-    bool        is_empty() const;
-    QDomNode    dom_node() const;
+    [[nodiscard]] bool        is_empty() const;
+    [[nodiscard]] QDomNode    dom_node() const;
 
 };
 

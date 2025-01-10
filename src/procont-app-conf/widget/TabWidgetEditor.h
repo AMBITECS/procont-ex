@@ -26,14 +26,11 @@ public:
 
     void addIntro();
 
+    void renameTab(const QModelIndex &);
+    void closeTab(const QModelIndex &, bool = false);
+
 public slots:
     void slot_addTabWidget(const QModelIndex &index);
-
-protected:
-    static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
-    static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
-    static QAbstractProxyModel * proxy(QAbstractItemModel *);
-    static DomItem * item(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
 
 private slots:
     void slot_closeTab(int index);

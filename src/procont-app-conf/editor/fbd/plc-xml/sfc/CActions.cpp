@@ -220,22 +220,32 @@ CDocumentation *CAction::documentation()
 
 CActions::CActions()
 {
-
+    m_actions = new std::vector<CAction*>();
 }
 
 CActions::CActions(const CActions &actions)
 {
+    m_actions = new std::vector<CAction*>();
 
+    for (auto &item : *actions.m_actions)
+    {
+        auto act = new CAction(*item);
+        m_actions->push_back(act);
+    }
 }
 
 CActions::CActions(const QDomNode &dom_node)
 {
-
+    m_actions = new std::vector<CAction*>();
 }
 
 CActions::~CActions()
 {
-
+    for (auto &item : *m_actions)
+    {
+        delete item;
+    }
+    delete m_actions;
 }
 
 bool CActions::is_empty() const

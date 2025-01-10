@@ -1,5 +1,10 @@
 #include "ItemDelegate.h"
 
+#include "item/DomItem.h"
+#include "model/DomModel.h"
+
+#include <QMessageBox>
+
 #include <QDebug>
 
 // *** CNoEditorDelegate ***
@@ -15,6 +20,56 @@ QWidget* CNoEditorDelegate::createEditor(QWidget *parent, const QStyleOptionView
     Q_UNUSED(index)
 
     return 0;
+}
+// ***
+
+// *** CLineEditDelegate ***
+
+#include <QLineEdit>
+
+CLineEditDelegate::CLineEditDelegate( QObject *parent) : QStyledItemDelegate(parent)
+{
+}
+
+QWidget *CLineEditDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(option)
+    Q_UNUSED(index)
+
+    auto *editor = new QLineEdit(parent);
+
+    return editor;
+}
+
+void CLineEditDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    QString current = index.model()->data(index, Qt::EditRole).toString();
+
+    auto * lineedit = static_cast<QLineEdit*>(editor);
+    lineedit->setText(current);
+}
+
+void CLineEditDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    auto * lineedit = static_cast<QLineEdit*>(editor);
+
+    auto _text = lineedit->text();
+    auto _item = DomModel::toItem(index)->parentItem();
+
+    Q_ASSERT(_item);
+
+    if(_item->hasChild(_text, index.row()))
+        QMessageBox::critical(nullptr, tr("Error"),
+            QString(tr("The variable named \'%1\' already exists\nPlease, enter different variable name")).arg(_text));
+    else
+        model->setData(index, _text, Qt::EditRole);
+}
+
+void CLineEditDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+
+    editor->setGeometry(option.rect);
 }
 // ***
 
@@ -60,6 +115,7 @@ void CComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOption
 
     editor->setGeometry(option.rect);
 }
+// ***
 
 // *** CTextEditDelegate ***
 
@@ -100,6 +156,7 @@ void CTextEditDelegate::updateEditorGeometry(QWidget *editor, const QStyleOption
 
     editor->setGeometry(option.rect);
 }
+// ***
 
 // *** CSpinBoxDelegate ***
 
@@ -173,5 +230,4 @@ void CSpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
 
     editor->setGeometry(option.rect);
 }
-
 // ***

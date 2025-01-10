@@ -56,11 +56,6 @@ CAddData::CAddData(const QDomNode &node)
 
 CAddData::~CAddData()
 {
-    /*if (!m_data_list)
-    {
-        return;
-    }*/
-
     if (!m_data_list->empty())
         clean();
     delete m_data_list;
@@ -109,7 +104,7 @@ CData *CAddData::remove_data(CData *data)
     {
         if (item == data)
         {
-            m_data_list->erase(m_data_list->begin() + counter);
+            m_data_list->erase(m_data_list->cbegin() + counter);
             return data;
         }
 
@@ -119,7 +114,8 @@ CData *CAddData::remove_data(CData *data)
     return nullptr;
 }
 
-CData *CAddData::remove_data(const uint16_t &index)
+CData *
+CAddData::remove_data(const uint16_t &index)
 {
     if (index >= m_data_list->count())
     {
@@ -127,7 +123,7 @@ CData *CAddData::remove_data(const uint16_t &index)
     }
 
     CData *rem = m_data_list->at(index);
-    m_data_list->erase(m_data_list->begin() + index);
+    m_data_list->erase(m_data_list->cbegin() + index);
     return rem;
 }
 

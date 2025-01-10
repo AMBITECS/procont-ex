@@ -38,6 +38,28 @@
         <file>images/hierarchy.svg</file>
         <file>images/plus-large.svg</file>
         <file>images/plus2.svg</file>
+        <file>images/input.svg</file>
+        <file>images/output.svg</file>
+        <file>images/input2.svg</file>
+        <file>images/input3.svg</file>
+        <file>images/output2.svg</file>
+        <file>images/output3.svg</file>
+        <file>images/rename.svg</file>
+        <file>images/config.svg</file>
+        <file>images/var_external_select.png</file>
+        <file>images/var_external.png</file>
+        <file>images/var_global_select.png</file>
+        <file>images/var_global.png</file>
+        <file>images/var_in_out_select.png</file>
+        <file>images/var_in_out.png</file>
+        <file>images/var_input_select.png</file>
+        <file>images/var_input.png</file>
+        <file>images/var_output_select.png</file>
+        <file>images/var_output.png</file>
+        <file>images/var_select.png</file>
+        <file>images/var_temp_select.png</file>
+        <file>images/var_temp.png</file>
+        <file>images/var.png</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/AdditionalFunctionBlocks.xml</file>
@@ -46,5 +68,6 @@
     </qresource>
     <qresource prefix="/proj">
         <file>proj/plc-e.xml</file>
+        <file>proj/plc-1.xml</file>
     </qresource>
 </RCC>

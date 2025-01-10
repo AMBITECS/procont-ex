@@ -83,8 +83,6 @@ public:
                     result.dimension.lower = dim_lower;
                     result.dimension.upper = dim_upper;
                     result.baseType = list_types.at(1).split("OF").at(1);
-
-                    qDebug() << "baseName: " << result.baseType << ", dimension lower: " << result.dimension.lower << ", dimension upper: " << result.dimension.upper;
                 }
             }
         }

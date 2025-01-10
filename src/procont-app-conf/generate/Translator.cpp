@@ -42,6 +42,54 @@ QString Translator_POU_FBD::translate() const
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** Translator_POU_SFC ***
+
+#include "translator/TranslatorSfc.h"
+
+Translator_POU_SFC::Translator_POU_SFC(const QDomNode &node_) : ITranslator_POU(node_)
+{
+}
+
+QString Translator_POU_SFC::translate() const
+{
+    TranslatorSFC translator;
+    return translator.getSTCode_pou(_m_node);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_LD ***
+
+#include "translator/TranslatorLD.h"
+
+Translator_POU_LD::Translator_POU_LD(const QDomNode &node_) : ITranslator_POU(node_)
+{
+}
+
+QString Translator_POU_LD::translate() const
+{
+    TranslatorLD translator;
+    return translator.getSTCode_pou(_m_node);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_IL ***
+
+#include "translator/TranslatorIL.h"
+
+Translator_POU_IL::Translator_POU_IL(const QDomNode &node_) : ITranslator_POU(node_)
+{
+}
+
+QString Translator_POU_IL::translate() const
+{
+    TranslatorIL translator;
+    return translator.getSTCode_pou(_m_node);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** Translator_POU_creator_ST ***
 
 ITranslator_POU * Translator_POU_creator_ST::create(const QDomNode &node_) const
@@ -60,6 +108,33 @@ ITranslator_POU * Translator_POU_creator_FBD::create(const QDomNode &node_) cons
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** Translator_POU_creator_SFC ***
+
+ITranslator_POU * Translator_POU_creator_SFC::create(const QDomNode &node_) const
+{
+    return new Translator_POU_SFC(node_);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_creator_LD ***
+
+ITranslator_POU * Translator_POU_creator_LD::create(const QDomNode &node_) const
+{
+    return new Translator_POU_LD(node_);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** Translator_POU_creator_IL ***
+
+ITranslator_POU * Translator_POU_creator_IL::create(const QDomNode &node_) const
+{
+    return new Translator_POU_IL(node_);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** Translator_POU_builder ***
 
 Translator_POU_builder * Translator_POU_builder::_m_instance = nullptr;
@@ -68,6 +143,9 @@ Translator_POU_builder::Translator_POU_builder()
 {
     _m_hCreators.insert(ITranslator_POU::eTranslatorPOUType::typeST, new Translator_POU_creator_ST);
     _m_hCreators.insert(ITranslator_POU::eTranslatorPOUType::typeFBD, new Translator_POU_creator_FBD);
+    _m_hCreators.insert(ITranslator_POU::eTranslatorPOUType::typeSFC, new Translator_POU_creator_SFC);
+    _m_hCreators.insert(ITranslator_POU::eTranslatorPOUType::typeLD, new Translator_POU_creator_LD);
+    _m_hCreators.insert(ITranslator_POU::eTranslatorPOUType::typeIL, new Translator_POU_creator_IL);
 }
 
 Translator_POU_builder::~Translator_POU_builder()
@@ -75,7 +153,7 @@ Translator_POU_builder::~Translator_POU_builder()
     for(const auto & creator : std::as_const(_m_hCreators))
         delete creator;
 
-    delete _m_instance;
+    if(_m_instance) delete _m_instance;
 }
 
 Translator_POU_builder * Translator_POU_builder::instance()
@@ -92,6 +170,12 @@ ITranslator_POU::eTranslatorPOUType Translator_POU_builder::assignType(const QDo
         return ITranslator_POU::eTranslatorPOUType::typeST;
     if(!node_.namedItem("body").namedItem("FBD").isNull())
         return ITranslator_POU::eTranslatorPOUType::typeFBD;
+    if(!node_.namedItem("body").namedItem("SFC").isNull())
+        return ITranslator_POU::eTranslatorPOUType::typeSFC;
+    if(!node_.namedItem("body").namedItem("LD").isNull())
+        return ITranslator_POU::eTranslatorPOUType::typeLD;
+    if(!node_.namedItem("body").namedItem("IL").isNull())
+        return ITranslator_POU::eTranslatorPOUType::typeIL;
 
     return ITranslator_POU::eTranslatorPOUType::typeUnknown;
 }

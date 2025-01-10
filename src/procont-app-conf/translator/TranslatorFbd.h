@@ -38,6 +38,8 @@ protected:
 
     quint32 linkConnect(quint32 _connect_id);
 
+    QString get_return_type(QString _function_name);
+
 protected:
     QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_in_var_item;
     QMap<quint64, T_POU_FBD_ITEM_SHORT> _m_out_var_item;

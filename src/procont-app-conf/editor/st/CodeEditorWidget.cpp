@@ -45,6 +45,11 @@ void CodeEditorWidget::setPlainText(const QString &text)
     codeEditor->setPlainText(text);
 }
 
+void CodeEditorWidget::setPousListName(QStringList list)
+{
+    codeEditor->setPousListName(list);
+}
+
 void CodeEditorWidget::onSearchText()
 {
     codeEditor->highliter()->searchText(searchLine->text());

@@ -8,6 +8,8 @@
 #include "../includes.h"
 #include "CVariable.h"
 
+class CPou;
+
 /**
  * @brief local variables, temporary variables, input variables, output variables, input/output variables, external
  *  variables, global variables and access path variables. They are defined with the same XML structure,
@@ -17,9 +19,9 @@
 class CIfaceVars
 {
 public:
-    CIfaceVars();
+    CIfaceVars(CPou * parent);
     CIfaceVars(const CIfaceVars & other);
-    explicit CIfaceVars(const QDomNode &dom_node);
+    explicit CIfaceVars(const QDomNode &dom_node, CPou *parent);
     CIfaceVars(CIfaceVars && other) noexcept;
     virtual ~CIfaceVars();
 
@@ -38,7 +40,7 @@ public:
     void        set_persistent( const bool & persistent );
 
     void        clean();
-    QList<CVariable*> * variables();
+    std::vector<CVariable*> * variables();
 
     CAddData *  add_data();
     CDocumentation * documentation();
@@ -51,8 +53,9 @@ protected:
     bool        m_constant{false};
     bool        m_retain{false};
     bool        m_persistent{false};
+    CPou      * m_parent{nullptr};
 
-    QList<CVariable*> * m_variables;
+    std::vector<CVariable*> * m_variables;
     CAddData            m_add_data;
     CDocumentation      m_document;
 };
@@ -60,56 +63,49 @@ protected:
 class CAccessVars : public CIfaceVars
 {
 public:
-    CAccessVars();
+    CAccessVars(CPou *parent);
     ~CAccessVars() override;
 };
 
 class CLocalVars : public CIfaceVars
 {
 public:
-    CLocalVars();
+    CLocalVars(CPou *parent);
     ~CLocalVars() override;
-};
-
-class CGlobalVars : public CIfaceVars
-{
-public:
-    CGlobalVars();
-    ~CGlobalVars() override;
 };
 
 class CExternalVars : public CIfaceVars
 {
 public:
-    CExternalVars();
+    CExternalVars(CPou *parent);
     ~CExternalVars() override;
 };
 
 class CTempVars : public CIfaceVars
 {
 public:
-    CTempVars();
+    CTempVars(CPou *parent);
     ~CTempVars() override;
 };
 
 class CInVars : public CIfaceVars
 {
 public:
-    CInVars();
+    CInVars(CPou *parent);
     ~CInVars() override;
 };
 
 class COutVars : public CIfaceVars
 {
 public:
-    COutVars();
+    COutVars(CPou *parent);
     ~COutVars() override;
 };
 
 class CInOutVars : public CIfaceVars
 {
 public:
-    CInOutVars();
+    CInOutVars(CPou *parent);
     ~CInOutVars() override;
 };
 

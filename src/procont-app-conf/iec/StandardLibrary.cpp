@@ -24,17 +24,17 @@ StandardLibrary * StandardLibrary::instance()
     return _m_instance;
 }
 
-void StandardLibrary::test()
-{
-    qDebug() << StandardLibrary::instance()->contents_type("datatype"); // no such type
-    qDebug() << StandardLibrary::instance()->contents_type("datatype0"); // type present
-    qDebug() << StandardLibrary::instance()->find_type("datatype").toElement().attribute("name"); // no such type
-    qDebug() << StandardLibrary::instance()->find_type("datatype0").toElement().attribute("name"); // type present
-    qDebug() << StandardLibrary::instance()->contents_pou("POU"); // no such pou
-    qDebug() << StandardLibrary::instance()->contents_pou("TON"); // pou present
-    qDebug() << StandardLibrary::instance()->find_pou("POU").toElement().attribute("name"); // no such pou
-    qDebug() << StandardLibrary::instance()->find_pou("TON").toElement().attribute("name"); // pou present
-}
+// void StandardLibrary::test()
+// {
+//     qDebug() << StandardLibrary::instance()->contents_type("datatype"); // no such type
+//     qDebug() << StandardLibrary::instance()->contents_type("datatype0"); // type present
+//     qDebug() << StandardLibrary::instance()->find_type("datatype").toElement().attribute("name"); // no such type
+//     qDebug() << StandardLibrary::instance()->find_type("datatype0").toElement().attribute("name"); // type present
+//     qDebug() << StandardLibrary::instance()->contents_pou("POU"); // no such pou
+//     qDebug() << StandardLibrary::instance()->contents_pou("TON"); // pou present
+//     qDebug() << StandardLibrary::instance()->find_pou("POU").toElement().attribute("name"); // no such pou
+//     qDebug() << StandardLibrary::instance()->find_pou("TON").toElement().attribute("name"); // pou present
+// }
 
 const QString StandardLibrary::filePath() const
 {
@@ -48,15 +48,23 @@ QString StandardLibrary::version() const
 
 void StandardLibrary::load()
 {
-    auto name_ = QObject::tr("Standard Function Blocks");
+    auto name_ = "Standard Function Blocks";
     _m_libs.insert(name_, new ILibrary(name_, ":/lib/lib/StandardFunctionBlocks.xml"));
-    name_ = QObject::tr("Additional Function Blocks");
+    name_ = "Additional Function Blocks";
     _m_libs.insert(name_, new ILibrary(name_, ":/lib/lib/AdditionalFunctionBlocks.xml"));
-    name_ = QObject::tr("Standard IEC Functions");
+    name_ = "Standard IEC Functions";
     _m_libs.insert(name_, new ILibrary(name_, ":/lib/lib/StandardIECFunctions.xml"));
 
     for(auto i : std::as_const(_m_libs))
         i->load();
+}
+
+void StandardLibrary::add(const QString & name_, QDomDocument * doc_, const QString &_name_user)
+{
+    if(_m_libs.contains(name_))
+        delete _m_libs.value(name_);
+
+    _m_libs.insert(name_, new ILibrary(name_, doc_, _name_user));
 }
 
 /// возвращяет true, если библиотека содержит dataType с именем name_

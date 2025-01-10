@@ -109,7 +109,7 @@ struct DataType
                     QDomElement initialValue_elem = document.createElement("initialValue");
                     QDomElement simpleValue_elem = document.createElement("simpleValue");
                     simpleValue_elem.setAttribute("value", var.initialValue.simpleValue.value);
-                    qDebug() << "Value = " << var.initialValue.simpleValue.value;
+                    // qDebug() << "Value = " << var.initialValue.simpleValue.value;
                     initialValue_elem.appendChild(simpleValue_elem);
                     variable_elem.appendChild(initialValue_elem);
                 } else {

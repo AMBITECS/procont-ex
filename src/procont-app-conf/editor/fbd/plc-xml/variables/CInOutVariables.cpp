@@ -26,7 +26,10 @@ CInOutVariable::CInOutVariable(const QDomNode &dom_node)
     m_edge_out      = (EEdge)dom_node.attributes().namedItem("edgeOut").toAttr().value().toInt();
     m_global_id     = dom_node.attributes().namedItem("globalId").toAttr().value();
 
-    // TODO: закончить!!!
+    m_point_in      = CConnectionPointIn(dom_node.namedItem("connectionPointIn"));
+    m_point_out     = CConnectionPointOut(dom_node.namedItem("connectionPointOut"));
+    m_expression    = CExpression(dom_node.namedItem("expression"));
+
 }
 
 CInOutVariable::~CInOutVariable()
@@ -249,6 +252,7 @@ bool CInOutVariable::is_empty() const
                   m_expression.is_empty();
     return empty;
 }
+
 //----------------------------------------------------------------------------------------------------------------------
 // CInOutVariables -----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------

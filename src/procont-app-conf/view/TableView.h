@@ -2,6 +2,7 @@
 #define TABLEVIEW_H
 
 #include <QTableView>
+#include <QDomNode>
 
 class TableView : public QTableView
 {

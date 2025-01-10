@@ -2,6 +2,8 @@
 // Created by artem on 10/22/24.
 //
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #ifndef EDITORSD_CCONNECTIONPOINTIN_H
 #define EDITORSD_CCONNECTIONPOINTIN_H
 
@@ -46,3 +48,5 @@ private:
 
 
 #endif //EDITORSD_CCONNECTIONPOINTIN_H
+
+#pragma clang diagnostic pop

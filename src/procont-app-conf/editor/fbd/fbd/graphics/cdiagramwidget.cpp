@@ -6,7 +6,10 @@
 #include "ui_diagramwgt.h"
 #include <QGridLayout>
 #include "../palette/CFbdComponentsTree.h"
-#include "../../general/QtDialogs.h"
+#include <QTimer>
+// igor'
+#include "main/MainWindow.h"
+#include <QUndoGroup>
 
 
 CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object, const bool &is_editable, QWidget *parent)
@@ -15,7 +18,6 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     ui->setupUi(this);
 
     m_dom_node = new QDomNode(pou_node);
-    m_st_widget = new CodeEditorWidget();
 
     s_ogl_startup startup;
     startup.tree = tree_object;
@@ -23,16 +25,45 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     startup.horizontal = ui->horizontalScrollBar;
     startup.node = m_dom_node;
     startup.is_editable = is_editable;
-    startup.st_widget = m_st_widget;
+
 
     m_ogl_widget = new COglWidget(&startup);
 
-    /// place ST-widget
-    // {
-    //     auto lo = new QGridLayout(ui->stWidget);
-    //     lo->addWidget(m_st_widget);
-    //     lo->setContentsMargins(0, 0, 0, 0);
-    // }
+    /// user clicked on the diagram, i'm in focus
+    connect(m_ogl_widget, &COglWidget::user_clicked, [this](){
+        undo_stack()->setActive();
+        emit user_clicked(); 
+    });
+
+    /// diagram_object_is_selected
+    connect(m_ogl_widget, &COglWidget::object_selected,
+            this, &CDiagramWidget::diagram_object_is_selected);
+
+    connect(m_ogl_widget, &COglWidget::set_current_pou,
+            [this](CPou *pou){m_current_pou = pou; build_tree();});
+
+    /// interface variable instance has been removed
+    connect(m_ogl_widget, &COglWidget::instance_removed,
+            [this](const QString &type, const QString &name)
+            {emit instance_removed(type, name); });
+
+    /// diagram has been changed, take QDomNode
+    connect(m_ogl_widget, &COglWidget::diagram_changed,
+            this, &CDiagramWidget::diagram_has_changed);
+
+    /// For now you can use undo/redo hmm... is it necessary?
+    connect(m_ogl_widget, &COglWidget::undo_enabled, [this]()
+            {emit this->undo_enabled();});
+
+    /// The new variable instance has to be added to the interface
+    connect(m_ogl_widget, &COglWidget::iface_var_new,
+            [this](const QString &t, const QString &n)
+            {emit interface_variable_new(t, n);});
+
+    /// This variable instance renamed in the diagram
+    connect(m_ogl_widget, &COglWidget::iface_var_ren,
+            [this](const QString &o, const QString &n)
+            {emit interface_variable_rename(o, n);});
 
     /// place OpenGL widget
     {
@@ -44,12 +75,12 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     m_tree_widget = tree_object;
     ui->diagramSplitter->setSizes({33333, 66667});
 
-    build_tree();
+    // igor'
+    MainWindow::instance()->undoGroup()->addStack(undo_stack());
 }
 
 CDiagramWidget::~CDiagramWidget()
 {
-    delete m_st_widget;
     delete m_ogl_widget;
     delete m_dom_node;
 
@@ -61,21 +92,49 @@ CDiagramWidget::~CDiagramWidget()
 
 void CDiagramWidget::build_tree()
 {
-    CFbdComponentsTree tree_filler(m_tree_widget);
-    tree_filler.build_tree();
+    m_current_pou = m_ogl_widget->current_pou();
+    if (m_current_pou)
+    {
+        CFbdComponentsTree tree_filler(m_tree_widget);
+        tree_filler.build_tree(m_current_pou);
+    }
 }
 
 void CDiagramWidget::set_active()
 {
-    if (m_tree_widget->topLevelItemCount() == 0)
-    {
-        build_tree();
-    }
+    build_tree();
 }
 
-void CDiagramWidget::diagram_updated()
+void CDiagramWidget::update_interface(const QDomNode &node)
 {
-
+    // changing interface
+    // emit change_interface();
 }
+
+QUndoStack *CDiagramWidget::undo_stack()
+{
+    return m_ogl_widget->undo_stack();
+}
+
+void CDiagramWidget::diagram_object_is_selected()
+{
+    // igor'
+    undo_stack()->setActive();
+    emit object_selected();
+}
+
+void CDiagramWidget::delete_selected_object()
+{
+    m_ogl_widget->delete_selected();
+}
+
+void CDiagramWidget::diagram_has_changed(const QDomNode &node)
+{
+    // igor'
+    undo_stack()->setActive();
+    emit changed_diagram(node);
+}
+
+
 
 

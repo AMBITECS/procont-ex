@@ -14,21 +14,31 @@
 #include "../CDocumentation.h"
 #include "../variables/CBlockVar.h"
 
+#define  INS "inputs"
+#define  OUTS "outputs"
+
+
+
 /**
  * XML Format for IEC 61131-3 page 47
  */
 class CBlock
 {
 public:
-    CBlock();
+    explicit CBlock(CBody *parent);
     CBlock(const CBlock & other);
     CBlock(CBlock && other) noexcept;
-    explicit CBlock(const QDomNode &dom_node);
-    ~CBlock();
+    explicit CBlock(const QDomNode &dom_node, CBody *parent);
+    virtual ~CBlock();
 
-    QDomNode        dom_node() const;
+    CBody * parent();
+    void    set_parent(CBody *parent);
 
-    bool            is_empty() const;
+    CBlock& operator=(const CBlock &block);
+
+    [[nodiscard]] QDomNode        dom_node() const;
+
+    [[nodiscard]] bool            is_empty() const;
 
     [[nodiscard]] uint64_t            local_id() const;
     void                set_local_id(const uint64_t & local_id);
@@ -53,7 +63,13 @@ public:
     CAddData        *   add_data();
     CDocumentation  *   documentation();
 
-private:
+    /** @brief block при загрузке проекта не имеет типов входов/выходов а сейчас всё будет хорошо */
+    bool    normalize_block(const CBlock &n_block);
+
+    CBlockVar * get_output_by_name(const QString &name);
+
+
+protected:
     uint64_t          m_local_id{0};
     float             m_width{0};
     float             m_height{0};
@@ -61,6 +77,8 @@ private:
     QString           m_instance_name;
     uint16_t          m_exec_order{0};
     QString           m_global_id;
+
+    CBody           * m_parent{nullptr};
 
     CPosition         m_position;
     QList<CBlockVar*> * m_in_vars;
@@ -72,6 +90,11 @@ private:
     void
     extract_vars(const QString &direction,
                  const QDomNode &node);
+
+    void    clear_variables();
+    //void extract_params();
+
+    //void extract_pin_params(const std::string &direction, const std::string &types_string);
 };
 
 

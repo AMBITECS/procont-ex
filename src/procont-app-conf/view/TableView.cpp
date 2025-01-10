@@ -1,5 +1,8 @@
 #include "TableView.h"
 
+#include "model/DomModel.h"
+#include "item/DomItem.h"
+
 #include <QMouseEvent>
 
 TableView::TableView(QWidget *parent) : QTableView(parent)

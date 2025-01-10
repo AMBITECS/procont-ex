@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
-  <fileHeader companyName="Ambitecs" productName="Standard IEC Functions" productVersion="1.0.0" creationDateTime="2024-09-20T00:00:00"/>
-  <contentHeader name="Standard IEC Functions" author="Lepekhin Igor" modificationDateTime="2024-11-01T08:00:00">
+  <fileHeader companyName="Ambitecs" productName="Standard IEC Functions" productVersion="1.0.1" creationDateTime="2024-09-20T00:00:00"/>
+  <contentHeader name="Standard IEC Functions" author="Lepekhin Igor" modificationDateTime="2024-12-05T08:00:00">
     <coordinateInfo>
       <fbd>
         <scaling x="0" y="0"/>
@@ -24,7 +24,7 @@
             <ANY_INT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -48,7 +48,7 @@
             <TOD/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <DT/>
               </type>
@@ -72,7 +72,7 @@
             <DATE/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <DT/>
               </type>
@@ -96,7 +96,7 @@
             <ANY_NUM/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_NUM/>
               </type>
@@ -120,7 +120,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -144,7 +144,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -168,7 +168,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -192,7 +192,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -216,7 +216,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -240,7 +240,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -264,7 +264,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -288,7 +288,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -312,7 +312,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -336,7 +336,7 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
@@ -360,12 +360,12 @@
             <ANY_NUM/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_NUM/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_NUM/>
               </type>
@@ -389,12 +389,12 @@
             <ANY_NUM/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_NUM/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_NUM/>
               </type>
@@ -418,12 +418,12 @@
             <ANY_NUM/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_NUM/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_NUM/>
               </type>
@@ -447,12 +447,12 @@
             <ANY_NUM/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_NUM/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_NUM/>
               </type>
@@ -476,12 +476,12 @@
             <ANY_INT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_INT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -505,12 +505,12 @@
             <ANY_REAL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_REAL/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_NUM/>
               </type>
@@ -534,7 +534,7 @@
             <ANY/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
@@ -558,12 +558,12 @@
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <TIME/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TIME/>
               </type>
@@ -587,12 +587,12 @@
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <TIME/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TIME/>
               </type>
@@ -610,47 +610,18 @@
           <xhtml:p><![CDATA[Time addition]]></xhtml:p>
         </documentation>
       </pou>
-      <pou name="ADD" pouType="function">
-        <interface>
-          <returnType>
-            <TOD/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <TOD/>
-              </type>
-            </variable>
-            <variable name="var1">
-              <type>
-                 <TIME/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Time-of-day addition+" "+_("DEPRECATED")]]></xhtml:p>
-        </documentation>
-      </pou>
       <pou name="ADD_TOD_TIME" pouType="function">
         <interface>
           <returnType>
             <TOD/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <TOD/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TIME/>
               </type>
@@ -668,47 +639,18 @@
           <xhtml:p><![CDATA[Time-of-day addition]]></xhtml:p>
         </documentation>
       </pou>
-      <pou name="ADD" pouType="function">
-        <interface>
-          <returnType>
-            <DT/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <DT/>
-              </type>
-            </variable>
-            <variable name="var1">
-              <type>
-                 <TIME/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Date addition+" "+_("DEPRECATED")]]></xhtml:p>
-        </documentation>
-      </pou>
       <pou name="ADD_DT_TIME" pouType="function">
         <interface>
           <returnType>
             <DT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <DT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TIME/>
               </type>
@@ -726,47 +668,18 @@
           <xhtml:p><![CDATA[Date addition]]></xhtml:p>
         </documentation>
       </pou>
-      <pou name="MUL" pouType="function">
-        <interface>
-          <returnType>
-            <TIME/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <TIME/>
-              </type>
-            </variable>
-            <variable name="var1">
-              <type>
-                 <ANY_NUM/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Time multiplication+" "+_("DEPRECATED")]]></xhtml:p>
-        </documentation>
-      </pou>
       <pou name="MULTIME" pouType="function">
         <interface>
           <returnType>
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <TIME/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_NUM/>
               </type>
@@ -790,41 +703,12 @@
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <TIME/>
               </type>
             </variable>
-            <variable name="var1">
-              <type>
-                 <TIME/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Time subtraction]]></xhtml:p>
-        </documentation>
-      </pou>
-      <pou name="SUB" pouType="function">
-        <interface>
-          <returnType>
-            <TIME/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <TIME/>
-              </type>
-            </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TIME/>
               </type>
@@ -848,14 +732,14 @@
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
-                 <DATE/>
+                 <TIME/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
-                 <DATE/>
+                 <TIME/>
               </type>
             </variable>
           </inputVars>
@@ -868,7 +752,7 @@
           </data>
         </addData>
         <documentation>
-          <xhtml:p><![CDATA[Date subtraction+" "+_("DEPRECATED")]]></xhtml:p>
+          <xhtml:p><![CDATA[Time subtraction]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_DATE_DATE" pouType="function">
@@ -877,12 +761,12 @@
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <DATE/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <DATE/>
               </type>
@@ -900,47 +784,18 @@
           <xhtml:p><![CDATA[Date subtraction]]></xhtml:p>
         </documentation>
       </pou>
-      <pou name="SUB" pouType="function">
-        <interface>
-          <returnType>
-            <TOD/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <TOD/>
-              </type>
-            </variable>
-            <variable name="var1">
-              <type>
-                 <TIME/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Time-of-day subtraction+" "+_("DEPRECATED")]]></xhtml:p>
-        </documentation>
-      </pou>
       <pou name="SUB_TOD_TIME" pouType="function">
         <interface>
           <returnType>
             <TOD/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <TOD/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TIME/>
               </type>
@@ -956,35 +811,6 @@
         </addData>
         <documentation>
           <xhtml:p><![CDATA[Time-of-day subtraction]]></xhtml:p>
-        </documentation>
-      </pou>
-      <pou name="SUB" pouType="function">
-        <interface>
-          <returnType>
-            <TIME/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <TOD/>
-              </type>
-            </variable>
-            <variable name="var1">
-              <type>
-                 <TOD/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Time-of-day subtraction+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_TOD_TOD" pouType="function">
@@ -993,12 +819,12 @@
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <TOD/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TOD/>
               </type>
@@ -1016,47 +842,18 @@
           <xhtml:p><![CDATA[Time-of-day subtraction]]></xhtml:p>
         </documentation>
       </pou>
-      <pou name="SUB" pouType="function">
-        <interface>
-          <returnType>
-            <DT/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <DT/>
-              </type>
-            </variable>
-            <variable name="var1">
-              <type>
-                 <TIME/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Date and time subtraction+" "+_("DEPRECATED")]]></xhtml:p>
-        </documentation>
-      </pou>
       <pou name="SUB_DT_TIME" pouType="function">
         <interface>
           <returnType>
             <DT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <DT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TIME/>
               </type>
@@ -1072,35 +869,6 @@
         </addData>
         <documentation>
           <xhtml:p><![CDATA[Date and time subtraction]]></xhtml:p>
-        </documentation>
-      </pou>
-      <pou name="SUB" pouType="function">
-        <interface>
-          <returnType>
-            <TIME/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <DT/>
-              </type>
-            </variable>
-            <variable name="var1">
-              <type>
-                 <DT/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Date and time subtraction+" "+_("DEPRECATED")]]></xhtml:p>
         </documentation>
       </pou>
       <pou name="SUB_DT_DT" pouType="function">
@@ -1109,12 +877,12 @@
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <DT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <DT/>
               </type>
@@ -1132,47 +900,18 @@
           <xhtml:p><![CDATA[Date and time subtraction]]></xhtml:p>
         </documentation>
       </pou>
-      <pou name="DIV" pouType="function">
-        <interface>
-          <returnType>
-            <TIME/>
-          </returnType>
-          <inputVars>
-            <variable name="var0">
-              <type>
-                 <TIME/>
-              </type>
-            </variable>
-            <variable name="var1">
-              <type>
-                 <ANY_NUM/>
-              </type>
-            </variable>
-          </inputVars>
-        </interface>
-        <body>
-        </body>
-        <addData>
-          <data name="http://ambi.biz/plcopenxml/group" handleUnknown="discard">
-            <group name="Time"/>
-          </data>
-        </addData>
-        <documentation>
-          <xhtml:p><![CDATA[Time division+" "+_("DEPRECATED")]]></xhtml:p>
-        </documentation>
-      </pou>
       <pou name="DIVTIME" pouType="function">
         <interface>
           <returnType>
             <TIME/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <TIME/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_NUM/>
               </type>
@@ -1196,12 +935,12 @@
             <ANY_BIT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_BIT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -1228,12 +967,12 @@
             <ANY_BIT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_BIT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -1260,12 +999,12 @@
             <ANY_NBIT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_NBIT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -1292,12 +1031,12 @@
             <ANY_NBIT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_NBIT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -1324,12 +1063,12 @@
             <ANY_BIT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_BIT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_BIT/>
               </type>
@@ -1353,12 +1092,12 @@
             <ANY_BIT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_BIT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_BIT/>
               </type>
@@ -1382,12 +1121,12 @@
             <ANY_BIT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_BIT/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_BIT/>
               </type>
@@ -1411,7 +1150,7 @@
             <ANY_BIT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_BIT/>
               </type>
@@ -1435,7 +1174,7 @@
             <ANY/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <BOOL/>
               </type>
@@ -1443,12 +1182,12 @@
                 <xhtml:p><![CDATA[Selection out of 2 inputs (gate)]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY/>
               </type>
@@ -1472,12 +1211,12 @@
             <ANY/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
@@ -1501,12 +1240,12 @@
             <ANY/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
@@ -1530,7 +1269,7 @@
             <ANY/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
@@ -1538,12 +1277,12 @@
                 <xhtml:p><![CDATA[Minimum value for limitation]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY/>
               </type>
@@ -1570,7 +1309,7 @@
             <ANY/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY_INT/>
               </type>
@@ -1578,12 +1317,12 @@
                 <xhtml:p><![CDATA[Selection out of n inputs]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY/>
               </type>
@@ -1607,12 +1346,12 @@
             <BOOL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
@@ -1636,12 +1375,12 @@
             <BOOL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
@@ -1665,12 +1404,12 @@
             <BOOL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
@@ -1694,12 +1433,12 @@
             <BOOL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
@@ -1723,12 +1462,12 @@
             <BOOL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
@@ -1752,12 +1491,12 @@
             <BOOL/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <ANY/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY/>
               </type>
@@ -1781,7 +1520,7 @@
             <INT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
@@ -1805,12 +1544,12 @@
             <STRING/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -1837,12 +1576,12 @@
             <STRING/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -1869,12 +1608,12 @@
             <STRING/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -1882,7 +1621,7 @@
                 <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY_INT/>
               </type>
@@ -1909,12 +1648,12 @@
             <STRING/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <STRING/>
               </type>
@@ -1938,12 +1677,12 @@
             <DT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <DATE/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <TOD/>
               </type>
@@ -1967,17 +1706,17 @@
             <STRING/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY_INT/>
               </type>
@@ -2004,12 +1743,12 @@
             <STRING/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <ANY_INT/>
               </type>
@@ -2017,7 +1756,7 @@
                 <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY_INT/>
               </type>
@@ -2044,17 +1783,17 @@
             <STRING/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var2">
+            <variable name="IN3">
               <type>
                  <ANY_INT/>
               </type>
@@ -2062,7 +1801,7 @@
                 <xhtml:p><![CDATA[Left position within character string]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="var3">
+            <variable name="IN4">
               <type>
                  <ANY_INT/>
               </type>
@@ -2089,12 +1828,12 @@
             <INT/>
           </returnType>
           <inputVars>
-            <variable name="var0">
+            <variable name="IN1">
               <type>
                  <STRING/>
               </type>
             </variable>
-            <variable name="var1">
+            <variable name="IN2">
               <type>
                  <STRING/>
               </type>

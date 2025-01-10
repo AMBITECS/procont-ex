@@ -4,7 +4,7 @@ set(NAME ${PNME}-conf-app)
 
 project(${NAME} VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -17,9 +17,24 @@ set(LIBRARY_OUTPUT_PATH     ${CMAKE_BINARY_DIR}/${PNME}/${NAME}/lib)
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets Xml LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets Xml LinguistTools)
 
+file(GLOB_RECURSE fbd-editor
+        editor/fbd/*.cpp
+        editor/fbd/*.h
+        editor/fbd/*.ui
+        editor/fbd/*.qrc
+        )
+
+file(GLOB_RECURSE st-editor
+        editor/st/*.cpp
+        editor/st/*.h
+        editor/st/*.ui
+        editor/st/*.qrc
+    )
+
 set(PROJECT_SOURCES
     main/MainApp.cpp
     main/MainWindow.cpp main/MainWindow.h
+    main/Settings.h
 
     model/DomModel.h model/DomModel.cpp
     model/ProxyModel.cpp model/ProxyModel.h
@@ -32,6 +47,8 @@ set(PROJECT_SOURCES
     widget/TabWidgetTree.h widget/TabWidgetTree.cpp
     widget/TabWidgetProtocol.cpp widget/TabWidgetProtocol.h
     widget/WidgetEditor.h widget/WidgetEditor.cpp
+    widget/WidgetEditor_fbd.cpp widget/WidgetEditor_fbd.h
+    widget/WidgetEditor_inherit.cpp widget/WidgetEditor_inherit.h
 
     log/Logger.h log/Logger.cpp log/Message.h log/Message.cpp
 
@@ -39,33 +56,8 @@ set(PROJECT_SOURCES
     view/ItemDelegate.h view/ItemDelegate.cpp
     view/SpinBoxMultiRange.h view/SpinBoxMultiRange.cpp
     view/TableView.h view/TableView.cpp
-
-    editor/st/CodeEditor.cpp editor/st/CodeEditor.h
-    editor/st/CodeEditorWidget.cpp editor/st/CodeEditorWidget.h
-    editor/st/Highlighter.cpp editor/st/Highlighter.h
-    editor/st/LineNumberArea.cpp editor/st/LineNumberArea.h
-    editor/st/FilesManager.h editor/st/FilesManager.cpp
-    editor/st/CommonStTypes.h
-    editor/st/XmlParser.cpp editor/st/XmlParser.h
-    editor/st/ArraySt.cpp editor/st/ArraySt.h
-    editor/st/StructSt.cpp editor/st/StructSt.h
-    editor/st/Variable.cpp editor/st/Variable.h
-    editor/st/POU.cpp editor/st/POU.h
-    editor/st/DataType.cpp editor/st/DataType.h
-    editor/st/editor-st.qrc
-
-    editor/fbd/fbd/graphics/CConnectorPin.cpp editor/fbd/fbd/graphics/CConnectorPin.h editor/fbd/fbd/graphics/CDiagramObject.cpp editor/fbd/fbd/graphics/CDiagramObject.h editor/fbd/fbd/graphics/cdiagramwidget.cpp editor/fbd/fbd/graphics/cdiagramwidget.h editor/fbd/fbd/graphics/cgraphicshelper.cpp editor/fbd/fbd/graphics/cgraphicshelper.h editor/fbd/fbd/graphics/CLadder.cpp editor/fbd/fbd/graphics/CLadder.h editor/fbd/fbd/graphics/CObjectsText.cpp editor/fbd/fbd/graphics/CObjectsText.h editor/fbd/fbd/graphics/COglStyle.cpp editor/fbd/fbd/graphics/COglStyle.h editor/fbd/fbd/graphics/coglwidget.cpp editor/fbd/fbd/graphics/coglwidget.h editor/fbd/fbd/graphics/COglWorld.cpp editor/fbd/fbd/graphics/COglWorld.h editor/fbd/fbd/graphics/diagramwgt.ui
-    editor/fbd/fbd/palette/CFbdComponentsTree.cpp editor/fbd/fbd/palette/CFbdComponentsTree.h editor/fbd/fbd/palette/components_palette.inc editor/fbd/fbd/palette/palette.h
-    editor/fbd/plc-xml/CAddData.cpp editor/fbd/plc-xml/CAddData.h editor/fbd/plc-xml/CAddDataInfo.cpp editor/fbd/plc-xml/CAddDataInfo.h editor/fbd/plc-xml/CConnection.cpp editor/fbd/plc-xml/CConnection.h editor/fbd/plc-xml/CConnectionPointIn.cpp editor/fbd/plc-xml/CConnectionPointIn.h editor/fbd/plc-xml/CConnectionPointOut.cpp editor/fbd/plc-xml/CConnectionPointOut.h editor/fbd/plc-xml/CConnector.cpp editor/fbd/plc-xml/CConnector.h editor/fbd/plc-xml/CData.cpp editor/fbd/plc-xml/CData.h editor/fbd/plc-xml/CDocumentation.cpp editor/fbd/plc-xml/CDocumentation.h editor/fbd/plc-xml/CExpression.cpp editor/fbd/plc-xml/CExpression.h editor/fbd/plc-xml/CInfo.cpp editor/fbd/plc-xml/CInfo.h editor/fbd/plc-xml/CInterface.cpp editor/fbd/plc-xml/CInterface.h editor/fbd/plc-xml/CPosition.cpp editor/fbd/plc-xml/CPosition.h editor/fbd/plc-xml/CRelPosition.cpp editor/fbd/plc-xml/CRelPosition.h editor/fbd/plc-xml/CTransitions.cpp editor/fbd/plc-xml/CTransitions.h editor/fbd/plc-xml/includes.h
-    editor/fbd/plc-xml/common/CBody.cpp editor/fbd/plc-xml/common/CBody.h editor/fbd/plc-xml/common/CComment.cpp editor/fbd/plc-xml/common/CComment.h editor/fbd/plc-xml/common/CPou.cpp editor/fbd/plc-xml/common/CPou.h
-    editor/fbd/plc-xml/fbd/CBlock.cpp editor/fbd/plc-xml/fbd/CBlock.h editor/fbd/plc-xml/fbd/CFbdContent.cpp editor/fbd/plc-xml/fbd/CFbdContent.h editor/fbd/plc-xml/fbd/CJump.cpp editor/fbd/plc-xml/fbd/CJump.h editor/fbd/plc-xml/fbd/CLabel.cpp editor/fbd/plc-xml/fbd/CLabel.h editor/fbd/plc-xml/fbd/CReturn.cpp editor/fbd/plc-xml/fbd/CReturn.h
-    editor/fbd/plc-xml/objects/CMacroStep.cpp editor/fbd/plc-xml/objects/CMacroStep.h
-    editor/fbd/plc-xml/sfc/CActionBlock.cpp editor/fbd/plc-xml/sfc/CActionBlock.h editor/fbd/plc-xml/sfc/CActions.cpp editor/fbd/plc-xml/sfc/CActions.h editor/fbd/plc-xml/sfc/CInline.cpp editor/fbd/plc-xml/sfc/CInline.h
-    editor/fbd/plc-xml/variables/CBlockVar.cpp editor/fbd/plc-xml/variables/CBlockVar.h editor/fbd/plc-xml/variables/CIFaceVars.cpp editor/fbd/plc-xml/variables/CIfaceVars.h editor/fbd/plc-xml/variables/CInOutVariables.cpp editor/fbd/plc-xml/variables/CInOutVariables.h editor/fbd/plc-xml/variables/CInputVariables.cpp editor/fbd/plc-xml/variables/CInputVariables.h editor/fbd/plc-xml/variables/COutputVariables.cpp editor/fbd/plc-xml/variables/COutputVariables.h editor/fbd/plc-xml/variables/CVariable.cpp editor/fbd/plc-xml/variables/CVariable.h
-    editor/fbd/general/QtDialogs.cpp editor/fbd/general/QtDialogs.h editor/fbd/general/types.h
-    editor/fbd/resources/images16.qrc
-    editor/fbd/general/ctreeobject.h editor/fbd/general/ctreeobject.cpp
-    editor/fbd/general/OglWidget.h editor/fbd/general/OglWidget.cpp
+    view/ComboBoxMultiListWidget.h view/ComboBoxMultiListWidget.cpp
+    view/ItemDelegate_combobox.h view/ItemDelegate_combobox.cpp
 
     translator/SchemaViewer.cpp translator/SchemaViewer.h
     translator/GlobalType.h
@@ -83,12 +75,25 @@ set(PROJECT_SOURCES
     iec/StandardLibrary.cpp iec/StandardLibrary.h
     iec/Library.h iec/Library.cpp
 
-    dialog/AddPOUDialog.h dialog/AddPOUDialog.cpp dialog/AddPOUDialog.ui
-    dialog/AddTypeDialog.h dialog/AddTypeDialog.cpp dialog/AddTypeDialog.ui
-
     dialog/InputDialog.h dialog/InputDialog.cpp
+    dialog/AddPOUDialog.h dialog/AddPOUDialog.cpp
+    dialog/AddDUTDialog.h dialog/AddDUTDialog.cpp
+    dialog/RenameDialog.h dialog/RenameDialog.cpp
 
     resource/procont-app-conf.qrc
+
+    tr/translation.h tr/translation.cpp
+
+    xml/PLCopenXML.cpp xml/PLCopenXML.h
+
+    undo/iundocommand.cpp undo/iundocommand.h
+    undo/cundocommand_edit.cpp undo/cundocommand_edit.h
+    undo/cundocommand_remove.h undo/cundocommand_remove.cpp
+    undo/cundocommand_insert.h undo/cundocommand_insert.cpp
+
+    ${st-editor}
+
+    ${fbd-editor}
 )
 
 qt_translate(
@@ -101,7 +106,7 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-    )
+   )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})
 endif()

@@ -5,11 +5,12 @@
 #include <QScrollBar>
 #include <QOpenGLFunctions>
 #include <QDomNode>
+//#include <QOpenGLFunctions_4_1_Core>
 
 #include "cgraphicshelper.h"
 #include "COglStyle.h"
-#include "../../general/ctreeobject.h"
-#include "../../../st/CodeEditorWidget.h"
+#include "editor/fbd/common/general/ctreeobject.h"
+
 
 struct s_ogl_startup
 {
@@ -18,8 +19,6 @@ struct s_ogl_startup
     QScrollBar  * vertical{nullptr};
     QScrollBar  * horizontal{nullptr};
     bool          is_editable{false};
-    CodeEditorWidget * st_widget{nullptr};
-
 };
 
 class COglWidget : public QOpenGLWidget, protected QOpenGLFunctions
@@ -29,91 +28,112 @@ public:
     explicit COglWidget(s_ogl_startup * ogl_startup, QWidget *parent = nullptr);
     ~COglWidget() override;
 
-    // open GL
+    QUndoStack *    undo_stack();
+    CPou * current_pou();
+
+    void    delete_selected();
+
+signals:
+    void  scroll_bars_moving(const QPoint & newPos);
+    void  drag_moving(QDragMoveEvent *event);
+    void  diagram_changed(const QDomNode & node);
+    void  undo_enabled();           //!< for update undo/redo interface for enabled
+    void  mouse_dblClicked(QMouseEvent *evt);
+    void    iface_var_new(const QString & type,     const QString & name);
+    void    iface_var_ren(const QString & old_name, const QString & new_name);
+    void    instance_removed(const QString &type, const QString &name);
+    void    set_current_pou(CPou *pou);
+    void    object_selected();
+    void    user_clicked();
+
+protected:
+    bool    eventFilter(QObject *target, QEvent *event) override;
+
+    /// open GL
     void initializeGL() override;
     void resizeGL(int w, int h) override;
     void paintGL() override;
 
-    // context
+    /// context
     void showEvent( QShowEvent* event ) override;
+    [[nodiscard]] bool is_editable() const;
+    void set_editable(const bool &editable);
+    void mouseDoubleClickEvent(QMouseEvent * dblEvent) override; //!< for manage variables and link lines
+    void wheelEvent(QWheelEvent *event) override;
+
+    /// mouse
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+
+    /// keyboard
     void keyPressEvent(QKeyEvent *evt) override;
     void keyReleaseEvent(QKeyEvent *evt) override;
 
-    // drag & drop
+    /// drag & drop
     void dropEvent(QDropEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dragLeaveEvent(QDragLeaveEvent *event) override;
-
+public slots:
+    void  drag_complete();  //!< когда процесс Drag&Drop закончился с любым исходом
 
 protected slots:
     void  vertical_scroll_moved(int position);
     void  horizontal_scroll_moved(int position);
     void  project_loaded();
     void  diagram_resized(const int &w, const int &h);
-
-signals:
-    void  scroll_bars_moving(const QPoint & newPos);
-
+    void  slotCustomMenuRequested(const QPoint &pos);
+    void  iface_new_var(const QString & type,     const QString & name);
+    void  iface_ren_var(const QString & old_name, const QString & new_name);
+    void  show_wrong_types(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable);
 protected:
 
 
 private:
-    std::vector<CLadder*>   * m_ladders;
-    CGraphicsHelper     * m_helper;
-    QScrollBar          * m_vertical;
-    QScrollBar          * m_horizontal;
+    std::vector<CFbdLadder*>   * m_ladders;
+    CGraphicsHelper         * m_helper;
+    QScrollBar              * m_vertical;
+    QScrollBar              * m_horizontal;
 
-    QOpenGLFunctions    * m_funcGL{nullptr};
-    QPaintDevice        * m_paint_dev;
-    QPoint                m_start_move;
-    QString               mime_data_text{"application/x-qabstractitemmodeldatalist"};
-    COglStyle           * m_style;
+    QPaintDevice            * m_paint_dev;
+    //COglStyle               * m_style;
 
     int                   m_X_scroll{0};
     int                   m_Y_scroll{0};
+    int                   m_height{0};
+    int                   m_width{0};
+    bool                  m_is_editable{true};
 
-    /// проба пера
-    const float PI =3.141592653; //Замечательно число Пи
-    int height{0};      //Высота персонажа, тут нуль, дабы смещения не происходило.
+    /// drag autoscroll
+    QImage                m_vert_top_autoscroll;
+    QImage                m_vert_top_templ;
+    QImage                m_vert_bottom_autoscroll;
+    QImage                m_vert_bottom_templ;
+    QRect                 m_vertical_auto_rect;
+    QImage                m_horiz_right_autoscroll;
+    QImage                m_horiz_left_templ;
+    QImage                m_horiz_left_autoscroll;
+    QImage                m_horiz_right_templ;
+    QRect                 m_horizon_auto_rect;
+    CPou                * m_current_pou{nullptr};
+
+    /// wrong types - message about not comparable variables types, when try to graphic connect them
+    QImage  m_wrong_type_img;
+    QRect   m_wrong_type_rect;
+    QString m_wrong_type_text;
+    QFont   m_message_font;
+    QFont   m_diagram_font;
 
     void draw_ladders();
+    void draw_drag_bottom_upper();
+    //void make_wrong_message(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable);
+
+    void draw_type_message();
+
+    void make_gradient_images();
 };
+
 
 #endif // COGLWIDGET_H
 
-/*Here's an implementation of gluLookAt:
-vec3_t x, y, z;
-mat4_t m;
-
-// view direction
-z[0] = eyex - centerx;
-z[1] = eyey - centery;
-z[2] = eyez - centerz;
-
-// default y to up
-y[0] = upx;
-y[1] = upy;
-y[2] = upz;
-
-// force x, y and z to be all perpendicular to each other
-vec3_Normalise(z);
-vec3_Cross(y, z, x);
-vec3_Cross(z, x, y);
-
-// normalise
-vec3_Normalise(x);
-vec3_Normalise(y);
-
-// Stuff them all into a matrix
-m[0] = x[0]; m[1] = y[0]; m[2] = z[0]; m[3] = 0;
-m[4] = x[1]; m[5] = y[1]; m[6] = z[1]; m[7] = 0;
-m[8] = x[2]; m[9] = y[2]; m[10] = z[2]; m[11] = 0;
-m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 1;
-
-// tell gl all about it
-mat4_Translate(-eyex, -eyey, -eyez, m);
-mat4_Mult(modelview, m, modelview);*/

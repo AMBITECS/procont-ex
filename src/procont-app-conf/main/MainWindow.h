@@ -70,8 +70,6 @@ public:
     QDomDocument & document();
 
     QUndoGroup * undoGroup() const;
-    // void registerUndoStackWidget(QWidget *);
-    QUndoStack * undoStack() const;
     QUndoStack * emptyStack() const;
 
 signals:
@@ -129,7 +127,7 @@ private:
     QDockWidget * dockDev{nullptr};
 
     // QTreeView * view{nullptr};
-    QTreeView * _m_tree_dev{nullptr};
+    TreeView * _m_tree_dev{nullptr};
     TreeView * _m_tree_pou{nullptr};
 
     DomModel * _m_model_project{nullptr};
@@ -155,9 +153,8 @@ private:
 
     QDomDocument _m_project_document;
 
-    CWidgetProtocol * _m_widget_protocol{nullptr};
     QUndoGroup * _m_undo_group{nullptr};
-    QUndoStack * _m_undo_stack{nullptr};
+    std::list<QObject *> _m_nostack_widgets;
     QUndoStack * _m_empty_stack{nullptr};
 
 private:

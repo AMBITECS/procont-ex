@@ -23,15 +23,9 @@ QUndoStack * TableView::undoStack() const
 void TableView::slot_focusChanged(QWidget *old_, QWidget *new_)
 {
     if(new_ == this)
-    {
-        // qDebug() << __PRETTY_FUNCTION__;
-
         undoStack()->setActive();
-    }
     else
-    {
         clearFocus();
-    }
 }
 
 void TableView::closeOpenedEditor()
@@ -41,8 +35,6 @@ void TableView::closeOpenedEditor()
 
 void TableView::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << __PRETTY_FUNCTION__;
-
     QModelIndex item = indexAt(event->pos());
 
     if (item.row() == -1 && item.column() == -1)
@@ -51,7 +43,7 @@ void TableView::mousePressEvent(QMouseEvent *event)
         setCurrentIndex(QModelIndex());
     }
 
-    undoStack()->setActive();
+    setFocus();
 
     QTableView::mousePressEvent(event);
 }

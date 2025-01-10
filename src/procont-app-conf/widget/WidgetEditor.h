@@ -41,9 +41,9 @@ protected slots:
     void slot_selectRow_tree(const QModelIndex &index_, bool);
 
 protected:
-    void updateTblView();
     virtual QWidget * createVarsEditor();
     virtual QWidget * createCodeEditor();
+    void updateTblView();
 
 protected:
     QModelIndex _m_index{};
@@ -51,9 +51,9 @@ protected:
     QAbstractProxyModel * _m_proxy{nullptr};
 
 protected:
-    TableView * _vars_table{nullptr};
-    CodeEditorWidget * _vars_text{nullptr};
-    CodeEditorWidget * _body_text{nullptr};
+    TableView * _m_vars_table{nullptr};
+    CodeEditorWidget * _m_vars_text{nullptr};
+    CodeEditorWidget * _m_body_text{nullptr};
     QWidget * _m_table_container{nullptr};
 };
 // ----------------------------------------------------------------------------

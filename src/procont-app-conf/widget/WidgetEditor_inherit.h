@@ -48,7 +48,6 @@ public:
 
 protected:
     QWidget * createCodeEditor() override;
-    QWidget * createVarsEditor() override;
 
 protected slots:
     void slot_codeShmViewToggled(bool);

@@ -45,16 +45,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     _m_proxy_pou(new ProxyModelTree_pou),
     _m_proxy_dev(new ProxyModelTree_dev),
-    _m_undo_stack(new QUndoStack),
     _m_empty_stack(new QUndoStack),
     _m_undo_group(new QUndoGroup)
 {
-    undoGroup()->addStack(undoStack());
     undoGroup()->addStack(emptyStack());
-    undoGroup()->setActiveStack(undoStack());
-
-    _m_proxy_pou->setUndoStack(undoStack());
-    _m_proxy_dev->setUndoStack(undoStack());
 
     if(!QFileInfo::exists(_m_base_directory))
         _m_base_directory = QFileInfo(QDir::currentPath()).absolutePath();
@@ -126,11 +120,6 @@ MainWindow * MainWindow::instance()
     return _m_instance;
 }
 
-QUndoStack * MainWindow::undoStack() const
-{
-    return _m_undo_stack;
-}
-
 QUndoStack * MainWindow::emptyStack() const
 {
     return _m_empty_stack;
@@ -147,7 +136,9 @@ void MainWindow::createWidgets()
     connect(TabWidgetEditor::instance(), &TabWidgetEditor::signal_currentTabChanged, this, &MainWindow::slot_currentViewChanged);
 
     // left area
-    _m_tree_dev = new QTreeView();
+    _m_tree_dev = new TreeView();
+    undoGroup()->addStack(_m_tree_dev->undoStack());
+    _m_proxy_dev->setUndoStack(_m_tree_dev->undoStack());
     _m_tree_dev->setExpandsOnDoubleClick(false);
     _m_tree_dev->setMinimumSize(300, 400);
     _m_tree_dev->setHeaderHidden(true);
@@ -160,7 +151,8 @@ void MainWindow::createWidgets()
     addDockWidget(Qt::LeftDockWidgetArea, dockDev);
     _m_view_menu->addAction(dockDev->toggleViewAction());
 
-    _m_tree_pou = new TreeView();
+    _m_tree_pou = new TreeView(_m_tree_dev->undoStack());
+    _m_proxy_pou->setUndoStack(_m_tree_pou->undoStack());
     _m_tree_pou->setExpandsOnDoubleClick(false);
     _m_tree_pou->setMinimumSize(250, 400);
     _m_tree_pou->setHeaderHidden(true);
@@ -187,6 +179,7 @@ void MainWindow::createWidgets()
 
     // right area
     _m_toolWidget = new CTreeObject;
+    _m_nostack_widgets.push_back(_m_toolWidget);
     _m_toolWidget->setMinimumSize(200, 500);
     QStringList treeHeaderLabels; treeHeaderLabels << tr("Components");
     _m_toolWidget->setHeaderLabels(treeHeaderLabels);
@@ -198,13 +191,14 @@ void MainWindow::createWidgets()
     _m_view_menu->addAction(pDock->toggleViewAction());
 
     // bottom area
-    _m_widget_protocol = new CWidgetProtocol(undoGroup());
-    connect(this, &MainWindow::signal_activateUndoStack, _m_widget_protocol, &CWidgetProtocol::slot_activateUndoStack);
-    _m_widget_protocol->setMinimumHeight(300);
+    CWidgetProtocol::instance()->setUndoGroup(undoGroup());
+    _m_nostack_widgets.push_back(CWidgetProtocol::instance());
+    // connect(this, &MainWindow::signal_activateUndoStack, _m_widget_protocol, &CWidgetProtocol::slot_activateUndoStack);
+    CWidgetProtocol::instance()->setMinimumHeight(300);
     pDock = new QDockWidget(tr("Protocol"), this);
     // pDock->setTitleBarWidget(new QWidget());
     pDock->setAllowedAreas(Qt::BottomDockWidgetArea);
-    pDock->setWidget(_m_widget_protocol);
+    pDock->setWidget(CWidgetProtocol::instance());
     addDockWidget(Qt::BottomDockWidgetArea, pDock);
     _m_view_menu->addAction(pDock->toggleViewAction());
 }
@@ -421,12 +415,17 @@ void MainWindow::slot_devCustomContextMenu(const QPoint &pos_)
 
 void MainWindow::slot_focusChanged(QWidget *, QWidget *new_)
 {
-    // qDebug() << new_;
-
-    if(new_ == _m_tree_pou || new_ == _m_tree_dev)
-        undoStack()->setActive();
-    else
-        emit signal_activateUndoStack(new_);
+    QObject * _up = new_;
+    while(_up && _up->parent() && _up != this)
+    {
+        if(std::find(_m_nostack_widgets.cbegin(), _m_nostack_widgets.cend(), _up) != _m_nostack_widgets.cend())
+        {
+           _m_empty_stack->setActive();
+            break;
+        }
+        else
+            _up = _up->parent();
+    }
 }
 
 void MainWindow::slot_pouCurrentChanged(const QModelIndex &current, const QModelIndex &)
@@ -474,7 +473,7 @@ void MainWindow::slot_add_DUT()
     {
         auto cmd = new CUndoCommand_insert_tree(_m_model_project, DomModel::s_index(_m_tree_pou->currentIndex()), dlg.getNode().toDocument().documentElement());
         connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_selectRow_tree);
-        undoStack()->push(cmd);
+        _m_tree_pou->undoStack()->push(cmd);
     }
     _m_tree_pou->setFocus();
 }
@@ -486,7 +485,7 @@ void MainWindow::slot_add_POU()
     {
         auto cmd = new CUndoCommand_insert_tree(_m_model_project, DomModel::s_index(_m_tree_pou->currentIndex()), dlg.getNode().toDocument().documentElement());
         connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_selectRow_tree);
-        undoStack()->push(cmd);
+        _m_tree_pou->undoStack()->push(cmd);
     }
 
     _m_tree_pou->setFocus();
@@ -648,7 +647,8 @@ void MainWindow::save(const QString & filePath)
 {
     if (!filePath.isEmpty())
     {
-        undoStack()->clear();
+        for(auto i : undoGroup()->stacks())
+            i->clear();
 
         QFile file(filePath);
         if (file.open(QIODevice::WriteOnly))
@@ -727,7 +727,7 @@ void MainWindow::slot_delete()
                         QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
                 );
             if(QMessageBox::Yes == _result)
-                undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));
+                _m_tree_pou->undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));
         }
     }
     // dev tree
@@ -756,7 +756,7 @@ void MainWindow::slot_delete()
                     QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
                 );
             if(QMessageBox::Yes == _result)
-                undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));
+                _m_tree_dev->undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));
         }
     }
 }

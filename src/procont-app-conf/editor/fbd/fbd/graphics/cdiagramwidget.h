@@ -53,8 +53,6 @@ public:
     ~CDiagramWidget() override;
     void  set_active();
 
-
-
     QUndoStack *    undo_stack();
 
 signals:

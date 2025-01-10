@@ -2,20 +2,20 @@
 // Created by artem on 12.10.24.
 //
 
-#include "CFbdComponentsTree.h"
-#include "../../plc-xml/common/CProject.h"
+#include "CComponentsTree.h"
+#include "editor/fbd/plc-xml/common/CProject.h"
 
 extern CProject *project;
 
-CFbdComponentsTree::CFbdComponentsTree(QTreeWidget *widget)
+CComponentsTree::CComponentsTree(QTreeWidget *widget)
 {
     m_widget = widget;
 }
 
-CFbdComponentsTree::~CFbdComponentsTree()
+CComponentsTree::~CComponentsTree()
 = default;
 
-void CFbdComponentsTree::build_tree(CPou *current_pou)
+void CComponentsTree::build_tree(CPou *current_pou)
 {
     clear_tree();
 
@@ -60,7 +60,7 @@ void CFbdComponentsTree::build_tree(CPou *current_pou)
 }
 
 void
-CFbdComponentsTree::clear_tree()
+CComponentsTree::clear_tree()
 {
 
     QTreeWidgetItem *item;
@@ -73,7 +73,7 @@ CFbdComponentsTree::clear_tree()
 }
 
 void
-CFbdComponentsTree::removeItem(QTreeWidgetItem *item)
+CComponentsTree::removeItem(QTreeWidgetItem *item)
 {
     if (!item)
     {
@@ -96,7 +96,7 @@ CFbdComponentsTree::removeItem(QTreeWidgetItem *item)
     delete item;
 }
 
-void CFbdComponentsTree::update_program_pous(CPou *current)
+void CComponentsTree::update_program_pous(CPou *current)
 {
     m_project_pou . clear();
 
@@ -130,7 +130,7 @@ void CFbdComponentsTree::update_program_pous(CPou *current)
     }
 }
 
-void CFbdComponentsTree::get_palette_roots(CPou *p_pou, QStringList &list, QVector<QVector<s_comp_item>> &list_1)
+void CComponentsTree::get_palette_roots(CPou *p_pou, QStringList &list, QVector<QVector<s_comp_item>> &list_1)
 {
     if (p_pou->type() == BT_FBD)
     {

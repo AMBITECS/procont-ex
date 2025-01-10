@@ -20,6 +20,8 @@ CInstEditor::CInstEditor(CFilter *filter, QWidget *parent) : QLineEdit(parent)
 
     connect(this, &CInstEditor::textChanged,   this, &CInstEditor::text_changed);
     connect(this, &CInstEditor::returnPressed, this, &CInstEditor::editing_complete);
+    connect(this, &CInstEditor::editingFinished, this, &CInstEditor::editing_complete);
+    connect(this, &CInstEditor::focusOutEvent, this, &CInstEditor::focus_out);
 
     this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
@@ -82,6 +84,11 @@ void CInstEditor::editing_complete()
         return;
     }
     emit escaped();
+}
+
+void CInstEditor::focus_out(QFocusEvent *event)
+{
+    editing_complete();
 }
 
 void CInstEditor::focusOutEvent(QFocusEvent *event)

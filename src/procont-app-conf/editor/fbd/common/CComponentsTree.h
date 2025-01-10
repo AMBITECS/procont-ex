@@ -4,14 +4,14 @@
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include "../palette/palette.h"
+#include "editor/fbd/fbd/palette/palette.h"
 #include "editor/fbd/plc-xml/common/CPou.h"
 
-class CFbdComponentsTree
+class CComponentsTree
 {
 public:
-    explicit CFbdComponentsTree(QTreeWidget *widget);
-    ~CFbdComponentsTree();
+    explicit CComponentsTree(QTreeWidget *widget);
+    ~CComponentsTree();
 
     void build_tree(CPou *current_pou);
     void clear_tree();

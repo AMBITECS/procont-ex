@@ -706,6 +706,10 @@ void COglWorld::iface_new_var(const QString &type, const QString &name)
 
 void COglWorld::iface_rename(const QString &old_name, const QString &new_name)
 {
+    if (!m_selection.object)
+    {
+        return;
+    }
     auto cmd_rename = new CRenameInst(this, m_selection.object,
                                       old_name, new_name);
     m_undo_stack->push(cmd_rename);

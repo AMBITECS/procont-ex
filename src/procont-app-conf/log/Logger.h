@@ -19,6 +19,8 @@
 
 #include <QObject>
 #include <QMap>
+#include <QTextStream>
+#include <QDir>
 
 class QTreeWidget;
 
@@ -29,12 +31,14 @@ private:
     CMessanger();
 public:
     ~CMessanger();
+
+public:
+    static void set_log_dir(const QString &path_);
+
 public:
     void add_message(void *, const QString &, const QStringList &, CMessage::eMsgLevel,
              IMessage::eMsgTab = IMessage::eMT_Message, const QDateTime & = QDateTime::currentDateTime());
-
     void add_cmd(CCmd::eCmdType, IMessage::eMsgTab = IMessage::eMT_Build);
-
     void add_txt(const QString &);
 
     void information(void *object_, const QString &function_, const QStringList &, IMessage::eMsgTab type_ = IMessage::eMT_Message);
@@ -49,10 +53,16 @@ signals:
 public:
     static CMessanger* instance();
     static QString get_function(const QString &);
+    static QString get_filepath(const QString &path_);
 
 private:
-    static CMessanger * m_pInstance;
-    quint64 m_uiMessageCounter;
+    static CMessanger * _m_instance;
+    static QDir _m_log_dir;
+    static QFile _m_messages_file;
+    static QTextStream _m_messages_stream;
+
+private:
+    quint64 _m_message_counter;
 };
 
 #endif // CMESSANGER_H

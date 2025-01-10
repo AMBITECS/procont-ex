@@ -17,17 +17,7 @@
 #include "editor/fbd/common/CLadder.h"
 
 
-#define  LEFT_WIDTH 50      //!< the width of the left rect
-#define  DIVIDER_WIDTH 3    //!< divider strip width
-#define  GRAY_WIDTH  20     //!< gray field width
-#define  DEF_HEIGHT 50      //!< empty ladder width
-#define  HEIGHT_RESERVE 15  //!< addition to the calculated height for connections
-#define  BOT_LANDING_HEIGHT 3
-#define  OBJECTS_DISTANCE   40
-#define  OBJECTS_TOP_SHIFT  30
 
-#define def_bound_dist 5
-#define def_lines_diff 5
 
 class s_selection;
 

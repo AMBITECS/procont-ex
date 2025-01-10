@@ -20,8 +20,6 @@ CUndoCommand_edit::CUndoCommand_edit(QAbstractProxyModel *model_, const QModelIn
 
 void CUndoCommand_edit::undo()
 {
-    qDebug() << __PRETTY_FUNCTION__ << _m_value_old;
-
     _m_index_current = _m_model->index(_m_row, _m_column, _m_index_parent);
 
     Q_ASSERT(DomModel::toItem(_m_index_current));

@@ -10,7 +10,8 @@
 #include <QDomNode>
 #include "editor/fbd/common/general/ctreeobject.h"
 #include "editor/fbd/plc-xml/common/CProject.h"
-#include "editor/fbd/common/COpenGlDiagram.h"
+#include "graphics/cdiagramogl.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -44,9 +45,13 @@ private:
     QDomNode        * m_source_node;
     CPou            * m_diagram_pou;
     EBodyType         m_diagram_language{EBodyType::BT_COUNT};
+    CDiagramOgl     * m_ogl_painter;
+    CTreeObject     * m_tree_object;
 
     QDomNode get_project_node(const QDomNode &node);
     void     define_diagram_pou(const QDomNode &pou_node);
+
+    void build_tree(CPou *p_pou);
 };
 
 

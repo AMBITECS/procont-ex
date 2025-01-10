@@ -70,8 +70,6 @@ void CUndoCommand_remove_tree::undo()
 
 void CUndoCommand_remove_tree::redo()
 {
-    qDebug() << __PRETTY_FUNCTION__;
-
     TabWidgetEditor::instance()->closeTab(_m_index_current, true);
 
     CUndoCommand_remove::redo();

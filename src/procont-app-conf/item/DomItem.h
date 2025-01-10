@@ -45,6 +45,9 @@ public:
     virtual void setData(const QVariant &value, int role) override;
     [[nodiscard]] int type() const override { return m_itemType; }
 
+    [[nodiscard]] bool is_read_only() { return _m_read_only; }
+    void set_read_only(bool _read_only) { _m_read_only = _read_only; }
+
     [[nodiscard]] QString print() const;
 
 public:
@@ -66,6 +69,7 @@ protected:
 protected:
     ItemType m_itemType;
     QScopedPointer<ItemValue> m_value;
+    bool _m_read_only = false;
 
 protected:
     std::vector<QDomNode> _v_child_nodes;

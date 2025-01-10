@@ -156,7 +156,14 @@ Qt::ItemFlags ProxyModelTable_var::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::NoItemFlags;
 
+    auto _item = DomModel::toItem(index);
+
+    Q_ASSERT(_item);
+
     Qt::ItemFlags flg = QAbstractItemModel::flags(index);
+
+    if(_item->is_read_only())
+        return flg;
 
     if(index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
         return Qt::ItemIsEditable | flg;
@@ -246,6 +253,10 @@ bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &valu
     auto _item = DomModel::toItem(_index);
 
     Q_ASSERT(_item);
+    Q_ASSERT(undoStack());
+
+    if(_item->is_read_only())
+        return false;
 
     undoStack()->push(new CUndoCommand_edit_table(this, index, index.data(), value, _item->node().toElement().attribute("name")));
 

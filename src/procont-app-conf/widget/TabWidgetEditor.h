@@ -45,7 +45,8 @@ private:
 
 private:
     static TabWidgetEditor * _instance;
-    static QHash<DomItem::ItemType, QAbstractProxyModel*> _hProxyModels;
+    // static QHash<DomItem::ItemType, QAbstractProxyModel*> _hProxyModels;
+    static QAbstractItemModel * _m_model;
 
 private:
     QHash<const QModelIndex, QWidget*> _hWidgets;

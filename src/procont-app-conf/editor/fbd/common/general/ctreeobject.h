@@ -18,6 +18,10 @@ protected:
     void mousePressEvent( QMouseEvent* event ) override;
     void mouseMoveEvent( QMouseEvent* event ) override;
 
+// igor'
+private slots:
+    void slot_focusChanged(QWidget *old_, QWidget *new_);
+
 private:
     QPoint    m_dragStart;
     QDrag   * m_drag{nullptr};

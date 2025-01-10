@@ -5,18 +5,30 @@
 #include <QList>
 #include <QIcon>
 
-
 CTreeObject::CTreeObject(QWidget *parent) : QTreeWidget(parent)
 {
     setSelectionMode(SelectionMode::SingleSelection);
     setSelectionBehavior(SelectionBehavior::SelectRows);
+
+    // igor'
+    connect(qApp, SIGNAL(focusChanged(QWidget*, QWidget*)), this, SLOT(slot_focusChanged(QWidget*, QWidget*)));
 }
 
 CTreeObject::~CTreeObject()
 = default;
 
+// igor'
+void CTreeObject::slot_focusChanged(QWidget *, QWidget *new_)
+{
+    if(new_ != this)
+        clearFocus();
+}
+
 void CTreeObject::mousePressEvent(QMouseEvent *event)
 {
+    // igor'
+    setFocus();
+
     m_dragStart = event->pos();
     m_drag_item = this->itemAt(m_dragStart);
 
@@ -39,7 +51,6 @@ void CTreeObject::mouseMoveEvent(QMouseEvent *event)
     {
         return;
     }
-
 
     m_drag = new QDrag( this );
     auto* mimeData = new QMimeData();

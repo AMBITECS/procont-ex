@@ -7,10 +7,36 @@
 // *** IWidgetProtocolTab ***
 
 #include <QWidget>
+#include <QTreeWidget>
+#include <QApplication>
 
 /*!
  * \brief The IWidgetProtocolTab interface
  */
+
+class TreeWidget : public QTreeWidget
+{
+    Q_OBJECT
+public:
+    TreeWidget(QWidget *parent = nullptr) : QTreeWidget(parent)
+    {
+        connect(qApp, SIGNAL(focusChanged(QWidget*, QWidget*)), this, SLOT(slot_focusChanged(QWidget*, QWidget*)));
+    }
+private:
+    virtual void mousePressEvent(QMouseEvent *event) override
+    {
+        setFocus();
+
+        QTreeWidget::mousePressEvent(event);
+    }
+
+private slots:
+    void slot_focusChanged(QWidget *old_, QWidget *new_)
+    {
+        if(new_ != this)
+            clearFocus();
+    }
+};
 
 class IWidgetProtocolTab : public QWidget
 {
@@ -81,7 +107,7 @@ private:
     static void set_type(QTreeWidgetItem *item_, const QString &type_);
 
 private:
-    QTreeWidget * m_pErrorTreeWidget = nullptr;
+    TreeWidget * m_pErrorTreeWidget = nullptr;
     QPlainTextEdit * m_pErrorPlainTextWidget = nullptr;
     CodeEditorWidget * m_pCodePlainTextWidget = nullptr;
 };
@@ -91,26 +117,49 @@ private:
 // *** CWidgetProtocol ***
 
 #include <QTabWidget>
+#include <QUndoView>
 
-QT_FORWARD_DECLARE_CLASS(QUndoView)
 QT_FORWARD_DECLARE_CLASS(QUndoGroup)
 
 /*!
  * \brief The CWidgetProtocol class
  */
 
+class UndoView : public QUndoView
+{
+    Q_OBJECT
+public:
+    UndoView(QWidget *parent = nullptr) : QUndoView(parent)
+    {
+        connect(qApp, SIGNAL(focusChanged(QWidget*, QWidget*)), this, SLOT(slot_focusChanged(QWidget*, QWidget*)));
+    }
+private:
+    virtual void mousePressEvent(QMouseEvent *event) override
+    {
+        setFocus();
+
+        QUndoView::mousePressEvent(event);
+    }
+
+private slots:
+    void slot_focusChanged(QWidget *old_, QWidget *new_)
+    {
+        if(new_ != this)
+            clearFocus();
+    }
+};
+
 class CWidgetProtocol : public QTabWidget
 {
     Q_OBJECT
 public:
-    explicit CWidgetProtocol(QUndoGroup*, QWidget *parent = nullptr);
+    explicit CWidgetProtocol(QWidget *parent = nullptr);
     virtual ~CWidgetProtocol();
 
-// public:
-//     static CWidgetProtocol * instance();
+    void setUndoGroup(QUndoGroup* group_) const;
 
-public slots:
-    void slot_activateUndoStack(QWidget *);
+public:
+    static CWidgetProtocol * instance();
 
 private slots:
     void slot_add_msg(const CMessage &);
@@ -121,12 +170,12 @@ private:
     void exec(const CCmd &);
 
 private:
-    CWidgetProtocolTab_message * m_pWidgetMessage;
-    CWidgetProtocolTab_build * m_pWidgetBuild;
-    QUndoView * m_pWidgetAction;
+    CWidgetProtocolTab_message * _m_widget_message;
+    CWidgetProtocolTab_build * _m_widget_build;
+    UndoView * _m_widget_action;
 
-// private:
-//     static CWidgetProtocol *m_pInstance;
+private:
+    static CWidgetProtocol *_m_instance;
 };
 // ----------------------------------------------------------------------------
 

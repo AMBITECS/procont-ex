@@ -27,26 +27,15 @@ WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy
     : QSplitter(Qt::Vertical, parent_),
     _m_index(index_),
     _m_item(DomModel::toItem(_m_index)),
-    _m_proxy(proxy_),
-    _m_undo_stack(new QUndoStack)
+    _m_proxy(proxy_)
 {
     setChildrenCollapsible(false);
-
-    reinterpret_cast<ProxyModelTable_var*>(proxy_)->setUndoStack(_m_undo_stack);
-
-    MainWindow::instance()->undoGroup()->addStack(undoStack());
-    connect(MainWindow::instance(), &MainWindow::signal_activateUndoStack, this, &WidgetEditor::slot_activateUndoStack);
 }
 
-QUndoStack * WidgetEditor::undoStack() const
+void WidgetEditor::initFocus() const
 {
-    return _m_undo_stack;
-}
-
-void WidgetEditor::slot_activateUndoStack(QWidget *widget_)
-{
-    if(widget_ == _vars_table)
-        undoStack()->setActive();
+    if(_m_vars_table)
+        _m_vars_table->setFocus();
 }
 
 QWidget * WidgetEditor::createVarsEditor()
@@ -63,17 +52,17 @@ QWidget * WidgetEditor::createVarsEditor()
     connect(action, &QAction::triggered, this, &WidgetEditor::slot_varDelVariable);
     toolbar_table->setIconSize(QSize(16, 16));
     // variables editor table
-    _vars_table = new TableView;
-    // MainWindow::registerUndoStackWidget(_vars_table);
-    _vars_table->setMinimumSize(500, 200);
-    _vars_table->setItemDelegateForColumn(3, new CLineEditDelegate);
-    _vars_table->setModel(_m_proxy);
-    _vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_m_index), _m_proxy));
-    _vars_table->setColumnHidden(0, true);
-    _vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
-    _vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
-    _vars_table->horizontalHeader()->setHighlightSections(false);
-    _vars_table->setItemDelegateForColumn(7, new CTextEditDelegate);
+    _m_vars_table = new TableView;
+    _m_vars_table->setMinimumSize(500, 200);
+    _m_vars_table->setItemDelegateForColumn(3, new CLineEditDelegate);
+    _m_vars_table->setModel(_m_proxy);
+    reinterpret_cast<ProxyModelTable_var*>(_m_proxy)->setUndoStack(_m_vars_table->undoStack());
+    _m_vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_m_index), _m_proxy));
+    _m_vars_table->setColumnHidden(0, true);
+    _m_vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _m_vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
+    _m_vars_table->horizontalHeader()->setHighlightSections(false);
+    _m_vars_table->setItemDelegateForColumn(7, new CTextEditDelegate);
     QStringList varTypes = {"Scope",
                             "VAR",
                             "VAR_INPUT",
@@ -86,21 +75,19 @@ QWidget * WidgetEditor::createVarsEditor()
                             "CONSTANT",
                             "PERSISTENT",
                             "RETAIN"};
-    _vars_table->setItemDelegateForColumn(2, new CComboBoxDelegate_variable_type(varTypes));
-    connect(_vars_table, &TableView::signal_tableChanged, this, &WidgetEditor::slot_varTblVarChanged);
+    _m_vars_table->setItemDelegateForColumn(2, new CComboBoxDelegate_variable_type(varTypes));
+    connect(_m_vars_table, &TableView::signal_tableChanged, this, &WidgetEditor::slot_varTblVarChanged);
     auto vb_table = new QVBoxLayout;
     vb_table->addWidget(toolbar_table);
-    vb_table->addWidget(_vars_table);
+    vb_table->addWidget(_m_vars_table);
     _m_table_container = new QWidget;
     _m_table_container->setLayout(vb_table);
-    // QStringList varTypes = {"localVars", "inputVars", "outputVars", "tempVars", "inOutVars", "externalVars", "globalVars", "accessVars"};
-    // table->setItemDelegateForColumn(2, new CComboBoxDelegate(varTypes));
     // variables editor code editor
-    _vars_text = new CodeEditorWidget(this);
-    _vars_text->setMinimumSize(500, 200);
-    _vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_m_index)->node()));
-    connect(_vars_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_varTxtVarChanged);
-    _vars_text->hide();
+    _m_vars_text = new CodeEditorWidget(this);
+    _m_vars_text->setMinimumSize(500, 200);
+    _m_vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_m_index)->node()));
+    connect(_m_vars_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_varTxtVarChanged);
+    _m_vars_text->hide();
     // variables editor toolbar for switch view
     auto toolbar_view = new QToolBar();
     toolbar_view->setOrientation(Qt::Vertical);
@@ -117,7 +104,7 @@ QWidget * WidgetEditor::createVarsEditor()
     // vertical (toolbar - table/code editor)
     auto vertical_layout = new QVBoxLayout;
     vertical_layout->addWidget(_m_table_container);
-    vertical_layout->addWidget(_vars_text);
+    vertical_layout->addWidget(_m_vars_text);
     // horizontal (vertical - toolbar for switch view)
     auto horizontal_layout = new QHBoxLayout;
     horizontal_layout->addLayout(vertical_layout);
@@ -131,25 +118,16 @@ QWidget * WidgetEditor::createVarsEditor()
     return container;
 }
 
-void WidgetEditor::slot_selectRow_tree(const QModelIndex &index_, bool first_)
-{
-    _vars_table->clearSelection();
-    _vars_table->setCurrentIndex(QModelIndex());
-    QModelIndex index = _vars_table->model()->index(index_.row(), 3, index_.parent());
-    _vars_table->setCurrentIndex(index);
-    if(first_) _vars_table->edit(index);
-}
-
 QWidget * WidgetEditor::createCodeEditor()
 {
     // *  code editor widgets
-    _body_text = new CodeEditorWidget(this);
-    _body_text->setMinimumSize(500, 250);
-    _body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
-    connect(_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_codeTxtChanged);
+    _m_body_text = new CodeEditorWidget(this);
+    _m_body_text->setMinimumSize(500, 250);
+    _m_body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
+    connect(_m_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_codeTxtChanged);
     // ***
 
-    return _body_text;
+    return _m_body_text;
 }
 
 void WidgetEditor::slot_varTxtViewToggled(bool state)
@@ -157,14 +135,15 @@ void WidgetEditor::slot_varTxtViewToggled(bool state)
     Q_UNUSED(state);
 
     _m_table_container->hide();
-    _vars_text->show();
+    _m_vars_table->undoStack()->clear();
+    _m_vars_text->show();
 }
 
 void WidgetEditor::slot_varTblViewToggled(bool state)
 {
     Q_UNUSED(state);
 
-    _vars_text->hide();
+    _m_vars_text->hide();
     _m_table_container->show();
 }
 
@@ -175,8 +154,8 @@ void WidgetEditor::slot_codeTxtChanged()
     // get new node from editor
     QDomNode new_node = XmlParser::getPouNode
         (
-        _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
-        _body_text != nullptr ? _body_text->toPlainText() : QString(),
+        _m_vars_text != nullptr ? _m_vars_text->toPlainText() : QString(),
+        _m_body_text != nullptr ? _m_body_text->toPlainText() : QString(),
         _m_item->node()
         );
 
@@ -188,8 +167,8 @@ void WidgetEditor::updateTblView()
     // get new node form txt view
     QDomNode new_node = XmlParser::getPouNode
         (
-        _vars_text != nullptr ? _vars_text->toPlainText() : QString(),
-        _body_text != nullptr ? _body_text->toPlainText() : QString(),
+        _m_vars_text != nullptr ? _m_vars_text->toPlainText() : QString(),
+        _m_body_text != nullptr ? _m_body_text->toPlainText() : QString(),
         _m_item->node()
         );
 
@@ -208,7 +187,7 @@ void WidgetEditor::updateTblView()
 void WidgetEditor::slot_varTxtVarChanged()
 {
     // user make changes in text view
-    if(_vars_text->isVisible())
+    if(_m_vars_text->isVisible())
     {
         qDebug() << __PRETTY_FUNCTION__;
 
@@ -218,25 +197,34 @@ void WidgetEditor::slot_varTxtVarChanged()
 
 void WidgetEditor::slot_varTblVarChanged()
 {
-    // user make changes in text view
-    if(_vars_table->isVisible() || _vars_table->selectionModel()->hasSelection())
+   // user make changes in table view
+    if(_m_vars_table->isVisible() /*|| _vars_table->selectionModel()->hasSelection()*/)
     {
         qDebug() << __PRETTY_FUNCTION__;
 
         // deselect vars items
-        if(!_vars_table->isVisible())
-            _vars_table->selectionModel()->clearSelection();
+        // if(!_vars_table->isVisible())
+        //     _vars_table->selectionModel()->clearSelection();
 
         // set new text to text view
-        _vars_text->setPlainText(XmlParser::getPouVarsText(_m_item->node()));
+        _m_vars_text->setPlainText(XmlParser::getPouVarsText(_m_item->node()));
     }
+}
+
+void WidgetEditor::slot_selectRow_tree(const QModelIndex &index_, bool first_)
+{
+    // _m_vars_table->clearSelection();
+    // _m_vars_table->setCurrentIndex(QModelIndex());
+    QModelIndex index = _m_vars_table->model()->index(index_.row(), 3, index_.parent());
+    _m_vars_table->setCurrentIndex(index);
+    if(first_) _m_vars_table->edit(index);
 }
 
 void WidgetEditor::slot_varAddVariable()
 {
     qDebug() << __PRETTY_FUNCTION__;
 
-    auto current = _vars_table->selectionModel()->selectedRows();
+    auto current = _m_vars_table->selectionModel()->selectedRows();
     auto node = _m_item->node().namedItem("interface").namedItem("localVars").isNull() ? _m_item->node() :
                     _m_item->node().namedItem("interface").namedItem("localVars");
 
@@ -246,23 +234,28 @@ void WidgetEditor::slot_varAddVariable()
         DomModel::s_index(_m_index),
         _m_item->defaultNode().toDocument().documentElement(),
         node);
+
     connect(cmd, &CUndoCommand_insert_table::signal_insertRow, this, &WidgetEditor::slot_selectRow_tree);
-    undoStack()->push(cmd);
+    _m_vars_table->undoStack()->push(cmd);
 }
 
 void WidgetEditor::slot_varDelVariable()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;    
 
-    auto current = _vars_table->selectionModel()->selectedRows();
+    auto _current = _m_vars_table->selectionModel()->selectedRows();
+    auto _index_current = (_current.count() == 1) ? _current.at(0) : QModelIndex();
 
-    if(current.count() != 1)
-        return;
+    if(_index_current.isValid())
+    {
+        if(!DomModel::toItem(_index_current)->is_read_only())
+            _m_vars_table->undoStack()->push(
+                new CUndoCommand_remove_table(
+                    DomModel::toModel(_m_proxy->sourceModel()),
+                    DomModel::s_index(_index_current),
+                    DomModel::s_index(_m_index)));
+    }
 
-    undoStack()->push(
-        new CUndoCommand_remove_table(
-            DomModel::toModel(_m_proxy->sourceModel()),
-            DomModel::s_index(current.at(0)),
-            DomModel::s_index(_m_index)));
+    _m_vars_table->setFocus();
 }
 // ----------------------------------------------------------------------------

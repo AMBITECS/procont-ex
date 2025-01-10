@@ -83,7 +83,8 @@ public:
     eMsgLevel level() const;
     eMsgTab type() const;
     QDateTime time() const;
-    QString toString() const;
+    QString toString_debug() const;
+    QString toString_file() const;
 
 private:
     static QString toString_level(eMsgLevel);

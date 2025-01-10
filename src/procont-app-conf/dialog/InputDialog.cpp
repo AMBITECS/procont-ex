@@ -184,7 +184,8 @@ QString InputDialog::get_type_name(const QString & name_)
 
 QString InputDialog::get_vartype_name(const QDomNode &node_)
 {
-
+    // todo - realize this
+    return "";
 }
 
 QDomNode InputDialog::selectedType() const

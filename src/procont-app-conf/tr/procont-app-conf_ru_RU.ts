@@ -997,35 +997,35 @@ Please, enter different variable name</source>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="118"/>
-        <location filename="../dialog/InputDialog.cpp" line="216"/>
-        <location filename="../dialog/InputDialog.cpp" line="254"/>
+        <location filename="../dialog/InputDialog.cpp" line="217"/>
+        <location filename="../dialog/InputDialog.cpp" line="255"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="119"/>
-        <location filename="../dialog/InputDialog.cpp" line="217"/>
+        <location filename="../dialog/InputDialog.cpp" line="218"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="120"/>
-        <location filename="../dialog/InputDialog.cpp" line="218"/>
+        <location filename="../dialog/InputDialog.cpp" line="219"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="255"/>
+        <location filename="../dialog/InputDialog.cpp" line="256"/>
         <source>Value type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="256"/>
+        <location filename="../dialog/InputDialog.cpp" line="257"/>
         <source>Variable type</source>
         <translation>Тип переменной</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="257"/>
+        <location filename="../dialog/InputDialog.cpp" line="258"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>

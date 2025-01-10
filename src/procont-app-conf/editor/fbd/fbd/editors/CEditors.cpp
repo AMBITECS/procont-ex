@@ -136,6 +136,11 @@ void CEditors::cancel_inst_naming()
 
 void CEditors::rename_inst()
 {
+    if (!m_diagram_object)
+    {
+        return;
+    }
+
     bool is_error = m_obj_inst_editor->is_error();
     QString new_name = m_obj_inst_editor->text();
 

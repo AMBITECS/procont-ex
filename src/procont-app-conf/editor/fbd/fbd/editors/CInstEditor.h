@@ -32,6 +32,7 @@ signals:
 protected slots:
     void    text_changed(const QString &str);
     void    editing_complete();
+    void    focus_out(QFocusEvent *event);
 
 
 protected:

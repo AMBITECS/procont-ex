@@ -6,6 +6,7 @@
 
 #include "clddiagram.h"
 #include "ui_clddiagram.h"
+#include "editor/fbd/common/CComponentsTree.h"
 
 extern CProject *project;
 
@@ -16,22 +17,25 @@ CLdDiagram::CLdDiagram(const QDomNode &pou_node, CTreeObject * tree_object,
     ui->setupUi(this);
     m_source_node = new QDomNode(pou_node);
     m_diagram_pou = nullptr;
+    m_tree_object = tree_object;
 
 
     /// произведём анализ - возможно это POU уже есть в CProject, если нет - добавим
     define_diagram_pou(pou_node);
 
+    build_tree(m_diagram_pou);
+
     /// create content of the diagram
-    switch (m_diagram_language)
+    m_ogl_painter = new CDiagramOgl(this);
+    m_ogl_painter->set_scroll_bars(ui->horizontalScrollBar, ui->verticalScrollBar);
+
+    QLayout * lo = ui->oglFrame->layout();
+    if (!lo)
     {
-        case BT_FBD:
-            break;
-        case BT_LD:
-            break;
-        default:
-            // create empty and out
-            break;
+        lo = new QGridLayout(this);
     }
+    lo->setContentsMargins(0,0,0,0);
+    lo->addWidget(m_ogl_painter);
 
     /// setup location
     this->setContentsMargins(0,0,0,0);
@@ -44,7 +48,7 @@ CLdDiagram::~CLdDiagram()
 
 void CLdDiagram::set_active()
 {
-
+    build_tree(m_diagram_pou);
 }
 
 QUndoStack *CLdDiagram::undo_stack()
@@ -104,4 +108,13 @@ void CLdDiagram::define_diagram_pou(const QDomNode &pou_node)
     }
 
     m_diagram_language = m_diagram_pou->type();
+}
+
+void CLdDiagram::build_tree(CPou *p_pou)
+{
+    if (p_pou)
+    {
+        CComponentsTree tree_filler(m_tree_object);
+        tree_filler.build_tree(p_pou);
+    }
 }

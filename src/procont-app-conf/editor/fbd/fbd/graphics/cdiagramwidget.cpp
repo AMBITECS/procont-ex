@@ -5,7 +5,7 @@
 #include "cdiagramwidget.h"
 #include "ui_diagramwgt.h"
 #include <QGridLayout>
-#include "../palette/CFbdComponentsTree.h"
+#include "editor/fbd/common/CComponentsTree.h"
 #include <QTimer>
 // igor'
 #include "main/MainWindow.h"
@@ -31,7 +31,7 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
 
     /// user clicked on the diagram, i'm in focus
     connect(m_ogl_widget, &COglWidget::user_clicked, [this](){
-        undo_stack()->setActive();
+        this->undo_stack()->setActive();
         emit user_clicked(); 
     });
 
@@ -76,7 +76,7 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     ui->diagramSplitter->setSizes({33333, 66667});
 
     // igor'
-    MainWindow::instance()->undoGroup()->addStack(undo_stack());
+    MainWindow::instance()->undoGroup()->addStack(this->undo_stack());
 }
 
 CDiagramWidget::~CDiagramWidget()
@@ -84,7 +84,7 @@ CDiagramWidget::~CDiagramWidget()
     delete m_ogl_widget;
     delete m_dom_node;
 
-    CFbdComponentsTree tree_filler(m_tree_widget);
+    CComponentsTree tree_filler(m_tree_widget);
     tree_filler.clear_tree();
 
     delete ui;
@@ -95,7 +95,7 @@ void CDiagramWidget::build_tree()
     m_current_pou = m_ogl_widget->current_pou();
     if (m_current_pou)
     {
-        CFbdComponentsTree tree_filler(m_tree_widget);
+        CComponentsTree tree_filler(m_tree_widget);
         tree_filler.build_tree(m_current_pou);
     }
 }

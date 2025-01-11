@@ -83,8 +83,9 @@ private:
     CTreeObject         * m_tree_widget;
     bool                  m_is_editable{true};
     QDomNode            * m_dom_node;
-    CPou                * m_current_pou{nullptr};
+    CPou *              m_current_pou{nullptr};
 
+    void save_to_file( const QDomNode &node );
 };
 
 

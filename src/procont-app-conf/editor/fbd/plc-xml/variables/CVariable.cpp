@@ -11,17 +11,18 @@ CVariable::CVariable(CInterface *parent)
     m_parent = parent;
 }
 
-CVariable::CVariable(const CVariable &src)
+CVariable::CVariable(const CVariable &rhs)
 {
-//    m_add_data = src.m_add_data;
-//    m_type = src.m_type;
-//    m_attr_addr = src.m_attr_addr;
-//    m_attr_global_id = src.m_attr_global_id;
-//    if (!src.m_attr_name.isNull())
-//        m_attr_name = src.m_attr_name;
-//    m_init_value = src.m_init_value;
-//    m_doc = src.m_doc;
-    *this = src;
+    m_add_data      = rhs.m_add_data;
+    m_type          = rhs.m_type;
+    m_attr_addr     = rhs.m_attr_addr;
+    m_attr_global_id= rhs.m_attr_global_id;
+    m_attr_name     = rhs.m_attr_name;
+    m_init_value    = rhs.m_init_value;
+    m_doc           = rhs.m_doc;
+    m_parent        = rhs.m_parent;
+    m_glob_parent   = rhs.m_glob_parent;
+    //*this = src;
 }
 
 CVariable::CVariable(CVariable &&tmp) noexcept
@@ -122,6 +123,7 @@ CVariable::operator=(const CVariable &rhs)
     m_init_value    = rhs.m_init_value;
     m_doc           = rhs.m_doc;
     m_parent        = rhs.m_parent;
+    m_glob_parent   = rhs.m_glob_parent;
 
     return *this;
 }

@@ -72,7 +72,7 @@ public:
      */
     [[nodiscard]] bool    filter_string(const std::string &string, const int & flags);
 
-    static void inline capitalize_word(std::string &word);
+    static void capitalize_word(std::string &word);
 
     /**
      *

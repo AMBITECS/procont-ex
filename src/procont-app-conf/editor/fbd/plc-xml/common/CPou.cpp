@@ -3,11 +3,12 @@
 //
 
 #include "CPou.h"
-
-extern  uint16_t    max_local_id;
-
+#include "../CInterface.h"
 #include "editor/fbd/fbd/variables.h"
 #include "editor/fbd/fbd/editors/CFilter.h"
+
+
+extern  uint16_t    max_local_id;
 
 CPou::CPou(CTypes * parent)
 {
@@ -589,4 +590,9 @@ CSfcContent *CPou::get_sfc()
 EBodyType CPou::type() const
 {
     return m_type;
+}
+
+void CPou::set_interface( CInterface *iface )
+{
+    m_interface->update_variables(iface);
 }

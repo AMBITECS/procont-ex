@@ -26,7 +26,7 @@ public:
     void      set_parent(CPou *pou);
 
     QDomNode            dom_node();
-    bool                is_empty() const;
+    [[nodiscard]] bool                is_empty() const;
 
     [[nodiscard]] QString             return_type() const;
     void                set_return_type(const QString &return_type);
@@ -46,6 +46,8 @@ public:
     std::vector<CVariable*>     p_outputs();
 
     CVariable *     get_variable_by_name(const QString &name);
+
+    void update_variables( CInterface *pInterface );
 
 private:
     // return type
@@ -69,6 +71,9 @@ private:
 
     void extract_child_nodes(QDomNode &node, CIfaceVars *p_vars, const QString &node_name);
     void gather_variables(std::vector<CVariable*> * source_variables, std::vector<CVariable*> * dest_vars);
+
+
+    bool check_vars( std::vector<CVariable *> *alien, std::vector<CVariable *> *local );
 };
 
 

@@ -29,6 +29,8 @@ public:
     [[nodiscard]] QDomNode    dom_node() const;
     [[nodiscard]] bool        is_empty() const;
 
+    void        set_interface(CInterface *iface);
+
     CBlock      get_block();
 
     [[nodiscard]] QString     name() const;

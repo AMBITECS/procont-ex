@@ -8,6 +8,7 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QTextStream>
+#include <QFile>
 
 
 #include "../redo-undo/CAddNewLadder.h"
@@ -443,13 +444,13 @@ CFbdObject * COglWorld::insert_new_component(CFbdLadder *p_ladder, const EPalett
 {
     if (!m_fbd_content)
     {
-        QtDialogs::warn_user("There is no FBD POUs");
+        QtDialogs::warn_user(tr("There is no FBD POUs"));
         return nullptr;
     }
 
     if (element < EL_AND || element >= E_COUNT)
     {
-        QtDialogs::warn_user("Пока компонент не поддерживается.");
+        QtDialogs::warn_user(tr("At the moment the component is not supported. But in the process of development"));
         return nullptr;
     }
 
@@ -604,7 +605,7 @@ void COglWorld::mouse_move(QMouseEvent *event)
     {
         if (m_selection.pin->parent()->instance_name() == "???")
         {
-            QtDialogs::warn_user("Задайте объекту корректное имя");
+            QtDialogs::warn_user(tr("Give the object a valid name"));
             return;
         }
         QPixmap pix = QPixmap::fromImage(*m_selection.pin->image());
@@ -663,13 +664,13 @@ void COglWorld::mouse_dblClicked(QMouseEvent *evt)
         /// pin variable
         if (m_selection.pin->direction() == PD_INPUT && m_selection.pin->is_connected())
         {
-            QtDialogs::warn_user("Пин уже имеет соединение");
+            QtDialogs::warn_user(tr("The pin already has a connection"));
             return;
         }
 
         if (m_selection.pin->parent()->instance_name() == "???")
         {
-            QtDialogs::warn_user("Задайте объекту имя");
+            QtDialogs::warn_user(tr("Specify a name for the object"));
             return;
         }
 
@@ -733,8 +734,8 @@ bool COglWorld::check_pins_to_connection(CPin *target_pin, s_compare_types &comp
     /// check target pin is busy
     if (target_pin->direction() == PD_INPUT && target_pin->is_connected())
     {
-        comparable_types.target_type = "ко многим";
-        comparable_types.dragged_type = "один";
+        comparable_types.target_type = tr("to many");
+        comparable_types.dragged_type = tr("single");
         return false;
     }
 
@@ -775,7 +776,7 @@ void COglWorld::connect_pins(CPin *dragged_pin, CPin *target_pin)
 {
     if (dragged_pin->direction() == target_pin->direction())
     {
-        QtDialogs::warn_user("Не могу соединить пины одной направленности");
+        QtDialogs::warn_user(tr("Can't connect pins with with the same direction"));
     }
     auto cmd = new CPinConnecting(this, dragged_pin, target_pin);
     m_undo_stack->push(cmd);
@@ -799,10 +800,17 @@ void COglWorld::text_based_connecting_pin(CPin *selected_pin)
 
 void COglWorld::convert_to_XML()
 {
-    QDomNode pou_node = m_pou->dom_node();
+    const QDomNode pou_node = m_pou->dom_node();
+
+    if (pou_node.isNull())
+    {
+        return;
+    }
+
+    save_to_file(pou_node);
     emit diagram_changed(pou_node);
 
-    QUndoStack loc_stack;
+    //QUndoStack loc_stack;
 
     /// когда из диаграммы
 
@@ -872,3 +880,23 @@ void COglWorld::delete_selected()
     }
 }
 
+void COglWorld::save_to_file( const QDomNode &node )
+{
+    QFile outFile( "fbd_diag.xml" );
+    /*if( !outFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
+    {
+        qDebug( "Failed to open file for writing." );
+        return;
+    }*/
+
+    QDomDocument document;// = node.toDocument();
+    document.appendChild(node);
+    QDomElement root = document.createElement("FBD_POU");
+    root.appendChild(node);
+    document.appendChild(root);
+
+    //QTextStream stream( &outFile );
+    //stream << document.toString(4);
+
+    //outFile.close();
+}

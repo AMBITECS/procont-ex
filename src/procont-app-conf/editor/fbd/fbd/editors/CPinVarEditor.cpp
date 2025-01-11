@@ -47,7 +47,7 @@ CPinVarEditor::CPinVarEditor(QWidget *parent) : QComboBox(parent), skipNextHide(
     m_view->expandAll();
     m_view->setItemsExpandable(false);
 
-    setView(m_view);
+    this->setView(m_view);
 
     m_view->header()->setVisible(true);
 
@@ -202,7 +202,7 @@ void CPinVarEditor::tree_clicked(const QPersistentModelIndex &index)
         m_new_variable += item->item()->name.c_str();
 
         /// Этот финт ушами, что бы обойти непонятную очистку QComboBox'а. Иначе поле ввода остаётся пустым
-        QTimer::singleShot(150, [=](){show_variable(m_new_variable);});
+        QTimer::singleShot(150, [this](){show_variable(m_new_variable);});
     }
 }
 

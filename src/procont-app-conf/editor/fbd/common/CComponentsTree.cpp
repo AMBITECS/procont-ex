@@ -56,7 +56,7 @@ void CComponentsTree::build_tree(CPou *current_pou)
 
 
     m_widget->expandAll();
-    m_widget->setItemsExpandable(false);
+    m_widget->setItemsExpandable(true);
 }
 
 void

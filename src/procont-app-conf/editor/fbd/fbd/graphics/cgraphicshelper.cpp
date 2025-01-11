@@ -29,13 +29,13 @@ CGraphicsHelper::CGraphicsHelper(COglWidget *ogl_widget, QDomNode *node) : QWidg
             [this](){emit object_selected();});
 
     connect(m_graphics_world, &COglWorld::set_current_pou,
-            [=](CPou *pou){emit set_current_pou(pou);});
+            [this](CPou *pou){emit set_current_pou(pou);});
 
     connect(m_graphics_world, &COglWorld::instance_removed,
-            [=](const QString &type, const QString &name){ emit instance_removed(type, name); });
+            [this](const QString &type, const QString &name){ emit instance_removed(type, name); });
 
     connect(m_graphics_world, &COglWorld::diagram_changed,
-            [=](const QDomNode &node){emit diagram_changed(node);});
+            [this](const QDomNode &node){emit diagram_changed(node);});
 
     connect(m_graphics_world, &COglWorld::drag_complete,
             this, &CGraphicsHelper::drag_process_complete);
@@ -145,6 +145,11 @@ void CGraphicsHelper::on_drop_event(QDropEvent *event)
             selected.ladder ? m_graphics_world->insert_new_ladder(selected.ladder) :
                               m_graphics_world->add_new_ladder();
         }
+        else
+        {
+            QtDialogs::warn_user(tr("Supporting this type is in progress. Sorry"));
+            return;
+        }
     }
 
     /// well it's existing CLadder or component
@@ -187,7 +192,7 @@ void CGraphicsHelper::on_drop_event(QDropEvent *event)
     /// accept and out
     if (!move_ok)
     {
-        QtDialogs::warn_user("Не могу изъять объект из исходной ступени.");
+        QtDialogs::warn_user(tr("Can't remove diagram object from the source ladder."));
         event->ignore();
     }
     else
@@ -328,7 +333,7 @@ bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point
     {
         QString text = "Отменить " + m_graphics_world->undo_stack()->undoText();
         act_undo->setText(text);
-        connect(act_undo, &QAction::triggered, [=](){m_graphics_world->undo_stack()->undo();});
+        connect(act_undo, &QAction::triggered, [this](){m_graphics_world->undo_stack()->undo();});
     }
     else
     {
@@ -340,7 +345,7 @@ bool CGraphicsHelper::make_menu(COglWidget *, QMenu *p_menu, const QPoint &point
     {
         QString text = "Повторить " + m_graphics_world->undo_stack()->redoText() ;
         act_redo->setText(text);
-        connect(act_redo, &QAction::triggered, [=](){m_graphics_world->undo_stack()->redo();});
+        connect(act_redo, &QAction::triggered, [this](){m_graphics_world->undo_stack()->redo();});
     }
     else
     {
@@ -381,7 +386,7 @@ void CGraphicsHelper::make_object_menu(QMenu *p_menu, CFbdObject *p_object, CFbd
     act_remove->setText(text);
 
     act_remove->setIcon(QIcon(":/24/images/24x24/Close.png"));
-    connect(act_remove, &QAction::triggered, [=](){
+    connect(act_remove, &QAction::triggered, [=,this](){
         object_remove(p_ladder, p_object);});
 
 
@@ -398,7 +403,7 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
 
     if (p_pin->is_connected())
     {
-        connect(act_reset_connect, &QAction::triggered, [=](){
+        connect(act_reset_connect, &QAction::triggered, [this, p_pin](){
             auto act = new CResetConnections(p_pin);
             m_graphics_world->undo_stack()->push(act);
         });
@@ -417,7 +422,7 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
         act_inversion = new QAction(QIcon(":/16/images/16x16/contrast.png"), negated_text);
         bool enabled = !p_pin->input()->is_negated();
         connect(act_inversion, &QAction::triggered,
-                [=](){
+                [this, enabled, p_pin](){
                     auto cmd = new CPinInverse(p_pin->input(), enabled);
                     m_graphics_world->undo_stack()->push(cmd);
                     });
@@ -425,7 +430,7 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
         /// rising edge
         QString rising_text = p_pin->input()->is_rising_edge() ? "Сбросить восходящий фронт" : "Установить восходящий фронт";
         act_edge_rising = new QAction(QIcon(":/24/images/24x24/Raise.png"), rising_text);
-        connect(act_edge_rising, &QAction::triggered, [=](){
+        connect(act_edge_rising, &QAction::triggered, [this, p_pin](){
                 auto cmd = new CPinRising(p_pin->input(), !p_pin->input()->is_rising_edge());
                 m_graphics_world->undo_stack()->push(cmd);
                 });
@@ -433,7 +438,7 @@ void CGraphicsHelper::make_pin_menu(QMenu *p_menu, CPin * p_pin)
         /// falling edge
         QString falling_text = p_pin->input()->is_falling_edge() ? "Сбросить нисходящий фронт" : "Установить нисходящий фронт";
         act_edge_falling = new QAction(QIcon(":/24/images/24x24/Fall.png"), falling_text);
-        connect(act_edge_falling, &QAction::triggered, [=](){
+        connect(act_edge_falling, &QAction::triggered, [this, p_pin](){
             auto cmd = new CPinFalling(p_pin->input(), !p_pin->input()->is_falling_edge());
             m_graphics_world->undo_stack()->push(cmd);
             });

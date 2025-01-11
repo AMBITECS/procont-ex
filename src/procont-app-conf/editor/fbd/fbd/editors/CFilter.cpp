@@ -280,7 +280,7 @@ QString CFilter::int_to_time(const ETimeMeasure & measure, uint16_t period)
     return QString();
 }
 
-void inline CFilter::capitalize_word(std::string &word)
+void CFilter::capitalize_word(std::string &word)
 {
     for (auto &sym : word)
     {

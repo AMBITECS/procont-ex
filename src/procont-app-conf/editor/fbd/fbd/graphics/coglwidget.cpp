@@ -57,9 +57,9 @@ COglWidget::COglWidget(s_ogl_startup * ogl_startup, QWidget *parent)
     connect (m_helper, &CGraphicsHelper::set_current_pou,
              [this](CPou* pou){m_current_pou = pou; emit set_current_pou(pou);});
     connect(m_helper, &CGraphicsHelper::diagram_changed,
-            [=](const QDomNode &node){emit diagram_changed(node);});
+            [this](const QDomNode &node){emit diagram_changed(node);});
     connect(m_helper, &CGraphicsHelper::instance_removed,
-            [=](const QString &type, const QString &name){emit instance_removed(type, name); });
+            [this](const QString &type, const QString &name){emit instance_removed(type, name); });
     connect(m_helper, &CGraphicsHelper::drag_complete, this, &COglWidget::drag_complete);
     connect(m_helper, &CGraphicsHelper::iface_var_new, this, &COglWidget::iface_new_var);
     connect(m_helper, &CGraphicsHelper::iface_var_rename, this, &COglWidget::iface_ren_var);

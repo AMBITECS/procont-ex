@@ -5,12 +5,13 @@
 #include "cdiagramwidget.h"
 #include "ui_diagramwgt.h"
 #include <QGridLayout>
-#include "../palette/CFbdComponentsTree.h"
+#include "../../common/CComponentsTree.h"
 #include <QTimer>
 // igor'
 #include "main/MainWindow.h"
 #include <QUndoGroup>
-
+#include <QFile>
+#include "../../plc-xml/common/CInstances.h"
 
 CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object, const bool &is_editable, QWidget *parent)
     : QWidget(parent), ui(new Ui::Form)
@@ -84,7 +85,7 @@ CDiagramWidget::~CDiagramWidget()
     delete m_ogl_widget;
     delete m_dom_node;
 
-    CFbdComponentsTree tree_filler(m_tree_widget);
+    CComponentsTree tree_filler(m_tree_widget);
     tree_filler.clear_tree();
 
     delete ui;
@@ -95,7 +96,7 @@ void CDiagramWidget::build_tree()
     m_current_pou = m_ogl_widget->current_pou();
     if (m_current_pou)
     {
-        CFbdComponentsTree tree_filler(m_tree_widget);
+        CComponentsTree tree_filler(m_tree_widget);
         tree_filler.build_tree(m_current_pou);
     }
 }
@@ -107,8 +108,23 @@ void CDiagramWidget::set_active()
 
 void CDiagramWidget::update_interface(const QDomNode &node)
 {
-    // changing interface
-    // emit change_interface();
+    if (!m_current_pou)
+    {
+        qDebug() << "m_current_pou is nullptr";
+        return;
+    }
+
+    //save_to_file(node);
+
+    auto *pou = new CPou(node, m_current_pou->parent());
+    auto iface = pou->interface();
+
+    if (!iface->is_empty())
+    {
+        m_current_pou->set_interface(iface);
+    }
+
+    delete pou;
 }
 
 QUndoStack *CDiagramWidget::undo_stack()
@@ -130,9 +146,36 @@ void CDiagramWidget::delete_selected_object()
 
 void CDiagramWidget::diagram_has_changed(const QDomNode &node)
 {
+    if (node.isNull())
+    {
+        return;
+    }
     // igor'
     undo_stack()->setActive();
+
+    //save_to_file(node);
+
     emit changed_diagram(node);
+}
+
+void CDiagramWidget::save_to_file( const QDomNode &node )
+{
+    QFile outFile( "fbd_diag.xml" );
+    if( !outFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
+    {
+        qDebug( "Failed to open file for writing." );
+        return;
+    }
+
+    QDomDocument document;
+    QDomElement root = document.createElement("wrapper");
+    root.appendChild(node);
+    document.appendChild(root);
+
+    QTextStream stream( &outFile );
+    stream << document.toString();
+
+    outFile.close();
 }
 
 

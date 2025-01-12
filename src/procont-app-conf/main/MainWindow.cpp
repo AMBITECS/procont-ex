@@ -845,6 +845,8 @@ void MainWindow::slot_build()
     file.close();
     // ***
 
+    qDebug() << _buildDir << QFileInfo("/home/master/Ambi/Work/Projects/procont/matiec/iec2c").exists();
+
     // *** трансляция ST->C
     if(_m_compiler == nullptr)
         _m_compiler = new Compiler_matiec

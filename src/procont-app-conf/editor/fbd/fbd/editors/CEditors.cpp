@@ -20,6 +20,7 @@ CEditors::CEditors(COglWidget *wgt, COglWorld *world)
     m_filter = new CFilter(m_var_analytics);
 
     m_obj_inst_editor = new CInstEditor(m_filter, wgt);
+
     connect(m_obj_inst_editor, &CInstEditor::insert_new,
             this, &CEditors::insert_new_inst);
 
@@ -49,9 +50,9 @@ CEditors::CEditors(COglWidget *wgt, COglWorld *world)
 CEditors::~CEditors()
 {
     delete m_model;
-    delete m_obj_inst_editor;
+    //delete m_obj_inst_editor;
     delete m_filter;
-    delete m_pin_var_editor;
+    //delete m_pin_var_editor;
     delete m_var_analytics;
 }
 
@@ -136,6 +137,11 @@ void CEditors::cancel_inst_naming()
 
 void CEditors::rename_inst()
 {
+    if (!m_diagram_object)
+    {
+        return;
+    }
+
     bool is_error = m_obj_inst_editor->is_error();
     QString new_name = m_obj_inst_editor->text();
 

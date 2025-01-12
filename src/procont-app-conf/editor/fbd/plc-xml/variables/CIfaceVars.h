@@ -19,7 +19,7 @@ class CPou;
 class CIfaceVars
 {
 public:
-    CIfaceVars(CPou * parent);
+    explicit CIfaceVars(CPou * parent);
     CIfaceVars(const CIfaceVars & other);
     explicit CIfaceVars(const QDomNode &dom_node, CPou *parent);
     CIfaceVars(CIfaceVars && other) noexcept;
@@ -63,49 +63,56 @@ protected:
 class CAccessVars : public CIfaceVars
 {
 public:
-    CAccessVars(CPou *parent);
+    explicit CAccessVars(CPou *parent);
+    CAccessVars(const CAccessVars &);
     ~CAccessVars() override;
 };
 
 class CLocalVars : public CIfaceVars
 {
 public:
-    CLocalVars(CPou *parent);
+    explicit CLocalVars(CPou *parent);
+    CLocalVars(const CLocalVars &);
     ~CLocalVars() override;
 };
 
 class CExternalVars : public CIfaceVars
 {
 public:
-    CExternalVars(CPou *parent);
+    explicit CExternalVars(CPou *parent);
+    CExternalVars(const CExternalVars &other);
     ~CExternalVars() override;
 };
 
 class CTempVars : public CIfaceVars
 {
 public:
-    CTempVars(CPou *parent);
+    explicit CTempVars(CPou *parent);
+    CTempVars(const CTempVars &other);
     ~CTempVars() override;
 };
 
 class CInVars : public CIfaceVars
 {
 public:
-    CInVars(CPou *parent);
+    explicit CInVars(CPou *parent);
+    CInVars(const CInVars &other);
     ~CInVars() override;
 };
 
 class COutVars : public CIfaceVars
 {
 public:
-    COutVars(CPou *parent);
+    explicit COutVars(CPou *parent);
+    COutVars(const COutVars &other);
     ~COutVars() override;
 };
 
 class CInOutVars : public CIfaceVars
 {
 public:
-    CInOutVars(CPou *parent);
+    explicit CInOutVars(CPou *parent);
+    CInOutVars(const CInOutVars &other);
     ~CInOutVars() override;
 };
 

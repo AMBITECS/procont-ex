@@ -4,6 +4,7 @@
 
 #include "CInterface.h"
 #include "../fbd/variables.h"
+#include "common/CPou.h"
 
 CInterface::CInterface(CPou * parent)
 {
@@ -312,4 +313,42 @@ void CInterface::set_parent(CPou *pou)
 {
     m_parent = pou;
 }
+
+void CInterface::update_variables( CInterface *pInterface )
+{
+    check_vars(pInterface->m_output_vars->variables(), m_output_vars->variables());
+    check_vars(pInterface->m_input_vars->variables(), m_input_vars->variables());
+    check_vars(pInterface->m_in_out_vars->variables(), m_in_out_vars->variables());
+    check_vars(pInterface->m_local_vars->variables(), m_local_vars->variables());
+    check_vars(pInterface->m_access_vars->variables(), m_access_vars->variables());
+    check_vars(pInterface->m_external_vars->variables(), m_external_vars->variables());
+    check_vars(pInterface->m_temp_vars->variables(), m_temp_vars->variables());
+}
+
+bool CInterface::check_vars( std::vector<CVariable *> *alien, std::vector<CVariable *> *local )
+{
+    if (!alien || alien->empty())
+    {
+        return false;
+    }
+
+    for (auto &alien_var : *alien)
+    {
+        bool found = std::any_of(local->begin(), local->end(),
+                                 [alien_var](CVariable* loc)
+                                    {
+                                        return  alien_var->type() == loc->type() &&
+                                                alien_var->name() == loc->name();
+                                    });
+
+        if (!found)
+        {
+            auto var = new CVariable(*alien_var);
+            local->push_back(var);
+        }
+    }
+    return true;
+}
+
+
 

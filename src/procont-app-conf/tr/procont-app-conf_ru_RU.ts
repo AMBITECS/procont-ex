@@ -230,7 +230,17 @@
 <context>
     <name>CGraphicsHelper</name>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="347"/>
+        <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="150"/>
+        <source>Supporting this type is in progress. Sorry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="195"/>
+        <source>Can&apos;t remove diagram object from the source ladder.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="352"/>
         <source>Вернуть</source>
         <translation type="unfinished"></translation>
     </message>
@@ -238,7 +248,7 @@
 <context>
     <name>CLdDiagram</name>
     <message>
-        <location filename="../editor/fbd/ld/clddiagram.ui" line="17"/>
+        <location filename="../editor/fbd/ld/clddiagram.ui" line="14"/>
         <source>CLdDiagram</source>
         <translation type="unfinished"></translation>
     </message>
@@ -256,6 +266,49 @@
 Please, enter different variable name</source>
         <translation>Переменная с именем &apos;%1&apos; уже существует
 Введите другое имя</translation>
+    </message>
+</context>
+<context>
+    <name>COglWorld</name>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="447"/>
+        <source>There is no FBD POUs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="453"/>
+        <source>At the moment the component is not supported. But in the process of development</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="608"/>
+        <source>Give the object a valid name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="667"/>
+        <source>The pin already has a connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="673"/>
+        <source>Specify a name for the object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="737"/>
+        <source>to many</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="738"/>
+        <source>single</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="779"/>
+        <source>Can&apos;t connect pins with with the same direction</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1057,12 +1110,12 @@ Please, enter different variable name</source>
         <translation>задайте верный путь к компилятору в %1</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="36"/>
+        <location filename="../generate/Compiler.cpp" line="38"/>
         <source>build started</source>
         <translation>сборка запущена</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="65"/>
+        <location filename="../generate/Compiler.cpp" line="67"/>
         <source>build finished</source>
         <translation>сборка закончена</translation>
     </message>

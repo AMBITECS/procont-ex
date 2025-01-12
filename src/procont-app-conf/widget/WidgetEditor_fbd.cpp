@@ -32,6 +32,62 @@ WidgetEditor_fbd::WidgetEditor_fbd(const QModelIndex &index_, QAbstractProxyMode
     addWidget(createCodeEditor());
 }
 
+void WidgetEditor_fbd::set_active()
+{
+    WidgetEditor::set_active();
+
+    _m_fbd_view->set_active();
+}
+
+QWidget * WidgetEditor_fbd::createCodeEditor()
+{
+    // *  variables editor widgets
+    // contauner for variables editor widgets
+    auto container = new QWidget;
+    // fbd editor
+    _m_fbd_view = new CDiagramWidget(DomModel::toItem(_m_index)->node(), MainWindow::instance()->toolWidget());
+    connect(_m_fbd_view, &CDiagramWidget::changed_diagram, this, &WidgetEditor_fbd::slot_codeShmChanged);
+    connect(_m_fbd_view, &CDiagramWidget::interface_variable_new, this, &WidgetEditor_fbd::slot_interfaceVariableAdd);
+    connect(_m_fbd_view, &CDiagramWidget::instance_removed, this, &WidgetEditor_fbd::slot_interfaceVariableDel);
+    connect(_m_fbd_view, &CDiagramWidget::interface_variable_rename, this, &WidgetEditor_fbd::slot_interfaceVariableRename);
+    // connect(_m_fbd_view, &CDiagramWidget::undo_enabled, this, &WidgetEditor_fbd::slot_undo_enabled);
+    connect(_m_fbd_view, &CDiagramWidget::object_selected, this, &WidgetEditor_fbd::slot_object_selected);
+    connect(_m_fbd_view, &CDiagramWidget::user_clicked, this, &WidgetEditor_fbd::slot_user_clicked);
+    _m_fbd_view->setMinimumSize(500, 250);
+    // variables editor code editor
+    // _txt_view = WidgetEditor::createCodeEditor();
+    _m_body_text = new CodeEditorWidget(this);
+    _m_body_text->setMinimumSize(500, 250);
+    _m_body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
+    _m_body_text->hide();
+    // variables editor toolbar for switch view
+    auto toolbar_view = new QToolBar();
+    toolbar_view->setOrientation(Qt::Vertical);
+    auto group = new QActionGroup(toolbar_view);
+    auto action = toolbar_view->addAction(QIcon(":/icon/images/text_3.svg"), tr("Text"));
+    connect(action, &QAction::toggled, this, &WidgetEditor_fbd::slot_codeTxtViewToggled);
+    action->setCheckable(true); group->addAction(action);
+    action = toolbar_view->addAction(QIcon(":/icon/images/diagram.svg"), tr("Schema"));
+    connect(action, &QAction::toggled, this, &WidgetEditor_fbd::slot_codeShmViewToggled);
+    action->setCheckable(true); group->addAction(action);
+    action->setChecked(true);
+    toolbar_view->setIconSize(QSize(24, 24));
+    // *  variables editor layout
+    // vertical (toolbar - table/code editor)
+    auto vertical_layout = new QVBoxLayout;
+    vertical_layout->addWidget(_m_fbd_view);
+    vertical_layout->addWidget(_m_body_text);
+    // horizontal (vertical - toolbar for switch view)
+    auto horizontal_layout = new QHBoxLayout;
+    horizontal_layout->addLayout(vertical_layout);
+    horizontal_layout->addWidget(toolbar_view);
+    // set layout for container
+    container->setLayout(horizontal_layout);
+    // ***
+
+    return container;
+}
+
 void WidgetEditor_fbd::slot_varAddVariable()
 {
     WidgetEditor::slot_varAddVariable();
@@ -72,55 +128,6 @@ void WidgetEditor_fbd::slot_varTblVarChanged()
 
         _m_fbd_view->update_interface(DomModel::toItem(_m_vars_table->rootIndex())->node());
     }
-}
-
-QWidget * WidgetEditor_fbd::createCodeEditor()
-{
-    // *  variables editor widgets
-    // contauner for variables editor widgets
-    auto container = new QWidget;
-    // fbd editor
-    _m_fbd_view = new CDiagramWidget(DomModel::toItem(_m_index)->node(), MainWindow::instance()->toolWidget());
-    connect(_m_fbd_view, &CDiagramWidget::changed_diagram, this, &WidgetEditor_fbd::slot_codeShmChanged);
-    connect(_m_fbd_view, &CDiagramWidget::interface_variable_new, this, &WidgetEditor_fbd::slot_interfaceVariableAdd);
-    connect(_m_fbd_view, &CDiagramWidget::instance_removed, this, &WidgetEditor_fbd::slot_interfaceVariableDel);
-    connect(_m_fbd_view, &CDiagramWidget::interface_variable_rename, this, &WidgetEditor_fbd::slot_interfaceVariableRename);
-    // connect(_m_fbd_view, &CDiagramWidget::undo_enabled, this, &WidgetEditor_fbd::slot_undo_enabled);
-    connect(_m_fbd_view, &CDiagramWidget::object_selected, this, &WidgetEditor_fbd::slot_object_selected);
-    connect(_m_fbd_view, &CDiagramWidget::user_clicked, this, &WidgetEditor_fbd::slot_user_clicked);
-   _m_fbd_view->setMinimumSize(500, 250);
-    // variables editor code editor
-    // _txt_view = WidgetEditor::createCodeEditor();
-    _m_body_text = new CodeEditorWidget(this);
-    _m_body_text->setMinimumSize(500, 250);
-    _m_body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
-    _m_body_text->hide();
-    // variables editor toolbar for switch view
-    auto toolbar_view = new QToolBar();
-    toolbar_view->setOrientation(Qt::Vertical);
-    auto group = new QActionGroup(toolbar_view);
-    auto action = toolbar_view->addAction(QIcon(":/icon/images/text_3.svg"), tr("Text"));
-    connect(action, &QAction::toggled, this, &WidgetEditor_fbd::slot_codeTxtViewToggled);
-    action->setCheckable(true); group->addAction(action);
-    action = toolbar_view->addAction(QIcon(":/icon/images/diagram.svg"), tr("Schema"));
-    connect(action, &QAction::toggled, this, &WidgetEditor_fbd::slot_codeShmViewToggled);
-    action->setCheckable(true); group->addAction(action);
-    action->setChecked(true);
-    toolbar_view->setIconSize(QSize(24, 24));
-    // *  variables editor layout
-    // vertical (toolbar - table/code editor)
-    auto vertical_layout = new QVBoxLayout;
-    vertical_layout->addWidget(_m_fbd_view);
-    vertical_layout->addWidget(_m_body_text);
-    // horizontal (vertical - toolbar for switch view)
-    auto horizontal_layout = new QHBoxLayout;
-    horizontal_layout->addLayout(vertical_layout);
-    horizontal_layout->addWidget(toolbar_view);
-    // set layout for container
-    container->setLayout(horizontal_layout);
-    // ***
-
-    return container;
 }
 
 void WidgetEditor_fbd::slot_user_clicked()

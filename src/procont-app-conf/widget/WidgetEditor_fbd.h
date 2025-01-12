@@ -18,6 +18,8 @@ class WidgetEditor_fbd : public WidgetEditor
 public:
     WidgetEditor_fbd(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
+    void set_active() override;
+
 protected:
     QWidget * createCodeEditor() override;
 

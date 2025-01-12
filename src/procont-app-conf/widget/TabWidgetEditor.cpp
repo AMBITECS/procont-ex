@@ -156,7 +156,7 @@ void TabWidgetEditor::slot_currentTabChanged(int index)
         emit signal_currentTabChanged(QModelIndex());
 
     if(dynamic_cast<WidgetEditor*>(widget(index)))
-        reinterpret_cast<WidgetEditor*>(widget(index))->initFocus();
+        reinterpret_cast<WidgetEditor*>(widget(index))->set_active();
 }
 
 void TabWidgetEditor::slot_closeTab(int index)

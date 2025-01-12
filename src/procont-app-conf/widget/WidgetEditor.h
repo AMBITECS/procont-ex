@@ -26,7 +26,7 @@ class WidgetEditor : public QSplitter
 public:
     WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
 
-    void initFocus() const;
+    virtual void set_active();
 
 protected slots:
     void slot_varTxtViewToggled(bool);
@@ -43,7 +43,8 @@ protected slots:
 protected:
     virtual QWidget * createVarsEditor();
     virtual QWidget * createCodeEditor();
-    void updateTblView();
+    void init_focus() const;
+    void update_table_view();
 
 protected:
     QModelIndex _m_index{};

@@ -1218,22 +1218,22 @@ Enter a new name</source>
 <context>
     <name>WidgetEditor</name>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="49"/>
+        <location filename="../widget/WidgetEditor.cpp" line="54"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="51"/>
+        <location filename="../widget/WidgetEditor.cpp" line="56"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="95"/>
+        <location filename="../widget/WidgetEditor.cpp" line="100"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="98"/>
+        <location filename="../widget/WidgetEditor.cpp" line="103"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -1249,7 +1249,7 @@ Enter a new name</source>
         <translation type="obsolete">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor_fbd.cpp" line="102"/>
+        <location filename="../widget/WidgetEditor_fbd.cpp" line="67"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
@@ -1258,7 +1258,7 @@ Enter a new name</source>
         <translation type="obsolete">Таблица</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor_fbd.cpp" line="105"/>
+        <location filename="../widget/WidgetEditor_fbd.cpp" line="70"/>
         <source>Schema</source>
         <translation>Схема</translation>
     </message>

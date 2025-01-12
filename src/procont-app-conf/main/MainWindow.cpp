@@ -565,7 +565,7 @@ void MainWindow::open(const QString & filePath)
 
     if(default_file)
     {
-        _filePath = ":/proj/proj/plc-1.xml";
+        _filePath = ":/proj/proj/plc-1.1.xml";
         _fileName = QFileInfo(_filePath.right(_filePath.size()-1)).fileName();
         m_info(
             QStringList()

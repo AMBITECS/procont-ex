@@ -32,10 +32,15 @@ WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy
     setChildrenCollapsible(false);
 }
 
-void WidgetEditor::initFocus() const
+void WidgetEditor::init_focus() const
 {
     if(_m_vars_table)
         _m_vars_table->setFocus();
+}
+
+void WidgetEditor::set_active()
+{
+    init_focus();
 }
 
 QWidget * WidgetEditor::createVarsEditor()
@@ -162,7 +167,7 @@ void WidgetEditor::slot_codeTxtChanged()
     _m_item->updateNode(new_node.namedItem("body"));
 }
 
-void WidgetEditor::updateTblView()
+void WidgetEditor::update_table_view()
 {
     // get new node form txt view
     QDomNode new_node = XmlParser::getPouNode
@@ -191,7 +196,7 @@ void WidgetEditor::slot_varTxtVarChanged()
     {
         qDebug() << __PRETTY_FUNCTION__;
 
-        updateTblView();
+        update_table_view();
     }
 }
 

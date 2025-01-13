@@ -53,5 +53,6 @@ compile_commands.json
 
 *_qmlcache.qrc
 /Diff.cmake
-/cmake-build-debug/
-/cmake-build-debug-qt/
+/cmake-build-*/
+/matiec/cmake-build-*/
+/matiec/cmake-build-debug-master/

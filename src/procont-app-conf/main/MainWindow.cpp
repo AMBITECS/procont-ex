@@ -37,6 +37,8 @@
 
 #include <QDebug>
 
+const QString _g_defaultProjectFilename = ":/proj/proj/plc-1.xml";
+
 MainWindow * MainWindow::_m_instance = nullptr;
 QString MainWindow::_m_config_filepath = {};
 QString MainWindow::_m_base_directory = {};
@@ -565,7 +567,7 @@ void MainWindow::open(const QString & filePath)
 
     if(default_file)
     {
-        _filePath = ":/proj/proj/plc-1.1.xml";
+        _filePath = _g_defaultProjectFilename;
         _fileName = QFileInfo(_filePath.right(_filePath.size()-1)).fileName();
         m_info(
             QStringList()

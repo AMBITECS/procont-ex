@@ -86,6 +86,7 @@ void CUndoCommand_edit_tree::redo()
 // ***
 
 // *** CUndoCommand_edit_table
+
 CUndoCommand_edit_table::CUndoCommand_edit_table(QAbstractProxyModel *model_, const QModelIndex &index_, QVariant value_old_, QVariant value_new_, const QString &name_, QUndoCommand *cmd_) :
     CUndoCommand_edit(model_, index_, value_old_, value_new_, cmd_)
 {

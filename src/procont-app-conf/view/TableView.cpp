@@ -82,4 +82,7 @@ void TableView::setModel(QAbstractItemModel *model)
     connect(this->model(), &QAbstractItemModel::dataChanged, this, &TableView::slot_dataChanged);
     connect(this->model(), &QAbstractItemModel::rowsRemoved, this, &TableView::slot_rowsRemoved);
     connect(this->model(), &QAbstractItemModel::rowsInserted, this, &TableView::slot_rowsInserted);
+
+    clearSelection();
+    setCurrentIndex(QModelIndex());
 }

@@ -34,12 +34,24 @@ public:
 // ***
 
 // *** CUndoCommand_remove_table
+
+QT_FORWARD_DECLARE_CLASS(QAbstractProxyModel)
+
 class CUndoCommand_remove_table : public CUndoCommand_remove
 {
+    Q_OBJECT
 public:
-    CUndoCommand_remove_table(DomModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, QUndoCommand * = nullptr);
+    // CUndoCommand_remove_table(DomModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, QUndoCommand * = nullptr);
+    CUndoCommand_remove_table(QAbstractProxyModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, QUndoCommand * = nullptr);
 
     void undo() override;
+    void redo() override;
+
+signals:
+    void signal_remove_variable(const QDomNode &node_);
+
+private:
+    QAbstractProxyModel * _m_model_proxy;
 };
 // ***
 

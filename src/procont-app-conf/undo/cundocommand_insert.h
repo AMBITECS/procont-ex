@@ -48,13 +48,13 @@ class CUndoCommand_insert_table : public CUndoCommand_insert
 {
     Q_OBJECT
 public:
-    CUndoCommand_insert_table(DomModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, const QDomNode &node_new_, const QDomNode &node_parent_, QUndoCommand * = nullptr);
+    // CUndoCommand_insert_table(DomModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, const QDomNode &node_new_, const QDomNode &node_parent_, QUndoCommand * = nullptr);
     CUndoCommand_insert_table(QAbstractProxyModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, const QDomNode &node_new_, const QDomNode &node_parent_, QUndoCommand * = nullptr);
 
     void redo() override;
 
 signals:
-    void signal_insertRow(const QModelIndex &index_, bool = false);
+    void signal_insert_variable(const QModelIndex &index_, bool = false);
 
 private:
     QAbstractProxyModel * _m_model_proxy;

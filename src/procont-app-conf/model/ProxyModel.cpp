@@ -153,9 +153,6 @@ Qt::ItemFlags ProxyModelTable_var::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::NoItemFlags;
 
-    if (!index.isValid())
-        return Qt::NoItemFlags;
-
     auto _item = DomModel::toItem(index);
 
     Q_ASSERT(_item);
@@ -255,10 +252,11 @@ bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &valu
     Q_ASSERT(_item);
     Q_ASSERT(undoStack());
 
-    if(_item->is_read_only())
-        return false;
+    QDomNode _old = _item->node().cloneNode();
 
     undoStack()->push(new CUndoCommand_edit_table(this, index, index.data(), value, _item->node().toElement().attribute("name")));
+
+    emit signal_variable_changed(_old, _item->node());
 
     return true;
 }

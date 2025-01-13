@@ -62,6 +62,7 @@ QWidget * WidgetEditor::createVarsEditor()
     _m_vars_table->setItemDelegateForColumn(3, new CLineEditDelegate);
     _m_vars_table->setModel(_m_proxy);
     reinterpret_cast<ProxyModelTable_var*>(_m_proxy)->setUndoStack(_m_vars_table->undoStack());
+    connect(reinterpret_cast<ProxyModelTable_var*>(_m_proxy), &ProxyModelTable_var::signal_variable_changed, this, &WidgetEditor::slot_variable_change);
     _m_vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_m_index), _m_proxy));
     _m_vars_table->setColumnHidden(0, true);
     _m_vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -216,13 +217,9 @@ void WidgetEditor::slot_varTblVarChanged()
     }
 }
 
-void WidgetEditor::slot_selectRow_tree(const QModelIndex &index_, bool first_)
+void WidgetEditor::slot_variable_change(const QDomNode &, const QDomNode &)
 {
-    // _m_vars_table->clearSelection();
-    // _m_vars_table->setCurrentIndex(QModelIndex());
-    QModelIndex index = _m_vars_table->model()->index(index_.row(), 3, index_.parent());
-    _m_vars_table->setCurrentIndex(index);
-    if(first_) _m_vars_table->edit(index);
+    qDebug() << __PRETTY_FUNCTION__;
 }
 
 void WidgetEditor::slot_varAddVariable()
@@ -240,8 +237,15 @@ void WidgetEditor::slot_varAddVariable()
         _m_item->defaultNode().toDocument().documentElement(),
         node);
 
-    connect(cmd, &CUndoCommand_insert_table::signal_insertRow, this, &WidgetEditor::slot_selectRow_tree);
+    connect(cmd, &CUndoCommand_insert_table::signal_insert_variable, this, &WidgetEditor::slot_variable_insert);
     _m_vars_table->undoStack()->push(cmd);
+}
+
+void WidgetEditor::slot_variable_insert(const QModelIndex &index_, bool first_)
+{
+    QModelIndex index = _m_vars_table->model()->index(index_.row(), 3, index_.parent());
+    _m_vars_table->setCurrentIndex(index);
+    if(first_) _m_vars_table->edit(index);
 }
 
 void WidgetEditor::slot_varDelVariable()
@@ -253,14 +257,23 @@ void WidgetEditor::slot_varDelVariable()
 
     if(_index_current.isValid())
     {
-        if(!DomModel::toItem(_index_current)->is_read_only())
-            _m_vars_table->undoStack()->push(
-                new CUndoCommand_remove_table(
-                    DomModel::toModel(_m_proxy->sourceModel()),
-                    DomModel::s_index(_index_current),
-                    DomModel::s_index(_m_index)));
+        auto _item = DomModel::toItem(_index_current);
+
+        if(_item->is_read_only())
+            return;
+
+        // qDebug() << _item->node().toElement().attribute("name");
+
+        auto cmd =  new CUndoCommand_remove_table(_m_proxy, DomModel::s_index(_index_current), DomModel::s_index(_m_index));
+        connect(cmd, &CUndoCommand_remove_table::signal_remove_variable, this, &WidgetEditor::slot_variable_delete);
+        _m_vars_table->undoStack()->push(cmd);
     }
 
     _m_vars_table->setFocus();
+}
+
+void WidgetEditor::slot_variable_delete(const QDomNode &node_)
+{
+    qDebug() << __PRETTY_FUNCTION__;
 }
 // ----------------------------------------------------------------------------

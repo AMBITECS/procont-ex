@@ -4,6 +4,7 @@
 #include "model/DomModel.h"
 #include "log/Logger.h"
 #include "tr/translation.h"
+#include "model/ProxyModel.h"
 
 #include <QDebug>
 
@@ -77,15 +78,30 @@ void CUndoCommand_remove_tree::redo()
 // ***
 
 // *** CUndoCommand_remove_table
-CUndoCommand_remove_table::CUndoCommand_remove_table(DomModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, QUndoCommand * cmd_) :
+// CUndoCommand_remove_table::CUndoCommand_remove_table(DomModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, QUndoCommand * cmd_) :
+//     CUndoCommand_remove(
+//           model_,
+//           index_.row(),
+//           index_.column(),
+//           index_parent_,
+//           DomModel::toItem(index_, true)->node(),
+//           DomModel::toItem(index_, true)->node().parentNode(),
+//           cmd_)
+// {
+//     _m_name_ru = QString("%1 \'%2\'").arg(tr_str::instance()->ru(_m_node_current.nodeName()), _m_node_current.toElement().attribute("name"));
+
+//     setText(QString(QObject::tr("Delete %1")).arg(_m_name_ru));
+// }
+
+CUndoCommand_remove_table::CUndoCommand_remove_table(QAbstractProxyModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, QUndoCommand * cmd_) :
     CUndoCommand_remove(
-          model_,
-          index_.row(),
-          index_.column(),
-          index_parent_,
-          DomModel::toItem(index_, true)->node(),
-          DomModel::toItem(index_, true)->node().parentNode(),
-          cmd_)
+        reinterpret_cast<DomModel*>(model_->sourceModel()),
+        index_.row(),
+        index_.column(),
+        index_parent_,
+        DomModel::toItem(index_, true)->node(),
+        DomModel::toItem(index_, true)->node().parentNode(),
+        cmd_)
 {
     _m_name_ru = QString("%1 \'%2\'").arg(tr_str::instance()->ru(_m_node_current.nodeName()), _m_node_current.toElement().attribute("name"));
 
@@ -97,5 +113,14 @@ void CUndoCommand_remove_table::undo()
     _m_node_current = _m_node_parent.appendChild(_m_node_current);
 
     CUndoCommand_remove::undo();
+}
+
+void CUndoCommand_remove_table::redo()
+{
+    auto _node = _m_node_current;
+
+    CUndoCommand_remove::redo();
+
+    emit signal_remove_variable(_node.cloneNode());
 }
 // ***

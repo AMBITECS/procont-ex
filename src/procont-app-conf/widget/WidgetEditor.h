@@ -31,14 +31,17 @@ public:
 protected slots:
     void slot_varTxtViewToggled(bool);
     void slot_varTblViewToggled(bool);
-    void slot_varAddVariable();
-    void slot_varDelVariable();
+
+    virtual void slot_varAddVariable();
+    virtual void slot_varDelVariable();
     virtual void slot_varTxtVarChanged();
     virtual void slot_varTblVarChanged();
 
     void slot_codeTxtChanged();
 
-    void slot_selectRow_tree(const QModelIndex &index_, bool);
+    virtual void slot_variable_insert(const QModelIndex &index_, bool first_);
+    virtual void slot_variable_delete(const QDomNode &node_);
+    virtual void slot_variable_change(const QDomNode& old_, const QDomNode& new_);
 
 protected:
     virtual QWidget * createVarsEditor();

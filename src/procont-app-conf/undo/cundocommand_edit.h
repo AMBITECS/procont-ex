@@ -44,6 +44,7 @@ public:
 // *** CUndoCommand_edit_table
 class CUndoCommand_edit_table : public CUndoCommand_edit
 {
+    Q_OBJECT
 public:
     CUndoCommand_edit_table(QAbstractProxyModel *model_, const QModelIndex &index_, QVariant value_old_, QVariant value_new_, const QString &name_, QUndoCommand * = nullptr);
 };

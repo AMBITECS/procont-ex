@@ -4,7 +4,6 @@
 #include "model/DomModel.h"
 #include "log/Logger.h"
 #include "tr/translation.h"
-
 #include "main/MainWindow.h"
 #include "view/TreeView.h"
 #include "model/ProxyModel.h"
@@ -82,17 +81,17 @@ void CUndoCommand_insert_tree::redo()
 // ***
 
 // *** CUndoCommand_insert_table
-CUndoCommand_insert_table::CUndoCommand_insert_table(DomModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, const QDomNode &node_new_, const QDomNode &node_parent_, QUndoCommand *cmd_) :
-    CUndoCommand_insert(
-          model_,
-          index_.isValid() ? index_.row() : DomModel::toItem(index_parent_, true)->rowCount(),
-          index_.isValid() ? index_.column() : DomModel::toItem(index_parent_, true)->columnCount(),
-          index_parent_,
-          node_new_,
-          node_parent_,
-          cmd_)
-{
-}
+// CUndoCommand_insert_table::CUndoCommand_insert_table(DomModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, const QDomNode &node_new_, const QDomNode &node_parent_, QUndoCommand *cmd_) :
+//     CUndoCommand_insert(
+//           model_,
+//           index_.isValid() ? index_.row() : DomModel::toItem(index_parent_, true)->rowCount(),
+//           index_.isValid() ? index_.column() : DomModel::toItem(index_parent_, true)->columnCount(),
+//           index_parent_,
+//           node_new_,
+//           node_parent_,
+//           cmd_)
+// {
+// }
 
 CUndoCommand_insert_table::CUndoCommand_insert_table(QAbstractProxyModel *model_, const QModelIndex &index_, const QModelIndex &index_parent_, const QDomNode &node_new_, const QDomNode &node_parent_, QUndoCommand *cmd_) :
     CUndoCommand_insert(
@@ -111,7 +110,7 @@ void CUndoCommand_insert_table::redo()
 {
     CUndoCommand_insert::redo();
 
-    emit signal_insertRow(DomModel::p_index(_m_index_current, _m_model_proxy), _m_first);
+    emit signal_insert_variable(DomModel::p_index(_m_index_current, _m_model_proxy), _m_first);
 
     _m_first = false;
 }

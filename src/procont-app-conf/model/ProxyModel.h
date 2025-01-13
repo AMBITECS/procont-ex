@@ -72,6 +72,9 @@ public:
 
     void setUndoStack(QUndoStack *undo_stack_);
 
+signals:
+    void signal_variable_changed(const QDomNode &old_, const QDomNode& new_);
+
 private:
     [[nodiscard]] QUndoStack * undoStack() { return _m_undo_stack; }
 

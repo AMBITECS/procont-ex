@@ -25,6 +25,7 @@ CBlock::CBlock(const CBlock &other)
     m_in_out_vars   = new QList<CBlockVar*>();
     m_out_vars      = new QList<CBlockVar*>();
     m_parent        = other.m_parent;
+    m_local_id      = other.m_local_id;
 
     *this = other;
 }
@@ -61,8 +62,10 @@ CBlock &CBlock::operator=(const CBlock &  other)
         m_out_vars->push_back(var);
     }
 
-//    max_local_id++;
-//    set_local_id(max_local_id);
+    if (m_local_id == 0)
+    {
+        m_local_id = other.m_local_id;
+    }
 
     m_width         = other.m_width;
     m_height        = other.m_height;

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-message("-- Project PROJ-helpers.cmake included")
+message("-- Project PROJ-helpers.cmake include BEGIN...")
 cmake_policy(SET CMP0121 OLD) # suppress warning on INDEX out-of-range
 
 #--------------------------------------------
@@ -332,3 +332,4 @@ function(add_sql_data SRCS_DIR)
 endfunction()
 
 #--------------------------------------------
+message("-- Project PROJ-helpers.cmake include ...OK")

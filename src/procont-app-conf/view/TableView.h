@@ -11,6 +11,7 @@ class TableView : public QTableView
     Q_OBJECT
 public:
     TableView(QWidget *parent = nullptr);
+    virtual ~TableView() override;
 
 public:
     virtual void setModel(QAbstractItemModel *model) override;

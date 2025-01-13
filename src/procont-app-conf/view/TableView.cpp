@@ -15,6 +15,11 @@ TableView::TableView(QWidget *parent) : QTableView(parent),
     connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(slot_focusChanged(QWidget *, QWidget *)));
 }
 
+TableView::~TableView()
+{
+    delete _m_undo_stack;
+}
+
 QUndoStack * TableView::undoStack() const
 {
     return _m_undo_stack;

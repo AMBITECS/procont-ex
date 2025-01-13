@@ -172,7 +172,7 @@ QVariant DomItem::data(int role) const
 
 void DomItem::setData(const QVariant &value, int role)
 {
-    qDebug() << __PRETTY_FUNCTION__ << m_value.get();
+    // qDebug() << __PRETTY_FUNCTION__ << m_value.get();
 
     m_value->set(value.toString());
 }
@@ -298,7 +298,7 @@ void DomItemVar::setupChildren(const QDomNode &node_, int row)
 
 void DomItemVar::buildChild(const QDomNode &node, int row)
 {
-    // qDebug() << __PRETTY_FUNCTION__ << row;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     // item
     auto childNode = node;
@@ -410,11 +410,11 @@ QDomNode DomItemPou::defaultNode() const
 
 void DomItemPou::updateNode(const QDomNode &new_node_)
 {
-    qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    // qDebug() << "1" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
     if(new_node_.nodeName() == "interface")
     {
-        qDebug() << "interface" << __PRETTY_FUNCTION__;
+        // qDebug() << "interface" << __PRETTY_FUNCTION__;
 
         node().removeChild(node().namedItem("interface"));
         node().appendChild(new_node_.cloneNode());
@@ -422,12 +422,12 @@ void DomItemPou::updateNode(const QDomNode &new_node_)
         return;
     }
 
-    qDebug() << "2" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    // qDebug() << "2" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
     if(new_node_.nodeName() == "body" &&
         node().namedItem("body").firstChild().nodeName() == new_node_.firstChild().nodeName())
     {
-        qDebug() << "body" << __PRETTY_FUNCTION__;
+        // qDebug() << "body" << __PRETTY_FUNCTION__ << node().isNull() << node().nodeName();
 
         node().removeChild(node().namedItem("body"));
         node().appendChild(new_node_.cloneNode());
@@ -435,9 +435,11 @@ void DomItemPou::updateNode(const QDomNode &new_node_)
         return;
     }
 
-    qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
+    // qDebug() << "3" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 
     DomItem::updateNode(new_node_);
+
+    // qDebug() << "4" << new_node_.toElement().attribute("name") << __PRETTY_FUNCTION__;
 }
 
 QDomNodeList DomItemPou::filterChildren(const QDomNode &node) const

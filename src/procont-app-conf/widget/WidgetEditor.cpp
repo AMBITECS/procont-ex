@@ -32,6 +32,11 @@ WidgetEditor::WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy
     setChildrenCollapsible(false);
 }
 
+WidgetEditor::~WidgetEditor()
+{
+    delete _m_vars_table;
+}
+
 void WidgetEditor::init_focus() const
 {
     if(_m_vars_table)

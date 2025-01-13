@@ -25,6 +25,7 @@ class WidgetEditor : public QSplitter
     Q_OBJECT
 public:
     WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
+    virtual ~WidgetEditor() override;
 
     virtual void set_active();
 

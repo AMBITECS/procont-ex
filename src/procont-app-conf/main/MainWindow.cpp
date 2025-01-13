@@ -638,8 +638,18 @@ void MainWindow::open(const QString & filePath)
         );
 }
 
+#include <QTextStream>
+
 void MainWindow::slot_save()
 {
+    qDebug() << undoGroup()->isClean() << undoGroup()->stacks().count();
+    QString str = {}; QTextStream stream(&str);
+    for(auto i : undoGroup()->stacks())
+        stream << i->isClean();
+    qDebug() << str;
+
+    return;
+
     QString filePath = QFileDialog::getSaveFileName(this, tr("Save File"), QString{}, tr("XML files (*.xml)"));
 
     save(filePath);

@@ -34,14 +34,14 @@ protected slots:
     void slot_object_selected();
     void slot_user_clicked();
 
-    // void slot_varAddVariable() override;
-    // void slot_varDelVariable() override;
+    void slot_varAddVariable() override;
+    void slot_varDelVariable() override;
     void slot_varTxtVarChanged() override;
-    // void slot_varTblVarChanged() override;
+    void slot_varTblVarChanged() override;
 
-    void slot_variable_insert(const QModelIndex &index_, bool) override;
-    void slot_variable_delete(const QDomNode &node_) override;
-    void slot_variable_change(const QDomNode& old_, const QDomNode& new_) override;
+    // void slot_variable_insert(const QModelIndex &index_, bool) override;
+    // void slot_variable_delete(const QDomNode &node_) override;
+    // void slot_variable_change(const QDomNode& old_, const QDomNode& new_) override;
 
 private:
     CDiagramWidget * _m_fbd_view = nullptr;

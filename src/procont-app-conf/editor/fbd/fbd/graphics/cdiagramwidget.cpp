@@ -153,29 +153,32 @@ void CDiagramWidget::diagram_has_changed(const QDomNode &node)
     // igor'
     undo_stack()->setActive();
 
-    //save_to_file(node);
+    // раскомментировать
+    save_to_file(node);
 
     emit changed_diagram(node);
 }
 
-void CDiagramWidget::save_to_file( const QDomNode &node )
+void CDiagramWidget::save_to_file(const QDomNode &node )
 {
-    QFile outFile( "fbd_diag.xml" );
+    // закоментировать
+    /*QFile outFile( "fbd_diag.xml" );
     if( !outFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
         qDebug( "Failed to open file for writing." );
         return;
-    }
+    }*/
 
     QDomDocument document;
     QDomElement root = document.createElement("wrapper");
     root.appendChild(node);
     document.appendChild(root);
 
-    QTextStream stream( &outFile );
+    // закоментировать
+    /*QTextStream stream( &outFile );
     stream << document.toString();
 
-    outFile.close();
+    outFile.close();*/
 }
 
 

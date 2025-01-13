@@ -240,7 +240,7 @@ QVariant ProxyModelTable_var::data(const QModelIndex &index, int role) const
 
 bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (role != Qt::EditRole)
+    if((role & Qt::EditRole) != Qt::EditRole)
         return false;
 
     if(index.data() == value)
@@ -254,7 +254,10 @@ bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &valu
 
     QDomNode _old = _item->node().cloneNode();
 
-    undoStack()->push(new CUndoCommand_edit_table(this, index, index.data(), value, _item->node().toElement().attribute("name")));
+    if(_item->is_read_only())
+        _item->setData(value, Qt::EditRole);
+    else
+        undoStack()->push(new CUndoCommand_edit_table(this, index, index.data(), value, _item->node().toElement().attribute("name")));
 
     emit signal_variable_changed(_old, _item->node());
 

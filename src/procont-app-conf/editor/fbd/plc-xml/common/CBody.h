@@ -24,7 +24,7 @@ class CStContent;
 class CBody
 {
 public:
-    CBody(CPou * parent);
+    explicit CBody(CPou * parent);
     CBody(const CBody & other);
     CBody(CBody && other) noexcept;
     explicit CBody(const QDomNode &dom_node, CPou *parent);

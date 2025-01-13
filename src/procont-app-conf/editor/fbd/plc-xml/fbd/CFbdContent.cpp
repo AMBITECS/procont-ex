@@ -343,3 +343,18 @@ COutVariable *CFbdContent::find_output_var_by_iface_name(const QString &iface_va
     }
     return nullptr;
 }
+
+CBlock *CFbdContent::remove_block(CBlock *block)
+{
+    int counter = 0;
+    for (auto &item : *m_blocks)
+    {
+        if (item == block)
+        {
+            m_blocks->erase(m_blocks->cbegin() + counter);
+            return block;
+        }
+        counter++;
+    }
+    return nullptr;
+}

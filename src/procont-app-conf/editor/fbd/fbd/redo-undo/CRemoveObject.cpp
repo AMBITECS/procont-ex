@@ -83,8 +83,12 @@ void CRemoveObject::redo()
     m_object->parent()->update_real_position();
     m_object->parent()->parent()->update_visible_ladders();
 
-    if (!m_object->instance_name().isEmpty())
+    if (!m_object->instance_name().isEmpty() && m_object->instance_name() != "???")
+    {
         emit m_world->instance_removed(m_object->type_name(), m_object->instance_name());
+    }
+
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }
 
 void CRemoveObject::undo()
@@ -161,7 +165,12 @@ void CRemoveObject::undo()
     m_object->parent()->update_real_position();
     m_object->parent()->parent()->update_visible_ladders();
 
-    emit m_world->iface_var_new(m_object->type_name(), m_object->instance_name());
+
+    if (!m_object->instance_name().isEmpty() && m_object->instance_name() != "???")
+    {
+        emit m_world->iface_var_new(m_object->type_name(), m_object->instance_name());
+    }
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }
 
 int CRemoveObject::remove_object(CFbdObject *object)
@@ -175,10 +184,12 @@ int CRemoveObject::remove_object(CFbdObject *object)
         if (obj == object)
         {
             arr->erase(arr->cbegin() + counter);
+            m_world->current_pou()->bodies()->front()->fbd_content()->remove_block(object->block());
             return counter;
         }
         counter++;
     }
+
     return -1;
 }
 
@@ -186,6 +197,8 @@ void CRemoveObject::insert_object(CFbdObject *object, const int &index)
 {
     CFbdLadder * ladder = m_object->parent();
     QVector<CFbdObject*> *arr = ladder->draw_components();
+
+    m_world->current_pou()->bodies()->front()->fbd_content()->blocks()->push_back(object->block());
 
     if (index >= arr->size())
     {

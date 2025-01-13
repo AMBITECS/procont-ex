@@ -201,10 +201,9 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
 
     if (!selected_item && var_name.isEmpty())
     {
-        QtDialogs::info_user("no selected items and combo text in 'CEditors::new_pin_connection'");
+        QtDialogs::info_user(tr("no selected items and combo text in 'CEditors::new_pin_connection'"));
         return;
     }
-
 
 
     if (!selected_item)
@@ -216,7 +215,7 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
         {
             if (m_pin->direction() == PD_OUTPUT)
             {
-                QtDialogs::warn_user("Не могу на выход посадить константу");
+                QtDialogs::warn_user(tr("Can't assign the constant to the output."));
                 return;
             }
             auto cmd = new CConstToPin(m_world, m_pin->input(), var_name);
@@ -228,7 +227,8 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
             else
             {
                 m_world->undo_stack()->push(cmd);
-                emit m_world->undo_enabled();
+                //emit m_world->undo_enabled();
+                //emit m_world->diagram_changed(m_world->current_pou()->dom_node());
             }
         }
         else
@@ -252,7 +252,8 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
         if (!cmd->is_error())
         {
             m_world->undo_stack()->push(cmd);
-            emit m_world->undo_enabled();
+            //emit m_world->undo_enabled();
+            // emit m_world->diagram_changed(m_world->current_pou()->dom_node());
         }
         else
             delete cmd;
@@ -263,7 +264,7 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
         auto cmd = new CPinRename(m_world, m_pin, var_name,
                                           opposite_pin, opposite_var_name, iface_var);
         m_world->undo_stack()->push(cmd);
-        emit m_world->undo_enabled();
+        //emit m_world->undo_enabled();
     }
 
     if (block && !opposite_pin && !iface_var)
@@ -279,5 +280,5 @@ void CEditors::new_pin_connection(s_tree_item *selected_item, const QString &var
     m_model->set_data({});
     m_pin_var_editor->hide();
 
-    emit pin_variable_renamed();
+    //emit pin_variable_renamed();
 }

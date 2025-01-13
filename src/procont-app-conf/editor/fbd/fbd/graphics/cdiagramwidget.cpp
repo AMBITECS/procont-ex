@@ -121,7 +121,7 @@ void CDiagramWidget::update_interface(const QDomNode &node)
 
     if (!iface->is_empty())
     {
-        m_current_pou->set_interface(iface);
+        m_current_pou->interface()->update_variables(iface);
     }
 
     delete pou;

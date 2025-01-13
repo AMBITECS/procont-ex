@@ -454,7 +454,6 @@ CFbdObject * COglWorld::insert_new_component(CFbdLadder *p_ladder, const EPalett
         return nullptr;
     }
 
-    //Не доходит наименование POU;
     auto cmd_insert_obj = new CInsertNewObject(this, m_fbd_content, p_ladder, element, pou_name, pos);
     m_undo_stack->push(cmd_insert_obj);
     auto object = cmd_insert_obj->inserted_object();
@@ -696,6 +695,11 @@ void COglWorld::mouse_dblClicked(QMouseEvent *evt)
 
 void COglWorld::iface_new_var(const QString &type, const QString &name)
 {
+    if (m_selection.object->type_name() == "function")
+    {
+        return;
+    }
+
     auto cmd_rename = new CRenameInst(this, m_selection.object,
                                       m_selection.object->type_name(), name);
     m_undo_stack->push(cmd_rename);
@@ -808,7 +812,7 @@ void COglWorld::convert_to_XML()
     }
 
     save_to_file(pou_node);
-    emit diagram_changed(pou_node);
+
 
     //QUndoStack loc_stack;
 

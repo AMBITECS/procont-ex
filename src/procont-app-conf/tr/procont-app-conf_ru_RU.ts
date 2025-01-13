@@ -228,6 +228,19 @@
     </message>
 </context>
 <context>
+    <name>CEditors</name>
+    <message>
+        <location filename="../editor/fbd/fbd/editors/CEditors.cpp" line="204"/>
+        <source>no selected items and combo text in &apos;CEditors::new_pin_connection&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/fbd/fbd/editors/CEditors.cpp" line="218"/>
+        <source>Can&apos;t assign the constant to the output.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CGraphicsHelper</name>
     <message>
         <location filename="../editor/fbd/fbd/graphics/cgraphicshelper.cpp" line="150"/>
@@ -281,32 +294,32 @@ Please, enter different variable name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="608"/>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="607"/>
         <source>Give the object a valid name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="667"/>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="666"/>
         <source>The pin already has a connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="673"/>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="672"/>
         <source>Specify a name for the object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="737"/>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="741"/>
         <source>to many</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="738"/>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="742"/>
         <source>single</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="779"/>
+        <location filename="../editor/fbd/fbd/graphics/COglWorld.cpp" line="783"/>
         <source>Can&apos;t connect pins with with the same direction</source>
         <translation type="unfinished"></translation>
     </message>

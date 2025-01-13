@@ -11,9 +11,9 @@ CConstToPin::CConstToPin(COglWorld *world, CPinIn *input, QString c_name)
 {
     auto type = CFilter::get_type_from_const(m_var_name.toStdString());
 
-    CVariablesAnalytics analytics(m_world, m_world->current_pou()->name());
+    //CVariablesAnalytics analytics(m_world, m_world->current_pou()->name());
     s_compare_types compare_types;
-    auto res = analytics.check_pin_compatibility(m_pin_in->type_name(),
+    auto res = CVariablesAnalytics::check_pin_compatibility(m_pin_in->type_name(),
                                                  m_pin_in->type(),
                                                  base_types_names[type],
                                                  type,
@@ -62,6 +62,8 @@ void CConstToPin::redo()
 
     m_pin_in->parent()->parent()->resort();
     m_world->update_hatch();
+
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }
 
 void CConstToPin::undo()
@@ -85,6 +87,8 @@ void CConstToPin::undo()
         auto type = CFilter::get_type_from_const(m_constant.toStdString());
         m_pin_in->set_constant(type, m_constant.toStdString());
     }
+
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }
 
 bool CConstToPin::is_error() const

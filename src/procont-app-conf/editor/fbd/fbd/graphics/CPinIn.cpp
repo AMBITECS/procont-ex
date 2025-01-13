@@ -180,23 +180,14 @@ void CPinIn::connect_pin(CPinOut *pin)
     load_project_connect_pin(pin);
 
     /// connecting in XML
-    auto point_in = m_block_variable->point_in();
-
-    if (!point_in->connections()->isEmpty())
-    {
-        for (auto &conn : *point_in->connections())
-        {
-            delete conn;
-        }
-        point_in->connections()->clear();
-    }
 
     auto connections = m_block_variable->point_in()->connections();
-    if (!connections->empty())
+
+    if (!connections->isEmpty())
     {
-        for (auto &item : *connections)
+        for (auto &conn : *connections)
         {
-            delete item;
+            delete conn;
         }
         connections->clear();
     }
@@ -204,7 +195,7 @@ void CPinIn::connect_pin(CPinOut *pin)
     auto connection = new CConnection();
     connection->set_formal_param(pin->name());
     connection->set_ref_local_id(pin->parent()->local_id());
-    point_in->connections()->push_back(connection);
+    connections->push_back(connection);
 }
 
 void CPinIn::disconnect(CPinOut *sender)

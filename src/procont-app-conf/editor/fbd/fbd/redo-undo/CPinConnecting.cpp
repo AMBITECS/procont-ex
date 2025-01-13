@@ -81,7 +81,7 @@ void CPinConnecting::redo()
         out->parent()->parent()->resort();
     }
     m_world->update_hatch();
-
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }
 
 void CPinConnecting::undo()
@@ -101,6 +101,8 @@ void CPinConnecting::undo()
     in->disconnect();
     out->disconnect(in);
     m_world->update_visible_ladders();
+
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }
 
 bool CPinConnecting::is_error() const

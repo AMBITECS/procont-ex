@@ -24,7 +24,9 @@ CInsertNewObject::CInsertNewObject(COglWorld * world, CFbdContent * fbd, CFbdLad
 CInsertNewObject::~CInsertNewObject()
 {
     if (m_to_delete)
+    {
         delete m_to_delete->block();
+    }
     delete m_to_delete;
 }
 
@@ -37,6 +39,8 @@ void CInsertNewObject::undo()
     m_ladder->highlights_off();
     m_ladder->update_real_position();
     m_world->view_hatch_moved({});
+
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }
 
 void CInsertNewObject::redo()
@@ -49,6 +53,8 @@ void CInsertNewObject::redo()
     m_ladder->highlights_off();
     m_ladder->update_real_position();
     m_world->view_hatch_moved({});
+
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }
 
 CFbdObject *CInsertNewObject::inserted_object()

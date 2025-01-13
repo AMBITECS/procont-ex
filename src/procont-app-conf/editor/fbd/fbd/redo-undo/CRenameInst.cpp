@@ -22,9 +22,14 @@ void CRenameInst::redo()
     m_ogl_widget->update_hatch();
 
     if (m_old != "???")
+    {
         emit m_ogl_widget->iface_var_rename(m_old, m_new);
+    }
     else
+    {
         emit m_ogl_widget->iface_var_new(m_object->type_name(), m_new);
+    }
+    emit m_ogl_widget->diagram_changed(m_ogl_widget->current_pou()->dom_node());
 }
 
 void CRenameInst::undo()
@@ -36,4 +41,6 @@ void CRenameInst::undo()
         emit m_ogl_widget->iface_var_rename(m_new, m_old);
     else
         emit m_ogl_widget->instance_removed(m_object->type_name(), m_new);
+
+    emit m_ogl_widget->diagram_changed(m_ogl_widget->current_pou()->dom_node());
 }

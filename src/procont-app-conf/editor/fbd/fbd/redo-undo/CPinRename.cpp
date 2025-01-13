@@ -154,4 +154,5 @@ void CPinRename::refresh_view()
     }
 
     m_world->update_hatch();
+    emit m_world->diagram_changed(m_world->current_pou()->dom_node());
 }

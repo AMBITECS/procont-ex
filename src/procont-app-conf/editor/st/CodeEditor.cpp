@@ -120,36 +120,34 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event_)
     auto _menu = new QMenu(this);
 
     auto _action = undoStack()->createUndoAction(this);
-    _action->setText(tr("&Undo"));
+    _action->setText(tr("Undo"));
     _action->setShortcuts(QKeySequence::Undo);
-    _action->setStatusTip(tr("Undo"));
     if(isReadOnly()) _action->setEnabled(false);
     _menu->addAction(_action);
 
     _action = undoStack()->createRedoAction(this);
-    _action->setText(tr("&Redo"));
+    _action->setText(tr("Redo"));
     _action->setShortcuts(QKeySequence::Redo);
-    _action->setStatusTip(tr("Redo"));
     if(isReadOnly()) _action->setEnabled(false);
     _menu->addAction(_action);
 
     _menu->addSeparator();
 
-    _action = _menu->addAction(tr("Cu&t"));
+    _action = _menu->addAction(tr("Cut"));
     _action->setShortcuts(QKeySequence::Cut);
     connect(_action, &QAction::triggered, this, &QPlainTextEdit::cut);
     _action->setEnabled(_m_text_selected);
     if(isReadOnly()) _action->setEnabled(false);
     _menu->addAction(_action);
 
-    _action = _menu->addAction(tr("&Copy"));
+    _action = _menu->addAction(tr("Copy"));
     _action->setShortcuts(QKeySequence::Copy);
     connect(_action, &QAction::triggered, this, &QPlainTextEdit::copy);
     _action->setEnabled(_m_text_selected);
     if(isReadOnly()) _action->setEnabled(false);
     _menu->addAction(_action);
 
-    _action = _menu->addAction(tr("&Paste"));
+    _action = _menu->addAction(tr("Paste"));
     _action->setShortcuts(QKeySequence::Paste);
     connect(_action, &QAction::triggered, this, &QPlainTextEdit::paste);
     _action->setEnabled(canPaste());

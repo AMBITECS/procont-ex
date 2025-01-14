@@ -375,7 +375,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if(isModified())
     {
-        auto _result = QMessageBox::warning(this, tr("Attention"), tr("The project has been changed. do ypu want to save changes?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        auto _result = QMessageBox::warning(this, tr("Attention"), tr("The project has been changed, do you want to save changes?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         if(_result == QMessageBox::Cancel)
         {
             event->ignore();

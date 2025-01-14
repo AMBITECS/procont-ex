@@ -496,48 +496,38 @@ Please, enter different variable name</source>
     <name>CodeEditor</name>
     <message>
         <location filename="../editor/st/CodeEditor.cpp" line="123"/>
-        <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../editor/st/CodeEditor.cpp" line="125"/>
         <source>Undo</source>
-        <translation type="unfinished">Отменить</translation>
+        <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../editor/st/CodeEditor.cpp" line="130"/>
-        <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../editor/st/CodeEditor.cpp" line="132"/>
+        <location filename="../editor/st/CodeEditor.cpp" line="129"/>
         <source>Redo</source>
-        <translation type="unfinished">Повторить</translation>
+        <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../editor/st/CodeEditor.cpp" line="138"/>
-        <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <location filename="../editor/st/CodeEditor.cpp" line="136"/>
+        <source>Cut</source>
+        <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../editor/st/CodeEditor.cpp" line="145"/>
-        <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <location filename="../editor/st/CodeEditor.cpp" line="143"/>
+        <source>Copy</source>
+        <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../editor/st/CodeEditor.cpp" line="152"/>
-        <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <location filename="../editor/st/CodeEditor.cpp" line="150"/>
+        <source>Paste</source>
+        <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../editor/st/CodeEditor.cpp" line="159"/>
+        <location filename="../editor/st/CodeEditor.cpp" line="157"/>
         <source>Delete</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../editor/st/CodeEditor.cpp" line="167"/>
+        <location filename="../editor/st/CodeEditor.cpp" line="165"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Выделить все</translation>
     </message>
 </context>
 <context>
@@ -776,11 +766,6 @@ Please, enter different variable name</source>
         <translation>Экземмпляр программы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="378"/>
-        <source>The project has been changed. do ypu want to save changes?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../main/MainWindow.cpp" line="649"/>
         <source>User defined</source>
         <translation>Пользовательские</translation>
@@ -892,12 +877,17 @@ Please, enter different variable name</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="200"/>
         <source>Components</source>
-        <translation type="unfinished">Компоненты</translation>
+        <translation>Компоненты</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="368"/>
         <source>Add device...</source>
         <translation>Добавить устройство...</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="378"/>
+        <source>The project has been changed, do you want to save changes?</source>
+        <translation>Проект был изменен, хотите сохранить изменения?</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="593"/>
@@ -1256,7 +1246,7 @@ Please, enter different variable name</source>
     <message>
         <location filename="../editor/st/CodeEditor.h" line="25"/>
         <source>Text changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст изменен</translation>
     </message>
 </context>
 <context>
@@ -1401,7 +1391,7 @@ Enter a new name</source>
     <message>
         <location filename="../widget/WidgetEditor_inherit.cpp" line="176"/>
         <source>Text</source>
-        <translation type="unfinished">Текст</translation>
+        <translation>Текст</translation>
     </message>
     <message>
         <source>Table</source>
@@ -1410,7 +1400,7 @@ Enter a new name</source>
     <message>
         <location filename="../widget/WidgetEditor_inherit.cpp" line="179"/>
         <source>Schema</source>
-        <translation type="unfinished">Схема</translation>
+        <translation>Схема</translation>
     </message>
 </context>
 <context>

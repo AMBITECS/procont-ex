@@ -41,7 +41,7 @@ MainWindow * MainWindow::_m_instance = nullptr;
 QString MainWindow::_m_config_filepath = {};
 QString MainWindow::_m_base_directory = {};
 const QString MainWindow::_m_defaultProjectFilename = ":/proj/proj/plc-1.xml";
-auto MainWindow::_m_undo_group = new QUndoGroup;
+QUndoGroup* MainWindow::_m_undo_group = new QUndoGroup;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

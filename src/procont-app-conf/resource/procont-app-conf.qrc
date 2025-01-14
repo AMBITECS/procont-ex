@@ -70,5 +70,6 @@
         <file>proj/plc-e.xml</file>
         <file>proj/plc-1.xml</file>
         <file>proj/plc-1.1.xml</file>
+        <file>proj/plc-2.xml</file>
     </qresource>
 </RCC>

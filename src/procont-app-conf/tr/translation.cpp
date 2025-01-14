@@ -15,6 +15,8 @@ tr_str::tr_str()
     _m_strings_ru["dataTypes"] = tr("dataTypes");
     _m_strings_ru["pous"] = tr("pous");
     _m_strings_ru["pou"] = tr("pou");
+    _m_strings_ru["program"] = tr("program");
+    _m_strings_ru["program#1"] = tr("program#1");
     _m_strings_ru["variable"] = tr("variable");
     _m_strings_ru["User defined"] = tr("User defined");
     _m_strings_ru["Standard Function Blocks"] = tr("Standard Function Blocks");
@@ -27,6 +29,8 @@ tr_str::tr_str()
     _m_strings_letter["function#1"] = "Function";
     _m_strings_letter["dataType"] = "data type";
     _m_strings_letter["dataType#1"] = "Data type";
+    _m_strings_letter["program"] = tr("program");
+    _m_strings_letter["program#1"] = tr("Program");
 }
 
 QString tr_str::ru(const QString &word_en_, eTranslateLetters letter_)

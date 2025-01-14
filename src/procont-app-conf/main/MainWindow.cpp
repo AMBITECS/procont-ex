@@ -291,7 +291,7 @@ void MainWindow::createMenu()
     projectMenu->addMenu(_m_addobject_menu);
 
     auto compileMenu = menuBar()->addMenu(tr("Compile"));
-    auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
+    // auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
     auto compile_build_act = compileMenu->addAction(QIcon(":/icon/images/hammer2.svg"), tr("Build"), QKeySequence(tr("Ctrl+Shift+B")), this, &MainWindow::slot_build);
 
     auto toolbar = addToolBar("main");
@@ -863,7 +863,7 @@ void MainWindow::slot_properties()
 
 void MainWindow::slot_input_assistant()
 {
-    InputDialog dlg(InputDialog::eCT_POU);
+    InputDialog dlg(InputDialog::eCT_ALL);
     dlg.exec();
     // qDebug() << dlg.selectedType().toElement().attribute("name");
 }

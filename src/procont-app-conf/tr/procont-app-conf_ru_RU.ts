@@ -859,7 +859,6 @@ Please, enter different variable name</source>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="293"/>
-        <location filename="../main/MainWindow.cpp" line="294"/>
         <source>Compile</source>
         <translation>Компиляция</translation>
     </message>
@@ -1107,35 +1106,35 @@ Please, enter different variable name</source>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="118"/>
-        <location filename="../dialog/InputDialog.cpp" line="217"/>
-        <location filename="../dialog/InputDialog.cpp" line="255"/>
+        <location filename="../dialog/InputDialog.cpp" line="220"/>
+        <location filename="../dialog/InputDialog.cpp" line="257"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="119"/>
-        <location filename="../dialog/InputDialog.cpp" line="218"/>
+        <location filename="../dialog/InputDialog.cpp" line="221"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="120"/>
-        <location filename="../dialog/InputDialog.cpp" line="219"/>
+        <location filename="../dialog/InputDialog.cpp" line="222"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="256"/>
+        <location filename="../dialog/InputDialog.cpp" line="258"/>
         <source>Value type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="257"/>
+        <location filename="../dialog/InputDialog.cpp" line="259"/>
         <source>Variable type</source>
         <translation>Тип переменной</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="258"/>
+        <location filename="../dialog/InputDialog.cpp" line="260"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>
@@ -1453,31 +1452,47 @@ Enter a new name</source>
     </message>
     <message>
         <location filename="translation.cpp" line="18"/>
+        <location filename="translation.cpp" line="32"/>
+        <source>program</source>
+        <translation>программа</translation>
+    </message>
+    <message>
+        <location filename="translation.cpp" line="19"/>
+        <source>program#1</source>
+        <translation>Программа</translation>
+    </message>
+    <message>
+        <location filename="translation.cpp" line="20"/>
         <source>variable</source>
         <translation>переменная</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="19"/>
+        <location filename="translation.cpp" line="21"/>
         <source>User defined</source>
         <oldsource>User types</oldsource>
         <translation>Пользовательские</translation>
+    </message>
+    <message>
+        <location filename="translation.cpp" line="33"/>
+        <source>Program</source>
+        <translation type="unfinished">Программа</translation>
     </message>
     <message>
         <source>User defined#1</source>
         <translation type="vanished">Пользовательские</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="20"/>
+        <location filename="translation.cpp" line="22"/>
         <source>Standard Function Blocks</source>
         <translation>Стандартные функциональные блоки</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="21"/>
+        <location filename="translation.cpp" line="23"/>
         <source>Standard IEC Functions</source>
         <translation>Стандартные функции IEC</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="22"/>
+        <location filename="translation.cpp" line="24"/>
         <source>Additional Function Blocks</source>
         <translation>Дополнительные функциональные блоки</translation>
     </message>

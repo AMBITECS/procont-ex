@@ -108,7 +108,7 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/qt_translate.cmake")
 
 ASSERT_OUT_OF_SOURCE_BUILD("Fatal! ${PROJ} - Requires an out-of-source build!")
 
-add_subdirectory("matiec")
+# add_subdirectory("matiec")
 add_subdirectory("src/procont-app-conf")
 add_subdirectory("src/common/threads")
 

@@ -94,7 +94,7 @@ QWidget * WidgetEditor::createVarsEditor()
     _m_table_container = new QWidget;
     _m_table_container->setLayout(vb_table);
     // variables editor code editor
-    _m_vars_text = new CodeEditorWidget(this);
+    _m_vars_text = new CodeEditorWidget(false, this);
     _m_vars_text->setMinimumSize(500, 200);
     _m_vars_text->setPlainText(XmlParser::getPouVarsText(DomModel::toItem(_m_index)->node()));
     connect(_m_vars_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_varTxtVarChanged);
@@ -132,7 +132,7 @@ QWidget * WidgetEditor::createVarsEditor()
 QWidget * WidgetEditor::createCodeEditor()
 {
     // *  code editor widgets
-    _m_body_text = new CodeEditorWidget(this);
+    _m_body_text = new CodeEditorWidget(false, this);
     _m_body_text->setMinimumSize(500, 250);
     _m_body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
     connect(_m_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor::slot_codeTxtChanged);
@@ -146,6 +146,10 @@ void WidgetEditor::slot_varTxtViewToggled(bool state)
     Q_UNUSED(state);
 
     _m_table_container->hide();
+
+    // _m_modified |= !_m_vars_table->undoStack()->isClean();
+    // qDebug() << __PRETTY_FUNCTION__ << _m_vars_table->undoStack()->isClean() << _m_modified;
+
     _m_vars_table->undoStack()->clear();
     _m_vars_text->show();
 }
@@ -155,12 +159,17 @@ void WidgetEditor::slot_varTblViewToggled(bool state)
     Q_UNUSED(state);
 
     _m_vars_text->hide();
+
+    // _m_modified |= !_m_vars_text->undoStack()->isClean();
+    // qDebug() << __PRETTY_FUNCTION__ << _m_vars_text->undoStack()->isClean() << _m_modified;
+
+    _m_vars_text->undoStack()->clear();
     _m_table_container->show();
 }
 
 void WidgetEditor::slot_codeTxtChanged()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     // get new node from editor
     QDomNode new_node = XmlParser::getPouNode
@@ -171,6 +180,11 @@ void WidgetEditor::slot_codeTxtChanged()
         );
 
     _m_item->updateNode(new_node.namedItem("body"));
+}
+
+bool WidgetEditor::isModified() const
+{
+    return (_m_modified | !_m_vars_text->undoStack()->isClean() | !_m_vars_table->undoStack()->isClean() | !_m_body_text->undoStack()->isClean());
 }
 
 void WidgetEditor::update_table_view()
@@ -200,7 +214,7 @@ void WidgetEditor::slot_varTxtVarChanged()
     // user make changes in text view
     if(_m_vars_text->isVisible())
     {
-        qDebug() << __PRETTY_FUNCTION__;
+        // qDebug() << __PRETTY_FUNCTION__;
 
         update_table_view();
     }
@@ -211,7 +225,7 @@ void WidgetEditor::slot_varTblVarChanged()
    // user make changes in table view
     if(_m_vars_table->isVisible() /*|| _vars_table->selectionModel()->hasSelection()*/)
     {
-        qDebug() << __PRETTY_FUNCTION__;
+        // qDebug() << __PRETTY_FUNCTION__;
 
         // deselect vars items
         // if(!_vars_table->isVisible())
@@ -224,12 +238,12 @@ void WidgetEditor::slot_varTblVarChanged()
 
 void WidgetEditor::slot_variable_change(const QDomNode &, const QDomNode &)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void WidgetEditor::slot_varAddVariable()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     auto current = _m_vars_table->selectionModel()->selectedRows();
     auto node = _m_item->node().namedItem("interface").namedItem("localVars").isNull() ? _m_item->node() :
@@ -255,7 +269,7 @@ void WidgetEditor::slot_variable_insert(const QModelIndex &index_, bool first_)
 
 void WidgetEditor::slot_varDelVariable()
 {
-    qDebug() << __PRETTY_FUNCTION__;    
+    // qDebug() << __PRETTY_FUNCTION__;
 
     auto _current = _m_vars_table->selectionModel()->selectedRows();
     auto _index_current = (_current.count() == 1) ? _current.at(0) : QModelIndex();

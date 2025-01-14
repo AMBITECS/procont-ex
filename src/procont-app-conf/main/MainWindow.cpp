@@ -37,18 +37,17 @@
 
 #include <QDebug>
 
-const QString _g_defaultProjectFilename = ":/proj/proj/plc-1.xml";
-
 MainWindow * MainWindow::_m_instance = nullptr;
 QString MainWindow::_m_config_filepath = {};
 QString MainWindow::_m_base_directory = {};
+const QString MainWindow::_m_defaultProjectFilename = ":/proj/proj/plc-1.xml";
+auto MainWindow::_m_undo_group = new QUndoGroup;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     _m_proxy_pou(new ProxyModelTree_pou),
     _m_proxy_dev(new ProxyModelTree_dev),
-    _m_empty_stack(new QUndoStack),
-    _m_undo_group(new QUndoGroup)
+    _m_empty_stack(new QUndoStack)
 {
     undoGroup()->addStack(emptyStack());
 
@@ -101,7 +100,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     open(/*QString("%1/plc-e.xml").arg(m_projDir)*/);
 
-    connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(slot_focusChanged(QWidget *, QWidget *)));
+    connect(qApp, &QApplication::focusChanged, this, &MainWindow::slot_focusChanged);
+}
+
+MainWindow::~MainWindow()
+{
+    delete _m_undo_group;
 }
 
 void MainWindow::setConfig(const QString &filepath_)
@@ -127,9 +131,20 @@ QUndoStack * MainWindow::emptyStack() const
     return _m_empty_stack;
 }
 
-QUndoGroup* MainWindow::undoGroup() const
+void MainWindow::addStack(QUndoStack *_stack)
+{
+    if(!undoGroup()->stacks().contains(_stack))
+        undoGroup()->addStack(_stack);
+}
+
+QUndoGroup* MainWindow::undoGroup()
 {
     return _m_undo_group;
+}
+
+void MainWindow::setModified(bool modified_)
+{
+    _m_modified |= modified_;
 }
 
 void MainWindow::createWidgets()
@@ -139,7 +154,6 @@ void MainWindow::createWidgets()
 
     // left area
     _m_tree_dev = new TreeView();
-    undoGroup()->addStack(_m_tree_dev->undoStack());
     _m_proxy_dev->setUndoStack(_m_tree_dev->undoStack());
     _m_tree_dev->setExpandsOnDoubleClick(false);
     _m_tree_dev->setMinimumSize(300, 400);
@@ -195,7 +209,6 @@ void MainWindow::createWidgets()
     // bottom area
     CWidgetProtocol::instance()->setUndoGroup(undoGroup());
     _m_nostack_widgets.push_back(CWidgetProtocol::instance());
-    // connect(this, &MainWindow::signal_activateUndoStack, _m_widget_protocol, &CWidgetProtocol::slot_activateUndoStack);
     CWidgetProtocol::instance()->setMinimumHeight(300);
     pDock = new QDockWidget(tr("Protocol"), this);
     // pDock->setTitleBarWidget(new QWidget());
@@ -278,7 +291,7 @@ void MainWindow::createMenu()
     projectMenu->addMenu(_m_addobject_menu);
 
     auto compileMenu = menuBar()->addMenu(tr("Compile"));
-    auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
+    // auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
     auto compile_build_act = compileMenu->addAction(QIcon(":/icon/images/hammer2.svg"), tr("Build"), QKeySequence(tr("Ctrl+Shift+B")), this, &MainWindow::slot_build);
 
     auto toolbar = addToolBar("main");
@@ -356,6 +369,33 @@ void MainWindow::createDynamicActions()
     connect(act, &QAction::triggered, this, &MainWindow::slot_add_device);
     _m_dynamic_actions.insert("project", DynamicAction(act, {_m_tree_dev}));
     _m_dynamic_actions.insert("configuration", DynamicAction(act, {_m_tree_dev}));
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if(isModified())
+    {
+        auto _result = QMessageBox::warning(this, tr("Attention"), tr("The project has been changed, do you want to save changes?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        if(_result == QMessageBox::Cancel)
+        {
+            event->ignore();
+            return;
+        }
+        if(_result == QMessageBox::Yes)
+            slot_save();
+    }
+
+    QMainWindow::closeEvent(event);
+}
+
+bool MainWindow::isModified() const
+{
+    auto _modified = _m_modified;
+
+    for(auto i : undoGroup()->stacks())
+        _modified |= !i->isClean();
+
+    return  _modified;
 }
 
 void MainWindow::createContextMenu(const QPoint &pos_, const QTreeView *tree_)
@@ -474,7 +514,7 @@ void MainWindow::slot_add_DUT()
     if(dlg.exec() == QDialog::Accepted)
     {
         auto cmd = new CUndoCommand_insert_tree(_m_model_project, DomModel::s_index(_m_tree_pou->currentIndex()), dlg.getNode().toDocument().documentElement());
-        connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_selectRow_tree);
+        connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_treeitem_insert);
         _m_tree_pou->undoStack()->push(cmd);
     }
     _m_tree_pou->setFocus();
@@ -486,16 +526,16 @@ void MainWindow::slot_add_POU()
     if(dlg.exec() == QDialog::Accepted)
     {
         auto cmd = new CUndoCommand_insert_tree(_m_model_project, DomModel::s_index(_m_tree_pou->currentIndex()), dlg.getNode().toDocument().documentElement());
-        connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_selectRow_tree);
+        connect(cmd, &CUndoCommand_insert_tree::signal_insertRow, this, &MainWindow::slot_treeitem_insert);
         _m_tree_pou->undoStack()->push(cmd);
     }
 
     _m_tree_pou->setFocus();
 }
 
-void MainWindow::slot_selectRow_tree(const QModelIndex &index_)
+void MainWindow::slot_treeitem_insert(const QModelIndex &index_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     if(index_.model() == _m_proxy_pou)
     {
@@ -507,22 +547,22 @@ void MainWindow::slot_selectRow_tree(const QModelIndex &index_)
 
 void MainWindow::slot_add_device()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void MainWindow::slot_add_resource()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void MainWindow::slot_add_task()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void MainWindow::slot_add_instance()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void MainWindow::slot_open()
@@ -567,7 +607,7 @@ void MainWindow::open(const QString & filePath)
 
     if(default_file)
     {
-        _filePath = _g_defaultProjectFilename;
+        _filePath = _m_defaultProjectFilename;
         _fileName = QFileInfo(_filePath.right(_filePath.size()-1)).fileName();
         m_info(
             QStringList()
@@ -636,21 +676,16 @@ void MainWindow::open(const QString & filePath)
         << QString(tr("project opened %1")).arg(_fileName)
         << QString(tr("project file: %1")).arg(_filePath)
         );
-}
 
-#include <QTextStream>
+    _m_modified = false;
+}
 
 void MainWindow::slot_save()
 {
-    qDebug() << undoGroup()->isClean() << undoGroup()->stacks().count();
-    QString str = {}; QTextStream stream(&str);
-    for(auto i : undoGroup()->stacks())
-        stream << i->isClean();
-    qDebug() << str;
-
-    return;
-
     QString filePath = QFileDialog::getSaveFileName(this, tr("Save File"), QString{}, tr("XML files (*.xml)"));
+
+    if(filePath.right(4) != ".xml")
+        filePath += ".xml";
 
     save(filePath);
 }
@@ -823,14 +858,14 @@ void MainWindow::slot_rename()
 
 void MainWindow::slot_properties()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void MainWindow::slot_input_assistant()
 {
-    InputDialog dlg(InputDialog::eCT_POU);
+    InputDialog dlg(InputDialog::eCT_ALL);
     dlg.exec();
-    qDebug() << dlg.selectedType().toElement().attribute("name");
+    // qDebug() << dlg.selectedType().toElement().attribute("name");
 }
 
 void MainWindow::slot_compile()
@@ -856,8 +891,6 @@ void MainWindow::slot_build()
     file.write(st_text.toLocal8Bit());
     file.close();
     // ***
-
-    qDebug() << _buildDir << QFileInfo("/home/master/Ambi/Work/Projects/procont/matiec/iec2c").exists();
 
     // *** трансляция ST->C
     if(_m_compiler == nullptr)

@@ -37,9 +37,9 @@ CWidgetProtocolTab_message::CWidgetProtocolTab_message(QWidget *parent_) : IWidg
     m_pWidget = new TreeWidget(this);
     m_pWidget->setColumnCount(6);
     m_pWidget->header()->resizeSection(1, 150);
-    m_pWidget->header()->resizeSection(2, 160);
+    m_pWidget->header()->resizeSection(2, 200);
     m_pWidget->header()->resizeSection(3, 220);
-    m_pWidget->header()->resizeSection(4, 150);
+    m_pWidget->header()->resizeSection(4, 200);
     m_pWidget->setHeaderLabels(QStringList() << tr("Number") << tr("Type") << tr("Time") << tr("Source") << tr("Object") << tr("Message"));
 
     auto *layout = new QVBoxLayout(this);
@@ -123,7 +123,7 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     m_pErrorTreeWidget->setHeaderLabels(QStringList() << tr("Message") << tr("Project") << tr("Object") << tr("Position"));
     m_pErrorTreeWidget->setWordWrap(true);
     m_pErrorTreeWidget->hide();
-    m_pCodePlainTextWidget = new CodeEditorWidget(this);
+    m_pCodePlainTextWidget = new CodeEditorWidget(true, this);
     m_pCodePlainTextWidget->hide();
     auto hb = new QHBoxLayout;
     hb->addWidget(m_pErrorPlainTextWidget);

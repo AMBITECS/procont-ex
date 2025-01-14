@@ -54,7 +54,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow() = default;
+    ~MainWindow() override;
 
 public:
     static MainWindow * instance();
@@ -69,11 +69,16 @@ public:
 
     QDomDocument & document();
 
-    QUndoGroup * undoGroup() const;
+    static void addStack(QUndoStack *_stack);
     QUndoStack * emptyStack() const;
+    void setModified(bool modified_);
 
-signals:
-    void signal_activateUndoStack(QWidget *);
+protected:
+    void closeEvent(QCloseEvent *event) override;
+    [[nodiscard]] bool isModified() const;
+
+private:
+    static QUndoGroup * undoGroup();
 
 private:
     void open(const QString & filePath = {});
@@ -117,7 +122,7 @@ private slots:
 
     void slot_focusChanged(QWidget *, QWidget *);
 
-    void slot_selectRow_tree(const QModelIndex &index_);
+    void slot_treeitem_insert(const QModelIndex &index_);
 
 private:
     void createContextMenu(const QPoint &pos_, const QTreeView *tree_);
@@ -148,17 +153,18 @@ private:
 
     QSettings * _m_settings{nullptr};
 
-    static QString _m_config_filepath;
-    static QString _m_base_directory;
-
     QDomDocument _m_project_document;
 
-    QUndoGroup * _m_undo_group{nullptr};
+    static QUndoGroup * _m_undo_group;
     std::list<QObject *> _m_nostack_widgets;
     QUndoStack * _m_empty_stack{nullptr};
+    bool _m_modified{false};
 
 private:
     static MainWindow * _m_instance;
+    static QString _m_config_filepath;
+    static QString _m_base_directory;
+    static const QString _m_defaultProjectFilename;
 };
 
 #endif // MAINWINDOW_H

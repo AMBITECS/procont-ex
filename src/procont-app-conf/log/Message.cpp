@@ -143,7 +143,7 @@ QString CMessage::toString_debug() const
     return QString("%1 | %2 | %3 | %4 | %5 | 0x%6 | %7")
             .arg(QString().asprintf("%08lld", number()))
             .arg(time().toString("dd.MM.yyyy hh:mm:ss.zzz"), toString_type(type()), toString_level(level()))
-            .arg(function(), 30)
+            .arg(function(), 32)
             .arg(*(quint64*)object(), 16, 16, QChar('0'))
             .arg(text().join(":"));
 }
@@ -159,7 +159,7 @@ QString CMessage::toString_file() const
             _message_stream << QString("%1 | %2 | %3 | %4 | %5 | 0x%6 | %7")
                             .arg(QString().asprintf("%08lld", number()))
                             .arg(time().toString("dd.MM.yyyy hh:mm:ss.zzz"), toString_type(type()), toString_level(level()))
-                            .arg(function(), 30)
+                            .arg(function(), 32)
                             .arg(*(quint64*)object(), 16, 16, QChar('0'))
                             .arg(i)
                      << Qt::endl;
@@ -169,7 +169,7 @@ QString CMessage::toString_file() const
                             .arg(QString(), 23, QChar(' '))
                             .arg(QString(), 10, QChar(' '))
                             .arg(QString(), 10, QChar(' '))
-                            .arg(QString(), 30, QChar(' '))
+                            .arg(QString(), 32, QChar(' '))
                             .arg(QString(), 18, QChar(' '))
                             .arg(i)
                      << Qt::endl;

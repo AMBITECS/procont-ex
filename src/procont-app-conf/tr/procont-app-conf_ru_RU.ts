@@ -493,6 +493,44 @@ Please, enter different variable name</source>
     </message>
 </context>
 <context>
+    <name>CodeEditor</name>
+    <message>
+        <location filename="../editor/st/CodeEditor.cpp" line="123"/>
+        <source>Undo</source>
+        <translation>Отменить</translation>
+    </message>
+    <message>
+        <location filename="../editor/st/CodeEditor.cpp" line="129"/>
+        <source>Redo</source>
+        <translation>Повторить</translation>
+    </message>
+    <message>
+        <location filename="../editor/st/CodeEditor.cpp" line="136"/>
+        <source>Cut</source>
+        <translation>Вырезать</translation>
+    </message>
+    <message>
+        <location filename="../editor/st/CodeEditor.cpp" line="143"/>
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <location filename="../editor/st/CodeEditor.cpp" line="150"/>
+        <source>Paste</source>
+        <translation>Вставить</translation>
+    </message>
+    <message>
+        <location filename="../editor/st/CodeEditor.cpp" line="157"/>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../editor/st/CodeEditor.cpp" line="165"/>
+        <source>Select All</source>
+        <translation>Выделить все</translation>
+    </message>
+</context>
+<context>
     <name>CodeEditorWidget</name>
     <message>
         <location filename="../editor/st/CodeEditorWidget.cpp" line="15"/>
@@ -587,7 +625,7 @@ Please, enter different variable name</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../main/MainWindow.cpp" line="149"/>
+        <location filename="../main/MainWindow.cpp" line="163"/>
         <source>Device</source>
         <translation>Устройства</translation>
     </message>
@@ -608,7 +646,7 @@ Please, enter different variable name</source>
         <translation type="vanished">загрузка библиотеки &apos;StandardLibrary&apos; из файла %1/etc/%2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="200"/>
+        <location filename="../main/MainWindow.cpp" line="213"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
@@ -633,107 +671,107 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="188"/>
+        <location filename="../main/MainWindow.cpp" line="202"/>
         <source>ToolBar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="215"/>
+        <location filename="../main/MainWindow.cpp" line="228"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="216"/>
+        <location filename="../main/MainWindow.cpp" line="229"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="217"/>
+        <location filename="../main/MainWindow.cpp" line="230"/>
         <source>Save...</source>
         <translation>Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="218"/>
+        <location filename="../main/MainWindow.cpp" line="231"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="220"/>
+        <location filename="../main/MainWindow.cpp" line="233"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="222"/>
+        <location filename="../main/MainWindow.cpp" line="235"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="225"/>
+        <location filename="../main/MainWindow.cpp" line="238"/>
         <source>Undo action</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="228"/>
+        <location filename="../main/MainWindow.cpp" line="241"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="231"/>
+        <location filename="../main/MainWindow.cpp" line="244"/>
         <source>Redo action</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="240"/>
+        <location filename="../main/MainWindow.cpp" line="253"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="248"/>
+        <location filename="../main/MainWindow.cpp" line="261"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="256"/>
+        <location filename="../main/MainWindow.cpp" line="269"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="264"/>
+        <location filename="../main/MainWindow.cpp" line="277"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="308"/>
+        <location filename="../main/MainWindow.cpp" line="321"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="318"/>
+        <location filename="../main/MainWindow.cpp" line="331"/>
         <source>Properties</source>
         <translation>Свойства</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="340"/>
+        <location filename="../main/MainWindow.cpp" line="353"/>
         <source>Resource</source>
         <translation>Ресурс</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="345"/>
+        <location filename="../main/MainWindow.cpp" line="358"/>
         <source>Task</source>
         <translation>Задача</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="350"/>
+        <location filename="../main/MainWindow.cpp" line="363"/>
         <source>POU instance</source>
         <translation>Экземмпляр программы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="609"/>
+        <location filename="../main/MainWindow.cpp" line="649"/>
         <source>User defined</source>
         <translation>Пользовательские</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="801"/>
+        <location filename="../main/MainWindow.cpp" line="836"/>
         <source>Do you really want rename %1 from &apos;%2&apos; to &apos;%3&apos;</source>
         <translation>Вы действительно хотите переименовать %1 из &apos;%2&apos; в &apos;%3&apos;</translation>
     </message>
@@ -746,15 +784,16 @@ Please, enter different variable name</source>
         <translation type="vanished">Пользовательские типы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="738"/>
-        <location filename="../main/MainWindow.cpp" line="767"/>
-        <location filename="../main/MainWindow.cpp" line="800"/>
+        <location filename="../main/MainWindow.cpp" line="378"/>
+        <location filename="../main/MainWindow.cpp" line="773"/>
+        <location filename="../main/MainWindow.cpp" line="802"/>
+        <location filename="../main/MainWindow.cpp" line="835"/>
         <source>Attention</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="739"/>
-        <location filename="../main/MainWindow.cpp" line="768"/>
+        <location filename="../main/MainWindow.cpp" line="774"/>
+        <location filename="../main/MainWindow.cpp" line="803"/>
         <source>Do you really want to delete %1 &apos;%2&apos;</source>
         <translation>Вы действительно хотите удалить %1 &apos;%2&apos;</translation>
     </message>
@@ -763,27 +802,27 @@ Please, enter different variable name</source>
         <translation type="vanished">Ассистент ввода...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="272"/>
+        <location filename="../main/MainWindow.cpp" line="285"/>
         <source>F2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="272"/>
+        <location filename="../main/MainWindow.cpp" line="285"/>
         <source>Input assistant...</source>
         <translation>Ассистент ввода...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="274"/>
+        <location filename="../main/MainWindow.cpp" line="287"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="282"/>
+        <location filename="../main/MainWindow.cpp" line="295"/>
         <source>Ctrl+Shift+B</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="328"/>
+        <location filename="../main/MainWindow.cpp" line="341"/>
         <source>DUT</source>
         <translation></translation>
     </message>
@@ -792,21 +831,21 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="276"/>
+        <location filename="../main/MainWindow.cpp" line="289"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="277"/>
-        <location filename="../main/MainWindow.cpp" line="330"/>
-        <location filename="../main/MainWindow.cpp" line="331"/>
-        <location filename="../main/MainWindow.cpp" line="336"/>
-        <location filename="../main/MainWindow.cpp" line="337"/>
-        <location filename="../main/MainWindow.cpp" line="342"/>
-        <location filename="../main/MainWindow.cpp" line="347"/>
-        <location filename="../main/MainWindow.cpp" line="352"/>
-        <location filename="../main/MainWindow.cpp" line="444"/>
-        <location filename="../main/MainWindow.cpp" line="463"/>
+        <location filename="../main/MainWindow.cpp" line="290"/>
+        <location filename="../main/MainWindow.cpp" line="343"/>
+        <location filename="../main/MainWindow.cpp" line="344"/>
+        <location filename="../main/MainWindow.cpp" line="349"/>
+        <location filename="../main/MainWindow.cpp" line="350"/>
+        <location filename="../main/MainWindow.cpp" line="355"/>
+        <location filename="../main/MainWindow.cpp" line="360"/>
+        <location filename="../main/MainWindow.cpp" line="365"/>
+        <location filename="../main/MainWindow.cpp" line="484"/>
+        <location filename="../main/MainWindow.cpp" line="503"/>
         <source>Add object</source>
         <translation>Добавить объект</translation>
     </message>
@@ -819,45 +858,49 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="280"/>
-        <location filename="../main/MainWindow.cpp" line="281"/>
+        <location filename="../main/MainWindow.cpp" line="293"/>
         <source>Compile</source>
         <translation>Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="282"/>
+        <location filename="../main/MainWindow.cpp" line="295"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="163"/>
-        <location filename="../main/MainWindow.cpp" line="334"/>
+        <location filename="../main/MainWindow.cpp" line="177"/>
+        <location filename="../main/MainWindow.cpp" line="347"/>
         <source>POU</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="186"/>
+        <location filename="../main/MainWindow.cpp" line="200"/>
         <source>Components</source>
-        <translation type="unfinished">Компоненты</translation>
+        <translation>Компоненты</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="355"/>
+        <location filename="../main/MainWindow.cpp" line="368"/>
         <source>Add device...</source>
         <translation>Добавить устройство...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="553"/>
-        <location filename="../main/MainWindow.cpp" line="574"/>
+        <location filename="../main/MainWindow.cpp" line="378"/>
+        <source>The project has been changed, do you want to save changes?</source>
+        <translation>Проект был изменен, хотите сохранить изменения?</translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="593"/>
+        <location filename="../main/MainWindow.cpp" line="614"/>
         <source>open project %1</source>
         <translation>загрузка проекта %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="586"/>
+        <location filename="../main/MainWindow.cpp" line="626"/>
         <source>can&apos;t open file for read: %1</source>
         <translation>не могу открыть файл для чтения: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="636"/>
+        <location filename="../main/MainWindow.cpp" line="676"/>
         <source>project opened %1</source>
         <translation>проект загружен %1</translation>
     </message>
@@ -874,26 +917,26 @@ Please, enter different variable name</source>
         <translation type="vanished">проект загружен</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="554"/>
-        <location filename="../main/MainWindow.cpp" line="575"/>
-        <location filename="../main/MainWindow.cpp" line="637"/>
+        <location filename="../main/MainWindow.cpp" line="594"/>
+        <location filename="../main/MainWindow.cpp" line="615"/>
+        <location filename="../main/MainWindow.cpp" line="677"/>
         <source>project file: %1</source>
         <translation>файл проекта: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="561"/>
-        <location filename="../main/MainWindow.cpp" line="585"/>
-        <location filename="../main/MainWindow.cpp" line="598"/>
+        <location filename="../main/MainWindow.cpp" line="601"/>
+        <location filename="../main/MainWindow.cpp" line="625"/>
+        <location filename="../main/MainWindow.cpp" line="638"/>
         <source>can&apos;t open project %1</source>
         <translation>не могу загрузить проект %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="562"/>
+        <location filename="../main/MainWindow.cpp" line="602"/>
         <source>file not found: %1</source>
         <translation>файл не найден: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="599"/>
+        <location filename="../main/MainWindow.cpp" line="639"/>
         <source>file parse error: %1</source>
         <translation>ошибка парсинга файла: %1</translation>
     </message>
@@ -902,13 +945,13 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="530"/>
+        <location filename="../main/MainWindow.cpp" line="570"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="530"/>
-        <location filename="../main/MainWindow.cpp" line="653"/>
+        <location filename="../main/MainWindow.cpp" line="570"/>
+        <location filename="../main/MainWindow.cpp" line="685"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
@@ -917,7 +960,7 @@ Please, enter different variable name</source>
         <translation type="vanished">открытие файла %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="653"/>
+        <location filename="../main/MainWindow.cpp" line="685"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -1063,35 +1106,35 @@ Please, enter different variable name</source>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="118"/>
-        <location filename="../dialog/InputDialog.cpp" line="217"/>
-        <location filename="../dialog/InputDialog.cpp" line="255"/>
+        <location filename="../dialog/InputDialog.cpp" line="220"/>
+        <location filename="../dialog/InputDialog.cpp" line="257"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="119"/>
-        <location filename="../dialog/InputDialog.cpp" line="218"/>
+        <location filename="../dialog/InputDialog.cpp" line="221"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
         <location filename="../dialog/InputDialog.cpp" line="120"/>
-        <location filename="../dialog/InputDialog.cpp" line="219"/>
+        <location filename="../dialog/InputDialog.cpp" line="222"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="256"/>
+        <location filename="../dialog/InputDialog.cpp" line="258"/>
         <source>Value type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="257"/>
+        <location filename="../dialog/InputDialog.cpp" line="259"/>
         <source>Variable type</source>
         <translation>Тип переменной</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="258"/>
+        <location filename="../dialog/InputDialog.cpp" line="260"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>
@@ -1123,12 +1166,12 @@ Please, enter different variable name</source>
         <translation>задайте верный путь к компилятору в %1</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="38"/>
+        <location filename="../generate/Compiler.cpp" line="36"/>
         <source>build started</source>
         <translation>сборка запущена</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="67"/>
+        <location filename="../generate/Compiler.cpp" line="65"/>
         <source>build finished</source>
         <translation>сборка закончена</translation>
     </message>
@@ -1198,6 +1241,11 @@ Please, enter different variable name</source>
         <location filename="../undo/cundocommand_edit.cpp" line="52"/>
         <source>the %1 has been edited</source>
         <translation>%1 отредактировано</translation>
+    </message>
+    <message>
+        <location filename="../editor/st/CodeEditor.h" line="25"/>
+        <source>Text changed</source>
+        <translation>Текст изменен</translation>
     </message>
 </context>
 <context>
@@ -1342,7 +1390,7 @@ Enter a new name</source>
     <message>
         <location filename="../widget/WidgetEditor_inherit.cpp" line="176"/>
         <source>Text</source>
-        <translation type="unfinished">Текст</translation>
+        <translation>Текст</translation>
     </message>
     <message>
         <source>Table</source>
@@ -1351,7 +1399,7 @@ Enter a new name</source>
     <message>
         <location filename="../widget/WidgetEditor_inherit.cpp" line="179"/>
         <source>Schema</source>
-        <translation type="unfinished">Схема</translation>
+        <translation>Схема</translation>
     </message>
 </context>
 <context>
@@ -1404,31 +1452,47 @@ Enter a new name</source>
     </message>
     <message>
         <location filename="translation.cpp" line="18"/>
+        <location filename="translation.cpp" line="32"/>
+        <source>program</source>
+        <translation>программа</translation>
+    </message>
+    <message>
+        <location filename="translation.cpp" line="19"/>
+        <source>program#1</source>
+        <translation>Программа</translation>
+    </message>
+    <message>
+        <location filename="translation.cpp" line="20"/>
         <source>variable</source>
         <translation>переменная</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="19"/>
+        <location filename="translation.cpp" line="21"/>
         <source>User defined</source>
         <oldsource>User types</oldsource>
         <translation>Пользовательские</translation>
+    </message>
+    <message>
+        <location filename="translation.cpp" line="33"/>
+        <source>Program</source>
+        <translation type="unfinished">Программа</translation>
     </message>
     <message>
         <source>User defined#1</source>
         <translation type="vanished">Пользовательские</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="20"/>
+        <location filename="translation.cpp" line="22"/>
         <source>Standard Function Blocks</source>
         <translation>Стандартные функциональные блоки</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="21"/>
+        <location filename="translation.cpp" line="23"/>
         <source>Standard IEC Functions</source>
         <translation>Стандартные функции IEC</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="22"/>
+        <location filename="translation.cpp" line="24"/>
         <source>Additional Function Blocks</source>
         <translation>Дополнительные функциональные блоки</translation>
     </message>

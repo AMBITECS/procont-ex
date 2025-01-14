@@ -7,11 +7,12 @@
 #include <QMouseEvent>
 #include <QUndoStack>
 #include <QUndoGroup>
+#include <QApplication>
 
 TableView::TableView(QWidget *parent) : QTableView(parent),
-    _m_undo_stack(new QUndoStack)
+    _m_undo_stack(new QUndoStack(this))
 {
-    MainWindow::instance()->undoGroup()->addStack(undoStack());
+    MainWindow::addStack(undoStack());
     connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(slot_focusChanged(QWidget *, QWidget *)));
 }
 

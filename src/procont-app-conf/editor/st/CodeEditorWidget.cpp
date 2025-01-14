@@ -7,7 +7,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 
-CodeEditorWidget::CodeEditorWidget(QWidget *parent)
+CodeEditorWidget::CodeEditorWidget(bool read_only_, QWidget *parent)
     : QWidget{parent}
 {
     searchLine = new QLineEdit();
@@ -21,6 +21,7 @@ CodeEditorWidget::CodeEditorWidget(QWidget *parent)
     searchLayout->addWidget(searchButton);
 
     codeEditor = new CodeEditor;
+    codeEditor->setReadOnly(read_only_);
     connect(codeEditor, &CodeEditor::textChanged, this, &CodeEditorWidget::slot_textChanged);
 
     auto layout = new QVBoxLayout;
@@ -29,6 +30,13 @@ CodeEditorWidget::CodeEditorWidget(QWidget *parent)
 
     setLayout(layout);
 }
+
+// *** igor'
+QUndoStack * CodeEditorWidget::undoStack()
+{
+    return codeEditor->undoStack();
+}
+// ***
 
 void CodeEditorWidget::slot_textChanged()
 {
@@ -42,7 +50,7 @@ QString CodeEditorWidget::toPlainText() const
 
 void CodeEditorWidget::setPlainText(const QString &text)
 {
-    codeEditor->setPlainText(text);
+    codeEditor->setText(text);
 }
 
 void CodeEditorWidget::setPousListName(QStringList list)

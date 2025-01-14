@@ -56,7 +56,7 @@ QWidget * WidgetEditor_fbd::createCodeEditor()
     _m_fbd_view->setMinimumSize(500, 250);
     // variables editor code editor
     // _txt_view = WidgetEditor::createCodeEditor();
-    _m_body_text = new CodeEditorWidget(this);
+    _m_body_text = new CodeEditorWidget(true, this);
     _m_body_text->setMinimumSize(500, 250);
     _m_body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
     _m_body_text->hide();
@@ -92,7 +92,7 @@ void WidgetEditor_fbd::slot_varAddVariable()
 {
     WidgetEditor::slot_varAddVariable();
 
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     _m_fbd_view->update_interface(DomModel::toItem(_m_vars_table->rootIndex())->node());
 }
@@ -114,7 +114,7 @@ void WidgetEditor_fbd::slot_varDelVariable()
 {
     WidgetEditor::slot_varDelVariable();
 
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     _m_fbd_view->update_interface(DomModel::toItem(_m_vars_table->rootIndex())->node());
 }
@@ -132,7 +132,7 @@ void WidgetEditor_fbd::slot_varTxtVarChanged()
 
     if(_m_vars_text->isVisible())
     {
-        qDebug() << __PRETTY_FUNCTION__;
+        // qDebug() << __PRETTY_FUNCTION__;
 
         _m_fbd_view->update_interface(DomModel::toItem(_m_vars_table->rootIndex())->node());
     }
@@ -144,7 +144,7 @@ void WidgetEditor_fbd::slot_varTblVarChanged()
 
     if(_m_vars_table->isVisible())
     {
-        qDebug() << __PRETTY_FUNCTION__;
+        // qDebug() << __PRETTY_FUNCTION__;
 
         _m_fbd_view->update_interface(DomModel::toItem(_m_vars_table->rootIndex())->node());
     }
@@ -202,7 +202,7 @@ void WidgetEditor_fbd::slot_codeShmChanged(const QDomNode &new_node_)
 
 void WidgetEditor_fbd::slot_interfaceVariableAdd(const QString &type_, const QString &name_)
 {
-    qDebug() << __PRETTY_FUNCTION__ << type_ << name_;
+    // qDebug() << __PRETTY_FUNCTION__ << type_ << name_;
 
     // create variable node
     auto _parent = DomModel::toItem(_m_vars_table->rootIndex());
@@ -235,7 +235,7 @@ void WidgetEditor_fbd::slot_interfaceVariableAdd(const QString &type_, const QSt
 
 void WidgetEditor_fbd::slot_interfaceVariableDel(const QString &type_, const QString &name_)
 {
-    qDebug() << __PRETTY_FUNCTION__ << type_ << name_;
+    // qDebug() << __PRETTY_FUNCTION__ << type_ << name_;
 
     QModelIndex _index;
     for(auto i = 0;i<DomModel::toItem(_m_vars_table->rootIndex())->rowCount();i++)
@@ -262,7 +262,7 @@ void WidgetEditor_fbd::slot_interfaceVariableDel(const QString &type_, const QSt
 
 void WidgetEditor_fbd::slot_interfaceVariableRename(const QString &old_name_, const QString &new_name_)
 {
-    qDebug() << __PRETTY_FUNCTION__ << old_name_ << new_name_;
+    // qDebug() << __PRETTY_FUNCTION__ << old_name_ << new_name_;
 
     QModelIndex _index;
     for(auto i = 0;i<DomModel::toItem(_m_vars_table->rootIndex())->rowCount();i++)

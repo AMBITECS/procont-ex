@@ -86,12 +86,12 @@ InputDialog::InputDialog(eType type_) :
     tab2->setChildrenCollapsible(false);
     auto tab2_wgt_t = new QWidget;
     auto tab2_lineedit_query = new QLineEdit;
-    _m_tab2_treewidget_result = new QTreeView;
-    _m_tab2_treewidget_result->setMinimumHeight(370);
-    _m_tab2_treewidget_result->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _m_tab2_treeview_result = new QTreeView;
+    _m_tab2_treeview_result->setMinimumHeight(370);
+    _m_tab2_treeview_result->setEditTriggers(QAbstractItemView::NoEditTriggers);
     vb = new QVBoxLayout;
     vb->addWidget(tab2_lineedit_query);
-    vb->addWidget(_m_tab2_treewidget_result);
+    vb->addWidget(_m_tab2_treeview_result);
     tab2_wgt_t->setLayout(vb);
     auto tab2_wgt_b = new QWidget;
     _m_tab2_textedit_doc = new QTextEdit;
@@ -112,7 +112,7 @@ InputDialog::InputDialog(eType type_) :
     tab2->addWidget(tab2_wgt_b);
     {
         _m_tab2_filter_proxy = new QSortFilterProxyModel;
-        _m_tab2_treewidget_result->setModel(_m_tab2_filter_proxy);
+        _m_tab2_treeview_result->setModel(_m_tab2_filter_proxy);
         auto source = new QStandardItemModel;
         source->setColumnCount(3);
         source->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
@@ -130,9 +130,9 @@ InputDialog::InputDialog(eType type_) :
             source->insertRow(0, items);
         }
         _m_tab2_filter_proxy->setSourceModel(source);
-        _m_tab2_treewidget_result->setColumnWidth(0, 200);
-        _m_tab2_treewidget_result->setColumnWidth(1, 150);
-        connect(_m_tab2_treewidget_result->selectionModel(), &QItemSelectionModel::currentChanged, this, &InputDialog::slot_typeCurrentChanged_tab2);
+        _m_tab2_treeview_result->setColumnWidth(0, 200);
+        _m_tab2_treeview_result->setColumnWidth(1, 150);
+        connect(_m_tab2_treeview_result->selectionModel(), &QItemSelectionModel::currentChanged, this, &InputDialog::slot_typeCurrentChanged_tab2);
 
         connect(tab2_lineedit_query, &QLineEdit::textChanged, this, &InputDialog::slot_filterTextChanged);
     }
@@ -141,6 +141,7 @@ InputDialog::InputDialog(eType type_) :
     _m_tabs = new QTabWidget;
     _m_tabs->addTab(tab1, tr("Categories"));
     _m_tabs->addTab(tab2, tr("Find"));
+    connect(_m_tabs, &QTabWidget::currentChanged, this, &InputDialog::slot_currentTabChanged);
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -161,6 +162,8 @@ bool InputDialog::accept_category(const QString & name_, eType type_)
         break;
     case eCT_TYPE:
         return (name_ != "program") && (name_ != "function");
+    case eCT_ALL:
+        return true;
         break;
     }
 
@@ -192,7 +195,7 @@ QDomNode InputDialog::selectedType() const
 {
     auto list = _m_tab1_treeview_name->selectionModel()->selectedIndexes();
     if(_m_tabs->currentIndex() != 0)
-        list = _m_tab2_treewidget_result->selectionModel()->selectedIndexes();
+        list = _m_tab2_treeview_result->selectionModel()->selectedIndexes();
 
     auto selection = std::find_if(list.begin(), list.end(), [](const QModelIndex &index){ return index.column() == 0; });
     if(selection != list.end())
@@ -243,9 +246,8 @@ void InputDialog::slot_categoryCurrentChanged(const QModelIndex &current, const 
 
 void InputDialog::updateVarsInfo(const QModelIndex &current_type_, QTextEdit *vars_info_, QStandardItemModel *vars_model_)
 {
-    vars_info_->clear();
-
     QDomNode node = StandardLibrary::instance()->find_pou(current_type_.data().toString());
+
     if(!node.isNull())
     {
         auto name = node.toElement().attribute("name");
@@ -303,16 +305,42 @@ void InputDialog::updateVarsInfo(const QModelIndex &current_type_, QTextEdit *va
     }
 }
 
+void InputDialog::slot_currentTabChanged(int index)
+{
+    _m_tab1_textedit_doc->clear();
+    _m_tab2_textedit_doc->clear();
+    _m_tab1_vars_model->clear();
+    _m_tab2_vars_model->clear();
+
+    if(index == 0 && _m_tab1_treeview_name->currentIndex().isValid())
+        updateVarsInfo(_m_tab1_treeview_name->currentIndex(), _m_tab1_textedit_doc, _m_tab1_vars_model);
+
+    if(index == 1 && _m_tab2_treeview_result->currentIndex().isValid())
+        updateVarsInfo(_m_tab2_treeview_result->currentIndex(), _m_tab2_textedit_doc, _m_tab2_vars_model);
+}
+
 void InputDialog::slot_typeCurrentChanged_tab1(const QModelIndex &current, const QModelIndex &)
 {
     if(current.isValid())
+    {
+        _m_tab1_textedit_doc->clear();
+        _m_tab2_textedit_doc->clear();
+        _m_tab1_vars_model->clear();
+        _m_tab2_vars_model->clear();
         updateVarsInfo(current, _m_tab1_textedit_doc, _m_tab1_vars_model);
+    }
 }
 
 void InputDialog::slot_typeCurrentChanged_tab2(const QModelIndex &current, const QModelIndex &)
 {
     if(current.isValid())
+    {
+        _m_tab1_textedit_doc->clear();
+        _m_tab2_textedit_doc->clear();
+        _m_tab1_vars_model->clear();
+        _m_tab2_vars_model->clear();
         updateVarsInfo(current, _m_tab2_textedit_doc, _m_tab2_vars_model);
+    }
 }
 
 void InputDialog::slot_filterTextChanged(const QString &text)

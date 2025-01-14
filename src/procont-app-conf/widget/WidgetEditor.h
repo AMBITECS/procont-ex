@@ -29,6 +29,8 @@ public:
 
     virtual void set_active();
 
+    [[nodiscard]] bool isModified() const;
+
 protected slots:
     void slot_varTxtViewToggled(bool);
     void slot_varTblViewToggled(bool);
@@ -60,6 +62,7 @@ protected:
     CodeEditorWidget * _m_vars_text{nullptr};
     CodeEditorWidget * _m_body_text{nullptr};
     QWidget * _m_table_container{nullptr};
+    bool _m_modified{false};
 };
 // ----------------------------------------------------------------------------
 

@@ -32,6 +32,7 @@ private slots:
     void slot_typeCurrentChanged_tab1(const QModelIndex &current, const QModelIndex &previous);
     void slot_typeCurrentChanged_tab2(const QModelIndex &current, const QModelIndex &previous);
     void slot_filterTextChanged(const QString &text);
+    void slot_currentTabChanged(int index);
 
 private:
     static QString get_type_name(const QString &);
@@ -50,7 +51,7 @@ private:
     QTextEdit * _m_tab1_textedit_doc;
     QStandardItemModel * _m_tab1_vars_model;
 
-    QTreeView * _m_tab2_treewidget_result;
+    QTreeView * _m_tab2_treeview_result;
     QSortFilterProxyModel * _m_tab2_filter_proxy;
     QTextEdit * _m_tab2_textedit_doc;
     QStandardItemModel * _m_tab2_vars_model;

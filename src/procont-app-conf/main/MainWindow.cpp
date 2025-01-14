@@ -547,7 +547,7 @@ void MainWindow::slot_treeitem_insert(const QModelIndex &index_)
 
 void MainWindow::slot_add_device()
 {
-    // qDebug() << __PRETTY_FUNCTION__;
+    qDebug() << __PRETTY_FUNCTION__;
 }
 
 void MainWindow::slot_add_resource()

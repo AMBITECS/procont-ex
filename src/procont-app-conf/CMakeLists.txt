@@ -79,6 +79,7 @@ set(PROJECT_SOURCES
     dialog/AddPOUDialog.h dialog/AddPOUDialog.cpp
     dialog/AddDUTDialog.h dialog/AddDUTDialog.cpp
     dialog/RenameDialog.h dialog/RenameDialog.cpp
+    dialog/AddDeviceDialog.h dialog/AddDeviceDialog.cpp
 
     resource/procont-app-conf.qrc
 

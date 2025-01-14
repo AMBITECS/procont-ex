@@ -1,2 +1,2 @@
-include(${CMAKE_DIR}/AMBI-libfind.cmake)
+include(${CMAKE_DIR}/PROJ-libfind.cmake)
 find_mod(OpenPAL NAMES openpal)

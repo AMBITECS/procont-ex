@@ -52,8 +52,6 @@ QString ItemValue_NodeName::get() const
 
 void ItemValue_NodeName::set(const QString &value)
 {
-    qDebug() <<__PRETTY_FUNCTION__;
-
     parent().removeChild(node());
     QDomNode new_node = parent().ownerDocument().createElement(value);
     m_node = parent().appendChild(new_node);
@@ -120,18 +118,9 @@ void ItemValue_SubNodeValue::set(const QString &value)
     {
         QDomText text = parent().ownerDocument().createCDATASection(value); text.setData(value);
         QDomNode xhtml = parent().ownerDocument().createElement("xhtml:p");
-
-        qDebug() <<__PRETTY_FUNCTION__;
-
         xhtml.appendChild(text);
         QDomNode doc = parent().ownerDocument().createElement("documentation");
-
-        qDebug() <<__PRETTY_FUNCTION__;
-
         doc.appendChild(xhtml);
-
-        qDebug() <<__PRETTY_FUNCTION__;
-
         m_node = parent().appendChild(doc);
     }
 }
@@ -212,8 +201,6 @@ QString ItemValue_SubNodeAttr::get() const
 
 void ItemValue_SubNodeAttr::set(const QString &value)
 {
-    qDebug() <<__PRETTY_FUNCTION__;
-
     parent().removeChild(node());
     m_node = {};
 
@@ -222,13 +209,7 @@ void ItemValue_SubNodeAttr::set(const QString &value)
         QDomNode new_node = parent().ownerDocument().createElement(m_nodeName);
         QDomNode new_child = parent().ownerDocument().createElement(m_chNodeName);
         new_child.toElement().setAttribute(m_chAttrName, value);
-
-        qDebug() <<__PRETTY_FUNCTION__;
-
         m_node = parent().appendChild(new_node);
-
-        qDebug() <<__PRETTY_FUNCTION__;
-
         node().appendChild(new_child);
     }
 }

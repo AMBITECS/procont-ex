@@ -20,7 +20,7 @@ class TreeWidget : public QTreeWidget
 public:
     TreeWidget(QWidget *parent = nullptr) : QTreeWidget(parent)
     {
-        connect(qApp, SIGNAL(focusChanged(QWidget*, QWidget*)), this, SLOT(slot_focusChanged(QWidget*, QWidget*)));
+        connect(qApp, &QApplication::focusChanged, this, &TreeWidget::slot_focusChanged);
     }
 private:
     virtual void mousePressEvent(QMouseEvent *event) override
@@ -131,7 +131,7 @@ class UndoView : public QUndoView
 public:
     UndoView(QWidget *parent = nullptr) : QUndoView(parent)
     {
-        connect(qApp, SIGNAL(focusChanged(QWidget*, QWidget*)), this, SLOT(slot_focusChanged(QWidget*, QWidget*)));
+        connect(qApp, &QApplication::focusChanged, this, &UndoView::slot_focusChanged);
     }
 private:
     virtual void mousePressEvent(QMouseEvent *event) override

@@ -110,8 +110,6 @@ public:
 
     void updateNode(const QDomNode &new_node_)
     {
-        qDebug() << __PRETTY_FUNCTION__;
-
         if(new_node_.nodeName() == "baseType")
         {
             node().removeChild(node().namedItem("baseType"));

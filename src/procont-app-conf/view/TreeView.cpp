@@ -13,6 +13,8 @@
 TreeView::TreeView(QUndoStack *stack_, QWidget *parent) : QTreeView(parent),
     _m_undo_stack(stack_ != nullptr ? stack_ : new QUndoStack)
 {
+    MainWindow::addStack(undoStack());
+
     connect(qApp, &QApplication::focusChanged, this, &TreeView::slot_focusChanged);
 }
 

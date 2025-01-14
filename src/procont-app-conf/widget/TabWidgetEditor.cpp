@@ -161,6 +161,9 @@ void TabWidgetEditor::slot_currentTabChanged(int index)
 
 void TabWidgetEditor::slot_closeTab(int index)
 {
+    if(dynamic_cast<WidgetEditor*>(widget(index)))
+        MainWindow::instance()->setModified(reinterpret_cast<WidgetEditor*>(widget(index))->isModified());
+
     _hWidgets.remove(_hWidgets.key(widget(index)));
 
     delete widget(index);

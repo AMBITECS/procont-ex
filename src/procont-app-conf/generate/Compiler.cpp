@@ -31,8 +31,6 @@ int Compiler::compile()
 
     b_command(CCmd::eCT_Clear);
 
-    qDebug() << _m_compiler << _m_args;
-
     _m_process.start(_m_compiler, _m_args);
 
     m_info(QObject::tr("build started"));

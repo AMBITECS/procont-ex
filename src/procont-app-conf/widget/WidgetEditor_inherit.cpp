@@ -60,18 +60,18 @@ WidgetEditor_type::WidgetEditor_type(const QModelIndex &index_, QAbstractProxyMo
 
 void WidgetEditor_type::slot_varTxtVarChanged()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void WidgetEditor_type::slot_varTblVarChanged()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 QWidget * WidgetEditor_type::createCodeEditor()
 {
     // *  code editor widgets
-    _m_body_text = new CodeEditorWidget(this);
+    _m_body_text = new CodeEditorWidget(false, this);
     _m_body_text->setMinimumSize(500, 250);
     _m_body_text->setPlainText(XmlParser::getDataTypeText(DomModel::toItem(_m_index)->node()));
     connect(_m_body_text, &CodeEditorWidget::textChanged, this, &WidgetEditor_type::slot_codeTxtChanged);
@@ -82,7 +82,7 @@ QWidget * WidgetEditor_type::createCodeEditor()
 
 void WidgetEditor_type::slot_codeTxtChanged()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     // get new node from st editor
     auto new_node = XmlParser::getDataTypeNode
@@ -114,7 +114,7 @@ void WidgetEditor_ld::slot_varAddVariable()
 {
     WidgetEditor::slot_varAddVariable();
 
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     // _m_ld_view->update_interface(item(_vars_table->rootIndex())->node());
 }
@@ -123,7 +123,7 @@ void WidgetEditor_ld::slot_varDelVariable()
 {
     WidgetEditor::slot_varDelVariable();
 
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     // _m_ld_view->update_interface(item(_vars_table->rootIndex())->node());
 }
@@ -134,7 +134,7 @@ void WidgetEditor_ld::slot_varTxtVarChanged()
 
     if(_m_vars_text->isVisible())
     {
-        qDebug() << __PRETTY_FUNCTION__;
+        // qDebug() << __PRETTY_FUNCTION__;
 
         // _m_ld_view->update_interface(item(_vars_table->rootIndex())->node());
     }
@@ -146,7 +146,7 @@ void WidgetEditor_ld::slot_varTblVarChanged()
 
     if(_m_vars_table->isVisible())
     {
-        qDebug() << __PRETTY_FUNCTION__;
+        // qDebug() << __PRETTY_FUNCTION__;
 
         // _m_ld_view->update_interface(item(_vars_table->rootIndex())->node());
     }
@@ -165,7 +165,7 @@ QWidget * WidgetEditor_ld::createCodeEditor()
     // connect(_m_ld_view, &CLdDiagram::instance_removed, this, &WidgetEditor_ld::slot_interfaceVariableDel);
     // connect(_m_ld_view, &CLdDiagram::interface_variable_rename, this, &WidgetEditor_ld::slot_interfaceVariableRename);
     // variables editor code editor
-    _m_body_text = new CodeEditorWidget(this);
+    _m_body_text = new CodeEditorWidget(true, this);
     _m_body_text->setMinimumSize(500, 250);
     _m_body_text->setPlainText(XmlParser::getPouBodyText(DomModel::toItem(_m_index)->node()));
     _m_body_text->hide();
@@ -214,7 +214,7 @@ void WidgetEditor_ld::slot_codeTxtViewToggled(bool)
 
 void WidgetEditor_ld::slot_codeShmChanged(const QDomNode &new_node_)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 
     QDomDocument doc = DomModel::toItem(_m_vars_table->rootIndex())->node().ownerDocument();
     DomModel::toItem(_m_vars_table->rootIndex())->updateNode(doc.importNode(new_node_, true).namedItem("body"));
@@ -222,16 +222,16 @@ void WidgetEditor_ld::slot_codeShmChanged(const QDomNode &new_node_)
 
 void WidgetEditor_ld::slot_interfaceVariableAdd(const QString &type, const QString &name)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void WidgetEditor_ld::slot_interfaceVariableDel(const QString &type, const QString &name)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 
 void WidgetEditor_ld::slot_interfaceVariableRename(const QString &old_name, const QString &new_name)
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
 }
 // ----------------------------------------------------------------------------

@@ -77,7 +77,7 @@ CDiagramWidget::CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_obje
     ui->diagramSplitter->setSizes({33333, 66667});
 
     // igor'
-    MainWindow::instance()->undoGroup()->addStack(undo_stack());
+    MainWindow::addStack(undo_stack());
 }
 
 CDiagramWidget::~CDiagramWidget()

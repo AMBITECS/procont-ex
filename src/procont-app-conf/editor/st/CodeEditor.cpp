@@ -18,9 +18,20 @@
 #include <QFile>
 #include <QStringListModel>
 
+// *** igor'
+#include <QUndoStack>
+#include <QUndoGroup>
+#include <QMenu>
+#include <QApplication>
+
+#include "main/MainWindow.h"
+// ***
+
 //QCompleter * CodeEditor::_completer = nullptr;
 
-CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
+CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent),
+// igor'
+    _m_undo_stack(new QUndoStack(this))
 {
     completer()->setWidget(this);
     QObject::connect(_completer, QOverload<const QString &>::of(&QCompleter::activated),
@@ -41,7 +52,129 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
     setTabStopDistance(40);
 
     this->installEventFilter(this);
+
+// *** igor'
+    MainWindow::addStack(undoStack());
+
+    connect(document(), &QTextDocument::undoCommandAdded, this, &CodeEditor::slot_undo_cmd_added);
+    connect(this, &QPlainTextEdit::undoAvailable, this, &CodeEditor::slot_undo_available);
+    connect(this, &QPlainTextEdit::redoAvailable, this, &CodeEditor::slot_redo_available);
+    connect(this, &QPlainTextEdit::copyAvailable, this, &CodeEditor::slot_copy_available);
+    connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(slot_focusChanged(QWidget *, QWidget *)));
+// ***
 }
+
+// *** igor'
+CodeEditor::~CodeEditor()
+{
+    delete _m_undo_stack;
+}
+
+void CodeEditor::setText(const QString &_text)
+{
+    undoStack()->clear();
+    setPlainText(_text);
+}
+
+QUndoStack * CodeEditor::undoStack() const
+{
+    return _m_undo_stack;
+}
+
+void CodeEditor::mousePressEvent(QMouseEvent *event)
+{
+    setFocus();
+
+    QPlainTextEdit::mousePressEvent(event);
+}
+
+void CodeEditor::slot_focusChanged(QWidget *, QWidget *new_)
+{
+    if(new_ == this)
+        undoStack()->setActive();
+    else
+        clearFocus();
+}
+
+void CodeEditor::slot_undo_cmd_added()
+{
+    undoStack()->push(new CUndoCommand_edit(this));
+}
+
+void CodeEditor::slot_undo_available(bool _available)
+{
+    qDebug() << __PRETTY_FUNCTION__ << _available;
+}
+
+void CodeEditor::slot_redo_available(bool _available)
+{
+    qDebug() << __PRETTY_FUNCTION__ << _available;
+}
+
+void CodeEditor::slot_copy_available(bool _available)
+{
+    _m_text_selected = _available;
+}
+void CodeEditor::contextMenuEvent(QContextMenuEvent *event_)
+{
+    auto _menu = new QMenu(this);
+
+    auto _action = undoStack()->createUndoAction(this);
+    _action->setText(tr("&Undo"));
+    _action->setShortcuts(QKeySequence::Undo);
+    _action->setStatusTip(tr("Undo"));
+    if(isReadOnly()) _action->setEnabled(false);
+    _menu->addAction(_action);
+
+    _action = undoStack()->createRedoAction(this);
+    _action->setText(tr("&Redo"));
+    _action->setShortcuts(QKeySequence::Redo);
+    _action->setStatusTip(tr("Redo"));
+    if(isReadOnly()) _action->setEnabled(false);
+    _menu->addAction(_action);
+
+    _menu->addSeparator();
+
+    _action = _menu->addAction(tr("Cu&t"));
+    _action->setShortcuts(QKeySequence::Cut);
+    connect(_action, &QAction::triggered, this, &QPlainTextEdit::cut);
+    _action->setEnabled(_m_text_selected);
+    if(isReadOnly()) _action->setEnabled(false);
+    _menu->addAction(_action);
+
+    _action = _menu->addAction(tr("&Copy"));
+    _action->setShortcuts(QKeySequence::Copy);
+    connect(_action, &QAction::triggered, this, &QPlainTextEdit::copy);
+    _action->setEnabled(_m_text_selected);
+    if(isReadOnly()) _action->setEnabled(false);
+    _menu->addAction(_action);
+
+    _action = _menu->addAction(tr("&Paste"));
+    _action->setShortcuts(QKeySequence::Paste);
+    connect(_action, &QAction::triggered, this, &QPlainTextEdit::paste);
+    _action->setEnabled(canPaste());
+    if(isReadOnly()) _action->setEnabled(false);
+    _menu->addAction(_action);
+
+    _action = _menu->addAction(tr("Delete"));
+    connect(_action, &QAction::triggered, this, &QPlainTextEdit::cut);
+    _action->setEnabled(_m_text_selected);
+    if(isReadOnly()) _action->setEnabled(false);
+    _menu->addAction(_action);
+
+    _menu->addSeparator();
+
+    _action = _menu->addAction(tr("Select All"));
+    _action->setShortcuts(QKeySequence::SelectAll);
+    connect(_action, &QAction::triggered, this, &QPlainTextEdit::selectAll);
+    _action->setEnabled(toPlainText().length());
+    if(isReadOnly()) _action->setEnabled(false);
+    _menu->addAction(_action);
+
+    _menu->exec(event_->globalPos());
+    delete _menu;
+}
+// ***
 
 int CodeEditor::lineNumberAreaWidth()
 {
@@ -343,6 +476,7 @@ void CodeEditor::focusInEvent(QFocusEvent *event)
 {
     if (_completer)
         _completer->setWidget(this);
+
     QPlainTextEdit::focusInEvent(event);
 }
 

@@ -58,3 +58,4 @@ cmake-build-*/
 __matiec/
 matiec/cmake-build-*/
 /matiec/cmake-build-debug-master/
+/cmake-build-debug/

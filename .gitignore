@@ -55,5 +55,6 @@ compile_commands.json
 /Diff.cmake
 cmake-build-*/
 
+__matiec/
 matiec/cmake-build-*/
 /matiec/cmake-build-debug-master/

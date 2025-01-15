@@ -22,6 +22,8 @@ set( PROJ_UP1_DIR                   ${PROJ_DIR}/..                  ) # PROJ 1-l
 set( PROJ_UP2_DIR                   ${PROJ_DIR}/../..               ) # PROJ 2-level up directory
 
 set( PROJ_IEC2C                     ${PROJ_DIR}/matiec/iec2c        ) # IEC to C compiler
+
+#set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/generated.st     ) # ST source file
 set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/wmt.st     ) # ST source file
 
 #-------------------------------------------------------------------------------

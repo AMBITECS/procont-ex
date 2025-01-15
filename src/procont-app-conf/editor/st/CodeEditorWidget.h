@@ -20,7 +20,6 @@ public:
     QString toPlainText() const;
     void setPlainText(const QString &text);
     void setPousListName(QStringList list);
-
     // igor'
     QUndoStack * undoStack();
 

@@ -41,7 +41,7 @@
 MainWindow * MainWindow::_m_instance = nullptr;
 QString MainWindow::_m_config_filepath = {};
 QString MainWindow::_m_base_directory = {};
-const QString MainWindow::_m_defaultProjectFilename = ":/proj/proj/plc-2.xml";
+const QString MainWindow::_m_defaultProjectFilename = ":/proj/proj/plc-1.xml";
 QUndoGroup* MainWindow::_m_undo_group = new QUndoGroup;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -805,7 +805,7 @@ void MainWindow::slot_delete()
                 (
                     this,
                     tr("Attention"),
-                    QString(tr("Do you really want to delete %1 '%2'")).arg(DomModel::toItem(index)->node().nodeName(), _name)
+                    QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
                 );
             if(QMessageBox::Yes == _result)
                 _m_tree_dev->undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));

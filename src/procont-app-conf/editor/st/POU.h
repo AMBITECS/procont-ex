@@ -407,7 +407,7 @@ struct Pou
                     varType = "VAR";
                 } else if (line.contains("VAR_EXTERNAL"))
                 {
-                    qDebug() << "VAR_EXTERNAL";
+                    // qDebug() << "VAR_EXTERNAL";
                     varType = "VAR_EXTERNAL";
                 } else if (line.contains("VAR_GLOBAL"))
                 {

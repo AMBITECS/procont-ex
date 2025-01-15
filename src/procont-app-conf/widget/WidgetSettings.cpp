@@ -44,6 +44,8 @@ WidgetSettings::WidgetSettings(const QModelIndex & index_) :
     setTabPosition(QTabWidget::West);
 
     tabBar()->setStyle(new CustomTabStyle);
+
+    setStyleSheet("QTabBar::tab { min-width: 50px; }");
 }
 
 WidgetSettings::eDeviceType WidgetSettings::assignType(const QDomNode &node_)

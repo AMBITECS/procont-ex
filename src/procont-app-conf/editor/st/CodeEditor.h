@@ -57,6 +57,7 @@ public:
     QCompleter * completer();
     Highlighter * highliter() const { return syntaxHighlighter; }
 
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
@@ -85,8 +86,6 @@ private:
 private slots:
     void slot_focusChanged(QWidget *old_, QWidget *new_);
     void slot_undo_cmd_added();
-    void slot_undo_available(bool);
-    void slot_redo_available(bool);
     void slot_copy_available(bool _available);
 
 private:

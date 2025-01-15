@@ -18,11 +18,11 @@
 #include <QFile>
 #include <QStringListModel>
 
+//QCompleter * CodeEditor::_completer = nullptr;
 // *** igor'
 #include <QUndoStack>
 #include <QUndoGroup>
 #include <QMenu>
-#include <QApplication>
 
 #include "main/MainWindow.h"
 // ***
@@ -57,8 +57,6 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent),
     MainWindow::addStack(undoStack());
 
     connect(document(), &QTextDocument::undoCommandAdded, this, &CodeEditor::slot_undo_cmd_added);
-    connect(this, &QPlainTextEdit::undoAvailable, this, &CodeEditor::slot_undo_available);
-    connect(this, &QPlainTextEdit::redoAvailable, this, &CodeEditor::slot_redo_available);
     connect(this, &QPlainTextEdit::copyAvailable, this, &CodeEditor::slot_copy_available);
     connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(slot_focusChanged(QWidget *, QWidget *)));
 // ***
@@ -99,16 +97,6 @@ void CodeEditor::slot_focusChanged(QWidget *, QWidget *new_)
 void CodeEditor::slot_undo_cmd_added()
 {
     undoStack()->push(new CUndoCommand_edit(this));
-}
-
-void CodeEditor::slot_undo_available(bool _available)
-{
-    qDebug() << __PRETTY_FUNCTION__ << _available;
-}
-
-void CodeEditor::slot_redo_available(bool _available)
-{
-    qDebug() << __PRETTY_FUNCTION__ << _available;
 }
 
 void CodeEditor::slot_copy_available(bool _available)
@@ -195,7 +183,7 @@ void CodeEditor::setPousListName(QStringList list)
     {
         if (!words_.contains(word))
         {
-            qDebug() << word;
+            // qDebug() << word;
             words_.append(word);
         }
     }

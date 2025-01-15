@@ -68,10 +68,10 @@ AddDeviceDialog::AddDeviceDialog()
     _device_treeView->setModel(_device_treeView_proxy);
     auto _device_treeView_model= new QStandardItemModel;
     _device_treeView_model->setColumnCount(4);
-    _device_treeView_model->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
-    _device_treeView_model->setHeaderData(1, Qt::Horizontal, QObject::tr("Vendor"));
-    _device_treeView_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Version"));
-    _device_treeView_model->setHeaderData(3, Qt::Horizontal, QObject::tr("Description"));
+    _device_treeView_model->setHeaderData(0, Qt::Horizontal, tr("Name"));
+    _device_treeView_model->setHeaderData(1, Qt::Horizontal, tr("Vendor"));
+    _device_treeView_model->setHeaderData(2, Qt::Horizontal, tr("Version"));
+    _device_treeView_model->setHeaderData(3, Qt::Horizontal, tr("Description"));
     setDeviceModelData(_device_treeView_model);
     _device_treeView_proxy->setSourceModel(_device_treeView_model);
     _device_treeView->expandAll();
@@ -108,6 +108,7 @@ AddDeviceDialog::AddDeviceDialog()
     // button
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Add device"));
+    buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 

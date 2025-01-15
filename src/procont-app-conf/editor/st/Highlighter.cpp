@@ -156,7 +156,7 @@ void Highlighter::setNewWords(const QStringList &list)
     {
         if (!words_.contains(word))
         {
-            qDebug() << word;
+            // qDebug() << word;
             words_.append(word);
         }
     }

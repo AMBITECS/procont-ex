@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Ambitecs" productName="Procont" productVersion="1" creationDateTime="2024-10-01T00:00:00"/>
-  <contentHeader name="Project for development tests" modificationDateTime="2024-10-01T00:00:00">
+  <contentHeader name="PROCont example project" modificationDateTime="2024-10-01T00:00:00">
     <coordinateInfo>
       <fbd>
         <scaling x="0" y="0"/>
@@ -1169,7 +1169,7 @@ ST Out
   </types>
   <instances>
     <configurations>
-      <configuration name="config">
+      <configuration name="PROCont SoftPLC v1">
         <resource name="resource1">
           <task name="plc_task" priority="1" interval="T#100ms">
             <pouInstance name="plc_task_instance" typeName="plc_prg"/>
@@ -1185,6 +1185,14 @@ ST Out
             </initialValue>
           </variable>
         </globalVars>
+	<device name="CANbus" type="1">
+	  <device name="CANopen Manager" type="2">
+	    <device name="CANopen remote device" type="4">
+	    </device>
+	  </device>
+	  <device name="CANopen Device" type="3">
+	  </device>
+	</device>
       </configuration>
     </configurations>
   </instances>

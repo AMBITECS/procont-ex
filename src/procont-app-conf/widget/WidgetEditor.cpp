@@ -184,7 +184,14 @@ void WidgetEditor::slot_codeTxtChanged()
 
 bool WidgetEditor::isModified() const
 {
-    return (_m_modified | !_m_vars_text->undoStack()->isClean() | !_m_vars_table->undoStack()->isClean() | !_m_body_text->undoStack()->isClean());
+    return (
+        _m_modified
+        |
+        ((_m_vars_text != nullptr) ? !_m_vars_text->undoStack()->isClean() : 1)
+        |
+        ((_m_vars_table != nullptr) ? !_m_vars_table->undoStack()->isClean() : 1)
+        |
+        ((_m_body_text != nullptr) ? !_m_body_text->undoStack()->isClean() : 1));
 }
 
 void WidgetEditor::update_table_view()

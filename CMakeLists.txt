@@ -33,7 +33,7 @@ find_package(AsioPAL REQUIRED)
 find_package(AsioDNP3 REQUIRED)
 find_package(OpenPAL REQUIRED)
 find_package(OpenDNP3 REQUIRED)
-find_package(modbus REQUIRED)
+#find_package(modbus REQUIRED)
 
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive") # errors to warnings conversion
 

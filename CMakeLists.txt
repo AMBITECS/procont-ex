@@ -25,6 +25,7 @@ set( PROJ_IEC2C                     ${PROJ_DIR}/matiec/iec2c        ) # IEC to C
 
 #set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/generated.st     ) # ST source file
 set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/wmt.st     ) # ST source file
+#set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/plc.st     ) # ST source file
 
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки

@@ -3,6 +3,7 @@
 #include "WidgetEditor.h"
 #include "WidgetEditor_fbd.h"
 #include "WidgetEditor_inherit.h"
+#include "WidgetSettings.h"
 
 #include "model/DomModel.h"
 #include "model/ProxyModel.h"
@@ -121,6 +122,18 @@ void TabWidgetEditor::slot_addTabWidget(const QModelIndex &index)
     case DomItem::typeVar:
     {
         _hWidgets.insert(_index, new WidgetEditor_vars(index, proxyModel(type)));
+    }
+    break;
+    case DomItem::typeDevice:
+    {
+        WidgetSettings_builder _builder;
+
+        auto * _settings = _builder.build(_index);
+
+        if(_settings != nullptr)
+            _hWidgets.insert(_index, _settings);
+        else
+            _hWidgets.insert(_index, new QLabel(QString("Widget for item %1").arg(index.data().toString())));
     }
     break;
     default:

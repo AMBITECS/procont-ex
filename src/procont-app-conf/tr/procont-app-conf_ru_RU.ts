@@ -44,18 +44,28 @@
         <translation>Поддержка списков текстов</translation>
     </message>
     <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="190"/>
-        <location filename="../dialog/AddDUTDialog.cpp" line="202"/>
+        <location filename="../dialog/AddDUTDialog.cpp" line="116"/>
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDUTDialog.cpp" line="117"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDUTDialog.cpp" line="192"/>
+        <location filename="../dialog/AddDUTDialog.cpp" line="204"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="191"/>
+        <location filename="../dialog/AddDUTDialog.cpp" line="193"/>
         <source>Please enter DUT name</source>
         <translation>Введите имя DUT</translation>
     </message>
     <message>
-        <location filename="../dialog/AddDUTDialog.cpp" line="203"/>
+        <location filename="../dialog/AddDUTDialog.cpp" line="205"/>
         <source>The name &apos;%1&apos; is already in use, please enter a different name</source>
         <translation>Имя &apos;%1&apos; уже используется, введите другое</translation>
     </message>
@@ -88,6 +98,75 @@
         <location filename="../dialog/AddDUTDialog.cpp" line="95"/>
         <source>Union</source>
         <translation>Объединение</translation>
+    </message>
+</context>
+<context>
+    <name>AddDeviceDialog</name>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="23"/>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="33"/>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="110"/>
+        <source>Add device</source>
+        <translation>Добавить устройство</translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="29"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Тип</translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="52"/>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="35"/>
+        <source>Insert device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="37"/>
+        <source>Plug device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="39"/>
+        <source>Update device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="61"/>
+        <source>Vendor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="137"/>
+        <source>Need for all fieldbusses which communicate over the CANbus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="150"/>
+        <source>CANopen manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="160"/>
+        <source>CANopen remote device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="170"/>
+        <source>CANopen device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="82"/>
+        <source>Group by category</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -186,18 +265,28 @@
         <translation>Язык реализации</translation>
     </message>
     <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="273"/>
-        <location filename="../dialog/AddPOUDialog.cpp" line="285"/>
+        <location filename="../dialog/AddPOUDialog.cpp" line="160"/>
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddPOUDialog.cpp" line="161"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddPOUDialog.cpp" line="275"/>
+        <location filename="../dialog/AddPOUDialog.cpp" line="287"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="274"/>
+        <location filename="../dialog/AddPOUDialog.cpp" line="276"/>
         <source>Please enter POU name</source>
         <translation>Введите имя POU</translation>
     </message>
     <message>
-        <location filename="../dialog/AddPOUDialog.cpp" line="286"/>
+        <location filename="../dialog/AddPOUDialog.cpp" line="288"/>
         <source>The name &apos;%1&apos; is already in use, please enter a different name</source>
         <translation>Имя &apos;%1&apos; уже используется, введите другое</translation>
     </message>
@@ -607,25 +696,41 @@ Please, enter different variable name</source>
 <context>
     <name>InputDialog</name>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="27"/>
+        <location filename="../dialog/InputDialog.cpp" line="28"/>
         <source>Input Assistant</source>
         <translation>Ассистент ввода</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="142"/>
+        <location filename="../dialog/InputDialog.cpp" line="61"/>
+        <location filename="../dialog/InputDialog.cpp" line="111"/>
+        <source>Documentation</source>
+        <translation type="unfinished">Документация</translation>
+    </message>
+    <message>
+        <location filename="../dialog/InputDialog.cpp" line="145"/>
         <source>Categories</source>
         <translation>Категории</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="143"/>
+        <location filename="../dialog/InputDialog.cpp" line="146"/>
         <source>Find</source>
         <translation>Поиск</translation>
+    </message>
+    <message>
+        <location filename="../dialog/InputDialog.cpp" line="149"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../dialog/InputDialog.cpp" line="150"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../main/MainWindow.cpp" line="163"/>
+        <location filename="../main/MainWindow.cpp" line="164"/>
         <source>Device</source>
         <translation>Устройства</translation>
     </message>
@@ -646,7 +751,7 @@ Please, enter different variable name</source>
         <translation type="vanished">загрузка библиотеки &apos;StandardLibrary&apos; из файла %1/etc/%2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="213"/>
+        <location filename="../main/MainWindow.cpp" line="214"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
@@ -671,44 +776,39 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="202"/>
+        <location filename="../main/MainWindow.cpp" line="203"/>
         <source>ToolBar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="228"/>
+        <location filename="../main/MainWindow.cpp" line="229"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="229"/>
+        <location filename="../main/MainWindow.cpp" line="230"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="230"/>
+        <location filename="../main/MainWindow.cpp" line="231"/>
         <source>Save...</source>
         <translation>Сохранить...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="231"/>
+        <location filename="../main/MainWindow.cpp" line="232"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="233"/>
+        <location filename="../main/MainWindow.cpp" line="234"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="235"/>
+        <location filename="../main/MainWindow.cpp" line="236"/>
         <source>Undo</source>
         <translation>Отменить</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="238"/>
-        <source>Undo action</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="241"/>
@@ -716,62 +816,57 @@ Please, enter different variable name</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="244"/>
-        <source>Redo action</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="253"/>
+        <location filename="../main/MainWindow.cpp" line="252"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="261"/>
+        <location filename="../main/MainWindow.cpp" line="260"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="269"/>
+        <location filename="../main/MainWindow.cpp" line="268"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="277"/>
+        <location filename="../main/MainWindow.cpp" line="276"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="321"/>
+        <location filename="../main/MainWindow.cpp" line="320"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="331"/>
+        <location filename="../main/MainWindow.cpp" line="330"/>
         <source>Properties</source>
         <translation>Свойства</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="353"/>
+        <location filename="../main/MainWindow.cpp" line="352"/>
         <source>Resource</source>
         <translation>Ресурс</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="358"/>
+        <location filename="../main/MainWindow.cpp" line="357"/>
         <source>Task</source>
         <translation>Задача</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="363"/>
+        <location filename="../main/MainWindow.cpp" line="362"/>
         <source>POU instance</source>
         <translation>Экземмпляр программы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="649"/>
+        <location filename="../main/MainWindow.cpp" line="654"/>
         <source>User defined</source>
         <translation>Пользовательские</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="836"/>
+        <location filename="../main/MainWindow.cpp" line="841"/>
         <source>Do you really want rename %1 from &apos;%2&apos; to &apos;%3&apos;</source>
         <translation>Вы действительно хотите переименовать %1 из &apos;%2&apos; в &apos;%3&apos;</translation>
     </message>
@@ -784,16 +879,16 @@ Please, enter different variable name</source>
         <translation type="vanished">Пользовательские типы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="378"/>
-        <location filename="../main/MainWindow.cpp" line="773"/>
-        <location filename="../main/MainWindow.cpp" line="802"/>
-        <location filename="../main/MainWindow.cpp" line="835"/>
+        <location filename="../main/MainWindow.cpp" line="377"/>
+        <location filename="../main/MainWindow.cpp" line="778"/>
+        <location filename="../main/MainWindow.cpp" line="807"/>
+        <location filename="../main/MainWindow.cpp" line="840"/>
         <source>Attention</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="774"/>
-        <location filename="../main/MainWindow.cpp" line="803"/>
+        <location filename="../main/MainWindow.cpp" line="779"/>
+        <location filename="../main/MainWindow.cpp" line="808"/>
         <source>Do you really want to delete %1 &apos;%2&apos;</source>
         <translation>Вы действительно хотите удалить %1 &apos;%2&apos;</translation>
     </message>
@@ -802,27 +897,27 @@ Please, enter different variable name</source>
         <translation type="vanished">Ассистент ввода...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="285"/>
+        <location filename="../main/MainWindow.cpp" line="284"/>
         <source>F2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="285"/>
+        <location filename="../main/MainWindow.cpp" line="284"/>
         <source>Input assistant...</source>
         <translation>Ассистент ввода...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="287"/>
+        <location filename="../main/MainWindow.cpp" line="286"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="295"/>
+        <location filename="../main/MainWindow.cpp" line="294"/>
         <source>Ctrl+Shift+B</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="341"/>
+        <location filename="../main/MainWindow.cpp" line="340"/>
         <source>DUT</source>
         <translation></translation>
     </message>
@@ -831,21 +926,19 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="289"/>
+        <location filename="../main/MainWindow.cpp" line="288"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="290"/>
+        <location filename="../main/MainWindow.cpp" line="289"/>
         <location filename="../main/MainWindow.cpp" line="343"/>
-        <location filename="../main/MainWindow.cpp" line="344"/>
         <location filename="../main/MainWindow.cpp" line="349"/>
-        <location filename="../main/MainWindow.cpp" line="350"/>
-        <location filename="../main/MainWindow.cpp" line="355"/>
-        <location filename="../main/MainWindow.cpp" line="360"/>
-        <location filename="../main/MainWindow.cpp" line="365"/>
-        <location filename="../main/MainWindow.cpp" line="484"/>
-        <location filename="../main/MainWindow.cpp" line="503"/>
+        <location filename="../main/MainWindow.cpp" line="354"/>
+        <location filename="../main/MainWindow.cpp" line="359"/>
+        <location filename="../main/MainWindow.cpp" line="364"/>
+        <location filename="../main/MainWindow.cpp" line="483"/>
+        <location filename="../main/MainWindow.cpp" line="502"/>
         <source>Add object</source>
         <translation>Добавить объект</translation>
     </message>
@@ -858,49 +951,49 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="293"/>
+        <location filename="../main/MainWindow.cpp" line="292"/>
         <source>Compile</source>
         <translation>Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="295"/>
+        <location filename="../main/MainWindow.cpp" line="294"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="177"/>
-        <location filename="../main/MainWindow.cpp" line="347"/>
+        <location filename="../main/MainWindow.cpp" line="178"/>
+        <location filename="../main/MainWindow.cpp" line="346"/>
         <source>POU</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="200"/>
+        <location filename="../main/MainWindow.cpp" line="201"/>
         <source>Components</source>
         <translation>Компоненты</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="368"/>
+        <location filename="../main/MainWindow.cpp" line="367"/>
         <source>Add device...</source>
         <translation>Добавить устройство...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="378"/>
+        <location filename="../main/MainWindow.cpp" line="377"/>
         <source>The project has been changed, do you want to save changes?</source>
         <translation>Проект был изменен, хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="593"/>
-        <location filename="../main/MainWindow.cpp" line="614"/>
+        <location filename="../main/MainWindow.cpp" line="598"/>
+        <location filename="../main/MainWindow.cpp" line="619"/>
         <source>open project %1</source>
         <translation>загрузка проекта %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="626"/>
+        <location filename="../main/MainWindow.cpp" line="631"/>
         <source>can&apos;t open file for read: %1</source>
         <translation>не могу открыть файл для чтения: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="676"/>
+        <location filename="../main/MainWindow.cpp" line="681"/>
         <source>project opened %1</source>
         <translation>проект загружен %1</translation>
     </message>
@@ -917,26 +1010,26 @@ Please, enter different variable name</source>
         <translation type="vanished">проект загружен</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="594"/>
-        <location filename="../main/MainWindow.cpp" line="615"/>
-        <location filename="../main/MainWindow.cpp" line="677"/>
+        <location filename="../main/MainWindow.cpp" line="599"/>
+        <location filename="../main/MainWindow.cpp" line="620"/>
+        <location filename="../main/MainWindow.cpp" line="682"/>
         <source>project file: %1</source>
         <translation>файл проекта: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="601"/>
-        <location filename="../main/MainWindow.cpp" line="625"/>
-        <location filename="../main/MainWindow.cpp" line="638"/>
+        <location filename="../main/MainWindow.cpp" line="606"/>
+        <location filename="../main/MainWindow.cpp" line="630"/>
+        <location filename="../main/MainWindow.cpp" line="643"/>
         <source>can&apos;t open project %1</source>
         <translation>не могу загрузить проект %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="602"/>
+        <location filename="../main/MainWindow.cpp" line="607"/>
         <source>file not found: %1</source>
         <translation>файл не найден: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="639"/>
+        <location filename="../main/MainWindow.cpp" line="644"/>
         <source>file parse error: %1</source>
         <translation>ошибка парсинга файла: %1</translation>
     </message>
@@ -945,13 +1038,13 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="570"/>
+        <location filename="../main/MainWindow.cpp" line="575"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="570"/>
-        <location filename="../main/MainWindow.cpp" line="685"/>
+        <location filename="../main/MainWindow.cpp" line="575"/>
+        <location filename="../main/MainWindow.cpp" line="690"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
@@ -960,7 +1053,7 @@ Please, enter different variable name</source>
         <translation type="vanished">открытие файла %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="685"/>
+        <location filename="../main/MainWindow.cpp" line="690"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -1105,36 +1198,52 @@ Please, enter different variable name</source>
         <translation type="vanished">библиотека &apos;StandardLibrary&apos; загружена, версия %1</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="118"/>
-        <location filename="../dialog/InputDialog.cpp" line="220"/>
-        <location filename="../dialog/InputDialog.cpp" line="257"/>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="71"/>
+        <location filename="../dialog/InputDialog.cpp" line="121"/>
+        <location filename="../dialog/InputDialog.cpp" line="225"/>
+        <location filename="../dialog/InputDialog.cpp" line="262"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="119"/>
-        <location filename="../dialog/InputDialog.cpp" line="221"/>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="72"/>
+        <source>Vendor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="73"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/AddDeviceDialog.cpp" line="74"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/InputDialog.cpp" line="122"/>
+        <location filename="../dialog/InputDialog.cpp" line="226"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="120"/>
-        <location filename="../dialog/InputDialog.cpp" line="222"/>
+        <location filename="../dialog/InputDialog.cpp" line="123"/>
+        <location filename="../dialog/InputDialog.cpp" line="227"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="258"/>
+        <location filename="../dialog/InputDialog.cpp" line="263"/>
         <source>Value type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="259"/>
+        <location filename="../dialog/InputDialog.cpp" line="264"/>
         <source>Variable type</source>
         <translation>Тип переменной</translation>
     </message>
     <message>
-        <location filename="../dialog/InputDialog.cpp" line="260"/>
+        <location filename="../dialog/InputDialog.cpp" line="265"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>
@@ -1251,35 +1360,45 @@ Please, enter different variable name</source>
 <context>
     <name>RenameDialog</name>
     <message>
-        <location filename="../dialog/RenameDialog.cpp" line="14"/>
+        <location filename="../dialog/RenameDialog.cpp" line="15"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../dialog/RenameDialog.cpp" line="24"/>
+        <location filename="../dialog/RenameDialog.cpp" line="25"/>
         <source>Current name</source>
         <translation>Существующее имя</translation>
     </message>
     <message>
-        <location filename="../dialog/RenameDialog.cpp" line="31"/>
+        <location filename="../dialog/RenameDialog.cpp" line="32"/>
         <source>New name</source>
         <translation>Новое имя</translation>
     </message>
     <message>
-        <location filename="../dialog/RenameDialog.cpp" line="55"/>
-        <location filename="../dialog/RenameDialog.cpp" line="67"/>
+        <location filename="../dialog/RenameDialog.cpp" line="37"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../dialog/RenameDialog.cpp" line="38"/>
+        <source>Cancel</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../dialog/RenameDialog.cpp" line="58"/>
+        <location filename="../dialog/RenameDialog.cpp" line="70"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialog/RenameDialog.cpp" line="56"/>
+        <location filename="../dialog/RenameDialog.cpp" line="59"/>
         <source>The current name and the new name are the same
 Enter a new name</source>
         <translation>Существующее имя и новое имя совпадают
 Введите новое имя</translation>
     </message>
     <message>
-        <location filename="../dialog/RenameDialog.cpp" line="68"/>
+        <location filename="../dialog/RenameDialog.cpp" line="71"/>
         <source>The name &apos;%1&apos; is already in use, please enter a different name</source>
         <translation>Имя &apos;%1&apos; уже используется, введите другое</translation>
     </message>
@@ -1302,7 +1421,7 @@ Enter a new name</source>
         <translation type="vanished">Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetEditor.cpp" line="36"/>
+        <location filename="../widget/TabWidgetEditor.cpp" line="37"/>
         <source>Intro</source>
         <translation>Обзор</translation>
     </message>
@@ -1403,6 +1522,288 @@ Enter a new name</source>
     </message>
 </context>
 <context>
+    <name>WidgetSettings_CANbus</name>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="72"/>
+        <source>CANbus - General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="72"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="73"/>
+        <source>CANbus - Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="73"/>
+        <source>Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="74"/>
+        <source>CANbus - CANbus IEC Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="74"/>
+        <source>CANbus IEC Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="75"/>
+        <source>CANbus - Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="75"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="76"/>
+        <source>CANbus - Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="76"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WidgetSettings_CANopen_device</name>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="101"/>
+        <source>CANopen device - General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="101"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="102"/>
+        <source>CANopen device - Object Dictionary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="102"/>
+        <source>Object Dictionary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="103"/>
+        <source>CANopen device - PDOs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="103"/>
+        <source>PDOs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="104"/>
+        <source>CANopen device - Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="104"/>
+        <source>Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="105"/>
+        <source>CANopen device - CANopen I/O Mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="105"/>
+        <source>CANopen I/O Mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="106"/>
+        <source>CANopen device - CANopen IEC Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="106"/>
+        <source>CANopen IEC Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="107"/>
+        <source>CANopen device - Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="107"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="108"/>
+        <source>CANopen device - Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="108"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WidgetSettings_CANopen_manager</name>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="86"/>
+        <source>CANopen manager - General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="86"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="87"/>
+        <source>CANopen manager - Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="87"/>
+        <source>Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="88"/>
+        <source>CANopen manager - CANopen I/O Mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="88"/>
+        <source>CANopen I/O Mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="89"/>
+        <source>CANopen manager - CANopen IEC Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="89"/>
+        <source>CANopen IEC Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="90"/>
+        <source>CANopen manager - Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="90"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="91"/>
+        <source>CANopen manager - Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="91"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WidgetSettings_CANopen_remote_device</name>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="118"/>
+        <source>CANopen remote device - General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="118"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="119"/>
+        <source>CANopen remote device - PDOs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="119"/>
+        <source>PDOs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="120"/>
+        <source>CANopen remote device - SDOs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="120"/>
+        <source>SDOs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="121"/>
+        <source>CANopen remote device - Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="121"/>
+        <source>Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="122"/>
+        <source>CANopen remote device - CANopen I/O Mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="122"/>
+        <source>CANopen I/O Mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="123"/>
+        <source>CANopen remote device - CANopen IEC Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="123"/>
+        <source>CANopen IEC Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="124"/>
+        <source>CANopen remote device - Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="124"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="125"/>
+        <source>CANopen remote device - Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="125"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>tr_str</name>
     <message>
         <location filename="translation.cpp" line="9"/>
@@ -1452,7 +1853,6 @@ Enter a new name</source>
     </message>
     <message>
         <location filename="translation.cpp" line="18"/>
-        <location filename="translation.cpp" line="32"/>
         <source>program</source>
         <translation>программа</translation>
     </message>
@@ -1473,9 +1873,8 @@ Enter a new name</source>
         <translation>Пользовательские</translation>
     </message>
     <message>
-        <location filename="translation.cpp" line="33"/>
         <source>Program</source>
-        <translation type="unfinished">Программа</translation>
+        <translation type="vanished">Программа</translation>
     </message>
     <message>
         <source>User defined#1</source>

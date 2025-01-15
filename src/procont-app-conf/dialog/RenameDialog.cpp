@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QDialogButtonBox>
 #include <QMessageBox>
+#include <QPushButton>
 
 RenameDialog::RenameDialog(const QString &_current_name)
 {
@@ -33,6 +34,8 @@ RenameDialog::RenameDialog(const QString &_current_name)
 
     // standard buttons
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    buttonBox->button(QDialogButtonBox::Ok)->setText(tr("OK"));
+    buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     layout->addWidget(buttonBox);

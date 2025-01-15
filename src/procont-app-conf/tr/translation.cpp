@@ -29,8 +29,8 @@ tr_str::tr_str()
     _m_strings_letter["function#1"] = "Function";
     _m_strings_letter["dataType"] = "data type";
     _m_strings_letter["dataType#1"] = "Data type";
-    _m_strings_letter["program"] = tr("program");
-    _m_strings_letter["program#1"] = tr("Program");
+    _m_strings_letter["program"] = "program";
+    _m_strings_letter["program#1"] = "Program";
 }
 
 QString tr_str::ru(const QString &word_en_, eTranslateLetters letter_)

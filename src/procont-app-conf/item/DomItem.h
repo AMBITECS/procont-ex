@@ -21,7 +21,8 @@ public:
         typePou     = QStandardItem::UserType + 3,
         typeType    = QStandardItem::UserType + 4,
         typeName    = QStandardItem::UserType + 5,
-        typeProject = QStandardItem::UserType + 6
+        typeProject = QStandardItem::UserType + 6,
+        typeDevice  = QStandardItem::UserType + 7
     };
 public:
     DomItem(const QDomNode &node);
@@ -87,6 +88,24 @@ class DomItemName : public DomItem
 {
 public:
     DomItemName(const QDomNode &node) :
+        DomItem(node)
+    {}
+
+    [[nodiscard]] QVariant data(int role) const override
+    {
+        Q_UNUSED(role);
+
+        return node().attributes().namedItem("name").nodeValue();
+    }
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** DomItemDevice
+class DomItemDevice : public DomItem
+{
+public:
+    DomItemDevice(const QDomNode &node) :
         DomItem(node)
     {}
 
@@ -193,6 +212,15 @@ public:
 // ----------------------------------------------------------------------------
 // *** DomItemName_creator
 class DomItemName_creator : public DomItem_creator
+{
+public:
+    [[nodiscard]] virtual DomItem * create(const QDomNode &node);
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** DomItemDevice_creator
+class DomItemDevice_creator : public DomItem_creator
 {
 public:
     [[nodiscard]] virtual DomItem * create(const QDomNode &node);

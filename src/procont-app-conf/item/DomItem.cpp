@@ -23,6 +23,8 @@ DomItem::ItemType DomItem::assignType(const QDomNode &node)
 {
     if(node.nodeName() == "pou")
         return DomItem::typePou;
+    if(node.nodeName() == "device")
+        return DomItem::typeDevice;
     if(node.nodeName() == "project")
         return DomItem::typeProject;
     if(
@@ -470,6 +472,14 @@ DomItem * DomItemName_creator::create(const QDomNode &node)
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** DomItemDevice_creator ***
+DomItem * DomItemDevice_creator::create(const QDomNode &node)
+{
+    return new DomItemDevice(node);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** DomItemType_creator ***
 DomItem * DomItemType_creator::create(const QDomNode &node)
 {
@@ -511,6 +521,7 @@ DomItem_builder::DomItem_builder()
     m_creators.insert(DomItem::typeVar, new DomItemVar_creator);
     m_creators.insert(DomItem::typePou, new DomItemPou_creator);
     m_creators.insert(DomItem::typeName, new DomItemName_creator);
+    m_creators.insert(DomItem::typeDevice, new DomItemDevice_creator);
     m_creators.insert(DomItem::typeProject, new DomItemProject_creator);
 }
 

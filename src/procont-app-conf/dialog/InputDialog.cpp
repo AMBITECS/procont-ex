@@ -18,6 +18,7 @@
 #include <QStringListModel>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <QPushButton>
 
 #include <QFile>
 
@@ -57,6 +58,7 @@ InputDialog::InputDialog(eType type_) :
     tab1_splitter_v->addWidget(tab1_treewidget_vars);
     tab1_splitter_v->setChildrenCollapsible(false);
     vb = new QVBoxLayout;
+    vb->addWidget(new QLabel(tr("Documentation")));
     vb->addWidget(tab1_splitter_v);
     tab1_wgt_b->setLayout(vb);
     tab1->addWidget(tab1_wgt_t);
@@ -106,6 +108,7 @@ InputDialog::InputDialog(eType type_) :
     tab2_splitter_v->addWidget(tab2_treewidget_vars);
     tab2_splitter_v->setChildrenCollapsible(false);
     vb = new QVBoxLayout;
+    vb->addWidget(new QLabel(tr("Documentation")));
     vb->addWidget(tab2_splitter_v);
     tab2_wgt_b->setLayout(vb);
     tab2->addWidget(tab2_wgt_t);
@@ -143,6 +146,8 @@ InputDialog::InputDialog(eType type_) :
     _m_tabs->addTab(tab2, tr("Find"));
     connect(_m_tabs, &QTabWidget::currentChanged, this, &InputDialog::slot_currentTabChanged);
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    buttonBox->button(QDialogButtonBox::Ok)->setText(tr("OK"));
+    buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 

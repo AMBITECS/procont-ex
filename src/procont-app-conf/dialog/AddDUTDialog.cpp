@@ -113,6 +113,8 @@ AddDUTDialog::AddDUTDialog()
     TypeRadio1->setChecked(true);
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Add"));
+    buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 

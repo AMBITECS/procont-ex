@@ -169,6 +169,8 @@ DomItem * DomModel::toItem(const QModelIndex &index, bool source, QAbstractItemM
 {
     auto _index = source ? index : s_index(index, proxy);
 
+    Q_ASSERT(_index.internalPointer());
+
     return reinterpret_cast<DomItem *>(_index.internalPointer());
 }
 

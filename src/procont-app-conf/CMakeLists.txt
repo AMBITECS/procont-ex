@@ -49,6 +49,7 @@ set(PROJECT_SOURCES
     widget/WidgetEditor.h widget/WidgetEditor.cpp
     widget/WidgetEditor_fbd.cpp widget/WidgetEditor_fbd.h
     widget/WidgetEditor_inherit.cpp widget/WidgetEditor_inherit.h
+    widget/WidgetSettings.h widget/WidgetSettings.cpp
 
     log/Logger.h log/Logger.cpp log/Message.h log/Message.cpp
 

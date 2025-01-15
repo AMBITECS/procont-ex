@@ -14,6 +14,7 @@
 #include "dialog/AddPOUDialog.h"
 #include "dialog/AddDUTDialog.h"
 #include "dialog/RenameDialog.h"
+#include "dialog/AddDeviceDialog.h"
 #include "generate/Translator.h"
 #include "generate/Compiler.h"
 #include "editor/fbd/common/general/ctreeobject.h"
@@ -40,7 +41,7 @@
 MainWindow * MainWindow::_m_instance = nullptr;
 QString MainWindow::_m_config_filepath = {};
 QString MainWindow::_m_base_directory = {};
-const QString MainWindow::_m_defaultProjectFilename = ":/proj/proj/plc-1.xml";
+const QString MainWindow::_m_defaultProjectFilename = ":/proj/proj/plc-2.xml";
 QUndoGroup* MainWindow::_m_undo_group = new QUndoGroup;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -235,13 +236,11 @@ void MainWindow::createMenu()
     edit_undo_act->setText(tr("Undo"));
     edit_undo_act->setIcon(QIcon(":/icon/images/undo1.svg"));
     edit_undo_act->setShortcuts(QKeySequence::Undo);
-    edit_undo_act->setStatusTip(tr("Undo action"));
 
     auto edit_redo_act = undoGroup()->createRedoAction(this);
     edit_redo_act->setText(tr("Redo"));
     edit_redo_act->setIcon(QIcon(":/icon/images/redo1.svg"));
     edit_redo_act->setShortcuts(QKeySequence::Redo);
-    edit_redo_act->setStatusTip(tr("Redo action"));
 
     //     editMenu->addAction(QIcon(":/icon/images/undo1.svg"), tr("Undo"), QKeySequence::Undo, this, &MainWindow::slot_undo);
     // edit_undo_act->setEnabled(false);
@@ -340,13 +339,13 @@ void MainWindow::createDynamicActions()
     // add DUT
     act = new QAction(QIcon(":/icon/images/hierarchy-3.svg"), tr("DUT"));
     connect(act, &QAction::triggered, this, &MainWindow::slot_add_DUT);
-    _m_dynamic_actions.insert("project", DynamicAction(act, {_m_tree_pou}, tr("Add object")));
+    // _m_dynamic_actions.insert("project", DynamicAction(act, {_m_tree_pou}, tr("Add object")));
     _m_dynamic_actions.insert("dataTypes", DynamicAction(act, {_m_tree_pou}, tr("Add object")));
 
     // add POU
     act = new QAction(QIcon(":/icon/images/document.svg"), tr("POU"));
     connect(act, &QAction::triggered, this, &MainWindow::slot_add_POU);
-    _m_dynamic_actions.insert("project", DynamicAction(act, {_m_tree_pou}, tr("Add object")));
+    // _m_dynamic_actions.insert("project", DynamicAction(act, {_m_tree_pou}, tr("Add object")));
     _m_dynamic_actions.insert("pous", DynamicAction(act, {_m_tree_pou}, tr("Add object")));
 
     // add resource
@@ -547,7 +546,13 @@ void MainWindow::slot_treeitem_insert(const QModelIndex &index_)
 
 void MainWindow::slot_add_device()
 {
-    qDebug() << __PRETTY_FUNCTION__;
+    // qDebug() << __PRETTY_FUNCTION__;
+
+    AddDeviceDialog dlg;
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        qDebug() << __PRETTY_FUNCTION__ << "add device";
+    }
 }
 
 void MainWindow::slot_add_resource()
@@ -800,7 +805,7 @@ void MainWindow::slot_delete()
                 (
                     this,
                     tr("Attention"),
-                    QString(tr("Do you really want to delete %1 '%2'")).arg(_type, _name)
+                    QString(tr("Do you really want to delete %1 '%2'")).arg(DomModel::toItem(index)->node().nodeName(), _name)
                 );
             if(QMessageBox::Yes == _result)
                 _m_tree_dev->undoStack()->push(new CUndoCommand_remove_tree(_m_model_project, DomModel::s_index(index)));

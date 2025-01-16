@@ -1,28 +1,110 @@
 TYPE
-  P_INT : STRUCT
-    A : INT := -1;
-    B : INT := -1;
-  END_STRUCT;
-  P_UINT : STRUCT
-    A : UINT := 0;
-    B : UINT := 0;
+  TVar : DINT;
+  TGrid : STRUCT
+    A : ARRAY [0..6271] OF TVar;
   END_STRUCT;
   P_SINT : STRUCT
     A : SINT;
     B : SINT;
   END_STRUCT;
+  TProf : ARRAY [0..11] OF P_SINT;
+  THandle : ULINT;
+  TMatter : STRUCT
+    a : REAL := 0.0001;
+    l : REAL := 1.0;
+    h : REAL := 0.001;
+    k : REAL := 1.0;
+  END_STRUCT;
+  P_INT : STRUCT
+    A : INT := -1;
+    B : INT := -1;
+  END_STRUCT;
   TPos8 : SINT := -1;
-  P_IDPIT : STRUCT
-    A : UINT := 0;
-    B : TPos8 := -1;
+  TItem : STRUCT
+    ID : UINT := 0;
+    Im : SINT := -1;
+    Iv : SINT := -1;
+    PDT : ARRAY [0..2] OF DT := [t#0ms, t#0ms, t#0ms];
+    Par : TPos8 := -1;
+    Num : SINT := 0;
+    Kids : ARRAY [0..15] OF TPos8 := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  END_STRUCT;
+  TDir : (DIR_UP, DIR_DOWN);
+  TIter : STRUCT
+    dir : TDir := DIR_UP;
+    prev : TPos8 := -1;
+    item : TPos8 := -1;
+    next : TPos8 := -1;
+    last : TPos8 := -1;
+    stack : ARRAY [0..3] OF TPos8 := [0, 0, 0, 0];
+  END_STRUCT;
+  P_RESI : STRUCT
+    A : REAL := 0.0;
+    B : SINT := 0;
+  END_STRUCT;
+  TPos16 : INT := -1;
+  TProps : STRUCT
+    Air : BOOL := false;
+    Oil : BOOL := false;
+    Fluid : BOOL := false;
+    Solid : BOOL := false;
   END_STRUCT;
   P_SIBT : STRUCT
     A : SINT := 0;
     B : BYTE := 0;
   END_STRUCT;
-  P_BOOL : STRUCT
-    A : BOOL := false;
-    B : BOOL := false;
+  TAxO : STRUCT
+    x : USINT := 0;
+    y : USINT := 0;
+    z : USINT := 0;
+  END_STRUCT;
+  LOGLEVEL : (CRITICAL, WARNING, INFO, DEBUG) := DEBUG;
+  TKnot : ARRAY [0..2] OF INT := [0, 0, 0];
+  TPoint : ARRAY [0..2] OF REAL;
+  TShape : STRUCT
+    wF : WORD := 0;
+    Kn : TKnot := [0, 0, 0];
+    p0 : TPoint := [0.0, 0.0, 0.0];
+    pL : TPoint := [0.0, 0.0, 0.0];
+    Lx : TPoint := [0.0, 0.0, 0.0];
+  END_STRUCT;
+  P_UINT : STRUCT
+    A : UINT := 0;
+    B : UINT := 0;
+  END_STRUCT;
+  P_IDPIT : STRUCT
+    A : UINT := 0;
+    B : TPos8 := -1;
+  END_STRUCT;
+  TDot : STRUCT
+    V : INT := 0;
+    A : TKnot := [0, 0, 0];
+  END_STRUCT;
+  TCond : STRUCT
+    ID : UINT := 0;
+    Tmid : INT := 0;
+    Tmin : TDot;
+    Tmax : TDot;
+  END_STRUCT;
+  TGrid2 : STRUCT
+    A : ARRAY [0..12543] OF TVar;
+  END_STRUCT;
+  TItems : STRUCT
+    Pr : ARRAY [0..99] OF P_IDPIT := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    It : ARRAY [0..99] OF TItem := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Sh : ARRAY [0..100] OF TShape := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Cn : ARRAY [0..100] OF TCond := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Gr : ARRAY [0..99] OF TGrid := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Gr2 : ARRAY [0..1] OF TGrid2 := [0, 0];
+  END_STRUCT;
+  TError : (E_SUCCESS, E_ID, E_HEAD, E_INDEX, E_ITEMPOS, E_ITEM, E_GRID, E_AXIS, E_PRIO, E_MATER, E_PROFILE, E_VALUE, E_STACKSIZE, E_ROOT, E_ITEMSIZE, E_STEPSIZE, E_TIMESIZE, E_NOTREADY, E_STRUCT, E_VALIDATE, E_LOC2ABS, E_ABS2LOC, E_GETTEMP, E_SETTEMP, E_CHECKVALID, E_LINKITEMS, E_PROCESS, E_PREPROC, E_POSTPROC, E_BADTEMP, E_STATE, E_CHECK, E_FAIL, W_PERIOD) := E_SUCCESS;
+  TVarI : STRUCT
+    DTI : UDINT := 0;
+    TMI : TIME := T#0s;
+    TOV : REAL := 0.0;
+    MHT : REAL := 0.0;
+    RI1 : REAL := 0.0;
+    RI2 : REAL := 0.0;
   END_STRUCT;
   TDef : STRUCT
     ID : UINT := 0;
@@ -34,11 +116,50 @@ TYPE
     Im : SINT := 0;
     Iv : SINT := 0;
   END_STRUCT;
+  TVarO : STRUCT
+    DTO : UDINT := 0;
+    TMO : TIME := T#0s;
+    QTY : REAL := 0.0;
+    QTS : REAL := 0.0;
+    RO1 : REAL := 0.0;
+    RO2 : REAL := 0.0;
+  END_STRUCT;
+  P_RERE : STRUCT
+    A : REAL := 0.0;
+    B : REAL := 0.0;
+  END_STRUCT;
   TMat : STRUCT
     KT : REAL := 0.11;
     CP : REAL := 1666.0;
     PL : REAL := 880.3;
     MD : REAL := 198.1;
+  END_STRUCT;
+  TVal : STRUCT
+    Iv : INT := 0;
+    Vi : ARRAY [0..2] OF P_SINT := [0, 0, 0];
+  END_STRUCT;
+  TSets : STRUCT
+    Mt : ARRAY [0..11] OF TMat := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Vl : ARRAY [0..24] OF TVal := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Pr : ARRAY [0..29] OF TProf := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Bf : ARRAY [0..31] OF REAL := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  END_STRUCT;
+  TPhaseO : STRUCT
+    Q0 : REAL := 0.0;
+    Q1 : REAL := 0.0;
+    Q2 : REAL := 0.0;
+    Tin : REAL := 20.0;
+    Tout : REAL := 80.0;
+    Qm : REAL := 0.01;
+    Se : REAL := 0.01;
+    Ve : REAL := 0.01;
+  END_STRUCT;
+  TPhaseI : STRUCT
+    Ic : REAL := 100.0;
+    Tin : REAL := 40.0;
+    Tout : REAL := 80.0;
+    Rn : DWORD := 16#FFFF;
+    RD : ARRAY [0..7] OF P_SINT := [0, 0, 0, 0, 0, 0, 0, 0];
   END_STRUCT;
   TRad : STRUCT
     Vm : REAL := 0.02;
@@ -46,6 +167,30 @@ TYPE
     Q0 : REAL := 0.003;
     Q1 : REAL := 0.01;
     BL : ARRAY [0..3] OF REAL := [0.2, 0.6, 0.85, 1.0];
+  END_STRUCT;
+  TConf : STRUCT
+    Nm : UINT := 0;
+    Nr : UINT := 0;
+    Tc : TIME := T#10s;
+  END_STRUCT;
+  TStat : STRUCT
+    RDY : BOOL := FALSE;
+    DBG : BOOL := TRUE;
+    ERR : TError := E_SUCCESS;
+    PAR : UINT := 0;
+    STR : STRING := '';
+  END_STRUCT;
+  P_BOOL : STRUCT
+    A : BOOL := false;
+    B : BOOL := false;
+  END_STRUCT;
+  TRes : STRUCT
+    DR : UDINT := 0;
+    TR : TIME := T#0s;
+    FP : TIME := T#0s;
+    ER : UINT := 0;
+    FL : WORD := 0;
+    RV : ARRAY [0..5] OF UDINT := [0, 0, 0, 0, 0, 0];
   END_STRUCT;
   THead : STRUCT
     Ni : SINT := 0;
@@ -62,213 +207,14 @@ TYPE
     pZ : INT := 0;
     RV : ARRAY [0..1] OF DINT := [0, 0];
   END_STRUCT;
-  TRes : STRUCT
-    DR : UDINT := 0;
-    TR : TIME := T#0s;
-    FP : TIME := T#0s;
-    ER : UINT := 0;
-    FL : WORD := 0;
-    RV : ARRAY [0..5] OF UDINT := [0, 0, 0, 0, 0, 0];
-  END_STRUCT;
-  TVal : STRUCT
-    Iv : INT := 0;
-    Vi : ARRAY [0..2] OF P_SINT := [0, 0, 0];
-  END_STRUCT;
-  TProf : ARRAY [0..11] OF P_SINT;
-  TConf : STRUCT
-    Nm : UINT := 0;
-    Nr : UINT := 0;
-    Tc : TIME := T#10s;
-  END_STRUCT;
-  TPhaseI : STRUCT
-    Ic : REAL := 100.0;
-    Tin : REAL := 40.0;
-    Tout : REAL := 80.0;
-    Rn : DWORD := 16#FFFF;
-    RD : ARRAY [0..7] OF P_SINT := [0, 0, 0, 0, 0, 0, 0, 0];
-  END_STRUCT;
-  TPhaseO : STRUCT
-    Q0 : REAL := 0.0;
-    Q1 : REAL := 0.0;
-    Q2 : REAL := 0.0;
-    Tin : REAL := 20.0;
-    Tout : REAL := 80.0;
-    Qm : REAL := 0.01;
-    Se : REAL := 0.01;
-    Ve : REAL := 0.01;
-  END_STRUCT;
-  TKnot : ARRAY [0..2] OF INT := [0, 0, 0];
-  TDot : STRUCT
-    V : INT := 0;
-    A : TKnot := [0, 0, 0];
-  END_STRUCT;
-  TCond : STRUCT
-    ID : UINT := 0;
-    Tmid : INT := 0;
-    Tmin : TDot;
-    Tmax : TDot;
-  END_STRUCT;
-  TVarI : STRUCT
-    DTI : UDINT := 0;
-    TMI : TIME := T#0s;
-    TOV : REAL := 0.0;
-    MHT : REAL := 0.0;
-    RI1 : REAL := 0.0;
-    RI2 : REAL := 0.0;
-  END_STRUCT;
-  TVarO : STRUCT
-    DTO : UDINT := 0;
-    TMO : TIME := T#0s;
-    QTY : REAL := 0.0;
-    QTS : REAL := 0.0;
-    RO1 : REAL := 0.0;
-    RO2 : REAL := 0.0;
-  END_STRUCT;
-  TError : (E_SUCCESS, E_ID, E_HEAD, E_INDEX, E_ITEMPOS, E_ITEM, E_GRID, E_AXIS, E_PRIO, E_MATER, E_PROFILE, E_VALUE, E_STACKSIZE, E_ROOT, E_ITEMSIZE, E_STEPSIZE, E_TIMESIZE, E_NOTREADY, E_STRUCT, E_VALIDATE, E_LOC2ABS, E_ABS2LOC, E_GETTEMP, E_SETTEMP, E_CHECKVALID, E_LINKITEMS, E_PROCESS, E_PREPROC, E_POSTPROC, E_BADTEMP, E_STATE, E_CHECK, E_FAIL, W_PERIOD) := E_SUCCESS;
-  TDir : (DIR_UP, DIR_DOWN);
-  TIter : STRUCT
-    dir : TDir := DIR_UP;
-    prev : TPos8 := -1;
-    item : TPos8 := -1;
-    next : TPos8 := -1;
-    last : TPos8 := -1;
-    stack : ARRAY [0..3] OF TPos8 := [0, 0, 0, 0];
-  END_STRUCT;
-  TPoint : ARRAY [0..2] OF REAL;
-  TAxO : STRUCT
-    x : USINT := 0;
-    y : USINT := 0;
-    z : USINT := 0;
-  END_STRUCT;
-  P_RESI : STRUCT
-    A : REAL := 0.0;
-    B : SINT := 0;
-  END_STRUCT;
-  P_RERE : STRUCT
-    A : REAL := 0.0;
-    B : REAL := 0.0;
-  END_STRUCT;
-  TMatter : STRUCT
-    a : REAL := 0.0001;
-    l : REAL := 1.0;
-    h : REAL := 0.001;
-    k : REAL := 1.0;
-  END_STRUCT;
-  TProps : STRUCT
-    Air : BOOL := false;
-    Oil : BOOL := false;
-    Fluid : BOOL := false;
-    Solid : BOOL := false;
-  END_STRUCT;
-  LOGLEVEL : (CRITICAL, WARNING, INFO, DEBUG) := DEBUG;
-  TStat : STRUCT
-    RDY : BOOL := FALSE;
-    DBG : BOOL := TRUE;
-    ERR : TError := E_SUCCESS;
-    PAR : UINT := 0;
-    STR : STRING := '';
-  END_STRUCT;
-  TVar : DINT;
-  TGrid : STRUCT
-    A : ARRAY [0..6271] OF TVar;
-  END_STRUCT;
-  TShape : STRUCT
-    wF : WORD := 0;
-    Kn : TKnot := [0, 0, 0];
-    p0 : TPoint := [0.0, 0.0, 0.0];
-    pL : TPoint := [0.0, 0.0, 0.0];
-    Lx : TPoint := [0.0, 0.0, 0.0];
-  END_STRUCT;
-  TItem : STRUCT
-    ID : UINT := 0;
-    Im : SINT := -1;
-    Iv : SINT := -1;
-    PDT : ARRAY [0..2] OF DT := [t#0ms, t#0ms, t#0ms];
-    Par : TPos8 := -1;
-    Num : SINT := 0;
-    Kids : ARRAY [0..15] OF TPos8 := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  END_STRUCT;
-  TPos16 : INT := -1;
-  TGrid2 : STRUCT
-    A : ARRAY [0..12543] OF TVar;
-  END_STRUCT;
-  TItems : STRUCT
-    Pr : ARRAY [0..99] OF P_IDPIT := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    It : ARRAY [0..99] OF TItem := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Sh : ARRAY [0..100] OF TShape := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Cn : ARRAY [0..100] OF TCond := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Gr : ARRAY [0..99] OF TGrid := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Gr2 : ARRAY [0..1] OF TGrid2 := [0, 0];
-  END_STRUCT;
-  TSets : STRUCT
-    Mt : ARRAY [0..11] OF TMat := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Vl : ARRAY [0..24] OF TVal := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Pr : ARRAY [0..29] OF TProf := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Bf : ARRAY [0..31] OF REAL := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  END_STRUCT;
-  THandle : ULINT;
 END_TYPE
 
-FUNCTION its_gr2 : THandle
+FUNCTION is_parent : BOOL
   VAR_INPUT
-    Off : TPos8 := 0;
+    PIT : TPos8 := -1;
   END_VAR
 
-  {{ ITS_GR2 = (THANDLE)&__GET_GLOBAL_ITS()->GR2.table[OFF]; }}
-END_FUNCTION
-
-FUNCTION its_gr : THandle
-  VAR_INPUT
-    Off : TPos8 := 0;
-  END_VAR
-
-  {{ ITS_GR = (THANDLE)&__GET_GLOBAL_ITS()->GR.table[OFF]; }}
-END_FUNCTION
-
-FUNCTION knoff : P_INT
-  VAR_INPUT
-    Nx : INT := 1;
-    Ny : INT := 1;
-    Nz : INT := 1;
-    I : INT := 0;
-    J : INT := 0;
-    K : INT := 0;
-  END_VAR
-
-  knoff.A := 0;  (* начальное смещение 0-ячейки в массиве Grid *)
-  knoff.B := 1;  (* количество ячеек  в массиве Grid (min = 1) *)
-  if (K > 0) then
-    knoff.A := knoff.A + K*2*(Nx+Ny) + (K+1)*Nx*Ny;
-    if (K = (Nz-1)) then knoff.B := knoff.B+1; end_if;
-  else knoff.B := knoff.B+1;
-  end_if;
-  if (J > 0) then
-    knoff.A := knoff.A + J*(2+knoff.B*Nx) + Nx;
-    if (J = (Ny-1)) then knoff.B := knoff.B+1; end_if;
-  else knoff.B := knoff.B+1;
-  end_if;
-  if (I > 0) then
-    knoff.A := knoff.A + I*knoff.B + 1;
-    if (I = (Nx-1)) then knoff.B := knoff.B+1; end_if;
-  else knoff.B := knoff.B+1;
-  end_if;
-
-END_FUNCTION
-
-FUNCTION halt : BOOL
-  VAR_INPUT
-    ERR : TError := E_FAIL;
-  END_VAR
-
-  (* Использует вызов sleep() и exit() для завершения потоков *)
-  {{
-    //#ifndef __ASSERT_H
-    //#define __ASSERT_H 1
-       //#include <unistd.h> // Include "unistd.h" for sleep() & exit() function
-    //#endif // __ASSERT_H
-    //sleep(3); // Wait for message logging..
-    //exit(ERR);
-  }}
+  {{ return (IS_PARENT = (__GET_GLOBAL_ITS()->IT.table[PIT].NUM > 0)); }}
 END_FUNCTION
 
 FUNCTION Err2Lev : LOGLEVEL
@@ -285,6 +231,78 @@ FUNCTION Err2Lev : LOGLEVEL
     Err2Lev:=CRITICAL;  
   END_CASE;
   RETURN;
+END_FUNCTION
+
+FUNCTION st_check : BOOL
+  VAR_INPUT
+    Force : BOOL := FALSE;
+  END_VAR
+
+  {{ 
+    return (
+      ST_CHECK = ( 
+        FORCE || (ERR2LEV(1,NULL,__GET_GLOBAL_STAT()->ERR) != LOGLEVEL__CRITICAL) 
+      )
+    ); 
+  }}
+END_FUNCTION
+
+FUNCTION m_var_out : TVarO
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+  END_VAR
+
+  m_var_out.DTO := MD0;  (* секунд от 01-01-1970 *)
+  m_var_out.TMO := UDINT_TO_TIME(MD1);
+  m_var_out.QTY := UDINT_TO_REAL(MD2);
+  m_var_out.QTS := UDINT_TO_REAL(MD3);
+  m_var_out.RO1 := UDINT_TO_REAL(MD4);
+  m_var_out.RO2 := UDINT_TO_REAL(MD5);
+END_FUNCTION
+
+FUNCTION m_rad : TRad
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+    MD6 : UDINT;
+    MD7 : UDINT;
+  END_VAR
+
+  m_rad.Vm := UDINT_TO_REAL(MD0);
+  m_rad.Fk := UDINT_TO_REAL(MD1);
+  m_rad.Q0 := UDINT_TO_REAL(MD2);
+  m_rad.Q1 := UDINT_TO_REAL(MD3);
+  m_rad.BL[0] := UDINT_TO_REAL(MD4);
+  m_rad.BL[1] := UDINT_TO_REAL(MD5);
+  m_rad.BL[2] := UDINT_TO_REAL(MD6);
+  m_rad.BL[3] := UDINT_TO_REAL(MD7);
+END_FUNCTION
+
+FUNCTION it_lev : SINT
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    IID : UINT := 16#ffff;
+  END_VAR
+
+  {{
+    IID = __GET_GLOBAL_ITS()->IT.table[PIT].ID;
+    if (IID==0 || IID==0xffff) return (IT_LEV=-1);
+    IT_LEV = 3;
+    if (IID & 0x000F) return(IT_LEV); IT_LEV--;
+    if (IID & 0x00F0) return(IT_LEV); IT_LEV--;
+    if (IID & 0x0F00) return(IT_LEV); IT_LEV--;
+  }}
 END_FUNCTION
 
 FUNCTION Err2Str : STRING
@@ -357,6 +375,22 @@ FUNCTION LogMsg : STRING
   }}
 END_FUNCTION
 
+FUNCTION halt : BOOL
+  VAR_INPUT
+    ERR : TError := E_FAIL;
+  END_VAR
+
+  (* Использует вызов sleep() и exit() для завершения потоков *)
+  {{
+    //#ifndef __ASSERT_H
+    //#define __ASSERT_H 1
+       //#include <unistd.h> // Include "unistd.h" for sleep() & exit() function
+    //#endif // __ASSERT_H
+    //sleep(3); // Wait for message logging..
+    //exit(ERR);
+  }}
+END_FUNCTION
+
 FUNCTION MakeMsg : STRING
   VAR_INPUT
     S0 : STRING := '';
@@ -405,531 +439,18 @@ FUNCTION assert : BOOL
   }}
 END_FUNCTION
 
-FUNCTION set_var : TPos8
+FUNCTION it_pos : TPos8
   VAR_INPUT
-    HGR : THandle := 0;
-    PGR : TPos8 := -1;
-    OFF : P_INT;
-    TV : TVar := -1;
-    IX : USINT := 0;
+    PIT : TPos8 := -1;
+    bForce : BOOL := false;
   END_VAR
 
-  {{
-    #pragma pack(push, 4)
-    typedef union {
-      TVAR tv;
-      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
-      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
-    } var_t, *pvar_t;
-    #pragma pack(pop)
-    
-    // Получаем массив сеток по дескриптору  
-    TGRID *Grids = (TGRID *)(HGR);
-    
-    if (IX == 0xFF) { // Направление не задано  - заполнение ячеек узла шаблоном TV
-    
-      for (short int k=0; k < OFF.B; k++) {
-        Grids[PGR].A.table[OFF.A+k] = TV;
-      }    
-      
-    } else {          //  Направление задано =>
-      if (IX == 0) {    // Главная ячейка (IX == 0)
-        Grids[PGR].A.table[OFF.A] = TV;
-        /*
-        pvar_t pDest = (var_t *) &Grids[PGR].A.table[OFF.A];
-        pvar_t pvar  = (var_t *) &TV;
-        if (pvar->r) *pDest = *pvar;
-        else {
-          // if (pvar->A != -16384) 
-            pDest->A = pvar->A;
-            
-          // if (pvar->B != -16384) 
-            pDest->B = pvar->B;
-            
-          pDest->C = pvar->C;
-        }
-        */
-      } else {          // Смежная ячейка (IX > 0)
-      
-        // В смежных ячейках могут быть только ссылки или воздух (-1)
-        // ASSERT(1,NULL,((pvar_t)&TV)->r,TERROR__E_FAIL, 
-          //__STRING_LITERAL(29,"it_var_set: Reference wanted!"));
-        
-        pvar_t pDest = NULL;
-        for (short int k=1; k < OFF.B; k++) {
-          pvar_t pvar = (var_t *) &Grids[PGR].A.table[OFF.A+k];
-          if ((pDest==NULL && pvar->d==0) || pvar->d == IX) {
-            pDest = pvar;
-            if (pDest->d == IX) break;
-          }
-        }
-        
-        // Ячейка должна найтись!!!
-        //ASSERT(1,NULL,pDest!=NULL,TERROR__E_FAIL,
-          //_STRING_LITERAL(26, "it_var_set: Cell not found!"));
-          
-        //if (pDest!=NULL) {
-          pDest->tv = TV; 
-          pDest->d  = IX;  // Значение IX перезаписывается
-        //}
-      }
+  {{ 
+    if (BFORCE) {
+      ASSERT(1, NULL, 
+       (PIT >= 0) && (PIT < __GET_GLOBAL_HDR()->NI), TERROR__E_ITEMPOS, __INIT_STRING);
     }
-    SET_VAR = PGR;
-  }}
-END_FUNCTION
-
-FUNCTION get_sh : TShape
-  VAR_INPUT
-    PSH : TPos8 := -1;
-  END_VAR
-
-  {{ return (GET_SH = __GET_GLOBAL_ITS()->SH.table[PSH]); }}
-END_FUNCTION
-
-FUNCTION _knot : TKnot
-  VAR_INPUT
-    I : INT := 0;
-    J : INT := 0;
-    K : INT := 0;
-  END_VAR
-
-  _knot[0] := I; 
-  _knot[1] := J; 
-  _knot[2] := K; 
-END_FUNCTION
-
-FUNCTION _dot : TDot
-  VAR_INPUT
-    V : INT := 0;
-    i : INT := 0;
-    j : INT := 0;
-    k : INT := 0;
-  END_VAR
-
-  _dot.V := V; 
-  _dot.A := _knot(i,j,k); 
-END_FUNCTION
-
-FUNCTION is_poly : BOOL
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-
-  {{ 
-    return (IS_POLY = (__GET_GLOBAL_ITS()->IT.table[PIT].NUM > 0)); 
-  }}
-END_FUNCTION
-
-FUNCTION sh_get_ax : USINT
-  VAR_INPUT
-    SH : TShape;
-  END_VAR
-
-  sh_get_ax := WORD_TO_USINT(SHR((Sh.wF AND 16#3000), 12));
-END_FUNCTION
-
-FUNCTION _point : TPoint
-  VAR_INPUT
-    X : REAL := 0.0;
-    Y : REAL := 0.0;
-    Z : REAL := 0.0;
-  END_VAR
-
-  {{ 
-    _POINT.table[0] = X; 
-    _POINT.table[1] = Y; 
-    _POINT.table[2] = Z; 
-  }}
-END_FUNCTION
-
-FUNCTION AxO : TAxO
-  VAR_INPUT
-    Ax : USINT := 0;
-    inside : BOOL := TRUE;
-  END_VAR
-
-  (*  Порядок координат при различной ориентации оси *)
-  if (inside) then
-    (* Взгляд изнутри: какой индекс в локальных координатах элемента
-      X(R),Y(F),Z имеет абсолютная координата (Ox,Oy,Oz)
-      при заданной ориентации оси симметрии Ax?
-    (* Индексы координат, ставших X,Y,Z:  Ax  | 1 | 2 | 3 | *)
-    (* O.x-индекс радиуса,O.y-угол,O.z-высота ------------- *)
-    AxO.x := (0+Ax) mod 3; (* Ind_of_X  (O.x) | 1 | 2 | 0 | *)
-    AxO.y := (1+Ax) mod 3; (* Ind_of_Y  (O.y) | 2 | 0 | 1 | *)  
-    AxO.z := (2+Ax) mod 3; (* Ind_of_Z  (O.z) | 0 | 1 | 2 | *)
-  else  (* Обратное преобразование -> *)
-    (* Взгляд снаружи: какую роль абсолютная координата (Ox,Oy,Oz)
-       играет для вложенного во внешнюю систему элемента?   *)
-    (* Порядок "перебора" координат:  Ax=Ix+1 | 1 | 2 | 3 | *)
-    (* где 0-внешний цикл, 2-самый вложенный  ------------- *)
-    AxO.x := (3-Ax) mod 3; (* Ind_of_X  (O.x) | 2 | 1 | 0 | *)
-    AxO.y := (4-Ax) mod 3; (* Ind_of_Y  (O.y) | 0 | 2 | 1 | *)  
-    AxO.z := (5-Ax) mod 3; (* Ind_of_Z  (O.z) | 1 | 0 | 2 | *)
-  end_if;
-END_FUNCTION
-
-FUNCTION grad : REAL
-  VAR_INPUT
-    RAD : REAL := 0.0;
-  END_VAR
-
-  grad:=RAD*57.295779513082320876798154814105;
-END_FUNCTION
-
-FUNCTION Sh_Abs2Loc : TPoint
-  VAR_INPUT
-    Sh : TShape;
-    X : REAL := 0.0;
-    Y : REAL := 0.0;
-    Z : REAL := 0.0;
-  END_VAR
-  VAR
-    Ax : USINT := 0;
-    A : TPoint := [0.0, 0.0, 0.0];
-    B : TPoint := [0.0, 0.0, 0.0];
-    O : TAxO;
-    PI : REAL := 3.1415926535897932384626433832795;
-    PI_2 : REAL := 1.5707963267948966192313216916398;
-  END_VAR
-  VAR CONSTANT
-    RAD : BOOL := FALSE;
-    DX : REAL := 1.0E-5;
-  END_VAR
-
-  (* Sh := get_sh(PIT); *)
-  Ax := sh_get_ax(Sh);
-
-  A := _point(X-Sh.P0[0],Y-Sh.P0[1],Z-Sh.P0[2]); 
-  if (Ax > 0) then 
-    (* Декарт -> Цилиндр *)
-    O := AxO(Ax);
-    B[O.x] := sqrt(A[O.x]*A[O.x] + A[O.y]*A[O.y]);
-    if (abs(A[O.x]) < DX) then A[O.x] := 0.0; end_if;
-    if (abs(A[O.y]) < DX) then A[O.y] := 0.0; end_if;
-    (* интерпретация atan2(y,x) *)
-    if (A[O.x] < 0.0) then 
-      if (A[O.y] < 0.0) then  B[O.y] := atan(A[O.y]/A[O.x])-PI; 
-      else                    B[O.y] := atan(A[O.y]/A[O.x])+PI; 
-      end_if;
-    else 
-      if (A[O.x] > 0.0) then
-        B[O.y] := atan(A[O.y]/A[O.x]);
-      else (* A[O.x] = 0.0 *)
-        if (A[O.y] < 0.0) then 
-          B[O.y] := -PI_2;  
-        else 
-          if (A[O.y] > 0.0) then
-            B[O.y] := PI_2;   
-          else (* y = 0.0 *)
-            B[O.y] := 0.0; 
-          end_if;
-        end_if;
-      end_if;
-    end_if;
-    if (abs(B[O.y]) < DX) then B[O.y] := 0.0; end_if;
-    if (not RAD) then B[O.y] := grad(B[O.y]); end_if;
-    B[O.z] := A[O.z];
-  else 
-    B := A;
-  end_if;
-  Sh_Abs2Loc := B; 
-END_FUNCTION
-
-FUNCTION radi : REAL
-  VAR_INPUT
-    GRA : REAL := 0.0;
-  END_VAR
-
-  radi:=GRA*0.01745329251994329576923690768489;
-END_FUNCTION
-
-FUNCTION angle : REAL
-  VAR_INPUT
-    A : REAL := 0.0;
-    L0 : REAL := 0.0;
-    PI2 : REAL := 360.0;
-  END_VAR
-
-  (* Приведение аргумента к диапазону [L0..L0+2*PI] *)
-  while (A < L0    ) do A := A+PI2; end_while;
-  while (A > L0+PI2) do A := A-PI2; end_while;
-  angle := A;
-END_FUNCTION
-
-FUNCTION Reform : TPoint
-  VAR_INPUT
-    wF : WORD := 0;
-    Ang : REAL := 0.0;
-    Pt : REAL := 0.0;
-    pL : REAL := 0.0;
-    Lx : REAL := 0.0;
-  END_VAR
-  VAR
-    pR : REAL := 0.0;
-    LR : P_BOOL;
-    Q : SINT := 0;
-    K : REAL := 0.0;
-    Kx : REAL := 0.0;
-  END_VAR
-  VAR CONSTANT
-    PI_2 : REAL := 90.0;
-    PI_4 : REAL := 45.0;
-    PI : REAL := 180.0;
-    PI3_2 : REAL := 270.0;
-  END_VAR
-
-  (* Нормируем угол 0-360 град. *)
-  Ang:=angle(Ang);
-
-  (* Определяем номер квадранта Q = [0..3] *)
-  if (Ang >= 0.0) then
-    if    (Ang >= 0.0   and Ang <  PI_2 ) then Q := 0; 
-    elsif (Ang >= PI_2  and Ang <  PI   ) then Q := 1; 
-    elsif (Ang >= PI    and Ang <  PI3_2) then Q := 2; 
-    else Q := 3;
-    end_if;
-  else
-    if    (Ang <= 0.0   and Ang > -PI_2 ) then Q := 3; 
-    elsif (Ang <= -PI_2 and Ang > -PI   ) then Q := 2; 
-    elsif (Ang <= -PI   and Ang > -PI3_2) then Q := 1; 
-    else Q := 0;
-    end_if;
-  end_if;
-
-  (* Определяем форму границ в квадранте Q *)
-  LR.A := ((wF and shl(16#10, Q))<>0);
-  LR.B := ((wF and shl(16#01, Q))<>0);
-
-  (* Делаем преобразование границ и точки Pt *)
-  if (LR.A or LR.B) then 
-    (* Растяжение по радиусу от угла *)
-    Ang := angle(Ang, 0.0, PI_2); 
-    if (Ang < PI_4) 
-    then Kx := 1.0/cos(radi(Ang));    (* коэффициент растяжения         *)
-    else Kx := 1.0/sin(radi(Ang));    (* коэффициент растяжения         *)
-    end_if;
-    pR := pL + Lx;                    (* координата правой границы      *)
-    K  := (Pt - pL)/Lx;               (* коэффициент пропорциональности *)
-    if (LR.A) then pL:=pL*Kx; end_if; (* коррекция левой  границы       *)
-    if (LR.B) then pR:=pR*Kx; end_if; (* коррекция правой границы       *)
-    Lx := (pR - pL);                  (* размер по координате           *)
-    Pt := pL + K * Lx;                (* координата точки               *)
-  end_if;
-
-  Reform[0] := Pt; (* текущая   координата *)
-  Reform[1] := pL; (* начальная координата *)
-  Reform[2] := Lx; (* размер по координате *)
-END_FUNCTION
-
-FUNCTION_BLOCK FRONT
-  VAR_INPUT
-    IN : BOOL := TRUE;
-    PT : TIME := T#1s;
-  END_VAR
-  VAR_OUTPUT
-    OUT : BOOL := FALSE;
-    INV : BOOL := FALSE;
-  END_VAR
-  VAR
-    f_TP : TP;
-    f_TP_ET : TIME := T#0s;
-    f_TP_Q : BOOL := FALSE;
-  END_VAR
-
-  VAR
-    (*Run    : R_TRIG;*)
-    bReStart : BOOL   := TRUE;
-  END_VAR
-    
-  (*Run(CLK := IN);*)
-  IF (IN) THEN
-    IF ((*Run.Q*)bReStart) THEN     
-      bReStart := FALSE;
-      (* Инициализация *)
-      f_TP(IN := FALSE);
-      f_TP(IN := TRUE, PT := PT, Q => f_TP_Q, ET => f_TP_ET);
-      OUT := TRUE;      (* Взвод триггера *)
-    END_IF; 
-    (* Нормальная работа *)
-    (* Отсчет таймера *)
-    f_TP(IN := FALSE, PT := PT, Q => f_TP_Q, ET => f_TP_ET);
-    
-    (* Анализ результата *)
-    IF (f_TP.Q = FALSE) THEN 
-      (* если отсчет закончился и ... *)
-      IF (OUT = FALSE) THEN 
-        (* ... если выход сброшен, тогда сразу начинаем новый отсчет *)
-        f_TP(IN := TRUE, PT := PT, Q => f_TP_Q, ET => f_TP_ET);
-        OUT := TRUE;  (* Взвод триггера *)
-      ELSE 
-        (* ... если выход взведен, то один цикл нужно пропустить !!! *)
-        OUT := FALSE; (* Сброс триггера *)
-      END_IF;
-    ELSE
-      OUT := FALSE;   (* Сброс триггера *)
-    END_IF;
-  ELSE
-    bReStart := TRUE;
-  END_IF; (* IN *)
-
-  (* Устанавливаем инверсный выход *)
-  IF (OUT <> TRUE) THEN INV := TRUE; ELSE INV := FALSE; END_IF;
-    
-  RETURN;
-END_FUNCTION_BLOCK
-
-FUNCTION Sh_Point2Dot : TDot
-  VAR_INPUT
-    Sh : TShape;
-    X : REAL := 0.0;
-    Y : REAL := 0.0;
-    Z : REAL := 0.0;
-    fChk : BOOL := TRUE;
-  END_VAR
-  VAR
-    Hn : TPoint := [0.0, 0.0, 0.0];
-    Ax : USINT := 0;
-    pL : TPoint := [0.0, 0.0, 0.0];
-    pR : TPoint := [0.0, 0.0, 0.0];
-    pDL : TPoint := [0.0, 0.0, 0.0];
-    pDR : TPoint := [0.0, 0.0, 0.0];
-    Ox : TAxO;
-    Pt : TPoint := [0.0, 0.0, 0.0];
-    Hx : TPoint := [0.0, 0.0, 0.0];
-    P : TPoint := [0.0, 0.0, 0.0];
-    B : BYTE := 0;
-    bRes : BOOL := true;
-  END_VAR
-  VAR CONSTANT
-    DX : REAL := 1.0E-5;
-  END_VAR
-
-  Ax := sh_get_ax(Sh);
-
-  (* точка (X,Y,Z)->лок *)
-  Pt := Sh_Abs2Loc(Sh, X, Y, Z);
-
-  (* Коррекция границ при изменении формы *)
-  if (Ax<>0) then
-    Ox := AxO(Ax);
-    Pt[Ox.y]:=angle(Pt[Ox.y], Sh.pL[Ox.y]);
-    P := Reform(Sh.wF, Pt[Ox.y], 0.0, Sh.pL[Ox.x], Sh.Lx[Ox.x]);
-    Sh.pL[Ox.x] := P[1]; Sh.Lx[Ox.x] := P[2];
-  end_if;
-
-  if (fChk) then 
-    (* B[0] - 0x01 (In)    - точка внутри элемента    *)
-    (* B[1] - 0x02 (Left)  - точка на левой грани     *)
-    (* B[2] - 0x04 (Right) - точка на правой грани    *)
-    (* B[3] - 0x08 (Front) - точка на передней грани  *)
-    (* B[4] - 0x10 (Back)  - точка на задней грани    *)
-    (* B[5] - 0x20 (Down)  - точка на нижней грани    *)
-    (* B[6] - 0x40 (Up)    - точка на верхней грани   *)
-    (* B[7] - 0x80 (Err)   - ошибка (не используется) *)
-    pL  := Sh.pL;
-    pR  := _point(Sh.pL[0]+Sh.Lx[0], Sh.pL[1]+Sh.Lx[1], Sh.pL[2]+Sh.Lx[2]);
-    
-    pDL := _point((pL[0])*(1.0+DX), (pL[1])*(1.0+DX), (pL[2])*(1.0+DX));
-    pDR := _point((pR[0])*(1.0-DX), (pR[1])*(1.0-DX), (pR[2])*(1.0-DX));
-    
-    (*
-    pDL := _point( pL[0]+(Sh.Lx[0]*DX), pL[1]+(Sh.Lx[1]*DX), pL[2]+(Sh.Lx[2]*DX) );
-    pDR := _point( pR[0]-(Sh.Lx[0]*DX), pR[1]-(Sh.Lx[1]*DX), pR[2]-(Sh.Lx[2]*DX) );
-    *)
-    
-    (* Проверка: точка внутри элемента -> B=1 *)
-    if ( (Pt[0] > pDL[0]) and (Pt[0] < pDR[0]) ) then 
-      if ( (Pt[1] > pDL[1]) and (Pt[1] < pDR[1]) ) then
-        if ( (Pt[2] > pDL[2]) and (Pt[2] < pDR[2]) ) then B:=16#01; end_if;
-      end_if;
-    end_if;
-    
-    (* Сравниваем координаты Pt с гранями элемента *)
-    if (B = 0) then
-      if    ( Pt[0] >= pL[0] and Pt[0] <= pDL[0] ) then B:=(B or shl(16#01, 1)); 
-      elsif ( Pt[0] <= pR[0] and Pt[0] >= pDR[0] ) then B:=(B or shl(16#01, 2)); end_if;
-      if    ( Pt[1] >= pL[1] and Pt[1] <= pDL[1] ) then B:=(B or shl(16#01, 3));
-      elsif ( Pt[1] <= pR[1] and Pt[1] >= pDR[1] ) then B:=(B or shl(16#01, 4)); end_if;
-      if    ( Pt[2] >= pL[2] and Pt[2] <= pDL[2] ) then B:=(B or shl(16#01, 5)); 
-      elsif ( Pt[2] <= pR[2] and Pt[2] >= pDR[2] ) then B:=(B or shl(16#01, 6)); end_if;
-    end_if;
-    if (B = 0) then (* точка вне элемента *)
-      {}(* bRes := assert(false, E_CHECK); *) 
-    end_if;
-  end_if;
-
-  (* Получение узла сетки элемента *)
-  if (Sh.Kn[0]>1) then Hn[0]:=(Sh.Lx[0]/INT_TO_REAL(Sh.Kn[0]-1)); end_if;
-  if (Sh.Kn[1]>1) then Hn[1]:=(Sh.Lx[1]/INT_TO_REAL(Sh.Kn[1]-1)); end_if;
-  if (Sh.Kn[2]>1) then Hn[2]:=(Sh.Lx[2]/INT_TO_REAL(Sh.Kn[2]-1)); end_if;
-
-  Sh_Point2Dot := _dot(
-      byte_to_int(B),
-      min(Sh.Kn[0]-1, max(0, REAL_TO_INT((Pt[0]-Sh.pL[0])/Hn[0]) )), 
-      min(Sh.Kn[1]-1, max(0, REAL_TO_INT((Pt[1]-Sh.pL[1])/Hn[1]) )), 
-      min(Sh.Kn[2]-1, max(0, REAL_TO_INT((Pt[2]-Sh.pL[2])/Hn[2]) ))
-  );
-END_FUNCTION
-
-FUNCTION st_check : BOOL
-  VAR_INPUT
-    Force : BOOL := FALSE;
-  END_VAR
-
-  {{ 
-    return (
-      ST_CHECK = ( 
-        FORCE || (ERR2LEV(1,NULL,__GET_GLOBAL_STAT()->ERR) != LOGLEVEL__CRITICAL) 
-      )
-    ); 
-  }}
-END_FUNCTION
-
-FUNCTION ID2PIT : TPos8
-  VAR_INPUT
-    ID : UINT := 0;
-  END_VAR
-  VAR
-    bFound : BOOL := false;
-  END_VAR
-
-  {{
-    ID2PIT = -1;
-    P_IDPIT *IDS = &(__GET_GLOBAL_ITS()->PR.table[0]);
-    if (ID != 0) {
-      int lBound=0, rBound=99, test;
-      if (IDS[rBound].A == ID)      ID2PIT = IDS[rBound].B;
-      else if (IDS[lBound].A == ID) ID2PIT = IDS[lBound].B;
-      else {
-        if ( (IDS[lBound].A < ID) && (ID < IDS[rBound].A) ) {
-          while (TRUE) {
-            test = (lBound+rBound)/2;
-            if (IDS[test].A == ID) { ID2PIT = IDS[test].B; break; }
-            if (rBound-lBound <= 1) break;
-            if (IDS[test].A <  ID) lBound = test; else rBound = test; 
-          }
-        }
-      }
-    } else ID2PIT = IDS[0].B;
-  }}
-END_FUNCTION
-
-FUNCTION it_lev : SINT
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR
-    IID : UINT := 16#ffff;
-  END_VAR
-
-  {{
-    IID = __GET_GLOBAL_ITS()->IT.table[PIT].ID;
-    if (IID==0 || IID==0xffff) return (IT_LEV=-1);
-    IT_LEV = 3;
-    if (IID & 0x000F) return(IT_LEV); IT_LEV--;
-    if (IID & 0x00F0) return(IT_LEV); IT_LEV--;
-    if (IID & 0x0F00) return(IT_LEV); IT_LEV--;
+    return (IT_POS = ( (PIT < 0) || (PIT >= __GET_GLOBAL_HDR()->NI) ? (0) : PIT ));
   }}
 END_FUNCTION
 
@@ -1029,748 +550,22 @@ FUNCTION it_begin : TIter
   }}
 END_FUNCTION
 
-FUNCTION Do_FindDot : TDot
+FUNCTION C2T : REAL
   VAR_INPUT
-    X : REAL := 0.0;
-    Y : REAL := 0.0;
-    Z : REAL := 0.0;
-    ign : TPos8 := -1;
-  END_VAR
-  VAR
-    It : TIter;
-    skip_to : TPos8 := -1;
-    i : SINT := 0;
-    N : SINT := 0;
-    Dots : ARRAY [0..7] OF TDot;
-    P : ARRAY [0..7] OF TPos8;
+    Code : INT := 0;
   END_VAR
 
-  if (not st_check(false)) then return; end_if;
-
-  (* Обход дерева - сбор элементов, содержащих точку *)
-  it  := it_begin(ID2PIT(0));
-  while (it.item<>-1 and N < 8) do (* не более 8 владельцев *)
-    case (it.dir) of
-    DIR_DOWN:
-      if (skip_to = -1) then
-        (* Если точка не входит в родителя, потомков пропускаем *)
-        if (is_poly(it.item)) then
-          Do_FindDot := Sh_Point2Dot(get_sh(it.item), X, Y, Z);
-          if (Do_FindDot.V <= 0) then skip_to := it.item; end_if;
-        end_if;
-      end_if;
-    DIR_UP:
-      if (skip_to <> -1) then
-        if (skip_to = it.item) then skip_to := -1; end_if;
-      else
-        (* если элемент конечный - проверяем точку *)
-        if (not is_poly(it.item)) then
-          Dots[N] := Sh_Point2Dot(get_sh(it.item), X, Y, Z);
-          if (Dots[N].V > 0) then 
-            P[N] := it.item; 
-            N    := N+1; 
-          end_if;
-        end_if;
-      end_if;
-    end_case;
-    it := it_next(it);
-  end_while;
-
-  (* Выбор элемента *)
-  Do_FindDot := _dot(-1);
-  if (N > 0) then
-    for i:=0 to N-1 do
-    
-      if (((*ign<>-1 and*) P[i]<>ign) or N=1) then 
-          Do_FindDot   := Dots[i]; 
-          Do_FindDot.V := sint_to_int(P[i]); 
-         exit; 
-      end_if;
-      
-    end_for;
-  end_if;
+  C2T := int_to_real(Code)/100.0;
 END_FUNCTION
 
-FUNCTION Sh_Loc2Abs : TPoint
-  VAR_INPUT
-    Sh : TShape;
-    X : REAL := 0.0;
-    Y : REAL := 0.0;
-    Z : REAL := 0.0;
-  END_VAR
-  VAR
-    Ax : USINT := 0;
-    A : TPoint := [0.0, 0.0, 0.0];
-    B : TPoint := [0.0, 0.0, 0.0];
-    O : TAxO;
-  END_VAR
-
-  (*Sh := get_sh(PIT);*)
-  Ax := sh_get_ax(Sh);
-
-  A := _point(X,Y,Z); 
-  if (Ax > 0) then 
-    (* Цилиндр -> Декарт *)
-    O := AxO(Ax);
-    A[O.y] := radi(A[O.y]); (* град -> радианы *)
-    B[O.x] := A[O.x]*cos(A[O.y]);
-    B[O.y] := A[O.x]*sin(A[O.y]);
-    B[O.z] := A[O.z];
-  else 
-    B := A;
-  end_if;
-  Sh_Loc2Abs := _point(B[0]+Sh.P0[0],B[1]+Sh.P0[1],B[2]+Sh.P0[2]); 
-
-
-
-END_FUNCTION
-
-FUNCTION Sh_Dot2Point : TPoint
-  VAR_INPUT
-    Sh : TShape;
-    I : INT := 0;
-    J : INT := 0;
-    K : INT := 0;
-    bAbs : BOOL := TRUE;
-  END_VAR
-  VAR
-    Hn : TPoint := [0.0, 0.0, 0.0];
-    Ax : USINT := 0;
-    Ang : REAL := 0.0;
-    Ox : TAxO;
-    P : TPoint := [0.0, 0.0, 0.0];
-  END_VAR
-
-  Ax := sh_get_ax(Sh);
-
-  (* (1) Определение локальной точки X, Y, Z  *)
-  if (Sh.Kn[0]>1) then Hn[0]:=(Sh.Lx[0]/INT_TO_REAL(Sh.Kn[0]-1)); end_if;
-  if (Sh.Kn[1]>1) then Hn[1]:=(Sh.Lx[1]/INT_TO_REAL(Sh.Kn[1]-1)); end_if;
-  if (Sh.Kn[2]>1) then Hn[2]:=(Sh.Lx[2]/INT_TO_REAL(Sh.Kn[2]-1)); end_if;
-
-  Sh_Dot2Point := _point( 
-    Sh.pL[0] + INT_TO_REAL(I) * Hn[0],
-    Sh.pL[1] + INT_TO_REAL(J) * Hn[1],
-    Sh.pL[2] + INT_TO_REAL(K) * Hn[2] 
-  );
-
-  (* (2) Коррекция точки при изменении формы  *)
-  if (Ax<>0) then
-    Ox := AxO(Ax, true);
-    P := Reform(Sh.wF, Sh_Dot2Point[Ox.y], 
-                  Sh_Dot2Point[Ox.x], Sh.pL[Ox.x], Sh.Lx[Ox.x]);
-    Sh_Dot2Point[Ox.x] := P[0];
-  end_if;
-
-  (* Преобразование локальной точки в абсолют *)
-  if (bAbs) then
-    Sh_Dot2Point := 
-      Sh_Loc2Abs(Sh, Sh_Dot2Point[0], Sh_Dot2Point[1], Sh_Dot2Point[2]);
-  end_if;
-END_FUNCTION
-
-FUNCTION _ref : TVar
-  VAR_INPUT
-    PIT : SINT := -1;
-    DOT : TDot;
-    DIR : USINT := 0;
-  END_VAR
-
-  {{
-    #pragma pack(push, 4)
-    union { // 32-бит (4 байта)
-      TVAR tv;
-      struct {  // Значение (var)
-        USINT  R:1;       // Флаг R (для var = 0)
-          INT  A:15;      // Значение A (актуальное)
-        USINT  C:1;       // Флаг C (1-расчёт готов)
-          INT  B:15;      // Значение B (предыдущее)
-      };
-      struct {  // Ссылка   (ref)
-        USINT  r:1;       // Флаг r (для ref = 1)
-        USINT  d:2;       // Направление (0,1,2,3)
-        USINT  p:8;       // Позиция элемента
-        USINT  i:7;       // Индекс сетки по DOT (0..127)
-        USINT  j:7;       // Индекс сетки по J (0..127)
-        USINT  k:7;       // Индекс сетки по K (0..127)
-      };
-    } var /*= {0}*/;
-    #pragma pack(pop)
-    var.r=1;              // Флаг r = 1
-    var.d=DIR;            // Индекс направления     (d)
-    var.p=PIT;            // Ссылка на элемент      (p)
-    var.i=DOT.A.table[0]; // Индексы узла элемента  (i)
-    var.j=DOT.A.table[1]; // Индексы узла элемента  (j)
-    var.k=DOT.A.table[2]; // Индексы узла элемента  (k)
-    _REF=var.tv;
-  }}
-END_FUNCTION
-
-FUNCTION link_var : TDot
-  VAR_INPUT
-    HGR : THandle := 0;
-    PGR : TPos8 := -1;
-    Sh : TShape;
-    I : INT := 0;
-    J : INT := 0;
-    K : INT := 0;
-    Ix : USINT := 0;
-    ign : TPos8 := -1;
-    Dx : REAL := 0.1;
-    Dyz : REAL := 0.1;
-  END_VAR
-  VAR
-    Mx : REAL := 0.0;
-    My : REAL := 0.0;
-    Mz : REAL := 0.0;
-    Pt : TPoint := [0.0, 0.0, 0.0];
-    Dot : TDot;
-  END_VAR
-
-  if (Ix <> 0) then (* при линковке узлов смежных элементов *)
-
-    (* Находим точку в данном узле решётки (лок) *)
-    Pt  := Sh_Dot2Point(Sh, I, J, K, false);
-
-    (* "Сверлим стену" *)
-    if (I=0) then Mx:=1.0; elsif (I=Sh.Kn[0]-1) then Mx:=-1.0; end_if;
-    if (J=0) then My:=1.0; elsif (J=Sh.Kn[1]-1) then My:=-1.0; end_if;
-    if (K=0) then Mz:=1.0; elsif (K=Sh.Kn[2]-1) then Mz:=-1.0; end_if;
-    
-    case Ix of
-      1: Pt := _point(Pt[0]-Mx*Dx , Pt[1]+My*Dyz, Pt[2]+Mz*Dyz);
-      2: Pt := _point(Pt[0]+Mx*Dyz, Pt[1]-My*Dx , Pt[2]+Mz*Dyz);
-      3: Pt := _point(Pt[0]+Mx*Dyz, Pt[1]+My*Dyz, Pt[2]-Mz*Dx );
-    end_case;
-    
-    (* Преобразование локальной точки в абсолют *)
-    Pt := Sh_Loc2Abs(Sh, Pt[0], Pt[1], Pt[2]);
-
-  else (* при линковке узлов составных элементов и поверхностей *)
-
-    (* Находим точку в данном узле решётки (абс) *)
-    Pt := Sh_Dot2Point(Sh, I, J, K);
-
-  end_if;
-
-  (* Находим элемент, содержащий эту точку *)
-  Dot := Do_FindDot(Pt[0], Pt[1], Pt[2], ign);
-
-  (* Заносим ссылку на найденный элемент в сетку *)
-  PGR := set_var( HGR, PGR, 
-    knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], I,J,K), 
-    _ref(int_to_sint(Dot.v), Dot), 
-    Ix 
-  );
-
-  (* Возвращаем позицию сетки, если слинковано, иначе = -1 *)
-  link_var := (Dot);
-END_FUNCTION
-
-FUNCTION sh_set_ax : TShape
-  VAR_INPUT
-    SH : TShape;
-    Ax : USINT;
-  END_VAR
-
-  Sh.wF := Sh.wF or shl(USINT_TO_WORD(Ax), 12);
-  sh_set_ax := Sh;
-END_FUNCTION
-
-FUNCTION set_cn : TPos8
-  VAR_INPUT
-    PIT : TPos8 := -1;
-    COND : TCond;
-  END_VAR
-
-  {{ 
-    __GET_GLOBAL_ITS()->CN.table[PIT] = COND;
-    return (SET_CN = PIT);
-  }}
-END_FUNCTION
-
-FUNCTION _cond : TCond
-  VAR_INPUT
-    ID : UINT := 0;
-    Tmid : INT := -1;
-    Tmin : TDot;
-    Tmax : TDot;
-  END_VAR
-
-  _COND.ID   := ID;
-  _COND.TMID := TMID;
-  _COND.TMIN := TMIN;
-  _COND.TMAX := TMAX;
-END_FUNCTION
-
-FUNCTION get_cn : TCond
+FUNCTION is_poly : BOOL
   VAR_INPUT
     PIT : TPos8 := -1;
   END_VAR
 
   {{ 
-    return (GET_CN = 
-      (
-        (PIT != -1) ? 
-        __GET_GLOBAL_ITS()->CN.table[PIT] 
-        : _COND(1, NULL, 0, 2000, _DOT(1,NULL,2000,0,0,0), _DOT(1,NULL,2000,0,0,0))
-      )
-    ); 
+    return (IS_POLY = (__GET_GLOBAL_ITS()->IT.table[PIT].NUM > 0)); 
   }}
-END_FUNCTION
-
-FUNCTION set_it : TPos8
-  VAR_INPUT
-    PIT : TPos8 := -1;
-    ITEM : TItem;
-  END_VAR
-
-  {{ return (SET_IT = ( __GET_GLOBAL_ITS()->IT.table[PIT] = ITEM, PIT) ); }}
-END_FUNCTION
-
-FUNCTION get_it : TItem
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-
-  {{ return (GET_IT = __GET_GLOBAL_ITS()->IT.table[PIT]); }}
-END_FUNCTION
-
-FUNCTION set_sh : TPos8
-  VAR_INPUT
-    PSH : TPos8 := -1;
-    Shape : TShape;
-  END_VAR
-
-  {{ return (SET_SH = ( __GET_GLOBAL_ITS()->SH.table[PSH] = SHAPE, PSH) ); }}
-END_FUNCTION
-
-FUNCTION _surf : TShape
-  VAR_INPUT
-    PIT : TPos8 := -1;
-    Ax : USINT := 0;
-    X : REAL := 0.0;
-    Y : REAL := 0.0;
-    Z : REAL := 0.0;
-  END_VAR
-  VAR
-    Pt : TPoint := [0.0, 0.0, 0.0];
-  END_VAR
-
-  (* Наследуем фигуру элемента модели *)
-  if (PIT < 0) then PIT := 0; end_if;
-  _surf := get_sh(PIT);
-
-  (* Уточняем размерность сетки [64x64] *)
-  _surf.wF := 0;
-  _surf.Kn := _knot(64,64,64);
-  _surf.Kn[Ax] := 1;
-
-  (* Уточняем положение по точке привязки *)
-  Pt := _point(X,Y,Z);
-  (*
-  _surf.pL[0] := _surf.pL[0]+0.1;
-  _surf.pL[1] := _surf.pL[1]+0.1;
-  _surf.pL[2] := _surf.pL[2]+0.1;
-  *)
-  _surf.pL[Ax] := Pt[Ax]; (* смещение по координате Ax *)
-  (*
-  _surf.Lx[0] := _surf.Lx[0]-0.2;
-  _surf.Lx[1] := _surf.Lx[1]-0.2;
-  _surf.Lx[2] := _surf.Lx[2]-0.2;
-  *)
-  _surf.Lx[Ax] := 0.0;    (* размер плоскости по Ax =0 *)
-END_FUNCTION
-
-FUNCTION get_h : THead
-  VAR_INPUT
-    Dummy : DINT := 0;
-  END_VAR
-
-  {{ return (GET_H = *__GET_GLOBAL_HDR()); }}
-END_FUNCTION
-
-FUNCTION get_pr : TProf
-  VAR_INPUT
-    PPR : TPos8 := -1;
-  END_VAR
-
-  {{ return (GET_PR = __GET_GLOBAL_STS()->PR.table[PPR]); }}
-END_FUNCTION
-
-FUNCTION get_bf : REAL
-  VAR_INPUT
-    PBF : TPos16 := -1;
-  END_VAR
-
-  {{ return (GET_BF = __GET_GLOBAL_STS()->BF.table[PBF]); }}
-END_FUNCTION
-
-FUNCTION get_vl : TVal
-  VAR_INPUT
-    PVL : TPos8 := -1;
-  END_VAR
-
-  {{ return (GET_VL = __GET_GLOBAL_STS()->VL.table[PVL]); }}
-END_FUNCTION
-
-FUNCTION get_mt : TMat
-  VAR_INPUT
-    PMT : TPos8 := -1;
-  END_VAR
-
-  {{ return (GET_MT = __GET_GLOBAL_STS()->MT.table[PMT]); }}
-END_FUNCTION
-
-FUNCTION get_pdt : DT
-  VAR_INPUT
-    PIT : TPos8 := -1;
-    Ix : USINT := 0;
-  END_VAR
-
-  {{ return (GET_PDT = __GET_GLOBAL_ITS()->IT.table[PIT].PDT.table[IX]); }}
-END_FUNCTION
-
-FUNCTION set_pdt : TPos8
-  VAR_INPUT
-    PIT : TPos8 := -1;
-    Ix : USINT := 0;
-    CDT : DT := DT#2000-01-01-00:00:00;
-  END_VAR
-
-  {{ return (SET_PDT = (__GET_GLOBAL_ITS()->IT.table[PIT].PDT.table[IX] = CDT, PIT)); }}
-END_FUNCTION
-
-FUNCTION it_im : TPos8
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-
-  {{ return (IT_IM = __GET_GLOBAL_ITS()->IT.table[PIT].IM); }}
-END_FUNCTION
-
-FUNCTION it_iv : TPos8
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-
-  {{ return (IT_IV = __GET_GLOBAL_ITS()->IT.table[PIT].IV); }}
-END_FUNCTION
-
-FUNCTION get_var : TVar
-  VAR_INPUT
-    HGR : THandle := 0;
-    PGR : TPos8 := -1;
-    OFF : P_INT;
-    IX : USINT := 0;
-  END_VAR
-
-  {{
-    #pragma pack(push, 4)
-    typedef union {
-      TVAR tv;
-      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
-      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
-    } var_t, *pvar_t;
-    #pragma pack(pop)
-
-    // Получаем массив сеток по дескриптору  
-    TGRID *Grids = (TGRID *)(HGR);
-    
-    if (IX == 0) {        // Главная ячейка узла
-    
-      GET_VAR = Grids[PGR].A.table[OFF.A];
-      
-    } else if (IX < 4) {  // Смежная ячейка узла
-    
-      for (int k=(GET_VAR=(TVAR)0, 1); k < OFF.B; k++) {
-        GET_VAR = Grids[PGR].A.table[OFF.A+k];
-        if (((pvar_t)&GET_VAR)->d == IX) break;
-      }
-      
-      // Значение смежных ячеек может быть только ссылочным (!)
-      // ASSERT(1, NULL, ((pvar_t)&GET_VAR)->r, TERROR__E_FAIL, 
-        //__STRING_LITERAL(29,"GET_VAR: Reference wanted!"));
-        
-    } else {
-
-      // Неверное значение IX
-      // ASSERT(1, NULL, FALSE, TERROR__E_FAIL, 
-        //__STRING_LITERAL(29,"GET_VAR: Invalid IX!"));
-    
-    }
-  }}
-END_FUNCTION
-
-FUNCTION var_up : TVar
-  VAR_INPUT
-    TV : TVar := 0;
-  END_VAR
-
-  {{
-    #pragma pack(push, 4)
-    typedef union {
-      TVAR tv;
-      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
-      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
-    } var_t, *pvar_t;
-    #pragma pack(pop)
-    pvar_t pvar = (pvar_t)&TV;
-    // Если значение не ссылка - "поднимаем" значение A->B!
-    if (!pvar->r) {
-      //if (pvar->C) 
-        pvar->B = (pvar->C=0, pvar->A);
-    }
-    VAR_UP = TV;
-  }}
-END_FUNCTION
-
-FUNCTION cn_mid : INT
-  VAR_INPUT
-    Cond : TCond;
-  END_VAR
-
-  CN_MID := COND.TMID;
-END_FUNCTION
-
-FUNCTION is_parent : BOOL
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-
-  {{ return (IS_PARENT = (__GET_GLOBAL_ITS()->IT.table[PIT].NUM > 0)); }}
-END_FUNCTION
-
-FUNCTION is_cyl : BOOL
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-
-  IS_CYL := (sh_get_ax(get_sh(PIT)) <> 0);
-END_FUNCTION
-
-FUNCTION it_pos : TPos8
-  VAR_INPUT
-    PIT : TPos8 := -1;
-    bForce : BOOL := false;
-  END_VAR
-
-  {{ 
-    if (BFORCE) {
-      ASSERT(1, NULL, 
-       (PIT >= 0) && (PIT < __GET_GLOBAL_HDR()->NI), TERROR__E_ITEMPOS, __INIT_STRING);
-    }
-    return (IT_POS = ( (PIT < 0) || (PIT >= __GET_GLOBAL_HDR()->NI) ? (0) : PIT ));
-  }}
-END_FUNCTION
-
-FUNCTION it_id : UINT
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-
-  {{ return (IT_ID = __GET_GLOBAL_ITS()->IT.table[PIT].ID); }}
-END_FUNCTION
-
-FUNCTION st_set_stat : BOOL
-  VAR_INPUT
-    err : TError := E_SUCCESS;
-    par : UINT := 0;
-    str : STRING := '';
-  END_VAR
-
-  {{ 
-    __GET_GLOBAL_STAT()->ERR=ERR; 
-    __GET_GLOBAL_STAT()->PAR=PAR; 
-    __GET_GLOBAL_STAT()->STR=STR;
-    LOGMSG(1,NULL,STR,LOGLEVEL__DEBUG,ERR);
-    return (ST_SET_STAT=ST_CHECK(1,NULL,FALSE));
-  }}
-END_FUNCTION
-
-FUNCTION Do_PreProc : BOOL
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR
-    It : TIter;
-  END_VAR
-
-  (* Проверка статуса программы *)
-  Do_PreProc := st_check(false);
-  if (not Do_PreProc) then return; end_if;
-
-  (* Обход дерева элементов *)
-  Do_PreProc := true;
-  it := it_begin(it_pos(PIT));
-  while (it.item <>-1) do
-    case (it.dir) of
-    DIR_UP:
-      (* Ничего не делаем *)
-      { }
-    end_case;
-    it := it_next(it);
-  end_while;
-
-  { __exit: }
-  return;
-
-  { __error: } 
-  Do_PreProc := true; st_set_stat(E_PREPROC, it_id(it.item));
-END_FUNCTION
-
-FUNCTION var_v : INT
-  VAR_INPUT
-    TV : TVar := -1;
-    GET_A : BOOL := true;
-  END_VAR
-  VAR
-    Sh : TShape;
-  END_VAR
-
-  {{
-    #pragma pack(push, 4)
-    typedef union {
-      TVAR tv;
-      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
-      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
-    } var_t, *pvar_t;
-    #pragma pack(pop)
-    pvar_t pvar = (pvar_t)&TV;
-    
-    // Решаем ссылку (если нужно)
-    while (pvar->r) {
-      if (pvar->p >= 0) {
-        // ссылка должна быть реальной (!)
-        //ASSERT(1, NULL, (pvar->p < __GET_GLOBAL_HDR()->NI), 
-        //  TERROR__E_FAIL, __STRING_LITERAL(22,"var_v: Reference fail!") );
-        
-        // Переход к элементу по ссылке:
-        SH = GET_SH(1, NULL, pvar->p);
-        P_INT Off = KNOFF(1, NULL, 
-            SH.KN.table[0], SH.KN.table[1], SH.KN.table[2], 
-            pvar->i, pvar->j, pvar->k
-        );
-        pvar = (pvar_t) &__GET_GLOBAL_ITS()->GR.table[pvar->p].A.table[Off.A];
-      } else {  
-        // элемент не существует -> воздух
-        return (VAR_V = 2000); // 20.00 градусов Цельсия
-      }
-    }
-    
-    VAR_V = (GET_A) ? pvar->A : pvar->B;
-  }}
-END_FUNCTION
-
-FUNCTION T2C : INT
-  VAR_INPUT
-    Temp : REAL := 0.0;
-  END_VAR
-
-  T2C := real_to_int(Temp*100.0);
-END_FUNCTION
-
-FUNCTION it_update : TPos8
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR
-    Pt : TPoint;
-    Kn : TKnot;
-    Sh : TShape;
-    Off : P_INT;
-    iVar : INT := 0;
-    TV : TVar := -1;
-    Tmid : REAL := 0.0;
-    count : INT := 0;
-    i : INT := 0;
-    j : INT := 0;
-    k : INT := 0;
-    Cond : TCond;
-  END_VAR
-
-  Sh := get_sh(it_pos(PIT));
-  Kn := Sh.Kn;
-  Cond.Tmin.V := 16383;   (* max_int7 *)
-  Cond.Tmax.V := -16384;  (* min_int7 *)
-
-  (* Вычисление средней, минимальной и максимальной температур *)
-  for i:=0 to Kn[0]-1 do
-    for J:=0 to Kn[1]-1 do
-      for K:=0 to Kn[2]-1 do
-        Off   := knoff(Kn[0], Kn[1], Kn[2], i,J,K);
-        TV    := get_var(its_gr(0), PIT, Off);
-        iVar  := var_v(TV);
-        
-        Tmid  := ( Tmid*int_to_real(count) + (int_to_real(iVar)/100.0) ) / 
-                      int_to_real(count+1);
-        if (iVar < Cond.Tmin.V) then Cond.Tmin := _dot(iVar, i,j,k); end_if;
-        if (iVar > Cond.Tmax.V) then Cond.Tmax := _dot(iVar, i,j,k); end_if;
-        
-        TV    := var_up(TV);
-        PIT   := set_var(its_gr(0), PIT, Off, (TV));
-        count := count+1;
-      end_for;
-    end_for;
-  end_for;
-
-  (* Средняя температура элемента *)
-  (* Cond.Tmid := T2C(Tmid); *)
-  {{ COND.TMID = (INT)(TMID * 100.0); }}
-
-  (* Минимальная температура элемента *)
-  Pt := Sh_Dot2Point(Sh, Cond.Tmin.A[0], Cond.Tmin.A[1], Cond.Tmin.A[2]);
-  Cond.Tmin.A[0] := real_to_int(Pt[0]);
-  Cond.Tmin.A[1] := real_to_int(Pt[1]);
-  Cond.Tmin.A[2] := real_to_int(Pt[2]);
-
-  (* Максимальная температура элемента *)         
-  Pt := Sh_Dot2Point(Sh, Cond.Tmax.A[0], Cond.Tmax.A[1], Cond.Tmax.A[2]);
-  Cond.Tmax.A[0] := real_to_int(Pt[0]);
-  Cond.Tmax.A[1] := real_to_int(Pt[1]);
-  Cond.Tmax.A[2] := real_to_int(Pt[2]);
-
-  (* Сохраняем состояние элемента *)
-  PIT := set_cn(PIT, Cond);
-
-  {{ // TEST
-    if (PIT==53) *__GET_GLOBAL_RTEST() = TMID;
-  }}
-
-  IT_Update := PIT;
-
-END_FUNCTION
-
-FUNCTION Do_PostProc : BOOL
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR
-    It : TIter;
-  END_VAR
-
-  (* Проверка статуса программы *)
-  Do_PostProc := st_check(false);
-  if (not Do_PostProc) then return; end_if;
-
-  (* Обход дерева элементов *)
-  Do_PostProc := true;
-  it := it_begin(it_pos(PIT));
-  while (it.item <>-1) do
-    case (it.dir) of
-    DIR_UP:
-      (* Обновление состояния сетки элемента *)
-      it.item := it_update(it.item);
-    end_case;
-    it := it_next(it);
-  end_while;
-
-  { __exit: }
-  return;
-
-  { __error: }
-  Do_PostProc := st_set_stat(E_POSTPROC, it_id(it.item));
-
 END_FUNCTION
 
 FUNCTION ID2Str : STRING
@@ -1804,12 +599,66 @@ FUNCTION ID2Str : STRING
   ID2Str := MakeMsg(ch[0], ch[1], ch[2], ch[3]);
 END_FUNCTION
 
-FUNCTION C2T : REAL
+FUNCTION it_id : UINT
   VAR_INPUT
-    Code : INT := 0;
+    PIT : TPos8 := -1;
   END_VAR
 
-  C2T := int_to_real(Code)/100.0;
+  {{ return (IT_ID = __GET_GLOBAL_ITS()->IT.table[PIT].ID); }}
+END_FUNCTION
+
+FUNCTION _knot : TKnot
+  VAR_INPUT
+    I : INT := 0;
+    J : INT := 0;
+    K : INT := 0;
+  END_VAR
+
+  _knot[0] := I; 
+  _knot[1] := J; 
+  _knot[2] := K; 
+END_FUNCTION
+
+FUNCTION _dot : TDot
+  VAR_INPUT
+    V : INT := 0;
+    i : INT := 0;
+    j : INT := 0;
+    k : INT := 0;
+  END_VAR
+
+  _dot.V := V; 
+  _dot.A := _knot(i,j,k); 
+END_FUNCTION
+
+FUNCTION _cond : TCond
+  VAR_INPUT
+    ID : UINT := 0;
+    Tmid : INT := -1;
+    Tmin : TDot;
+    Tmax : TDot;
+  END_VAR
+
+  _COND.ID   := ID;
+  _COND.TMID := TMID;
+  _COND.TMIN := TMIN;
+  _COND.TMAX := TMAX;
+END_FUNCTION
+
+FUNCTION get_cn : TCond
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+
+  {{ 
+    return (GET_CN = 
+      (
+        (PIT != -1) ? 
+        __GET_GLOBAL_ITS()->CN.table[PIT] 
+        : _COND(1, NULL, 0, 2000, _DOT(1,NULL,2000,0,0,0), _DOT(1,NULL,2000,0,0,0))
+      )
+    ); 
+  }}
 END_FUNCTION
 
 FUNCTION IT_CondStr : STRING
@@ -1871,1735 +720,13 @@ FUNCTION Do_LogCond : BOOL
   (*Do_LogCond := true;*)
 END_FUNCTION
 
-FUNCTION Do_LinkItems : INT
+FUNCTION set_var : TPos8
   VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR
-    It : TIter;
-    B : BYTE := 0;
-    I : INT := 0;
-    J : INT := 0;
-    K : INT := 0;
-    nPos : SINT := 0;
-    nAir : INT := 0;
-    nItems : INT := 0;
-    Sh : TShape;
-    Dot : TDot;
-    Pt : TPoint;
-  END_VAR
-
-  Do_LinkItems := (-1);
-  if (not st_check(false)) then return; end_if;
-
-  (* Обход дерева элементов *)
-  it := it_begin(it_pos(PIT));
-  while (it.item <> -1) do
-    case (it.dir) of
-    DIR_UP:
-      B     := 0; 
-      nAir  := 0;
-      Sh := get_sh(it.item);
-      
-      (* Рассчитываем точки по граням X=(Х0,Kn[0]-1) *)
-      for I:=0 to Sh.Kn[0]-1 do
-        for J:=0 to Sh.Kn[1]-1 do
-          for K:=0 to Sh.Kn[2]-1 do
-
-            if (not is_poly(it.item)) then  
-              (* линкуем узлы конечных элементов *)
-            
-              if (I=0 or I=Sh.Kn[0]-1) then  (* по координате X (Ix=1) *)
-                Dot := link_var(its_gr(0), it.item, Sh, I, J, K, 1, it.item);
-                if (Dot.v = -1) then   (* Воздух *)
-                  if (I=0) then B:=(B or shl(16#01, 1)); else B:=(B or shl(16#01, 2)); end_if;
-                end_if;
-              end_if;
-              
-              if (J=0 or J=Sh.Kn[1]-1) then  (* по координате Y  (Ix=2) *)
-                Dot := link_var(its_gr(0), it.item, Sh, I, J, K, 2, it.item);
-                if (Dot.v = -1) then  (* Воздух *)
-                  if (J=0) then B:=(B or shl(16#01, 3)); else B:=(B or shl(16#01, 4)); end_if;
-                end_if;
-              end_if;
-              
-              if (K=0 or K=Sh.Kn[2]-1) then  (* по координате Z  (Ix=3) *)
-                Dot := link_var(its_gr(0), it.item, Sh, I, J, K, 3, it.item);
-                if (Dot.v = -1) then  (* Воздух *)
-                  if (K=0) then B:=(B or shl(16#01, 5)); else B:=(B or shl(16#01, 6)); end_if;
-                end_if;
-              end_if;
-              
-            else    (* линкуем сетку составного элемента (Ix=0, default) *)
-            
-              Dot := link_var(its_gr(0), it.item, Sh, I, J, K);
-              
-            end_if;
-            
-          end_for;
-        end_for;
-      end_for;
-      
-      (* Суммируем количество граней, контактирующих с воздухом *)
-      for i:=1 to 6 do
-        if ((B and shl(16#01, i)) <> 0) then nAir:=nAir+1; end_if;
-      end_for;
-        
-      (* Подсчёт элеметов, контактирующих с "воздухом" *)
-      if (nAir > 0) then nItems := nItems+1; end_if;
-      
-    end_case;
-    it := it_next(it);
-  end_while;
-
-  Do_LinkItems := (nItems);
-END_FUNCTION
-
-FUNCTION it_ip : TPos8
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-
-  {{ return (IT_IP = __GET_GLOBAL_ITS()->IT.table[PIT].PAR); }}
-END_FUNCTION
-
-FUNCTION _var : TVar
-  VAR_INPUT
-    A : INT := -16384;
-    B : INT := -16384;
-    C : BOOL := false;
-  END_VAR
-
-  {{
-    #pragma pack(push, 4)
-    union { // 32-бит (4 байта)
-      TVAR tv;
-      struct {  // Значение (var)
-        USINT  R:1;     // Флаг R (для var = 0)
-          INT  A:15;    // Значение A (актуальное)
-        USINT  C:1;     // Флаг C (1-расчёт готов)
-          INT  B:15;    // Значение B (предыдущее)
-      };
-      struct {  // Ссылка   (ref)
-        USINT  r:1;     // Флаг r (для ref = 1)
-        USINT  d:2;     // Направление (0,1,2,3)
-        USINT  p:8;     // Позиция элемента
-        USINT  i:7;     // Индекс сетки по I (0..127)
-        USINT  j:7;     // Индекс сетки по J (0..127)
-        USINT  k:7;     // Индекс сетки по K (0..127)
-      };
-    } var = {0};
-    #pragma pack(pop)
-    
-    var.A = A;  // Значение A (текущее)
-    var.B = B;  // Значение B (предыдущее)
-    var.C = C;  // Флаг "расчёт выполнен" (A!=B)
-    
-    _VAR = var.tv;
-  }}
-END_FUNCTION
-
-FUNCTION IT_InitTemp : TPos8
-  VAR_INPUT
-    PIT : TPos8 := 0;
-    Temp : REAL := 0.0;
-    CLR : BOOL := false;
-  END_VAR
-  VAR
-    Sh : TShape;
-    I : INT := 0;
-    J : INT := 0;
-    K : INT := 0;
-    M : INT := 0;
-    Off : P_INT;
-  END_VAR
-
-  Sh := get_sh(it_pos(PIT));
-  for I:=0 to Sh.Kn[0]-1 do
-    for J:=0 to Sh.Kn[1]-1 do
-      for K:=0 to Sh.Kn[2]-1 do
-        Off := knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], I,J,K);
-        if (CLR) then PIT := set_var(its_gr(0), PIT, Off, 0, 16#ff); end_if;
-        PIT := set_var(its_gr(0), PIT, Off, _var(T2C(Temp), T2C(Temp)));
-      end_for;
-    end_for;
-  end_for;
-  IT_InitTemp := PIT;
-END_FUNCTION
-
-FUNCTION m_def : TDef
-  VAR_INPUT
-    MW0 : UINT;
-    MW1 : UINT;
-    MW2 : UINT;
-    MW3 : UINT;
-    MW4 : UINT;
-    MW5 : UINT;
-    MW6 : UINT;
-    MW7 : UINT;
-    MW8 : UINT;
-    MW9 : UINT;
-  END_VAR
-
-  (* Идентификатор, флаги и радиус *)
-  m_def.ID    := MW0;
-  m_def.CF    := UINT_TO_WORD(MW1);
-  m_def.R0    := UINT_TO_INT (MW2);
-
-  (* Определение точки начала отсчёта *)
-  m_def.XYZ[0]:= UINT_TO_INT (MW3);
-  m_def.XYZ[1]:= UINT_TO_INT (MW4);
-  m_def.XYZ[2]:= UINT_TO_INT (MW5);
-
-  (* Определение габаритов элемента   *)
-  m_def.LWH[0]:= UINT_TO_INT (MW6);
-  m_def.LWH[1]:= UINT_TO_INT (MW7);
-  m_def.LWH[2]:= UINT_TO_INT (MW8);
-
-  (* Определение индексов элемента   *)
-  m_def.Ig    := UINT_TO_SINT((MW9/256)/16);
-  m_def.Im    := UINT_TO_SINT(mod((MW9/256),16));
-  m_def.Iv    := UINT_TO_SINT(mod(MW9, 256));
-END_FUNCTION
-
-FUNCTION_BLOCK GetDef
-  VAR_EXTERNAL
-    MW0 : UINT;
-    MW1 : UINT;
-    MW2 : UINT;
-    MW3 : UINT;
-    MW4 : UINT;
-    MW5 : UINT;
-    MW6 : UINT;
-    MW7 : UINT;
-    MW8 : UINT;
-    MW9 : UINT;
-    MW10 : UINT;
-    MW11 : UINT;
-    MW12 : UINT;
-    MW13 : UINT;
-    MW14 : UINT;
-    MW15 : UINT;
-    MW16 : UINT;
-    MW17 : UINT;
-    MW18 : UINT;
-    MW19 : UINT;
-    MW20 : UINT;
-    MW21 : UINT;
-    MW22 : UINT;
-    MW23 : UINT;
-    MW24 : UINT;
-    MW25 : UINT;
-    MW26 : UINT;
-    MW27 : UINT;
-    MW28 : UINT;
-    MW29 : UINT;
-    MW30 : UINT;
-    MW31 : UINT;
-    MW32 : UINT;
-    MW33 : UINT;
-    MW34 : UINT;
-    MW35 : UINT;
-    MW36 : UINT;
-    MW37 : UINT;
-    MW38 : UINT;
-    MW39 : UINT;
-    MW40 : UINT;
-    MW41 : UINT;
-    MW42 : UINT;
-    MW43 : UINT;
-    MW44 : UINT;
-    MW45 : UINT;
-    MW46 : UINT;
-    MW47 : UINT;
-    MW48 : UINT;
-    MW49 : UINT;
-    MW50 : UINT;
-    MW51 : UINT;
-    MW52 : UINT;
-    MW53 : UINT;
-    MW54 : UINT;
-    MW55 : UINT;
-    MW56 : UINT;
-    MW57 : UINT;
-    MW58 : UINT;
-    MW59 : UINT;
-    MW60 : UINT;
-    MW61 : UINT;
-    MW62 : UINT;
-    MW63 : UINT;
-    MW64 : UINT;
-    MW65 : UINT;
-    MW66 : UINT;
-    MW67 : UINT;
-    MW68 : UINT;
-    MW69 : UINT;
-    MW70 : UINT;
-    MW71 : UINT;
-    MW72 : UINT;
-    MW73 : UINT;
-    MW74 : UINT;
-    MW75 : UINT;
-    MW76 : UINT;
-    MW77 : UINT;
-    MW78 : UINT;
-    MW79 : UINT;
-    MW80 : UINT;
-    MW81 : UINT;
-    MW82 : UINT;
-    MW83 : UINT;
-    MW84 : UINT;
-    MW85 : UINT;
-    MW86 : UINT;
-    MW87 : UINT;
-    MW88 : UINT;
-    MW89 : UINT;
-    MW90 : UINT;
-    MW91 : UINT;
-    MW92 : UINT;
-    MW93 : UINT;
-    MW94 : UINT;
-    MW95 : UINT;
-    MW96 : UINT;
-    MW97 : UINT;
-    MW98 : UINT;
-    MW99 : UINT;
-    MW100 : UINT;
-    MW101 : UINT;
-    MW102 : UINT;
-    MW103 : UINT;
-    MW104 : UINT;
-    MW105 : UINT;
-    MW106 : UINT;
-    MW107 : UINT;
-    MW108 : UINT;
-    MW109 : UINT;
-    MW110 : UINT;
-    MW111 : UINT;
-    MW112 : UINT;
-    MW113 : UINT;
-    MW114 : UINT;
-    MW115 : UINT;
-    MW116 : UINT;
-    MW117 : UINT;
-    MW118 : UINT;
-    MW119 : UINT;
-    MW120 : UINT;
-    MW121 : UINT;
-    MW122 : UINT;
-    MW123 : UINT;
-    MW124 : UINT;
-    MW125 : UINT;
-    MW126 : UINT;
-    MW127 : UINT;
-    MW128 : UINT;
-    MW129 : UINT;
-    MW130 : UINT;
-    MW131 : UINT;
-    MW132 : UINT;
-    MW133 : UINT;
-    MW134 : UINT;
-    MW135 : UINT;
-    MW136 : UINT;
-    MW137 : UINT;
-    MW138 : UINT;
-    MW139 : UINT;
-    MW140 : UINT;
-    MW141 : UINT;
-    MW142 : UINT;
-    MW143 : UINT;
-    MW144 : UINT;
-    MW145 : UINT;
-    MW146 : UINT;
-    MW147 : UINT;
-    MW148 : UINT;
-    MW149 : UINT;
-    MW150 : UINT;
-    MW151 : UINT;
-    MW152 : UINT;
-    MW153 : UINT;
-    MW154 : UINT;
-    MW155 : UINT;
-    MW156 : UINT;
-    MW157 : UINT;
-    MW158 : UINT;
-    MW159 : UINT;
-    MW160 : UINT;
-    MW161 : UINT;
-    MW162 : UINT;
-    MW163 : UINT;
-    MW164 : UINT;
-    MW165 : UINT;
-    MW166 : UINT;
-    MW167 : UINT;
-    MW168 : UINT;
-    MW169 : UINT;
-    MW170 : UINT;
-    MW171 : UINT;
-    MW172 : UINT;
-    MW173 : UINT;
-    MW174 : UINT;
-    MW175 : UINT;
-    MW176 : UINT;
-    MW177 : UINT;
-    MW178 : UINT;
-    MW179 : UINT;
-    MW180 : UINT;
-    MW181 : UINT;
-    MW182 : UINT;
-    MW183 : UINT;
-    MW184 : UINT;
-    MW185 : UINT;
-    MW186 : UINT;
-    MW187 : UINT;
-    MW188 : UINT;
-    MW189 : UINT;
-    MW190 : UINT;
-    MW191 : UINT;
-    MW192 : UINT;
-    MW193 : UINT;
-    MW194 : UINT;
-    MW195 : UINT;
-    MW196 : UINT;
-    MW197 : UINT;
-    MW198 : UINT;
-    MW199 : UINT;
-    MW200 : UINT;
-    MW201 : UINT;
-    MW202 : UINT;
-    MW203 : UINT;
-    MW204 : UINT;
-    MW205 : UINT;
-    MW206 : UINT;
-    MW207 : UINT;
-    MW208 : UINT;
-    MW209 : UINT;
-    MW210 : UINT;
-    MW211 : UINT;
-    MW212 : UINT;
-    MW213 : UINT;
-    MW214 : UINT;
-    MW215 : UINT;
-    MW216 : UINT;
-    MW217 : UINT;
-    MW218 : UINT;
-    MW219 : UINT;
-    MW220 : UINT;
-    MW221 : UINT;
-    MW222 : UINT;
-    MW223 : UINT;
-    MW224 : UINT;
-    MW225 : UINT;
-    MW226 : UINT;
-    MW227 : UINT;
-    MW228 : UINT;
-    MW229 : UINT;
-    MW230 : UINT;
-    MW231 : UINT;
-    MW232 : UINT;
-    MW233 : UINT;
-    MW234 : UINT;
-    MW235 : UINT;
-    MW236 : UINT;
-    MW237 : UINT;
-    MW238 : UINT;
-    MW239 : UINT;
-    MW240 : UINT;
-    MW241 : UINT;
-    MW242 : UINT;
-    MW243 : UINT;
-    MW244 : UINT;
-    MW245 : UINT;
-    MW246 : UINT;
-    MW247 : UINT;
-    MW248 : UINT;
-    MW249 : UINT;
-    MW250 : UINT;
-    MW251 : UINT;
-    MW252 : UINT;
-    MW253 : UINT;
-    MW254 : UINT;
-    MW255 : UINT;
-    MW256 : UINT;
-    MW257 : UINT;
-    MW258 : UINT;
-    MW259 : UINT;
-    MW260 : UINT;
-    MW261 : UINT;
-    MW262 : UINT;
-    MW263 : UINT;
-    MW264 : UINT;
-    MW265 : UINT;
-    MW266 : UINT;
-    MW267 : UINT;
-    MW268 : UINT;
-    MW269 : UINT;
-    MW270 : UINT;
-    MW271 : UINT;
-    MW272 : UINT;
-    MW273 : UINT;
-    MW274 : UINT;
-    MW275 : UINT;
-    MW276 : UINT;
-    MW277 : UINT;
-    MW278 : UINT;
-    MW279 : UINT;
-    MW280 : UINT;
-    MW281 : UINT;
-    MW282 : UINT;
-    MW283 : UINT;
-    MW284 : UINT;
-    MW285 : UINT;
-    MW286 : UINT;
-    MW287 : UINT;
-    MW288 : UINT;
-    MW289 : UINT;
-    MW290 : UINT;
-    MW291 : UINT;
-    MW292 : UINT;
-    MW293 : UINT;
-    MW294 : UINT;
-    MW295 : UINT;
-    MW296 : UINT;
-    MW297 : UINT;
-    MW298 : UINT;
-    MW299 : UINT;
-    MW300 : UINT;
-    MW301 : UINT;
-    MW302 : UINT;
-    MW303 : UINT;
-    MW304 : UINT;
-    MW305 : UINT;
-    MW306 : UINT;
-    MW307 : UINT;
-    MW308 : UINT;
-    MW309 : UINT;
-    MW310 : UINT;
-    MW311 : UINT;
-    MW312 : UINT;
-    MW313 : UINT;
-    MW314 : UINT;
-    MW315 : UINT;
-    MW316 : UINT;
-    MW317 : UINT;
-    MW318 : UINT;
-    MW319 : UINT;
-    MW320 : UINT;
-    MW321 : UINT;
-    MW322 : UINT;
-    MW323 : UINT;
-    MW324 : UINT;
-    MW325 : UINT;
-    MW326 : UINT;
-    MW327 : UINT;
-    MW328 : UINT;
-    MW329 : UINT;
-    MW330 : UINT;
-    MW331 : UINT;
-    MW332 : UINT;
-    MW333 : UINT;
-    MW334 : UINT;
-    MW335 : UINT;
-    MW336 : UINT;
-    MW337 : UINT;
-    MW338 : UINT;
-    MW339 : UINT;
-    MW340 : UINT;
-    MW341 : UINT;
-    MW342 : UINT;
-    MW343 : UINT;
-    MW344 : UINT;
-    MW345 : UINT;
-    MW346 : UINT;
-    MW347 : UINT;
-    MW348 : UINT;
-    MW349 : UINT;
-    MW350 : UINT;
-    MW351 : UINT;
-    MW352 : UINT;
-    MW353 : UINT;
-    MW354 : UINT;
-    MW355 : UINT;
-    MW356 : UINT;
-    MW357 : UINT;
-    MW358 : UINT;
-    MW359 : UINT;
-    MW360 : UINT;
-    MW361 : UINT;
-    MW362 : UINT;
-    MW363 : UINT;
-    MW364 : UINT;
-    MW365 : UINT;
-    MW366 : UINT;
-    MW367 : UINT;
-    MW368 : UINT;
-    MW369 : UINT;
-    MW370 : UINT;
-    MW371 : UINT;
-    MW372 : UINT;
-    MW373 : UINT;
-    MW374 : UINT;
-    MW375 : UINT;
-    MW376 : UINT;
-    MW377 : UINT;
-    MW378 : UINT;
-    MW379 : UINT;
-    MW380 : UINT;
-    MW381 : UINT;
-    MW382 : UINT;
-    MW383 : UINT;
-    MW384 : UINT;
-    MW385 : UINT;
-    MW386 : UINT;
-    MW387 : UINT;
-    MW388 : UINT;
-    MW389 : UINT;
-    MW390 : UINT;
-    MW391 : UINT;
-    MW392 : UINT;
-    MW393 : UINT;
-    MW394 : UINT;
-    MW395 : UINT;
-    MW396 : UINT;
-    MW397 : UINT;
-    MW398 : UINT;
-    MW399 : UINT;
-    MW400 : UINT;
-    MW401 : UINT;
-    MW402 : UINT;
-    MW403 : UINT;
-    MW404 : UINT;
-    MW405 : UINT;
-    MW406 : UINT;
-    MW407 : UINT;
-    MW408 : UINT;
-    MW409 : UINT;
-    MW410 : UINT;
-    MW411 : UINT;
-    MW412 : UINT;
-    MW413 : UINT;
-    MW414 : UINT;
-    MW415 : UINT;
-    MW416 : UINT;
-    MW417 : UINT;
-    MW418 : UINT;
-    MW419 : UINT;
-    MW420 : UINT;
-    MW421 : UINT;
-    MW422 : UINT;
-    MW423 : UINT;
-    MW424 : UINT;
-    MW425 : UINT;
-    MW426 : UINT;
-    MW427 : UINT;
-    MW428 : UINT;
-    MW429 : UINT;
-    MW430 : UINT;
-    MW431 : UINT;
-    MW432 : UINT;
-    MW433 : UINT;
-    MW434 : UINT;
-    MW435 : UINT;
-    MW436 : UINT;
-    MW437 : UINT;
-    MW438 : UINT;
-    MW439 : UINT;
-    MW440 : UINT;
-    MW441 : UINT;
-    MW442 : UINT;
-    MW443 : UINT;
-    MW444 : UINT;
-    MW445 : UINT;
-    MW446 : UINT;
-    MW447 : UINT;
-    MW448 : UINT;
-    MW449 : UINT;
-    MW450 : UINT;
-    MW451 : UINT;
-    MW452 : UINT;
-    MW453 : UINT;
-    MW454 : UINT;
-    MW455 : UINT;
-    MW456 : UINT;
-    MW457 : UINT;
-    MW458 : UINT;
-    MW459 : UINT;
-    MW460 : UINT;
-    MW461 : UINT;
-    MW462 : UINT;
-    MW463 : UINT;
-    MW464 : UINT;
-    MW465 : UINT;
-    MW466 : UINT;
-    MW467 : UINT;
-    MW468 : UINT;
-    MW469 : UINT;
-    MW470 : UINT;
-    MW471 : UINT;
-    MW472 : UINT;
-    MW473 : UINT;
-    MW474 : UINT;
-    MW475 : UINT;
-    MW476 : UINT;
-    MW477 : UINT;
-    MW478 : UINT;
-    MW479 : UINT;
-    MW480 : UINT;
-    MW481 : UINT;
-    MW482 : UINT;
-    MW483 : UINT;
-    MW484 : UINT;
-    MW485 : UINT;
-    MW486 : UINT;
-    MW487 : UINT;
-    MW488 : UINT;
-    MW489 : UINT;
-    MW490 : UINT;
-    MW491 : UINT;
-    MW492 : UINT;
-    MW493 : UINT;
-    MW494 : UINT;
-    MW495 : UINT;
-    MW496 : UINT;
-    MW497 : UINT;
-    MW498 : UINT;
-    MW499 : UINT;
-    MW500 : UINT;
-    MW501 : UINT;
-    MW502 : UINT;
-    MW503 : UINT;
-    MW504 : UINT;
-    MW505 : UINT;
-    MW506 : UINT;
-    MW507 : UINT;
-    MW508 : UINT;
-    MW509 : UINT;
-    MW510 : UINT;
-    MW511 : UINT;
-    MW512 : UINT;
-    MW513 : UINT;
-    MW514 : UINT;
-    MW515 : UINT;
-    MW516 : UINT;
-    MW517 : UINT;
-    MW518 : UINT;
-    MW519 : UINT;
-    MW520 : UINT;
-    MW521 : UINT;
-    MW522 : UINT;
-    MW523 : UINT;
-    MW524 : UINT;
-    MW525 : UINT;
-    MW526 : UINT;
-    MW527 : UINT;
-    MW528 : UINT;
-    MW529 : UINT;
-    MW530 : UINT;
-    MW531 : UINT;
-    MW532 : UINT;
-    MW533 : UINT;
-    MW534 : UINT;
-    MW535 : UINT;
-    MW536 : UINT;
-    MW537 : UINT;
-    MW538 : UINT;
-    MW539 : UINT;
-    MW540 : UINT;
-    MW541 : UINT;
-    MW542 : UINT;
-    MW543 : UINT;
-    MW544 : UINT;
-    MW545 : UINT;
-    MW546 : UINT;
-    MW547 : UINT;
-    MW548 : UINT;
-    MW549 : UINT;
-    MW550 : UINT;
-    MW551 : UINT;
-    MW552 : UINT;
-    MW553 : UINT;
-    MW554 : UINT;
-    MW555 : UINT;
-    MW556 : UINT;
-    MW557 : UINT;
-    MW558 : UINT;
-    MW559 : UINT;
-    MW560 : UINT;
-    MW561 : UINT;
-    MW562 : UINT;
-    MW563 : UINT;
-    MW564 : UINT;
-    MW565 : UINT;
-    MW566 : UINT;
-    MW567 : UINT;
-    MW568 : UINT;
-    MW569 : UINT;
-    MW570 : UINT;
-    MW571 : UINT;
-    MW572 : UINT;
-    MW573 : UINT;
-    MW574 : UINT;
-    MW575 : UINT;
-    MW576 : UINT;
-    MW577 : UINT;
-    MW578 : UINT;
-    MW579 : UINT;
-    MW580 : UINT;
-    MW581 : UINT;
-    MW582 : UINT;
-    MW583 : UINT;
-    MW584 : UINT;
-    MW585 : UINT;
-    MW586 : UINT;
-    MW587 : UINT;
-    MW588 : UINT;
-    MW589 : UINT;
-    MW590 : UINT;
-    MW591 : UINT;
-    MW592 : UINT;
-    MW593 : UINT;
-    MW594 : UINT;
-    MW595 : UINT;
-    MW596 : UINT;
-    MW597 : UINT;
-    MW598 : UINT;
-    MW599 : UINT;
-    MW600 : UINT;
-    MW601 : UINT;
-    MW602 : UINT;
-    MW603 : UINT;
-    MW604 : UINT;
-    MW605 : UINT;
-    MW606 : UINT;
-    MW607 : UINT;
-    MW608 : UINT;
-    MW609 : UINT;
-    MW610 : UINT;
-    MW611 : UINT;
-    MW612 : UINT;
-    MW613 : UINT;
-    MW614 : UINT;
-    MW615 : UINT;
-    MW616 : UINT;
-    MW617 : UINT;
-    MW618 : UINT;
-    MW619 : UINT;
-    MW620 : UINT;
-    MW621 : UINT;
-    MW622 : UINT;
-    MW623 : UINT;
-    MW624 : UINT;
-    MW625 : UINT;
-    MW626 : UINT;
-    MW627 : UINT;
-    MW628 : UINT;
-    MW629 : UINT;
-    MW630 : UINT;
-    MW631 : UINT;
-    MW632 : UINT;
-    MW633 : UINT;
-    MW634 : UINT;
-    MW635 : UINT;
-    MW636 : UINT;
-    MW637 : UINT;
-    MW638 : UINT;
-    MW639 : UINT;
-    MW640 : UINT;
-    MW641 : UINT;
-    MW642 : UINT;
-    MW643 : UINT;
-    MW644 : UINT;
-    MW645 : UINT;
-    MW646 : UINT;
-    MW647 : UINT;
-    MW648 : UINT;
-    MW649 : UINT;
-    MW650 : UINT;
-    MW651 : UINT;
-    MW652 : UINT;
-    MW653 : UINT;
-    MW654 : UINT;
-    MW655 : UINT;
-    MW656 : UINT;
-    MW657 : UINT;
-    MW658 : UINT;
-    MW659 : UINT;
-    MW660 : UINT;
-    MW661 : UINT;
-    MW662 : UINT;
-    MW663 : UINT;
-    MW664 : UINT;
-    MW665 : UINT;
-    MW666 : UINT;
-    MW667 : UINT;
-    MW668 : UINT;
-    MW669 : UINT;
-    MW670 : UINT;
-    MW671 : UINT;
-    MW672 : UINT;
-    MW673 : UINT;
-    MW674 : UINT;
-    MW675 : UINT;
-    MW676 : UINT;
-    MW677 : UINT;
-    MW678 : UINT;
-    MW679 : UINT;
-    MW680 : UINT;
-    MW681 : UINT;
-    MW682 : UINT;
-    MW683 : UINT;
-    MW684 : UINT;
-    MW685 : UINT;
-    MW686 : UINT;
-    MW687 : UINT;
-    MW688 : UINT;
-    MW689 : UINT;
-    MW690 : UINT;
-    MW691 : UINT;
-    MW692 : UINT;
-    MW693 : UINT;
-    MW694 : UINT;
-    MW695 : UINT;
-    MW696 : UINT;
-    MW697 : UINT;
-    MW698 : UINT;
-    MW699 : UINT;
-    MW700 : UINT;
-    MW701 : UINT;
-    MW702 : UINT;
-    MW703 : UINT;
-    MW704 : UINT;
-    MW705 : UINT;
-    MW706 : UINT;
-    MW707 : UINT;
-    MW708 : UINT;
-    MW709 : UINT;
-    MW710 : UINT;
-    MW711 : UINT;
-    MW712 : UINT;
-    MW713 : UINT;
-    MW714 : UINT;
-    MW715 : UINT;
-    MW716 : UINT;
-    MW717 : UINT;
-    MW718 : UINT;
-    MW719 : UINT;
-    MW720 : UINT;
-    MW721 : UINT;
-    MW722 : UINT;
-    MW723 : UINT;
-    MW724 : UINT;
-    MW725 : UINT;
-    MW726 : UINT;
-    MW727 : UINT;
-    MW728 : UINT;
-    MW729 : UINT;
-    MW730 : UINT;
-    MW731 : UINT;
-    MW732 : UINT;
-    MW733 : UINT;
-    MW734 : UINT;
-    MW735 : UINT;
-    MW736 : UINT;
-    MW737 : UINT;
-    MW738 : UINT;
-    MW739 : UINT;
-    MW740 : UINT;
-    MW741 : UINT;
-    MW742 : UINT;
-    MW743 : UINT;
-    MW744 : UINT;
-    MW745 : UINT;
-    MW746 : UINT;
-    MW747 : UINT;
-    MW748 : UINT;
-    MW749 : UINT;
-    MW750 : UINT;
-    MW751 : UINT;
-    MW752 : UINT;
-    MW753 : UINT;
-    MW754 : UINT;
-    MW755 : UINT;
-    MW756 : UINT;
-    MW757 : UINT;
-    MW758 : UINT;
-    MW759 : UINT;
-    MW760 : UINT;
-    MW761 : UINT;
-    MW762 : UINT;
-    MW763 : UINT;
-    MW764 : UINT;
-    MW765 : UINT;
-    MW766 : UINT;
-    MW767 : UINT;
-    MW768 : UINT;
-    MW769 : UINT;
-    MW770 : UINT;
-    MW771 : UINT;
-    MW772 : UINT;
-    MW773 : UINT;
-    MW774 : UINT;
-    MW775 : UINT;
-    MW776 : UINT;
-    MW777 : UINT;
-    MW778 : UINT;
-    MW779 : UINT;
-    MW780 : UINT;
-    MW781 : UINT;
-    MW782 : UINT;
-    MW783 : UINT;
-    MW784 : UINT;
-    MW785 : UINT;
-    MW786 : UINT;
-    MW787 : UINT;
-    MW788 : UINT;
-    MW789 : UINT;
-    MW790 : UINT;
-    MW791 : UINT;
-    MW792 : UINT;
-    MW793 : UINT;
-    MW794 : UINT;
-    MW795 : UINT;
-    MW796 : UINT;
-    MW797 : UINT;
-    MW798 : UINT;
-    MW799 : UINT;
-    MW800 : UINT;
-    MW801 : UINT;
-    MW802 : UINT;
-    MW803 : UINT;
-    MW804 : UINT;
-    MW805 : UINT;
-    MW806 : UINT;
-    MW807 : UINT;
-    MW808 : UINT;
-    MW809 : UINT;
-    MW810 : UINT;
-    MW811 : UINT;
-    MW812 : UINT;
-    MW813 : UINT;
-    MW814 : UINT;
-    MW815 : UINT;
-    MW816 : UINT;
-    MW817 : UINT;
-    MW818 : UINT;
-    MW819 : UINT;
-    MW820 : UINT;
-    MW821 : UINT;
-    MW822 : UINT;
-    MW823 : UINT;
-    MW824 : UINT;
-    MW825 : UINT;
-    MW826 : UINT;
-    MW827 : UINT;
-    MW828 : UINT;
-    MW829 : UINT;
-    MW830 : UINT;
-    MW831 : UINT;
-    MW832 : UINT;
-    MW833 : UINT;
-    MW834 : UINT;
-    MW835 : UINT;
-    MW836 : UINT;
-    MW837 : UINT;
-    MW838 : UINT;
-    MW839 : UINT;
-    MW840 : UINT;
-    MW841 : UINT;
-    MW842 : UINT;
-    MW843 : UINT;
-    MW844 : UINT;
-    MW845 : UINT;
-    MW846 : UINT;
-    MW847 : UINT;
-    MW848 : UINT;
-    MW849 : UINT;
-    MW850 : UINT;
-    MW851 : UINT;
-    MW852 : UINT;
-    MW853 : UINT;
-    MW854 : UINT;
-    MW855 : UINT;
-    MW856 : UINT;
-    MW857 : UINT;
-    MW858 : UINT;
-    MW859 : UINT;
-    MW860 : UINT;
-    MW861 : UINT;
-    MW862 : UINT;
-    MW863 : UINT;
-    MW864 : UINT;
-    MW865 : UINT;
-    MW866 : UINT;
-    MW867 : UINT;
-    MW868 : UINT;
-    MW869 : UINT;
-    MW870 : UINT;
-    MW871 : UINT;
-    MW872 : UINT;
-    MW873 : UINT;
-    MW874 : UINT;
-    MW875 : UINT;
-    MW876 : UINT;
-    MW877 : UINT;
-    MW878 : UINT;
-    MW879 : UINT;
-    MW880 : UINT;
-    MW881 : UINT;
-    MW882 : UINT;
-    MW883 : UINT;
-    MW884 : UINT;
-    MW885 : UINT;
-    MW886 : UINT;
-    MW887 : UINT;
-    MW888 : UINT;
-    MW889 : UINT;
-    MW890 : UINT;
-    MW891 : UINT;
-    MW892 : UINT;
-    MW893 : UINT;
-    MW894 : UINT;
-    MW895 : UINT;
-    MW896 : UINT;
-    MW897 : UINT;
-    MW898 : UINT;
-    MW899 : UINT;
-    MW900 : UINT;
-    MW901 : UINT;
-    MW902 : UINT;
-    MW903 : UINT;
-    MW904 : UINT;
-    MW905 : UINT;
-    MW906 : UINT;
-    MW907 : UINT;
-    MW908 : UINT;
-    MW909 : UINT;
-    MW910 : UINT;
-    MW911 : UINT;
-    MW912 : UINT;
-    MW913 : UINT;
-    MW914 : UINT;
-    MW915 : UINT;
-    MW916 : UINT;
-    MW917 : UINT;
-    MW918 : UINT;
-    MW919 : UINT;
-    MW920 : UINT;
-    MW921 : UINT;
-    MW922 : UINT;
-    MW923 : UINT;
-    MW924 : UINT;
-    MW925 : UINT;
-    MW926 : UINT;
-    MW927 : UINT;
-    MW928 : UINT;
-    MW929 : UINT;
-    MW930 : UINT;
-    MW931 : UINT;
-    MW932 : UINT;
-    MW933 : UINT;
-    MW934 : UINT;
-    MW935 : UINT;
-    MW936 : UINT;
-    MW937 : UINT;
-    MW938 : UINT;
-    MW939 : UINT;
-    MW940 : UINT;
-    MW941 : UINT;
-    MW942 : UINT;
-    MW943 : UINT;
-    MW944 : UINT;
-    MW945 : UINT;
-    MW946 : UINT;
-    MW947 : UINT;
-    MW948 : UINT;
-    MW949 : UINT;
-    MW950 : UINT;
-    MW951 : UINT;
-    MW952 : UINT;
-    MW953 : UINT;
-    MW954 : UINT;
-    MW955 : UINT;
-    MW956 : UINT;
-    MW957 : UINT;
-    MW958 : UINT;
-    MW959 : UINT;
-    MW960 : UINT;
-    MW961 : UINT;
-    MW962 : UINT;
-    MW963 : UINT;
-    MW964 : UINT;
-    MW965 : UINT;
-    MW966 : UINT;
-    MW967 : UINT;
-    MW968 : UINT;
-    MW969 : UINT;
-    MW970 : UINT;
-    MW971 : UINT;
-    MW972 : UINT;
-    MW973 : UINT;
-    MW974 : UINT;
-    MW975 : UINT;
-    MW976 : UINT;
-    MW977 : UINT;
-    MW978 : UINT;
-    MW979 : UINT;
-    MW980 : UINT;
-    MW981 : UINT;
-    MW982 : UINT;
-    MW983 : UINT;
-    MW984 : UINT;
-    MW985 : UINT;
-    MW986 : UINT;
-    MW987 : UINT;
-    MW988 : UINT;
-    MW989 : UINT;
-    MW990 : UINT;
-    MW991 : UINT;
-    MW992 : UINT;
-    MW993 : UINT;
-    MW994 : UINT;
-    MW995 : UINT;
-    MW996 : UINT;
-    MW997 : UINT;
-    MW998 : UINT;
-    MW999 : UINT;
-  END_VAR
-  VAR_INPUT
-    I : TPos8 := -1;
-  END_VAR
-  VAR_OUTPUT
-    DEF : TDef;
-  END_VAR
-
-  CASE i OF
-  0 : DEF := m_def(MW0,MW1,MW2,MW3,MW4,MW5,MW6,MW7,MW8,MW9);
-  1 : DEF := m_def(MW10,MW11,MW12,MW13,MW14,MW15,MW16,MW17,MW18,MW19);
-  2 : DEF := m_def(MW20,MW21,MW22,MW23,MW24,MW25,MW26,MW27,MW28,MW29);
-  3 : DEF := m_def(MW30,MW31,MW32,MW33,MW34,MW35,MW36,MW37,MW38,MW39);
-  4 : DEF := m_def(MW40,MW41,MW42,MW43,MW44,MW45,MW46,MW47,MW48,MW49);
-  5 : DEF := m_def(MW50,MW51,MW52,MW53,MW54,MW55,MW56,MW57,MW58,MW59);
-  6 : DEF := m_def(MW60,MW61,MW62,MW63,MW64,MW65,MW66,MW67,MW68,MW69);
-  7 : DEF := m_def(MW70,MW71,MW72,MW73,MW74,MW75,MW76,MW77,MW78,MW79);
-  8 : DEF := m_def(MW80,MW81,MW82,MW83,MW84,MW85,MW86,MW87,MW88,MW89);
-  9 : DEF := m_def(MW90,MW91,MW92,MW93,MW94,MW95,MW96,MW97,MW98,MW99);
-
-  10 : DEF := m_def(MW100,MW101,MW102,MW103,MW104,MW105,MW106,MW107,MW108,MW109);
-  11 : DEF := m_def(MW110,MW111,MW112,MW113,MW114,MW115,MW116,MW117,MW118,MW119);
-  12 : DEF := m_def(MW120,MW121,MW122,MW123,MW124,MW125,MW126,MW127,MW128,MW129);
-  13 : DEF := m_def(MW130,MW131,MW132,MW133,MW134,MW135,MW136,MW137,MW138,MW139);
-  14 : DEF := m_def(MW140,MW141,MW142,MW143,MW144,MW145,MW146,MW147,MW148,MW149);
-  15 : DEF := m_def(MW150,MW151,MW152,MW153,MW154,MW155,MW156,MW157,MW158,MW159);
-  16 : DEF := m_def(MW160,MW161,MW162,MW163,MW164,MW165,MW166,MW167,MW168,MW169);
-  17 : DEF := m_def(MW170,MW171,MW172,MW173,MW174,MW175,MW176,MW177,MW178,MW179);
-  18 : DEF := m_def(MW180,MW181,MW182,MW183,MW184,MW185,MW186,MW187,MW188,MW189);
-  19 : DEF := m_def(MW190,MW191,MW192,MW193,MW194,MW195,MW196,MW197,MW198,MW199);
-
-  20 : DEF := m_def(MW200,MW201,MW202,MW203,MW204,MW205,MW206,MW207,MW208,MW209);
-  21 : DEF := m_def(MW210,MW211,MW212,MW213,MW214,MW215,MW216,MW217,MW218,MW219);
-  22 : DEF := m_def(MW220,MW221,MW222,MW223,MW224,MW225,MW226,MW227,MW228,MW229);
-  23 : DEF := m_def(MW230,MW231,MW232,MW233,MW234,MW235,MW236,MW237,MW238,MW239);
-  24 : DEF := m_def(MW240,MW241,MW242,MW243,MW244,MW245,MW246,MW247,MW248,MW249);
-  25 : DEF := m_def(MW250,MW251,MW252,MW253,MW254,MW255,MW256,MW257,MW258,MW259);
-  26 : DEF := m_def(MW260,MW261,MW262,MW263,MW264,MW265,MW266,MW267,MW268,MW269);
-  27 : DEF := m_def(MW270,MW271,MW272,MW273,MW274,MW275,MW276,MW277,MW278,MW279);
-  28 : DEF := m_def(MW280,MW281,MW282,MW283,MW284,MW285,MW286,MW287,MW288,MW289);
-  29 : DEF := m_def(MW290,MW291,MW292,MW293,MW294,MW295,MW296,MW297,MW298,MW299);
-
-  30 : DEF := m_def(MW300,MW301,MW302,MW303,MW304,MW305,MW306,MW307,MW308,MW309);
-  31 : DEF := m_def(MW310,MW311,MW312,MW313,MW314,MW315,MW316,MW317,MW318,MW319);
-  32 : DEF := m_def(MW320,MW321,MW322,MW323,MW324,MW325,MW326,MW327,MW328,MW329);
-  33 : DEF := m_def(MW330,MW331,MW332,MW333,MW334,MW335,MW336,MW337,MW338,MW339);
-  34 : DEF := m_def(MW340,MW341,MW342,MW343,MW344,MW345,MW346,MW347,MW348,MW349);
-  35 : DEF := m_def(MW350,MW351,MW352,MW353,MW354,MW355,MW356,MW357,MW358,MW359);
-  36 : DEF := m_def(MW360,MW361,MW362,MW363,MW364,MW365,MW366,MW367,MW368,MW369);
-  37 : DEF := m_def(MW370,MW371,MW372,MW373,MW374,MW375,MW376,MW377,MW378,MW379);
-  38 : DEF := m_def(MW380,MW381,MW382,MW383,MW384,MW385,MW386,MW387,MW388,MW389);
-  39 : DEF := m_def(MW390,MW391,MW392,MW393,MW394,MW395,MW396,MW397,MW398,MW399);
-
-  40 : DEF := m_def(MW400,MW401,MW402,MW403,MW404,MW405,MW406,MW407,MW408,MW409);
-  41 : DEF := m_def(MW410,MW411,MW412,MW413,MW414,MW415,MW416,MW417,MW418,MW419);
-  42 : DEF := m_def(MW420,MW421,MW422,MW423,MW424,MW425,MW426,MW427,MW428,MW429);
-  43 : DEF := m_def(MW430,MW431,MW432,MW433,MW434,MW435,MW436,MW437,MW438,MW439);
-  44 : DEF := m_def(MW440,MW441,MW442,MW443,MW444,MW445,MW446,MW447,MW448,MW449);
-  45 : DEF := m_def(MW450,MW451,MW452,MW453,MW454,MW455,MW456,MW457,MW458,MW459);
-  46 : DEF := m_def(MW460,MW461,MW462,MW463,MW464,MW465,MW466,MW467,MW468,MW469);
-  47 : DEF := m_def(MW470,MW471,MW472,MW473,MW474,MW475,MW476,MW477,MW478,MW479);
-  48 : DEF := m_def(MW480,MW481,MW482,MW483,MW484,MW485,MW486,MW487,MW488,MW489);
-  49 : DEF := m_def(MW490,MW491,MW492,MW493,MW494,MW495,MW496,MW497,MW498,MW499);
-
-  50 : DEF := m_def(MW500,MW501,MW502,MW503,MW504,MW505,MW506,MW507,MW508,MW509);
-  51 : DEF := m_def(MW510,MW511,MW512,MW513,MW514,MW515,MW516,MW517,MW518,MW519);
-  52 : DEF := m_def(MW520,MW521,MW522,MW523,MW524,MW525,MW526,MW527,MW528,MW529);
-  53 : DEF := m_def(MW530,MW531,MW532,MW533,MW534,MW535,MW536,MW537,MW538,MW539);
-  54 : DEF := m_def(MW540,MW541,MW542,MW543,MW544,MW545,MW546,MW547,MW548,MW549);
-  55 : DEF := m_def(MW550,MW551,MW552,MW553,MW554,MW555,MW556,MW557,MW558,MW559);
-  56 : DEF := m_def(MW560,MW561,MW562,MW563,MW564,MW565,MW566,MW567,MW568,MW569);
-  57 : DEF := m_def(MW570,MW571,MW572,MW573,MW574,MW575,MW576,MW577,MW578,MW579);
-  58 : DEF := m_def(MW580,MW581,MW582,MW583,MW584,MW585,MW586,MW587,MW588,MW589);
-  59 : DEF := m_def(MW590,MW591,MW592,MW593,MW594,MW595,MW596,MW597,MW598,MW599);
-
-  60 : DEF := m_def(MW600,MW601,MW602,MW603,MW604,MW605,MW606,MW607,MW608,MW609);
-  61 : DEF := m_def(MW610,MW611,MW612,MW613,MW614,MW615,MW616,MW617,MW618,MW619);
-  62 : DEF := m_def(MW620,MW621,MW622,MW623,MW624,MW625,MW626,MW627,MW628,MW629);
-  63 : DEF := m_def(MW630,MW631,MW632,MW633,MW634,MW635,MW636,MW637,MW638,MW639);
-  64 : DEF := m_def(MW640,MW641,MW642,MW643,MW644,MW645,MW646,MW647,MW648,MW649);
-  65 : DEF := m_def(MW650,MW651,MW652,MW653,MW654,MW655,MW656,MW657,MW658,MW659);
-  66 : DEF := m_def(MW660,MW661,MW662,MW663,MW664,MW665,MW666,MW667,MW668,MW669);
-  67 : DEF := m_def(MW670,MW671,MW672,MW673,MW674,MW675,MW676,MW677,MW678,MW679);
-  68 : DEF := m_def(MW680,MW681,MW682,MW683,MW684,MW685,MW686,MW687,MW688,MW689);
-  69 : DEF := m_def(MW690,MW691,MW692,MW693,MW694,MW695,MW696,MW697,MW698,MW699);
-
-  70 : DEF := m_def(MW700,MW701,MW702,MW703,MW704,MW705,MW706,MW707,MW708,MW709);
-  71 : DEF := m_def(MW710,MW711,MW712,MW713,MW714,MW715,MW716,MW717,MW718,MW719);
-  72 : DEF := m_def(MW720,MW721,MW722,MW723,MW724,MW725,MW726,MW727,MW728,MW729);
-  73 : DEF := m_def(MW730,MW731,MW732,MW733,MW734,MW735,MW736,MW737,MW738,MW739);
-  74 : DEF := m_def(MW740,MW741,MW742,MW743,MW744,MW745,MW746,MW747,MW748,MW749);
-  75 : DEF := m_def(MW750,MW751,MW752,MW753,MW754,MW755,MW756,MW757,MW758,MW759);
-  76 : DEF := m_def(MW760,MW761,MW762,MW763,MW764,MW765,MW766,MW767,MW768,MW769);
-  77 : DEF := m_def(MW770,MW771,MW772,MW773,MW774,MW775,MW776,MW777,MW778,MW779);
-  78 : DEF := m_def(MW780,MW781,MW782,MW783,MW784,MW785,MW786,MW787,MW788,MW789);
-  79 : DEF := m_def(MW790,MW791,MW792,MW793,MW794,MW795,MW796,MW797,MW798,MW799);
-
-  80 : DEF := m_def(MW800,MW801,MW802,MW803,MW804,MW805,MW806,MW807,MW808,MW809);
-  81 : DEF := m_def(MW810,MW811,MW812,MW813,MW814,MW815,MW816,MW817,MW818,MW819);
-  82 : DEF := m_def(MW820,MW821,MW822,MW823,MW824,MW825,MW826,MW827,MW828,MW829);
-  83 : DEF := m_def(MW830,MW831,MW832,MW833,MW834,MW835,MW836,MW837,MW838,MW839);
-  84 : DEF := m_def(MW840,MW841,MW842,MW843,MW844,MW845,MW846,MW847,MW848,MW849);
-  85 : DEF := m_def(MW850,MW851,MW852,MW853,MW854,MW855,MW856,MW857,MW858,MW859);
-  86 : DEF := m_def(MW860,MW861,MW862,MW863,MW864,MW865,MW866,MW867,MW868,MW869);
-  87 : DEF := m_def(MW870,MW871,MW872,MW873,MW874,MW875,MW876,MW877,MW878,MW879);
-  88 : DEF := m_def(MW880,MW881,MW882,MW883,MW884,MW885,MW886,MW887,MW888,MW889);
-  89 : DEF := m_def(MW890,MW891,MW892,MW893,MW894,MW895,MW896,MW897,MW898,MW899);
-
-  90 : DEF := m_def(MW900,MW901,MW902,MW903,MW904,MW905,MW906,MW907,MW908,MW909);
-  91 : DEF := m_def(MW910,MW911,MW912,MW913,MW914,MW915,MW916,MW917,MW918,MW919);
-  92 : DEF := m_def(MW920,MW921,MW922,MW923,MW924,MW925,MW926,MW927,MW928,MW929);
-  93 : DEF := m_def(MW930,MW931,MW932,MW933,MW934,MW935,MW936,MW937,MW938,MW939);
-  94 : DEF := m_def(MW940,MW941,MW942,MW943,MW944,MW945,MW946,MW947,MW948,MW949);
-  95 : DEF := m_def(MW950,MW951,MW952,MW953,MW954,MW955,MW956,MW957,MW958,MW959);
-  96 : DEF := m_def(MW960,MW961,MW962,MW963,MW964,MW965,MW966,MW967,MW968,MW969);
-  97 : DEF := m_def(MW970,MW971,MW972,MW973,MW974,MW975,MW976,MW977,MW978,MW979);
-  98 : DEF := m_def(MW980,MW981,MW982,MW983,MW984,MW985,MW986,MW987,MW988,MW989);
-  99 : DEF := m_def(MW990,MW991,MW992,MW993,MW994,MW995,MW996,MW997,MW998,MW999);
-  END_CASE;
-END_FUNCTION_BLOCK
-
-FUNCTION_BLOCK ReadItem
-  VAR_EXTERNAL
-    HDR : THead;
-  END_VAR
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR_OUTPUT
-    iRes : TError := E_SUCCESS;
-  END_VAR
-  VAR
-    Def : TDef;
-    Item : TItem;
-    Shape : TShape;
-    Off : P_INT;
-    msg : STRING;
-    _GetDef : GetDef;
-  END_VAR
-
-  iRes:=E_SUCCESS;
-
-  (* Проверка корректности индекса элемента *)
-  if (PIT < 0 or PIT >= HDR.Ni) then iRes:=E_INDEX; {goto __exit} end_if;
-
-  (* Получение определения элемента из массива конфигурации *)
-  _GetDef(i := PIT, DEF => Def);
-
-  (* Проверка индексов в массивах VAL, MAT, KNT *)
-  if (HDR.Nv<>0 and Def.Iv >= HDR.Nv) then iRes:=E_VALUE; {goto __exit} end_if;
-  if (HDR.Nm=0  or  Def.Im >= HDR.Nm) then iRes:=E_MATER; {goto __exit} end_if;
-  if (HDR.Ng=0  or  Def.Ig >= HDR.Ng) then iRes:=E_GRID;  {goto __exit} end_if;
-
-  (* Инициализация *)
-  Item.ID  := Def.ID;  (* Копирование идентификатора элемента          *)
-  Item.Im  := Def.Im;  (* Копирование индекса материала                *)
-  Item.Iv  := Def.Iv;  (* Копирование индекса величины (если есть)     *)
-  Item.Par := -1;      (* Родитель не определен, дерево строится позже *)
-  Item.Num := 0;       (* Детей пока тоже нет, дерево строится позже   *)
-
-  (* Флаги геометрии (расшифровка в Do_Validate)  *)
-  Shape.wF  := Def.CF;   
-
-  (* Временное размещение начальных смещений в Кn (int[0..2]) *)
-  Shape.Kn[0] := Def.R0;                       (* начальный радиус (X0) *)
-  Shape.Kn[1] := 
-    WORD_TO_INT(SHR((Def.CF and 16#0F00), 8)); (* начальный сектор (Y0) *)
-  Shape.Kn[2] := 0;                            (* начальная высота (Z0) *)
-
-  (* Копирование xyz[], lwh[] *)
-  Shape.pL[0] := INT_TO_REAL(Def.XYZ[0]);
-  Shape.pL[1] := INT_TO_REAL(Def.XYZ[1]);
-  Shape.pL[2] := INT_TO_REAL(Def.XYZ[2]);
-  Shape.Lx[0] := INT_TO_REAL(Def.LWH[0]);
-  Shape.Lx[1] := INT_TO_REAL(Def.LWH[1]);
-  Shape.Lx[2] := INT_TO_REAL(Def.LWH[2]);
-
-  (* Завершение процедуры *)
-  {__exit:}
-  if (iRes = E_SUCCESS) then 
-    PIT := set_sh(PIT, Shape);
-    PIT := set_it(PIT, Item);
-  end_if;
-END_FUNCTION_BLOCK
-
-FUNCTION Do_Validate : BOOL
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR
-    It : TIter;
-    Item : TItem;
-    Sh : TShape;
-    Ax : USINT := 0;
-    bAx : BOOL := false;
-    bCx : BOOL := false;
-    bOx : BOOL := false;
+    HGR : THandle := 0;
+    PGR : TPos8 := -1;
     OFF : P_INT;
-    i : INT := 0;
-    j : INT := 0;
-    k : INT := 0;
-    m : INT := 0;
-    iP : TPos8 := 0;
-    P0 : TPoint := [0.0, 0.0, 0.0];
-    Lx : TPoint := [0.0, 0.0, 0.0];
-    O : TAxO;
-    RI : ARRAY [0..2] OF P_RESI;
-    temp : P_RESI;
-    rTemp : REAL := 0.0;
-    bRes : BOOL := false;
-  END_VAR
-  VAR CONSTANT
-    PI : REAL := 180.0;
-    PI2 : REAL := 360.0;
-    PI_RAD : REAL := 3.1415926535897932384626433832795;
-  END_VAR
-
-  Do_Validate := st_check(false);
-  if (not Do_Validate) then return; end_if;
-
-  (* Обход дерева элементов *)
-  it := it_begin(ID2PIT(0));
-  while (it.item<>-1) do
-    (* Локальная копия элемента *)
-    Item  := get_it(it.item);
-    Sh    := get_sh(it.item);
-    
-    (* Расшифровка гео-флагов *)
-    (* Флаги границ  - 0-7 биты в wF *)
-    (* Sh.bF := WORD_TO_BYTE(Sh.wF AND 16#00FF); *)
-    
-    (* Номер сектора скопирован в Sh.Kn[1] в ReadItem() *)
-    (*Item.nS := WORD_TO_USINT(SHR((Def.CF AND 16#0F00), 8)); *)
-
-    (* Флаг составного элемента - 16 бит (не используется) *)
-    (* Item.bP := ((Def.CF AND 16#8000)<>0); *)
-    
-    (* Ось симметрии - следующие 12-13 биты в wF *)
-    Ax  := WORD_TO_USINT(SHR((Sh.wF AND 16#3000), 12));
-
-    bCx := ((Sh.wF and 16#4000)<>0); (* Признак 'цилиндрич. система'   *)
-    bAx := (Ax<>0);                  (* Признак 'ось задана'           *)
-    bOx := (not bCx or bAx);         (* Признак 'задана точка отсчёта' *)
-
-    case (it.dir) of
-    DIR_DOWN:
-      (* Определение точек начала отсчёта (НО) в ABS координатах   *)
-      if (Item.Num>0 and bOx) then   (* Элемент с новой точкой отсчёта *)
-        (* Прибавляем координаты НО к накопителю P0 *)
-        P0[0] := P0[0] + Sh.pL[0]; 
-        P0[1] := P0[1] + Sh.pL[1]; 
-        P0[2] := P0[2] + Sh.pL[2];
-      end_if;
-      
-    DIR_UP:
-      (* Определение точек начала отсчёта в ABS координатах *)
-      if (Item.Num>0 and bOx) then  (* Элемент с новой точкой отсчёта *)
-        (* Вычитаем координаты НО из накопителя P0 *)
-        P0[0] := P0[0] - Sh.pL[0]; 
-        P0[1] := P0[1] - Sh.pL[1]; 
-        P0[2] := P0[2] - Sh.pL[2];
-      end_if;
-      
-      (* Сохраняем собственную точку НО *)
-      Sh.p0[0] := P0[0]; 
-      Sh.p0[1] := P0[1];
-      Sh.p0[2] := P0[2];
-      
-      (* === Цилиндрическая система === *)
-      if (bCx) then
-      
-        (* Если ось не задана - она наследуется от родителя *)
-        if (not bAx)  then
-          iP := Item.Par;
-          while (iP<>-1) do
-            Ax := sh_get_ax(get_sh(iP));
-            iP := it_ip(iP);
-            if (Ax<>0) then exit; end_if;
-          end_while;
-          if (Ax=0) then {goto __error} end_if;
-        end_if;
-
-        (* Индексы "оригинальных" координат: Ax -> O *)
-         O := AxO(Ax);
-         
-        (* --- Преобразование начальной точки --- *)
-        if (bAx) then
-          (* Если ось задана:       *)
-          (* (1) XYZ->OOO (декарт); *)
-          Sh.p0[0]   := Sh.p0[0] + Sh.pL[0];
-          Sh.p0[1]   := Sh.p0[1] + Sh.pL[1];
-          Sh.p0[2]   := Sh.p0[2] + Sh.pL[2];
-          
-          (* (2) R0->X, nS->Y, Z=0  *)
-          Sh.pL[O.x] := INT_TO_REAL(Sh.Kn[0]);            (* R0  *)
-          Sh.pL[O.y] := INT_TO_REAL(Sh.Kn[1]) *(PI/8.0);  (* nS  *)
-          Sh.pL[O.z] := INT_TO_REAL(Sh.Kn[2]);            (* 0.0 *)
-        end_if;
-        
-        (* Приведение угловой координаты к диапазону [-PI..PI] *)
-        Sh.pL[O.y]:=angle(Sh.pL[O.y], (-PI));
-        
-        (* Приведение углового размера   к диапазону [0..2*PI] *)
-        Sh.Lx[O.y]:=angle(Sh.Lx[O.y], 0.0);
-        
-        (* Если размер =0 -> делаем его =360град *)
-        if (Sh.Lx[O.y]=0.0) then Sh.Lx[O.y]:=PI2; end_if;
-        
-      else  (* Прямоугольные координаты *)
-        Ax := 0;
-      end_if;
-      
-      (* Установка флагов оси симметрии Ax *)
-      Sh := sh_set_ax(Sh, Ax);
-      
-      (* === Расчёт сетки BEGIN === *)
-      Lx:=Sh.Lx;
-      
-      (* Вычисление радиального размера *)
-      if (Ax<>0) then Lx[O.y]:=Lx[O.x]*Lx[O.y]*PI_RAD/360.0; end_if;
-      
-      (* Инициализация перед сортировкой пар 'размер-индекс' *) 
-      RI[0].A := Lx[0]; RI[0].B := 0;
-      RI[1].A := Lx[1]; RI[1].B := 1;
-      RI[2].A := Lx[2]; RI[2].B := 2;
-      
-      (* Сортировка пузырьком пар 'размер-индекс' *) 
-      for i:=0 to 1 do
-        for  j:=0 to 1-i do
-          if (RI[j].A > RI[j+1].A) then
-            temp:=RI[j]; RI[j]:=RI[j+1]; RI[j+1]:=temp;
-          end_if;
-        end_for;
-      end_for;
-      
-      (* Определяем количество узлов сети (Kn) *)
-      if ((RI[1].A+RI[2].A)/RI[0].A > 4.0) then
-        Sh.Kn[RI[0].B]:=8;
-        if ((RI[2].A/RI[1].A) > 4.0) then
-          Sh.Kn[RI[1].B]:=8;  
-          Sh.Kn[RI[2].B]:=64;
-        else
-          Sh.Kn[RI[1].B]:=16; 
-          Sh.Kn[RI[2].B]:=32;
-        end_if;
-      else
-        Sh.Kn[0]:=16; 
-        Sh.Kn[1]:=16; 
-        Sh.Kn[2]:=16;
-      end_if;
-      (* === Расчёт сетки END === *)
-
-    end_case;
-
-    (* TEST -> *)
-    if not (
-      (it.item>=1 and it.item<=99) 
-    ) then 
-      Item.Im := 0; (* воздух *)
-    end_if;
-    (* <- TEST *)
-
-    (* Записываем "валидный" элемент ОБРАТНО в массив *)
-    it.item := set_sh(it.item, Sh);
-    it.item := set_it(it.item, Item);
-    
-    (* === Инициализация сетки элемента === *)
-    it.item := IT_InitTemp(it.item, 20.0, true);
-    
-    it := it_next(it);
-  end_while;
-
-  (*PIT := IT_InitTemp(42, 100.0, true);*)
-
-  Do_Validate := true;
-  return;
-
-  { __error: }
-  Do_Validate := false;
-END_FUNCTION
-
-FUNCTION Do_CheckValid : BOOL
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR
-    PIT2 : TPos8 := 0;
-    bRes : BOOL := false;
-    It : TIter;
-    stack : ARRAY [0..99] OF TPos8;
-    kids : ARRAY [0..15] OF TPos8;
-    n : SINT := 0;
-    m : SINT := 0;
-    im : SINT := 0;
-    j : SINT := 0;
-    Chk : TDot;
-    bC : BOOL := false;
-    Sh : TShape;
-    p0 : TPoint;
-    p1 : TPoint;
-    p2 : TPoint;
-    msg : STRING := '';
-  END_VAR
-
-  Do_CheckValid := st_check(false);
-  if (not Do_CheckValid) then return; end_if;
-
-  (* Обход дерева элементов *)
-  it := it_begin(ID2PIT(0));
-  while (it.item<>-1) do
-
-    case (it.dir) of
-    DIR_DOWN:
-      (* Запись родителя в стек *)
-      if (n > 99) then msg:='CheckValid: Stack overflow'; {goto __error} end_if;
-      stack[n] := it.item;
-      n:=n+1;
-    DIR_UP:
-      (* Извлечение из стека *)
-      if (is_poly(it.item)) then  (* элемент - родитель *)
-      
-        (* Выборка потомства из стека *)
-        m:=0;
-        while (stack[n-1]<>it.item) do
-          n:=n-1;
-          if (m > 15) then msg:='CheckValid: Kids overflow'; {goto __error} end_if;
-          kids[m]:=stack[n];
-          m:=m+1;
-        end_while;
-        
-        (* Анализ потомства *)
-        for im:=0 to m-1 do
-          PIT:=kids[im]; (* Позиция ребёнка *)
-          msg:=MakeMsg('CheckValid: P=', ID2Str(IT_ID(IT.ITEM)), ', C=', ID2Str(IT_ID(PIT)));
-          
-          (* === Проверка 1: Если родитель в цилиндрической СК, то дети - тоже  *)
-          if (is_cyl(IT.ITEM) and not is_cyl(PIT)) then
-            msg := MakeMsg(msg, ', Er=CS does not match');
-            { goto __exit;  }
-          end_if;
-          
-          (* === Проверка 2: Размер не может быть нулевым  *)
-          Sh := get_sh(PIT);
-          P0 := sh.p0; (* Начало отсчёта  (абс) *)
-          P1 := sh.pl; (* Начало элемента (лок) *)
-          P2 := sh.lx; (* Размер элемента (лок) *)
-          
-          msg := MakeMsg(msg, ' LWH=(',REAL_TO_STRING(P2[0]), ','  );
-          msg := MakeMsg(msg, '',      REAL_TO_STRING(P2[1]), ','  );
-          msg := MakeMsg(msg, '',      REAL_TO_STRING(P2[2]), ');' );
-          
-          if (p2[0]<=0.1 or p2[1]<=0.1 or p2[2]<=0.1) then 
-            msg := MakeMsg(msg, ', Er=LWH must be nonzero'); 
-            {goto __exit} 
-          end_if;
-
-          (* Преобразуем точки p1, p2 в абсолютные координаты *)
-          p2 := _point((p1[0]+p2[0]), (p1[1]+p2[1]), (p1[2]+p2[2]));
-          
-          p1 := Sh_Loc2Abs(Sh, p1[0], p1[1], p1[2]);
-          p2 := Sh_Loc2Abs(Sh, p2[0], p2[1], p2[2]);
-          
-          msg := MakeMsg(msg, ' P1=(', REAL_TO_STRING(P1[0]), ','  );
-          msg := MakeMsg(msg, '',      REAL_TO_STRING(P1[1]), ','  );
-          msg := MakeMsg(msg, '',      REAL_TO_STRING(P1[2]), ');' );
-          msg := MakeMsg(msg, ' P2=(', REAL_TO_STRING(P2[0]), ','  );
-          msg := MakeMsg(msg, '',      REAL_TO_STRING(P2[1]), ','  );
-          msg := MakeMsg(msg, '',      REAL_TO_STRING(P2[2]), ');' );
-                          
-          (* === Проверка 3: Точки p1, p2 элемента не могут быть вне родителя   *)
-          Chk := Sh_Point2Dot(get_sh(IT.ITEM), p1[0], p1[1], p1[2]);
-          if (Chk.V <= 0) then 
-            msg := MakeMsg(msg, ', Er=P1 out of parent' ); 
-            {goto __exit} 
-          end_if;
-          Chk := Sh_Point2Dot(get_sh(IT.ITEM), p2[0], p2[1], p2[2]);
-          if (Chk.V <= 0) then 
-            msg := MakeMsg(msg, ', Er=P2 out of parent' ); 
-            {goto __exit} 
-          end_if;
-
-          (* === Проверка 4,5: *)
-          if (not is_poly(PIT)) then
-            for j:=0 to m-1 do
-              (* Проверка 4: p1,p2 одного элемента не могут быть внутри другого *)
-              if (j<>im) then
-                PIT2:=kids[j];
-                Chk := Sh_Point2Dot(get_sh(PIT2), p1[0], p1[1], p1[2]);
-                if (Chk.V = 16#01 or Chk.V = 16#ff) then 
-                  msg := MakeMsg(msg, ', Err: P1 of ', SINT_TO_STRING(PIT));
-                  msg := MakeMsg(msg, ' is into ',   SINT_TO_STRING(PIT2));
-                  {goto __exit} 
-                end_if;
-                Chk := Sh_Point2Dot(get_sh(PIT2), p2[0], p2[1], p2[2]);
-                if (Chk.V = 16#01 or Chk.V = 16#ff) then 
-                  msg := MakeMsg(msg, ', Err: P2 of ', SINT_TO_STRING(PIT));
-                  msg := MakeMsg(msg, ' is into ',   SINT_TO_STRING(PIT2));
-                  {goto __exit} 
-                end_if;
-              end_if;
-              
-              (* Проверка 5: *)
-              (* --- *)
-              
-            end_for;
-          end_if;
-          
-          msg:=LogMsg(msg);      
-        end_for;
-        
-      else (* конечный элемент *)
-        (* Запись конечного элемента в стек *)
-        if (n > 99) then msg := 'CheckValid: Stack overflow'; {goto __error} end_if;
-        stack[n] := it.item;
-        n:=n+1;
-      end_if;
-      
-    end_case;
-    
-    it := it_next(it);
-  end_while;
-
-  bRes:=true;
-
-  { __exit: }
-  msg:=LogMsg(msg);
-  Do_CheckValid := bRes;
-  return;
-
-  { __error: }
-  Do_CheckValid := st_set_stat(E_CHECKVALID, IT_ID(it.item), msg);
-END_FUNCTION
-
-FUNCTION var_d : TDot
-  VAR_INPUT
-    TV : TVar := 0;
+    TV : TVar := -1;
+    IX : USINT := 0;
   END_VAR
 
   {{
@@ -3610,945 +737,61 @@ FUNCTION var_d : TDot
       struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
     } var_t, *pvar_t;
     #pragma pack(pop)
-
-    // Величина должна быть ссылкой
-    // ASSERT(1, NULL, pvar->r, TERROR__E_FAIL, __INIT_STRING);
-    VAR_D.A.table[0] = ((pvar_t) &TV)->i;
-    VAR_D.A.table[1] = ((pvar_t) &TV)->j;
-    VAR_D.A.table[2] = ((pvar_t) &TV)->k;
-    VAR_D.V          = ((pvar_t) &TV)->p;
+    
+    // Получаем массив сеток по дескриптору  
+    TGRID *Grids = (TGRID *)(HGR);
+    
+    if (IX == 0xFF) { // Направление не задано  - заполнение ячеек узла шаблоном TV
+    
+      for (short int k=0; k < OFF.B; k++) {
+        Grids[PGR].A.table[OFF.A+k] = TV;
+      }    
+      
+    } else {          //  Направление задано =>
+      if (IX == 0) {    // Главная ячейка (IX == 0)
+        Grids[PGR].A.table[OFF.A] = TV;
+        /*
+        pvar_t pDest = (var_t *) &Grids[PGR].A.table[OFF.A];
+        pvar_t pvar  = (var_t *) &TV;
+        if (pvar->r) *pDest = *pvar;
+        else {
+          // if (pvar->A != -16384) 
+            pDest->A = pvar->A;
+            
+          // if (pvar->B != -16384) 
+            pDest->B = pvar->B;
+            
+          pDest->C = pvar->C;
+        }
+        */
+      } else {          // Смежная ячейка (IX > 0)
+      
+        // В смежных ячейках могут быть только ссылки или воздух (-1)
+        // ASSERT(1,NULL,((pvar_t)&TV)->r,TERROR__E_FAIL, 
+          //__STRING_LITERAL(29,"it_var_set: Reference wanted!"));
+        
+        pvar_t pDest = NULL;
+        for (short int k=1; k < OFF.B; k++) {
+          pvar_t pvar = (var_t *) &Grids[PGR].A.table[OFF.A+k];
+          if ((pDest==NULL && pvar->d==0) || pvar->d == IX) {
+            pDest = pvar;
+            if (pDest->d == IX) break;
+          }
+        }
+        
+        // Ячейка должна найтись!!!
+        //ASSERT(1,NULL,pDest!=NULL,TERROR__E_FAIL,
+          //_STRING_LITERAL(26, "it_var_set: Cell not found!"));
+          
+        //if (pDest!=NULL) {
+          pDest->tv = TV; 
+          pDest->d  = IX;  // Значение IX перезаписывается
+        //}
+      }
+    }
+    SET_VAR = PGR;
   }}
 END_FUNCTION
-
-FUNCTION var_p : TPos8
-  VAR_INPUT
-    TV : TVar := 0;
-  END_VAR
-
-  {{
-    #pragma pack(push, 4)
-    typedef union {
-      TVAR tv;
-      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
-      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
-    } var_t, *pvar_t;
-    #pragma pack(pop)
-    pvar_t pvar = (pvar_t)&TV;
-    
-    // Величина должна быть ссылкой
-    // ASSERT(1, NULL, pvar->r, TERROR__E_FAIL, __INIT_STRING);
-    VAR_P = pvar->p;
-  }}
-END_FUNCTION
-
-FUNCTION st_set_ready : BOOL
-  VAR_INPUT
-    RDY : BOOL := FALSE;
-  END_VAR
-
-  {{ return (ST_SET_READY=(__GET_GLOBAL_STAT()->RDY=RDY)); }}
-END_FUNCTION
-
-FUNCTION st_set_debug : BOOL
-  VAR_INPUT
-    DBG : BOOL := FALSE;
-  END_VAR
-
-  {{ return (ST_SET_DEBUG=(__GET_GLOBAL_STAT()->DBG=DBG)); }}
-END_FUNCTION
-
-FUNCTION st_is_ready : BOOL
-  VAR_INPUT
-    tmp : BOOL := FALSE;
-  END_VAR
-
-  {{ return (ST_IS_READY=__GET_GLOBAL_STAT()->RDY); }}
-END_FUNCTION
-
-FUNCTION st_is_debug : BOOL
-  VAR_INPUT
-    tmp : BOOL := FALSE;
-  END_VAR
-
-  {{ return (ST_IS_DEBUG=__GET_GLOBAL_STAT()->DBG); }}
-END_FUNCTION
-
-FUNCTION IT_InfoStr : STRING
-  VAR_INPUT
-    PIT : TPos8 := -1;
-  END_VAR
-  VAR
-    Item : TItem;
-    Shape : TShape;
-    msg : STRING := '';
-  END_VAR
-
-  Item  := get_it(it_pos(PIT));
-  Shape := get_sh(PIT);
-  msg  := MakeMsg(msg, ' [',   ID2Str(Item.ID) );
-  msg  := MakeMsg(msg, ', P=', SINT_TO_STRING(Item.Par) );
-  msg  := MakeMsg(msg, ', O=(',REAL_TO_STRING(Shape.p0[0]), '');
-  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.p0[1]), '');
-  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.p0[2]), ')');
-  msg  := MakeMsg(msg, ', N=(',REAL_TO_STRING(Shape.pL[0]), '');
-  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.pL[1]), '');
-  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.pL[2]), ')');
-  msg  := MakeMsg(msg, ', W=(',REAL_TO_STRING(Shape.Lx[0]), '');
-  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.Lx[1]), '');
-  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.Lx[2]), ')]');
-  IT_InfoStr:=MSG;
-END_FUNCTION
-
-FUNCTION Alfa_i : P_RERE
-  VAR_INPUT
-    Ht : REAL := 0.0;
-    M : TMatter;
-    Alfa_im : P_RERE;
-    Ti : REAL := 0.0;
-    Qi : REAL := 0.0;
-    Vi : REAL := 0.0;
-    Ri : REAL := 0.0;
-  END_VAR
-  VAR
-    Ai : REAL := 0.0;
-    Bi : REAL := 0.0;
-    Ci : REAL := 0.0;
-    Fi : REAL := 0.0;
-    rh : REAL := 0.0;
-    rk : REAL := 0.0;
-    Via : REAL := 0.0;
-    Vip : REAL := 0.0;
-    Vim : REAL := 0.0;
-    Di : REAL := 0.0;
-    Ei : REAL := 0.0;
-    denom : REAL := 0.0;
-  END_VAR
-
-  (* Малый радиус - условие симметрии *)
-  if (Ri < 1.0E-4) then 
-    Alfa_i.A := 1.0;
-    Alfa_i.B := 0.0;
-  else
-
-    (* расчёт движения по радиусу *)
-    if (Ri < 1.0e5) then Ei := M.h / (2.0 * Ri); end_if;
-    
-    (* расчёт движения среды *)
-    if (Vi <> 0.0) then
-      Via := abs(Vi);
-      Vip := (Via + Vi)   / 2.0;
-      Vim := (Via - Vi)   / 2.0;
-      Di  := (Via * M.h)  / (2.0 * M.a);
-    end_if;
-
-    rh := Ht / M.h;       (* Отношение     (rh=dt/dx)     *)
-    rk := (M.a*rh) / M.h; (* Число Куранта (rk=a*dt/dx^2) *)
-
-    Ai :=       rk*(1.0+Ei) / (1.0+Di) + Vim*rh; 
-    Ci :=       rk*(1.0-Ei) / (1.0+Di) + Vip*rh; 
-    Bi := 1.0 +    (2.0*rk) / (1.0+Di) + Via*rh; 
-    Fi := -Ti - Ht*Qi;
-
-    denom := (Bi - Ci*Alfa_im.A);
-
-    Alfa_i.A := Ai / denom;
-    Alfa_i.B := (Ci*Alfa_im.B - Fi) / denom;
-  end_if;
-END_FUNCTION
-
-FUNCTION Temp_i : REAL
-  VAR_INPUT
-    _Alfa_i : P_RERE;
-    T_ip : REAL := 0.0;
-  END_VAR
-
-  Temp_i := _Alfa_i.A * T_ip + _Alfa_i.B;
-END_FUNCTION
-
-FUNCTION Beta_N3 : REAL
-  VAR_INPUT
-    Ht : REAL := 0.0;
-    M : TMatter;
-    Alfa_N1 : P_RERE;
-    Tn_N : REAL := 0.0;
-    Tq_N : REAL := 0.0;
-    Qn_N : REAL := 0.0;
-    V_N : REAL := 0.0;
-    R_N : REAL := 0.0;
-    Bound3 : BOOL := TRUE;
-  END_VAR
-  VAR
-    D_N : REAL := 0.0;
-    E_N : REAL := 0.0;
-    b_N : REAL := 0.0;
-    k_N : REAL := 0.0;
-    h2 : REAL := 0.0;
-    at2 : REAL := 0.0;
-    DE : REAL := 0.0;
-    denom : REAL := 0.0;
-  END_VAR
-
-  if (R_N > 1.0E-5) then 
-    if (not Bound3) then M.k := 1.0; end_if;
-    b_N := M.k/M.l;
-    k_N := b_N*Tq_N;
-    if (not Bound3) then b_N := 0.0; end_if;
-    if (R_N < 1.0E5) then E_N := M.h / (2.0*R_N); end_if;
-    D_N := (abs(V_N)*M.h) / (2.0*M.a);
-  else
-    (* Малый радиус - условия симметрии h=0 *)
-    M.h := 0.0;
-  end_if;
-
-  h2    := M.h * M.h;
-  at2   := 2.0 * M.a * Ht;
-  DE    := (1.0 - D_N + E_N);
-  denom := h2 + at2 * (1.0 + DE * M.h*b_N - Alfa_N1.A);
-
-  Beta_N3 := ( h2 * (Tn_N + Ht*Qn_N) + at2 * (Alfa_N1.B + DE * M.h*k_N) ) / denom;
-END_FUNCTION
-
-FUNCTION Beta_N4 : REAL
-  VAR_INPUT
-    Ht : REAL := 0.0;
-    M1 : TMatter;
-    M2 : TMatter;
-    Alfa_Nm1 : P_RERE;
-    Tn_N : REAL := 0.0;
-    Tn_Np1 : REAL;
-    Q1n_N : REAL := 0.0;
-    Q2n_N : REAL := 0.0;
-  END_VAR
-  VAR
-    B : REAL := 0.0;
-    C : REAL := 0.0;
-    F : REAL := 0.0;
-  END_VAR
-
-  (* Малый шаг - условие симметрии *)
-  if (M1.h < 1.0E-4 or M2.h < 1.0E-4) then
-    Beta_N4 := Tn_Np1;
-  else
-    (* Cчитаем известной T=Tn_Np1 в точке i=N+1, тогда Alfa.A=0, Alfa.B=T *)
-    C :=  M1.l / M1.h;
-
-    B :=    (M1.l / M1.h) 
-          + (M2.l / M2.h) 
-          + (M1.l * M1.h / (2.0*M1.a*Ht))  
-          + (M2.l * M2.h / (2.0*M2.a*Ht));
-
-    F :=  - Tn_N * ( (M1.l*M1.h/(2.0*M1.a*Ht)) + (M2.l*M2.h/(2.0*M2.a*Ht)) ) 
-          - (M1.l * M1.h / (2.0*M1.a)) * Q1n_N  
-          - (M2.l * M2.h / (2.0*M2.a)) * Q2n_N
-          - (M2.l / M2.h) * Tn_Np1; (* доп слагаемое - см. Tn_Np1 *)
-
-    Beta_N4 := (C * Alfa_Nm1.B - F) / (B - C * Alfa_Nm1.A);
-  end_if;
-END_FUNCTION
-
-FUNCTION Alfa_03 : P_RERE
-  VAR_INPUT
-    Ht : REAL := 0.0;
-    M : TMatter;
-    Tn_0 : REAL := 0.0;
-    Tq_0 : REAL := 0.0;
-    Qn_0 : REAL := 0.0;
-    V_0 : REAL := 0.0;
-    R_0 : REAL := 0.0;
-    Bound3 : BOOL := TRUE;
-  END_VAR
-  VAR
-    D_0 : REAL := 0.0;
-    E_0 : REAL := 0.0;
-    b_0 : REAL := 0.0;
-    k_0 : REAL := 0.0;
-    h2 : REAL := 0.0;
-    at2 : REAL := 0.0;
-    DE : REAL := 0.0;
-    denom : REAL := 0.0;
-    Res : P_RERE;
-  END_VAR
-
-  if (R_0 > 1.0E-5) then 
-    if (not Bound3) then M.k := 1.0; end_if;
-    b_0 := M.k/M.l;
-    k_0 := b_0*Tq_0;
-    if (not Bound3) then b_0 := 0.0; end_if;
-    if (R_0 < 1.0E5) then E_0 := M.h / (2.0*R_0); end_if;
-    D_0 := (abs(V_0)*M.h) / (2.0*M.a);
-  else
-    (* Малый радиус - условия симметрии h=0 *)
-    M.h := 0.0;
-  end_if;
-
-  h2    := M.h * M.h;
-  at2   := 2.0 * M.a * Ht;
-  DE    := (1.0 + D_0 - E_0);
-  denom := h2 + at2 * (1.0 + DE * M.h*b_0);
-
-  Alfa_03.A := at2 / denom;
-  Alfa_03.B := ( h2 * (Tn_0 + Ht*Qn_0) + at2 * DE * M.h*k_0 ) / denom;
-END_FUNCTION
-
-FUNCTION Alfa_04 : P_RERE
-  VAR_INPUT
-    Ht : REAL := 0.0;
-    M1 : TMatter;
-    M2 : TMatter;
-    Alfa : P_RERE;
-    Tn_0 : REAL := 0.0;
-    Q1n_0 : REAL := 0.0;
-    Q2n_0 : REAL := 0.0;
-  END_VAR
-  VAR
-    A : REAL := 0.0;
-    B : REAL := 0.0;
-    F : REAL := 0.0;
-  END_VAR
-
-  (* Малый шаг - условие симметрии *)
-  if (M1.h < 1.0E-4 or M2.h < 1.0E-4) then
-    Alfa_04.A := 1.0;
-    Alfa_04.B := 0.0;
-  else
-    (* Вариант-1: считаем известной T в точке i=-1, тогда Alfa.A=0, Alfa.B=T *)
-    (* Вариант-2: считаем известной пару Alfa|Beta в точке i=-1 на момент расчёта *)
-
-    A :=    M1.l / M1.h;
-
-    B :=    (M1.l / M1.h) 
-          + (M2.l / M2.h) 
-          + (M1.l*M1.h/(2.0*M1.a*Ht))  
-          + (M2.l*M2.h/(2.0*M2.a*Ht))
-          - (M2.l / M2.h) * Alfa.A; (* Доп слагаемое - вариант 1 или 2 *)
-
-    F :=  - Tn_0 * ( (M1.l*M1.h/(2.0*M1.a*Ht)) + (M2.l*M2.h/(2.0*M2.a*Ht)) ) 
-          - (M1.l*M1.h/(2.0*M1.a)) * Q1n_0  
-          - (M2.l*M2.h/(2.0*M2.a)) * Q2n_0 
-          - (M2.l / M2.h) * Alfa.B; (* Доп слагаемое - вариант 1 или 2 *)
-
-    Alfa_04.A :=  A/B;
-    Alfa_04.B := -F/B;
-  end_if;
-END_FUNCTION
-
-FUNCTION _Matter : TMatter
-  VAR_INPUT
-    a : REAL := 0.0;
-    l : REAL := 0.0;
-    h : REAL := 0.0;
-    k : REAL := 0.0;
-  END_VAR
-
-  _Matter.a:=a;
-  _Matter.l:=l;
-  _Matter.h:=h;
-  _Matter.k:=k;
-END_FUNCTION
-
-FUNCTION kto_oil : REAL
-  VAR_INPUT
-    L : REAL := 0.0;
-    dTm : REAL := 0.0;
-  END_VAR
-  VAR CONSTANT
-    C : REAL := 0.59;
-    n : REAL := 0.25;
-  END_VAR
-
-  kto_oil:=36.0;
-END_FUNCTION
-
-FUNCTION kto_air : REAL
-  VAR_INPUT
-    L : REAL := 0.0;
-  END_VAR
-
-  kto_air:=10.0;
-END_FUNCTION
-
-FUNCTION IT_Process : TError
-  VAR_INPUT
-    PIT : TPos8 := -1;
-    Ix : USINT := 0;
-    CDT : DT := DT#2000-01-01-00:00:00;
-  END_VAR
-  VAR
-    PDT : DT := DT#2000-01-01-00:00:00;
-    It : TItem;
-    Hd : THead;
-    Sh : TShape;
-    Ax : USINT := 0;
-    Ox : TAxO;
-    Cx : TAxO;
-    Q : SINT := 0;
-    Ht : REAL := 0.0;
-    K : ARRAY [0..2] OF INT;
-    L : ARRAY [0..2] OF INT;
-    H0 : TPoint := [0.0, 0.0, 0.0];
-    Hx2 : TPoint := [0.0, 0.0, 0.0];
-    pR : TPoint := [0.0, 0.0, 0.0];
-    Iv : SINT := 0;
-    Im : SINT := 0;
-    V : TVal;
-    Vx : REAL := 0.0;
-    Px : TProf;
-    Cm : TMat;
-    Pm : TProps;
-    P0 : TPoint := [0.0, 0.0, 0.0];
-    Hi : REAL := 0.0;
-    Hi2 : REAL := 0.0;
-    Pi : TPoint := [0.0, 0.0, 0.0];
-    Ri : REAL := 0.0;
-    Li : REAL := 0.0;
-    Vi1 : REAL := 0.0;
-    Qi1 : REAL := 0.0;
-    Ti1 : REAL := 0.0;
-    M : TMatter;
-    P : TPoint := [0.0, 0.0, 0.0];
-    TV : TVar := 0;
-    LR : ARRAY [0..3] OF P_BOOL := [FALSE, FALSE, FALSE, FALSE];
-    PIT2 : TPos8 := -1;
-    Kn2 : TKnot := [0, 0, 0];
-    Im2 : SINT := 0;
-    Cm2 : TMat;
-    Pm2 : TProps;
-    Iv2 : SINT := 0;
-    V2 : TVal;
-    Vx2 : REAL := 0.0;
-    Px2 : TProf;
-    Vi2 : REAL := 0.0;
-    Qi2 : REAL := 0.0;
-    Ti2 : REAL := 0.0;
-    M2 : TMatter;
-    Tmid2 : REAL := 0.0;
-    i : INT := 0;
-    N : INT := 0;
-    off : P_INT;
-    xx : REAL := 0.0;
-    ii : INT := 0;
-    Alfa : P_RERE;
-    Alfas : ARRAY [0..63] OF P_RERE;
-    iRes : TError := E_SUCCESS;
-    bRes : BOOL := false;
-    msg : STRING := '';
-  END_VAR
-  VAR CONSTANT
-    Kt : REAL := 300.0;
-    Hmin : REAL := 1.0E-5;
-  END_VAR
-
-  (* Получаем время предыдущего расчёта и сохраняем текущее *)
-  PDT := get_pdt(PIT, Ix);
-  PIT := set_pdt(PIT, Ix, CDT);
-
-  Hd := get_h(0);       (* Заголовок модели *)
-  It := get_it(PIT);    (* Элемент          *)
-  Sh := get_sh(PIT);    (* Фигура элемента  *)
-  Ax := sh_get_ax(Sh);  (* Направление оси  *)
-
-  Im := It.Im;          (* Индекс материала *)
-  Iv := It.Iv;          (* Индекс величины  *)
-
-  Cm := get_mt(It.Im);  (* Материал *)
-
-  (* Получение значения динамической величины элемента-1 и её профиля *)
-  if (Iv > 0 and Iv < Hd.Nv) then
-    V  := get_vl(It.Iv);
-    Vx := get_bf(V.Iv) * sint_to_real(V.Vi[Ix].A);
-    Px := get_pr(V.Vi[Ix].B);
-  end_if;
-
-  (* Ориентация элемента *)
-  Ox := AXO(Ax,  TRUE);     (* Порядок перебора координат *)
-  Cx := AXO(Ix+1, FALSE);   (* Порядок обхода сетки       *)
-
-  (* Признаки материала *)
-  Pm.Air   := (Im = 0);            (* Признак - воздух (нулевой материал) *)
-  Pm.Oil   := (Cm.MD <> 0.0);      (* Признак - масло  (задана вязкость)  *)
-  Pm.Fluid := (Pm.Oil or Pm.Air);  (* Признак - флюид  (воздух или масло) *)
-  Pm.Solid := (not Pm.Fluid);      (* Признак - твердое тело (не флюид)   *)
-
-  (* Если элемент - воздух - не считаем *)
-  if (Pm.Air) then {goto __exit} end_if;
-
-  (* Опредедение шага (Ht>0) по времени в секундах *)
-  Ht := 300.0; (*Kt * ULINT_TO_REAL(DT_TO_ULINT(CDT)-DT_TO_ULINT(PDT));*)
-  if (Ht < 1.0) then iRes:=E_TIMESIZE; {goto __exit} end_if;
-
-  (* Опредедение шага по сетке (ориг) *)
-  H0 := _point( Sh.Lx[0]/INT_TO_REAL(Sh.Kn[0]-1), 
-                Sh.Lx[1]/INT_TO_REAL(Sh.Kn[1]-1), 
-                Sh.Lx[2]/INT_TO_REAL(Sh.Kn[2]-1) );
-  if ( (H0[0]<Hmin) or (H0[1]<Hmin) or (H0[2]<Hmin) ) 
-    then iRes:=E_STEPSIZE; {goto __exit} end_if;
-
-  (* TEST *)
-  (* Имитация тепловыделения в обмотках низкого и высокого напряжения *)
-  if (PIT = 21 or PIT = 31) then Vx := 5.0; end_if;
-  if (PIT = 38 or PIT = 59 or PIT = 80) then Vx := 3.0;  end_if;
-  if (PIT = 42 or PIT = 63 or PIT = 84) then Vx := 12.0; end_if;
-  if (PIT = 45 or PIT = 46 or PIT = 47 or PIT = 48 or PIT = 49 or 
-      PIT = 50 or PIT = 51 or PIT = 52 or PIT = 53 or PIT = 54) then Vx := 20.0; end_if;
-  if (PIT = 66 or PIT = 67 or PIT = 68 or PIT = 69 or PIT = 70 or 
-      PIT = 71 or PIT = 72 or PIT = 73 or PIT = 74 or PIT = 75) then Vx := 20.0; end_if;
-  if (PIT = 87 or PIT = 88 or PIT = 89 or PIT = 90 or PIT = 91 or 
-      PIT = 92 or PIT = 93 or PIT = 94 or PIT = 95 or PIT = 96) then Vx := 20.0; end_if;
-
-  (* Базовые значения профилируемых величин-1 - "равномерно без профиля" *)
-  if (Vx=0.0) then Vi1 := 0.0; Qi1 := 0.0;
-  else
-    if (Pm.Fluid) then Vi1 := abs(Vx);                    (* скорость       *)
-    else Qi1 := Vx/INT_TO_REAL(Sh.Kn[0]*Sh.Kn[1]*Sh.Kn[2]);  (* тепловыделение *)
-    end_if; 
-  end_if;
-
-  (* Сохранение верхних индексов узлов сетки по координатным осям *)
-  L[Cx.x] := Sh.Kn[0]-1; (* =2 при iX=0 *)
-  L[Cx.y] := Sh.Kn[1]-1; (* =0 при iX=0 *)
-  L[Cx.z] := Sh.Kn[2]-1; (* =1 при iX=0 *)
-  N:=L[2];  (* верхний индекс прогонки *)
-
-  (* Циклы по сетке в направлении Ix *)
-  K[0]:=0;
-  while (K[0] <= L[0]) do (* Цикл (0) *)
-    K[1]:=0;
-    while (K[1] <= L[1]) do (* Цикл (1) *)
-      K[2]:=0;
-    
-      (* Локальная точка элемента в начале нити *)
-      P0 := _point( Sh.pL[0] + H0[0]*INT_TO_REAL(K[Cx.x]), 
-                    Sh.pL[1] + H0[1]*INT_TO_REAL(K[Cx.y]),
-                    Sh.pL[2] + H0[2]*INT_TO_REAL(K[Cx.z]) );
-
-      (* Коррекция начальной точки и шага в направлении радиуса *)
-      if (Ax<>0 (*and Ix=Ox.x*)) then
-        P0[Ox.y] := angle(P0[Ox.y], Sh.pL[Ox.y]);
-        P := Reform(Sh.wF, P0[Ox.y], P0[Ox.x], Sh.pL[Ox.x], Sh.Lx[Ox.x]);
-        P0[Ox.x] := P[0];                 (* коррекция начальной точки *)
-        H0[Ox.x] := P[2]/INT_TO_REAL(N);  (* коррекция шага по радиусу *)
-      end_if;
-                                                        
-      (* === Прямая прогонка === *)
-      for i:=0 to N do (* Цикл (2) - прогонка по направлению Ix *)
-        K[2]   := i;                      (* i -  индекс нити прогонки *)
-        Pi     := P0;                     (* P0 - начальная точка нити *)
-        Pi[Ix] := P0[Ix] + 
-                  H0[Ix]*INT_TO_REAL(i);  (* текущая точка узла        *)
-        
-        (* Расчёт радиуса Ri и шага Hi *)
-        if (Ax<>0 and Ix=Ox.x) then    (* движение по радиусу       *)
-          Ri := Pi[Ix]   * 0.001;         (* мм->м                     *)
-          Hi := H0[Ix]   * 0.001;         (* мм->м                     *)
-        elsif (Ax<>0 and Ix=Ox.y) then (* движение по дуге          *)
-          P  := Reform(Sh.wF, Pi[Ox.y], Pi[Ox.x], Sh.pL[Ox.x], Sh.Lx[Ox.x]);
-          Pi[Ox.x] := P[0];               (* радиальная координата     *)
-          Ri := Pi[Ox.x] * 0.001;         (* мм->м                     *)
-          Hi := Ri * radi(H0[Ix]);        (* длина дуги (м)            *)
-        else                              (* "плоское" движение        *)
-          Ri := 1.0e6;                    (* большой радиус            *)
-          Hi := H0[Ix]   * 0.001;         (* мм->м                     *)
-        end_if;
-
-        (* Свойства материи M(a, lambda, h, k) *)
-        M := _Matter(Cm.kt/(Cm.PL*Cm.CP), Cm.kt, Hi);
-        
-        (* Смещение расчётного узла в сетке *)
-        Off := knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], K[Cx.x], K[Cx.y], K[Cx.z]);
-        
-        (* Температура расчётного узла (код (int) -> °С (real)) *)
-        Ti1 := C2T(var_v( get_var(its_gr(0), PIT, Off) )); 
-        
-        (* Обработка краевых условий *)
-        if ((i = 0) or (i = N)) then
-        
-          (* Получение дескриптора смежного элемента (PIT2) *)
-          TV   := get_var(its_gr(0), PIT, Off, Ix+1);
-          PIT2 := var_p(TV); (* может быть = (-1) *)
-          
-          {{
-            // Доступ к свойствам элемента-2
-            TITEM *pItem2 = ((PIT2==-1) ? NULL : &(__GET_GLOBAL_ITS()->IT.table[PIT2]));
-            IM2 = ((pItem2==NULL) ? 0 : pItem2->IM);  // Индекс материала
-            CM2 = GET_MT(1,NULL,IM2);                 // Материал
-            
-            if (IM2==0) { // воздух =>
-              VX2 = 0.0;                              // динимаческая величина = 0
-            } else {      // обычный элемент =>
-              IM2 = pItem2->IM;                       // Индекс материала
-              IV2 = pItem2->IV;                       // Индекс величины
-
-              __ARRAY_OF_TVAL_25  *pVAL = &__GET_GLOBAL_STS()->VL; // Связанные величины
-              __ARRAY_OF_TPROF_30 *pPRO = &__GET_GLOBAL_STS()->PR; // Профили
-              __ARRAY_OF_REAL_32  *pBUF = &__GET_GLOBAL_STS()->BF; // Буфер величин
-                          
-              if (IV2 > 0 && IV2 < HD.NV) {
-                VX2 = pVAL->table[IV2].VI.table[IX].A * pBUF->table[pVAL->table[IV2].IV];
-                PX2 = pPRO->table[pVAL->table[IV2].VI.table[IX].B];
-              }
-            }
-            
-          }}
-          
-          (*Kn2   := it_kn(PIT2);*) (* размерность сетки элемента-2 *)
-          
-          (* времяночка - заплатка *)
-          Tmid2 := C2T(cn_mid(get_cn(PIT2)));
-          
-          (* Признаки материала 2 (соседа) *)
-          Pm2.Air   := (Im2 = 0);             (* Признак - воздух (Im=0)         *)
-          Pm2.Oil   := (Cm2.md <> 0.0);       (* Признак - масло  (md<>0)        *)
-          Pm2.Fluid := (Pm2.Oil or Pm2.Air);  (* Признак - флюид  (Air or Oil)   *)
-          Pm2.Solid := (not Pm2.Fluid);       (* Признак - твердое тело          *)
-
-          (* Базовые значения профилируемых величин-2 - "равномерно без профиля" *)
-          if (Vx2=0.0) then Vi2 := 0.0; Qi2 := 0.0;
-          else
-            if (Pm2.Fluid) then Vi2 := abs(Vx2);
-            else Qi2 := Vx2/INT_TO_REAL( 4096 (*Kn2[0] * Kn2[1] * Kn2[2]*) ); 
-            end_if; 
-          end_if;
-
-          (* Запрашиваем температуру в узле сетки-2, ближайшем к точке расчёта *)
-          (*
-          P   := Sh_Loc2Abs(PIT, Pi[0], Pi[1], Pi[2]);
-          TV := IT_Check(PIT2, P[0], P[1], P[2], false);
-          *)
-          
-          Ti2 := C2T(var_v(TV)); (* код (int) -> °С (real) *)
-          
-          (* TV.PT := Sh_Dot2Point(PIT2, var_d(TV.TV)) *)
-          (* Hi2 := abs(P[Ix]-TV.PT[Ix]); *)
-          
-          (*+*)   if (K[0]=0 and K[1]=0 and PIT=3) then
-                    msg := MakeMsg(   '-> Ti2= ', REAL_TO_STRING(Ti2));
-                    msg := MakeMsg(msg, ' off= ', INT_TO_STRING(OFF.A));
-                    msg := MakeMsg(msg, ' PIT= ', SINT_TO_STRING(PIT2));
-                    msg := MakeMsg(msg, ' Hi2= ', REAL_TO_STRING(Hi2));
-                    msg := LogMsg (msg);
-                  end_if; 
-                                                  
-          (* Свойства материи-2 *)
-          M2 := _Matter(Cm2.kt/(Cm2.PL*Cm2.CP), Cm2.KT, (* Hi2* *)0.001); (* в метрах *)
-          
-          (* === Метод прогонки === *)
-          if (i = 0) then (* левая граница *)
-          
-            (* --- Расчёт коэффициентов Alfas[0] на левой границе --- *)
-            if (Pm2.Air) then (* ГУ-3 *)
-            
-              if (true) then
-                M.k := kto_air(1.0);
-                Alfas[0] := Alfa_03(Ht, M, Ti1, Ti2, Qi1, Vi1, Ri);
-              else
-                Alfa.A := 0.0; Alfa.B := Ti2; 
-                Alfas[0] := Alfa_i(Ht, M, Alfa, Ti1, Qi1, Vi1, Ri);
-              end_if;
-              
-            elsif ((*(Pm.Oil and Pm2.Solid) or*) (Pm.Solid and Pm2.Oil)) then
-            
-                M.k := kto_oil(1.0);
-                Alfas[0] := Alfa_03(Ht, M, Ti1, Tmid2-(Tmid2-20.0)/2.2, Qi1, Vi1, Ri);
-            
-            else  (* ГУ-4 *)
-            
-              Alfa.A := 0.0; Alfa.B := Ti2; 
-              if (true) then
-                (* Вариант 1 *)
-                Alfas[0] := Alfa_i(Ht, M, Alfa, Ti1, Qi1, Vi1, Ri);
-              else
-                (* Вариант 2 *)
-                M2.h := 0.001;
-                Alfas[0] := Alfa_04(Ht, M, M2, Alfa, Ti1, Qi1, Qi2);
-              end_if;
-              
-            end_if;
-            
-          elsif (i = N) then (* правая граница *)
-          
-            (* --- Расчёт температуры T[N] на правой границе --- *)
-            if (Pm2.Air) then (* ГУ-3 *)
-            
-              if (true) then
-                M.k := kto_air(1.0);
-                xx := Beta_N3(Ht, M, Alfas[N-1], Ti1, Ti2, Qi1, Vi1, Ri);
-              else
-                Alfas[N] := Alfa_i(Ht, M, Alfas[N-1], Ti1, Qi1, Vi1, Ri);
-                xx := Temp_i(Alfas[N], Ti2);
-              end_if;
-              
-            elsif ((*(Pm.Oil and Pm2.Solid) or*) (Pm.Solid and Pm2.Oil)) then
-            
-                M.k := kto_oil(1.0);
-                xx := Beta_N3(Ht, M, Alfas[N-1], Ti1, Tmid2-(Tmid2-20.0)/2.2, Qi1, Vi1, Ri);
-            
-            else (* ГУ-4 *)
-            
-              if (true) then
-                (* Вариант 1 *)
-                (*M.h := Hx2[Ix] * 0.001;*)
-                Alfas[N] := Alfa_i(Ht, M, Alfas[N-1], Ti1, Qi1, Vi1, Ri);
-                xx := Temp_i(Alfas[N], Ti2);
-              else
-                (* Вариант 2 *)
-                M2.h := 0.001;
-                xx := Beta_N4(Ht, M, M2, Alfas[N-1], Ti1, Ti2, Qi1, Qi2);
-              end_if;
-              
-            end_if;
-            
-            (* Запись значения xx в сетку, °С (real) -> код (int) *)
-            PIT := set_var(its_gr(0), PIT, OFF, _var(T2C(xx)));
-            
-            (*+*)     if (K[0]=0 and K[1]=0 and PIT =3) then
-                        msg := MakeMsg(' T[', INT_TO_STRING(i), ']= ', REAL_TO_STRING(xx));
-                        msg := MakeMsg(msg, ' M.a=', REAL_TO_STRING(M.a));
-                        msg := MakeMsg(msg, ' M.h=', REAL_TO_STRING(M.h));
-                        msg := MakeMsg(msg, ' M.l=', REAL_TO_STRING(M.l)); 
-                        msg := MakeMsg(msg, ' R=',   REAL_TO_STRING(Ri));
-                        msg := LogMsg(msg);
-                      end_if; 
-                      
-          end_if;
-
-        else (* не краевые точки *)
-          (* --- Расчёт коэффициентов Alfas[i], Betas[i] --- *)
-          Alfas[i] := Alfa_i(Ht, M, Alfas[i-1], Ti1, Qi1, Vi1, Ri);
-        end_if; (* Обработка краевых условий *)
-
-      end_for; (* прямая прогонка *)
-
-      (* === Обратная прогонка === *)
-      for i:=N-1 to 0 by -1 do
-        K[2]:=i;
-        
-        (* --- Расчёт температуры T[N-1]..T[0] --- *)
-        xx := Temp_i(Alfas[i], xx);
-        
-        (* Запись значения xx в сетку, °С (real) -> код (int) *)
-        Off := knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], K[Cx.x], K[Cx.y], K[Cx.z]);
-        
-        PIT := set_var(its_gr(0), PIT, Off, _var(T2C(xx)));
-        
-        (*+*) if (K[0]=0 and K[1]=0 and PIT =3) then
-                msg := MakeMsg('T[', INT_TO_STRING(i), ']= ', REAL_TO_STRING(xx));
-                msg := LogMsg(msg);
-              end_if; 
-              
-      end_for; (* обратная прогонка *)
-      
-      K[1] := K[1]+1;
-    end_while; (* Цикл (1) *)
-    K[0] := K[0]+1;
-  end_while; (* Цикл (0) *)
-
-  { __exit: }
-  IT_PROCESS := iRes;
-END_FUNCTION
-
-FUNCTION_BLOCK Process_XYZ
-  VAR_EXTERNAL
-    rTest : REAL;
-    HDR : THead;
-    ITS : TItems;
-  END_VAR
-  VAR_INPUT
-    IN : BOOL := TRUE;
-    Ix : USINT := 0;
-    N : SINT := -1;
-  END_VAR
-  VAR_OUTPUT
-    bRes : BOOL := FALSE;
-  END_VAR
-  VAR
-    iErr : TError := E_SUCCESS;
-    i : SINT := 0;
-    Ix_local : USINT := 0;
-    bRestart : BOOL := true;
-    bBreak : BOOL := false;
-    It : TIter;
-    CDT : DT := DT#2000-01-01-00:00:00;
-    PDT : DT := DT#2000-01-01-00:00:00;
-    msg : STRING := '';
-    rr : REAL := 0.0;
-    RTIME : RTC;
-    DTIME : TON;
-  END_VAR
-
-  IF (IN) THEN                          (* Деблокировка блока          *)
-    IF (bReStart) THEN                  (* Инициализация блока         *)
-      (* Проверка корректности конфигурации перед стартом *)
-      if (Ix<0 or Ix>2) then iErr:=E_AXIS; {goto __error;} end_if;
-      if (true) then
-        (* Инициализация *)
-        msg:=MakeMsg('== PROCESS init ... ');
-        i:=0; it:=it_end(-1);
-        bRes      := true;               
-        bReStart  := false;
-        bBreak    := false;
-        Ix_local  := Ix;                 (* Направление запоминается    *)
-        RTIME(EN  := false);             (* Текущее время -> PDT        *)
-        RTIME(EN  := true, PDT := DT#2000-01-01-00:00:00, CDT => CDT);
-        DTIME(IN  := false);             (* Рестарт счётчика DTIME      *)
-        DTIME(IN  := true, PT := T#24h);
-        PDT := CDT;
-        (* Заносим время расчёта по направлению Ix в каждый элемент    *)
-        it := it_begin(ID2PIT(0));
-        while (it.item<>-1) do
-          if (it.dir = DIR_UP) then ITS.IT[it.item].PDT[Ix]:=CDT; end_if;
-          it := it_next(it);
-        end_while;
-        msg:=LogMsg(MakeMsg(msg, 'Ok! [time=', DT_TO_STRING(CDT),  '];'));
-      end_if;
-      RETURN; (* После инициализации - выход из блока *)
-    END_IF;
-
-    (* Проверка условий выполнения (нет ли блокировки на уровне модели) *)
-    if (not st_is_ready(0)) then {goto __error;} end_if;
-    (*bRes := TRUE;*)
-    
-    (* Проверка вхождения точки в модель *)
-    (* TEST *) (*it := it_begin(42);*) 
-    if (N<>0 and it.item=-1) then it := it_begin(ID2PIT(0)); end_if;
-
-    (* TEST *) if (Ix_local=0) then msg:=LogMsg(MakeMsg(msg, 'START')); end_if;
-
-    while (not bBreak and it.item<>-1) do
-      case (it.dir) of
-      DIR_UP:
-        (* ВОПРОС: считаемем только конечные элементы? - пока да...  *)
-        if (not is_poly(it.item)) then
-          (* Крутим таймер - определяем текущее время расчёта *)
-          DTIME(); 
-          CDT := ULINT_TO_DT(ADD(DT_TO_ULINT(PDT), TIME_TO_ULINT(DTIME.ET)));
-          
-  (* TEST -------- *)        
-  if (
-    (it.item>=1 and it.item<=99) 
-  ) then 
-  (* ------------- *)        
-          (* === Расчёт элемента по направлению Ix === *)
-          msg:=MakeMsg(msg, 'Process item ID=', ID2Str(IT_ID(it.item)), ' ... '); 
-          
-          iErr := IT_Process(it.item, Ix_local, CDT);
-          bRes := (iErr = E_SUCCESS);
-          if (not bRes) then 
-            msg:=LogMsg(MakeMsg(msg, 'FAILED!'));
-            {goto __error;} 
-          else 
-            msg:=LogMsg('');
-          end_if;
-  (* ------------- *)        
-  end_if;        
-  (* ------------- *)        
-
-        end_if; (* not is_poly(it.item) *)
-      end_case; (* it.dir *)
-
-      it := it_next(it);
-      (* Проверка на досрочный выход из цикла *)
-      if (not bBreak and N<>-1) then
-        i:=i+1;
-        if (i >= N) then i:=0; bBreak:=true; end_if;
-      end_if;
-      
-    end_while;
-    bBreak:=false;
-    
-    (* TEST *)
-    if (Ix_local=0) then msg := LogMsg(MakeMsg(msg, 'END')); end_if; 
-
-    (* Каждый час - рестарт счётчика в защиту от переполнения *)
-    if (DTIME.ET > T#1h) then 
-      PDT := CDT;
-      DTIME(IN:=false);
-      DTIME(IN:=true);
-    end_if;
-    return;
-
-    {{__error:}}
-    if (iErr = E_SUCCESS) then iErr := E_PROCESS; end_if;
-    bRes := FALSE;
-    bReStart := TRUE; (* Посылаем на рестарт *)
-    
-    (* Протоколирование ошибки *)
-    msg:=LogMsg( MakeMsg('== PROCESS ERROR -> will be re-started! [ERR=', 
-        Err2Str(iErr), ']'), Warning, iErr);
-  ELSE
-    bRes := FALSE;
-    bReStart := TRUE;
-  END_IF; (* IN *)
-END_FUNCTION_BLOCK
-
-PROGRAM P_MOD1
-  VAR_EXTERNAL
-    STAT : TStat;
-    F_Res : BOOL;
-  END_VAR
-  VAR
-    CDT : DT;
-    bRes : BOOL;
-    Process_X1 : Process_XYZ;
-    Process_X2 : Process_XYZ;
-    Process_X0 : Process_XYZ;
-    _TMP_NOT33_OUT : BOOL;
-    _TMP_AND32_OUT : BOOL;
-    _TMP_Do_PreProc19_ENO : BOOL;
-    _TMP_Do_PreProc19_OUT : BOOL;
-    _TMP_Do_PostProc37_ENO : BOOL;
-    _TMP_Do_PostProc37_OUT : BOOL;
-  END_VAR
-
-  _TMP_NOT33_OUT := NOT(F_Res);
-  _TMP_AND32_OUT := AND(STAT.RDY, _TMP_NOT33_OUT);
-  _TMP_Do_PreProc19_OUT := Do_PreProc(EN := _TMP_AND32_OUT, PIT := 0, ENO => _TMP_Do_PreProc19_ENO);
-  Process_X0(IN := _TMP_Do_PreProc19_ENO, Ix := 0, N := -1);
-  Process_X1(IN := Process_X0.bRes, Ix := 1, N := -1);
-  Process_X2(IN := Process_X1.bRes, Ix := 2, N := -1);
-  _TMP_Do_PostProc37_OUT := Do_PostProc(EN := Process_X2.bRes, PIT := 0, ENO => _TMP_Do_PostProc37_ENO);
-  IF _TMP_Do_PostProc37_ENO THEN
-      STAT.RDY := _TMP_Do_PostProc37_ENO;
-  END_IF;
-  F_Res := STAT.RDY;
-END_PROGRAM
-
-PROGRAM P_MOD2
-  VAR_EXTERNAL
-    STS : TSets;
-    MD460 : UDINT;
-    MD461 : UDINT;
-    MD462 : UDINT;
-    MD463 : UDINT;
-    MD464 : UDINT;
-    MD465 : UDINT;
-    MD466 : UDINT;
-    MD467 : UDINT;
-    MD468 : UDINT;
-    MD469 : UDINT;
-    MD470 : UDINT;
-    MD471 : UDINT;
-    MD472 : UDINT;
-    MD473 : UDINT;
-    MD474 : UDINT;
-    MD475 : UDINT;
-    MD476 : UDINT;
-    MD477 : UDINT;
-    MD478 : UDINT;
-    MD479 : UDINT;
-    MD480 : UDINT;
-    MD481 : UDINT;
-    MD482 : UDINT;
-    MD483 : UDINT;
-    MD484 : UDINT;
-    MD485 : UDINT;
-    MD486 : UDINT;
-    MD487 : UDINT;
-    MD488 : UDINT;
-    MD489 : UDINT;
-  END_VAR
-
-  MD460 := 0;
-END_PROGRAM
 
 FUNCTION_BLOCK DistCond
   VAR_OUTPUT
@@ -5228,35 +1471,831 @@ FUNCTION_BLOCK SetCond
   END_CASE;
 END_FUNCTION_BLOCK
 
-FUNCTION_BLOCK WriteItem
+FUNCTION Beta_N4 : REAL
+  VAR_INPUT
+    Ht : REAL := 0.0;
+    M1 : TMatter;
+    M2 : TMatter;
+    Alfa_Nm1 : P_RERE;
+    Tn_N : REAL := 0.0;
+    Tn_Np1 : REAL;
+    Q1n_N : REAL := 0.0;
+    Q2n_N : REAL := 0.0;
+  END_VAR
+  VAR
+    B : REAL := 0.0;
+    C : REAL := 0.0;
+    F : REAL := 0.0;
+  END_VAR
+
+  (* Малый шаг - условие симметрии *)
+  if (M1.h < 1.0E-4 or M2.h < 1.0E-4) then
+    Beta_N4 := Tn_Np1;
+  else
+    (* Cчитаем известной T=Tn_Np1 в точке i=N+1, тогда Alfa.A=0, Alfa.B=T *)
+    C :=  M1.l / M1.h;
+
+    B :=    (M1.l / M1.h) 
+          + (M2.l / M2.h) 
+          + (M1.l * M1.h / (2.0*M1.a*Ht))  
+          + (M2.l * M2.h / (2.0*M2.a*Ht));
+
+    F :=  - Tn_N * ( (M1.l*M1.h/(2.0*M1.a*Ht)) + (M2.l*M2.h/(2.0*M2.a*Ht)) ) 
+          - (M1.l * M1.h / (2.0*M1.a)) * Q1n_N  
+          - (M2.l * M2.h / (2.0*M2.a)) * Q2n_N
+          - (M2.l / M2.h) * Tn_Np1; (* доп слагаемое - см. Tn_Np1 *)
+
+    Beta_N4 := (C * Alfa_Nm1.B - F) / (B - C * Alfa_Nm1.A);
+  end_if;
+END_FUNCTION
+
+FUNCTION _ref : TVar
+  VAR_INPUT
+    PIT : SINT := -1;
+    DOT : TDot;
+    DIR : USINT := 0;
+  END_VAR
+
+  {{
+    #pragma pack(push, 4)
+    union { // 32-бит (4 байта)
+      TVAR tv;
+      struct {  // Значение (var)
+        USINT  R:1;       // Флаг R (для var = 0)
+          INT  A:15;      // Значение A (актуальное)
+        USINT  C:1;       // Флаг C (1-расчёт готов)
+          INT  B:15;      // Значение B (предыдущее)
+      };
+      struct {  // Ссылка   (ref)
+        USINT  r:1;       // Флаг r (для ref = 1)
+        USINT  d:2;       // Направление (0,1,2,3)
+        USINT  p:8;       // Позиция элемента
+        USINT  i:7;       // Индекс сетки по DOT (0..127)
+        USINT  j:7;       // Индекс сетки по J (0..127)
+        USINT  k:7;       // Индекс сетки по K (0..127)
+      };
+    } var /*= {0}*/;
+    #pragma pack(pop)
+    var.r=1;              // Флаг r = 1
+    var.d=DIR;            // Индекс направления     (d)
+    var.p=PIT;            // Ссылка на элемент      (p)
+    var.i=DOT.A.table[0]; // Индексы узла элемента  (i)
+    var.j=DOT.A.table[1]; // Индексы узла элемента  (j)
+    var.k=DOT.A.table[2]; // Индексы узла элемента  (k)
+    _REF=var.tv;
+  }}
+END_FUNCTION
+
+FUNCTION Beta_N3 : REAL
+  VAR_INPUT
+    Ht : REAL := 0.0;
+    M : TMatter;
+    Alfa_N1 : P_RERE;
+    Tn_N : REAL := 0.0;
+    Tq_N : REAL := 0.0;
+    Qn_N : REAL := 0.0;
+    V_N : REAL := 0.0;
+    R_N : REAL := 0.0;
+    Bound3 : BOOL := TRUE;
+  END_VAR
+  VAR
+    D_N : REAL := 0.0;
+    E_N : REAL := 0.0;
+    b_N : REAL := 0.0;
+    k_N : REAL := 0.0;
+    h2 : REAL := 0.0;
+    at2 : REAL := 0.0;
+    DE : REAL := 0.0;
+    denom : REAL := 0.0;
+  END_VAR
+
+  if (R_N > 1.0E-5) then 
+    if (not Bound3) then M.k := 1.0; end_if;
+    b_N := M.k/M.l;
+    k_N := b_N*Tq_N;
+    if (not Bound3) then b_N := 0.0; end_if;
+    if (R_N < 1.0E5) then E_N := M.h / (2.0*R_N); end_if;
+    D_N := (abs(V_N)*M.h) / (2.0*M.a);
+  else
+    (* Малый радиус - условия симметрии h=0 *)
+    M.h := 0.0;
+  end_if;
+
+  h2    := M.h * M.h;
+  at2   := 2.0 * M.a * Ht;
+  DE    := (1.0 - D_N + E_N);
+  denom := h2 + at2 * (1.0 + DE * M.h*b_N - Alfa_N1.A);
+
+  Beta_N3 := ( h2 * (Tn_N + Ht*Qn_N) + at2 * (Alfa_N1.B + DE * M.h*k_N) ) / denom;
+END_FUNCTION
+
+FUNCTION its_gr2 : THandle
+  VAR_INPUT
+    Off : TPos8 := 0;
+  END_VAR
+
+  {{ ITS_GR2 = (THANDLE)&__GET_GLOBAL_ITS()->GR2.table[OFF]; }}
+END_FUNCTION
+
+FUNCTION int4ul : ULINT
+  VAR_INPUT
+    I0 : INT;
+    I1 : INT;
+    I2 : INT;
+    I3 : INT;
+  END_VAR
+
+  int4ul := INT_TO_ULINT(I0)*16#0001000000000000 + 
+            INT_TO_ULINT(I1)*16#0000000100000000 +
+            INT_TO_ULINT(I2)*16#0000000000010000 +
+            INT_TO_ULINT(I3);
+           
+END_FUNCTION
+
+FUNCTION_BLOCK DistVarO
+  VAR_OUTPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+  END_VAR
+  VAR_INPUT
+    VarO : TVarO;
+  END_VAR
+
+  MD0 := VarO.DTO;  (* секунд от 01-01-1970 *)
+  MD1 := TIME_TO_UDINT(VarO.TMO);
+  MD2 := REAL_TO_UDINT(VarO.QTY);
+  MD3 := REAL_TO_UDINT(VarO.QTS);
+  MD4 := REAL_TO_UDINT(VarO.RO1);
+  MD5 := REAL_TO_UDINT(VarO.RO2);
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK FRONT
+  VAR_INPUT
+    IN : BOOL := TRUE;
+    PT : TIME := T#1s;
+  END_VAR
+  VAR_OUTPUT
+    OUT : BOOL := FALSE;
+    INV : BOOL := FALSE;
+  END_VAR
+  VAR
+    f_TP : TP;
+    f_TP_ET : TIME := T#0s;
+    f_TP_Q : BOOL := FALSE;
+  END_VAR
+
+  VAR
+    (*Run    : R_TRIG;*)
+    bReStart : BOOL   := TRUE;
+  END_VAR
+    
+  (*Run(CLK := IN);*)
+  IF (IN) THEN
+    IF ((*Run.Q*)bReStart) THEN     
+      bReStart := FALSE;
+      (* Инициализация *)
+      f_TP(IN := FALSE);
+      f_TP(IN := TRUE, PT := PT, Q => f_TP_Q, ET => f_TP_ET);
+      OUT := TRUE;      (* Взвод триггера *)
+    END_IF; 
+    (* Нормальная работа *)
+    (* Отсчет таймера *)
+    f_TP(IN := FALSE, PT := PT, Q => f_TP_Q, ET => f_TP_ET);
+    
+    (* Анализ результата *)
+    IF (f_TP.Q = FALSE) THEN 
+      (* если отсчет закончился и ... *)
+      IF (OUT = FALSE) THEN 
+        (* ... если выход сброшен, тогда сразу начинаем новый отсчет *)
+        f_TP(IN := TRUE, PT := PT, Q => f_TP_Q, ET => f_TP_ET);
+        OUT := TRUE;  (* Взвод триггера *)
+      ELSE 
+        (* ... если выход взведен, то один цикл нужно пропустить !!! *)
+        OUT := FALSE; (* Сброс триггера *)
+      END_IF;
+    ELSE
+      OUT := FALSE;   (* Сброс триггера *)
+    END_IF;
+  ELSE
+    bReStart := TRUE;
+  END_IF; (* IN *)
+
+  (* Устанавливаем инверсный выход *)
+  IF (OUT <> TRUE) THEN INV := TRUE; ELSE INV := FALSE; END_IF;
+    
+  RETURN;
+END_FUNCTION_BLOCK
+
+FUNCTION st_is_debug : BOOL
+  VAR_INPUT
+    tmp : BOOL := FALSE;
+  END_VAR
+
+  {{ return (ST_IS_DEBUG=__GET_GLOBAL_STAT()->DBG); }}
+END_FUNCTION
+
+FUNCTION it_ip : TPos8
   VAR_INPUT
     PIT : TPos8 := -1;
   END_VAR
-  VAR
-    Cond : TCond;
-    msg : STRING := '';
-    _SetCond : SetCond;
+
+  {{ return (IT_IP = __GET_GLOBAL_ITS()->IT.table[PIT].PAR); }}
+END_FUNCTION
+
+FUNCTION m_head : THead
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+    MD6 : UDINT;
+    MD7 : UDINT;
+    MD8 : UDINT;
+    MD9 : UDINT;
   END_VAR
 
-  (* Запись состояния в регистры *)
-  Cond    := get_cn(PIT);
-  Cond.ID := it_id(PIT);
-  (*TEST*)
-  (* #53 - ID = 16761, 0x4179, REG = 3578-3587 *)
-  (*
-  if (Cond.ID = 16761) then 
-    msg := MakeMsg(msg, '= TEST1 [', ID2Str(IT_ID(PIT)), ',');
-    msg := MakeMsg(msg, SINT_TO_STRING(PIT), ',');
-    msg := MakeMsg(msg, 'Tmid=', REAL_TO_STRING(INT_TO_REAL(Cond.Tmid)/100.0), ',');
-    msg := MakeMsg(msg, 'Tmax=', REAL_TO_STRING(INT_TO_REAL(Cond.Tmax.v)/100.0), ',');
-    msg := MakeMsg(msg,  INT_TO_STRING(Cond.Tmax.i[0]), ',');
-    msg := MakeMsg(msg,  INT_TO_STRING(Cond.Tmax.i[1]), ',');
-    msg := MakeMsg(msg,  INT_TO_STRING(Cond.Tmax.i[2]), ']');
-    msg := LogMsg(msg);
-  end_if;
-  *)
-  _SetCond(I := SINT_TO_UINT(PIT), COND := Cond);
+  m_head.Ni     := UINT_TO_SINT(UDINT_TO_UINT(MD0/65536)/256);            (* Количество элементов  *)
+  m_head.Ng     := UINT_TO_SINT(mod(UDINT_TO_UINT(MD0/65536),256));       (* Количество сеток      *)
+  m_head.Nm     := UINT_TO_SINT(UDINT_TO_UINT(mod(MD0,65536))/256);       (* Количество материалов *)
+  m_head.Nv     := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD0,65536)),256));  (* Количество величин    *)
+  m_head.Np     := UINT_TO_SINT(UDINT_TO_UINT(MD1/65536)/256);            (* Количество профилей   *)
+  m_head.Ri     := UINT_TO_SINT(mod(UDINT_TO_UINT(MD1/65536),256));       (* Резерв                *)
+
+  m_head.ID     := UDINT_TO_UINT(mod(MD1,65536)); (* ID эл-та для выкладки сетки в регистры *)
+
+  m_head.TR[0]  := UDINT_TO_TIME(MD2); (* Период 1 *)
+  m_head.TR[1]  := UDINT_TO_TIME(MD3); (* Период 2 *)
+  m_head.TR[2]  := UDINT_TO_TIME(MD4); (* Период 3 *)
+  m_head.TR[3]  := UDINT_TO_TIME(MD5); (* Период 4 *)
+
+  m_head.Ax     := UDINT_TO_UINT(MD6/65536);      (* Направление перпендикуляра секущей *)
+  m_head.pX     := UDINT_TO_INT(mod(MD6,65536));  (* Координата X опорной точки секущей *)
+  m_head.pY     := UDINT_TO_INT(MD7/65536);       (* Координата Y опорной точки секущей *)
+  m_head.pZ     := UDINT_TO_INT(mod(MD7,65536));  (* Координата Z опорной точки секущей *)
+
+  m_head.RV[0]  := UDINT_TO_DINT(MD8); (* резерв *)
+  m_head.RV[1]  := UDINT_TO_DINT(MD9); (* резерв *)
+END_FUNCTION
+
+FUNCTION_BLOCK GetHead
+  VAR_EXTERNAL
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+    MD6 : UDINT;
+    MD7 : UDINT;
+    MD8 : UDINT;
+    MD9 : UDINT;
+  END_VAR
+  VAR_OUTPUT
+    HEAD : THead;
+  END_VAR
+
+  HEAD := m_head(MD0,MD1,MD2,MD3,MD4,MD5,MD6,MD7,MD8,MD9);
 END_FUNCTION_BLOCK
+
+FUNCTION it_iv : TPos8
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+
+  {{ return (IT_IV = __GET_GLOBAL_ITS()->IT.table[PIT].IV); }}
+END_FUNCTION
+
+FUNCTION sh_get_ax : USINT
+  VAR_INPUT
+    SH : TShape;
+  END_VAR
+
+  sh_get_ax := WORD_TO_USINT(SHR((Sh.wF AND 16#3000), 12));
+END_FUNCTION
+
+FUNCTION Alfa_i : P_RERE
+  VAR_INPUT
+    Ht : REAL := 0.0;
+    M : TMatter;
+    Alfa_im : P_RERE;
+    Ti : REAL := 0.0;
+    Qi : REAL := 0.0;
+    Vi : REAL := 0.0;
+    Ri : REAL := 0.0;
+  END_VAR
+  VAR
+    Ai : REAL := 0.0;
+    Bi : REAL := 0.0;
+    Ci : REAL := 0.0;
+    Fi : REAL := 0.0;
+    rh : REAL := 0.0;
+    rk : REAL := 0.0;
+    Via : REAL := 0.0;
+    Vip : REAL := 0.0;
+    Vim : REAL := 0.0;
+    Di : REAL := 0.0;
+    Ei : REAL := 0.0;
+    denom : REAL := 0.0;
+  END_VAR
+
+  (* Малый радиус - условие симметрии *)
+  if (Ri < 1.0E-4) then 
+    Alfa_i.A := 1.0;
+    Alfa_i.B := 0.0;
+  else
+
+    (* расчёт движения по радиусу *)
+    if (Ri < 1.0e5) then Ei := M.h / (2.0 * Ri); end_if;
+    
+    (* расчёт движения среды *)
+    if (Vi <> 0.0) then
+      Via := abs(Vi);
+      Vip := (Via + Vi)   / 2.0;
+      Vim := (Via - Vi)   / 2.0;
+      Di  := (Via * M.h)  / (2.0 * M.a);
+    end_if;
+
+    rh := Ht / M.h;       (* Отношение     (rh=dt/dx)     *)
+    rk := (M.a*rh) / M.h; (* Число Куранта (rk=a*dt/dx^2) *)
+
+    Ai :=       rk*(1.0+Ei) / (1.0+Di) + Vim*rh; 
+    Ci :=       rk*(1.0-Ei) / (1.0+Di) + Vip*rh; 
+    Bi := 1.0 +    (2.0*rk) / (1.0+Di) + Via*rh; 
+    Fi := -Ti - Ht*Qi;
+
+    denom := (Bi - Ci*Alfa_im.A);
+
+    Alfa_i.A := Ai / denom;
+    Alfa_i.B := (Ci*Alfa_im.B - Fi) / denom;
+  end_if;
+END_FUNCTION
+
+FUNCTION Temp_i : REAL
+  VAR_INPUT
+    _Alfa_i : P_RERE;
+    T_ip : REAL := 0.0;
+  END_VAR
+
+  Temp_i := _Alfa_i.A * T_ip + _Alfa_i.B;
+END_FUNCTION
+
+FUNCTION REAL2UDI : UDINT
+  VAR_INPUT
+    VALUE : REAL := 0.0;
+  END_VAR
+  VAR
+    tmp : UDINT := 0;
+  END_VAR
+
+  {{
+    union { UDINT  udint; float real; } value;
+    value.real = VALUE;
+    TMP = value.udint;
+  }}
+  REAL2UDI := TMP;
+END_FUNCTION
+
+FUNCTION _point : TPoint
+  VAR_INPUT
+    X : REAL := 0.0;
+    Y : REAL := 0.0;
+    Z : REAL := 0.0;
+  END_VAR
+
+  {{ 
+    _POINT.table[0] = X; 
+    _POINT.table[1] = Y; 
+    _POINT.table[2] = Z; 
+  }}
+END_FUNCTION
+
+FUNCTION kto_oil : REAL
+  VAR_INPUT
+    L : REAL := 0.0;
+    dTm : REAL := 0.0;
+  END_VAR
+  VAR CONSTANT
+    C : REAL := 0.59;
+    n : REAL := 0.25;
+  END_VAR
+
+  kto_oil:=36.0;
+END_FUNCTION
+
+FUNCTION _Matter : TMatter
+  VAR_INPUT
+    a : REAL := 0.0;
+    l : REAL := 0.0;
+    h : REAL := 0.0;
+    k : REAL := 0.0;
+  END_VAR
+
+  _Matter.a:=a;
+  _Matter.l:=l;
+  _Matter.h:=h;
+  _Matter.k:=k;
+END_FUNCTION
+
+FUNCTION grad : REAL
+  VAR_INPUT
+    RAD : REAL := 0.0;
+  END_VAR
+
+  grad:=RAD*57.295779513082320876798154814105;
+END_FUNCTION
+
+FUNCTION AxO : TAxO
+  VAR_INPUT
+    Ax : USINT := 0;
+    inside : BOOL := TRUE;
+  END_VAR
+
+  (*  Порядок координат при различной ориентации оси *)
+  if (inside) then
+    (* Взгляд изнутри: какой индекс в локальных координатах элемента
+      X(R),Y(F),Z имеет абсолютная координата (Ox,Oy,Oz)
+      при заданной ориентации оси симметрии Ax?
+    (* Индексы координат, ставших X,Y,Z:  Ax  | 1 | 2 | 3 | *)
+    (* O.x-индекс радиуса,O.y-угол,O.z-высота ------------- *)
+    AxO.x := (0+Ax) mod 3; (* Ind_of_X  (O.x) | 1 | 2 | 0 | *)
+    AxO.y := (1+Ax) mod 3; (* Ind_of_Y  (O.y) | 2 | 0 | 1 | *)  
+    AxO.z := (2+Ax) mod 3; (* Ind_of_Z  (O.z) | 0 | 1 | 2 | *)
+  else  (* Обратное преобразование -> *)
+    (* Взгляд снаружи: какую роль абсолютная координата (Ox,Oy,Oz)
+       играет для вложенного во внешнюю систему элемента?   *)
+    (* Порядок "перебора" координат:  Ax=Ix+1 | 1 | 2 | 3 | *)
+    (* где 0-внешний цикл, 2-самый вложенный  ------------- *)
+    AxO.x := (3-Ax) mod 3; (* Ind_of_X  (O.x) | 2 | 1 | 0 | *)
+    AxO.y := (4-Ax) mod 3; (* Ind_of_Y  (O.y) | 0 | 2 | 1 | *)  
+    AxO.z := (5-Ax) mod 3; (* Ind_of_Z  (O.z) | 1 | 0 | 2 | *)
+  end_if;
+END_FUNCTION
+
+FUNCTION get_sh : TShape
+  VAR_INPUT
+    PSH : TPos8 := -1;
+  END_VAR
+
+  {{ return (GET_SH = __GET_GLOBAL_ITS()->SH.table[PSH]); }}
+END_FUNCTION
+
+FUNCTION Sh_Abs2Loc : TPoint
+  VAR_INPUT
+    Sh : TShape;
+    X : REAL := 0.0;
+    Y : REAL := 0.0;
+    Z : REAL := 0.0;
+  END_VAR
+  VAR
+    Ax : USINT := 0;
+    A : TPoint := [0.0, 0.0, 0.0];
+    B : TPoint := [0.0, 0.0, 0.0];
+    O : TAxO;
+    PI : REAL := 3.1415926535897932384626433832795;
+    PI_2 : REAL := 1.5707963267948966192313216916398;
+  END_VAR
+  VAR CONSTANT
+    RAD : BOOL := FALSE;
+    DX : REAL := 1.0E-5;
+  END_VAR
+
+  (* Sh := get_sh(PIT); *)
+  Ax := sh_get_ax(Sh);
+
+  A := _point(X-Sh.P0[0],Y-Sh.P0[1],Z-Sh.P0[2]); 
+  if (Ax > 0) then 
+    (* Декарт -> Цилиндр *)
+    O := AxO(Ax);
+    B[O.x] := sqrt(A[O.x]*A[O.x] + A[O.y]*A[O.y]);
+    if (abs(A[O.x]) < DX) then A[O.x] := 0.0; end_if;
+    if (abs(A[O.y]) < DX) then A[O.y] := 0.0; end_if;
+    (* интерпретация atan2(y,x) *)
+    if (A[O.x] < 0.0) then 
+      if (A[O.y] < 0.0) then  B[O.y] := atan(A[O.y]/A[O.x])-PI; 
+      else                    B[O.y] := atan(A[O.y]/A[O.x])+PI; 
+      end_if;
+    else 
+      if (A[O.x] > 0.0) then
+        B[O.y] := atan(A[O.y]/A[O.x]);
+      else (* A[O.x] = 0.0 *)
+        if (A[O.y] < 0.0) then 
+          B[O.y] := -PI_2;  
+        else 
+          if (A[O.y] > 0.0) then
+            B[O.y] := PI_2;   
+          else (* y = 0.0 *)
+            B[O.y] := 0.0; 
+          end_if;
+        end_if;
+      end_if;
+    end_if;
+    if (abs(B[O.y]) < DX) then B[O.y] := 0.0; end_if;
+    if (not RAD) then B[O.y] := grad(B[O.y]); end_if;
+    B[O.z] := A[O.z];
+  else 
+    B := A;
+  end_if;
+  Sh_Abs2Loc := B; 
+END_FUNCTION
+
+FUNCTION radi : REAL
+  VAR_INPUT
+    GRA : REAL := 0.0;
+  END_VAR
+
+  radi:=GRA*0.01745329251994329576923690768489;
+END_FUNCTION
+
+FUNCTION angle : REAL
+  VAR_INPUT
+    A : REAL := 0.0;
+    L0 : REAL := 0.0;
+    PI2 : REAL := 360.0;
+  END_VAR
+
+  (* Приведение аргумента к диапазону [L0..L0+2*PI] *)
+  while (A < L0    ) do A := A+PI2; end_while;
+  while (A > L0+PI2) do A := A-PI2; end_while;
+  angle := A;
+END_FUNCTION
+
+FUNCTION Reform : TPoint
+  VAR_INPUT
+    wF : WORD := 0;
+    Ang : REAL := 0.0;
+    Pt : REAL := 0.0;
+    pL : REAL := 0.0;
+    Lx : REAL := 0.0;
+  END_VAR
+  VAR
+    pR : REAL := 0.0;
+    LR : P_BOOL;
+    Q : SINT := 0;
+    K : REAL := 0.0;
+    Kx : REAL := 0.0;
+  END_VAR
+  VAR CONSTANT
+    PI_2 : REAL := 90.0;
+    PI_4 : REAL := 45.0;
+    PI : REAL := 180.0;
+    PI3_2 : REAL := 270.0;
+  END_VAR
+
+  (* Нормируем угол 0-360 град. *)
+  Ang:=angle(Ang);
+
+  (* Определяем номер квадранта Q = [0..3] *)
+  if (Ang >= 0.0) then
+    if    (Ang >= 0.0   and Ang <  PI_2 ) then Q := 0; 
+    elsif (Ang >= PI_2  and Ang <  PI   ) then Q := 1; 
+    elsif (Ang >= PI    and Ang <  PI3_2) then Q := 2; 
+    else Q := 3;
+    end_if;
+  else
+    if    (Ang <= 0.0   and Ang > -PI_2 ) then Q := 3; 
+    elsif (Ang <= -PI_2 and Ang > -PI   ) then Q := 2; 
+    elsif (Ang <= -PI   and Ang > -PI3_2) then Q := 1; 
+    else Q := 0;
+    end_if;
+  end_if;
+
+  (* Определяем форму границ в квадранте Q *)
+  LR.A := ((wF and shl(16#10, Q))<>0);
+  LR.B := ((wF and shl(16#01, Q))<>0);
+
+  (* Делаем преобразование границ и точки Pt *)
+  if (LR.A or LR.B) then 
+    (* Растяжение по радиусу от угла *)
+    Ang := angle(Ang, 0.0, PI_2); 
+    if (Ang < PI_4) 
+    then Kx := 1.0/cos(radi(Ang));    (* коэффициент растяжения         *)
+    else Kx := 1.0/sin(radi(Ang));    (* коэффициент растяжения         *)
+    end_if;
+    pR := pL + Lx;                    (* координата правой границы      *)
+    K  := (Pt - pL)/Lx;               (* коэффициент пропорциональности *)
+    if (LR.A) then pL:=pL*Kx; end_if; (* коррекция левой  границы       *)
+    if (LR.B) then pR:=pR*Kx; end_if; (* коррекция правой границы       *)
+    Lx := (pR - pL);                  (* размер по координате           *)
+    Pt := pL + K * Lx;                (* координата точки               *)
+  end_if;
+
+  Reform[0] := Pt; (* текущая   координата *)
+  Reform[1] := pL; (* начальная координата *)
+  Reform[2] := Lx; (* размер по координате *)
+END_FUNCTION
+
+FUNCTION Sh_Point2Dot : TDot
+  VAR_INPUT
+    Sh : TShape;
+    X : REAL := 0.0;
+    Y : REAL := 0.0;
+    Z : REAL := 0.0;
+    fChk : BOOL := TRUE;
+  END_VAR
+  VAR
+    Hn : TPoint := [0.0, 0.0, 0.0];
+    Ax : USINT := 0;
+    pL : TPoint := [0.0, 0.0, 0.0];
+    pR : TPoint := [0.0, 0.0, 0.0];
+    pDL : TPoint := [0.0, 0.0, 0.0];
+    pDR : TPoint := [0.0, 0.0, 0.0];
+    Ox : TAxO;
+    Pt : TPoint := [0.0, 0.0, 0.0];
+    Hx : TPoint := [0.0, 0.0, 0.0];
+    P : TPoint := [0.0, 0.0, 0.0];
+    B : BYTE := 0;
+    bRes : BOOL := true;
+  END_VAR
+  VAR CONSTANT
+    DX : REAL := 1.0E-5;
+  END_VAR
+
+  Ax := sh_get_ax(Sh);
+
+  (* точка (X,Y,Z)->лок *)
+  Pt := Sh_Abs2Loc(Sh, X, Y, Z);
+
+  (* Коррекция границ при изменении формы *)
+  if (Ax<>0) then
+    Ox := AxO(Ax);
+    Pt[Ox.y]:=angle(Pt[Ox.y], Sh.pL[Ox.y]);
+    P := Reform(Sh.wF, Pt[Ox.y], 0.0, Sh.pL[Ox.x], Sh.Lx[Ox.x]);
+    Sh.pL[Ox.x] := P[1]; Sh.Lx[Ox.x] := P[2];
+  end_if;
+
+  if (fChk) then 
+    (* B[0] - 0x01 (In)    - точка внутри элемента    *)
+    (* B[1] - 0x02 (Left)  - точка на левой грани     *)
+    (* B[2] - 0x04 (Right) - точка на правой грани    *)
+    (* B[3] - 0x08 (Front) - точка на передней грани  *)
+    (* B[4] - 0x10 (Back)  - точка на задней грани    *)
+    (* B[5] - 0x20 (Down)  - точка на нижней грани    *)
+    (* B[6] - 0x40 (Up)    - точка на верхней грани   *)
+    (* B[7] - 0x80 (Err)   - ошибка (не используется) *)
+    pL  := Sh.pL;
+    pR  := _point(Sh.pL[0]+Sh.Lx[0], Sh.pL[1]+Sh.Lx[1], Sh.pL[2]+Sh.Lx[2]);
+    
+    pDL := _point((pL[0])*(1.0+DX), (pL[1])*(1.0+DX), (pL[2])*(1.0+DX));
+    pDR := _point((pR[0])*(1.0-DX), (pR[1])*(1.0-DX), (pR[2])*(1.0-DX));
+    
+    (*
+    pDL := _point( pL[0]+(Sh.Lx[0]*DX), pL[1]+(Sh.Lx[1]*DX), pL[2]+(Sh.Lx[2]*DX) );
+    pDR := _point( pR[0]-(Sh.Lx[0]*DX), pR[1]-(Sh.Lx[1]*DX), pR[2]-(Sh.Lx[2]*DX) );
+    *)
+    
+    (* Проверка: точка внутри элемента -> B=1 *)
+    if ( (Pt[0] > pDL[0]) and (Pt[0] < pDR[0]) ) then 
+      if ( (Pt[1] > pDL[1]) and (Pt[1] < pDR[1]) ) then
+        if ( (Pt[2] > pDL[2]) and (Pt[2] < pDR[2]) ) then B:=16#01; end_if;
+      end_if;
+    end_if;
+    
+    (* Сравниваем координаты Pt с гранями элемента *)
+    if (B = 0) then
+      if    ( Pt[0] >= pL[0] and Pt[0] <= pDL[0] ) then B:=(B or shl(16#01, 1)); 
+      elsif ( Pt[0] <= pR[0] and Pt[0] >= pDR[0] ) then B:=(B or shl(16#01, 2)); end_if;
+      if    ( Pt[1] >= pL[1] and Pt[1] <= pDL[1] ) then B:=(B or shl(16#01, 3));
+      elsif ( Pt[1] <= pR[1] and Pt[1] >= pDR[1] ) then B:=(B or shl(16#01, 4)); end_if;
+      if    ( Pt[2] >= pL[2] and Pt[2] <= pDL[2] ) then B:=(B or shl(16#01, 5)); 
+      elsif ( Pt[2] <= pR[2] and Pt[2] >= pDR[2] ) then B:=(B or shl(16#01, 6)); end_if;
+    end_if;
+    if (B = 0) then (* точка вне элемента *)
+      {}(* bRes := assert(false, E_CHECK); *) 
+    end_if;
+  end_if;
+
+  (* Получение узла сетки элемента *)
+  if (Sh.Kn[0]>1) then Hn[0]:=(Sh.Lx[0]/INT_TO_REAL(Sh.Kn[0]-1)); end_if;
+  if (Sh.Kn[1]>1) then Hn[1]:=(Sh.Lx[1]/INT_TO_REAL(Sh.Kn[1]-1)); end_if;
+  if (Sh.Kn[2]>1) then Hn[2]:=(Sh.Lx[2]/INT_TO_REAL(Sh.Kn[2]-1)); end_if;
+
+  Sh_Point2Dot := _dot(
+      byte_to_int(B),
+      min(Sh.Kn[0]-1, max(0, REAL_TO_INT((Pt[0]-Sh.pL[0])/Hn[0]) )), 
+      min(Sh.Kn[1]-1, max(0, REAL_TO_INT((Pt[1]-Sh.pL[1])/Hn[1]) )), 
+      min(Sh.Kn[2]-1, max(0, REAL_TO_INT((Pt[2]-Sh.pL[2])/Hn[2]) ))
+  );
+END_FUNCTION
+
+FUNCTION ID2PIT : TPos8
+  VAR_INPUT
+    ID : UINT := 0;
+  END_VAR
+  VAR
+    bFound : BOOL := false;
+  END_VAR
+
+  {{
+    ID2PIT = -1;
+    P_IDPIT *IDS = &(__GET_GLOBAL_ITS()->PR.table[0]);
+    if (ID != 0) {
+      int lBound=0, rBound=99, test;
+      if (IDS[rBound].A == ID)      ID2PIT = IDS[rBound].B;
+      else if (IDS[lBound].A == ID) ID2PIT = IDS[lBound].B;
+      else {
+        if ( (IDS[lBound].A < ID) && (ID < IDS[rBound].A) ) {
+          while (TRUE) {
+            test = (lBound+rBound)/2;
+            if (IDS[test].A == ID) { ID2PIT = IDS[test].B; break; }
+            if (rBound-lBound <= 1) break;
+            if (IDS[test].A <  ID) lBound = test; else rBound = test; 
+          }
+        }
+      }
+    } else ID2PIT = IDS[0].B;
+  }}
+END_FUNCTION
+
+FUNCTION Do_FindDot : TDot
+  VAR_INPUT
+    X : REAL := 0.0;
+    Y : REAL := 0.0;
+    Z : REAL := 0.0;
+    ign : TPos8 := -1;
+  END_VAR
+  VAR
+    It : TIter;
+    skip_to : TPos8 := -1;
+    i : SINT := 0;
+    N : SINT := 0;
+    Dots : ARRAY [0..7] OF TDot;
+    P : ARRAY [0..7] OF TPos8;
+  END_VAR
+
+  if (not st_check(false)) then return; end_if;
+
+  (* Обход дерева - сбор элементов, содержащих точку *)
+  it  := it_begin(ID2PIT(0));
+  while (it.item<>-1 and N < 8) do (* не более 8 владельцев *)
+    case (it.dir) of
+    DIR_DOWN:
+      if (skip_to = -1) then
+        (* Если точка не входит в родителя, потомков пропускаем *)
+        if (is_poly(it.item)) then
+          Do_FindDot := Sh_Point2Dot(get_sh(it.item), X, Y, Z);
+          if (Do_FindDot.V <= 0) then skip_to := it.item; end_if;
+        end_if;
+      end_if;
+    DIR_UP:
+      if (skip_to <> -1) then
+        if (skip_to = it.item) then skip_to := -1; end_if;
+      else
+        (* если элемент конечный - проверяем точку *)
+        if (not is_poly(it.item)) then
+          Dots[N] := Sh_Point2Dot(get_sh(it.item), X, Y, Z);
+          if (Dots[N].V > 0) then 
+            P[N] := it.item; 
+            N    := N+1; 
+          end_if;
+        end_if;
+      end_if;
+    end_case;
+    it := it_next(it);
+  end_while;
+
+  (* Выбор элемента *)
+  Do_FindDot := _dot(-1);
+  if (N > 0) then
+    for i:=0 to N-1 do
+    
+      if (((*ign<>-1 and*) P[i]<>ign) or N=1) then 
+          Do_FindDot   := Dots[i]; 
+          Do_FindDot.V := sint_to_int(P[i]); 
+         exit; 
+      end_if;
+      
+    end_for;
+  end_if;
+END_FUNCTION
+
+FUNCTION var_d : TDot
+  VAR_INPUT
+    TV : TVar := 0;
+  END_VAR
+
+  {{
+    #pragma pack(push, 4)
+    typedef union {
+      TVAR tv;
+      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
+      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
+    } var_t, *pvar_t;
+    #pragma pack(pop)
+
+    // Величина должна быть ссылкой
+    // ASSERT(1, NULL, pvar->r, TERROR__E_FAIL, __INIT_STRING);
+    VAR_D.A.table[0] = ((pvar_t) &TV)->i;
+    VAR_D.A.table[1] = ((pvar_t) &TV)->j;
+    VAR_D.A.table[2] = ((pvar_t) &TV)->k;
+    VAR_D.V          = ((pvar_t) &TV)->p;
+  }}
+END_FUNCTION
 
 FUNCTION_BLOCK DistLong4
   VAR_INPUT
@@ -6570,19 +3609,122 @@ FUNCTION_BLOCK SetLong4
   END_CASE;
 END_FUNCTION_BLOCK
 
-FUNCTION int4ul : ULINT
+FUNCTION knoff : P_INT
   VAR_INPUT
-    I0 : INT;
-    I1 : INT;
-    I2 : INT;
-    I3 : INT;
+    Nx : INT := 1;
+    Ny : INT := 1;
+    Nz : INT := 1;
+    I : INT := 0;
+    J : INT := 0;
+    K : INT := 0;
   END_VAR
 
-  int4ul := INT_TO_ULINT(I0)*16#0001000000000000 + 
-            INT_TO_ULINT(I1)*16#0000000100000000 +
-            INT_TO_ULINT(I2)*16#0000000000010000 +
-            INT_TO_ULINT(I3);
-           
+  knoff.A := 0;  (* начальное смещение 0-ячейки в массиве Grid *)
+  knoff.B := 1;  (* количество ячеек  в массиве Grid (min = 1) *)
+  if (K > 0) then
+    knoff.A := knoff.A + K*2*(Nx+Ny) + (K+1)*Nx*Ny;
+    if (K = (Nz-1)) then knoff.B := knoff.B+1; end_if;
+  else knoff.B := knoff.B+1;
+  end_if;
+  if (J > 0) then
+    knoff.A := knoff.A + J*(2+knoff.B*Nx) + Nx;
+    if (J = (Ny-1)) then knoff.B := knoff.B+1; end_if;
+  else knoff.B := knoff.B+1;
+  end_if;
+  if (I > 0) then
+    knoff.A := knoff.A + I*knoff.B + 1;
+    if (I = (Nx-1)) then knoff.B := knoff.B+1; end_if;
+  else knoff.B := knoff.B+1;
+  end_if;
+
+END_FUNCTION
+
+FUNCTION var_v : INT
+  VAR_INPUT
+    TV : TVar := -1;
+    GET_A : BOOL := true;
+  END_VAR
+  VAR
+    Sh : TShape;
+  END_VAR
+
+  {{
+    #pragma pack(push, 4)
+    typedef union {
+      TVAR tv;
+      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
+      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
+    } var_t, *pvar_t;
+    #pragma pack(pop)
+    pvar_t pvar = (pvar_t)&TV;
+    
+    // Решаем ссылку (если нужно)
+    while (pvar->r) {
+      if (pvar->p >= 0) {
+        // ссылка должна быть реальной (!)
+        //ASSERT(1, NULL, (pvar->p < __GET_GLOBAL_HDR()->NI), 
+        //  TERROR__E_FAIL, __STRING_LITERAL(22,"var_v: Reference fail!") );
+        
+        // Переход к элементу по ссылке:
+        SH = GET_SH(1, NULL, pvar->p);
+        P_INT Off = KNOFF(1, NULL, 
+            SH.KN.table[0], SH.KN.table[1], SH.KN.table[2], 
+            pvar->i, pvar->j, pvar->k
+        );
+        pvar = (pvar_t) &__GET_GLOBAL_ITS()->GR.table[pvar->p].A.table[Off.A];
+      } else {  
+        // элемент не существует -> воздух
+        return (VAR_V = 2000); // 20.00 градусов Цельсия
+      }
+    }
+    
+    VAR_V = (GET_A) ? pvar->A : pvar->B;
+  }}
+END_FUNCTION
+
+FUNCTION get_var : TVar
+  VAR_INPUT
+    HGR : THandle := 0;
+    PGR : TPos8 := -1;
+    OFF : P_INT;
+    IX : USINT := 0;
+  END_VAR
+
+  {{
+    #pragma pack(push, 4)
+    typedef union {
+      TVAR tv;
+      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
+      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
+    } var_t, *pvar_t;
+    #pragma pack(pop)
+
+    // Получаем массив сеток по дескриптору  
+    TGRID *Grids = (TGRID *)(HGR);
+    
+    if (IX == 0) {        // Главная ячейка узла
+    
+      GET_VAR = Grids[PGR].A.table[OFF.A];
+      
+    } else if (IX < 4) {  // Смежная ячейка узла
+    
+      for (int k=(GET_VAR=(TVAR)0, 1); k < OFF.B; k++) {
+        GET_VAR = Grids[PGR].A.table[OFF.A+k];
+        if (((pvar_t)&GET_VAR)->d == IX) break;
+      }
+      
+      // Значение смежных ячеек может быть только ссылочным (!)
+      // ASSERT(1, NULL, ((pvar_t)&GET_VAR)->r, TERROR__E_FAIL, 
+        //__STRING_LITERAL(29,"GET_VAR: Reference wanted!"));
+        
+    } else {
+
+      // Неверное значение IX
+      // ASSERT(1, NULL, FALSE, TERROR__E_FAIL, 
+        //__STRING_LITERAL(29,"GET_VAR: Invalid IX!"));
+    
+    }
+  }}
 END_FUNCTION
 
 FUNCTION_BLOCK Grid2ul
@@ -6670,399 +3812,45 @@ FUNCTION_BLOCK Grid2ul
   end_if; 
 END_FUNCTION_BLOCK
 
-FUNCTION m_head : THead
+FUNCTION get_bf : REAL
   VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-    MD6 : UDINT;
-    MD7 : UDINT;
-    MD8 : UDINT;
-    MD9 : UDINT;
+    PBF : TPos16 := -1;
   END_VAR
 
-  m_head.Ni     := UINT_TO_SINT(UDINT_TO_UINT(MD0/65536)/256);            (* Количество элементов  *)
-  m_head.Ng     := UINT_TO_SINT(mod(UDINT_TO_UINT(MD0/65536),256));       (* Количество сеток      *)
-  m_head.Nm     := UINT_TO_SINT(UDINT_TO_UINT(mod(MD0,65536))/256);       (* Количество материалов *)
-  m_head.Nv     := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD0,65536)),256));  (* Количество величин    *)
-  m_head.Np     := UINT_TO_SINT(UDINT_TO_UINT(MD1/65536)/256);            (* Количество профилей   *)
-  m_head.Ri     := UINT_TO_SINT(mod(UDINT_TO_UINT(MD1/65536),256));       (* Резерв                *)
-
-  m_head.ID     := UDINT_TO_UINT(mod(MD1,65536)); (* ID эл-та для выкладки сетки в регистры *)
-
-  m_head.TR[0]  := UDINT_TO_TIME(MD2); (* Период 1 *)
-  m_head.TR[1]  := UDINT_TO_TIME(MD3); (* Период 2 *)
-  m_head.TR[2]  := UDINT_TO_TIME(MD4); (* Период 3 *)
-  m_head.TR[3]  := UDINT_TO_TIME(MD5); (* Период 4 *)
-
-  m_head.Ax     := UDINT_TO_UINT(MD6/65536);      (* Направление перпендикуляра секущей *)
-  m_head.pX     := UDINT_TO_INT(mod(MD6,65536));  (* Координата X опорной точки секущей *)
-  m_head.pY     := UDINT_TO_INT(MD7/65536);       (* Координата Y опорной точки секущей *)
-  m_head.pZ     := UDINT_TO_INT(mod(MD7,65536));  (* Координата Z опорной точки секущей *)
-
-  m_head.RV[0]  := UDINT_TO_DINT(MD8); (* резерв *)
-  m_head.RV[1]  := UDINT_TO_DINT(MD9); (* резерв *)
+  {{ return (GET_BF = __GET_GLOBAL_STS()->BF.table[PBF]); }}
 END_FUNCTION
 
-FUNCTION_BLOCK GetHead
-  VAR_EXTERNAL
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-    MD6 : UDINT;
-    MD7 : UDINT;
-    MD8 : UDINT;
-    MD9 : UDINT;
-  END_VAR
-  VAR_OUTPUT
-    HEAD : THead;
-  END_VAR
-
-  HEAD := m_head(MD0,MD1,MD2,MD3,MD4,MD5,MD6,MD7,MD8,MD9);
-END_FUNCTION_BLOCK
-
-PROGRAM P_RES
-  VAR_EXTERNAL
-    f_Res : BOOL;
-    HDR : THead;
-    ITS : TItems;
-  END_VAR
-  VAR
-    pit : TPos8 := 0;
-    Sh : TShape;
-    Pt : TPoint;
-    Off : P_INT;
-    PGR : TPos8 := -1;
-    I : INT := 0;
-    J : INT := 0;
-    K : INT := 0;
-    Dot : TDot;
-    bRes : BOOL := false;
-    iRes : TError := E_SUCCESS;
-    iLog : INT := 0;
-    msg : STRING := '';
-    _WriteItem : WriteItem;
-    _Grid2ul : Grid2ul;
-    _GetHead : GetHead;
-  END_VAR
-
-  (* Считывание заголовка *)
-  _GetHead(HEAD => HDR);
-
-  (* Test *)
-  (* if (HDR.ID = 100)  then HDR.ID := 99; end_if; *)
-  (*
-  HDR.ID := 100;
-  HDR.Ax := 2;
-  HDR.pX := 1800;
-  HDR.pY := 620;
-  HDR.pZ := 1575;
-  *)
-  (* =1= Протоколирование на консоль === *)
-  bRes := Do_LogCond(ID2PIT(0));
-
-  (* =2= Запись массива элементов в регистры === *)
-  (*msg:=LogMsg('Write items ... '); *)
-  FOR pit := 0 TO HDR.Ni-1 DO 
-    _WriteItem(PIT := pit);
-    (*
-    if (len(msg)=0) then msg := MakeMsg(' - Updated items: '); end_if;
-    msg := MakeMsg(msg, ' [', ID2Str(IT_ID(pit)), ',');
-    msg := MakeMsg(msg,       SINT_TO_STRING(pit), ']');
-    if (mod((pit+1),5)=0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if;
-    *)
-  END_FOR; 
-  (* if (len(msg)>0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if; *)
-
-  (* =3= Вывод T-поля объекта [POS=HDR.ID] в регистры === *)
-  msg:=LogMsg(MakeMsg(msg, '===== T-Field START ====='));      
-
-  pit := UINT_TO_SINT(HDR.ID); (* it_pos(ID2PIT(HDR.ID)); *)
-  if (pit >= 0 and pit < HDR.Ni) then 
-
-    (* Вывод поля обычного элемента *)
-    Sh := get_sh(pit);
-    _Grid2ul(HGR := its_gr(0), PGR := pit, SH := Sh, iRes=>iRes);
-    
-  elsif (pit = 100) then (* Вывод поля поверхности *)
-    
-    Sh := _surf(
-      ID2PIT(0), 
-      UINT_TO_USINT(HDR.Ax), 
-      INT_TO_REAL(HDR.pX), 
-      INT_TO_REAL(HDR.pY), 
-      INT_TO_REAL(HDR.pZ)
-    );
-    (*Sh := get_sh(0);*)
-    ITS.Sh[pit] := Sh;
-    
-    (* Линковка узлов *)
-    iLog := 0;
-    for I:=0 to Sh.Kn[0]-1 do
-      for J:=0 to Sh.Kn[1]-1 do
-        for K:=0 to Sh.Kn[2]-1 do
-        
-          Dot := link_var(its_gr2(0), 0, Sh, I, J, K);
-          (*
-          Pt  := Sh_Dot2Point(Sh, I, J, K);
-          Dot := Do_FindDot(Pt[0], Pt[1], Pt[2]);
-          Off := knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], I,J,K);
-          PGR := set_var( its_gr2(0), 0, Off, _ref(int_to_sint(Dot.v), Dot));
-          *)
-          
-          (*
-          if (false or iLog<80) then  
-            if (len(msg)=0) then msg := MakeMsg(' =!=> '); end_if;
-            msg := MakeMsg(msg, '[', INT_TO_STRING(REAL_TO_INT(Pt[0])), ',');
-            msg := MakeMsg(msg,  '', INT_TO_STRING(REAL_TO_INT(Pt[1])), ',');
-            msg := MakeMsg(msg,  '', INT_TO_STRING(REAL_TO_INT(Pt[2])), ']');
-            if (mod((iLog+1),8)=0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if;
-            iLog:=iLog+1;
-          end_if;
-          *)
-          (*
-          if (iLog<80) then  
-            if (len(msg)=0) then msg := MakeMsg(' =!=> '); end_if;
-            msg := MakeMsg(msg, '[', INT_TO_STRING(Dot.v), ',');
-            msg := MakeMsg(msg,  '', INT_TO_STRING(Dot.a[0]), ',');
-            msg := MakeMsg(msg,  '', INT_TO_STRING(Dot.a[1]), ',');
-            msg := MakeMsg(msg,  '', INT_TO_STRING(Dot.a[2]), ']');
-            if (mod((iLog+1),8)=0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if;
-            iLog:=iLog+1;
-          end_if;
-          *)
-        end_for;
-      end_for;
-    end_for;
-    if (len(msg)>0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if;
-    
-    _Grid2ul(HGR := its_gr2(0), PGR := 0, SH := Sh, iRes=>iRes);
-    
-  else (* ошибка позиции *)
-    {}
-
-  end_if;
-  msg:=LogMsg(MakeMsg(msg, '===== T-Field (END) ====='));      
-
-  (* Сброс флага *)
-  f_Res := FALSE;
-END_PROGRAM
-
-FUNCTION UDI2REAL : REAL
+FUNCTION mat_oil : TMat
   VAR_INPUT
-    VALUE : UDINT := 0;
+    Tm : REAL := 20.0;
   END_VAR
-  VAR
-    tmp : REAL := 0.0;
+
+  mat_oil.kt := 0.1124  - 0.000085 * Tm;
+  mat_oil.pl := 892.0   - 0.6075   * Tm;
+  mat_oil.cp := 1549.0  + 5.93334  * Tm;
+  mat_oil.md := 0.13515 * exp(2820.0/(272.0+1.13*Tm))/100000.0;
+END_FUNCTION
+
+FUNCTION var_p : TPos8
+  VAR_INPUT
+    TV : TVar := 0;
   END_VAR
 
   {{
-    union { UDINT  udint; float real; } value;
-    value.udint = VALUE;
-    TMP = value.real;
+    #pragma pack(push, 4)
+    typedef union {
+      TVAR tv;
+      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
+      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
+    } var_t, *pvar_t;
+    #pragma pack(pop)
+    pvar_t pvar = (pvar_t)&TV;
+    
+    // Величина должна быть ссылкой
+    // ASSERT(1, NULL, pvar->r, TERROR__E_FAIL, __INIT_STRING);
+    VAR_P = pvar->p;
   }}
-  UDI2REAL := TMP;
 END_FUNCTION
-
-FUNCTION m_mat : TMat
-  VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-  END_VAR
-
-  m_mat.KT := UDI2REAL(MD0);
-  m_mat.CP := UDI2REAL(MD1);
-  m_mat.PL := UDI2REAL(MD2);
-  m_mat.MD := UDI2REAL(MD3);
-END_FUNCTION
-
-FUNCTION_BLOCK GetMat
-  VAR_EXTERNAL
-    MD22 : UDINT;
-    MD23 : UDINT;
-    MD24 : UDINT;
-    MD25 : UDINT;
-    MD26 : UDINT;
-    MD27 : UDINT;
-    MD28 : UDINT;
-    MD29 : UDINT;
-    MD30 : UDINT;
-    MD31 : UDINT;
-    MD32 : UDINT;
-    MD33 : UDINT;
-    MD34 : UDINT;
-    MD35 : UDINT;
-    MD36 : UDINT;
-    MD37 : UDINT;
-    MD38 : UDINT;
-    MD39 : UDINT;
-    MD40 : UDINT;
-    MD41 : UDINT;
-    MD42 : UDINT;
-    MD43 : UDINT;
-    MD44 : UDINT;
-    MD45 : UDINT;
-    MD46 : UDINT;
-    MD47 : UDINT;
-    MD48 : UDINT;
-    MD49 : UDINT;
-    MD50 : UDINT;
-    MD51 : UDINT;
-    MD52 : UDINT;
-    MD53 : UDINT;
-    MD54 : UDINT;
-    MD55 : UDINT;
-    MD56 : UDINT;
-    MD57 : UDINT;
-    MD58 : UDINT;
-    MD59 : UDINT;
-    MD60 : UDINT;
-    MD61 : UDINT;
-    MD62 : UDINT;
-    MD63 : UDINT;
-    MD64 : UDINT;
-    MD65 : UDINT;
-    MD66 : UDINT;
-    MD67 : UDINT;
-    MD68 : UDINT;
-    MD69 : UDINT;
-  END_VAR
-  VAR_INPUT
-    I : SINT := 0;
-  END_VAR
-  VAR_OUTPUT
-    MAT : TMat;
-  END_VAR
-
-  CASE i OF
-  0 : MAT := m_mat(MD22,MD23,MD24,MD25);
-  1 : MAT := m_mat(MD26,MD27,MD28,MD29);
-  2 : MAT := m_mat(MD30,MD31,MD32,MD33);
-  3 : MAT := m_mat(MD34,MD35,MD36,MD37);
-  4 : MAT := m_mat(MD38,MD39,MD40,MD41);
-  5 : MAT := m_mat(MD42,MD43,MD44,MD45);
-  6 : MAT := m_mat(MD46,MD47,MD48,MD49);
-  7 : MAT := m_mat(MD50,MD51,MD52,MD53);
-  8 : MAT := m_mat(MD54,MD55,MD56,MD57);
-  9 : MAT := m_mat(MD58,MD59,MD60,MD61);
-  10: MAT := m_mat(MD62,MD63,MD64,MD65);
-  11: MAT := m_mat(MD66,MD67,MD68,MD69);
-  END_CASE;
-END_FUNCTION_BLOCK
-
-FUNCTION m_val : TVal
-  VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-  END_VAR
-
-  m_val.Iv      := UDINT_TO_INT(MD0/65536);
-  m_val.Vi[0].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD0,65536))/256);
-  m_val.Vi[0].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD0,65536)),256));
-  m_val.Vi[1].A := UINT_TO_SINT(UDINT_TO_UINT(MD1/65536)/256);
-  m_val.Vi[1].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD1/65536),256));
-  m_val.Vi[2].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD1,65536))/256);
-  m_val.Vi[2].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD1,65536)),256));
-
-
-END_FUNCTION
-
-FUNCTION_BLOCK GetVal
-  VAR_EXTERNAL
-    MD70 : UDINT;
-    MD71 : UDINT;
-    MD72 : UDINT;
-    MD73 : UDINT;
-    MD74 : UDINT;
-    MD75 : UDINT;
-    MD76 : UDINT;
-    MD77 : UDINT;
-    MD78 : UDINT;
-    MD79 : UDINT;
-    MD80 : UDINT;
-    MD81 : UDINT;
-    MD82 : UDINT;
-    MD83 : UDINT;
-    MD84 : UDINT;
-    MD85 : UDINT;
-    MD86 : UDINT;
-    MD87 : UDINT;
-    MD88 : UDINT;
-    MD89 : UDINT;
-    MD90 : UDINT;
-    MD91 : UDINT;
-    MD92 : UDINT;
-    MD93 : UDINT;
-    MD94 : UDINT;
-    MD95 : UDINT;
-    MD96 : UDINT;
-    MD97 : UDINT;
-    MD98 : UDINT;
-    MD99 : UDINT;
-    MD100 : UDINT;
-    MD101 : UDINT;
-    MD102 : UDINT;
-    MD103 : UDINT;
-    MD104 : UDINT;
-    MD105 : UDINT;
-    MD106 : UDINT;
-    MD107 : UDINT;
-    MD108 : UDINT;
-    MD109 : UDINT;
-    MD110 : UDINT;
-    MD111 : UDINT;
-    MD112 : UDINT;
-    MD113 : UDINT;
-    MD114 : UDINT;
-    MD115 : UDINT;
-    MD116 : UDINT;
-    MD117 : UDINT;
-    MD118 : UDINT;
-    MD119 : UDINT;
-  END_VAR
-  VAR_INPUT
-    I : SINT := 0;
-  END_VAR
-  VAR_OUTPUT
-    VAL : TVal;
-  END_VAR
-
-  CASE i OF
-  0 : VAL := m_val(MD70,MD71);
-  1 : VAL := m_val(MD72,MD73);
-  2 : VAL := m_val(MD74,MD75);
-  3 : VAL := m_val(MD76,MD77);
-  4 : VAL := m_val(MD78,MD79);
-  5 : VAL := m_val(MD80,MD81);
-  6 : VAL := m_val(MD82,MD83);
-  7 : VAL := m_val(MD84,MD85);
-  8 : VAL := m_val(MD86,MD87);
-  9 : VAL := m_val(MD88,MD89);
-  10: VAL := m_val(MD90,MD91);
-  11: VAL := m_val(MD92,MD93);
-  12: VAL := m_val(MD94,MD95);
-  13: VAL := m_val(MD96,MD97);
-  14: VAL := m_val(MD98,MD99);
-  15: VAL := m_val(MD100,MD101);
-  16: VAL := m_val(MD102,MD103);
-  17: VAL := m_val(MD104,MD105);
-  18: VAL := m_val(MD106,MD107);
-  19: VAL := m_val(MD108,MD109);
-  20: VAL := m_val(MD110,MD111);
-  21: VAL := m_val(MD112,MD113);
-  22: VAL := m_val(MD114,MD115);
-  23: VAL := m_val(MD116,MD117);
-  24: VAL := m_val(MD118,MD119);
-  END_CASE;
-END_FUNCTION_BLOCK
 
 FUNCTION m_prof : TProf
   VAR_INPUT
@@ -7329,6 +4117,2517 @@ FUNCTION_BLOCK GetProf
   END_CASE;
 END_FUNCTION_BLOCK
 
+FUNCTION get_vl : TVal
+  VAR_INPUT
+    PVL : TPos8 := -1;
+  END_VAR
+
+  {{ return (GET_VL = __GET_GLOBAL_STS()->VL.table[PVL]); }}
+END_FUNCTION
+
+FUNCTION its_gr : THandle
+  VAR_INPUT
+    Off : TPos8 := 0;
+  END_VAR
+
+  {{ ITS_GR = (THANDLE)&__GET_GLOBAL_ITS()->GR.table[OFF]; }}
+END_FUNCTION
+
+FUNCTION m_cond : TCond
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+  END_VAR
+
+  m_cond.ID   := UDINT_TO_UINT(MD0/65536);
+  m_cond.Tmid := UDINT_TO_INT(mod(MD0,65536));
+
+  m_cond.Tmin.A[0] := UDINT_TO_INT(MD1/65536);
+  m_cond.Tmin.A[1] := UDINT_TO_INT(mod(MD1,65536));
+  m_cond.Tmin.A[2] := UDINT_TO_INT(MD2/65536);
+  m_cond.Tmin.V    := UDINT_TO_INT(mod(MD2,65536));
+
+  m_cond.Tmax.A[0] := UDINT_TO_INT(MD3/65536);
+  m_cond.Tmax.A[1] := UDINT_TO_INT(mod(MD3,65536));
+  m_cond.Tmax.A[2] := UDINT_TO_INT(MD4/65536);
+  m_cond.Tmax.V    := UDINT_TO_INT(mod(MD4,65536));
+END_FUNCTION
+
+FUNCTION_BLOCK WriteItem
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    Cond : TCond;
+    msg : STRING := '';
+    _SetCond : SetCond;
+  END_VAR
+
+  (* Запись состояния в регистры *)
+  Cond    := get_cn(PIT);
+  Cond.ID := it_id(PIT);
+  (*TEST*)
+  (* #53 - ID = 16761, 0x4179, REG = 3578-3587 *)
+  (*
+  if (Cond.ID = 16761) then 
+    msg := MakeMsg(msg, '= TEST1 [', ID2Str(IT_ID(PIT)), ',');
+    msg := MakeMsg(msg, SINT_TO_STRING(PIT), ',');
+    msg := MakeMsg(msg, 'Tmid=', REAL_TO_STRING(INT_TO_REAL(Cond.Tmid)/100.0), ',');
+    msg := MakeMsg(msg, 'Tmax=', REAL_TO_STRING(INT_TO_REAL(Cond.Tmax.v)/100.0), ',');
+    msg := MakeMsg(msg,  INT_TO_STRING(Cond.Tmax.i[0]), ',');
+    msg := MakeMsg(msg,  INT_TO_STRING(Cond.Tmax.i[1]), ',');
+    msg := MakeMsg(msg,  INT_TO_STRING(Cond.Tmax.i[2]), ']');
+    msg := LogMsg(msg);
+  end_if;
+  *)
+  _SetCond(I := SINT_TO_UINT(PIT), COND := Cond);
+END_FUNCTION_BLOCK
+
+FUNCTION UDI2REAL : REAL
+  VAR_INPUT
+    VALUE : UDINT := 0;
+  END_VAR
+  VAR
+    tmp : REAL := 0.0;
+  END_VAR
+
+  {{
+    union { UDINT  udint; float real; } value;
+    value.udint = VALUE;
+    TMP = value.real;
+  }}
+  UDI2REAL := TMP;
+END_FUNCTION
+
+FUNCTION LogErr : STRING
+  VAR_INPUT
+    ERR : TError := E_SUCCESS;
+  END_VAR
+
+  LogErr := LogMsg('',Info,ERR);
+
+
+END_FUNCTION
+
+FUNCTION m_phase_out : TPhaseO
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+    MD6 : UDINT;
+    MD7 : UDINT;
+  END_VAR
+
+  m_phase_out.Q0   := UDINT_TO_REAL(MD0);
+  m_phase_out.Q1   := UDINT_TO_REAL(MD1);
+  m_phase_out.Q2   := UDINT_TO_REAL(MD2);
+  m_phase_out.Tin  := UDINT_TO_REAL(MD3);
+  m_phase_out.Tout := UDINT_TO_REAL(MD4);
+  m_phase_out.Qm   := UDINT_TO_REAL(MD5);
+  m_phase_out.Se   := UDINT_TO_REAL(MD6);
+  m_phase_out.Ve   := UDINT_TO_REAL(MD7);
+END_FUNCTION
+
+FUNCTION sh_set_ax : TShape
+  VAR_INPUT
+    SH : TShape;
+    Ax : USINT;
+  END_VAR
+
+  Sh.wF := Sh.wF or shl(USINT_TO_WORD(Ax), 12);
+  sh_set_ax := Sh;
+END_FUNCTION
+
+FUNCTION set_it : TPos8
+  VAR_INPUT
+    PIT : TPos8 := -1;
+    ITEM : TItem;
+  END_VAR
+
+  {{ return (SET_IT = ( __GET_GLOBAL_ITS()->IT.table[PIT] = ITEM, PIT) ); }}
+END_FUNCTION
+
+FUNCTION m_def : TDef
+  VAR_INPUT
+    MW0 : UINT;
+    MW1 : UINT;
+    MW2 : UINT;
+    MW3 : UINT;
+    MW4 : UINT;
+    MW5 : UINT;
+    MW6 : UINT;
+    MW7 : UINT;
+    MW8 : UINT;
+    MW9 : UINT;
+  END_VAR
+
+  (* Идентификатор, флаги и радиус *)
+  m_def.ID    := MW0;
+  m_def.CF    := UINT_TO_WORD(MW1);
+  m_def.R0    := UINT_TO_INT (MW2);
+
+  (* Определение точки начала отсчёта *)
+  m_def.XYZ[0]:= UINT_TO_INT (MW3);
+  m_def.XYZ[1]:= UINT_TO_INT (MW4);
+  m_def.XYZ[2]:= UINT_TO_INT (MW5);
+
+  (* Определение габаритов элемента   *)
+  m_def.LWH[0]:= UINT_TO_INT (MW6);
+  m_def.LWH[1]:= UINT_TO_INT (MW7);
+  m_def.LWH[2]:= UINT_TO_INT (MW8);
+
+  (* Определение индексов элемента   *)
+  m_def.Ig    := UINT_TO_SINT((MW9/256)/16);
+  m_def.Im    := UINT_TO_SINT(mod((MW9/256),16));
+  m_def.Iv    := UINT_TO_SINT(mod(MW9, 256));
+END_FUNCTION
+
+FUNCTION_BLOCK GetDef
+  VAR_EXTERNAL
+    MW0 : UINT;
+    MW1 : UINT;
+    MW2 : UINT;
+    MW3 : UINT;
+    MW4 : UINT;
+    MW5 : UINT;
+    MW6 : UINT;
+    MW7 : UINT;
+    MW8 : UINT;
+    MW9 : UINT;
+    MW10 : UINT;
+    MW11 : UINT;
+    MW12 : UINT;
+    MW13 : UINT;
+    MW14 : UINT;
+    MW15 : UINT;
+    MW16 : UINT;
+    MW17 : UINT;
+    MW18 : UINT;
+    MW19 : UINT;
+    MW20 : UINT;
+    MW21 : UINT;
+    MW22 : UINT;
+    MW23 : UINT;
+    MW24 : UINT;
+    MW25 : UINT;
+    MW26 : UINT;
+    MW27 : UINT;
+    MW28 : UINT;
+    MW29 : UINT;
+    MW30 : UINT;
+    MW31 : UINT;
+    MW32 : UINT;
+    MW33 : UINT;
+    MW34 : UINT;
+    MW35 : UINT;
+    MW36 : UINT;
+    MW37 : UINT;
+    MW38 : UINT;
+    MW39 : UINT;
+    MW40 : UINT;
+    MW41 : UINT;
+    MW42 : UINT;
+    MW43 : UINT;
+    MW44 : UINT;
+    MW45 : UINT;
+    MW46 : UINT;
+    MW47 : UINT;
+    MW48 : UINT;
+    MW49 : UINT;
+    MW50 : UINT;
+    MW51 : UINT;
+    MW52 : UINT;
+    MW53 : UINT;
+    MW54 : UINT;
+    MW55 : UINT;
+    MW56 : UINT;
+    MW57 : UINT;
+    MW58 : UINT;
+    MW59 : UINT;
+    MW60 : UINT;
+    MW61 : UINT;
+    MW62 : UINT;
+    MW63 : UINT;
+    MW64 : UINT;
+    MW65 : UINT;
+    MW66 : UINT;
+    MW67 : UINT;
+    MW68 : UINT;
+    MW69 : UINT;
+    MW70 : UINT;
+    MW71 : UINT;
+    MW72 : UINT;
+    MW73 : UINT;
+    MW74 : UINT;
+    MW75 : UINT;
+    MW76 : UINT;
+    MW77 : UINT;
+    MW78 : UINT;
+    MW79 : UINT;
+    MW80 : UINT;
+    MW81 : UINT;
+    MW82 : UINT;
+    MW83 : UINT;
+    MW84 : UINT;
+    MW85 : UINT;
+    MW86 : UINT;
+    MW87 : UINT;
+    MW88 : UINT;
+    MW89 : UINT;
+    MW90 : UINT;
+    MW91 : UINT;
+    MW92 : UINT;
+    MW93 : UINT;
+    MW94 : UINT;
+    MW95 : UINT;
+    MW96 : UINT;
+    MW97 : UINT;
+    MW98 : UINT;
+    MW99 : UINT;
+    MW100 : UINT;
+    MW101 : UINT;
+    MW102 : UINT;
+    MW103 : UINT;
+    MW104 : UINT;
+    MW105 : UINT;
+    MW106 : UINT;
+    MW107 : UINT;
+    MW108 : UINT;
+    MW109 : UINT;
+    MW110 : UINT;
+    MW111 : UINT;
+    MW112 : UINT;
+    MW113 : UINT;
+    MW114 : UINT;
+    MW115 : UINT;
+    MW116 : UINT;
+    MW117 : UINT;
+    MW118 : UINT;
+    MW119 : UINT;
+    MW120 : UINT;
+    MW121 : UINT;
+    MW122 : UINT;
+    MW123 : UINT;
+    MW124 : UINT;
+    MW125 : UINT;
+    MW126 : UINT;
+    MW127 : UINT;
+    MW128 : UINT;
+    MW129 : UINT;
+    MW130 : UINT;
+    MW131 : UINT;
+    MW132 : UINT;
+    MW133 : UINT;
+    MW134 : UINT;
+    MW135 : UINT;
+    MW136 : UINT;
+    MW137 : UINT;
+    MW138 : UINT;
+    MW139 : UINT;
+    MW140 : UINT;
+    MW141 : UINT;
+    MW142 : UINT;
+    MW143 : UINT;
+    MW144 : UINT;
+    MW145 : UINT;
+    MW146 : UINT;
+    MW147 : UINT;
+    MW148 : UINT;
+    MW149 : UINT;
+    MW150 : UINT;
+    MW151 : UINT;
+    MW152 : UINT;
+    MW153 : UINT;
+    MW154 : UINT;
+    MW155 : UINT;
+    MW156 : UINT;
+    MW157 : UINT;
+    MW158 : UINT;
+    MW159 : UINT;
+    MW160 : UINT;
+    MW161 : UINT;
+    MW162 : UINT;
+    MW163 : UINT;
+    MW164 : UINT;
+    MW165 : UINT;
+    MW166 : UINT;
+    MW167 : UINT;
+    MW168 : UINT;
+    MW169 : UINT;
+    MW170 : UINT;
+    MW171 : UINT;
+    MW172 : UINT;
+    MW173 : UINT;
+    MW174 : UINT;
+    MW175 : UINT;
+    MW176 : UINT;
+    MW177 : UINT;
+    MW178 : UINT;
+    MW179 : UINT;
+    MW180 : UINT;
+    MW181 : UINT;
+    MW182 : UINT;
+    MW183 : UINT;
+    MW184 : UINT;
+    MW185 : UINT;
+    MW186 : UINT;
+    MW187 : UINT;
+    MW188 : UINT;
+    MW189 : UINT;
+    MW190 : UINT;
+    MW191 : UINT;
+    MW192 : UINT;
+    MW193 : UINT;
+    MW194 : UINT;
+    MW195 : UINT;
+    MW196 : UINT;
+    MW197 : UINT;
+    MW198 : UINT;
+    MW199 : UINT;
+    MW200 : UINT;
+    MW201 : UINT;
+    MW202 : UINT;
+    MW203 : UINT;
+    MW204 : UINT;
+    MW205 : UINT;
+    MW206 : UINT;
+    MW207 : UINT;
+    MW208 : UINT;
+    MW209 : UINT;
+    MW210 : UINT;
+    MW211 : UINT;
+    MW212 : UINT;
+    MW213 : UINT;
+    MW214 : UINT;
+    MW215 : UINT;
+    MW216 : UINT;
+    MW217 : UINT;
+    MW218 : UINT;
+    MW219 : UINT;
+    MW220 : UINT;
+    MW221 : UINT;
+    MW222 : UINT;
+    MW223 : UINT;
+    MW224 : UINT;
+    MW225 : UINT;
+    MW226 : UINT;
+    MW227 : UINT;
+    MW228 : UINT;
+    MW229 : UINT;
+    MW230 : UINT;
+    MW231 : UINT;
+    MW232 : UINT;
+    MW233 : UINT;
+    MW234 : UINT;
+    MW235 : UINT;
+    MW236 : UINT;
+    MW237 : UINT;
+    MW238 : UINT;
+    MW239 : UINT;
+    MW240 : UINT;
+    MW241 : UINT;
+    MW242 : UINT;
+    MW243 : UINT;
+    MW244 : UINT;
+    MW245 : UINT;
+    MW246 : UINT;
+    MW247 : UINT;
+    MW248 : UINT;
+    MW249 : UINT;
+    MW250 : UINT;
+    MW251 : UINT;
+    MW252 : UINT;
+    MW253 : UINT;
+    MW254 : UINT;
+    MW255 : UINT;
+    MW256 : UINT;
+    MW257 : UINT;
+    MW258 : UINT;
+    MW259 : UINT;
+    MW260 : UINT;
+    MW261 : UINT;
+    MW262 : UINT;
+    MW263 : UINT;
+    MW264 : UINT;
+    MW265 : UINT;
+    MW266 : UINT;
+    MW267 : UINT;
+    MW268 : UINT;
+    MW269 : UINT;
+    MW270 : UINT;
+    MW271 : UINT;
+    MW272 : UINT;
+    MW273 : UINT;
+    MW274 : UINT;
+    MW275 : UINT;
+    MW276 : UINT;
+    MW277 : UINT;
+    MW278 : UINT;
+    MW279 : UINT;
+    MW280 : UINT;
+    MW281 : UINT;
+    MW282 : UINT;
+    MW283 : UINT;
+    MW284 : UINT;
+    MW285 : UINT;
+    MW286 : UINT;
+    MW287 : UINT;
+    MW288 : UINT;
+    MW289 : UINT;
+    MW290 : UINT;
+    MW291 : UINT;
+    MW292 : UINT;
+    MW293 : UINT;
+    MW294 : UINT;
+    MW295 : UINT;
+    MW296 : UINT;
+    MW297 : UINT;
+    MW298 : UINT;
+    MW299 : UINT;
+    MW300 : UINT;
+    MW301 : UINT;
+    MW302 : UINT;
+    MW303 : UINT;
+    MW304 : UINT;
+    MW305 : UINT;
+    MW306 : UINT;
+    MW307 : UINT;
+    MW308 : UINT;
+    MW309 : UINT;
+    MW310 : UINT;
+    MW311 : UINT;
+    MW312 : UINT;
+    MW313 : UINT;
+    MW314 : UINT;
+    MW315 : UINT;
+    MW316 : UINT;
+    MW317 : UINT;
+    MW318 : UINT;
+    MW319 : UINT;
+    MW320 : UINT;
+    MW321 : UINT;
+    MW322 : UINT;
+    MW323 : UINT;
+    MW324 : UINT;
+    MW325 : UINT;
+    MW326 : UINT;
+    MW327 : UINT;
+    MW328 : UINT;
+    MW329 : UINT;
+    MW330 : UINT;
+    MW331 : UINT;
+    MW332 : UINT;
+    MW333 : UINT;
+    MW334 : UINT;
+    MW335 : UINT;
+    MW336 : UINT;
+    MW337 : UINT;
+    MW338 : UINT;
+    MW339 : UINT;
+    MW340 : UINT;
+    MW341 : UINT;
+    MW342 : UINT;
+    MW343 : UINT;
+    MW344 : UINT;
+    MW345 : UINT;
+    MW346 : UINT;
+    MW347 : UINT;
+    MW348 : UINT;
+    MW349 : UINT;
+    MW350 : UINT;
+    MW351 : UINT;
+    MW352 : UINT;
+    MW353 : UINT;
+    MW354 : UINT;
+    MW355 : UINT;
+    MW356 : UINT;
+    MW357 : UINT;
+    MW358 : UINT;
+    MW359 : UINT;
+    MW360 : UINT;
+    MW361 : UINT;
+    MW362 : UINT;
+    MW363 : UINT;
+    MW364 : UINT;
+    MW365 : UINT;
+    MW366 : UINT;
+    MW367 : UINT;
+    MW368 : UINT;
+    MW369 : UINT;
+    MW370 : UINT;
+    MW371 : UINT;
+    MW372 : UINT;
+    MW373 : UINT;
+    MW374 : UINT;
+    MW375 : UINT;
+    MW376 : UINT;
+    MW377 : UINT;
+    MW378 : UINT;
+    MW379 : UINT;
+    MW380 : UINT;
+    MW381 : UINT;
+    MW382 : UINT;
+    MW383 : UINT;
+    MW384 : UINT;
+    MW385 : UINT;
+    MW386 : UINT;
+    MW387 : UINT;
+    MW388 : UINT;
+    MW389 : UINT;
+    MW390 : UINT;
+    MW391 : UINT;
+    MW392 : UINT;
+    MW393 : UINT;
+    MW394 : UINT;
+    MW395 : UINT;
+    MW396 : UINT;
+    MW397 : UINT;
+    MW398 : UINT;
+    MW399 : UINT;
+    MW400 : UINT;
+    MW401 : UINT;
+    MW402 : UINT;
+    MW403 : UINT;
+    MW404 : UINT;
+    MW405 : UINT;
+    MW406 : UINT;
+    MW407 : UINT;
+    MW408 : UINT;
+    MW409 : UINT;
+    MW410 : UINT;
+    MW411 : UINT;
+    MW412 : UINT;
+    MW413 : UINT;
+    MW414 : UINT;
+    MW415 : UINT;
+    MW416 : UINT;
+    MW417 : UINT;
+    MW418 : UINT;
+    MW419 : UINT;
+    MW420 : UINT;
+    MW421 : UINT;
+    MW422 : UINT;
+    MW423 : UINT;
+    MW424 : UINT;
+    MW425 : UINT;
+    MW426 : UINT;
+    MW427 : UINT;
+    MW428 : UINT;
+    MW429 : UINT;
+    MW430 : UINT;
+    MW431 : UINT;
+    MW432 : UINT;
+    MW433 : UINT;
+    MW434 : UINT;
+    MW435 : UINT;
+    MW436 : UINT;
+    MW437 : UINT;
+    MW438 : UINT;
+    MW439 : UINT;
+    MW440 : UINT;
+    MW441 : UINT;
+    MW442 : UINT;
+    MW443 : UINT;
+    MW444 : UINT;
+    MW445 : UINT;
+    MW446 : UINT;
+    MW447 : UINT;
+    MW448 : UINT;
+    MW449 : UINT;
+    MW450 : UINT;
+    MW451 : UINT;
+    MW452 : UINT;
+    MW453 : UINT;
+    MW454 : UINT;
+    MW455 : UINT;
+    MW456 : UINT;
+    MW457 : UINT;
+    MW458 : UINT;
+    MW459 : UINT;
+    MW460 : UINT;
+    MW461 : UINT;
+    MW462 : UINT;
+    MW463 : UINT;
+    MW464 : UINT;
+    MW465 : UINT;
+    MW466 : UINT;
+    MW467 : UINT;
+    MW468 : UINT;
+    MW469 : UINT;
+    MW470 : UINT;
+    MW471 : UINT;
+    MW472 : UINT;
+    MW473 : UINT;
+    MW474 : UINT;
+    MW475 : UINT;
+    MW476 : UINT;
+    MW477 : UINT;
+    MW478 : UINT;
+    MW479 : UINT;
+    MW480 : UINT;
+    MW481 : UINT;
+    MW482 : UINT;
+    MW483 : UINT;
+    MW484 : UINT;
+    MW485 : UINT;
+    MW486 : UINT;
+    MW487 : UINT;
+    MW488 : UINT;
+    MW489 : UINT;
+    MW490 : UINT;
+    MW491 : UINT;
+    MW492 : UINT;
+    MW493 : UINT;
+    MW494 : UINT;
+    MW495 : UINT;
+    MW496 : UINT;
+    MW497 : UINT;
+    MW498 : UINT;
+    MW499 : UINT;
+    MW500 : UINT;
+    MW501 : UINT;
+    MW502 : UINT;
+    MW503 : UINT;
+    MW504 : UINT;
+    MW505 : UINT;
+    MW506 : UINT;
+    MW507 : UINT;
+    MW508 : UINT;
+    MW509 : UINT;
+    MW510 : UINT;
+    MW511 : UINT;
+    MW512 : UINT;
+    MW513 : UINT;
+    MW514 : UINT;
+    MW515 : UINT;
+    MW516 : UINT;
+    MW517 : UINT;
+    MW518 : UINT;
+    MW519 : UINT;
+    MW520 : UINT;
+    MW521 : UINT;
+    MW522 : UINT;
+    MW523 : UINT;
+    MW524 : UINT;
+    MW525 : UINT;
+    MW526 : UINT;
+    MW527 : UINT;
+    MW528 : UINT;
+    MW529 : UINT;
+    MW530 : UINT;
+    MW531 : UINT;
+    MW532 : UINT;
+    MW533 : UINT;
+    MW534 : UINT;
+    MW535 : UINT;
+    MW536 : UINT;
+    MW537 : UINT;
+    MW538 : UINT;
+    MW539 : UINT;
+    MW540 : UINT;
+    MW541 : UINT;
+    MW542 : UINT;
+    MW543 : UINT;
+    MW544 : UINT;
+    MW545 : UINT;
+    MW546 : UINT;
+    MW547 : UINT;
+    MW548 : UINT;
+    MW549 : UINT;
+    MW550 : UINT;
+    MW551 : UINT;
+    MW552 : UINT;
+    MW553 : UINT;
+    MW554 : UINT;
+    MW555 : UINT;
+    MW556 : UINT;
+    MW557 : UINT;
+    MW558 : UINT;
+    MW559 : UINT;
+    MW560 : UINT;
+    MW561 : UINT;
+    MW562 : UINT;
+    MW563 : UINT;
+    MW564 : UINT;
+    MW565 : UINT;
+    MW566 : UINT;
+    MW567 : UINT;
+    MW568 : UINT;
+    MW569 : UINT;
+    MW570 : UINT;
+    MW571 : UINT;
+    MW572 : UINT;
+    MW573 : UINT;
+    MW574 : UINT;
+    MW575 : UINT;
+    MW576 : UINT;
+    MW577 : UINT;
+    MW578 : UINT;
+    MW579 : UINT;
+    MW580 : UINT;
+    MW581 : UINT;
+    MW582 : UINT;
+    MW583 : UINT;
+    MW584 : UINT;
+    MW585 : UINT;
+    MW586 : UINT;
+    MW587 : UINT;
+    MW588 : UINT;
+    MW589 : UINT;
+    MW590 : UINT;
+    MW591 : UINT;
+    MW592 : UINT;
+    MW593 : UINT;
+    MW594 : UINT;
+    MW595 : UINT;
+    MW596 : UINT;
+    MW597 : UINT;
+    MW598 : UINT;
+    MW599 : UINT;
+    MW600 : UINT;
+    MW601 : UINT;
+    MW602 : UINT;
+    MW603 : UINT;
+    MW604 : UINT;
+    MW605 : UINT;
+    MW606 : UINT;
+    MW607 : UINT;
+    MW608 : UINT;
+    MW609 : UINT;
+    MW610 : UINT;
+    MW611 : UINT;
+    MW612 : UINT;
+    MW613 : UINT;
+    MW614 : UINT;
+    MW615 : UINT;
+    MW616 : UINT;
+    MW617 : UINT;
+    MW618 : UINT;
+    MW619 : UINT;
+    MW620 : UINT;
+    MW621 : UINT;
+    MW622 : UINT;
+    MW623 : UINT;
+    MW624 : UINT;
+    MW625 : UINT;
+    MW626 : UINT;
+    MW627 : UINT;
+    MW628 : UINT;
+    MW629 : UINT;
+    MW630 : UINT;
+    MW631 : UINT;
+    MW632 : UINT;
+    MW633 : UINT;
+    MW634 : UINT;
+    MW635 : UINT;
+    MW636 : UINT;
+    MW637 : UINT;
+    MW638 : UINT;
+    MW639 : UINT;
+    MW640 : UINT;
+    MW641 : UINT;
+    MW642 : UINT;
+    MW643 : UINT;
+    MW644 : UINT;
+    MW645 : UINT;
+    MW646 : UINT;
+    MW647 : UINT;
+    MW648 : UINT;
+    MW649 : UINT;
+    MW650 : UINT;
+    MW651 : UINT;
+    MW652 : UINT;
+    MW653 : UINT;
+    MW654 : UINT;
+    MW655 : UINT;
+    MW656 : UINT;
+    MW657 : UINT;
+    MW658 : UINT;
+    MW659 : UINT;
+    MW660 : UINT;
+    MW661 : UINT;
+    MW662 : UINT;
+    MW663 : UINT;
+    MW664 : UINT;
+    MW665 : UINT;
+    MW666 : UINT;
+    MW667 : UINT;
+    MW668 : UINT;
+    MW669 : UINT;
+    MW670 : UINT;
+    MW671 : UINT;
+    MW672 : UINT;
+    MW673 : UINT;
+    MW674 : UINT;
+    MW675 : UINT;
+    MW676 : UINT;
+    MW677 : UINT;
+    MW678 : UINT;
+    MW679 : UINT;
+    MW680 : UINT;
+    MW681 : UINT;
+    MW682 : UINT;
+    MW683 : UINT;
+    MW684 : UINT;
+    MW685 : UINT;
+    MW686 : UINT;
+    MW687 : UINT;
+    MW688 : UINT;
+    MW689 : UINT;
+    MW690 : UINT;
+    MW691 : UINT;
+    MW692 : UINT;
+    MW693 : UINT;
+    MW694 : UINT;
+    MW695 : UINT;
+    MW696 : UINT;
+    MW697 : UINT;
+    MW698 : UINT;
+    MW699 : UINT;
+    MW700 : UINT;
+    MW701 : UINT;
+    MW702 : UINT;
+    MW703 : UINT;
+    MW704 : UINT;
+    MW705 : UINT;
+    MW706 : UINT;
+    MW707 : UINT;
+    MW708 : UINT;
+    MW709 : UINT;
+    MW710 : UINT;
+    MW711 : UINT;
+    MW712 : UINT;
+    MW713 : UINT;
+    MW714 : UINT;
+    MW715 : UINT;
+    MW716 : UINT;
+    MW717 : UINT;
+    MW718 : UINT;
+    MW719 : UINT;
+    MW720 : UINT;
+    MW721 : UINT;
+    MW722 : UINT;
+    MW723 : UINT;
+    MW724 : UINT;
+    MW725 : UINT;
+    MW726 : UINT;
+    MW727 : UINT;
+    MW728 : UINT;
+    MW729 : UINT;
+    MW730 : UINT;
+    MW731 : UINT;
+    MW732 : UINT;
+    MW733 : UINT;
+    MW734 : UINT;
+    MW735 : UINT;
+    MW736 : UINT;
+    MW737 : UINT;
+    MW738 : UINT;
+    MW739 : UINT;
+    MW740 : UINT;
+    MW741 : UINT;
+    MW742 : UINT;
+    MW743 : UINT;
+    MW744 : UINT;
+    MW745 : UINT;
+    MW746 : UINT;
+    MW747 : UINT;
+    MW748 : UINT;
+    MW749 : UINT;
+    MW750 : UINT;
+    MW751 : UINT;
+    MW752 : UINT;
+    MW753 : UINT;
+    MW754 : UINT;
+    MW755 : UINT;
+    MW756 : UINT;
+    MW757 : UINT;
+    MW758 : UINT;
+    MW759 : UINT;
+    MW760 : UINT;
+    MW761 : UINT;
+    MW762 : UINT;
+    MW763 : UINT;
+    MW764 : UINT;
+    MW765 : UINT;
+    MW766 : UINT;
+    MW767 : UINT;
+    MW768 : UINT;
+    MW769 : UINT;
+    MW770 : UINT;
+    MW771 : UINT;
+    MW772 : UINT;
+    MW773 : UINT;
+    MW774 : UINT;
+    MW775 : UINT;
+    MW776 : UINT;
+    MW777 : UINT;
+    MW778 : UINT;
+    MW779 : UINT;
+    MW780 : UINT;
+    MW781 : UINT;
+    MW782 : UINT;
+    MW783 : UINT;
+    MW784 : UINT;
+    MW785 : UINT;
+    MW786 : UINT;
+    MW787 : UINT;
+    MW788 : UINT;
+    MW789 : UINT;
+    MW790 : UINT;
+    MW791 : UINT;
+    MW792 : UINT;
+    MW793 : UINT;
+    MW794 : UINT;
+    MW795 : UINT;
+    MW796 : UINT;
+    MW797 : UINT;
+    MW798 : UINT;
+    MW799 : UINT;
+    MW800 : UINT;
+    MW801 : UINT;
+    MW802 : UINT;
+    MW803 : UINT;
+    MW804 : UINT;
+    MW805 : UINT;
+    MW806 : UINT;
+    MW807 : UINT;
+    MW808 : UINT;
+    MW809 : UINT;
+    MW810 : UINT;
+    MW811 : UINT;
+    MW812 : UINT;
+    MW813 : UINT;
+    MW814 : UINT;
+    MW815 : UINT;
+    MW816 : UINT;
+    MW817 : UINT;
+    MW818 : UINT;
+    MW819 : UINT;
+    MW820 : UINT;
+    MW821 : UINT;
+    MW822 : UINT;
+    MW823 : UINT;
+    MW824 : UINT;
+    MW825 : UINT;
+    MW826 : UINT;
+    MW827 : UINT;
+    MW828 : UINT;
+    MW829 : UINT;
+    MW830 : UINT;
+    MW831 : UINT;
+    MW832 : UINT;
+    MW833 : UINT;
+    MW834 : UINT;
+    MW835 : UINT;
+    MW836 : UINT;
+    MW837 : UINT;
+    MW838 : UINT;
+    MW839 : UINT;
+    MW840 : UINT;
+    MW841 : UINT;
+    MW842 : UINT;
+    MW843 : UINT;
+    MW844 : UINT;
+    MW845 : UINT;
+    MW846 : UINT;
+    MW847 : UINT;
+    MW848 : UINT;
+    MW849 : UINT;
+    MW850 : UINT;
+    MW851 : UINT;
+    MW852 : UINT;
+    MW853 : UINT;
+    MW854 : UINT;
+    MW855 : UINT;
+    MW856 : UINT;
+    MW857 : UINT;
+    MW858 : UINT;
+    MW859 : UINT;
+    MW860 : UINT;
+    MW861 : UINT;
+    MW862 : UINT;
+    MW863 : UINT;
+    MW864 : UINT;
+    MW865 : UINT;
+    MW866 : UINT;
+    MW867 : UINT;
+    MW868 : UINT;
+    MW869 : UINT;
+    MW870 : UINT;
+    MW871 : UINT;
+    MW872 : UINT;
+    MW873 : UINT;
+    MW874 : UINT;
+    MW875 : UINT;
+    MW876 : UINT;
+    MW877 : UINT;
+    MW878 : UINT;
+    MW879 : UINT;
+    MW880 : UINT;
+    MW881 : UINT;
+    MW882 : UINT;
+    MW883 : UINT;
+    MW884 : UINT;
+    MW885 : UINT;
+    MW886 : UINT;
+    MW887 : UINT;
+    MW888 : UINT;
+    MW889 : UINT;
+    MW890 : UINT;
+    MW891 : UINT;
+    MW892 : UINT;
+    MW893 : UINT;
+    MW894 : UINT;
+    MW895 : UINT;
+    MW896 : UINT;
+    MW897 : UINT;
+    MW898 : UINT;
+    MW899 : UINT;
+    MW900 : UINT;
+    MW901 : UINT;
+    MW902 : UINT;
+    MW903 : UINT;
+    MW904 : UINT;
+    MW905 : UINT;
+    MW906 : UINT;
+    MW907 : UINT;
+    MW908 : UINT;
+    MW909 : UINT;
+    MW910 : UINT;
+    MW911 : UINT;
+    MW912 : UINT;
+    MW913 : UINT;
+    MW914 : UINT;
+    MW915 : UINT;
+    MW916 : UINT;
+    MW917 : UINT;
+    MW918 : UINT;
+    MW919 : UINT;
+    MW920 : UINT;
+    MW921 : UINT;
+    MW922 : UINT;
+    MW923 : UINT;
+    MW924 : UINT;
+    MW925 : UINT;
+    MW926 : UINT;
+    MW927 : UINT;
+    MW928 : UINT;
+    MW929 : UINT;
+    MW930 : UINT;
+    MW931 : UINT;
+    MW932 : UINT;
+    MW933 : UINT;
+    MW934 : UINT;
+    MW935 : UINT;
+    MW936 : UINT;
+    MW937 : UINT;
+    MW938 : UINT;
+    MW939 : UINT;
+    MW940 : UINT;
+    MW941 : UINT;
+    MW942 : UINT;
+    MW943 : UINT;
+    MW944 : UINT;
+    MW945 : UINT;
+    MW946 : UINT;
+    MW947 : UINT;
+    MW948 : UINT;
+    MW949 : UINT;
+    MW950 : UINT;
+    MW951 : UINT;
+    MW952 : UINT;
+    MW953 : UINT;
+    MW954 : UINT;
+    MW955 : UINT;
+    MW956 : UINT;
+    MW957 : UINT;
+    MW958 : UINT;
+    MW959 : UINT;
+    MW960 : UINT;
+    MW961 : UINT;
+    MW962 : UINT;
+    MW963 : UINT;
+    MW964 : UINT;
+    MW965 : UINT;
+    MW966 : UINT;
+    MW967 : UINT;
+    MW968 : UINT;
+    MW969 : UINT;
+    MW970 : UINT;
+    MW971 : UINT;
+    MW972 : UINT;
+    MW973 : UINT;
+    MW974 : UINT;
+    MW975 : UINT;
+    MW976 : UINT;
+    MW977 : UINT;
+    MW978 : UINT;
+    MW979 : UINT;
+    MW980 : UINT;
+    MW981 : UINT;
+    MW982 : UINT;
+    MW983 : UINT;
+    MW984 : UINT;
+    MW985 : UINT;
+    MW986 : UINT;
+    MW987 : UINT;
+    MW988 : UINT;
+    MW989 : UINT;
+    MW990 : UINT;
+    MW991 : UINT;
+    MW992 : UINT;
+    MW993 : UINT;
+    MW994 : UINT;
+    MW995 : UINT;
+    MW996 : UINT;
+    MW997 : UINT;
+    MW998 : UINT;
+    MW999 : UINT;
+  END_VAR
+  VAR_INPUT
+    I : TPos8 := -1;
+  END_VAR
+  VAR_OUTPUT
+    DEF : TDef;
+  END_VAR
+
+  CASE i OF
+  0 : DEF := m_def(MW0,MW1,MW2,MW3,MW4,MW5,MW6,MW7,MW8,MW9);
+  1 : DEF := m_def(MW10,MW11,MW12,MW13,MW14,MW15,MW16,MW17,MW18,MW19);
+  2 : DEF := m_def(MW20,MW21,MW22,MW23,MW24,MW25,MW26,MW27,MW28,MW29);
+  3 : DEF := m_def(MW30,MW31,MW32,MW33,MW34,MW35,MW36,MW37,MW38,MW39);
+  4 : DEF := m_def(MW40,MW41,MW42,MW43,MW44,MW45,MW46,MW47,MW48,MW49);
+  5 : DEF := m_def(MW50,MW51,MW52,MW53,MW54,MW55,MW56,MW57,MW58,MW59);
+  6 : DEF := m_def(MW60,MW61,MW62,MW63,MW64,MW65,MW66,MW67,MW68,MW69);
+  7 : DEF := m_def(MW70,MW71,MW72,MW73,MW74,MW75,MW76,MW77,MW78,MW79);
+  8 : DEF := m_def(MW80,MW81,MW82,MW83,MW84,MW85,MW86,MW87,MW88,MW89);
+  9 : DEF := m_def(MW90,MW91,MW92,MW93,MW94,MW95,MW96,MW97,MW98,MW99);
+
+  10 : DEF := m_def(MW100,MW101,MW102,MW103,MW104,MW105,MW106,MW107,MW108,MW109);
+  11 : DEF := m_def(MW110,MW111,MW112,MW113,MW114,MW115,MW116,MW117,MW118,MW119);
+  12 : DEF := m_def(MW120,MW121,MW122,MW123,MW124,MW125,MW126,MW127,MW128,MW129);
+  13 : DEF := m_def(MW130,MW131,MW132,MW133,MW134,MW135,MW136,MW137,MW138,MW139);
+  14 : DEF := m_def(MW140,MW141,MW142,MW143,MW144,MW145,MW146,MW147,MW148,MW149);
+  15 : DEF := m_def(MW150,MW151,MW152,MW153,MW154,MW155,MW156,MW157,MW158,MW159);
+  16 : DEF := m_def(MW160,MW161,MW162,MW163,MW164,MW165,MW166,MW167,MW168,MW169);
+  17 : DEF := m_def(MW170,MW171,MW172,MW173,MW174,MW175,MW176,MW177,MW178,MW179);
+  18 : DEF := m_def(MW180,MW181,MW182,MW183,MW184,MW185,MW186,MW187,MW188,MW189);
+  19 : DEF := m_def(MW190,MW191,MW192,MW193,MW194,MW195,MW196,MW197,MW198,MW199);
+
+  20 : DEF := m_def(MW200,MW201,MW202,MW203,MW204,MW205,MW206,MW207,MW208,MW209);
+  21 : DEF := m_def(MW210,MW211,MW212,MW213,MW214,MW215,MW216,MW217,MW218,MW219);
+  22 : DEF := m_def(MW220,MW221,MW222,MW223,MW224,MW225,MW226,MW227,MW228,MW229);
+  23 : DEF := m_def(MW230,MW231,MW232,MW233,MW234,MW235,MW236,MW237,MW238,MW239);
+  24 : DEF := m_def(MW240,MW241,MW242,MW243,MW244,MW245,MW246,MW247,MW248,MW249);
+  25 : DEF := m_def(MW250,MW251,MW252,MW253,MW254,MW255,MW256,MW257,MW258,MW259);
+  26 : DEF := m_def(MW260,MW261,MW262,MW263,MW264,MW265,MW266,MW267,MW268,MW269);
+  27 : DEF := m_def(MW270,MW271,MW272,MW273,MW274,MW275,MW276,MW277,MW278,MW279);
+  28 : DEF := m_def(MW280,MW281,MW282,MW283,MW284,MW285,MW286,MW287,MW288,MW289);
+  29 : DEF := m_def(MW290,MW291,MW292,MW293,MW294,MW295,MW296,MW297,MW298,MW299);
+
+  30 : DEF := m_def(MW300,MW301,MW302,MW303,MW304,MW305,MW306,MW307,MW308,MW309);
+  31 : DEF := m_def(MW310,MW311,MW312,MW313,MW314,MW315,MW316,MW317,MW318,MW319);
+  32 : DEF := m_def(MW320,MW321,MW322,MW323,MW324,MW325,MW326,MW327,MW328,MW329);
+  33 : DEF := m_def(MW330,MW331,MW332,MW333,MW334,MW335,MW336,MW337,MW338,MW339);
+  34 : DEF := m_def(MW340,MW341,MW342,MW343,MW344,MW345,MW346,MW347,MW348,MW349);
+  35 : DEF := m_def(MW350,MW351,MW352,MW353,MW354,MW355,MW356,MW357,MW358,MW359);
+  36 : DEF := m_def(MW360,MW361,MW362,MW363,MW364,MW365,MW366,MW367,MW368,MW369);
+  37 : DEF := m_def(MW370,MW371,MW372,MW373,MW374,MW375,MW376,MW377,MW378,MW379);
+  38 : DEF := m_def(MW380,MW381,MW382,MW383,MW384,MW385,MW386,MW387,MW388,MW389);
+  39 : DEF := m_def(MW390,MW391,MW392,MW393,MW394,MW395,MW396,MW397,MW398,MW399);
+
+  40 : DEF := m_def(MW400,MW401,MW402,MW403,MW404,MW405,MW406,MW407,MW408,MW409);
+  41 : DEF := m_def(MW410,MW411,MW412,MW413,MW414,MW415,MW416,MW417,MW418,MW419);
+  42 : DEF := m_def(MW420,MW421,MW422,MW423,MW424,MW425,MW426,MW427,MW428,MW429);
+  43 : DEF := m_def(MW430,MW431,MW432,MW433,MW434,MW435,MW436,MW437,MW438,MW439);
+  44 : DEF := m_def(MW440,MW441,MW442,MW443,MW444,MW445,MW446,MW447,MW448,MW449);
+  45 : DEF := m_def(MW450,MW451,MW452,MW453,MW454,MW455,MW456,MW457,MW458,MW459);
+  46 : DEF := m_def(MW460,MW461,MW462,MW463,MW464,MW465,MW466,MW467,MW468,MW469);
+  47 : DEF := m_def(MW470,MW471,MW472,MW473,MW474,MW475,MW476,MW477,MW478,MW479);
+  48 : DEF := m_def(MW480,MW481,MW482,MW483,MW484,MW485,MW486,MW487,MW488,MW489);
+  49 : DEF := m_def(MW490,MW491,MW492,MW493,MW494,MW495,MW496,MW497,MW498,MW499);
+
+  50 : DEF := m_def(MW500,MW501,MW502,MW503,MW504,MW505,MW506,MW507,MW508,MW509);
+  51 : DEF := m_def(MW510,MW511,MW512,MW513,MW514,MW515,MW516,MW517,MW518,MW519);
+  52 : DEF := m_def(MW520,MW521,MW522,MW523,MW524,MW525,MW526,MW527,MW528,MW529);
+  53 : DEF := m_def(MW530,MW531,MW532,MW533,MW534,MW535,MW536,MW537,MW538,MW539);
+  54 : DEF := m_def(MW540,MW541,MW542,MW543,MW544,MW545,MW546,MW547,MW548,MW549);
+  55 : DEF := m_def(MW550,MW551,MW552,MW553,MW554,MW555,MW556,MW557,MW558,MW559);
+  56 : DEF := m_def(MW560,MW561,MW562,MW563,MW564,MW565,MW566,MW567,MW568,MW569);
+  57 : DEF := m_def(MW570,MW571,MW572,MW573,MW574,MW575,MW576,MW577,MW578,MW579);
+  58 : DEF := m_def(MW580,MW581,MW582,MW583,MW584,MW585,MW586,MW587,MW588,MW589);
+  59 : DEF := m_def(MW590,MW591,MW592,MW593,MW594,MW595,MW596,MW597,MW598,MW599);
+
+  60 : DEF := m_def(MW600,MW601,MW602,MW603,MW604,MW605,MW606,MW607,MW608,MW609);
+  61 : DEF := m_def(MW610,MW611,MW612,MW613,MW614,MW615,MW616,MW617,MW618,MW619);
+  62 : DEF := m_def(MW620,MW621,MW622,MW623,MW624,MW625,MW626,MW627,MW628,MW629);
+  63 : DEF := m_def(MW630,MW631,MW632,MW633,MW634,MW635,MW636,MW637,MW638,MW639);
+  64 : DEF := m_def(MW640,MW641,MW642,MW643,MW644,MW645,MW646,MW647,MW648,MW649);
+  65 : DEF := m_def(MW650,MW651,MW652,MW653,MW654,MW655,MW656,MW657,MW658,MW659);
+  66 : DEF := m_def(MW660,MW661,MW662,MW663,MW664,MW665,MW666,MW667,MW668,MW669);
+  67 : DEF := m_def(MW670,MW671,MW672,MW673,MW674,MW675,MW676,MW677,MW678,MW679);
+  68 : DEF := m_def(MW680,MW681,MW682,MW683,MW684,MW685,MW686,MW687,MW688,MW689);
+  69 : DEF := m_def(MW690,MW691,MW692,MW693,MW694,MW695,MW696,MW697,MW698,MW699);
+
+  70 : DEF := m_def(MW700,MW701,MW702,MW703,MW704,MW705,MW706,MW707,MW708,MW709);
+  71 : DEF := m_def(MW710,MW711,MW712,MW713,MW714,MW715,MW716,MW717,MW718,MW719);
+  72 : DEF := m_def(MW720,MW721,MW722,MW723,MW724,MW725,MW726,MW727,MW728,MW729);
+  73 : DEF := m_def(MW730,MW731,MW732,MW733,MW734,MW735,MW736,MW737,MW738,MW739);
+  74 : DEF := m_def(MW740,MW741,MW742,MW743,MW744,MW745,MW746,MW747,MW748,MW749);
+  75 : DEF := m_def(MW750,MW751,MW752,MW753,MW754,MW755,MW756,MW757,MW758,MW759);
+  76 : DEF := m_def(MW760,MW761,MW762,MW763,MW764,MW765,MW766,MW767,MW768,MW769);
+  77 : DEF := m_def(MW770,MW771,MW772,MW773,MW774,MW775,MW776,MW777,MW778,MW779);
+  78 : DEF := m_def(MW780,MW781,MW782,MW783,MW784,MW785,MW786,MW787,MW788,MW789);
+  79 : DEF := m_def(MW790,MW791,MW792,MW793,MW794,MW795,MW796,MW797,MW798,MW799);
+
+  80 : DEF := m_def(MW800,MW801,MW802,MW803,MW804,MW805,MW806,MW807,MW808,MW809);
+  81 : DEF := m_def(MW810,MW811,MW812,MW813,MW814,MW815,MW816,MW817,MW818,MW819);
+  82 : DEF := m_def(MW820,MW821,MW822,MW823,MW824,MW825,MW826,MW827,MW828,MW829);
+  83 : DEF := m_def(MW830,MW831,MW832,MW833,MW834,MW835,MW836,MW837,MW838,MW839);
+  84 : DEF := m_def(MW840,MW841,MW842,MW843,MW844,MW845,MW846,MW847,MW848,MW849);
+  85 : DEF := m_def(MW850,MW851,MW852,MW853,MW854,MW855,MW856,MW857,MW858,MW859);
+  86 : DEF := m_def(MW860,MW861,MW862,MW863,MW864,MW865,MW866,MW867,MW868,MW869);
+  87 : DEF := m_def(MW870,MW871,MW872,MW873,MW874,MW875,MW876,MW877,MW878,MW879);
+  88 : DEF := m_def(MW880,MW881,MW882,MW883,MW884,MW885,MW886,MW887,MW888,MW889);
+  89 : DEF := m_def(MW890,MW891,MW892,MW893,MW894,MW895,MW896,MW897,MW898,MW899);
+
+  90 : DEF := m_def(MW900,MW901,MW902,MW903,MW904,MW905,MW906,MW907,MW908,MW909);
+  91 : DEF := m_def(MW910,MW911,MW912,MW913,MW914,MW915,MW916,MW917,MW918,MW919);
+  92 : DEF := m_def(MW920,MW921,MW922,MW923,MW924,MW925,MW926,MW927,MW928,MW929);
+  93 : DEF := m_def(MW930,MW931,MW932,MW933,MW934,MW935,MW936,MW937,MW938,MW939);
+  94 : DEF := m_def(MW940,MW941,MW942,MW943,MW944,MW945,MW946,MW947,MW948,MW949);
+  95 : DEF := m_def(MW950,MW951,MW952,MW953,MW954,MW955,MW956,MW957,MW958,MW959);
+  96 : DEF := m_def(MW960,MW961,MW962,MW963,MW964,MW965,MW966,MW967,MW968,MW969);
+  97 : DEF := m_def(MW970,MW971,MW972,MW973,MW974,MW975,MW976,MW977,MW978,MW979);
+  98 : DEF := m_def(MW980,MW981,MW982,MW983,MW984,MW985,MW986,MW987,MW988,MW989);
+  99 : DEF := m_def(MW990,MW991,MW992,MW993,MW994,MW995,MW996,MW997,MW998,MW999);
+  END_CASE;
+END_FUNCTION_BLOCK
+
+FUNCTION set_sh : TPos8
+  VAR_INPUT
+    PSH : TPos8 := -1;
+    Shape : TShape;
+  END_VAR
+
+  {{ return (SET_SH = ( __GET_GLOBAL_ITS()->SH.table[PSH] = SHAPE, PSH) ); }}
+END_FUNCTION
+
+FUNCTION_BLOCK ReadItem
+  VAR_EXTERNAL
+    HDR : THead;
+  END_VAR
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR_OUTPUT
+    iRes : TError := E_SUCCESS;
+  END_VAR
+  VAR
+    Def : TDef;
+    Item : TItem;
+    Shape : TShape;
+    Off : P_INT;
+    msg : STRING;
+    _GetDef : GetDef;
+  END_VAR
+
+  iRes:=E_SUCCESS;
+
+  (* Проверка корректности индекса элемента *)
+  if (PIT < 0 or PIT >= HDR.Ni) then iRes:=E_INDEX; {goto __exit} end_if;
+
+  (* Получение определения элемента из массива конфигурации *)
+  _GetDef(i := PIT, DEF => Def);
+
+  (* Проверка индексов в массивах VAL, MAT, KNT *)
+  if (HDR.Nv<>0 and Def.Iv >= HDR.Nv) then iRes:=E_VALUE; {goto __exit} end_if;
+  if (HDR.Nm=0  or  Def.Im >= HDR.Nm) then iRes:=E_MATER; {goto __exit} end_if;
+  if (HDR.Ng=0  or  Def.Ig >= HDR.Ng) then iRes:=E_GRID;  {goto __exit} end_if;
+
+  (* Инициализация *)
+  Item.ID  := Def.ID;  (* Копирование идентификатора элемента          *)
+  Item.Im  := Def.Im;  (* Копирование индекса материала                *)
+  Item.Iv  := Def.Iv;  (* Копирование индекса величины (если есть)     *)
+  Item.Par := -1;      (* Родитель не определен, дерево строится позже *)
+  Item.Num := 0;       (* Детей пока тоже нет, дерево строится позже   *)
+
+  (* Флаги геометрии (расшифровка в Do_Validate)  *)
+  Shape.wF  := Def.CF;   
+
+  (* Временное размещение начальных смещений в Кn (int[0..2]) *)
+  Shape.Kn[0] := Def.R0;                       (* начальный радиус (X0) *)
+  Shape.Kn[1] := 
+    WORD_TO_INT(SHR((Def.CF and 16#0F00), 8)); (* начальный сектор (Y0) *)
+  Shape.Kn[2] := 0;                            (* начальная высота (Z0) *)
+
+  (* Копирование xyz[], lwh[] *)
+  Shape.pL[0] := INT_TO_REAL(Def.XYZ[0]);
+  Shape.pL[1] := INT_TO_REAL(Def.XYZ[1]);
+  Shape.pL[2] := INT_TO_REAL(Def.XYZ[2]);
+  Shape.Lx[0] := INT_TO_REAL(Def.LWH[0]);
+  Shape.Lx[1] := INT_TO_REAL(Def.LWH[1]);
+  Shape.Lx[2] := INT_TO_REAL(Def.LWH[2]);
+
+  (* Завершение процедуры *)
+  {__exit:}
+  if (iRes = E_SUCCESS) then 
+    PIT := set_sh(PIT, Shape);
+    PIT := set_it(PIT, Item);
+  end_if;
+END_FUNCTION_BLOCK
+
+FUNCTION T2C : INT
+  VAR_INPUT
+    Temp : REAL := 0.0;
+  END_VAR
+
+  T2C := real_to_int(Temp*100.0);
+END_FUNCTION
+
+FUNCTION _var : TVar
+  VAR_INPUT
+    A : INT := -16384;
+    B : INT := -16384;
+    C : BOOL := false;
+  END_VAR
+
+  {{
+    #pragma pack(push, 4)
+    union { // 32-бит (4 байта)
+      TVAR tv;
+      struct {  // Значение (var)
+        USINT  R:1;     // Флаг R (для var = 0)
+          INT  A:15;    // Значение A (актуальное)
+        USINT  C:1;     // Флаг C (1-расчёт готов)
+          INT  B:15;    // Значение B (предыдущее)
+      };
+      struct {  // Ссылка   (ref)
+        USINT  r:1;     // Флаг r (для ref = 1)
+        USINT  d:2;     // Направление (0,1,2,3)
+        USINT  p:8;     // Позиция элемента
+        USINT  i:7;     // Индекс сетки по I (0..127)
+        USINT  j:7;     // Индекс сетки по J (0..127)
+        USINT  k:7;     // Индекс сетки по K (0..127)
+      };
+    } var = {0};
+    #pragma pack(pop)
+    
+    var.A = A;  // Значение A (текущее)
+    var.B = B;  // Значение B (предыдущее)
+    var.C = C;  // Флаг "расчёт выполнен" (A!=B)
+    
+    _VAR = var.tv;
+  }}
+END_FUNCTION
+
+FUNCTION IT_InitTemp : TPos8
+  VAR_INPUT
+    PIT : TPos8 := 0;
+    Temp : REAL := 0.0;
+    CLR : BOOL := false;
+  END_VAR
+  VAR
+    Sh : TShape;
+    I : INT := 0;
+    J : INT := 0;
+    K : INT := 0;
+    M : INT := 0;
+    Off : P_INT;
+  END_VAR
+
+  Sh := get_sh(it_pos(PIT));
+  for I:=0 to Sh.Kn[0]-1 do
+    for J:=0 to Sh.Kn[1]-1 do
+      for K:=0 to Sh.Kn[2]-1 do
+        Off := knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], I,J,K);
+        if (CLR) then PIT := set_var(its_gr(0), PIT, Off, 0, 16#ff); end_if;
+        PIT := set_var(its_gr(0), PIT, Off, _var(T2C(Temp), T2C(Temp)));
+      end_for;
+    end_for;
+  end_for;
+  IT_InitTemp := PIT;
+END_FUNCTION
+
+FUNCTION get_it : TItem
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+
+  {{ return (GET_IT = __GET_GLOBAL_ITS()->IT.table[PIT]); }}
+END_FUNCTION
+
+FUNCTION Do_Validate : BOOL
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    It : TIter;
+    Item : TItem;
+    Sh : TShape;
+    Ax : USINT := 0;
+    bAx : BOOL := false;
+    bCx : BOOL := false;
+    bOx : BOOL := false;
+    OFF : P_INT;
+    i : INT := 0;
+    j : INT := 0;
+    k : INT := 0;
+    m : INT := 0;
+    iP : TPos8 := 0;
+    P0 : TPoint := [0.0, 0.0, 0.0];
+    Lx : TPoint := [0.0, 0.0, 0.0];
+    O : TAxO;
+    RI : ARRAY [0..2] OF P_RESI;
+    temp : P_RESI;
+    rTemp : REAL := 0.0;
+    bRes : BOOL := false;
+  END_VAR
+  VAR CONSTANT
+    PI : REAL := 180.0;
+    PI2 : REAL := 360.0;
+    PI_RAD : REAL := 3.1415926535897932384626433832795;
+  END_VAR
+
+  Do_Validate := st_check(false);
+  if (not Do_Validate) then return; end_if;
+
+  (* Обход дерева элементов *)
+  it := it_begin(ID2PIT(0));
+  while (it.item<>-1) do
+    (* Локальная копия элемента *)
+    Item  := get_it(it.item);
+    Sh    := get_sh(it.item);
+    
+    (* Расшифровка гео-флагов *)
+    (* Флаги границ  - 0-7 биты в wF *)
+    (* Sh.bF := WORD_TO_BYTE(Sh.wF AND 16#00FF); *)
+    
+    (* Номер сектора скопирован в Sh.Kn[1] в ReadItem() *)
+    (*Item.nS := WORD_TO_USINT(SHR((Def.CF AND 16#0F00), 8)); *)
+
+    (* Флаг составного элемента - 16 бит (не используется) *)
+    (* Item.bP := ((Def.CF AND 16#8000)<>0); *)
+    
+    (* Ось симметрии - следующие 12-13 биты в wF *)
+    Ax  := WORD_TO_USINT(SHR((Sh.wF AND 16#3000), 12));
+
+    bCx := ((Sh.wF and 16#4000)<>0); (* Признак 'цилиндрич. система'   *)
+    bAx := (Ax<>0);                  (* Признак 'ось задана'           *)
+    bOx := (not bCx or bAx);         (* Признак 'задана точка отсчёта' *)
+
+    case (it.dir) of
+    DIR_DOWN:
+      (* Определение точек начала отсчёта (НО) в ABS координатах   *)
+      if (Item.Num>0 and bOx) then   (* Элемент с новой точкой отсчёта *)
+        (* Прибавляем координаты НО к накопителю P0 *)
+        P0[0] := P0[0] + Sh.pL[0]; 
+        P0[1] := P0[1] + Sh.pL[1]; 
+        P0[2] := P0[2] + Sh.pL[2];
+      end_if;
+      
+    DIR_UP:
+      (* Определение точек начала отсчёта в ABS координатах *)
+      if (Item.Num>0 and bOx) then  (* Элемент с новой точкой отсчёта *)
+        (* Вычитаем координаты НО из накопителя P0 *)
+        P0[0] := P0[0] - Sh.pL[0]; 
+        P0[1] := P0[1] - Sh.pL[1]; 
+        P0[2] := P0[2] - Sh.pL[2];
+      end_if;
+      
+      (* Сохраняем собственную точку НО *)
+      Sh.p0[0] := P0[0]; 
+      Sh.p0[1] := P0[1];
+      Sh.p0[2] := P0[2];
+      
+      (* === Цилиндрическая система === *)
+      if (bCx) then
+      
+        (* Если ось не задана - она наследуется от родителя *)
+        if (not bAx)  then
+          iP := Item.Par;
+          while (iP<>-1) do
+            Ax := sh_get_ax(get_sh(iP));
+            iP := it_ip(iP);
+            if (Ax<>0) then exit; end_if;
+          end_while;
+          if (Ax=0) then {goto __error} end_if;
+        end_if;
+
+        (* Индексы "оригинальных" координат: Ax -> O *)
+         O := AxO(Ax);
+         
+        (* --- Преобразование начальной точки --- *)
+        if (bAx) then
+          (* Если ось задана:       *)
+          (* (1) XYZ->OOO (декарт); *)
+          Sh.p0[0]   := Sh.p0[0] + Sh.pL[0];
+          Sh.p0[1]   := Sh.p0[1] + Sh.pL[1];
+          Sh.p0[2]   := Sh.p0[2] + Sh.pL[2];
+          
+          (* (2) R0->X, nS->Y, Z=0  *)
+          Sh.pL[O.x] := INT_TO_REAL(Sh.Kn[0]);            (* R0  *)
+          Sh.pL[O.y] := INT_TO_REAL(Sh.Kn[1]) *(PI/8.0);  (* nS  *)
+          Sh.pL[O.z] := INT_TO_REAL(Sh.Kn[2]);            (* 0.0 *)
+        end_if;
+        
+        (* Приведение угловой координаты к диапазону [-PI..PI] *)
+        Sh.pL[O.y]:=angle(Sh.pL[O.y], (-PI));
+        
+        (* Приведение углового размера   к диапазону [0..2*PI] *)
+        Sh.Lx[O.y]:=angle(Sh.Lx[O.y], 0.0);
+        
+        (* Если размер =0 -> делаем его =360град *)
+        if (Sh.Lx[O.y]=0.0) then Sh.Lx[O.y]:=PI2; end_if;
+        
+      else  (* Прямоугольные координаты *)
+        Ax := 0;
+      end_if;
+      
+      (* Установка флагов оси симметрии Ax *)
+      Sh := sh_set_ax(Sh, Ax);
+      
+      (* === Расчёт сетки BEGIN === *)
+      Lx:=Sh.Lx;
+      
+      (* Вычисление радиального размера *)
+      if (Ax<>0) then Lx[O.y]:=Lx[O.x]*Lx[O.y]*PI_RAD/360.0; end_if;
+      
+      (* Инициализация перед сортировкой пар 'размер-индекс' *) 
+      RI[0].A := Lx[0]; RI[0].B := 0;
+      RI[1].A := Lx[1]; RI[1].B := 1;
+      RI[2].A := Lx[2]; RI[2].B := 2;
+      
+      (* Сортировка пузырьком пар 'размер-индекс' *) 
+      for i:=0 to 1 do
+        for  j:=0 to 1-i do
+          if (RI[j].A > RI[j+1].A) then
+            temp:=RI[j]; RI[j]:=RI[j+1]; RI[j+1]:=temp;
+          end_if;
+        end_for;
+      end_for;
+      
+      (* Определяем количество узлов сети (Kn) *)
+      if ((RI[1].A+RI[2].A)/RI[0].A > 4.0) then
+        Sh.Kn[RI[0].B]:=8;
+        if ((RI[2].A/RI[1].A) > 4.0) then
+          Sh.Kn[RI[1].B]:=8;  
+          Sh.Kn[RI[2].B]:=64;
+        else
+          Sh.Kn[RI[1].B]:=16; 
+          Sh.Kn[RI[2].B]:=32;
+        end_if;
+      else
+        Sh.Kn[0]:=16; 
+        Sh.Kn[1]:=16; 
+        Sh.Kn[2]:=16;
+      end_if;
+      (* === Расчёт сетки END === *)
+
+    end_case;
+
+    (* TEST -> *)
+    if not (
+      (it.item>=1 and it.item<=99) 
+    ) then 
+      Item.Im := 0; (* воздух *)
+    end_if;
+    (* <- TEST *)
+
+    (* Записываем "валидный" элемент ОБРАТНО в массив *)
+    it.item := set_sh(it.item, Sh);
+    it.item := set_it(it.item, Item);
+    
+    (* === Инициализация сетки элемента === *)
+    it.item := IT_InitTemp(it.item, 20.0, true);
+    
+    it := it_next(it);
+  end_while;
+
+  (*PIT := IT_InitTemp(42, 100.0, true);*)
+
+  Do_Validate := true;
+  return;
+
+  { __error: }
+  Do_Validate := false;
+END_FUNCTION
+
+FUNCTION m_res : TRes
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+    MD6 : UDINT;
+    MD7 : UDINT;
+    MD8 : UDINT;
+    MD9 : UDINT;
+  END_VAR
+
+  m_res.DR := MD0;  (* секунд от 01-01-1970 *)
+  m_res.TR := UDINT_TO_TIME(MD1);
+  m_res.FP := UDINT_TO_TIME(MD2);
+  m_res.ER := UDINT_TO_UINT(MD3/65536);
+  m_res.FL := UDINT_TO_WORD(mod(MD3,65536));
+  m_res.RV[0] := MD4;
+  m_res.RV[1] := MD5;
+  m_res.RV[2] := MD6;
+  m_res.RV[3] := MD7;
+  m_res.RV[4] := MD8;
+  m_res.RV[5] := MD9;
+END_FUNCTION
+
+FUNCTION_BLOCK GetRes
+  VAR_EXTERNAL
+    MD490 : UDINT;
+    MD491 : UDINT;
+    MD492 : UDINT;
+    MD493 : UDINT;
+    MD494 : UDINT;
+    MD495 : UDINT;
+    MD496 : UDINT;
+    MD497 : UDINT;
+    MD498 : UDINT;
+    MD499 : UDINT;
+  END_VAR
+  VAR_OUTPUT
+    RES : TRes;
+  END_VAR
+
+  RES := m_res(MD490,MD491,MD492,MD493,MD494,MD495,MD496,MD497,MD498,MD499);
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK DistRes
+  VAR_OUTPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+    MD6 : UDINT;
+    MD7 : UDINT;
+    MD8 : UDINT;
+    MD9 : UDINT;
+  END_VAR
+  VAR_INPUT
+    RES : TRes;
+  END_VAR
+
+  MD0 := RES.DR;  (* секунд от 01-01-1970 *)
+  MD1 := TIME_TO_UDINT(RES.TR);
+  MD2 := TIME_TO_UDINT(RES.FP);
+  MD3 := UINT_TO_UDINT(RES.ER)*65536 + WORD_TO_UDINT(RES.FL);
+  MD4 := RES.RV[0];
+  MD5 := RES.RV[1];
+  MD6 := RES.RV[2];
+  MD7 := RES.RV[3];
+  MD8 := RES.RV[4];
+  MD9 := RES.RV[5];
+END_FUNCTION_BLOCK
+
+FUNCTION m_mat : TMat
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+  END_VAR
+
+  m_mat.KT := UDI2REAL(MD0);
+  m_mat.CP := UDI2REAL(MD1);
+  m_mat.PL := UDI2REAL(MD2);
+  m_mat.MD := UDI2REAL(MD3);
+END_FUNCTION
+
+FUNCTION_BLOCK GetMat
+  VAR_EXTERNAL
+    MD22 : UDINT;
+    MD23 : UDINT;
+    MD24 : UDINT;
+    MD25 : UDINT;
+    MD26 : UDINT;
+    MD27 : UDINT;
+    MD28 : UDINT;
+    MD29 : UDINT;
+    MD30 : UDINT;
+    MD31 : UDINT;
+    MD32 : UDINT;
+    MD33 : UDINT;
+    MD34 : UDINT;
+    MD35 : UDINT;
+    MD36 : UDINT;
+    MD37 : UDINT;
+    MD38 : UDINT;
+    MD39 : UDINT;
+    MD40 : UDINT;
+    MD41 : UDINT;
+    MD42 : UDINT;
+    MD43 : UDINT;
+    MD44 : UDINT;
+    MD45 : UDINT;
+    MD46 : UDINT;
+    MD47 : UDINT;
+    MD48 : UDINT;
+    MD49 : UDINT;
+    MD50 : UDINT;
+    MD51 : UDINT;
+    MD52 : UDINT;
+    MD53 : UDINT;
+    MD54 : UDINT;
+    MD55 : UDINT;
+    MD56 : UDINT;
+    MD57 : UDINT;
+    MD58 : UDINT;
+    MD59 : UDINT;
+    MD60 : UDINT;
+    MD61 : UDINT;
+    MD62 : UDINT;
+    MD63 : UDINT;
+    MD64 : UDINT;
+    MD65 : UDINT;
+    MD66 : UDINT;
+    MD67 : UDINT;
+    MD68 : UDINT;
+    MD69 : UDINT;
+  END_VAR
+  VAR_INPUT
+    I : SINT := 0;
+  END_VAR
+  VAR_OUTPUT
+    MAT : TMat;
+  END_VAR
+
+  CASE i OF
+  0 : MAT := m_mat(MD22,MD23,MD24,MD25);
+  1 : MAT := m_mat(MD26,MD27,MD28,MD29);
+  2 : MAT := m_mat(MD30,MD31,MD32,MD33);
+  3 : MAT := m_mat(MD34,MD35,MD36,MD37);
+  4 : MAT := m_mat(MD38,MD39,MD40,MD41);
+  5 : MAT := m_mat(MD42,MD43,MD44,MD45);
+  6 : MAT := m_mat(MD46,MD47,MD48,MD49);
+  7 : MAT := m_mat(MD50,MD51,MD52,MD53);
+  8 : MAT := m_mat(MD54,MD55,MD56,MD57);
+  9 : MAT := m_mat(MD58,MD59,MD60,MD61);
+  10: MAT := m_mat(MD62,MD63,MD64,MD65);
+  11: MAT := m_mat(MD66,MD67,MD68,MD69);
+  END_CASE;
+END_FUNCTION_BLOCK
+
+FUNCTION st_set_stat : BOOL
+  VAR_INPUT
+    err : TError := E_SUCCESS;
+    par : UINT := 0;
+    str : STRING := '';
+  END_VAR
+
+  {{ 
+    __GET_GLOBAL_STAT()->ERR=ERR; 
+    __GET_GLOBAL_STAT()->PAR=PAR; 
+    __GET_GLOBAL_STAT()->STR=STR;
+    LOGMSG(1,NULL,STR,LOGLEVEL__DEBUG,ERR);
+    return (ST_SET_STAT=ST_CHECK(1,NULL,FALSE));
+  }}
+END_FUNCTION
+
+FUNCTION var_up : TVar
+  VAR_INPUT
+    TV : TVar := 0;
+  END_VAR
+
+  {{
+    #pragma pack(push, 4)
+    typedef union {
+      TVAR tv;
+      struct { USINT R:1;   INT A:15; USINT C:1;   INT B:15; };
+      struct { USINT r:1; USINT d:2;   SINT p:8; USINT i:7; USINT j:7; USINT k:7; };
+    } var_t, *pvar_t;
+    #pragma pack(pop)
+    pvar_t pvar = (pvar_t)&TV;
+    // Если значение не ссылка - "поднимаем" значение A->B!
+    if (!pvar->r) {
+      //if (pvar->C) 
+        pvar->B = (pvar->C=0, pvar->A);
+    }
+    VAR_UP = TV;
+  }}
+END_FUNCTION
+
+FUNCTION set_cn : TPos8
+  VAR_INPUT
+    PIT : TPos8 := -1;
+    COND : TCond;
+  END_VAR
+
+  {{ 
+    __GET_GLOBAL_ITS()->CN.table[PIT] = COND;
+    return (SET_CN = PIT);
+  }}
+END_FUNCTION
+
+FUNCTION Sh_Loc2Abs : TPoint
+  VAR_INPUT
+    Sh : TShape;
+    X : REAL := 0.0;
+    Y : REAL := 0.0;
+    Z : REAL := 0.0;
+  END_VAR
+  VAR
+    Ax : USINT := 0;
+    A : TPoint := [0.0, 0.0, 0.0];
+    B : TPoint := [0.0, 0.0, 0.0];
+    O : TAxO;
+  END_VAR
+
+  (*Sh := get_sh(PIT);*)
+  Ax := sh_get_ax(Sh);
+
+  A := _point(X,Y,Z); 
+  if (Ax > 0) then 
+    (* Цилиндр -> Декарт *)
+    O := AxO(Ax);
+    A[O.y] := radi(A[O.y]); (* град -> радианы *)
+    B[O.x] := A[O.x]*cos(A[O.y]);
+    B[O.y] := A[O.x]*sin(A[O.y]);
+    B[O.z] := A[O.z];
+  else 
+    B := A;
+  end_if;
+  Sh_Loc2Abs := _point(B[0]+Sh.P0[0],B[1]+Sh.P0[1],B[2]+Sh.P0[2]); 
+
+
+
+END_FUNCTION
+
+FUNCTION Sh_Dot2Point : TPoint
+  VAR_INPUT
+    Sh : TShape;
+    I : INT := 0;
+    J : INT := 0;
+    K : INT := 0;
+    bAbs : BOOL := TRUE;
+  END_VAR
+  VAR
+    Hn : TPoint := [0.0, 0.0, 0.0];
+    Ax : USINT := 0;
+    Ang : REAL := 0.0;
+    Ox : TAxO;
+    P : TPoint := [0.0, 0.0, 0.0];
+  END_VAR
+
+  Ax := sh_get_ax(Sh);
+
+  (* (1) Определение локальной точки X, Y, Z  *)
+  if (Sh.Kn[0]>1) then Hn[0]:=(Sh.Lx[0]/INT_TO_REAL(Sh.Kn[0]-1)); end_if;
+  if (Sh.Kn[1]>1) then Hn[1]:=(Sh.Lx[1]/INT_TO_REAL(Sh.Kn[1]-1)); end_if;
+  if (Sh.Kn[2]>1) then Hn[2]:=(Sh.Lx[2]/INT_TO_REAL(Sh.Kn[2]-1)); end_if;
+
+  Sh_Dot2Point := _point( 
+    Sh.pL[0] + INT_TO_REAL(I) * Hn[0],
+    Sh.pL[1] + INT_TO_REAL(J) * Hn[1],
+    Sh.pL[2] + INT_TO_REAL(K) * Hn[2] 
+  );
+
+  (* (2) Коррекция точки при изменении формы  *)
+  if (Ax<>0) then
+    Ox := AxO(Ax, true);
+    P := Reform(Sh.wF, Sh_Dot2Point[Ox.y], 
+                  Sh_Dot2Point[Ox.x], Sh.pL[Ox.x], Sh.Lx[Ox.x]);
+    Sh_Dot2Point[Ox.x] := P[0];
+  end_if;
+
+  (* Преобразование локальной точки в абсолют *)
+  if (bAbs) then
+    Sh_Dot2Point := 
+      Sh_Loc2Abs(Sh, Sh_Dot2Point[0], Sh_Dot2Point[1], Sh_Dot2Point[2]);
+  end_if;
+END_FUNCTION
+
+FUNCTION it_update : TPos8
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    Pt : TPoint;
+    Kn : TKnot;
+    Sh : TShape;
+    Off : P_INT;
+    iVar : INT := 0;
+    TV : TVar := -1;
+    Tmid : REAL := 0.0;
+    count : INT := 0;
+    i : INT := 0;
+    j : INT := 0;
+    k : INT := 0;
+    Cond : TCond;
+  END_VAR
+
+  Sh := get_sh(it_pos(PIT));
+  Kn := Sh.Kn;
+  Cond.Tmin.V := 16383;   (* max_int7 *)
+  Cond.Tmax.V := -16384;  (* min_int7 *)
+
+  (* Вычисление средней, минимальной и максимальной температур *)
+  for i:=0 to Kn[0]-1 do
+    for J:=0 to Kn[1]-1 do
+      for K:=0 to Kn[2]-1 do
+        Off   := knoff(Kn[0], Kn[1], Kn[2], i,J,K);
+        TV    := get_var(its_gr(0), PIT, Off);
+        iVar  := var_v(TV);
+        
+        Tmid  := ( Tmid*int_to_real(count) + (int_to_real(iVar)/100.0) ) / 
+                      int_to_real(count+1);
+        if (iVar < Cond.Tmin.V) then Cond.Tmin := _dot(iVar, i,j,k); end_if;
+        if (iVar > Cond.Tmax.V) then Cond.Tmax := _dot(iVar, i,j,k); end_if;
+        
+        TV    := var_up(TV);
+        PIT   := set_var(its_gr(0), PIT, Off, (TV));
+        count := count+1;
+      end_for;
+    end_for;
+  end_for;
+
+  (* Средняя температура элемента *)
+  (* Cond.Tmid := T2C(Tmid); *)
+  {{ COND.TMID = (INT)(TMID * 100.0); }}
+
+  (* Минимальная температура элемента *)
+  Pt := Sh_Dot2Point(Sh, Cond.Tmin.A[0], Cond.Tmin.A[1], Cond.Tmin.A[2]);
+  Cond.Tmin.A[0] := real_to_int(Pt[0]);
+  Cond.Tmin.A[1] := real_to_int(Pt[1]);
+  Cond.Tmin.A[2] := real_to_int(Pt[2]);
+
+  (* Максимальная температура элемента *)         
+  Pt := Sh_Dot2Point(Sh, Cond.Tmax.A[0], Cond.Tmax.A[1], Cond.Tmax.A[2]);
+  Cond.Tmax.A[0] := real_to_int(Pt[0]);
+  Cond.Tmax.A[1] := real_to_int(Pt[1]);
+  Cond.Tmax.A[2] := real_to_int(Pt[2]);
+
+  (* Сохраняем состояние элемента *)
+  PIT := set_cn(PIT, Cond);
+
+  {{ // TEST
+    if (PIT==53) *__GET_GLOBAL_RTEST() = TMID;
+  }}
+
+  IT_Update := PIT;
+
+END_FUNCTION
+
+FUNCTION Do_PostProc : BOOL
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    It : TIter;
+  END_VAR
+
+  (* Проверка статуса программы *)
+  Do_PostProc := st_check(false);
+  if (not Do_PostProc) then return; end_if;
+
+  (* Обход дерева элементов *)
+  Do_PostProc := true;
+  it := it_begin(it_pos(PIT));
+  while (it.item <>-1) do
+    case (it.dir) of
+    DIR_UP:
+      (* Обновление состояния сетки элемента *)
+      it.item := it_update(it.item);
+    end_case;
+    it := it_next(it);
+  end_while;
+
+  { __exit: }
+  return;
+
+  { __error: }
+  Do_PostProc := st_set_stat(E_POSTPROC, it_id(it.item));
+
+END_FUNCTION
+
+FUNCTION Byte2Str : STRING
+  VAR_INPUT
+    Bt : BYTE := 0;
+  END_VAR
+  VAR
+    i : SINT := 0;
+    str : STRING := '2#';
+  END_VAR
+
+  for i:=7 to 0 by -1 do
+    if ((Bt and shl(1, i))<>0) then
+      str:=MakeMsg(str, '1');
+    else
+      str:=MakeMsg(str, '0');
+    end_if;
+  end_for;
+  Byte2Str:=str;
+END_FUNCTION
+
+FUNCTION m_var_in : TVarI
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+    MD2 : UDINT;
+    MD3 : UDINT;
+    MD4 : UDINT;
+    MD5 : UDINT;
+  END_VAR
+
+  m_var_in.DTI := MD0; (* секунд от 01-01-1970 *)
+  m_var_in.TMI := UDINT_TO_TIME(MD1);
+  m_var_in.TOV := UDINT_TO_REAL(MD2);
+  m_var_in.MHT := UDINT_TO_REAL(MD3);
+  m_var_in.RI1 := UDINT_TO_REAL(MD4);
+  m_var_in.RI2 := UDINT_TO_REAL(MD5);
+END_FUNCTION
+
+FUNCTION Alfa_03 : P_RERE
+  VAR_INPUT
+    Ht : REAL := 0.0;
+    M : TMatter;
+    Tn_0 : REAL := 0.0;
+    Tq_0 : REAL := 0.0;
+    Qn_0 : REAL := 0.0;
+    V_0 : REAL := 0.0;
+    R_0 : REAL := 0.0;
+    Bound3 : BOOL := TRUE;
+  END_VAR
+  VAR
+    D_0 : REAL := 0.0;
+    E_0 : REAL := 0.0;
+    b_0 : REAL := 0.0;
+    k_0 : REAL := 0.0;
+    h2 : REAL := 0.0;
+    at2 : REAL := 0.0;
+    DE : REAL := 0.0;
+    denom : REAL := 0.0;
+    Res : P_RERE;
+  END_VAR
+
+  if (R_0 > 1.0E-5) then 
+    if (not Bound3) then M.k := 1.0; end_if;
+    b_0 := M.k/M.l;
+    k_0 := b_0*Tq_0;
+    if (not Bound3) then b_0 := 0.0; end_if;
+    if (R_0 < 1.0E5) then E_0 := M.h / (2.0*R_0); end_if;
+    D_0 := (abs(V_0)*M.h) / (2.0*M.a);
+  else
+    (* Малый радиус - условия симметрии h=0 *)
+    M.h := 0.0;
+  end_if;
+
+  h2    := M.h * M.h;
+  at2   := 2.0 * M.a * Ht;
+  DE    := (1.0 + D_0 - E_0);
+  denom := h2 + at2 * (1.0 + DE * M.h*b_0);
+
+  Alfa_03.A := at2 / denom;
+  Alfa_03.B := ( h2 * (Tn_0 + Ht*Qn_0) + at2 * DE * M.h*k_0 ) / denom;
+END_FUNCTION
+
+FUNCTION Alfa_04 : P_RERE
+  VAR_INPUT
+    Ht : REAL := 0.0;
+    M1 : TMatter;
+    M2 : TMatter;
+    Alfa : P_RERE;
+    Tn_0 : REAL := 0.0;
+    Q1n_0 : REAL := 0.0;
+    Q2n_0 : REAL := 0.0;
+  END_VAR
+  VAR
+    A : REAL := 0.0;
+    B : REAL := 0.0;
+    F : REAL := 0.0;
+  END_VAR
+
+  (* Малый шаг - условие симметрии *)
+  if (M1.h < 1.0E-4 or M2.h < 1.0E-4) then
+    Alfa_04.A := 1.0;
+    Alfa_04.B := 0.0;
+  else
+    (* Вариант-1: считаем известной T в точке i=-1, тогда Alfa.A=0, Alfa.B=T *)
+    (* Вариант-2: считаем известной пару Alfa|Beta в точке i=-1 на момент расчёта *)
+
+    A :=    M1.l / M1.h;
+
+    B :=    (M1.l / M1.h) 
+          + (M2.l / M2.h) 
+          + (M1.l*M1.h/(2.0*M1.a*Ht))  
+          + (M2.l*M2.h/(2.0*M2.a*Ht))
+          - (M2.l / M2.h) * Alfa.A; (* Доп слагаемое - вариант 1 или 2 *)
+
+    F :=  - Tn_0 * ( (M1.l*M1.h/(2.0*M1.a*Ht)) + (M2.l*M2.h/(2.0*M2.a*Ht)) ) 
+          - (M1.l*M1.h/(2.0*M1.a)) * Q1n_0  
+          - (M2.l*M2.h/(2.0*M2.a)) * Q2n_0 
+          - (M2.l / M2.h) * Alfa.B; (* Доп слагаемое - вариант 1 или 2 *)
+
+    Alfa_04.A :=  A/B;
+    Alfa_04.B := -F/B;
+  end_if;
+END_FUNCTION
+
+FUNCTION set_pdt : TPos8
+  VAR_INPUT
+    PIT : TPos8 := -1;
+    Ix : USINT := 0;
+    CDT : DT := DT#2000-01-01-00:00:00;
+  END_VAR
+
+  {{ return (SET_PDT = (__GET_GLOBAL_ITS()->IT.table[PIT].PDT.table[IX] = CDT, PIT)); }}
+END_FUNCTION
+
+FUNCTION get_mt : TMat
+  VAR_INPUT
+    PMT : TPos8 := -1;
+  END_VAR
+
+  {{ return (GET_MT = __GET_GLOBAL_STS()->MT.table[PMT]); }}
+END_FUNCTION
+
+FUNCTION link_var : TDot
+  VAR_INPUT
+    HGR : THandle := 0;
+    PGR : TPos8 := -1;
+    Sh : TShape;
+    I : INT := 0;
+    J : INT := 0;
+    K : INT := 0;
+    Ix : USINT := 0;
+    ign : TPos8 := -1;
+    Dx : REAL := 0.1;
+    Dyz : REAL := 0.1;
+  END_VAR
+  VAR
+    Mx : REAL := 0.0;
+    My : REAL := 0.0;
+    Mz : REAL := 0.0;
+    Pt : TPoint := [0.0, 0.0, 0.0];
+    Dot : TDot;
+  END_VAR
+
+  if (Ix <> 0) then (* при линковке узлов смежных элементов *)
+
+    (* Находим точку в данном узле решётки (лок) *)
+    Pt  := Sh_Dot2Point(Sh, I, J, K, false);
+
+    (* "Сверлим стену" *)
+    if (I=0) then Mx:=1.0; elsif (I=Sh.Kn[0]-1) then Mx:=-1.0; end_if;
+    if (J=0) then My:=1.0; elsif (J=Sh.Kn[1]-1) then My:=-1.0; end_if;
+    if (K=0) then Mz:=1.0; elsif (K=Sh.Kn[2]-1) then Mz:=-1.0; end_if;
+    
+    case Ix of
+      1: Pt := _point(Pt[0]-Mx*Dx , Pt[1]+My*Dyz, Pt[2]+Mz*Dyz);
+      2: Pt := _point(Pt[0]+Mx*Dyz, Pt[1]-My*Dx , Pt[2]+Mz*Dyz);
+      3: Pt := _point(Pt[0]+Mx*Dyz, Pt[1]+My*Dyz, Pt[2]-Mz*Dx );
+    end_case;
+    
+    (* Преобразование локальной точки в абсолют *)
+    Pt := Sh_Loc2Abs(Sh, Pt[0], Pt[1], Pt[2]);
+
+  else (* при линковке узлов составных элементов и поверхностей *)
+
+    (* Находим точку в данном узле решётки (абс) *)
+    Pt := Sh_Dot2Point(Sh, I, J, K);
+
+  end_if;
+
+  (* Находим элемент, содержащий эту точку *)
+  Dot := Do_FindDot(Pt[0], Pt[1], Pt[2], ign);
+
+  (* Заносим ссылку на найденный элемент в сетку *)
+  PGR := set_var( HGR, PGR, 
+    knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], I,J,K), 
+    _ref(int_to_sint(Dot.v), Dot), 
+    Ix 
+  );
+
+  (* Возвращаем позицию сетки, если слинковано, иначе = -1 *)
+  link_var := (Dot);
+END_FUNCTION
+
+FUNCTION _surf : TShape
+  VAR_INPUT
+    PIT : TPos8 := -1;
+    Ax : USINT := 0;
+    X : REAL := 0.0;
+    Y : REAL := 0.0;
+    Z : REAL := 0.0;
+  END_VAR
+  VAR
+    Pt : TPoint := [0.0, 0.0, 0.0];
+  END_VAR
+
+  (* Наследуем фигуру элемента модели *)
+  if (PIT < 0) then PIT := 0; end_if;
+  _surf := get_sh(PIT);
+
+  (* Уточняем размерность сетки [64x64] *)
+  _surf.wF := 0;
+  _surf.Kn := _knot(64,64,64);
+  _surf.Kn[Ax] := 1;
+
+  (* Уточняем положение по точке привязки *)
+  Pt := _point(X,Y,Z);
+  (*
+  _surf.pL[0] := _surf.pL[0]+0.1;
+  _surf.pL[1] := _surf.pL[1]+0.1;
+  _surf.pL[2] := _surf.pL[2]+0.1;
+  *)
+  _surf.pL[Ax] := Pt[Ax]; (* смещение по координате Ax *)
+  (*
+  _surf.Lx[0] := _surf.Lx[0]-0.2;
+  _surf.Lx[1] := _surf.Lx[1]-0.2;
+  _surf.Lx[2] := _surf.Lx[2]-0.2;
+  *)
+  _surf.Lx[Ax] := 0.0;    (* размер плоскости по Ax =0 *)
+END_FUNCTION
+
+PROGRAM P_RES
+  VAR_EXTERNAL
+    f_Res : BOOL;
+    HDR : THead;
+    ITS : TItems;
+  END_VAR
+  VAR
+    pit : TPos8 := 0;
+    Sh : TShape;
+    Pt : TPoint;
+    Off : P_INT;
+    PGR : TPos8 := -1;
+    I : INT := 0;
+    J : INT := 0;
+    K : INT := 0;
+    Dot : TDot;
+    bRes : BOOL := false;
+    iRes : TError := E_SUCCESS;
+    iLog : INT := 0;
+    msg : STRING := '';
+    _WriteItem : WriteItem;
+    _Grid2ul : Grid2ul;
+    _GetHead : GetHead;
+  END_VAR
+
+  (* Считывание заголовка *)
+  _GetHead(HEAD => HDR);
+
+  (* Test *)
+  (* if (HDR.ID = 100)  then HDR.ID := 99; end_if; *)
+  (*
+  HDR.ID := 100;
+  HDR.Ax := 2;
+  HDR.pX := 1800;
+  HDR.pY := 620;
+  HDR.pZ := 1575;
+  *)
+  (* =1= Протоколирование на консоль === *)
+  bRes := Do_LogCond(ID2PIT(0));
+
+  (* =2= Запись массива элементов в регистры === *)
+  (*msg:=LogMsg('Write items ... '); *)
+  FOR pit := 0 TO HDR.Ni-1 DO 
+    _WriteItem(PIT := pit);
+    (*
+    if (len(msg)=0) then msg := MakeMsg(' - Updated items: '); end_if;
+    msg := MakeMsg(msg, ' [', ID2Str(IT_ID(pit)), ',');
+    msg := MakeMsg(msg,       SINT_TO_STRING(pit), ']');
+    if (mod((pit+1),5)=0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if;
+    *)
+  END_FOR; 
+  (* if (len(msg)>0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if; *)
+
+  (* =3= Вывод T-поля объекта [POS=HDR.ID] в регистры === *)
+  msg:=LogMsg(MakeMsg(msg, '===== T-Field START ====='));      
+
+  pit := UINT_TO_SINT(HDR.ID); (* it_pos(ID2PIT(HDR.ID)); *)
+  if (pit >= 0 and pit < HDR.Ni) then 
+
+    (* Вывод поля обычного элемента *)
+    Sh := get_sh(pit);
+    _Grid2ul(HGR := its_gr(0), PGR := pit, SH := Sh, iRes=>iRes);
+    
+  elsif (pit = 100) then (* Вывод поля поверхности *)
+    
+    Sh := _surf(
+      ID2PIT(0), 
+      UINT_TO_USINT(HDR.Ax), 
+      INT_TO_REAL(HDR.pX), 
+      INT_TO_REAL(HDR.pY), 
+      INT_TO_REAL(HDR.pZ)
+    );
+    (*Sh := get_sh(0);*)
+    ITS.Sh[pit] := Sh;
+    
+    (* Линковка узлов *)
+    iLog := 0;
+    for I:=0 to Sh.Kn[0]-1 do
+      for J:=0 to Sh.Kn[1]-1 do
+        for K:=0 to Sh.Kn[2]-1 do
+        
+          Dot := link_var(its_gr2(0), 0, Sh, I, J, K);
+          (*
+          Pt  := Sh_Dot2Point(Sh, I, J, K);
+          Dot := Do_FindDot(Pt[0], Pt[1], Pt[2]);
+          Off := knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], I,J,K);
+          PGR := set_var( its_gr2(0), 0, Off, _ref(int_to_sint(Dot.v), Dot));
+          *)
+          
+          (*
+          if (false or iLog<80) then  
+            if (len(msg)=0) then msg := MakeMsg(' =!=> '); end_if;
+            msg := MakeMsg(msg, '[', INT_TO_STRING(REAL_TO_INT(Pt[0])), ',');
+            msg := MakeMsg(msg,  '', INT_TO_STRING(REAL_TO_INT(Pt[1])), ',');
+            msg := MakeMsg(msg,  '', INT_TO_STRING(REAL_TO_INT(Pt[2])), ']');
+            if (mod((iLog+1),8)=0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if;
+            iLog:=iLog+1;
+          end_if;
+          *)
+          (*
+          if (iLog<80) then  
+            if (len(msg)=0) then msg := MakeMsg(' =!=> '); end_if;
+            msg := MakeMsg(msg, '[', INT_TO_STRING(Dot.v), ',');
+            msg := MakeMsg(msg,  '', INT_TO_STRING(Dot.a[0]), ',');
+            msg := MakeMsg(msg,  '', INT_TO_STRING(Dot.a[1]), ',');
+            msg := MakeMsg(msg,  '', INT_TO_STRING(Dot.a[2]), ']');
+            if (mod((iLog+1),8)=0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if;
+            iLog:=iLog+1;
+          end_if;
+          *)
+        end_for;
+      end_for;
+    end_for;
+    if (len(msg)>0) then msg:=LogMsg(MakeMsg(msg, ';')); end_if;
+    
+    _Grid2ul(HGR := its_gr2(0), PGR := 0, SH := Sh, iRes=>iRes);
+    
+  else (* ошибка позиции *)
+    {}
+
+  end_if;
+  msg:=LogMsg(MakeMsg(msg, '===== T-Field (END) ====='));      
+
+  (* Сброс флага *)
+  f_Res := FALSE;
+END_PROGRAM
+
+FUNCTION m_val : TVal
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+  END_VAR
+
+  m_val.Iv      := UDINT_TO_INT(MD0/65536);
+  m_val.Vi[0].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD0,65536))/256);
+  m_val.Vi[0].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD0,65536)),256));
+  m_val.Vi[1].A := UINT_TO_SINT(UDINT_TO_UINT(MD1/65536)/256);
+  m_val.Vi[1].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD1/65536),256));
+  m_val.Vi[2].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD1,65536))/256);
+  m_val.Vi[2].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD1,65536)),256));
+
+
+END_FUNCTION
+
+FUNCTION_BLOCK GetVal
+  VAR_EXTERNAL
+    MD70 : UDINT;
+    MD71 : UDINT;
+    MD72 : UDINT;
+    MD73 : UDINT;
+    MD74 : UDINT;
+    MD75 : UDINT;
+    MD76 : UDINT;
+    MD77 : UDINT;
+    MD78 : UDINT;
+    MD79 : UDINT;
+    MD80 : UDINT;
+    MD81 : UDINT;
+    MD82 : UDINT;
+    MD83 : UDINT;
+    MD84 : UDINT;
+    MD85 : UDINT;
+    MD86 : UDINT;
+    MD87 : UDINT;
+    MD88 : UDINT;
+    MD89 : UDINT;
+    MD90 : UDINT;
+    MD91 : UDINT;
+    MD92 : UDINT;
+    MD93 : UDINT;
+    MD94 : UDINT;
+    MD95 : UDINT;
+    MD96 : UDINT;
+    MD97 : UDINT;
+    MD98 : UDINT;
+    MD99 : UDINT;
+    MD100 : UDINT;
+    MD101 : UDINT;
+    MD102 : UDINT;
+    MD103 : UDINT;
+    MD104 : UDINT;
+    MD105 : UDINT;
+    MD106 : UDINT;
+    MD107 : UDINT;
+    MD108 : UDINT;
+    MD109 : UDINT;
+    MD110 : UDINT;
+    MD111 : UDINT;
+    MD112 : UDINT;
+    MD113 : UDINT;
+    MD114 : UDINT;
+    MD115 : UDINT;
+    MD116 : UDINT;
+    MD117 : UDINT;
+    MD118 : UDINT;
+    MD119 : UDINT;
+  END_VAR
+  VAR_INPUT
+    I : SINT := 0;
+  END_VAR
+  VAR_OUTPUT
+    VAL : TVal;
+  END_VAR
+
+  CASE i OF
+  0 : VAL := m_val(MD70,MD71);
+  1 : VAL := m_val(MD72,MD73);
+  2 : VAL := m_val(MD74,MD75);
+  3 : VAL := m_val(MD76,MD77);
+  4 : VAL := m_val(MD78,MD79);
+  5 : VAL := m_val(MD80,MD81);
+  6 : VAL := m_val(MD82,MD83);
+  7 : VAL := m_val(MD84,MD85);
+  8 : VAL := m_val(MD86,MD87);
+  9 : VAL := m_val(MD88,MD89);
+  10: VAL := m_val(MD90,MD91);
+  11: VAL := m_val(MD92,MD93);
+  12: VAL := m_val(MD94,MD95);
+  13: VAL := m_val(MD96,MD97);
+  14: VAL := m_val(MD98,MD99);
+  15: VAL := m_val(MD100,MD101);
+  16: VAL := m_val(MD102,MD103);
+  17: VAL := m_val(MD104,MD105);
+  18: VAL := m_val(MD106,MD107);
+  19: VAL := m_val(MD108,MD109);
+  20: VAL := m_val(MD110,MD111);
+  21: VAL := m_val(MD112,MD113);
+  22: VAL := m_val(MD114,MD115);
+  23: VAL := m_val(MD116,MD117);
+  24: VAL := m_val(MD118,MD119);
+  END_CASE;
+END_FUNCTION_BLOCK
+
 FUNCTION_BLOCK Sort_IDS
   VAR_EXTERNAL
     ITS : TItems;
@@ -7406,6 +6705,828 @@ FUNCTION_BLOCK Sort_IDS
     
   END_WHILE; (* Сортировка завершена *)
 END_FUNCTION_BLOCK
+
+FUNCTION st_is_ready : BOOL
+  VAR_INPUT
+    tmp : BOOL := FALSE;
+  END_VAR
+
+  {{ return (ST_IS_READY=__GET_GLOBAL_STAT()->RDY); }}
+END_FUNCTION
+
+FUNCTION kto_air : REAL
+  VAR_INPUT
+    L : REAL := 0.0;
+  END_VAR
+
+  kto_air:=10.0;
+END_FUNCTION
+
+FUNCTION get_pdt : DT
+  VAR_INPUT
+    PIT : TPos8 := -1;
+    Ix : USINT := 0;
+  END_VAR
+
+  {{ return (GET_PDT = __GET_GLOBAL_ITS()->IT.table[PIT].PDT.table[IX]); }}
+END_FUNCTION
+
+FUNCTION get_h : THead
+  VAR_INPUT
+    Dummy : DINT := 0;
+  END_VAR
+
+  {{ return (GET_H = *__GET_GLOBAL_HDR()); }}
+END_FUNCTION
+
+FUNCTION get_pr : TProf
+  VAR_INPUT
+    PPR : TPos8 := -1;
+  END_VAR
+
+  {{ return (GET_PR = __GET_GLOBAL_STS()->PR.table[PPR]); }}
+END_FUNCTION
+
+FUNCTION cn_mid : INT
+  VAR_INPUT
+    Cond : TCond;
+  END_VAR
+
+  CN_MID := COND.TMID;
+END_FUNCTION
+
+FUNCTION IT_Process : TError
+  VAR_INPUT
+    PIT : TPos8 := -1;
+    Ix : USINT := 0;
+    CDT : DT := DT#2000-01-01-00:00:00;
+  END_VAR
+  VAR
+    PDT : DT := DT#2000-01-01-00:00:00;
+    It : TItem;
+    Hd : THead;
+    Sh : TShape;
+    Ax : USINT := 0;
+    Ox : TAxO;
+    Cx : TAxO;
+    Q : SINT := 0;
+    Ht : REAL := 0.0;
+    K : ARRAY [0..2] OF INT;
+    L : ARRAY [0..2] OF INT;
+    H0 : TPoint := [0.0, 0.0, 0.0];
+    Hx2 : TPoint := [0.0, 0.0, 0.0];
+    pR : TPoint := [0.0, 0.0, 0.0];
+    Iv : SINT := 0;
+    Im : SINT := 0;
+    V : TVal;
+    Vx : REAL := 0.0;
+    Px : TProf;
+    Cm : TMat;
+    Pm : TProps;
+    P0 : TPoint := [0.0, 0.0, 0.0];
+    Hi : REAL := 0.0;
+    Hi2 : REAL := 0.0;
+    Pi : TPoint := [0.0, 0.0, 0.0];
+    Ri : REAL := 0.0;
+    Li : REAL := 0.0;
+    Vi1 : REAL := 0.0;
+    Qi1 : REAL := 0.0;
+    Ti1 : REAL := 0.0;
+    M : TMatter;
+    P : TPoint := [0.0, 0.0, 0.0];
+    TV : TVar := 0;
+    LR : ARRAY [0..3] OF P_BOOL := [FALSE, FALSE, FALSE, FALSE];
+    PIT2 : TPos8 := -1;
+    Kn2 : TKnot := [0, 0, 0];
+    Im2 : SINT := 0;
+    Cm2 : TMat;
+    Pm2 : TProps;
+    Iv2 : SINT := 0;
+    V2 : TVal;
+    Vx2 : REAL := 0.0;
+    Px2 : TProf;
+    Vi2 : REAL := 0.0;
+    Qi2 : REAL := 0.0;
+    Ti2 : REAL := 0.0;
+    M2 : TMatter;
+    Tmid2 : REAL := 0.0;
+    i : INT := 0;
+    N : INT := 0;
+    off : P_INT;
+    xx : REAL := 0.0;
+    ii : INT := 0;
+    Alfa : P_RERE;
+    Alfas : ARRAY [0..63] OF P_RERE;
+    iRes : TError := E_SUCCESS;
+    bRes : BOOL := false;
+    msg : STRING := '';
+  END_VAR
+  VAR CONSTANT
+    Kt : REAL := 300.0;
+    Hmin : REAL := 1.0E-5;
+  END_VAR
+
+  (* Получаем время предыдущего расчёта и сохраняем текущее *)
+  PDT := get_pdt(PIT, Ix);
+  PIT := set_pdt(PIT, Ix, CDT);
+
+  Hd := get_h(0);       (* Заголовок модели *)
+  It := get_it(PIT);    (* Элемент          *)
+  Sh := get_sh(PIT);    (* Фигура элемента  *)
+  Ax := sh_get_ax(Sh);  (* Направление оси  *)
+
+  Im := It.Im;          (* Индекс материала *)
+  Iv := It.Iv;          (* Индекс величины  *)
+
+  Cm := get_mt(It.Im);  (* Материал *)
+
+  (* Получение значения динамической величины элемента-1 и её профиля *)
+  if (Iv > 0 and Iv < Hd.Nv) then
+    V  := get_vl(It.Iv);
+    Vx := get_bf(V.Iv) * sint_to_real(V.Vi[Ix].A);
+    Px := get_pr(V.Vi[Ix].B);
+  end_if;
+
+  (* Ориентация элемента *)
+  Ox := AXO(Ax,  TRUE);     (* Порядок перебора координат *)
+  Cx := AXO(Ix+1, FALSE);   (* Порядок обхода сетки       *)
+
+  (* Признаки материала *)
+  Pm.Air   := (Im = 0);            (* Признак - воздух (нулевой материал) *)
+  Pm.Oil   := (Cm.MD <> 0.0);      (* Признак - масло  (задана вязкость)  *)
+  Pm.Fluid := (Pm.Oil or Pm.Air);  (* Признак - флюид  (воздух или масло) *)
+  Pm.Solid := (not Pm.Fluid);      (* Признак - твердое тело (не флюид)   *)
+
+  (* Если элемент - воздух - не считаем *)
+  if (Pm.Air) then {goto __exit} end_if;
+
+  (* Опредедение шага (Ht>0) по времени в секундах *)
+  Ht := 300.0; (*Kt * ULINT_TO_REAL(DT_TO_ULINT(CDT)-DT_TO_ULINT(PDT));*)
+  if (Ht < 1.0) then iRes:=E_TIMESIZE; {goto __exit} end_if;
+
+  (* Опредедение шага по сетке (ориг) *)
+  H0 := _point( Sh.Lx[0]/INT_TO_REAL(Sh.Kn[0]-1), 
+                Sh.Lx[1]/INT_TO_REAL(Sh.Kn[1]-1), 
+                Sh.Lx[2]/INT_TO_REAL(Sh.Kn[2]-1) );
+  if ( (H0[0]<Hmin) or (H0[1]<Hmin) or (H0[2]<Hmin) ) 
+    then iRes:=E_STEPSIZE; {goto __exit} end_if;
+
+  (* TEST *)
+  (* Имитация тепловыделения в обмотках низкого и высокого напряжения *)
+  if (PIT = 21 or PIT = 31) then Vx := 5.0; end_if;
+  if (PIT = 38 or PIT = 59 or PIT = 80) then Vx := 3.0;  end_if;
+  if (PIT = 42 or PIT = 63 or PIT = 84) then Vx := 12.0; end_if;
+  if (PIT = 45 or PIT = 46 or PIT = 47 or PIT = 48 or PIT = 49 or 
+      PIT = 50 or PIT = 51 or PIT = 52 or PIT = 53 or PIT = 54) then Vx := 20.0; end_if;
+  if (PIT = 66 or PIT = 67 or PIT = 68 or PIT = 69 or PIT = 70 or 
+      PIT = 71 or PIT = 72 or PIT = 73 or PIT = 74 or PIT = 75) then Vx := 20.0; end_if;
+  if (PIT = 87 or PIT = 88 or PIT = 89 or PIT = 90 or PIT = 91 or 
+      PIT = 92 or PIT = 93 or PIT = 94 or PIT = 95 or PIT = 96) then Vx := 20.0; end_if;
+
+  (* Базовые значения профилируемых величин-1 - "равномерно без профиля" *)
+  if (Vx=0.0) then Vi1 := 0.0; Qi1 := 0.0;
+  else
+    if (Pm.Fluid) then Vi1 := abs(Vx);                    (* скорость       *)
+    else Qi1 := Vx/INT_TO_REAL(Sh.Kn[0]*Sh.Kn[1]*Sh.Kn[2]);  (* тепловыделение *)
+    end_if; 
+  end_if;
+
+  (* Сохранение верхних индексов узлов сетки по координатным осям *)
+  L[Cx.x] := Sh.Kn[0]-1; (* =2 при iX=0 *)
+  L[Cx.y] := Sh.Kn[1]-1; (* =0 при iX=0 *)
+  L[Cx.z] := Sh.Kn[2]-1; (* =1 при iX=0 *)
+  N:=L[2];  (* верхний индекс прогонки *)
+
+  (* Циклы по сетке в направлении Ix *)
+  K[0]:=0;
+  while (K[0] <= L[0]) do (* Цикл (0) *)
+    K[1]:=0;
+    while (K[1] <= L[1]) do (* Цикл (1) *)
+      K[2]:=0;
+    
+      (* Локальная точка элемента в начале нити *)
+      P0 := _point( Sh.pL[0] + H0[0]*INT_TO_REAL(K[Cx.x]), 
+                    Sh.pL[1] + H0[1]*INT_TO_REAL(K[Cx.y]),
+                    Sh.pL[2] + H0[2]*INT_TO_REAL(K[Cx.z]) );
+
+      (* Коррекция начальной точки и шага в направлении радиуса *)
+      if (Ax<>0 (*and Ix=Ox.x*)) then
+        P0[Ox.y] := angle(P0[Ox.y], Sh.pL[Ox.y]);
+        P := Reform(Sh.wF, P0[Ox.y], P0[Ox.x], Sh.pL[Ox.x], Sh.Lx[Ox.x]);
+        P0[Ox.x] := P[0];                 (* коррекция начальной точки *)
+        H0[Ox.x] := P[2]/INT_TO_REAL(N);  (* коррекция шага по радиусу *)
+      end_if;
+                                                        
+      (* === Прямая прогонка === *)
+      for i:=0 to N do (* Цикл (2) - прогонка по направлению Ix *)
+        K[2]   := i;                      (* i -  индекс нити прогонки *)
+        Pi     := P0;                     (* P0 - начальная точка нити *)
+        Pi[Ix] := P0[Ix] + 
+                  H0[Ix]*INT_TO_REAL(i);  (* текущая точка узла        *)
+        
+        (* Расчёт радиуса Ri и шага Hi *)
+        if (Ax<>0 and Ix=Ox.x) then    (* движение по радиусу       *)
+          Ri := Pi[Ix]   * 0.001;         (* мм->м                     *)
+          Hi := H0[Ix]   * 0.001;         (* мм->м                     *)
+        elsif (Ax<>0 and Ix=Ox.y) then (* движение по дуге          *)
+          P  := Reform(Sh.wF, Pi[Ox.y], Pi[Ox.x], Sh.pL[Ox.x], Sh.Lx[Ox.x]);
+          Pi[Ox.x] := P[0];               (* радиальная координата     *)
+          Ri := Pi[Ox.x] * 0.001;         (* мм->м                     *)
+          Hi := Ri * radi(H0[Ix]);        (* длина дуги (м)            *)
+        else                              (* "плоское" движение        *)
+          Ri := 1.0e6;                    (* большой радиус            *)
+          Hi := H0[Ix]   * 0.001;         (* мм->м                     *)
+        end_if;
+
+        (* Свойства материи M(a, lambda, h, k) *)
+        M := _Matter(Cm.kt/(Cm.PL*Cm.CP), Cm.kt, Hi);
+        
+        (* Смещение расчётного узла в сетке *)
+        Off := knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], K[Cx.x], K[Cx.y], K[Cx.z]);
+        
+        (* Температура расчётного узла (код (int) -> °С (real)) *)
+        Ti1 := C2T(var_v( get_var(its_gr(0), PIT, Off) )); 
+        
+        (* Обработка краевых условий *)
+        if ((i = 0) or (i = N)) then
+        
+          (* Получение дескриптора смежного элемента (PIT2) *)
+          TV   := get_var(its_gr(0), PIT, Off, Ix+1);
+          PIT2 := var_p(TV); (* может быть = (-1) *)
+          
+          {{
+            // Доступ к свойствам элемента-2
+            TITEM *pItem2 = ((PIT2==-1) ? NULL : &(__GET_GLOBAL_ITS()->IT.table[PIT2]));
+            IM2 = ((pItem2==NULL) ? 0 : pItem2->IM);  // Индекс материала
+            CM2 = GET_MT(1,NULL,IM2);                 // Материал
+            
+            if (IM2==0) { // воздух =>
+              VX2 = 0.0;                              // динимаческая величина = 0
+            } else {      // обычный элемент =>
+              IM2 = pItem2->IM;                       // Индекс материала
+              IV2 = pItem2->IV;                       // Индекс величины
+
+              __ARRAY_OF_TVAL_25  *pVAL = &__GET_GLOBAL_STS()->VL; // Связанные величины
+              __ARRAY_OF_TPROF_30 *pPRO = &__GET_GLOBAL_STS()->PR; // Профили
+              __ARRAY_OF_REAL_32  *pBUF = &__GET_GLOBAL_STS()->BF; // Буфер величин
+                          
+              if (IV2 > 0 && IV2 < HD.NV) {
+                VX2 = pVAL->table[IV2].VI.table[IX].A * pBUF->table[pVAL->table[IV2].IV];
+                PX2 = pPRO->table[pVAL->table[IV2].VI.table[IX].B];
+              }
+            }
+            
+          }}
+          
+          (*Kn2   := it_kn(PIT2);*) (* размерность сетки элемента-2 *)
+          
+          (* времяночка - заплатка *)
+          Tmid2 := C2T(cn_mid(get_cn(PIT2)));
+          
+          (* Признаки материала 2 (соседа) *)
+          Pm2.Air   := (Im2 = 0);             (* Признак - воздух (Im=0)         *)
+          Pm2.Oil   := (Cm2.md <> 0.0);       (* Признак - масло  (md<>0)        *)
+          Pm2.Fluid := (Pm2.Oil or Pm2.Air);  (* Признак - флюид  (Air or Oil)   *)
+          Pm2.Solid := (not Pm2.Fluid);       (* Признак - твердое тело          *)
+
+          (* Базовые значения профилируемых величин-2 - "равномерно без профиля" *)
+          if (Vx2=0.0) then Vi2 := 0.0; Qi2 := 0.0;
+          else
+            if (Pm2.Fluid) then Vi2 := abs(Vx2);
+            else Qi2 := Vx2/INT_TO_REAL( 4096 (*Kn2[0] * Kn2[1] * Kn2[2]*) ); 
+            end_if; 
+          end_if;
+
+          (* Запрашиваем температуру в узле сетки-2, ближайшем к точке расчёта *)
+          (*
+          P   := Sh_Loc2Abs(PIT, Pi[0], Pi[1], Pi[2]);
+          TV := IT_Check(PIT2, P[0], P[1], P[2], false);
+          *)
+          
+          Ti2 := C2T(var_v(TV)); (* код (int) -> °С (real) *)
+          
+          (* TV.PT := Sh_Dot2Point(PIT2, var_d(TV.TV)) *)
+          (* Hi2 := abs(P[Ix]-TV.PT[Ix]); *)
+          
+          (*+*)   if (K[0]=0 and K[1]=0 and PIT=3) then
+                    msg := MakeMsg(   '-> Ti2= ', REAL_TO_STRING(Ti2));
+                    msg := MakeMsg(msg, ' off= ', INT_TO_STRING(OFF.A));
+                    msg := MakeMsg(msg, ' PIT= ', SINT_TO_STRING(PIT2));
+                    msg := MakeMsg(msg, ' Hi2= ', REAL_TO_STRING(Hi2));
+                    msg := LogMsg (msg);
+                  end_if; 
+                                                  
+          (* Свойства материи-2 *)
+          M2 := _Matter(Cm2.kt/(Cm2.PL*Cm2.CP), Cm2.KT, (* Hi2* *)0.001); (* в метрах *)
+          
+          (* === Метод прогонки === *)
+          if (i = 0) then (* левая граница *)
+          
+            (* --- Расчёт коэффициентов Alfas[0] на левой границе --- *)
+            if (Pm2.Air) then (* ГУ-3 *)
+            
+              if (true) then
+                M.k := kto_air(1.0);
+                Alfas[0] := Alfa_03(Ht, M, Ti1, Ti2, Qi1, Vi1, Ri);
+              else
+                Alfa.A := 0.0; Alfa.B := Ti2; 
+                Alfas[0] := Alfa_i(Ht, M, Alfa, Ti1, Qi1, Vi1, Ri);
+              end_if;
+              
+            elsif ((*(Pm.Oil and Pm2.Solid) or*) (Pm.Solid and Pm2.Oil)) then
+            
+                M.k := kto_oil(1.0);
+                Alfas[0] := Alfa_03(Ht, M, Ti1, Tmid2-(Tmid2-20.0)/2.2, Qi1, Vi1, Ri);
+            
+            else  (* ГУ-4 *)
+            
+              Alfa.A := 0.0; Alfa.B := Ti2; 
+              if (true) then
+                (* Вариант 1 *)
+                Alfas[0] := Alfa_i(Ht, M, Alfa, Ti1, Qi1, Vi1, Ri);
+              else
+                (* Вариант 2 *)
+                M2.h := 0.001;
+                Alfas[0] := Alfa_04(Ht, M, M2, Alfa, Ti1, Qi1, Qi2);
+              end_if;
+              
+            end_if;
+            
+          elsif (i = N) then (* правая граница *)
+          
+            (* --- Расчёт температуры T[N] на правой границе --- *)
+            if (Pm2.Air) then (* ГУ-3 *)
+            
+              if (true) then
+                M.k := kto_air(1.0);
+                xx := Beta_N3(Ht, M, Alfas[N-1], Ti1, Ti2, Qi1, Vi1, Ri);
+              else
+                Alfas[N] := Alfa_i(Ht, M, Alfas[N-1], Ti1, Qi1, Vi1, Ri);
+                xx := Temp_i(Alfas[N], Ti2);
+              end_if;
+              
+            elsif ((*(Pm.Oil and Pm2.Solid) or*) (Pm.Solid and Pm2.Oil)) then
+            
+                M.k := kto_oil(1.0);
+                xx := Beta_N3(Ht, M, Alfas[N-1], Ti1, Tmid2-(Tmid2-20.0)/2.2, Qi1, Vi1, Ri);
+            
+            else (* ГУ-4 *)
+            
+              if (true) then
+                (* Вариант 1 *)
+                (*M.h := Hx2[Ix] * 0.001;*)
+                Alfas[N] := Alfa_i(Ht, M, Alfas[N-1], Ti1, Qi1, Vi1, Ri);
+                xx := Temp_i(Alfas[N], Ti2);
+              else
+                (* Вариант 2 *)
+                M2.h := 0.001;
+                xx := Beta_N4(Ht, M, M2, Alfas[N-1], Ti1, Ti2, Qi1, Qi2);
+              end_if;
+              
+            end_if;
+            
+            (* Запись значения xx в сетку, °С (real) -> код (int) *)
+            PIT := set_var(its_gr(0), PIT, OFF, _var(T2C(xx)));
+            
+            (*+*)     if (K[0]=0 and K[1]=0 and PIT =3) then
+                        msg := MakeMsg(' T[', INT_TO_STRING(i), ']= ', REAL_TO_STRING(xx));
+                        msg := MakeMsg(msg, ' M.a=', REAL_TO_STRING(M.a));
+                        msg := MakeMsg(msg, ' M.h=', REAL_TO_STRING(M.h));
+                        msg := MakeMsg(msg, ' M.l=', REAL_TO_STRING(M.l)); 
+                        msg := MakeMsg(msg, ' R=',   REAL_TO_STRING(Ri));
+                        msg := LogMsg(msg);
+                      end_if; 
+                      
+          end_if;
+
+        else (* не краевые точки *)
+          (* --- Расчёт коэффициентов Alfas[i], Betas[i] --- *)
+          Alfas[i] := Alfa_i(Ht, M, Alfas[i-1], Ti1, Qi1, Vi1, Ri);
+        end_if; (* Обработка краевых условий *)
+
+      end_for; (* прямая прогонка *)
+
+      (* === Обратная прогонка === *)
+      for i:=N-1 to 0 by -1 do
+        K[2]:=i;
+        
+        (* --- Расчёт температуры T[N-1]..T[0] --- *)
+        xx := Temp_i(Alfas[i], xx);
+        
+        (* Запись значения xx в сетку, °С (real) -> код (int) *)
+        Off := knoff(Sh.Kn[0], Sh.Kn[1], Sh.Kn[2], K[Cx.x], K[Cx.y], K[Cx.z]);
+        
+        PIT := set_var(its_gr(0), PIT, Off, _var(T2C(xx)));
+        
+        (*+*) if (K[0]=0 and K[1]=0 and PIT =3) then
+                msg := MakeMsg('T[', INT_TO_STRING(i), ']= ', REAL_TO_STRING(xx));
+                msg := LogMsg(msg);
+              end_if; 
+              
+      end_for; (* обратная прогонка *)
+      
+      K[1] := K[1]+1;
+    end_while; (* Цикл (1) *)
+    K[0] := K[0]+1;
+  end_while; (* Цикл (0) *)
+
+  { __exit: }
+  IT_PROCESS := iRes;
+END_FUNCTION
+
+FUNCTION_BLOCK Process_XYZ
+  VAR_EXTERNAL
+    rTest : REAL;
+    HDR : THead;
+    ITS : TItems;
+  END_VAR
+  VAR_INPUT
+    IN : BOOL := TRUE;
+    Ix : USINT := 0;
+    N : SINT := -1;
+  END_VAR
+  VAR_OUTPUT
+    bRes : BOOL := FALSE;
+  END_VAR
+  VAR
+    iErr : TError := E_SUCCESS;
+    i : SINT := 0;
+    Ix_local : USINT := 0;
+    bRestart : BOOL := true;
+    bBreak : BOOL := false;
+    It : TIter;
+    CDT : DT := DT#2000-01-01-00:00:00;
+    PDT : DT := DT#2000-01-01-00:00:00;
+    msg : STRING := '';
+    rr : REAL := 0.0;
+    RTIME : RTC;
+    DTIME : TON;
+  END_VAR
+
+  IF (IN) THEN                          (* Деблокировка блока          *)
+    IF (bReStart) THEN                  (* Инициализация блока         *)
+      (* Проверка корректности конфигурации перед стартом *)
+      if (Ix<0 or Ix>2) then iErr:=E_AXIS; {goto __error;} end_if;
+      if (true) then
+        (* Инициализация *)
+        msg:=MakeMsg('== PROCESS init ... ');
+        i:=0; it:=it_end(-1);
+        bRes      := true;               
+        bReStart  := false;
+        bBreak    := false;
+        Ix_local  := Ix;                 (* Направление запоминается    *)
+        RTIME(EN  := false);             (* Текущее время -> PDT        *)
+        RTIME(EN  := true, PDT := DT#2000-01-01-00:00:00, CDT => CDT);
+        DTIME(IN  := false);             (* Рестарт счётчика DTIME      *)
+        DTIME(IN  := true, PT := T#24h);
+        PDT := CDT;
+        (* Заносим время расчёта по направлению Ix в каждый элемент    *)
+        it := it_begin(ID2PIT(0));
+        while (it.item<>-1) do
+          if (it.dir = DIR_UP) then ITS.IT[it.item].PDT[Ix]:=CDT; end_if;
+          it := it_next(it);
+        end_while;
+        msg:=LogMsg(MakeMsg(msg, 'Ok! [time=', DT_TO_STRING(CDT),  '];'));
+      end_if;
+      RETURN; (* После инициализации - выход из блока *)
+    END_IF;
+
+    (* Проверка условий выполнения (нет ли блокировки на уровне модели) *)
+    if (not st_is_ready(0)) then {goto __error;} end_if;
+    (*bRes := TRUE;*)
+    
+    (* Проверка вхождения точки в модель *)
+    (* TEST *) (*it := it_begin(42);*) 
+    if (N<>0 and it.item=-1) then it := it_begin(ID2PIT(0)); end_if;
+
+    (* TEST *) if (Ix_local=0) then msg:=LogMsg(MakeMsg(msg, 'START')); end_if;
+
+    while (not bBreak and it.item<>-1) do
+      case (it.dir) of
+      DIR_UP:
+        (* ВОПРОС: считаемем только конечные элементы? - пока да...  *)
+        if (not is_poly(it.item)) then
+          (* Крутим таймер - определяем текущее время расчёта *)
+          DTIME(); 
+          CDT := ULINT_TO_DT(ADD(DT_TO_ULINT(PDT), TIME_TO_ULINT(DTIME.ET)));
+          
+  (* TEST -------- *)        
+  if (
+    (it.item>=1 and it.item<=99) 
+  ) then 
+  (* ------------- *)        
+          (* === Расчёт элемента по направлению Ix === *)
+          msg:=MakeMsg(msg, 'Process item ID=', ID2Str(IT_ID(it.item)), ' ... '); 
+          
+          iErr := IT_Process(it.item, Ix_local, CDT);
+          bRes := (iErr = E_SUCCESS);
+          if (not bRes) then 
+            msg:=LogMsg(MakeMsg(msg, 'FAILED!'));
+            {goto __error;} 
+          else 
+            msg:=LogMsg('');
+          end_if;
+  (* ------------- *)        
+  end_if;        
+  (* ------------- *)        
+
+        end_if; (* not is_poly(it.item) *)
+      end_case; (* it.dir *)
+
+      it := it_next(it);
+      (* Проверка на досрочный выход из цикла *)
+      if (not bBreak and N<>-1) then
+        i:=i+1;
+        if (i >= N) then i:=0; bBreak:=true; end_if;
+      end_if;
+      
+    end_while;
+    bBreak:=false;
+    
+    (* TEST *)
+    if (Ix_local=0) then msg := LogMsg(MakeMsg(msg, 'END')); end_if; 
+
+    (* Каждый час - рестарт счётчика в защиту от переполнения *)
+    if (DTIME.ET > T#1h) then 
+      PDT := CDT;
+      DTIME(IN:=false);
+      DTIME(IN:=true);
+    end_if;
+    return;
+
+    {{__error:}}
+    if (iErr = E_SUCCESS) then iErr := E_PROCESS; end_if;
+    bRes := FALSE;
+    bReStart := TRUE; (* Посылаем на рестарт *)
+    
+    (* Протоколирование ошибки *)
+    msg:=LogMsg( MakeMsg('== PROCESS ERROR -> will be re-started! [ERR=', 
+        Err2Str(iErr), ']'), Warning, iErr);
+  ELSE
+    bRes := FALSE;
+    bReStart := TRUE;
+  END_IF; (* IN *)
+END_FUNCTION_BLOCK
+
+FUNCTION st_set_ready : BOOL
+  VAR_INPUT
+    RDY : BOOL := FALSE;
+  END_VAR
+
+  {{ return (ST_SET_READY=(__GET_GLOBAL_STAT()->RDY=RDY)); }}
+END_FUNCTION
+
+FUNCTION is_cyl : BOOL
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+
+  IS_CYL := (sh_get_ax(get_sh(PIT)) <> 0);
+END_FUNCTION
+
+FUNCTION Do_CheckValid : BOOL
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    PIT2 : TPos8 := 0;
+    bRes : BOOL := false;
+    It : TIter;
+    stack : ARRAY [0..99] OF TPos8;
+    kids : ARRAY [0..15] OF TPos8;
+    n : SINT := 0;
+    m : SINT := 0;
+    im : SINT := 0;
+    j : SINT := 0;
+    Chk : TDot;
+    bC : BOOL := false;
+    Sh : TShape;
+    p0 : TPoint;
+    p1 : TPoint;
+    p2 : TPoint;
+    msg : STRING := '';
+  END_VAR
+
+  Do_CheckValid := st_check(false);
+  if (not Do_CheckValid) then return; end_if;
+
+  (* Обход дерева элементов *)
+  it := it_begin(ID2PIT(0));
+  while (it.item<>-1) do
+
+    case (it.dir) of
+    DIR_DOWN:
+      (* Запись родителя в стек *)
+      if (n > 99) then msg:='CheckValid: Stack overflow'; {goto __error} end_if;
+      stack[n] := it.item;
+      n:=n+1;
+    DIR_UP:
+      (* Извлечение из стека *)
+      if (is_poly(it.item)) then  (* элемент - родитель *)
+      
+        (* Выборка потомства из стека *)
+        m:=0;
+        while (stack[n-1]<>it.item) do
+          n:=n-1;
+          if (m > 15) then msg:='CheckValid: Kids overflow'; {goto __error} end_if;
+          kids[m]:=stack[n];
+          m:=m+1;
+        end_while;
+        
+        (* Анализ потомства *)
+        for im:=0 to m-1 do
+          PIT:=kids[im]; (* Позиция ребёнка *)
+          msg:=MakeMsg('CheckValid: P=', ID2Str(IT_ID(IT.ITEM)), ', C=', ID2Str(IT_ID(PIT)));
+          
+          (* === Проверка 1: Если родитель в цилиндрической СК, то дети - тоже  *)
+          if (is_cyl(IT.ITEM) and not is_cyl(PIT)) then
+            msg := MakeMsg(msg, ', Er=CS does not match');
+            { goto __exit;  }
+          end_if;
+          
+          (* === Проверка 2: Размер не может быть нулевым  *)
+          Sh := get_sh(PIT);
+          P0 := sh.p0; (* Начало отсчёта  (абс) *)
+          P1 := sh.pl; (* Начало элемента (лок) *)
+          P2 := sh.lx; (* Размер элемента (лок) *)
+          
+          msg := MakeMsg(msg, ' LWH=(',REAL_TO_STRING(P2[0]), ','  );
+          msg := MakeMsg(msg, '',      REAL_TO_STRING(P2[1]), ','  );
+          msg := MakeMsg(msg, '',      REAL_TO_STRING(P2[2]), ');' );
+          
+          if (p2[0]<=0.1 or p2[1]<=0.1 or p2[2]<=0.1) then 
+            msg := MakeMsg(msg, ', Er=LWH must be nonzero'); 
+            {goto __exit} 
+          end_if;
+
+          (* Преобразуем точки p1, p2 в абсолютные координаты *)
+          p2 := _point((p1[0]+p2[0]), (p1[1]+p2[1]), (p1[2]+p2[2]));
+          
+          p1 := Sh_Loc2Abs(Sh, p1[0], p1[1], p1[2]);
+          p2 := Sh_Loc2Abs(Sh, p2[0], p2[1], p2[2]);
+          
+          msg := MakeMsg(msg, ' P1=(', REAL_TO_STRING(P1[0]), ','  );
+          msg := MakeMsg(msg, '',      REAL_TO_STRING(P1[1]), ','  );
+          msg := MakeMsg(msg, '',      REAL_TO_STRING(P1[2]), ');' );
+          msg := MakeMsg(msg, ' P2=(', REAL_TO_STRING(P2[0]), ','  );
+          msg := MakeMsg(msg, '',      REAL_TO_STRING(P2[1]), ','  );
+          msg := MakeMsg(msg, '',      REAL_TO_STRING(P2[2]), ');' );
+                          
+          (* === Проверка 3: Точки p1, p2 элемента не могут быть вне родителя   *)
+          Chk := Sh_Point2Dot(get_sh(IT.ITEM), p1[0], p1[1], p1[2]);
+          if (Chk.V <= 0) then 
+            msg := MakeMsg(msg, ', Er=P1 out of parent' ); 
+            {goto __exit} 
+          end_if;
+          Chk := Sh_Point2Dot(get_sh(IT.ITEM), p2[0], p2[1], p2[2]);
+          if (Chk.V <= 0) then 
+            msg := MakeMsg(msg, ', Er=P2 out of parent' ); 
+            {goto __exit} 
+          end_if;
+
+          (* === Проверка 4,5: *)
+          if (not is_poly(PIT)) then
+            for j:=0 to m-1 do
+              (* Проверка 4: p1,p2 одного элемента не могут быть внутри другого *)
+              if (j<>im) then
+                PIT2:=kids[j];
+                Chk := Sh_Point2Dot(get_sh(PIT2), p1[0], p1[1], p1[2]);
+                if (Chk.V = 16#01 or Chk.V = 16#ff) then 
+                  msg := MakeMsg(msg, ', Err: P1 of ', SINT_TO_STRING(PIT));
+                  msg := MakeMsg(msg, ' is into ',   SINT_TO_STRING(PIT2));
+                  {goto __exit} 
+                end_if;
+                Chk := Sh_Point2Dot(get_sh(PIT2), p2[0], p2[1], p2[2]);
+                if (Chk.V = 16#01 or Chk.V = 16#ff) then 
+                  msg := MakeMsg(msg, ', Err: P2 of ', SINT_TO_STRING(PIT));
+                  msg := MakeMsg(msg, ' is into ',   SINT_TO_STRING(PIT2));
+                  {goto __exit} 
+                end_if;
+              end_if;
+              
+              (* Проверка 5: *)
+              (* --- *)
+              
+            end_for;
+          end_if;
+          
+          msg:=LogMsg(msg);      
+        end_for;
+        
+      else (* конечный элемент *)
+        (* Запись конечного элемента в стек *)
+        if (n > 99) then msg := 'CheckValid: Stack overflow'; {goto __error} end_if;
+        stack[n] := it.item;
+        n:=n+1;
+      end_if;
+      
+    end_case;
+    
+    it := it_next(it);
+  end_while;
+
+  bRes:=true;
+
+  { __exit: }
+  msg:=LogMsg(msg);
+  Do_CheckValid := bRes;
+  return;
+
+  { __error: }
+  Do_CheckValid := st_set_stat(E_CHECKVALID, IT_ID(it.item), msg);
+END_FUNCTION
+
+FUNCTION Do_LinkItems : INT
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    It : TIter;
+    B : BYTE := 0;
+    I : INT := 0;
+    J : INT := 0;
+    K : INT := 0;
+    nPos : SINT := 0;
+    nAir : INT := 0;
+    nItems : INT := 0;
+    Sh : TShape;
+    Dot : TDot;
+    Pt : TPoint;
+  END_VAR
+
+  Do_LinkItems := (-1);
+  if (not st_check(false)) then return; end_if;
+
+  (* Обход дерева элементов *)
+  it := it_begin(it_pos(PIT));
+  while (it.item <> -1) do
+    case (it.dir) of
+    DIR_UP:
+      B     := 0; 
+      nAir  := 0;
+      Sh := get_sh(it.item);
+      
+      (* Рассчитываем точки по граням X=(Х0,Kn[0]-1) *)
+      for I:=0 to Sh.Kn[0]-1 do
+        for J:=0 to Sh.Kn[1]-1 do
+          for K:=0 to Sh.Kn[2]-1 do
+
+            if (not is_poly(it.item)) then  
+              (* линкуем узлы конечных элементов *)
+            
+              if (I=0 or I=Sh.Kn[0]-1) then  (* по координате X (Ix=1) *)
+                Dot := link_var(its_gr(0), it.item, Sh, I, J, K, 1, it.item);
+                if (Dot.v = -1) then   (* Воздух *)
+                  if (I=0) then B:=(B or shl(16#01, 1)); else B:=(B or shl(16#01, 2)); end_if;
+                end_if;
+              end_if;
+              
+              if (J=0 or J=Sh.Kn[1]-1) then  (* по координате Y  (Ix=2) *)
+                Dot := link_var(its_gr(0), it.item, Sh, I, J, K, 2, it.item);
+                if (Dot.v = -1) then  (* Воздух *)
+                  if (J=0) then B:=(B or shl(16#01, 3)); else B:=(B or shl(16#01, 4)); end_if;
+                end_if;
+              end_if;
+              
+              if (K=0 or K=Sh.Kn[2]-1) then  (* по координате Z  (Ix=3) *)
+                Dot := link_var(its_gr(0), it.item, Sh, I, J, K, 3, it.item);
+                if (Dot.v = -1) then  (* Воздух *)
+                  if (K=0) then B:=(B or shl(16#01, 5)); else B:=(B or shl(16#01, 6)); end_if;
+                end_if;
+              end_if;
+              
+            else    (* линкуем сетку составного элемента (Ix=0, default) *)
+            
+              Dot := link_var(its_gr(0), it.item, Sh, I, J, K);
+              
+            end_if;
+            
+          end_for;
+        end_for;
+      end_for;
+      
+      (* Суммируем количество граней, контактирующих с воздухом *)
+      for i:=1 to 6 do
+        if ((B and shl(16#01, i)) <> 0) then nAir:=nAir+1; end_if;
+      end_for;
+        
+      (* Подсчёт элеметов, контактирующих с "воздухом" *)
+      if (nAir > 0) then nItems := nItems+1; end_if;
+      
+    end_case;
+    it := it_next(it);
+  end_while;
+
+  Do_LinkItems := (nItems);
+END_FUNCTION
+
+FUNCTION st_set_debug : BOOL
+  VAR_INPUT
+    DBG : BOOL := FALSE;
+  END_VAR
+
+  {{ return (ST_SET_DEBUG=(__GET_GLOBAL_STAT()->DBG=DBG)); }}
+END_FUNCTION
 
 PROGRAM P_CONF
   VAR_EXTERNAL
@@ -7630,6 +7751,47 @@ PROGRAM P_CONF
   f_Conf := FALSE;            (* Сброс флага конфигурирования *)
 END_PROGRAM
 
+FUNCTION_BLOCK GetPhaseO
+  VAR_EXTERNAL
+    MD466 : UDINT;
+    MD467 : UDINT;
+    MD468 : UDINT;
+    MD469 : UDINT;
+    MD470 : UDINT;
+    MD471 : UDINT;
+    MD472 : UDINT;
+    MD473 : UDINT;
+    MD474 : UDINT;
+    MD475 : UDINT;
+    MD476 : UDINT;
+    MD477 : UDINT;
+    MD478 : UDINT;
+    MD479 : UDINT;
+    MD480 : UDINT;
+    MD481 : UDINT;
+    MD482 : UDINT;
+    MD483 : UDINT;
+    MD484 : UDINT;
+    MD485 : UDINT;
+    MD486 : UDINT;
+    MD487 : UDINT;
+    MD488 : UDINT;
+    MD489 : UDINT;
+  END_VAR
+  VAR_INPUT
+    I : SINT := 0;
+  END_VAR
+  VAR_OUTPUT
+    PHASE : TPhaseO;
+  END_VAR
+
+  CASE i OF
+  0 : PHASE := m_phase_out(MD466,MD467,MD468,MD469,MD470,MD471,MD472,MD473);
+  1 : PHASE := m_phase_out(MD474,MD475,MD476,MD477,MD478,MD479,MD480,MD481);
+  2 : PHASE := m_phase_out(MD482,MD483,MD484,MD485,MD486,MD487,MD488,MD489);
+  END_CASE;
+END_FUNCTION_BLOCK
+
 FUNCTION_BLOCK Buffer32
   VAR_INPUT
     MD0 : UDINT;
@@ -7703,8 +7865,40 @@ FUNCTION_BLOCK Buffer32
   BUF[31]:=UDI2REAL(MD31);
 END_FUNCTION_BLOCK
 
-FUNCTION_BLOCK DistRes
+FUNCTION_BLOCK GetVarI
+  VAR_EXTERNAL
+    MD430 : UDINT;
+    MD431 : UDINT;
+    MD432 : UDINT;
+    MD433 : UDINT;
+    MD434 : UDINT;
+    MD435 : UDINT;
+  END_VAR
   VAR_OUTPUT
+    VarI : TVarI;
+  END_VAR
+
+  VarI := m_var_in(MD430,MD431,MD432,MD433,MD434,MD435);
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK GetVarO
+  VAR_EXTERNAL
+    MD460 : UDINT;
+    MD461 : UDINT;
+    MD462 : UDINT;
+    MD463 : UDINT;
+    MD464 : UDINT;
+    MD465 : UDINT;
+  END_VAR
+  VAR_OUTPUT
+    VarO : TVarO;
+  END_VAR
+
+  VarO := m_var_out(MD460,MD461,MD462,MD463,MD464,MD465);
+END_FUNCTION_BLOCK
+
+FUNCTION m_phase_in : TPhaseI
+  VAR_INPUT
     MD0 : UDINT;
     MD1 : UDINT;
     MD2 : UDINT;
@@ -7713,23 +7907,204 @@ FUNCTION_BLOCK DistRes
     MD5 : UDINT;
     MD6 : UDINT;
     MD7 : UDINT;
-    MD8 : UDINT;
-    MD9 : UDINT;
-  END_VAR
-  VAR_INPUT
-    RES : TRes;
   END_VAR
 
-  MD0 := RES.DR;  (* секунд от 01-01-1970 *)
-  MD1 := TIME_TO_UDINT(RES.TR);
-  MD2 := TIME_TO_UDINT(RES.FP);
-  MD3 := UINT_TO_UDINT(RES.ER)*65536 + WORD_TO_UDINT(RES.FL);
-  MD4 := RES.RV[0];
-  MD5 := RES.RV[1];
-  MD6 := RES.RV[2];
-  MD7 := RES.RV[3];
-  MD8 := RES.RV[4];
-  MD9 := RES.RV[5];
+  m_phase_in.Ic   := UDINT_TO_REAL(MD0);
+  m_phase_in.Tin  := UDINT_TO_REAL(MD1);
+  m_phase_in.Tout := UDINT_TO_REAL(MD2);
+  m_phase_in.RN   := UDINT_TO_DWORD(MD3);
+
+  m_phase_in.RD[0].A := UINT_TO_SINT(UDINT_TO_UINT(MD4/65536)/256);
+  m_phase_in.RD[0].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD4/65536),256));
+  m_phase_in.RD[1].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD4,65536))/256);
+  m_phase_in.RD[1].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD4,65536)),256));
+
+  m_phase_in.RD[2].A := UINT_TO_SINT(UDINT_TO_UINT(MD5/65536)/256);
+  m_phase_in.RD[2].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD5/65536),256));
+  m_phase_in.RD[3].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD5,65536))/256);
+  m_phase_in.RD[3].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD5,65536)),256));
+
+  m_phase_in.RD[4].A := UINT_TO_SINT(UDINT_TO_UINT(MD6/65536)/256);
+  m_phase_in.RD[4].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD6/65536),256));
+  m_phase_in.RD[5].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD6,65536))/256);
+  m_phase_in.RD[5].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD6,65536)),256));
+
+  m_phase_in.RD[6].A := UINT_TO_SINT(UDINT_TO_UINT(MD7/65536)/256);
+  m_phase_in.RD[6].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD7/65536),256));
+  m_phase_in.RD[7].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD7,65536))/256);
+  m_phase_in.RD[7].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD7,65536)),256));
+END_FUNCTION
+
+FUNCTION m_conf : TConf
+  VAR_INPUT
+    MD0 : UDINT;
+    MD1 : UDINT;
+  END_VAR
+
+  m_conf.Nm := UDINT_TO_UINT(MD0/65536);
+  m_conf.Nr := UDINT_TO_UINT(mod(MD0,65536));
+  m_conf.Tc := UDINT_TO_TIME(MD1);
+END_FUNCTION
+
+FUNCTION Do_PreProc : BOOL
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    It : TIter;
+  END_VAR
+
+  (* Проверка статуса программы *)
+  Do_PreProc := st_check(false);
+  if (not Do_PreProc) then return; end_if;
+
+  (* Обход дерева элементов *)
+  Do_PreProc := true;
+  it := it_begin(it_pos(PIT));
+  while (it.item <>-1) do
+    case (it.dir) of
+    DIR_UP:
+      (* Ничего не делаем *)
+      { }
+    end_case;
+    it := it_next(it);
+  end_while;
+
+  { __exit: }
+  return;
+
+  { __error: } 
+  Do_PreProc := st_set_stat(E_PREPROC, it_id(it.item));
+END_FUNCTION
+
+PROGRAM P_MOD1
+  VAR_EXTERNAL
+    STAT : TStat;
+    F_Res : BOOL;
+  END_VAR
+  VAR
+    CDT : DT;
+    bRes : BOOL;
+    Process_X1 : Process_XYZ;
+    Process_X2 : Process_XYZ;
+    Process_X0 : Process_XYZ;
+    _TMP_NOT33_OUT : BOOL;
+    _TMP_AND32_OUT : BOOL;
+    _TMP_Do_PreProc19_ENO : BOOL;
+    _TMP_Do_PreProc19_OUT : BOOL;
+    _TMP_Do_PostProc37_ENO : BOOL;
+    _TMP_Do_PostProc37_OUT : BOOL;
+  END_VAR
+
+  _TMP_NOT33_OUT := NOT(F_Res);
+  _TMP_AND32_OUT := AND(STAT.RDY, _TMP_NOT33_OUT);
+  _TMP_Do_PreProc19_OUT := Do_PreProc(EN := _TMP_AND32_OUT, PIT := 0, ENO => _TMP_Do_PreProc19_ENO);
+  Process_X0(IN := _TMP_Do_PreProc19_ENO, Ix := 0, N := -1);
+  Process_X1(IN := Process_X0.bRes, Ix := 1, N := -1);
+  Process_X2(IN := Process_X1.bRes, Ix := 2, N := -1);
+  _TMP_Do_PostProc37_OUT := Do_PostProc(EN := Process_X2.bRes, PIT := 0, ENO => _TMP_Do_PostProc37_ENO);
+  IF _TMP_Do_PostProc37_ENO THEN
+      STAT.RDY := _TMP_Do_PostProc37_ENO;
+  END_IF;
+  F_Res := STAT.RDY;
+END_PROGRAM
+
+PROGRAM P_MOD2
+  VAR_EXTERNAL
+    STS : TSets;
+    MD460 : UDINT;
+    MD461 : UDINT;
+    MD462 : UDINT;
+    MD463 : UDINT;
+    MD464 : UDINT;
+    MD465 : UDINT;
+    MD466 : UDINT;
+    MD467 : UDINT;
+    MD468 : UDINT;
+    MD469 : UDINT;
+    MD470 : UDINT;
+    MD471 : UDINT;
+    MD472 : UDINT;
+    MD473 : UDINT;
+    MD474 : UDINT;
+    MD475 : UDINT;
+    MD476 : UDINT;
+    MD477 : UDINT;
+    MD478 : UDINT;
+    MD479 : UDINT;
+    MD480 : UDINT;
+    MD481 : UDINT;
+    MD482 : UDINT;
+    MD483 : UDINT;
+    MD484 : UDINT;
+    MD485 : UDINT;
+    MD486 : UDINT;
+    MD487 : UDINT;
+    MD488 : UDINT;
+    MD489 : UDINT;
+  END_VAR
+
+  MD460 := 0;
+END_PROGRAM
+
+FUNCTION_BLOCK GetPhaseI
+  VAR_EXTERNAL
+    MD436 : UDINT;
+    MD437 : UDINT;
+    MD438 : UDINT;
+    MD439 : UDINT;
+    MD440 : UDINT;
+    MD441 : UDINT;
+    MD442 : UDINT;
+    MD443 : UDINT;
+    MD444 : UDINT;
+    MD445 : UDINT;
+    MD446 : UDINT;
+    MD447 : UDINT;
+    MD448 : UDINT;
+    MD449 : UDINT;
+    MD450 : UDINT;
+    MD451 : UDINT;
+    MD452 : UDINT;
+    MD453 : UDINT;
+    MD454 : UDINT;
+    MD455 : UDINT;
+    MD456 : UDINT;
+    MD457 : UDINT;
+    MD458 : UDINT;
+    MD459 : UDINT;
+  END_VAR
+  VAR_INPUT
+    I : SINT := 0;
+  END_VAR
+  VAR_OUTPUT
+    PHASE : TPhaseI;
+  END_VAR
+
+  CASE i OF
+  0 : PHASE := m_phase_in(MD436,MD437,MD438,MD439,MD440,MD441,MD442,MD443);
+  1 : PHASE := m_phase_in(MD444,MD445,MD446,MD447,MD448,MD449,MD450,MD451);
+  2 : PHASE := m_phase_in(MD452,MD453,MD454,MD455,MD456,MD457,MD458,MD459);
+  END_CASE;
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK SetVarO
+  VAR_EXTERNAL
+    MD460 : UDINT;
+    MD461 : UDINT;
+    MD462 : UDINT;
+    MD463 : UDINT;
+    MD464 : UDINT;
+    MD465 : UDINT;
+  END_VAR
+  VAR_INPUT
+    VarO : TVarO;
+  END_VAR
+  VAR
+    DIST : DistVarO;
+  END_VAR
+
+  DIST(VarO:=VarO,MD0=>MD460,MD1=>MD461,MD2=>MD462,MD3=>MD463,MD4=>MD464,MD5=>MD465);
 END_FUNCTION_BLOCK
 
 FUNCTION_BLOCK DistPhaseO
@@ -7755,51 +8130,6 @@ FUNCTION_BLOCK DistPhaseO
   MD5 := REAL_TO_UDINT(PhaseO.Qm);
   MD6 := REAL_TO_UDINT(PhaseO.Se);  
   MD7 := REAL_TO_UDINT(PhaseO.Ve);
-END_FUNCTION_BLOCK
-
-FUNCTION_BLOCK DistVarO
-  VAR_OUTPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-  END_VAR
-  VAR_INPUT
-    VarO : TVarO;
-  END_VAR
-
-  MD0 := VarO.DTO;  (* секунд от 01-01-1970 *)
-  MD1 := TIME_TO_UDINT(VarO.TMO);
-  MD2 := REAL_TO_UDINT(VarO.QTY);
-  MD3 := REAL_TO_UDINT(VarO.QTS);
-  MD4 := REAL_TO_UDINT(VarO.RO1);
-  MD5 := REAL_TO_UDINT(VarO.RO2);
-END_FUNCTION_BLOCK
-
-FUNCTION_BLOCK SetRes
-  VAR_EXTERNAL
-    MD490 : UDINT;
-    MD491 : UDINT;
-    MD492 : UDINT;
-    MD493 : UDINT;
-    MD494 : UDINT;
-    MD495 : UDINT;
-    MD496 : UDINT;
-    MD497 : UDINT;
-    MD498 : UDINT;
-    MD499 : UDINT;
-  END_VAR
-  VAR_INPUT
-    RES : TRes;
-  END_VAR
-  VAR
-    DIST : DistRes;
-  END_VAR
-
-  DIST(RES:=RES,MD0=>MD490,MD1=>MD491,MD2=>MD492,MD3=>MD493,MD4=>MD494,
-                MD5=>MD495,MD6=>MD496,MD7=>MD497,MD8=>MD498,MD9=>MD499);
 END_FUNCTION_BLOCK
 
 FUNCTION_BLOCK SetPhaseO
@@ -7844,47 +8174,233 @@ FUNCTION_BLOCK SetPhaseO
   END_CASE;
 END_FUNCTION_BLOCK
 
-FUNCTION_BLOCK SetVarO
+PROGRAM P_EVAL
+  VAR
+    LocalVar0 : DINT;
+  END_VAR
+
+  LocalVar0:=0;
+END_PROGRAM
+
+FUNCTION_BLOCK SetRes
   VAR_EXTERNAL
-    MD460 : UDINT;
-    MD461 : UDINT;
-    MD462 : UDINT;
-    MD463 : UDINT;
-    MD464 : UDINT;
-    MD465 : UDINT;
+    MD490 : UDINT;
+    MD491 : UDINT;
+    MD492 : UDINT;
+    MD493 : UDINT;
+    MD494 : UDINT;
+    MD495 : UDINT;
+    MD496 : UDINT;
+    MD497 : UDINT;
+    MD498 : UDINT;
+    MD499 : UDINT;
   END_VAR
   VAR_INPUT
-    VarO : TVarO;
+    RES : TRes;
   END_VAR
   VAR
-    DIST : DistVarO;
+    DIST : DistRes;
   END_VAR
 
-  DIST(VarO:=VarO,MD0=>MD460,MD1=>MD461,MD2=>MD462,MD3=>MD463,MD4=>MD464,MD5=>MD465);
+  DIST(RES:=RES,MD0=>MD490,MD1=>MD491,MD2=>MD492,MD3=>MD493,MD4=>MD494,
+                MD5=>MD495,MD6=>MD496,MD7=>MD497,MD8=>MD498,MD9=>MD499);
 END_FUNCTION_BLOCK
 
-FUNCTION m_cond : TCond
+FUNCTION_BLOCK GetRad
+  VAR_EXTERNAL
+    MD302 : UDINT;
+    MD303 : UDINT;
+    MD304 : UDINT;
+    MD305 : UDINT;
+    MD306 : UDINT;
+    MD307 : UDINT;
+    MD308 : UDINT;
+    MD309 : UDINT;
+    MD310 : UDINT;
+    MD311 : UDINT;
+    MD312 : UDINT;
+    MD313 : UDINT;
+    MD314 : UDINT;
+    MD315 : UDINT;
+    MD316 : UDINT;
+    MD317 : UDINT;
+    MD318 : UDINT;
+    MD319 : UDINT;
+    MD320 : UDINT;
+    MD321 : UDINT;
+    MD322 : UDINT;
+    MD323 : UDINT;
+    MD324 : UDINT;
+    MD325 : UDINT;
+    MD326 : UDINT;
+    MD327 : UDINT;
+    MD328 : UDINT;
+    MD329 : UDINT;
+    MD330 : UDINT;
+    MD331 : UDINT;
+    MD332 : UDINT;
+    MD333 : UDINT;
+    MD334 : UDINT;
+    MD335 : UDINT;
+    MD336 : UDINT;
+    MD337 : UDINT;
+    MD338 : UDINT;
+    MD339 : UDINT;
+    MD340 : UDINT;
+    MD341 : UDINT;
+    MD342 : UDINT;
+    MD343 : UDINT;
+    MD344 : UDINT;
+    MD345 : UDINT;
+    MD346 : UDINT;
+    MD347 : UDINT;
+    MD348 : UDINT;
+    MD349 : UDINT;
+    MD350 : UDINT;
+    MD351 : UDINT;
+    MD352 : UDINT;
+    MD353 : UDINT;
+    MD354 : UDINT;
+    MD355 : UDINT;
+    MD356 : UDINT;
+    MD357 : UDINT;
+    MD358 : UDINT;
+    MD359 : UDINT;
+    MD360 : UDINT;
+    MD361 : UDINT;
+    MD362 : UDINT;
+    MD363 : UDINT;
+    MD364 : UDINT;
+    MD365 : UDINT;
+    MD366 : UDINT;
+    MD367 : UDINT;
+    MD368 : UDINT;
+    MD369 : UDINT;
+    MD370 : UDINT;
+    MD371 : UDINT;
+    MD372 : UDINT;
+    MD373 : UDINT;
+    MD374 : UDINT;
+    MD375 : UDINT;
+    MD376 : UDINT;
+    MD377 : UDINT;
+    MD378 : UDINT;
+    MD379 : UDINT;
+    MD380 : UDINT;
+    MD381 : UDINT;
+    MD382 : UDINT;
+    MD383 : UDINT;
+    MD384 : UDINT;
+    MD385 : UDINT;
+    MD386 : UDINT;
+    MD387 : UDINT;
+    MD388 : UDINT;
+    MD389 : UDINT;
+    MD390 : UDINT;
+    MD391 : UDINT;
+    MD392 : UDINT;
+    MD393 : UDINT;
+    MD394 : UDINT;
+    MD395 : UDINT;
+    MD396 : UDINT;
+    MD397 : UDINT;
+    MD398 : UDINT;
+    MD399 : UDINT;
+    MD400 : UDINT;
+    MD401 : UDINT;
+    MD402 : UDINT;
+    MD403 : UDINT;
+    MD404 : UDINT;
+    MD405 : UDINT;
+    MD406 : UDINT;
+    MD407 : UDINT;
+    MD408 : UDINT;
+    MD409 : UDINT;
+    MD410 : UDINT;
+    MD411 : UDINT;
+    MD412 : UDINT;
+    MD413 : UDINT;
+    MD414 : UDINT;
+    MD415 : UDINT;
+    MD416 : UDINT;
+    MD417 : UDINT;
+    MD418 : UDINT;
+    MD419 : UDINT;
+    MD420 : UDINT;
+    MD421 : UDINT;
+    MD422 : UDINT;
+    MD423 : UDINT;
+    MD424 : UDINT;
+    MD425 : UDINT;
+    MD426 : UDINT;
+    MD427 : UDINT;
+    MD428 : UDINT;
+    MD429 : UDINT;
+  END_VAR
   VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
+    I : SINT := 0;
+  END_VAR
+  VAR_OUTPUT
+    RAD : TRad;
   END_VAR
 
-  m_cond.ID   := UDINT_TO_UINT(MD0/65536);
-  m_cond.Tmid := UDINT_TO_INT(mod(MD0,65536));
+  CASE i OF
+  0 : RAD := m_rad(MD302,MD303,MD304,MD305,MD306,MD307,MD308,MD309);
+  1 : RAD := m_rad(MD310,MD311,MD312,MD313,MD314,MD315,MD316,MD317);
+  2 : RAD := m_rad(MD318,MD319,MD320,MD321,MD322,MD323,MD324,MD325);
+  3 : RAD := m_rad(MD326,MD327,MD328,MD329,MD330,MD331,MD332,MD333);
+  4 : RAD := m_rad(MD334,MD335,MD336,MD337,MD338,MD339,MD340,MD341);
+  5 : RAD := m_rad(MD342,MD343,MD344,MD345,MD346,MD347,MD348,MD349);
+  6 : RAD := m_rad(MD350,MD351,MD352,MD353,MD354,MD355,MD356,MD357);
+  7 : RAD := m_rad(MD358,MD359,MD360,MD361,MD362,MD363,MD364,MD365);
+  8 : RAD := m_rad(MD366,MD367,MD368,MD369,MD370,MD371,MD372,MD373);
+  9 : RAD := m_rad(MD374,MD375,MD376,MD377,MD378,MD379,MD380,MD381);
+  10: RAD := m_rad(MD382,MD383,MD384,MD385,MD386,MD387,MD388,MD389);
+  11: RAD := m_rad(MD390,MD391,MD392,MD393,MD394,MD395,MD396,MD397);
+  12: RAD := m_rad(MD398,MD399,MD400,MD401,MD402,MD403,MD404,MD405);
+  13: RAD := m_rad(MD406,MD407,MD408,MD409,MD410,MD411,MD412,MD413);
+  14: RAD := m_rad(MD414,MD415,MD416,MD417,MD418,MD419,MD420,MD421);
+  15: RAD := m_rad(MD422,MD423,MD424,MD425,MD426,MD427,MD428,MD429);
+  END_CASE;
+END_FUNCTION_BLOCK
 
-  m_cond.Tmin.A[0] := UDINT_TO_INT(MD1/65536);
-  m_cond.Tmin.A[1] := UDINT_TO_INT(mod(MD1,65536));
-  m_cond.Tmin.A[2] := UDINT_TO_INT(MD2/65536);
-  m_cond.Tmin.V    := UDINT_TO_INT(mod(MD2,65536));
+FUNCTION IT_InfoStr : STRING
+  VAR_INPUT
+    PIT : TPos8 := -1;
+  END_VAR
+  VAR
+    Item : TItem;
+    Shape : TShape;
+    msg : STRING := '';
+  END_VAR
 
-  m_cond.Tmax.A[0] := UDINT_TO_INT(MD3/65536);
-  m_cond.Tmax.A[1] := UDINT_TO_INT(mod(MD3,65536));
-  m_cond.Tmax.A[2] := UDINT_TO_INT(MD4/65536);
-  m_cond.Tmax.V    := UDINT_TO_INT(mod(MD4,65536));
+  Item  := get_it(it_pos(PIT));
+  Shape := get_sh(PIT);
+  msg  := MakeMsg(msg, ' [',   ID2Str(Item.ID) );
+  msg  := MakeMsg(msg, ', P=', SINT_TO_STRING(Item.Par) );
+  msg  := MakeMsg(msg, ', O=(',REAL_TO_STRING(Shape.p0[0]), '');
+  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.p0[1]), '');
+  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.p0[2]), ')');
+  msg  := MakeMsg(msg, ', N=(',REAL_TO_STRING(Shape.pL[0]), '');
+  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.pL[1]), '');
+  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.pL[2]), ')');
+  msg  := MakeMsg(msg, ', W=(',REAL_TO_STRING(Shape.Lx[0]), '');
+  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.Lx[1]), '');
+  msg  := MakeMsg(msg, ', ',   REAL_TO_STRING(Shape.Lx[2]), ')]');
+  IT_InfoStr:=MSG;
 END_FUNCTION
+
+FUNCTION_BLOCK GetConf
+  VAR_EXTERNAL
+    MD300 : UDINT;
+    MD301 : UDINT;
+  END_VAR
+  VAR_OUTPUT
+    CONF : TConf;
+  END_VAR
+
+  CONF := m_conf(MD300,MD301);
+END_FUNCTION_BLOCK
 
 FUNCTION_BLOCK GetCond
   VAR_EXTERNAL
@@ -8510,529 +9026,13 @@ FUNCTION_BLOCK GetCond
   END_CASE;
 END_FUNCTION_BLOCK
 
-FUNCTION m_res : TRes
+FUNCTION it_im : TPos8
   VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-    MD6 : UDINT;
-    MD7 : UDINT;
-    MD8 : UDINT;
-    MD9 : UDINT;
+    PIT : TPos8 := -1;
   END_VAR
 
-  m_res.DR := MD0;  (* секунд от 01-01-1970 *)
-  m_res.TR := UDINT_TO_TIME(MD1);
-  m_res.FP := UDINT_TO_TIME(MD2);
-  m_res.ER := UDINT_TO_UINT(MD3/65536);
-  m_res.FL := UDINT_TO_WORD(mod(MD3,65536));
-  m_res.RV[0] := MD4;
-  m_res.RV[1] := MD5;
-  m_res.RV[2] := MD6;
-  m_res.RV[3] := MD7;
-  m_res.RV[4] := MD8;
-  m_res.RV[5] := MD9;
+  {{ return (IT_IM = __GET_GLOBAL_ITS()->IT.table[PIT].IM); }}
 END_FUNCTION
-
-FUNCTION_BLOCK GetRes
-  VAR_EXTERNAL
-    MD490 : UDINT;
-    MD491 : UDINT;
-    MD492 : UDINT;
-    MD493 : UDINT;
-    MD494 : UDINT;
-    MD495 : UDINT;
-    MD496 : UDINT;
-    MD497 : UDINT;
-    MD498 : UDINT;
-    MD499 : UDINT;
-  END_VAR
-  VAR_OUTPUT
-    RES : TRes;
-  END_VAR
-
-  RES := m_res(MD490,MD491,MD492,MD493,MD494,MD495,MD496,MD497,MD498,MD499);
-END_FUNCTION_BLOCK
-
-FUNCTION m_phase_out : TPhaseO
-  VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-    MD6 : UDINT;
-    MD7 : UDINT;
-  END_VAR
-
-  m_phase_out.Q0   := UDINT_TO_REAL(MD0);
-  m_phase_out.Q1   := UDINT_TO_REAL(MD1);
-  m_phase_out.Q2   := UDINT_TO_REAL(MD2);
-  m_phase_out.Tin  := UDINT_TO_REAL(MD3);
-  m_phase_out.Tout := UDINT_TO_REAL(MD4);
-  m_phase_out.Qm   := UDINT_TO_REAL(MD5);
-  m_phase_out.Se   := UDINT_TO_REAL(MD6);
-  m_phase_out.Ve   := UDINT_TO_REAL(MD7);
-END_FUNCTION
-
-FUNCTION_BLOCK GetPhaseO
-  VAR_EXTERNAL
-    MD466 : UDINT;
-    MD467 : UDINT;
-    MD468 : UDINT;
-    MD469 : UDINT;
-    MD470 : UDINT;
-    MD471 : UDINT;
-    MD472 : UDINT;
-    MD473 : UDINT;
-    MD474 : UDINT;
-    MD475 : UDINT;
-    MD476 : UDINT;
-    MD477 : UDINT;
-    MD478 : UDINT;
-    MD479 : UDINT;
-    MD480 : UDINT;
-    MD481 : UDINT;
-    MD482 : UDINT;
-    MD483 : UDINT;
-    MD484 : UDINT;
-    MD485 : UDINT;
-    MD486 : UDINT;
-    MD487 : UDINT;
-    MD488 : UDINT;
-    MD489 : UDINT;
-  END_VAR
-  VAR_INPUT
-    I : SINT := 0;
-  END_VAR
-  VAR_OUTPUT
-    PHASE : TPhaseO;
-  END_VAR
-
-  CASE i OF
-  0 : PHASE := m_phase_out(MD466,MD467,MD468,MD469,MD470,MD471,MD472,MD473);
-  1 : PHASE := m_phase_out(MD474,MD475,MD476,MD477,MD478,MD479,MD480,MD481);
-  2 : PHASE := m_phase_out(MD482,MD483,MD484,MD485,MD486,MD487,MD488,MD489);
-  END_CASE;
-END_FUNCTION_BLOCK
-
-FUNCTION m_var_out : TVarO
-  VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-  END_VAR
-
-  m_var_out.DTO := MD0;  (* секунд от 01-01-1970 *)
-  m_var_out.TMO := UDINT_TO_TIME(MD1);
-  m_var_out.QTY := UDINT_TO_REAL(MD2);
-  m_var_out.QTS := UDINT_TO_REAL(MD3);
-  m_var_out.RO1 := UDINT_TO_REAL(MD4);
-  m_var_out.RO2 := UDINT_TO_REAL(MD5);
-END_FUNCTION
-
-FUNCTION_BLOCK GetVarO
-  VAR_EXTERNAL
-    MD460 : UDINT;
-    MD461 : UDINT;
-    MD462 : UDINT;
-    MD463 : UDINT;
-    MD464 : UDINT;
-    MD465 : UDINT;
-  END_VAR
-  VAR_OUTPUT
-    VarO : TVarO;
-  END_VAR
-
-  VarO := m_var_out(MD460,MD461,MD462,MD463,MD464,MD465);
-END_FUNCTION_BLOCK
-
-FUNCTION m_phase_in : TPhaseI
-  VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-    MD6 : UDINT;
-    MD7 : UDINT;
-  END_VAR
-
-  m_phase_in.Ic   := UDINT_TO_REAL(MD0);
-  m_phase_in.Tin  := UDINT_TO_REAL(MD1);
-  m_phase_in.Tout := UDINT_TO_REAL(MD2);
-  m_phase_in.RN   := UDINT_TO_DWORD(MD3);
-
-  m_phase_in.RD[0].A := UINT_TO_SINT(UDINT_TO_UINT(MD4/65536)/256);
-  m_phase_in.RD[0].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD4/65536),256));
-  m_phase_in.RD[1].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD4,65536))/256);
-  m_phase_in.RD[1].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD4,65536)),256));
-
-  m_phase_in.RD[2].A := UINT_TO_SINT(UDINT_TO_UINT(MD5/65536)/256);
-  m_phase_in.RD[2].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD5/65536),256));
-  m_phase_in.RD[3].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD5,65536))/256);
-  m_phase_in.RD[3].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD5,65536)),256));
-
-  m_phase_in.RD[4].A := UINT_TO_SINT(UDINT_TO_UINT(MD6/65536)/256);
-  m_phase_in.RD[4].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD6/65536),256));
-  m_phase_in.RD[5].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD6,65536))/256);
-  m_phase_in.RD[5].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD6,65536)),256));
-
-  m_phase_in.RD[6].A := UINT_TO_SINT(UDINT_TO_UINT(MD7/65536)/256);
-  m_phase_in.RD[6].B := UINT_TO_SINT(mod(UDINT_TO_UINT(MD7/65536),256));
-  m_phase_in.RD[7].A := UINT_TO_SINT(UDINT_TO_UINT(mod(MD7,65536))/256);
-  m_phase_in.RD[7].B := UINT_TO_SINT(mod(UDINT_TO_UINT(mod(MD7,65536)),256));
-END_FUNCTION
-
-FUNCTION_BLOCK GetPhaseI
-  VAR_EXTERNAL
-    MD436 : UDINT;
-    MD437 : UDINT;
-    MD438 : UDINT;
-    MD439 : UDINT;
-    MD440 : UDINT;
-    MD441 : UDINT;
-    MD442 : UDINT;
-    MD443 : UDINT;
-    MD444 : UDINT;
-    MD445 : UDINT;
-    MD446 : UDINT;
-    MD447 : UDINT;
-    MD448 : UDINT;
-    MD449 : UDINT;
-    MD450 : UDINT;
-    MD451 : UDINT;
-    MD452 : UDINT;
-    MD453 : UDINT;
-    MD454 : UDINT;
-    MD455 : UDINT;
-    MD456 : UDINT;
-    MD457 : UDINT;
-    MD458 : UDINT;
-    MD459 : UDINT;
-  END_VAR
-  VAR_INPUT
-    I : SINT := 0;
-  END_VAR
-  VAR_OUTPUT
-    PHASE : TPhaseI;
-  END_VAR
-
-  CASE i OF
-  0 : PHASE := m_phase_in(MD436,MD437,MD438,MD439,MD440,MD441,MD442,MD443);
-  1 : PHASE := m_phase_in(MD444,MD445,MD446,MD447,MD448,MD449,MD450,MD451);
-  2 : PHASE := m_phase_in(MD452,MD453,MD454,MD455,MD456,MD457,MD458,MD459);
-  END_CASE;
-END_FUNCTION_BLOCK
-
-FUNCTION m_var_in : TVarI
-  VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-  END_VAR
-
-  m_var_in.DTI := MD0; (* секунд от 01-01-1970 *)
-  m_var_in.TMI := UDINT_TO_TIME(MD1);
-  m_var_in.TOV := UDINT_TO_REAL(MD2);
-  m_var_in.MHT := UDINT_TO_REAL(MD3);
-  m_var_in.RI1 := UDINT_TO_REAL(MD4);
-  m_var_in.RI2 := UDINT_TO_REAL(MD5);
-END_FUNCTION
-
-FUNCTION_BLOCK GetVarI
-  VAR_EXTERNAL
-    MD430 : UDINT;
-    MD431 : UDINT;
-    MD432 : UDINT;
-    MD433 : UDINT;
-    MD434 : UDINT;
-    MD435 : UDINT;
-  END_VAR
-  VAR_OUTPUT
-    VarI : TVarI;
-  END_VAR
-
-  VarI := m_var_in(MD430,MD431,MD432,MD433,MD434,MD435);
-END_FUNCTION_BLOCK
-
-FUNCTION m_rad : TRad
-  VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-    MD2 : UDINT;
-    MD3 : UDINT;
-    MD4 : UDINT;
-    MD5 : UDINT;
-    MD6 : UDINT;
-    MD7 : UDINT;
-  END_VAR
-
-  m_rad.Vm := UDINT_TO_REAL(MD0);
-  m_rad.Fk := UDINT_TO_REAL(MD1);
-  m_rad.Q0 := UDINT_TO_REAL(MD2);
-  m_rad.Q1 := UDINT_TO_REAL(MD3);
-  m_rad.BL[0] := UDINT_TO_REAL(MD4);
-  m_rad.BL[1] := UDINT_TO_REAL(MD5);
-  m_rad.BL[2] := UDINT_TO_REAL(MD6);
-  m_rad.BL[3] := UDINT_TO_REAL(MD7);
-END_FUNCTION
-
-FUNCTION_BLOCK GetRad
-  VAR_EXTERNAL
-    MD302 : UDINT;
-    MD303 : UDINT;
-    MD304 : UDINT;
-    MD305 : UDINT;
-    MD306 : UDINT;
-    MD307 : UDINT;
-    MD308 : UDINT;
-    MD309 : UDINT;
-    MD310 : UDINT;
-    MD311 : UDINT;
-    MD312 : UDINT;
-    MD313 : UDINT;
-    MD314 : UDINT;
-    MD315 : UDINT;
-    MD316 : UDINT;
-    MD317 : UDINT;
-    MD318 : UDINT;
-    MD319 : UDINT;
-    MD320 : UDINT;
-    MD321 : UDINT;
-    MD322 : UDINT;
-    MD323 : UDINT;
-    MD324 : UDINT;
-    MD325 : UDINT;
-    MD326 : UDINT;
-    MD327 : UDINT;
-    MD328 : UDINT;
-    MD329 : UDINT;
-    MD330 : UDINT;
-    MD331 : UDINT;
-    MD332 : UDINT;
-    MD333 : UDINT;
-    MD334 : UDINT;
-    MD335 : UDINT;
-    MD336 : UDINT;
-    MD337 : UDINT;
-    MD338 : UDINT;
-    MD339 : UDINT;
-    MD340 : UDINT;
-    MD341 : UDINT;
-    MD342 : UDINT;
-    MD343 : UDINT;
-    MD344 : UDINT;
-    MD345 : UDINT;
-    MD346 : UDINT;
-    MD347 : UDINT;
-    MD348 : UDINT;
-    MD349 : UDINT;
-    MD350 : UDINT;
-    MD351 : UDINT;
-    MD352 : UDINT;
-    MD353 : UDINT;
-    MD354 : UDINT;
-    MD355 : UDINT;
-    MD356 : UDINT;
-    MD357 : UDINT;
-    MD358 : UDINT;
-    MD359 : UDINT;
-    MD360 : UDINT;
-    MD361 : UDINT;
-    MD362 : UDINT;
-    MD363 : UDINT;
-    MD364 : UDINT;
-    MD365 : UDINT;
-    MD366 : UDINT;
-    MD367 : UDINT;
-    MD368 : UDINT;
-    MD369 : UDINT;
-    MD370 : UDINT;
-    MD371 : UDINT;
-    MD372 : UDINT;
-    MD373 : UDINT;
-    MD374 : UDINT;
-    MD375 : UDINT;
-    MD376 : UDINT;
-    MD377 : UDINT;
-    MD378 : UDINT;
-    MD379 : UDINT;
-    MD380 : UDINT;
-    MD381 : UDINT;
-    MD382 : UDINT;
-    MD383 : UDINT;
-    MD384 : UDINT;
-    MD385 : UDINT;
-    MD386 : UDINT;
-    MD387 : UDINT;
-    MD388 : UDINT;
-    MD389 : UDINT;
-    MD390 : UDINT;
-    MD391 : UDINT;
-    MD392 : UDINT;
-    MD393 : UDINT;
-    MD394 : UDINT;
-    MD395 : UDINT;
-    MD396 : UDINT;
-    MD397 : UDINT;
-    MD398 : UDINT;
-    MD399 : UDINT;
-    MD400 : UDINT;
-    MD401 : UDINT;
-    MD402 : UDINT;
-    MD403 : UDINT;
-    MD404 : UDINT;
-    MD405 : UDINT;
-    MD406 : UDINT;
-    MD407 : UDINT;
-    MD408 : UDINT;
-    MD409 : UDINT;
-    MD410 : UDINT;
-    MD411 : UDINT;
-    MD412 : UDINT;
-    MD413 : UDINT;
-    MD414 : UDINT;
-    MD415 : UDINT;
-    MD416 : UDINT;
-    MD417 : UDINT;
-    MD418 : UDINT;
-    MD419 : UDINT;
-    MD420 : UDINT;
-    MD421 : UDINT;
-    MD422 : UDINT;
-    MD423 : UDINT;
-    MD424 : UDINT;
-    MD425 : UDINT;
-    MD426 : UDINT;
-    MD427 : UDINT;
-    MD428 : UDINT;
-    MD429 : UDINT;
-  END_VAR
-  VAR_INPUT
-    I : SINT := 0;
-  END_VAR
-  VAR_OUTPUT
-    RAD : TRad;
-  END_VAR
-
-  CASE i OF
-  0 : RAD := m_rad(MD302,MD303,MD304,MD305,MD306,MD307,MD308,MD309);
-  1 : RAD := m_rad(MD310,MD311,MD312,MD313,MD314,MD315,MD316,MD317);
-  2 : RAD := m_rad(MD318,MD319,MD320,MD321,MD322,MD323,MD324,MD325);
-  3 : RAD := m_rad(MD326,MD327,MD328,MD329,MD330,MD331,MD332,MD333);
-  4 : RAD := m_rad(MD334,MD335,MD336,MD337,MD338,MD339,MD340,MD341);
-  5 : RAD := m_rad(MD342,MD343,MD344,MD345,MD346,MD347,MD348,MD349);
-  6 : RAD := m_rad(MD350,MD351,MD352,MD353,MD354,MD355,MD356,MD357);
-  7 : RAD := m_rad(MD358,MD359,MD360,MD361,MD362,MD363,MD364,MD365);
-  8 : RAD := m_rad(MD366,MD367,MD368,MD369,MD370,MD371,MD372,MD373);
-  9 : RAD := m_rad(MD374,MD375,MD376,MD377,MD378,MD379,MD380,MD381);
-  10: RAD := m_rad(MD382,MD383,MD384,MD385,MD386,MD387,MD388,MD389);
-  11: RAD := m_rad(MD390,MD391,MD392,MD393,MD394,MD395,MD396,MD397);
-  12: RAD := m_rad(MD398,MD399,MD400,MD401,MD402,MD403,MD404,MD405);
-  13: RAD := m_rad(MD406,MD407,MD408,MD409,MD410,MD411,MD412,MD413);
-  14: RAD := m_rad(MD414,MD415,MD416,MD417,MD418,MD419,MD420,MD421);
-  15: RAD := m_rad(MD422,MD423,MD424,MD425,MD426,MD427,MD428,MD429);
-  END_CASE;
-END_FUNCTION_BLOCK
-
-FUNCTION m_conf : TConf
-  VAR_INPUT
-    MD0 : UDINT;
-    MD1 : UDINT;
-  END_VAR
-
-  m_conf.Nm := UDINT_TO_UINT(MD0/65536);
-  m_conf.Nr := UDINT_TO_UINT(mod(MD0,65536));
-  m_conf.Tc := UDINT_TO_TIME(MD1);
-END_FUNCTION
-
-FUNCTION_BLOCK GetConf
-  VAR_EXTERNAL
-    MD300 : UDINT;
-    MD301 : UDINT;
-  END_VAR
-  VAR_OUTPUT
-    CONF : TConf;
-  END_VAR
-
-  CONF := m_conf(MD300,MD301);
-END_FUNCTION_BLOCK
-
-FUNCTION LogErr : STRING
-  VAR_INPUT
-    ERR : TError := E_SUCCESS;
-  END_VAR
-
-  LogErr := LogMsg('',Info,ERR);
-
-
-END_FUNCTION
-
-FUNCTION Byte2Str : STRING
-  VAR_INPUT
-    Bt : BYTE := 0;
-  END_VAR
-  VAR
-    i : SINT := 0;
-    str : STRING := '2#';
-  END_VAR
-
-  for i:=7 to 0 by -1 do
-    if ((Bt and shl(1, i))<>0) then
-      str:=MakeMsg(str, '1');
-    else
-      str:=MakeMsg(str, '0');
-    end_if;
-  end_for;
-  Byte2Str:=str;
-END_FUNCTION
-
-FUNCTION REAL2UDI : UDINT
-  VAR_INPUT
-    VALUE : REAL := 0.0;
-  END_VAR
-  VAR
-    tmp : UDINT := 0;
-  END_VAR
-
-  {{
-    union { UDINT  udint; float real; } value;
-    value.real = VALUE;
-    TMP = value.udint;
-  }}
-  REAL2UDI := TMP;
-END_FUNCTION
-
-FUNCTION mat_oil : TMat
-  VAR_INPUT
-    Tm : REAL := 20.0;
-  END_VAR
-
-  mat_oil.kt := 0.1124  - 0.000085 * Tm;
-  mat_oil.pl := 892.0   - 0.6075   * Tm;
-  mat_oil.cp := 1549.0  + 5.93334  * Tm;
-  mat_oil.md := 0.13515 * exp(2820.0/(272.0+1.13*Tm))/100000.0;
-END_FUNCTION
-
-PROGRAM P_EVAL
-  VAR
-    LocalVar0 : DINT;
-  END_VAR
-
-  LocalVar0:=0;
-END_PROGRAM
 
 
 CONFIGURATION Config0

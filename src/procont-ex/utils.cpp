@@ -151,7 +151,7 @@ void log(char *logmsg)
  */
 void *interactiveServerThread(void *arg)
 {
-    startInteractiveServer(43628);
+    startInteractiveServer(INTERACTIVE_PORT); // 43628
     return NULL;
 }
 

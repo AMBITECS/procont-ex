@@ -323,7 +323,7 @@ int main(int argc,char **argv)
 	}
 
     //======================================================
-    //             SHUTTING DOWN OPENPLC RUNTIME
+    //             SHUTTING DOWN PROCONT RUNTIME
     //======================================================
     pthread_join(interactive_thread, NULL);
     printf("Disabling outputs\n");
@@ -331,6 +331,6 @@ int main(int argc,char **argv)
 //    updateCustomOut();
     updateBuffersOut();
     finalizeHardware();
-    printf("Shutting down OpenPLC Runtime...\n");
+    printf("Shutting down ProCont Runtime...\n");
     exit(0);
 }

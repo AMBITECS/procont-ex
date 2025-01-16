@@ -452,7 +452,7 @@ void processMessage_interactive(unsigned char *buffer, int bufferSize, int clien
 {
     for (int i = 0; i < bufferSize; i++)
     {
-        if (buffer[i] == '\r' || buffer[i] == '\n' || command_index >= 1024)
+        if (buffer[i] == '\r' || buffer[i] == '\n'  || buffer[i] == 0x00 || command_index >= 1024)
         {
             processCommand((char*)server_command, client_fd);
             command_index = 0;

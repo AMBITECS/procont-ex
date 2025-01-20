@@ -24,6 +24,22 @@ public:
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** LogViewer ***
+
+/*!
+ * \brief The LogViewer class
+ */
+
+class LogViewer : public QWidget
+{
+    Q_OBJECT
+
+public:
+    LogViewer();
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** WidgetSettings ***
 
 /*!
@@ -62,6 +78,9 @@ class WidgetSettings_CANbus : public WidgetSettings
     Q_OBJECT
 public:
     WidgetSettings_CANbus(const QModelIndex & index_);
+
+private:
+    [[nodiscard]] QWidget * createTab1();
 };
 // ----------------------------------------------------------------------------
 
@@ -76,6 +95,9 @@ class WidgetSettings_CANopen_manager : public WidgetSettings
     Q_OBJECT
 public:
     WidgetSettings_CANopen_manager(const QModelIndex & index_);
+
+private:
+    [[nodiscard]] QWidget * createTab1();
 };
 // ----------------------------------------------------------------------------
 
@@ -90,6 +112,9 @@ class WidgetSettings_CANopen_device : public WidgetSettings
     Q_OBJECT
 public:
     WidgetSettings_CANopen_device(const QModelIndex & index_);
+
+private:
+    [[nodiscard]] QWidget * createTab1();
 };
 // ----------------------------------------------------------------------------
 
@@ -104,6 +129,9 @@ class WidgetSettings_CANopen_remote_device : public WidgetSettings
     Q_OBJECT
 public:
     WidgetSettings_CANopen_remote_device(const QModelIndex & index_);
+
+private:
+    [[nodiscard]] QWidget * createTab1();
 };
 // ----------------------------------------------------------------------------
 

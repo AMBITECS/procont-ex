@@ -108,6 +108,7 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
+        view/Section.h view/Section.cpp
    )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})

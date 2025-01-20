@@ -17,11 +17,14 @@ public:
 
     void searchText(const QString& text);
     void wordsFromFile(const QString& fileName);
+    void setNewWords(const QStringList& list);
 
 protected:
     void highlightBlock(const QString &text) override;
 
 private:
+    void checkType(const QString &text);
+
     struct HighlightingRule
     {
         QRegularExpression pattern;
@@ -43,6 +46,9 @@ private:
     QTextCharFormat functionFormat;
     QTextCharFormat ariphmeticFormat;
     QTextCharFormat valuesFormat;
+    QTextCharFormat redLineFormat;
+
+    QStringList words_;
 
 };
 

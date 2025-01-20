@@ -1,4 +1,5 @@
 #include "TranslatorFbd.h"
+#include "../iec/StandardLibrary.h"
 
 TranslatorFBD::TranslatorFBD() {}
 
@@ -239,29 +240,29 @@ void TranslatorFBD::prepareBlock()
                     _var._name += _m_item[_block_id]._inputVariables[_v]._connection._formalParameter;
                     _var._type = "BOOL";
                 }else
-                    if(itemIsFunc(_var_id))
+                if(itemIsFunc(_var_id))
+                {
+                    _var._name += _m_func_item[_var_id]._expression;
+                    _var._type = _m_func_item[_var_id]._return_type;
+                }else
+                if(itemIsInVar(_var_id))
+                {
+                    _var._name += _m_in_var_item[_var_id]._expression;
+                    _var._type = _m_in_var_item[_var_id]._return_type;
+                }else
+                if(itemIsInOutVar(_var_id))
+                {
+                    _var._name += _m_in_out_var_item[_var_id]._expression;
+                    _var._type = _m_in_out_var_item[_var_id]._return_type;
+                }else
+                if(itemIsContinuation(_var_id))
+                {
+                    if(!_m_continuation_item[_var_id]._inputVariables.isEmpty())
                     {
-                        _var._name += _m_func_item[_var_id]._expression;
-                        _var._type = _m_func_item[_var_id]._return_type;
-                    }else
-                        if(itemIsInVar(_var_id))
-                        {
-                            _var._name += _m_in_var_item[_var_id]._expression;
-                            _var._type = _m_in_var_item[_var_id]._return_type;
-                        }else
-                            if(itemIsInOutVar(_var_id))
-                            {
-                                _var._name += _m_in_out_var_item[_var_id]._expression;
-                                _var._type = _m_in_out_var_item[_var_id]._return_type;
-                            }else
-                                if(itemIsContinuation(_var_id))
-                                {
-                                    if(!_m_continuation_item[_var_id]._inputVariables.isEmpty())
-                                    {
-                                        _var._name += _m_continuation_item[_var_id]._inputVariables[0]._name;
-                                        _var._type = _m_continuation_item[_var_id]._inputVariables[0]._type;
-                                    }
-                                }
+                        _var._name += _m_continuation_item[_var_id]._inputVariables[0]._name;
+                        _var._type = _m_continuation_item[_var_id]._inputVariables[0]._type;
+                    }
+                }
                 _m_block_item[_block_id]._inputVariables.push_back(_var);
             }
         }
@@ -371,20 +372,20 @@ void TranslatorFBD::prepareVarType()
         if(itemIsBlock(_connect_id))
         {
         }else
-            if(itemIsFunc(_connect_id))
-            {
-                _m_func_item[_connect_id]._return_type = _m_out_var_item[_var_id]._return_type;
-            }else
-                if(itemIsInVar(_connect_id))
-                {
-                }else
-                    if(itemIsInOutVar(_connect_id))
-                    {
-                    }else
-                        if(itemIsContinuation(_connect_id))
-                        {
-                            _m_continuation_item[_connect_id]._return_type = _m_out_var_item[_var_id]._return_type;
-                        }
+        if(itemIsFunc(_connect_id))
+        {
+            _m_func_item[_connect_id]._return_type = _m_out_var_item[_var_id]._return_type;
+        }else
+        if(itemIsInVar(_connect_id))
+        {
+        }else
+        if(itemIsInOutVar(_connect_id))
+        {
+        }else
+        if(itemIsContinuation(_connect_id))
+        {
+            _m_continuation_item[_connect_id]._return_type = _m_out_var_item[_var_id]._return_type;
+        }
     }
     foreach(T_POU_FBD_ITEM_SHORT _it, _m_in_out_var_item)
     {
@@ -394,20 +395,20 @@ void TranslatorFBD::prepareVarType()
         if(itemIsBlock(_connect_id))
         {
         }else
-            if(itemIsFunc(_connect_id))
-            {
-                _m_func_item[_connect_id]._return_type = _m_in_out_var_item[_var_id]._return_type;
-            }else
-                if(itemIsInVar(_connect_id))
-                {
-                }else
-                    if(itemIsInOutVar(_connect_id))
-                    {
-                    }else
-                        if(itemIsContinuation(_connect_id))
-                        {
-                            _m_continuation_item[_connect_id]._return_type = _m_in_out_var_item[_var_id]._return_type;
-                        }
+        if(itemIsFunc(_connect_id))
+        {
+            _m_func_item[_connect_id]._return_type = _m_in_out_var_item[_var_id]._return_type;
+        }else
+        if(itemIsInVar(_connect_id))
+        {
+        }else
+        if(itemIsInOutVar(_connect_id))
+        {
+        }else
+        if(itemIsContinuation(_connect_id))
+        {
+            _m_continuation_item[_connect_id]._return_type = _m_in_out_var_item[_var_id]._return_type;
+        }
     }
 }
 //-----------------------------------------------------------------------------------
@@ -552,32 +553,31 @@ void TranslatorFBD::prepareConnectContinuation()
         {
         case IT_FBD_BLOCK:{
             _var._name = QString("%1.%2")
-            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._instanceName)
-                .arg(_m_item[_connect_id]._connection._formalParameter);
+                            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._instanceName, _m_item[_connect_id]._connection._formalParameter);
             _m_connect_item[_connect_id]._return_type = _m_block_item[_m_item[_connect_id]._connection._refLocalId]._return_type;
             _var._type = _m_connect_item[_connect_id]._return_type;
         }break;
         case IT_FBD_FUNCTION:{
             _var._name = QString("%1")
-            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._expression);
+                            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._expression);
             _m_connect_item[_connect_id]._return_type = _m_func_item[_m_item[_connect_id]._connection._refLocalId]._return_type;
             _var._type = _m_connect_item[_connect_id]._return_type;
         }break;
         case IT_FBD_INPUT:{
             _var._name = QString("%1")
-            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._expression);
+                            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._expression);
             _m_connect_item[_connect_id]._return_type = _m_in_var_item[_m_item[_connect_id]._connection._refLocalId]._return_type;
             _var._type = _m_connect_item[_connect_id]._return_type;
         }break;
         case IT_FBD_OUTPUT:{
             _var._name = QString("%1")
-            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._expression);
+                            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._expression);
             _m_connect_item[_connect_id]._return_type = _m_out_var_item[_m_item[_connect_id]._connection._refLocalId]._return_type;
             _var._type = _m_connect_item[_connect_id]._return_type;
         }break;
         case IT_FBD_INPUT_OUTPUT:{
             _var._name = QString("%1")
-            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._expression);
+                            .arg(_m_item[_m_item[_connect_id]._connection._refLocalId]._expression);
             _m_connect_item[_connect_id]._return_type = _m_in_out_var_item[_m_item[_connect_id]._connection._refLocalId]._return_type;
             _var._type = _m_connect_item[_connect_id]._return_type;
         }break;
@@ -711,7 +711,7 @@ void TranslatorFBD::parseItem(T_POU *pou_)
             _item._name                 = pou_->_body._FBD._item[_i]._name;
             _item._typeName             = pou_->_body._FBD._item[_i]._typeName;
             _item._instanceName         = pou_->_body._FBD._item[_i]._instanceName;
-            _item._return_type          = "";
+            _item._return_type          = "BOOL";
             _item._inOutVariables.clear();
             _item._inputVariables.clear();
             _item._outputVariables.clear();
@@ -729,9 +729,7 @@ void TranslatorFBD::parseItem(T_POU *pou_)
             _item._name                 = pou_->_body._FBD._item[_i]._name;
             _item._typeName             = pou_->_body._FBD._item[_i]._typeName;
             _item._instanceName         = pou_->_body._FBD._item[_i]._instanceName;
-            //            _item._return_type          = pou_->_return_type;
-            //            _item._return_type          = getRetTypeStandartFunction(_item._typeName);
-            _item._return_type          = "";
+            _item._return_type          = get_return_type(_item._typeName);
             _item._inOutVariables.clear();
             _item._inputVariables.clear();
             _item._outputVariables.clear();
@@ -853,7 +851,7 @@ void TranslatorFBD::parseItem(T_POU_BODY_FBD *_fbd)
             _item._name                 = _fbd->_item[_i]._name;
             _item._typeName             = _fbd->_item[_i]._typeName;
             _item._instanceName         = _fbd->_item[_i]._instanceName;
-            _item._return_type          = "";
+            _item._return_type          = "BOOL";
             _item._inOutVariables.clear();
             _item._inputVariables.clear();
             _item._outputVariables.clear();
@@ -871,9 +869,7 @@ void TranslatorFBD::parseItem(T_POU_BODY_FBD *_fbd)
             _item._name                 = _fbd->_item[_i]._name;
             _item._typeName             = _fbd->_item[_i]._typeName;
             _item._instanceName         = _fbd->_item[_i]._instanceName;
-            //            _item._return_type          = pou_->_return_type;
-            //            _item._return_type          = getRetTypeStandartFunction(_item._typeName);
-            _item._return_type          = "";
+            _item._return_type          = get_return_type(_item._typeName);
             _item._inOutVariables.clear();
             _item._inputVariables.clear();
             _item._outputVariables.clear();
@@ -967,6 +963,31 @@ void TranslatorFBD::parseItem(T_POU_BODY_FBD *_fbd)
             _item._outputVariables.clear();
             _m_continuation_item.insert(_item._localId, _item);
         }
+}
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+QString TranslatorFBD::get_return_type(QString _function_name)
+{
+    QDomNode _iface = StandardLibrary::instance()->find_pou(_function_name).firstChild();
+    QDomNode _param = _iface.firstChild();
+
+    while(!_param.isNull())
+    {
+        if(_param.toElement().tagName() == "returnType")
+        {
+            QString _type = _param.firstChild().toElement().tagName();
+            if(_type == "ANY_NUM")  _type = "INT";
+            if(_type == "ANY_INT")  _type = "INT";
+            if(_type == "ANY_REAL") _type = "LREAL";
+            if(_type == "ANY_BIT")  _type = "BOOL";
+            if(_type == "ANY_NBIT") _type = "BYTE";
+
+            return _type;
+        }
+        _param = _param.nextSibling();
+    }
+    return {};
 }
 //-----------------------------------------------------------------------------------
 //

@@ -1,0 +1,689 @@
+#include "WidgetSettings.h"
+
+#include "model/DomModel.h"
+#include "item/DomItem.h"
+#include "view/Section.h"
+
+#include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QFormLayout>
+
+// ----------------------------------------------------------------------------
+// *** CustomTabStyle ***
+
+#include <QStyleOptionTab>
+
+QSize CustomTabStyle::sizeFromContents(ContentsType type_, const QStyleOption* option_, const QSize& size_, const QWidget* widget_) const
+{
+    auto _size = QProxyStyle::sizeFromContents(type_, option_, size_, widget_);
+    if(type_ == QStyle::CT_TabBarTab)
+        _size.transpose();
+
+    return _size;
+}
+
+void CustomTabStyle::drawControl(ControlElement element_, const QStyleOption* option_, QPainter* painter_, const QWidget* widget_) const
+{
+    if(element_ == CE_TabBarTabLabel)
+    {
+        if(const QStyleOptionTab * _tab = qstyleoption_cast<const QStyleOptionTab*>(option_))
+        {
+            QStyleOptionTab _opt(*_tab);
+            _opt.shape = QTabBar::RoundedNorth;
+            QProxyStyle::drawControl(element_, &_opt, painter_, widget_);
+            return;
+        }
+    }
+    QProxyStyle::drawControl(element_, option_, painter_, widget_);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** LogViewer ***
+
+#include <QToolBar>
+#include <QTreeView>
+#include <QSortFilterProxyModel>
+#include <QApplication>
+
+LogViewer::LogViewer()
+{
+    auto _toolbar = new QToolBar;
+    _toolbar->setIconSize(QSize(24, 24));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-2-up-top.svg"), tr("Up top")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-3-up.svg"), tr("Up")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-4-down.svg"), tr("Down")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-2-down-bottom.svg"), tr("Down bottom")));
+    _toolbar->addSeparator();
+    auto _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning), tr("0")); _action->setCheckable(true);
+    auto _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _button->setText(tr("0")); _button->setIcon(qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning)); _button->setDefaultAction(_action);
+    _toolbar->addWidget(_button);
+    _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical), tr("0")); _action->setCheckable(true);
+    _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _button->setText(tr("0")); _button->setIcon(qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical)); _button->setDefaultAction(_action);
+    _toolbar->addWidget(_button);
+    _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("0")); _action->setCheckable(true);
+    _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _button->setText(tr("0")); _button->setIcon(qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation)); _button->setDefaultAction(_action);
+    _toolbar->addWidget(_button);
+    _toolbar->addSeparator();
+    auto _lineedit = new QLineEdit;
+    _lineedit->setMinimumWidth(250);
+    _toolbar->addWidget(_lineedit);
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/find-up.svg"), tr("Find up")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/find-down.svg"), tr("Find down")));
+    _toolbar->addSeparator();
+    _toolbar->addWidget(new QCheckBox(tr("UTC Time")));
+    _toolbar->addSeparator();
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/import-1.svg"), tr("Import")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/export-1.svg"), tr("Export")));
+
+    auto _model = new QStandardItemModel;
+    _model->setColumnCount(4);
+    _model->setHeaderData(0, Qt::Horizontal, tr("Severity"));
+    _model->setHeaderData(1, Qt::Horizontal, tr("Time Stamp"));
+    _model->setHeaderData(2, Qt::Horizontal, tr("Description"));
+    _model->setHeaderData(3, Qt::Horizontal, tr("Component"));
+    auto _proxy = new QSortFilterProxyModel;
+    _proxy->setSourceModel(_model);
+    auto _listview = new QTreeView;
+    _listview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _listview->setModel(_proxy);
+
+    auto _layout = new QVBoxLayout;
+    _layout->addWidget(_toolbar);
+    _layout->addWidget(_listview);
+
+    setLayout(_layout);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings ***
+
+WidgetSettings::WidgetSettings(const QModelIndex & index_) :
+    _m_index(index_)
+{
+    setTabPosition(QTabWidget::West);
+
+    tabBar()->setStyle(new CustomTabStyle);
+
+    setStyleSheet("QTabBar::tab { min-width: 50px; }");
+}
+
+WidgetSettings::eDeviceType WidgetSettings::assignType(const QDomNode &node_)
+{
+    auto _type = node_.toElement().attribute("type").toShort();
+
+    switch(_type)
+    {
+    case 1: return WidgetSettings::eDT_CANbus; break;
+    case 2: return WidgetSettings::eDT_CANopen_manager; break;
+    case 3: return WidgetSettings::eDT_CANopen_device; break;
+    case 4: return WidgetSettings::eDT_CANopen_remote_device; break;
+    default: return WidgetSettings::eDT_Unknown; break;
+    }
+
+    return WidgetSettings::eDT_Unknown;
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_CANbus ***
+
+WidgetSettings_CANbus::WidgetSettings_CANbus(const QModelIndex & index_) :
+    WidgetSettings(index_)
+{
+    auto _tab1 = new QScrollArea; _tab1->setWidget(createTab1());
+    addTab(_tab1, tr("General"));
+    addTab(new LogViewer, tr("Log"));
+    addTab(new QLabel(tr("CANbus - CANbus IEC Objects")), tr("CANbus IEC Objects"));
+    addTab(new QLabel(tr("CANbus - Status")), tr("Status"));
+    addTab(new QLabel(tr("CANbus - Information")), tr("Information"));
+}
+QWidget * WidgetSettings_CANbus::createTab1()
+{
+    // *** section - General
+    auto _section_general_spinbox_network = new QSpinBox;
+    _section_general_spinbox_network->setFixedWidth(150);
+    _section_general_spinbox_network->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_combobox_rate = new QComboBox;
+    _section_general_combobox_rate->addItems(QStringList() << "10" << "20" << "50" << "100" << "125" << "250" << "500" << "800" << "1000" << tr("Use current setting"));
+    _section_general_combobox_rate->setCurrentText(tr("Use current setting"));
+    _section_general_combobox_rate->setFixedWidth(200);
+    _section_general_combobox_rate->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_1_can_logo_label = new QLabel;
+    auto _can_logo_pixmap = QPixmap(":/icon/images/can-2.svg");
+    _section_general_1_can_logo_label->setPixmap(_can_logo_pixmap);
+    _section_general_1_can_logo_label->setScaledContents(true);
+    _section_general_1_can_logo_label->setFixedSize(240, 56);
+
+    auto _section_general_layout = new QGridLayout;
+    _section_general_layout->addWidget(new QLabel(tr("Network")), 0, 0, 1, 1);
+    _section_general_layout->addWidget(_section_general_spinbox_network, 0, 1, 1, 1);
+    _section_general_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 2, 1, 1);
+    _section_general_layout->addWidget(new QLabel(tr("Baud rate (kbit/s)")), 1, 0, 1, 1);
+    _section_general_layout->addWidget(_section_general_combobox_rate, 1, 1, 1, 1);
+    _section_general_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 1, 2, 1, 1);
+    _section_general_layout->addWidget(_section_general_1_can_logo_label, 0, 3, 2, 1);
+
+    Section* _section_general = new Section(tr("General"), true);
+    _section_general->setContentLayout(*_section_general_layout);
+
+    // *** layout
+    auto _tab1_layout = new QGridLayout;
+    _tab1_layout->addWidget(_section_general, 0, 0, 1, 2, Qt::AlignTop);
+    _tab1_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 1, 0, 1, 2, Qt::AlignTop);
+
+    // *** container
+    auto _tab1 = new QWidget;
+    _tab1->setLayout(_tab1_layout);
+    _tab1->setMinimumWidth(900);
+    _tab1->setMinimumHeight(400);
+
+    return _tab1;
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_CANopen_manager ***
+
+WidgetSettings_CANopen_manager::WidgetSettings_CANopen_manager(const QModelIndex & index_) :
+    WidgetSettings(index_)
+{
+    auto _tab1 = new QScrollArea; _tab1->setWidget(createTab1());
+    addTab(_tab1, tr("General"));
+    addTab(new LogViewer, tr("Log"));
+    addTab(new QLabel(tr("CANopen manager - CANopen I/O Mapping")), tr("CANopen I/O Mapping"));
+    addTab(new QLabel(tr("CANopen manager - CANopen IEC Objects")), tr("CANopen IEC Objects"));
+    addTab(new QLabel(tr("CANopen manager - Status")), tr("Status"));
+    addTab(new QLabel(tr("CANopen manager - Information")), tr("Information"));
+}
+
+QWidget * WidgetSettings_CANopen_manager::createTab1()
+{
+    // *** section - General
+    auto _section_general_spinbox_id = new QSpinBox;
+    _section_general_spinbox_id->setFixedWidth(150);
+    _section_general_spinbox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_1_canopen_logo_label = new QLabel;
+    auto _canopen_logo_pixmap = QPixmap(":/icon/images/canopen-2.svg");
+    _section_general_1_canopen_logo_label->setPixmap(_canopen_logo_pixmap);
+    _section_general_1_canopen_logo_label->setScaledContents(true);
+    _section_general_1_canopen_logo_label->setFixedSize(240, 56);
+
+    auto _section_general_1_layout = new QGridLayout;
+    _section_general_1_layout->addWidget(new QLabel(tr("Node ID")), 0, 0, 1, 1);
+    _section_general_1_layout->addWidget(_section_general_spinbox_id, 0, 1, 1, 1);
+    _section_general_1_layout->addWidget(new QPushButton(tr("Check and Fix Configuration...")), 0, 2, 1, 1);
+    _section_general_1_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 3, 1, 1);
+    _section_general_1_layout->addWidget(_section_general_1_canopen_logo_label, 0, 4, 2, 1);
+
+    auto _section_general_2_layout = new QHBoxLayout;
+    _section_general_2_layout->addWidget(new QCheckBox(tr("Autostart CANopen Manager")));
+    _section_general_2_layout->addWidget(new QCheckBox(tr("Polling of optional slaves")));
+    _section_general_2_layout->addStretch();
+
+    auto _section_general_3_combobox = new QComboBox;
+    _section_general_3_combobox->addItems(QStringList() << tr("Restart slave") << tr("Stop slave"));
+
+    auto _section_general_3_layout = new QHBoxLayout;
+    _section_general_3_layout->addWidget(new QCheckBox(tr("Start slaves")));
+    _section_general_3_layout->addSpacerItem(new QSpacerItem(125, 0));
+    _section_general_3_layout->addWidget(new QLabel(tr("NMT error bahavior")));
+    _section_general_3_layout->addWidget(_section_general_3_combobox);
+    _section_general_3_layout->addStretch();
+    _section_general_3_layout->addSpacing(20);
+
+    auto _section_general_4_layout = new QHBoxLayout;
+    _section_general_4_layout->addSpacerItem(new QSpacerItem(25, 0));
+    _section_general_4_layout->addWidget(new QCheckBox(tr("NMT start all (if possible)")));
+
+    auto* _section_general_layout = new QVBoxLayout;
+    _section_general_layout->addLayout(_section_general_1_layout);
+    _section_general_layout->addLayout(_section_general_2_layout);
+    _section_general_layout->addLayout(_section_general_3_layout);
+    _section_general_layout->addLayout(_section_general_4_layout);
+
+    Section* _section_general = new Section(tr("General"), true);
+    _section_general->setContentLayout(*_section_general_layout);
+
+    // *** section - Guarding
+
+    auto _section_guarding_spinbox_id = new QSpinBox;
+    _section_guarding_spinbox_id->setFixedWidth(150);
+    _section_guarding_spinbox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_guarding_spinbox_time = new QSpinBox;
+    _section_guarding_spinbox_time->setFixedWidth(150);
+    _section_guarding_spinbox_time->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto* _section_guarding_layout = new QFormLayout;
+    _section_guarding_layout->addRow(new QCheckBox(tr("Enable heartbeat producing")));
+    _section_guarding_layout->addRow(new QLabel(tr("Node ID")), _section_guarding_spinbox_id);
+    _section_guarding_layout->addRow(new QLabel(tr("Producer time (ms)")), _section_guarding_spinbox_time);
+
+    Section* _section_guarding = new Section(tr("Guarding"), false);
+    _section_guarding->setContentLayout(*_section_guarding_layout);
+
+    // *** section - SYNC
+
+    auto _section_sync_spinbox_id = new QSpinBox;
+    _section_sync_spinbox_id->setFixedWidth(150);
+    _section_sync_spinbox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_sync_spinbox_period = new QSpinBox;
+    _section_sync_spinbox_period->setFixedWidth(150);
+    _section_sync_spinbox_period->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_sync_spinbox_length = new QSpinBox;
+    _section_sync_spinbox_length->setFixedWidth(150);
+    _section_sync_spinbox_length->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto* _section_sync_layout = new QFormLayout;
+    _section_sync_layout->addRow(new QCheckBox(tr("Enable SYNC producing")));
+    _section_sync_layout->addRow(new QLabel(tr("COB ID (Hex)     16#")), _section_sync_spinbox_id);
+    _section_sync_layout->addRow(new QLabel(tr("Cycle period (us)")), _section_sync_spinbox_period);
+    _section_sync_layout->addRow(new QLabel(tr("Window length (us)")), _section_sync_spinbox_length);
+    _section_sync_layout->addRow(new QCheckBox(tr("Enable SYNC consuming")));
+
+    Section* _section_sync = new Section(tr("SYNC"), false);
+    _section_sync->setContentLayout(*_section_sync_layout);
+
+    // *** section - TIME
+
+    auto _section_time_spinbox_id = new QSpinBox;
+    _section_time_spinbox_id->setFixedWidth(150);
+    _section_time_spinbox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_sync_spinbox_time = new QSpinBox;
+    _section_sync_spinbox_time->setFixedWidth(150);
+    _section_sync_spinbox_time->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto* _section_time_layout = new QFormLayout;
+    _section_time_layout->addRow(new QCheckBox(tr("Enable TIME producing")));
+    _section_time_layout->addRow(new QLabel(tr("COB ID (Hex)     16#")), _section_time_spinbox_id);
+    _section_time_layout->addRow(new QLabel(tr("Producer time (ms)")), _section_sync_spinbox_time);
+
+    Section* _section_time = new Section(tr("TIME"), false);
+    _section_time->setContentLayout(*_section_time_layout);
+
+    // *** layout
+    auto _tab1_layout = new QGridLayout;
+    _tab1_layout->addWidget(_section_general, 0, 0, 1, 2, Qt::AlignTop);
+    _tab1_layout->addWidget(_section_guarding, 1, 0, 1, 2, Qt::AlignTop);
+    _tab1_layout->addWidget(_section_sync, 2, 0, 1, 1, Qt::AlignTop);
+    _tab1_layout->addWidget(_section_time, 2, 1, 1, 1, Qt::AlignTop);
+    _tab1_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 3, 0, 1, 2, Qt::AlignTop);
+
+    // *** container
+    auto _tab1 = new QWidget;
+    _tab1->setLayout(_tab1_layout);
+    _tab1->setMinimumWidth(900);
+    _tab1->setMinimumHeight(600);
+
+    return _tab1;
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_CANopen_device ***
+
+WidgetSettings_CANopen_device::WidgetSettings_CANopen_device(const QModelIndex & index_) :
+    WidgetSettings(index_)
+{
+    auto _tab1 = new QScrollArea; _tab1->setWidget(createTab1());
+    addTab(_tab1, tr("General"));
+    addTab(new QLabel(tr("CANopen device - Object Dictionary")), tr("Object Dictionary"));
+    addTab(new QLabel(tr("CANopen device - PDOs")), tr("PDOs"));
+    addTab(new LogViewer, tr("Log"));
+    addTab(new QLabel(tr("CANopen device - CANopen I/O Mapping")), tr("CANopen I/O Mapping"));
+    addTab(new QLabel(tr("CANopen device - CANopen IEC Objects")), tr("CANopen IEC Objects"));
+    addTab(new QLabel(tr("CANopen device - Status")), tr("Status"));
+    addTab(new QLabel(tr("CANopen device - Information")), tr("Information"));
+}
+
+QWidget * WidgetSettings_CANopen_device::createTab1()
+{
+    // *** section - General
+    auto _section_general_1_canopen_logo_label = new QLabel;
+    auto _canopen_logo_pixmap = QPixmap(":/icon/images/canopen-2.svg");
+    _section_general_1_canopen_logo_label->setPixmap(_canopen_logo_pixmap);
+    _section_general_1_canopen_logo_label->setScaledContents(true);
+    _section_general_1_canopen_logo_label->setFixedSize(240, 56);
+
+    auto _section_general_spinbox_id = new QSpinBox;
+    _section_general_spinbox_id->setFixedWidth(150);
+    _section_general_spinbox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_spinbox_profile = new QSpinBox;
+    _section_general_spinbox_profile->setFixedWidth(150);
+    _section_general_spinbox_profile->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_1_layout = new QGridLayout;
+    _section_general_1_layout->addWidget(new QLabel(tr("Node ID")), 0, 0, 1, 1);
+    _section_general_1_layout->addWidget(_section_general_spinbox_id, 0, 1, 1, 1);
+    _section_general_1_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 2, 1, 1);
+    _section_general_1_layout->addWidget(new QLabel(tr("Device profile")), 1, 0, 1, 1);
+    _section_general_1_layout->addWidget(_section_general_spinbox_profile, 1, 1, 1, 1);
+    _section_general_1_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 1, 2, 1, 1);
+    _section_general_1_layout->addWidget(_section_general_1_canopen_logo_label, 0, 3, 2, 1);
+
+    auto _section_general_pushbutton_io = new QPushButton(tr("Edit I/O Area..."));
+    _section_general_pushbutton_io->setMinimumWidth(225);
+
+    auto _section_general_pushbutton_sd = new QPushButton(tr("Edit SDO Parameter Area..."));
+    _section_general_pushbutton_sd->setMinimumWidth(225);
+
+    auto _section_general_2_layout = new QHBoxLayout;
+    _section_general_2_layout->addWidget(_section_general_pushbutton_io);
+    _section_general_2_layout->addWidget(_section_general_pushbutton_sd);
+    _section_general_2_layout->addStretch();
+
+    auto* _section_general_layout = new QVBoxLayout;
+    _section_general_layout->addLayout(_section_general_1_layout);
+    _section_general_layout->addLayout(_section_general_2_layout);
+
+    Section* _section_general = new Section(tr("General"), true);
+    _section_general->setContentLayout(*_section_general_layout);
+
+    // *** section - EDS File
+
+    auto _section_guarding_editline_vendor_name = new QLineEdit;
+    _section_guarding_editline_vendor_name->setFixedWidth(350);
+    _section_guarding_editline_vendor_name->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_guarding_spinbox_vendor_number = new QSpinBox;
+    _section_guarding_spinbox_vendor_number->setFixedWidth(150);
+    _section_guarding_spinbox_vendor_number->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_guarding_editline_product_name = new QLineEdit;
+    _section_guarding_editline_product_name->setFixedWidth(350);
+    _section_guarding_editline_product_name->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_guarding_spinbox_product_number = new QSpinBox;
+    _section_guarding_spinbox_product_number->setFixedWidth(150);
+    _section_guarding_spinbox_product_number->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_guarding_spinbox_revision_number = new QSpinBox;
+    _section_guarding_spinbox_revision_number->setFixedWidth(150);
+    _section_guarding_spinbox_revision_number->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto* _section_guarding_1_layout = new QFormLayout;
+    _section_guarding_1_layout->addRow(new QLabel(tr("Vendor name")), _section_guarding_editline_vendor_name);
+    _section_guarding_1_layout->addRow(new QLabel(tr("Vendor number")), _section_guarding_spinbox_vendor_number);
+    _section_guarding_1_layout->addRow(new QLabel(tr("Product name")), _section_guarding_editline_product_name);
+    _section_guarding_1_layout->addRow(new QLabel(tr("Product number")), _section_guarding_spinbox_product_number);
+    _section_guarding_1_layout->addRow(new QLabel(tr("Revision number")), _section_guarding_spinbox_revision_number);
+
+    auto _section_eds_pushbutton_io = new QPushButton(tr("Install to Device Repository"));
+    _section_eds_pushbutton_io->setMinimumWidth(225);
+
+    auto _section_eds_pushbutton_sd = new QPushButton(tr("Export EDS File..."));
+    _section_eds_pushbutton_sd->setMinimumWidth(225);
+
+    auto _section_guarding_2_layout = new QHBoxLayout;
+    _section_guarding_2_layout->addWidget(_section_eds_pushbutton_io);
+    _section_guarding_2_layout->addWidget(_section_eds_pushbutton_sd);
+    _section_guarding_2_layout->addStretch();
+
+    auto* _section_guarding_layout = new QVBoxLayout;
+    _section_guarding_layout->addLayout(_section_guarding_1_layout);
+    _section_guarding_layout->addLayout(_section_guarding_2_layout);
+
+    Section* _section_guarding = new Section(tr("EDS File"), false);
+    _section_guarding->setContentLayout(*_section_guarding_layout);
+
+    // *** layout
+    auto _tab1_layout = new QGridLayout;
+    _tab1_layout->addWidget(_section_general, 0, 0, 1, 1, Qt::AlignTop);
+    _tab1_layout->addWidget(_section_guarding, 1, 0, 1, 1, Qt::AlignTop);
+    _tab1_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 2, 0, 1, 1, Qt::AlignTop);
+
+    // *** container
+    auto _tab1 = new QWidget;
+    _tab1->setLayout(_tab1_layout);
+    _tab1->setMinimumWidth(900);
+    _tab1->setMinimumHeight(500);
+
+    return _tab1;
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_CANopen_remote_device ***
+
+WidgetSettings_CANopen_remote_device::WidgetSettings_CANopen_remote_device(const QModelIndex & index_) :
+    WidgetSettings(index_)
+{
+    auto _tab1 = new QScrollArea; _tab1->setWidget(createTab1());
+    addTab(_tab1, tr("General"));
+    addTab(new QLabel(tr("CANopen remote device - PDOs")), tr("PDOs"));
+    addTab(new QLabel(tr("CANopen remote device - SDOs")), tr("SDOs"));
+    addTab(new LogViewer, tr("Log"));
+    addTab(new QLabel(tr("CANopen remote device - CANopen I/O Mapping")), tr("CANopen I/O Mapping"));
+    addTab(new QLabel(tr("CANopen remote device - CANopen IEC Objects")), tr("CANopen IEC Objects"));
+    addTab(new QLabel(tr("CANopen remote device - Status")), tr("Status"));
+    addTab(new QLabel(tr("CANopen remote device - Information")), tr("Information"));
+}
+
+QWidget * WidgetSettings_CANopen_remote_device::createTab1()
+{
+    // *** section - General
+    auto _section_general_1_canopen_logo_label = new QLabel;
+    auto _canopen_logo_pixmap = QPixmap(":/icon/images/canopen-2.svg");
+    _section_general_1_canopen_logo_label->setPixmap(_canopen_logo_pixmap);
+    _section_general_1_canopen_logo_label->setScaledContents(true);
+    _section_general_1_canopen_logo_label->setFixedSize(240, 56);
+
+    auto _section_general_spinbox_id = new QSpinBox;
+    _section_general_spinbox_id->setFixedWidth(150);
+    _section_general_spinbox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_pushbutton_sdo = new QPushButton(tr("SDO Channels (1/1 Active)"));
+    _section_general_pushbutton_sdo->setFixedWidth(250);
+    _section_general_spinbox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_combobox_id = new QComboBox;
+    _section_general_combobox_id->setFixedWidth(150);
+    _section_general_combobox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_1_layout = new QGridLayout;
+    _section_general_1_layout->addWidget(new QLabel(tr("Node ID")), 0, 0, 1, 1);
+    _section_general_1_layout->addWidget(_section_general_spinbox_id, 0, 1, 1, 1);
+    _section_general_1_layout->addWidget(_section_general_pushbutton_sdo, 0, 2, 1, 1);
+    _section_general_1_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 3, 1, 1);
+    _section_general_1_layout->addWidget(_section_general_1_canopen_logo_label, 0, 4, 2, 1);
+
+    auto _section_general_2_layout = new QGridLayout;
+    _section_general_2_layout->addWidget(new QCheckBox(tr("Enable expert settings")), 0, 0, 1, 1);
+    _section_general_2_layout->addWidget(new QCheckBox(tr("Enable SYNC producing")), 1, 0, 1, 1);
+    _section_general_2_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 3, 1, 1);
+    _section_general_2_layout->addWidget(new QCheckBox(tr("Optional device")), 0, 1, 1, 1);
+    _section_general_2_layout->addWidget(new QCheckBox(tr("No initialization")), 1, 1, 1, 1);
+    _section_general_2_layout->addWidget(new QCheckBox(tr("Reset node")), 1, 2, 1, 1);
+    _section_general_2_layout->addWidget(_section_general_combobox_id, 1, 3, 1, 1);
+    _section_general_2_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 1, 3, 1, 1);
+
+    auto* _section_general_layout = new QVBoxLayout;
+    _section_general_layout->addLayout(_section_general_1_layout);
+    _section_general_layout->addLayout(_section_general_2_layout);
+
+    Section* _section_general = new Section(tr("General"), true);
+    _section_general->setContentLayout(*_section_general_layout);
+
+    // *** section - Guarding
+
+    auto _section_guarding_spinbox_guard_time = new QSpinBox;
+    _section_guarding_spinbox_guard_time->setFixedWidth(150);
+    _section_guarding_spinbox_guard_time->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_guarding_spinbox_factor = new QSpinBox;
+    _section_guarding_spinbox_factor->setFixedWidth(150);
+    _section_guarding_spinbox_factor->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_guarding_spinbox_producer_time = new QSpinBox;
+    _section_guarding_spinbox_producer_time->setFixedWidth(150);
+    _section_guarding_spinbox_producer_time->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_general_pushbutton_heartbeat = new QPushButton(tr("SDO Channels (1/1 Active)"));
+    _section_general_pushbutton_heartbeat->setFixedWidth(250);
+    _section_general_pushbutton_heartbeat->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_guarding_1_layout = new QFormLayout;
+    _section_guarding_1_layout->addRow(new QCheckBox(tr("Enable nodeguarding")));
+    _section_guarding_1_layout->addRow(new QLabel(tr("Guard time (ms)")), _section_guarding_spinbox_guard_time);
+    _section_guarding_1_layout->addRow(new QLabel(tr("Life time factor (ms)")), _section_guarding_spinbox_guard_time);
+
+    auto _section_guarding_2_layout = new QFormLayout;
+    _section_guarding_2_layout->addRow(new QCheckBox(tr("Enable heartbeat producing")));
+    _section_guarding_2_layout->addRow(new QLabel(tr("Producer time (ms)")), _section_guarding_spinbox_producer_time);
+    _section_guarding_2_layout->addRow(_section_general_pushbutton_heartbeat);
+
+    auto* _section_guarding_layout = new QHBoxLayout;
+    _section_guarding_layout->addLayout(_section_guarding_1_layout);
+    _section_guarding_layout->addLayout(_section_guarding_2_layout);
+
+    Section* _section_guarding = new Section(tr("Guarding"), false);
+    _section_guarding->setContentLayout(*_section_guarding_layout);
+
+    // *** section - Emergency
+
+    auto _section_sync_spinbox_emergency = new QSpinBox;
+    _section_sync_spinbox_emergency->setFixedWidth(150);
+    _section_sync_spinbox_emergency->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto* _section_sync_layout = new QFormLayout;
+    _section_sync_layout->addRow(new QCheckBox(tr("Enable emergency (EMCY)")));
+    _section_sync_layout->addRow(new QLabel(tr("COB ID")), _section_sync_spinbox_emergency);
+
+    Section* _section_sync = new Section(tr("Emergency (EMCY)"), false);
+    _section_sync->setContentLayout(*_section_sync_layout);
+
+    // *** section - TIME
+
+    auto _section_time_spinbox_id = new QSpinBox;
+    _section_time_spinbox_id->setFixedWidth(150);
+    _section_time_spinbox_id->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _section_sync_spinbox_time = new QSpinBox;
+    _section_sync_spinbox_time->setFixedWidth(150);
+    _section_sync_spinbox_time->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto* _section_time_layout = new QFormLayout;
+    _section_time_layout->addRow(new QCheckBox(tr("Enable TIME producing")));
+    _section_time_layout->addRow(new QLabel(tr("COB ID (Hex)     16#")), _section_time_spinbox_id);
+    _section_time_layout->addRow(new QLabel(tr("Producer time (ms)")), _section_sync_spinbox_time);
+    _section_time_layout->addRow(new QCheckBox(tr("Enable TIME consuming")));
+
+    Section* _section_time = new Section(tr("TIME"), false);
+    _section_time->setContentLayout(*_section_time_layout);
+
+    // *** section - Checks
+
+    auto* _section_ckeck_layout = new QHBoxLayout;
+    _section_ckeck_layout->addWidget(new QCheckBox(tr("Check vendor ID")));
+    _section_ckeck_layout->addWidget(new QCheckBox(tr("Check product number")));
+    _section_ckeck_layout->addWidget(new QCheckBox(tr("Check revision number")));
+    _section_ckeck_layout->addStretch();
+
+    Section* _section_check = new Section(tr("Checks at Startup"), false);
+    _section_check->setContentLayout(*_section_ckeck_layout);
+
+    // *** layout
+    auto _tab1_layout = new QGridLayout;
+    _tab1_layout->addWidget(_section_general, 0, 0, 1, 2, Qt::AlignTop);
+    _tab1_layout->addWidget(_section_guarding, 1, 0, 1, 2, Qt::AlignTop);
+    _tab1_layout->addWidget(_section_sync, 2, 0, 1, 1, Qt::AlignTop);
+    _tab1_layout->addWidget(_section_time, 2, 1, 1, 1, Qt::AlignTop);
+    _tab1_layout->addWidget(_section_check, 3, 0, 1, 2, Qt::AlignTop);
+    _tab1_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 4, 0, 1, 2, Qt::AlignTop);
+
+    // *** container
+    auto _tab1 = new QWidget;
+    _tab1->setLayout(_tab1_layout);
+    _tab1->setMinimumWidth(900);
+    _tab1->setMinimumHeight(600);
+
+    return _tab1;
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_creator_CANbus ***
+
+WidgetSettings * WidgetSettings_creator_CANbus::create(const QModelIndex & index_)
+{
+    return new WidgetSettings_CANbus(index_);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_creator_CANopen_manager ***
+
+WidgetSettings * WidgetSettings_creator_CANopen_manager::create(const QModelIndex & index_)
+{
+    return new WidgetSettings_CANopen_manager(index_);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_creator_CANopen_device ***
+
+WidgetSettings * WidgetSettings_creator_CANopen_device::create(const QModelIndex & index_)
+{
+    return new WidgetSettings_CANopen_device(index_);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_creator_CANopen_remote_device ***
+
+WidgetSettings * WidgetSettings_creator_CANopen_remote_device::create(const QModelIndex & index_)
+{
+    return new WidgetSettings_CANopen_remote_device(index_);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** WidgetSettings_builder ***
+
+WidgetSettings_builder::WidgetSettings_builder()
+{
+    m_creators.insert(WidgetSettings::eDT_CANbus, new WidgetSettings_creator_CANbus);
+    m_creators.insert(WidgetSettings::eDT_CANopen_manager, new WidgetSettings_creator_CANopen_manager);
+    m_creators.insert(WidgetSettings::eDT_CANopen_device, new WidgetSettings_creator_CANopen_device);
+    m_creators.insert(WidgetSettings::eDT_CANopen_remote_device, new WidgetSettings_creator_CANopen_remote_device);
+}
+
+WidgetSettings_builder::~WidgetSettings_builder()
+{
+    for(const auto & creator : std::as_const(m_creators))
+        delete creator;
+}
+
+WidgetSettings * WidgetSettings_builder::build(const QModelIndex & index_)
+{
+    if(!index_.isValid())
+        return nullptr;
+
+    auto _item = DomModel::toItem(index_, true);
+    Q_ASSERT(_item);
+
+    auto type = WidgetSettings::assignType(_item->node());
+
+    if(m_creators.contains(type))
+        return m_creators.value(type)->create(index_);
+
+    return nullptr;
+}
+
+// ----------------------------------------------------------------------------

@@ -5,15 +5,16 @@
 #include <QDomNode>
 
 // ----------------------------------------------------------------------------
-// *** WidgetCodeEditor ***
+// *** WidgetEditor ***
 
 /*!
- * \brief The WidgetCodeEditor class
+ * \brief The WidgetEditor class
  */
 
-QT_FORWARD_DECLARE_CLASS(DomItem)
 QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
+QT_FORWARD_DECLARE_CLASS(QUndoStack)
 
+QT_FORWARD_DECLARE_CLASS(DomItem)
 QT_FORWARD_DECLARE_CLASS(CodeEditorWidget)
 QT_FORWARD_DECLARE_CLASS(TableView)
 
@@ -24,122 +25,44 @@ class WidgetEditor : public QSplitter
     Q_OBJECT
 public:
     WidgetEditor(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
+    virtual ~WidgetEditor() override;
 
-    virtual void activate() const {;}
+    virtual void set_active();
+
+    [[nodiscard]] bool isModified() const;
+
+protected slots:
+    void slot_varTxtViewToggled(bool);
+    void slot_varTblViewToggled(bool);
+
+    virtual void slot_varAddVariable();
+    virtual void slot_varDelVariable();
+    virtual void slot_varTxtVarChanged();
+    virtual void slot_varTblVarChanged();
+
+    void slot_codeTxtChanged();
+
+    virtual void slot_variable_insert(const QModelIndex &index_, bool first_);
+    virtual void slot_variable_delete(const QDomNode &node_);
+    virtual void slot_variable_change(const QDomNode& old_, const QDomNode& new_);
 
 protected:
-    static QModelIndex s_index(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
-    static QModelIndex p_index(const QModelIndex &index, QAbstractItemModel * proxy);
-    static QAbstractProxyModel * proxy(QAbstractItemModel *);
-    static DomItem * item(const QModelIndex &index, QAbstractItemModel * proxy = nullptr);
-
-private slots:
-    void slot_addVariable();
-    void slot_delVariable();
-    void slot_txtViewToggled(bool);
-    void slot_tblViewToggled(bool);
-
-    void slot_codeChanged();
-    void slot_txtVarChanged();
-    void slot_tblVarChanged();
-
-protected:
-    void updateTblView();
     virtual QWidget * createVarsEditor();
     virtual QWidget * createCodeEditor();
+    void init_focus() const;
+    void update_table_view();
 
 protected:
-    QModelIndex _index = {};
-    QDomNode _node = {};
-    QAbstractProxyModel * _proxy = nullptr;
+    QModelIndex _m_index{};
+    DomItem * _m_item{nullptr};
+    QAbstractProxyModel * _m_proxy{nullptr};
 
 protected:
-    TableView * _vars_table = nullptr;
-    CodeEditorWidget * _vars_text = nullptr;
-    CodeEditorWidget * _body_text = nullptr;
-    QWidget * _m_table_container = nullptr;
-};
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** WidgetEditor_vars ***
-
-/*!
- * \brief The WidgetEditor_vars class
- */
-class WidgetEditor_vars : public WidgetEditor
-{
-    Q_OBJECT
-public:
-    WidgetEditor_vars(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
-};
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** WidgetEditor_st ***
-
-/*!
- * \brief The WidgetEditor_st class
- */
-class WidgetEditor_st : public WidgetEditor
-{
-    Q_OBJECT
-public:
-    WidgetEditor_st(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
-};
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** WidgetEditor_fbd ***
-
-#include "editor/fbd/fbd/graphics/cdiagramwidget.h"
-
-/*!
- * \brief The WidgetEditor_fbd class
- */
-
-// QT_FORWARD_DECLARE_CLASS(FBDviewer)
-QT_FORWARD_DECLARE_CLASS(CDiagramWidget)
-
-class WidgetEditor_fbd : public WidgetEditor
-{
-    Q_OBJECT
-public:
-    WidgetEditor_fbd(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
-
-    virtual void activate() const override { _m_fbd_view->set_active(); }
-
-protected:
-    virtual QWidget * createCodeEditor() override;
-
-private slots:
-    void slot_shmViewToggled(bool);
-    void slot_txtViewToggled(bool);
-
-private:
-    QWidget * _txt_view = nullptr;
-    // FBDviewer * _fbd_view = nullptr;
-    CDiagramWidget * _m_fbd_view = nullptr;
-};
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// *** WidgetEditor_type ***
-
-/*!
- * \brief The WidgetEditor_type class
- */
-class WidgetEditor_type : public WidgetEditor
-{
-    Q_OBJECT
-public:
-    WidgetEditor_type(const QModelIndex &index_, QAbstractProxyModel *proxy_, QWidget *parent_ = {});
-
-private slots:
-    void slot_codeChanged();
-
-protected:
-    virtual QWidget * createCodeEditor();
+    TableView * _m_vars_table{nullptr};
+    CodeEditorWidget * _m_vars_text{nullptr};
+    CodeEditorWidget * _m_body_text{nullptr};
+    QWidget * _m_table_container{nullptr};
+    bool _m_modified{false};
 };
 // ----------------------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
-  <fileHeader companyName="Beremiz" productName="Beremiz" productVersion="1" creationDateTime="2016-10-24T18:09:22"/>
-  <contentHeader name="First Steps" modificationDateTime="2024-07-23T08:54:09">
+  <fileHeader companyName="Ambitecs" productName="Procont" productVersion="1" creationDateTime="2024-10-01T00:00:00"/>
+  <contentHeader name="Project for development tests" modificationDateTime="2024-10-01T00:00:00">
     <coordinateInfo>
       <fbd>
         <scaling x="0" y="0"/>
@@ -15,7 +15,38 @@
     </coordinateInfo>
   </contentHeader>
   <types>
-    <dataTypes/>
+    <dataTypes>
+          <dataType name="datatype0">
+        <baseType>
+          <struct>
+            <variable name="id">
+              <type>
+                <DINT/>
+              </type>
+              <initialValue>
+                <simpleValue value="1"/>
+              </initialValue>
+            </variable>
+            <variable name="lvl">
+              <type>
+                <DINT/>
+              </type>
+              <initialValue>
+                <simpleValue value="2"/>
+              </initialValue>
+            </variable>
+            <variable name="make">
+              <type>
+                <DINT/>
+              </type>
+              <initialValue>
+                <simpleValue value="3"/>
+              </initialValue>
+            </variable>
+          </struct>
+        </baseType>
+      </dataType>
+    </dataTypes>
     <pous>
       <pou name="AverageVal" pouType="function">
         <interface>

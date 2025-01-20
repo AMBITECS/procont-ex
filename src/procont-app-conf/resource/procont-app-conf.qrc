@@ -38,6 +38,50 @@
         <file>images/hierarchy.svg</file>
         <file>images/plus-large.svg</file>
         <file>images/plus2.svg</file>
+        <file>images/input.svg</file>
+        <file>images/output.svg</file>
+        <file>images/input2.svg</file>
+        <file>images/input3.svg</file>
+        <file>images/output2.svg</file>
+        <file>images/output3.svg</file>
+        <file>images/rename.svg</file>
+        <file>images/config.svg</file>
+        <file>images/var_external_select.png</file>
+        <file>images/var_external.png</file>
+        <file>images/var_global_select.png</file>
+        <file>images/var_global.png</file>
+        <file>images/var_in_out_select.png</file>
+        <file>images/var_in_out.png</file>
+        <file>images/var_input_select.png</file>
+        <file>images/var_input.png</file>
+        <file>images/var_output_select.png</file>
+        <file>images/var_output.png</file>
+        <file>images/var_select.png</file>
+        <file>images/var_temp_select.png</file>
+        <file>images/var_temp.png</file>
+        <file>images/var.png</file>
+        <file>images/canopen_logo.svg</file>
+        <file>images/canopen-1.svg</file>
+        <file>images/canopen-2.svg</file>
+        <file>images/can-1.svg</file>
+        <file>images/can-2.svg</file>
+        <file>images/arrow-1-down-bottom.svg</file>
+        <file>images/arrow-1-down.svg</file>
+        <file>images/arrow-1-up-top.svg</file>
+        <file>images/arrow-1-up.svg</file>
+        <file>images/arrow-2-down.svg</file>
+        <file>images/arrow-2-up.svg</file>
+        <file>images/find-down.svg</file>
+        <file>images/find-up.svg</file>
+        <file>images/export.svg</file>
+        <file>images/import.svg</file>
+        <file>images/arrow-3-down.svg</file>
+        <file>images/arrow-4-down.svg</file>
+        <file>images/import-1.svg</file>
+        <file>images/export-1.svg</file>
+        <file>images/arrow-3-up.svg</file>
+        <file>images/arrow-2-down-bottom.svg</file>
+        <file>images/arrow-2-up-top.svg</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/AdditionalFunctionBlocks.xml</file>
@@ -46,5 +90,12 @@
     </qresource>
     <qresource prefix="/proj">
         <file>proj/plc-e.xml</file>
+        <file>proj/plc-1.xml</file>
+        <file>proj/plc-1.1.xml</file>
+        <file>proj/plc-2.xml</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>images/arrow-3-up.svg</file>
+        <file>images/export-1.svg</file>
     </qresource>
 </RCC>

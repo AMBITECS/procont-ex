@@ -3,18 +3,21 @@
 //
 
 #include "CInterface.h"
+#include "../fbd/variables.h"
+#include "common/CPou.h"
 
-CInterface::CInterface()
+CInterface::CInterface(CPou * parent)
 {
-    m_local_vars    = new CLocalVars();
-    m_temp_vars     = new CTempVars();
-    m_input_vars    = new CInVars();
-    m_output_vars   = new COutVars();
-    m_in_out_vars   = new CInOutVars();
-    m_external_vars = new CExternalVars();
-    m_global_vars   = new CGlobalVars();
-    m_access_vars   = new CAccessVars();
+    m_local_vars    = new CLocalVars(parent);
+    m_temp_vars     = new CTempVars(parent);
+    m_input_vars    = new CInVars(parent);
+    m_output_vars   = new COutVars(parent);
+    m_in_out_vars   = new CInOutVars(parent);
+    m_external_vars = new CExternalVars(parent);
+    //m_global_vars   = new CGlobalVars(parent);
+    m_access_vars   = new CAccessVars(parent);
     m_documentation = new CDocumentation();
+    m_parent        = parent;
 
 }
 
@@ -26,12 +29,13 @@ CInterface::CInterface(const CInterface &src)
     m_output_vars   = new COutVars(*src.m_output_vars);
     m_in_out_vars   = new CInOutVars(*src.m_in_out_vars);
     m_external_vars = new CExternalVars(*src.m_external_vars);
-    m_global_vars   = new CGlobalVars(*src.m_global_vars);
+    //m_global_vars   = new CGlobalVars(*src.m_global_vars);
     m_access_vars   = new CAccessVars(*src.m_access_vars);
     m_documentation = new CDocumentation(*src.m_documentation);
 
     m_add_data      = src.m_add_data;
     m_return_type   = src.m_return_type;
+    m_parent        = src.m_parent;
 }
 
 CInterface::CInterface(CInterface &&tmp) noexcept
@@ -43,9 +47,10 @@ CInterface::CInterface(CInterface &&tmp) noexcept
     m_output_vars   = tmp.m_output_vars;
     m_in_out_vars   = tmp.m_in_out_vars;
     m_external_vars = tmp.m_external_vars;
-    m_global_vars   = tmp.m_global_vars;
+    //m_global_vars   = tmp.m_global_vars;
     m_access_vars   = tmp.m_access_vars;
     m_documentation = tmp.m_documentation;
+    m_parent        = tmp.m_parent;
 
     tmp.m_local_vars    = nullptr;
     tmp.m_temp_vars     = nullptr;
@@ -53,41 +58,57 @@ CInterface::CInterface(CInterface &&tmp) noexcept
     tmp.m_output_vars   = nullptr;
     tmp.m_in_out_vars   = nullptr;
     tmp.m_external_vars = nullptr;
-    tmp.m_global_vars   = nullptr;
+    //tmp.m_global_vars   = nullptr;
     tmp.m_access_vars   = nullptr;
     tmp.m_documentation = nullptr;
 
     m_add_data          = tmp.m_add_data;
 }
 
-CInterface::CInterface(const QDomNode &node)
+CInterface::CInterface(const QDomNode &node, CPou * parent)
 {
+    /*
     if (node.nodeName() != "interface")
     {
         throw std::runtime_error("in 'CInterface::CInterface(const QDomNode &node)' wrong node name");
-    }
+    }*/
 
-    m_local_vars    = new CLocalVars();
-    m_temp_vars     = new CTempVars();
-    m_input_vars    = new CInVars();
-    m_output_vars   = new COutVars();
-    m_in_out_vars   = new CInOutVars();
-    m_external_vars = new CExternalVars();
-    m_global_vars   = new CGlobalVars();
-    m_access_vars   = new CAccessVars();
+    m_local_vars    = new CLocalVars(parent);
+    m_temp_vars     = new CTempVars(parent);
+    m_input_vars    = new CInVars(parent);
+    m_output_vars   = new COutVars(parent);
+    m_in_out_vars   = new CInOutVars(parent);
+    m_external_vars = new CExternalVars(parent);
+    //m_global_vars   = new CGlobalVars(parent);
+    m_access_vars   = new CAccessVars(parent);
+    m_parent        = parent;
 
 
     for (uint16_t i = 0; i < node.childNodes().count(); ++i)
     {
         QDomNode child = node.childNodes().at(i);
 
+        if (child.nodeName() == xmln::return_type)
+        {
+            auto type_node = child.firstChild();
+            if (type_node.attributes().isEmpty())
+            {
+                m_return_type = type_node.nodeName();
+                m_is_derived = false;
+            }
+            else
+            {
+                m_return_type = type_node.attributes().namedItem(xmln::name).toAttr().value();
+                m_is_derived = true;
+            }
+        }
         extract_child_nodes(child, m_local_vars, "localVars");
         extract_child_nodes(child, m_temp_vars, "tempVars");
         extract_child_nodes(child, m_input_vars, "inputVars");
         extract_child_nodes(child, m_output_vars, "outputVars");
         extract_child_nodes(child, m_in_out_vars, "inOutVars");
         extract_child_nodes(child, m_external_vars, "externalVars");
-        extract_child_nodes(child, m_global_vars, "globalVars");
+        //extract_child_nodes(child, m_global_vars, "globalVars");
         extract_child_nodes(child, m_access_vars, "accessVars");
     }
     m_documentation = new CDocumentation(node.namedItem("documentation"));
@@ -101,7 +122,7 @@ CInterface::~CInterface()
     delete m_output_vars;
     delete m_in_out_vars;
     delete m_external_vars;
-    delete m_global_vars;
+    //delete m_global_vars;
     delete m_access_vars;
     delete m_documentation;
 }
@@ -118,7 +139,7 @@ CInterface::dom_node()
     add_child(root, m_output_vars);
     add_child(root, m_in_out_vars);
     add_child(root, m_external_vars);
-    add_child(root, m_global_vars);
+    //add_child(root, m_global_vars);
     add_child(root, m_access_vars);
 
     if (!m_add_data.is_empty())
@@ -181,12 +202,6 @@ CInterface::external_variables()
     return m_external_vars;
 }
 
-CGlobalVars *
-CInterface::global_variables()
-{
-    return m_global_vars;
-}
-
 CAccessVars *
 CInterface::access_variables()
 {
@@ -207,7 +222,7 @@ void CInterface::extract_child_nodes(QDomNode &node, CIfaceVars *p_vars, const Q
     {
         for (uint16_t c = 0; c < node.childNodes().count(); ++c)
         {
-            auto varNode = new CVariable(node.childNodes().at(c));
+            auto varNode = new CVariable(node.childNodes().at(c), this);
             p_vars->variables()->push_back(varNode);
         }
     }
@@ -223,8 +238,117 @@ bool CInterface::is_empty() const
                  m_output_vars->is_empty() &&
                  m_in_out_vars->is_empty() &&
                  m_external_vars->is_empty() &&
-                 m_global_vars->is_empty() &&
+//                 m_global_vars->is_empty() &&
                  m_access_vars->is_empty();
     return empty;
 }
+
+std::vector<CVariable *>  CInterface::all_variables()
+{
+    std::vector<CVariable*> p_variables;
+
+//    gather_variables(m_global_vars->variables(), &p_variables);
+    gather_variables(m_external_vars->variables(), &p_variables);
+    gather_variables(m_access_vars->variables(), &p_variables);
+    gather_variables(m_in_out_vars->variables(), &p_variables);
+    gather_variables(m_input_vars->variables(), &p_variables);
+    gather_variables(m_output_vars->variables(), &p_variables);
+    gather_variables(m_local_vars->variables(), &p_variables);
+
+    return p_variables;
+}
+
+void CInterface::gather_variables(std::vector<CVariable *> *source_variables, std::vector<CVariable *> *dest_vars)
+{
+    if (!source_variables->empty())
+        dest_vars->insert(dest_vars->end(), source_variables->begin(), source_variables->end());
+}
+
+std::vector<CVariable *> CInterface::p_inputs()
+{
+    std::vector<CVariable *> inputs;
+
+    for (auto &var : *m_input_vars->variables())
+    {
+        inputs.push_back(var);
+    }
+
+    return inputs;
+}
+
+std::vector<CVariable *> CInterface::p_outputs()
+{
+    std::vector<CVariable *> outputs;
+
+    outputs.insert(outputs.end(),
+                   m_output_vars->variables()->begin(),
+                   m_output_vars->variables()->end());
+
+    return outputs;
+}
+
+bool CInterface::is_derived() const
+{
+    return m_is_derived;
+}
+
+CVariable *CInterface::get_variable_by_name(const QString &name)
+{
+    for (auto &var : all_variables())
+    {
+        if (var->name() == name)
+        {
+            return var;
+        }
+    }
+    return nullptr;
+}
+
+CPou *CInterface::parent()
+{
+    return m_parent;
+}
+
+void CInterface::set_parent(CPou *pou)
+{
+    m_parent = pou;
+}
+
+void CInterface::update_variables( CInterface *pInterface )
+{
+    check_vars(pInterface->m_output_vars->variables(), m_output_vars->variables());
+    check_vars(pInterface->m_input_vars->variables(), m_input_vars->variables());
+    check_vars(pInterface->m_in_out_vars->variables(), m_in_out_vars->variables());
+    check_vars(pInterface->m_local_vars->variables(), m_local_vars->variables());
+    check_vars(pInterface->m_access_vars->variables(), m_access_vars->variables());
+    check_vars(pInterface->m_external_vars->variables(), m_external_vars->variables());
+    check_vars(pInterface->m_temp_vars->variables(), m_temp_vars->variables());
+}
+
+bool CInterface::check_vars( std::vector<CVariable *> *alien, std::vector<CVariable *> *local )
+{
+    if (!alien || alien->empty())
+    {
+        return false;
+    }
+
+    for (auto &alien_var : *alien)
+    {
+        bool found = std::any_of(local->begin(), local->end(),
+                                 [alien_var](CVariable* loc)
+                                    {
+                                        return  alien_var->type() == loc->type() &&
+                                                alien_var->name() == loc->name();
+                                    });
+
+        if (!found)
+        {
+            auto var = new CVariable(*alien_var);
+            local->push_back(var);
+        }
+    }
+    return true;
+}
+
+
 

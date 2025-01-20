@@ -2,6 +2,8 @@
 // Created by artem on 10/22/24.
 //
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #ifndef EDITORSD_CCONNECTION_H
 #define EDITORSD_CCONNECTION_H
 
@@ -26,7 +28,7 @@ public:
     void            set_global_id(const QString &glob_id);
 
     [[nodiscard]] uint64_t        ref_local_id() const;
-    void            set_re_local_id(const uint64_t &ref_local_id);
+    void            set_ref_local_id(const uint64_t &ref_local_id);
 
     [[nodiscard]] QString         formal_parameter() const;
     void            set_formal_param(const QString &formal_param);
@@ -60,3 +62,5 @@ private:
 
 
 #endif //EDITORSD_CCONNECTION_H
+
+#pragma clang diagnostic pop

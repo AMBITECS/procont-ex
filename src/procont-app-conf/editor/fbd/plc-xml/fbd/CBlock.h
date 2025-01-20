@@ -17,17 +17,24 @@
 #define  INS "inputs"
 #define  OUTS "outputs"
 
+
+
 /**
  * XML Format for IEC 61131-3 page 47
  */
 class CBlock
 {
 public:
-    CBlock();
+    explicit CBlock(CBody *parent);
     CBlock(const CBlock & other);
     CBlock(CBlock && other) noexcept;
-    explicit CBlock(const QDomNode &dom_node);
+    explicit CBlock(const QDomNode &dom_node, CBody *parent);
     virtual ~CBlock();
+
+    CBody * parent();
+    void    set_parent(CBody *parent);
+
+    CBlock& operator=(const CBlock &block);
 
     [[nodiscard]] QDomNode        dom_node() const;
 
@@ -56,6 +63,12 @@ public:
     CAddData        *   add_data();
     CDocumentation  *   documentation();
 
+    /** @brief block при загрузке проекта не имеет типов входов/выходов а сейчас всё будет хорошо */
+    bool    normalize_block(const CBlock &n_block);
+
+    CBlockVar * get_output_by_name(const QString &name);
+
+
 protected:
     uint64_t          m_local_id{0};
     float             m_width{0};
@@ -65,6 +78,8 @@ protected:
     uint16_t          m_exec_order{0};
     QString           m_global_id;
 
+    CBody           * m_parent{nullptr};
+
     CPosition         m_position;
     QList<CBlockVar*> * m_in_vars;
     QList<CBlockVar*> * m_in_out_vars;
@@ -72,15 +87,14 @@ protected:
     CAddData          m_add_data;
     CDocumentation    m_documentation;
 
-    std::vector<EDefinedDataTypes>  m_inputs;
-    std::vector<EDefinedDataTypes>  m_outputs;
-
     void
     extract_vars(const QString &direction,
                  const QDomNode &node);
-    void extract_params();
 
-    void extract_pin_params(const std::string &direction, const std::string &types_string);
+    void    clear_variables();
+    //void extract_params();
+
+    //void extract_pin_params(const std::string &direction, const std::string &types_string);
 };
 
 

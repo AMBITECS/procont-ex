@@ -1,9 +1,34 @@
 #include "TreeView.h"
 
-#include <QMouseEvent>
+#include "model/DomModel.h"
+#include "item/DomItem.h"
+#include "main/MainWindow.h"
 
-TreeView::TreeView(QWidget *parent) : QTreeView(parent)
+#include <QMouseEvent>
+#include <QUndoStack>
+#include <QUndoGroup>
+#include <QApplication>
+
+
+TreeView::TreeView(QUndoStack *stack_, QWidget *parent) : QTreeView(parent),
+    _m_undo_stack(stack_ != nullptr ? stack_ : new QUndoStack)
 {
+    MainWindow::addStack(undoStack());
+
+    connect(qApp, &QApplication::focusChanged, this, &TreeView::slot_focusChanged);
+}
+
+QUndoStack * TreeView::undoStack() const
+{
+    return _m_undo_stack;
+}
+
+void TreeView::slot_focusChanged(QWidget *old_, QWidget *new_)
+{
+    if(new_ == this)
+        undoStack()->setActive();
+    else
+        clearFocus();
 }
 
 void TreeView::mousePressEvent(QMouseEvent *event)
@@ -14,8 +39,9 @@ void TreeView::mousePressEvent(QMouseEvent *event)
     {
         clearSelection();
         setCurrentIndex(QModelIndex());
-        emit selectionModel()->currentChanged(QModelIndex(), QModelIndex());
     }
+
+    setFocus();
 
     QTreeView::mousePressEvent(event);
 }

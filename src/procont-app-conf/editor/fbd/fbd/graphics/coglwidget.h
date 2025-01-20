@@ -5,10 +5,11 @@
 #include <QScrollBar>
 #include <QOpenGLFunctions>
 #include <QDomNode>
+//#include <QOpenGLFunctions_4_1_Core>
 
 #include "cgraphicshelper.h"
 #include "COglStyle.h"
-#include "../../general/ctreeobject.h"
+#include "editor/fbd/common/general/ctreeobject.h"
 
 
 struct s_ogl_startup
@@ -27,6 +28,27 @@ public:
     explicit COglWidget(s_ogl_startup * ogl_startup, QWidget *parent = nullptr);
     ~COglWidget() override;
 
+    QUndoStack *    undo_stack();
+    CPou * current_pou();
+
+    void    delete_selected();
+
+signals:
+    void  scroll_bars_moving(const QPoint & newPos);
+    void  drag_moving(QDragMoveEvent *event);
+    void  diagram_changed(const QDomNode & node);
+    void  undo_enabled();           //!< for update undo/redo interface for enabled
+    void  mouse_dblClicked(QMouseEvent *evt);
+    void    iface_var_new(const QString & type,     const QString & name);
+    void    iface_var_ren(const QString & old_name, const QString & new_name);
+    void    instance_removed(const QString &type, const QString &name);
+    void    set_current_pou(CPou *pou);
+    void    object_selected();
+    void    user_clicked();
+
+protected:
+    bool    eventFilter(QObject *target, QEvent *event) override;
+
     /// open GL
     void initializeGL() override;
     void resizeGL(int w, int h) override;
@@ -36,6 +58,8 @@ public:
     void showEvent( QShowEvent* event ) override;
     [[nodiscard]] bool is_editable() const;
     void set_editable(const bool &editable);
+    void mouseDoubleClickEvent(QMouseEvent * dblEvent) override; //!< for manage variables and link lines
+    void wheelEvent(QWheelEvent *event) override;
 
     /// mouse
     void mousePressEvent(QMouseEvent* event) override;
@@ -51,7 +75,8 @@ public:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dragLeaveEvent(QDragLeaveEvent *event) override;
-
+public slots:
+    void  drag_complete();  //!< когда процесс Drag&Drop закончился с любым исходом
 
 protected slots:
     void  vertical_scroll_moved(int position);
@@ -59,23 +84,20 @@ protected slots:
     void  project_loaded();
     void  diagram_resized(const int &w, const int &h);
     void  slotCustomMenuRequested(const QPoint &pos);
-
-signals:
-    void  scroll_bars_moving(const QPoint & newPos);
-    void  drag_moving(QDragMoveEvent *event);
-    void  diagram_changed();
-
+    void  iface_new_var(const QString & type,     const QString & name);
+    void  iface_ren_var(const QString & old_name, const QString & new_name);
+    void  show_wrong_types(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable);
 protected:
 
 
 private:
-    std::vector<CLadder*>   * m_ladders;
-    CGraphicsHelper     * m_helper;
-    QScrollBar          * m_vertical;
-    QScrollBar          * m_horizontal;
+    std::vector<CFbdLadder*>   * m_ladders;
+    CGraphicsHelper         * m_helper;
+    QScrollBar              * m_vertical;
+    QScrollBar              * m_horizontal;
 
-    QPaintDevice        * m_paint_dev;
-    COglStyle           * m_style;
+    QPaintDevice            * m_paint_dev;
+    //COglStyle               * m_style;
 
     int                   m_X_scroll{0};
     int                   m_Y_scroll{0};
@@ -84,15 +106,34 @@ private:
     bool                  m_is_editable{true};
 
     /// drag autoscroll
-    QImage                m_vertical_autoscroll;
+    QImage                m_vert_top_autoscroll;
+    QImage                m_vert_top_templ;
+    QImage                m_vert_bottom_autoscroll;
+    QImage                m_vert_bottom_templ;
     QRect                 m_vertical_auto_rect;
-    QImage                m_horizon_autoscroll;
+    QImage                m_horiz_right_autoscroll;
+    QImage                m_horiz_left_templ;
+    QImage                m_horiz_left_autoscroll;
+    QImage                m_horiz_right_templ;
     QRect                 m_horizon_auto_rect;
+    CPou                * m_current_pou{nullptr};
+
+    /// wrong types - message about not comparable variables types, when try to graphic connect them
+    QImage  m_wrong_type_img;
+    QRect   m_wrong_type_rect;
+    QString m_wrong_type_text;
+    QFont   m_message_font;
+    QFont   m_diagram_font;
 
     void draw_ladders();
-
     void draw_drag_bottom_upper();
+    //void make_wrong_message(const QString &dragged, const QString &target, const QPoint &pos, const bool &is_comparable);
+
+    void draw_type_message();
+
+    void make_gradient_images();
 };
+
 
 #endif // COGLWIDGET_H
 

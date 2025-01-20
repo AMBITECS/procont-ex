@@ -4,6 +4,8 @@
 
 #include <QFileInfo>
 
+#include "main/MainWindow.h"
+
 // ----------------------------------------------------------------------------
 // *** Compiler ***
 //
@@ -22,7 +24,8 @@ int Compiler::compile()
         QStringList lmess;
         lmess << QObject::tr("Compiler not found, build is aborted");
         lmess << QString(QObject::tr("not found file '%1'").arg(_m_compiler));
-        warn(lmess);
+        lmess << QString(QObject::tr("enter correct compiler path in %1").arg(MainWindow::config_file()));
+        m_warn(lmess);
         return 1;
     }
 
@@ -30,7 +33,7 @@ int Compiler::compile()
 
     _m_process.start(_m_compiler, _m_args);
 
-    info(QObject::tr("build started"));
+    m_info(QObject::tr("build started"));
 
     return 0;
 }
@@ -62,11 +65,11 @@ void Compiler::slot_finished(int exitCode, QProcess::ExitStatus exitStatus)
     QString message = QObject::tr("build finished");
     if(exitCode > 0)
     {
-        warn(message);
+        m_warn(message);
         return;
     }
 
-    info(message);
+    m_info(message);
 }
 // ----------------------------------------------------------------------------
 

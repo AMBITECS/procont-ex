@@ -22,15 +22,15 @@ public:
     ~CAction();
 
     CAction&    operator=(const CAction & other);
-    QDomNode    dom_node() const;
+    [[nodiscard]] QDomNode    dom_node() const;
 
-    uint64_t    local_id() const;
+    [[nodiscard]] uint64_t    local_id() const;
     void        set_local_id(const uint64_t &local_id);
 
-    QString     qualifier() const;
+    [[nodiscard]] QString     qualifier() const;
     void        set_qualifier(const QString &qualifier);
 
-    float       width() const;
+    [[nodiscard]] float       width() const;
     void        set_width(const float &width);
 
     float       height() const;
@@ -60,19 +60,19 @@ public:
 
 private:
     uint64_t        m_local_id{0};
-    QString         m_qualifier;
+    QString         m_qualifier{};
     float           m_width{0};
     float           m_height{0};
-    QString         m_duration;
-    QString         m_indicator;
+    QString         m_duration{};
+    QString         m_indicator{};
     uint32_t        m_exec_order{0};
-    QString         m_global_id;
-    CRelPosition    m_rel_position;
-    QString         m_reference;
-    CInline         m_inline;
-    CConnectionPointOut m_connection_point_out;
-    CAddData        m_add_data;
-    CDocumentation  m_document;
+    QString         m_global_id{};
+    CRelPosition    m_rel_position{};
+    QString         m_reference{};
+    CInline         m_inline{};
+    CConnectionPointOut m_connection_point_out{};
+    CAddData        m_add_data{};
+    CDocumentation  m_document{};
 };
 
 class CActions
@@ -80,12 +80,13 @@ class CActions
 public:
     CActions();
     CActions(const CActions & actions);
-    CActions(const QDomNode & dom_node);
+    explicit CActions(const QDomNode & dom_node);
     ~CActions();
 
-    bool        is_empty() const;
-    QDomNode    dom_node() const;
-
+    [[nodiscard]] bool        is_empty() const;
+    [[nodiscard]] QDomNode    dom_node() const;
+private:
+    std::vector<CAction*>   * m_actions;
 };
 
 

@@ -6,25 +6,15 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(name_short "ProCont")
+set(name_short "procont")
 set(local_proj_name ${name_short}-threads)
+
 project(${local_proj_name} VERSION ${VERSION_SHORT} )
 
 find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED) # QT_VERSION_MAJOR defined here
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Xml)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-#-------------------------------------------------------------------------------
-# Detect platform x86|x64
-#-------------------------------------------------------------------------------
-if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
-    set(proj_PlatformDir "x86")
-else()
-    set(proj_PlatformDir "x64")
-endif()
-message(STATUS "proj_PlatformDir - \'${proj_PlatformDir}\'")
-
 
 #-------------------------------------------------------------------------------
 # PROJ target modules options sets
@@ -54,8 +44,7 @@ set(PROJ_PRPS_QTGEN                         # Qt generation properties
 add_module(${local_proj_name}
         INSTALL LIB
         OPTS -g -O0
-        DEFS
-            #:QT
+        DEFS #:QT
         PRPS
             :QTGEN
             CXX_STANDARD 11

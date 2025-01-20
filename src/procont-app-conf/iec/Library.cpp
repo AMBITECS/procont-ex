@@ -1,6 +1,7 @@
 #include "Library.h"
 
 #include "log/Logger.h"
+#include "tr/translation.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -16,13 +17,15 @@ ILibrary::ILibrary(const QString & _name, const QString &_filepath, const QStrin
 ILibrary::ILibrary(const QString & _name, QDomDocument *library_, const QString &_name_user) :
     _m_name(_name),
     _m_name_user(_name_user),
-    _m_library(library_)
+    _m_library(library_),
+    _m_external_doc(true)
 {
 }
 
 ILibrary::~ILibrary()
 {
-    delete _m_library;
+    if(!_m_external_doc)
+        delete _m_library;
 }
 
 const QString ILibrary::filePath() const
@@ -32,7 +35,7 @@ const QString ILibrary::filePath() const
 
 void ILibrary::load()
 {
-    info(
+    m_info(
         QStringList()
         << QString(QObject::tr("open library '%1'")).arg(_m_name)
         << QString(QObject::tr("library '%1' file: %2")).arg(_m_name).arg(_m_filePath)
@@ -40,7 +43,7 @@ void ILibrary::load()
 
     if(!QFileInfo::exists(_m_filePath))
     {
-        crit(
+        m_crit(
             QStringList()
             << QString(QObject::tr("can't open library '%1'")).arg(_m_name)
             << QString(QObject::tr("file not found: %1").arg(_m_filePath))
@@ -52,7 +55,7 @@ void ILibrary::load()
     QFile file(_m_filePath);
     if(!file.open(QIODevice::ReadOnly))
     {
-        crit(
+        m_crit(
             QStringList()
             << QString(QObject::tr("can't open library '%1'")).arg(_m_name)
             << QString(QObject::tr("can't open file for read: %1").arg(_m_filePath))
@@ -65,7 +68,7 @@ void ILibrary::load()
 
     if(!result)
     {
-        warn(
+        m_warn(
             QStringList()
             << QString(QObject::tr("can't open library '%1'")).arg(_m_name)
             << QString(QObject::tr("file parse error: %1").arg(_m_filePath))
@@ -75,7 +78,7 @@ void ILibrary::load()
         return;
     }
 
-    info(
+    m_info(
         QStringList()
         << QString(QObject::tr("library '%1' opened, version %2")).arg(_m_name).arg(version())
         << QString(QObject::tr("library '%1' file: %2")).arg(_m_name).arg(_m_filePath)
@@ -189,10 +192,9 @@ const ILibrary::ObjectInfo ILibrary::object_info(const QString &name_) const
     if(!node.isNull())
     {
         auto category = node.toElement().elementsByTagName("category").at(0).toElement().attribute("name");
-        // qDebug() << node.toElement().namedItem("addData").namedItem("data").namedItem("category").nodeName();
         if(category.isEmpty())
             category = _m_name;
-        return ILibrary::ObjectInfo(name_, type, QString("%1, %2").arg(name()).arg(version()), category);
+        return ILibrary::ObjectInfo(name_, type, QString("%1, %2").arg(tr_str::instance()->ru(name())).arg(version()), category);
     }
 
     return ILibrary::ObjectInfo();

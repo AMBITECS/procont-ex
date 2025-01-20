@@ -3,12 +3,27 @@
 //
 
 #include "CVariable.h"
+#include "../CInterface.h"
+#include "../common/CPou.h"
 
-CVariable::CVariable()
-= default;
+CVariable::CVariable(CInterface *parent)
+{
+    m_parent = parent;
+}
 
-CVariable::CVariable(const CVariable &src)
- = default;
+CVariable::CVariable(const CVariable &rhs)
+{
+    m_add_data      = rhs.m_add_data;
+    m_type          = rhs.m_type;
+    m_attr_addr     = rhs.m_attr_addr;
+    m_attr_global_id= rhs.m_attr_global_id;
+    m_attr_name     = rhs.m_attr_name;
+    m_init_value    = rhs.m_init_value;
+    m_doc           = rhs.m_doc;
+    m_parent        = rhs.m_parent;
+    m_glob_parent   = rhs.m_glob_parent;
+    //*this = src;
+}
 
 CVariable::CVariable(CVariable &&tmp) noexcept
     : m_add_data(tmp.m_add_data)
@@ -18,11 +33,14 @@ CVariable::CVariable(CVariable &&tmp) noexcept
     , m_attr_name(std::move(tmp.m_attr_name))
     , m_init_value(std::move(tmp.m_init_value))
     , m_doc(tmp.m_doc)
+    , m_parent(tmp.m_parent)
 {}
 
-CVariable::CVariable(const QDomNode &node)
+CVariable::CVariable(const QDomNode &node, CInterface *parent)
 {
-    m_attr_name = node.attributes().namedItem("name").toAttr().value();
+    m_parent = parent;
+    if (!node.attributes().namedItem("name").toAttr().isNull())
+        m_attr_name = node.attributes().namedItem("name").toAttr().value();
     m_attr_addr = node.attributes().namedItem("address").toAttr().value();
     m_attr_global_id = node.attributes().namedItem("globalId").toAttr().value();
 
@@ -39,8 +57,7 @@ CVariable::CVariable(const QDomNode &node)
 CVariable::~CVariable()
 = default;
 
-QDomNode
-CVariable::dom_node()
+QDomNode CVariable::dom_node()
 {
     QDomDocument doc;
     QDomElement node = doc.createElement("variable");
@@ -105,12 +122,13 @@ CVariable::operator=(const CVariable &rhs)
     m_attr_name     = rhs.m_attr_name;
     m_init_value    = rhs.m_init_value;
     m_doc           = rhs.m_doc;
+    m_parent        = rhs.m_parent;
+    m_glob_parent   = rhs.m_glob_parent;
 
     return *this;
 }
 
-QString
-CVariable::type() const
+QString CVariable::type() const
 {
     return m_type;
 }
@@ -181,4 +199,41 @@ void CVariable::set_comment(const QString &comment)
 {
     m_doc.set_document(comment);
 }
+
+bool CVariable::is_empty() const
+{
+    return m_attr_name.isEmpty();
+}
+
+CInterface *CVariable::parent()
+{
+    return m_parent;
+}
+
+void CVariable::set_parent(CInterface *parent)
+{
+    m_parent = parent;
+}
+
+bool CVariable::is_global() const
+{
+    return m_glob_parent != nullptr;
+}
+
+CResource *CVariable::resource()
+{
+    return m_glob_parent;
+}
+
+void CVariable::set_global_parent(CResource *resource)
+{
+    m_glob_parent = resource;
+}
+
+QString CVariable::full_name() const
+{
+    QString txt = m_parent == nullptr ? "glob." : m_parent->parent()->name() + ".";
+    return txt + name();
+}
+
 

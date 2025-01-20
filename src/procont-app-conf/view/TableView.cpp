@@ -1,9 +1,42 @@
 #include "TableView.h"
 
-#include <QMouseEvent>
+#include "model/DomModel.h"
+#include "item/DomItem.h"
+#include "main/MainWindow.h"
 
-TableView::TableView(QWidget *parent) : QTableView(parent)
+#include <QMouseEvent>
+#include <QUndoStack>
+#include <QUndoGroup>
+#include <QApplication>
+
+TableView::TableView(QWidget *parent) : QTableView(parent),
+    _m_undo_stack(new QUndoStack(this))
 {
+    MainWindow::addStack(undoStack());
+    connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(slot_focusChanged(QWidget *, QWidget *)));
+}
+
+TableView::~TableView()
+{
+    delete _m_undo_stack;
+}
+
+QUndoStack * TableView::undoStack() const
+{
+    return _m_undo_stack;
+}
+
+void TableView::slot_focusChanged(QWidget *old_, QWidget *new_)
+{
+    if(new_ == this)
+        undoStack()->setActive();
+    else
+        clearFocus();
+}
+
+void TableView::closeOpenedEditor()
+{
+    closeEditor(indexWidget(currentIndex()), QAbstractItemDelegate::RevertModelCache);
 }
 
 void TableView::mousePressEvent(QMouseEvent *event)
@@ -15,6 +48,8 @@ void TableView::mousePressEvent(QMouseEvent *event)
         clearSelection();
         setCurrentIndex(QModelIndex());
     }
+
+    setFocus();
 
     QTableView::mousePressEvent(event);
 }
@@ -53,4 +88,7 @@ void TableView::setModel(QAbstractItemModel *model)
     connect(this->model(), &QAbstractItemModel::dataChanged, this, &TableView::slot_dataChanged);
     connect(this->model(), &QAbstractItemModel::rowsRemoved, this, &TableView::slot_rowsRemoved);
     connect(this->model(), &QAbstractItemModel::rowsInserted, this, &TableView::slot_rowsInserted);
+
+    clearSelection();
+    setCurrentIndex(QModelIndex());
 }

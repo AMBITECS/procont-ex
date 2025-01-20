@@ -2,7 +2,7 @@
 
 #include "item/DomItem.h"
 
-#include <QtXml>
+#include <QAbstractProxyModel>
 
 DomModel::DomModel(const QDomDocument &document, QObject *parent)
     : QAbstractItemModel(parent),
@@ -145,4 +145,36 @@ bool DomModel::removeRows(int position, int rows, const QModelIndex &parent)
     endRemoveRows();
 
     return true;
+}
+
+QModelIndex DomModel::s_index(const QModelIndex &index, QAbstractItemModel * proxy)
+{
+    if(proxy == nullptr)
+        return reinterpret_cast<const QAbstractProxyModel*>(index.model())->mapToSource(index);
+
+    return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapToSource(index);
+}
+
+QModelIndex DomModel::p_index(const QModelIndex &index, QAbstractItemModel * proxy)
+{
+    return reinterpret_cast<const QAbstractProxyModel*>(proxy)->mapFromSource(index);
+}
+
+QAbstractProxyModel * DomModel::toProxy(QAbstractItemModel *model)
+{
+    return reinterpret_cast<QAbstractProxyModel*>(model);
+}
+
+DomItem * DomModel::toItem(const QModelIndex &index, bool source, QAbstractItemModel * proxy)
+{
+    auto _index = source ? index : s_index(index, proxy);
+
+    Q_ASSERT(_index.internalPointer());
+
+    return reinterpret_cast<DomItem *>(_index.internalPointer());
+}
+
+DomModel * DomModel::toModel(QAbstractItemModel *model_)
+{
+    return reinterpret_cast<DomModel *>(model_);
 }

@@ -1,0 +1,32 @@
+#ifndef CTREEOBJECT_H
+#define CTREEOBJECT_H
+
+#include <QTreeWidget>
+#include <QMouseEvent>
+
+class CTreeObject : public QTreeWidget
+{
+    Q_OBJECT
+public:
+    explicit CTreeObject(QWidget *parent = nullptr);
+    ~CTreeObject() override;
+
+signals:
+    void  dragging_complete();
+
+protected:
+    void mousePressEvent( QMouseEvent* event ) override;
+    void mouseMoveEvent( QMouseEvent* event ) override;
+
+// igor'
+private slots:
+    void slot_focusChanged(QWidget *old_, QWidget *new_);
+
+private:
+    QPoint    m_dragStart;
+    QDrag   * m_drag{nullptr};
+    QTreeWidgetItem * m_drag_item{nullptr};
+
+};
+
+#endif // CTREEOBJECT_H

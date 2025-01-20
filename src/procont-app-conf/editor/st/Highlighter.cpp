@@ -8,6 +8,10 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
     HighlightingRule rule;
 
+    redLineFormat.setBaselineOffset(10);
+    redLineFormat.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+    redLineFormat.setUnderlineColor(Qt::red);
+
     keywordFormat.setForeground(Qt::blue);
     keywordFormat.setFontWeight(QFont::Bold);
 
@@ -57,6 +61,8 @@ void Highlighter::highlightBlock(const QString &text)
             setFormat(match.capturedStart(), match.capturedLength(), rule.format);
         }
     }
+    checkType(text);
+
 
     QRegularExpressionMatchIterator matchIterator = searchPattern.globalMatch(text);
     while (matchIterator.hasNext())
@@ -89,6 +95,21 @@ void Highlighter::highlightBlock(const QString &text)
     }
 }
 
+void Highlighter::checkType(const QString &text)
+{
+    QRegularExpression rule(R"((\w+):\s*(\w+)\s*)");
+    QRegularExpressionMatchIterator matchIterator = rule.globalMatch(text);
+    while (matchIterator.hasNext()) {
+        QRegularExpressionMatch match = matchIterator.next();
+        QString name = match.captured(1);
+        QString type = match.captured(2);
+        if (!words_.contains(type))
+        {
+            setFormat(match.capturedStart(), match.capturedLength(), redLineFormat);
+        }
+    }
+}
+
 void Highlighter::searchText(const QString &text)
 {
     searchPattern = QRegularExpression(text);
@@ -107,24 +128,47 @@ void Highlighter::wordsFromFile(const QString &fileName)
 #ifndef QT_NO_CURSOR
     QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 #endif
-    QStringList words;
+    //QStringList words;
 
     while (!file.atEnd()) {
         QByteArray line = file.readLine();
         if (!line.isEmpty())
-            words << QString::fromUtf8(line.trimmed());
+            words_ << QString::fromUtf8(line.trimmed());
     }
 
-    words.sort();
+    words_.sort();
 
 #ifndef QT_NO_CURSOR
     QGuiApplication::restoreOverrideCursor();
 #endif
     HighlightingRule rule;
 
-    for (const QString & pattern : words) {
+    for (const QString & pattern : words_) {
         rule.pattern = QRegularExpression((QString("\\b") + pattern + QString("\\b")));
         rule.format = keywordFormat;
         highlightingRules.append(rule);
     }
+}
+
+void Highlighter::setNewWords(const QStringList &list)
+{
+    for (const auto word : list)
+    {
+        if (!words_.contains(word))
+        {
+            // qDebug() << word;
+            words_.append(word);
+        }
+    }
+
+    words_.sort();
+/*
+    HighlightingRule rule;
+
+    for (const QString & pattern : words_) {
+        rule.pattern = QRegularExpression((QString("\\b") + pattern + QString("\\b")));
+        rule.format = keywordFormat;
+        highlightingRules.append(rule);
+    }
+*/
 }

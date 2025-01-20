@@ -2,7 +2,7 @@
 #define CGRAPHICSHELPER_H
 
 #include <QVector>
-#include "CLadder.h"
+#include "CFbdLadder.h"
 #include "../palette/palette.h"
 #include "../../plc-xml/fbd/CFbdContent.h"
 #include "../../plc-xml/common/CPou.h"
@@ -31,36 +31,37 @@ class CGraphicsHelper : public QWidget
 {
     Q_OBJECT
 
-
-
 public:
-    explicit CGraphicsHelper(QDomNode * node);
+    explicit CGraphicsHelper(COglWidget *ogl_widget, QDomNode * node);
     ~CGraphicsHelper() override;
 
     /// drag drop
     void    on_drop_event(QDropEvent *event);
     void    on_drag_enter_event(QDragEnterEvent *event);
-    void    on_drag_move_event(QDragMoveEvent *event);
     void    on_drag_exit(QDragLeaveEvent *event);
     void    on_drag_ladder_enter(QDragEnterEvent * event);
     void    on_drag_object_enter(QDragEnterEvent * event);
+    void    on_drag_move_event(QDragMoveEvent *event);
+    void    on_drag_pin(QDragMoveEvent *p_event);
 
     /// mouse
     void    on_mouse_released(const QPoint &pos);
-    void    on_move_object(QDragMoveEvent *event);
-    void    on_move_ladder(QDragMoveEvent *event);
     void    on_right_mouse_click(QMouseEvent *event);
     void    on_left_mouse_click(QMouseEvent *event);
+
 
     /// keyboard
     void    on_key_press_evt(QKeyEvent *event);
     void    on_key_released_event(QKeyEvent *event);
 
+
     /// others
     void    resized(const int &w, const int &h);
-    std::vector<CLadder*>    * ladders();
+    std::vector<CFbdLadder*>    * ladders();
     bool make_menu(COglWidget *p_widget, QMenu *p_menu, const QPoint &point);
+    void remove_selected_object();
 
+    QUndoStack *    undo_stack();
 
     /// signals and slots
 signals:
@@ -75,38 +76,64 @@ signals:
     void    on_project_loaded();
     void    shutdown_highlights();
     void    diagram_resized(const int &w, const int &h);
+    void    undo_enabled();
+    void    mouse_dblClicked(QMouseEvent *evt);
+    void    iface_var_new(const QString & type,     const QString & name);
+    void    iface_var_rename(const QString & old_name, const QString & new_name);
+    void    types_wrong(const QString &dragged_type, const QString &target_type,
+                        const QPoint &pos, const bool &is_comparable);
+    void    drag_complete();
+    void    diagram_changed(const QDomNode &pou_node);
+    void    instance_removed(const QString &type, const QString &name);
+    void    set_current_pou(CPou *pou);
+    void    object_selected();
+    void    user_clicked();
+
 
 
 public slots:
     void    scroll_bar_moved(const QPoint & point);      //!< on scroll bar action
     void    diagram_sized(const int &w, const int &h);   //!< to scale scrollbars
-    void    object_remove(CLadder *ladder, CDiagramObject *object);
+    void    object_remove(CFbdLadder *ladder, CFbdObject *object);
+    void    double_clicked(QMouseEvent *evt);
+    void    drag_process_complete();
+
+
+
 protected slots:
     void    project_complete();
+    void    iface_new_var(const QString & type,     const QString & name);
+    void    iface_ren_var(const QString & old_name, const QString & new_name);
 
 protected:
 
+
 private:
-    std::vector<CLadder*>
+    std::vector<CFbdLadder*>
                       * m_ladders;
 
     QDomNode          * m_pou_node;
-    CPou              * m_pou;
+    CPou              * m_pou{nullptr};
     QPoint              m_hatch_tl{0,0};
-    int m_w{0}, m_h{0};
+
 
     s_diagram_modes     m_modes;
     COglWorld         * m_graphics_world;
 
-    CDiagramObject    * m_dragged_obj{nullptr};
-    CDiagramObject    * m_clip_object{nullptr};
-    CLadder           * m_object_source{nullptr};
-    CLadder           * m_dragged_ladder{nullptr};
+    CFbdObject    * m_dragged_obj{nullptr};
+    CPin              * m_dragged_pin{nullptr};
+    CFbdLadder           * m_object_source{nullptr};
+    CFbdLadder           * m_dragged_ladder{nullptr};
+    COglWidget        * m_opengl_widget{nullptr};
 
-    void make_object_menu(QMenu *p_menu, CDiagramObject *p_object, CLadder *p_ladder);
-    void make_pin_menu(QMenu *p_menu, CConnectorPin * p_pin);
-    void make_ladder_menu(QMenu *p_menu, CLadder *p_ladder);
-    void object_cat(CLadder *p_ladder, CDiagramObject *p_object);
+
+    void make_object_menu(QMenu *p_menu, CFbdObject *p_object, CFbdLadder *p_ladder);
+    void make_pin_menu(QMenu *p_menu, CPin * p_pin);
+    void make_ladder_menu(QMenu *p_menu, CFbdLadder *p_ladder);
+    void object_cat(CFbdLadder *p_ladder, CFbdObject *p_object);
+    void reset_dragged_objects();
+
+    void get_project(QDomNode *pou_node);
 };
 
 #endif // CGRAPHICSHELPER_H

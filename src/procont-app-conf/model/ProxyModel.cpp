@@ -1,14 +1,34 @@
 #include "ProxyModel.h"
 
 #include "DomModel.h"
-
 #include "item/DomItem.h"
+#include "undo/cundocommand_edit.h"
 
 #include <QDebug>
 
 ProxyModelTree_pou::ProxyModelTree_pou(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
+}
+
+void ProxyModelTree_pou::setUndoStack(QUndoStack *undo_stack_)
+{
+    _m_undo_stack = undo_stack_;
+}
+
+bool ProxyModelTree_pou::setData(const QModelIndex &index, const QVariant &value_new_, int role)
+{
+    if (role != Qt::EditRole)
+        return false;
+
+    auto _value_old = index.data().toString(); _value_old = _value_old.remove(_value_old.indexOf('('), _value_old.length());
+
+    if(_value_old == value_new_)
+        return false;
+
+    undoStack()->push(new CUndoCommand_edit_tree(this, index, _value_old, value_new_));
+
+    return true;
 }
 
 bool ProxyModelTree_pou::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
@@ -59,6 +79,24 @@ ProxyModelTree_dev::ProxyModelTree_dev(QObject *parent)
 {
 }
 
+void ProxyModelTree_dev::setUndoStack(QUndoStack *undo_stack_)
+{
+    _m_undo_stack = undo_stack_;
+}
+
+bool ProxyModelTree_dev::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (role != Qt::EditRole)
+        return false;
+
+    if(index.data() == value)
+        return false;
+
+    undoStack()->push(new CUndoCommand_edit(this, index, index.data(), value));
+
+    return true;
+}
+
 bool ProxyModelTree_dev::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
@@ -105,15 +143,24 @@ ProxyModelTable_var::ProxyModelTable_var(QObject *parent)
 {
 }
 
+void ProxyModelTable_var::setUndoStack(QUndoStack *undo_stack_)
+{
+    _m_undo_stack = undo_stack_;
+}
+
 Qt::ItemFlags ProxyModelTable_var::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::NoItemFlags;
 
-    if (!index.isValid())
-        return Qt::NoItemFlags;
+    auto _item = DomModel::toItem(index);
+
+    Q_ASSERT(_item);
 
     Qt::ItemFlags flg = QAbstractItemModel::flags(index);
+
+    if(_item->is_read_only())
+        return flg;
 
     if(index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
         return Qt::ItemIsEditable | flg;
@@ -193,17 +240,26 @@ QVariant ProxyModelTable_var::data(const QModelIndex &index, int role) const
 
 bool ProxyModelTable_var::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (role != Qt::EditRole)
+    if((role & Qt::EditRole) != Qt::EditRole)
         return false;
 
-    QModelIndex source_index = mapToSource(index);
-    DomItem *item = static_cast<DomItem*>(source_index.internalPointer());
+    if(index.data() == value)
+        return false;
 
-    Q_ASSERT(item);
+    auto _index = this->index(index.row(), 0, index.parent());
+    auto _item = DomModel::toItem(_index);
 
-    item->setData(value, role);
+    Q_ASSERT(_item);
+    Q_ASSERT(undoStack());
 
-    emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
+    QDomNode _old = _item->node().cloneNode();
+
+    if(_item->is_read_only())
+        _item->setData(value, Qt::EditRole);
+    else
+        undoStack()->push(new CUndoCommand_edit_table(this, index, index.data(), value, _item->node().toElement().attribute("name")));
+
+    emit signal_variable_changed(_old, _item->node());
 
     return true;
 }

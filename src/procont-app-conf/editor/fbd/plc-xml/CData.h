@@ -45,10 +45,9 @@ public:
     void        set_any_node(const QDomNode &any_instance);
 
 private:
-    QString     m_name;
-    QString     m_handle_undef;
-
-    QDomNode    m_any;
+    QString     m_name{};
+    QString     m_handle_undef{};
+    QDomNode    m_any{};
 };
 
 

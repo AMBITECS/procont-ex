@@ -8,7 +8,12 @@
 #include "../includes.h"
 #include "../CDocumentation.h"
 #include "../CAddData.h"
+#include "../CConnectionPointIn.h"
+#include "../CConnectionPointOut.h"
 
+
+class CInterface;
+class CResource;
 
 /**
  * @brief  part of derived CInVar and so on.
@@ -17,11 +22,14 @@
 class CVariable
 {
 public:
-    CVariable();
+    explicit CVariable(CInterface *parent);
     CVariable(const CVariable &);
     CVariable(CVariable &&) noexcept;
-    explicit CVariable(const QDomNode &node);
+    CVariable(const QDomNode &node, CInterface *parent);
     ~CVariable();
+
+    CInterface * parent();
+    void         set_parent(CInterface *parent);
 
     QDomNode    dom_node();
 
@@ -31,6 +39,7 @@ public:
     void        set_type(const QString &type);
 
     [[nodiscard]] QString     name() const;
+    [[nodiscard]] QString     full_name() const;
     void        set_name(const QString &name);
 
     [[nodiscard]] QString     address() const;
@@ -42,13 +51,22 @@ public:
     [[nodiscard]] QString     init_value() const;
     void        set_init_value(const QString &str);
 
-    QString     comment() const;
+    [[nodiscard]] QString     comment() const;
     void        set_comment(const QString &comment);
 
+    [[nodiscard]] bool        is_empty() const;
+
+    void        set_global_parent(CResource *resource);
+
+    [[nodiscard]] bool          is_global() const;
+    CResource     * resource();
+
 private:
-    QString     m_attr_name;   // required
-    QString     m_attr_addr;
-    QString     m_attr_global_id;
+    CInterface * m_parent{nullptr};
+    CResource  * m_glob_parent{nullptr};
+    QString     m_attr_name{""};   // required
+    QString     m_attr_addr{};
+    QString     m_attr_global_id{};
 
     QString     m_type;           // EBaseTypes or other POUs
     QString     m_derived_name;

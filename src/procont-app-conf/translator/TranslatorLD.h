@@ -46,10 +46,13 @@ protected:
 
     quint32 linkConnect(qint32 _connect_id);
     quint32 linkContinuation(qint32 _connect_id, qint32 _new_connect_id);
-    qint32 checkBlockConnectionChain(qint32 _var_id, T_CONNECTION_VAR *_var);
-    qint32 checkFuncConnectionChain(qint32 _var_id, T_CONNECTION_VAR *_var);
-    qint32 checkVarConnectionChain(qint32 _var_id, T_CONNECTION_VAR *_var);
-    QString checkCoilConnectionChain(qint32 _var_id, qint32 &_next_id, QString _coil_type);
+    qint32 checkBlockConnectionChain(QString _target_name, qint32 _var_id, T_CONNECTION_VAR *_var);
+    qint32 checkFuncConnectionChain(QString _target_name, qint32 _var_id, T_CONNECTION_VAR *_var);
+    qint32 checkVarConnectionChain(QString _target_name, qint32 _var_id, T_CONNECTION_VAR *_var);
+    qint32 checkCoilConnectionChain(QString _target_name, qint32 _var_id, T_MODIFICATOR_TYPE _modificator_type, T_MODIFICATOR &_mod);
+    void checkIsChainUsed();
+
+    QString get_return_type(QString _function_name);
 
 protected:
     QMap<quint64, T_POU_LD_ITEM>        _m_in_var_item;
@@ -70,6 +73,8 @@ protected:
 
     QMultiMap<quint64, T_POU_LD_ITEM>   _m_execution_order_item;
     QMap<quint64, T_POU_LD_ITEM>        _m_generator_item;
+
+    QString                             _m_add_var_string;
 };
 
 #endif // TRANSLATORLD_H

@@ -1,0 +1,1 @@
+/usr/share/libtool-2.4/build-aux/ltmain.sh

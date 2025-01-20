@@ -7,64 +7,120 @@
 #include <QApplication>
 #include <QDrag>
 #include <QMimeData>
+#include <QTextStream>
+#include <QFile>
 
-#include "../palette/DBlock.h"
-#include "../../general/QtDialogs.h"
+
+#include "../redo-undo/CAddNewLadder.h"
+#include "../redo-undo/CInsertNewLadder.h"
+#include "../redo-undo/CInsertNewObject.h"
+#include "../redo-undo/CMoveObject.h"
+#include "../redo-undo/CInsertLadder.h"
+#include "../redo-undo/CRenameInst.h"
+
+#include "coglwidget.h"
+#include "editor/fbd/common/general/QtDialogs.h"
+#include "../editors/CEditors.h"
+#include "editor/fbd/fbd/redo-undo/CPinConnecting.h"
+#include "editor/fbd/fbd/redo-undo/CRemoveObject.h"
 
 
-COglWorld::COglWorld(CPou *pou, QPoint * hatch_pos)
+uint16_t    max_local_id;
+extern CProject *project;
+
+
+COglWorld::COglWorld(COglWidget * openGLwidget, CPou *pou, QPoint * hatch_pos)
 {
-    m_ladders = new std::vector<CLadder*> ();
-    m_visible_ladders = new std::vector<CLadder*> ();
-    m_hatch_topLeft = hatch_pos;
+    max_local_id = 0;
+
     m_pou = pou;
+    m_ladders         = new std::vector<CFbdLadder*> ();
+    m_visible_ladders = new std::vector<CFbdLadder*> ();
+    m_undo_stack      = new QUndoStack();
+    m_hatch_topLeft   = hatch_pos;
+
+
     m_diagram_type = EBodyType::BT_COUNT;
 
-    /// рефакторить ЭТО. Срочно
-    if (!pou->bodies()->isEmpty())
-    {
-        auto body = pou->bodies()->front();
-        m_diagram_type = body->diagram_lang();
-        if (m_diagram_type == BT_FBD)
-            m_fbd_content = body->fbd_content();
-    }
-    else
-    {
-        auto body = new CBody();
-        m_pou->bodies()->push_back(body);
-        m_fbd_content = body->add_fbd_diagram();
-        m_diagram_type = BT_FBD;
-    }
+    m_editors   = new CEditors(openGLwidget, this);
 
-    QTimer::singleShot(20, this, SLOT(initial_shot()));
+    connect(m_editors, &CEditors::interface_new_var, this, &COglWorld::iface_new_var);
+
+
+    connect(m_editors, &CEditors::interface_rename, this, &COglWorld::iface_rename);
+
+
+    connect(m_editors, &CEditors::pin_variable_renamed,
+            this, &COglWorld::pin_variable_rename);
+
+    connect(this, &COglWorld::undo_enabled, this, &COglWorld::convert_to_XML);
+
+    init_projects_instances();
+
+    QTimer::singleShot(20, this, SLOT(load_later()));
 }
 
 COglWorld::~COglWorld()
 {
+    delete m_editors;
     clear_ladders();
     delete m_ladders;
     delete m_visible_ladders;
+    delete m_undo_stack;
 }
 
-CLadder *COglWorld::add_new_ladder()
+void COglWorld::init_projects_instances()
 {
-    CLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
-
-    auto ladder = new CLadder(m_hatch_topLeft, &m_hatch_size, prev);
-
-    if (prev)
+    if (!m_pou->bodies()->isEmpty())
     {
-        prev->set_next(ladder);
+        m_diagram_type = m_pou->bodies()->front()->diagram_lang();
+        if (m_diagram_type == BT_FBD)
+        {
+            m_fbd_content = m_pou->bodies()->front()->fbd_content();
+        }
+        else
+        {
+            m_fbd_content = m_pou->bodies()->front()->add_fbd_diagram();
+        }
+        return;
     }
 
-    m_ladders->push_back(ladder);
-
-    check_diagram_size();
-    update_visible_ladders();
-
-    return ladder;
+    auto body = new CBody(m_pou);
+    m_pou->bodies()->push_back(body);
+    m_fbd_content = body->add_fbd_diagram();
+    m_diagram_type = BT_FBD;
 }
 
+CFbdLadder *COglWorld::add_new_ladder()
+{
+    auto cmd_new_ladder = new CAddNewLadder(this);
+    m_undo_stack->push(cmd_new_ladder);
+
+    if (!m_project_loading)
+    {
+        emit undo_enabled();
+    }
+
+    return cmd_new_ladder->new_ladder();
+}
+
+bool COglWorld::move_object(CFbdLadder *source, CFbdLadder *destination, CFbdObject *object, const QPoint &pos)
+{
+    source = object->parent();
+
+    /// if last moving to the end
+
+
+    auto cmd_move = new CMoveObject(this, source, destination, object, pos);
+    m_undo_stack->push(cmd_move);
+
+    if (!cmd_move->is_error())
+    {
+        emit undo_enabled();
+    }
+
+    return !cmd_move->is_error();
+}
 
 void COglWorld::clear_ladders()
 {
@@ -75,17 +131,9 @@ void COglWorld::clear_ladders()
     m_ladders->clear();
 }
 
-std::vector<CLadder*>  *COglWorld::ladders()
+std::vector<CFbdLadder*>  *COglWorld::visible_ladders()
 {
     return m_visible_ladders;
-}
-
-void COglWorld::reset_all_highlights()
-{
-    for (auto &item : *m_ladders)
-    {
-        item->highlights_off();
-    }
 }
 
 void COglWorld::win_resized(const int &w, const int &h)
@@ -99,7 +147,7 @@ void COglWorld::win_resized(const int &w, const int &h)
 
 void COglWorld::view_hatch_moved(const QPoint &)
 {
-    /// define visible ladders
+    /// define visible visible_ladders
     update_visible_ladders();
 }
 
@@ -133,7 +181,7 @@ s_selection COglWorld::get_selection(const QPoint &pos)
 
             for (auto &pin : *obj->pins())
             {
-                if (!pin->rect()->contains(pos))
+                if (!pin->is_pin_at_pos(pos))
                 {
                     continue;
                 }
@@ -144,6 +192,24 @@ s_selection COglWorld::get_selection(const QPoint &pos)
             if (p_selected)
                 break;
         }
+
+        CFbdConnectLine *sel_line = nullptr;
+        for (auto &line : *vis->connecting_lines())
+        {
+            line->set_selected(false);
+            if (line->is_clicked_on(pos))
+            {
+                sel_line = line;
+            }
+        }
+
+        if (sel_line)
+        {
+            sel_line->set_selected(true);
+            m_selection.connection_line = sel_line;
+            p_selected = true;
+        }
+
         if (p_selected)
             break;
     }
@@ -165,7 +231,7 @@ QPoint COglWorld::get_visible_range(const QPoint &)
     int right = count - 1;
     int mid;
 
-    CLadder * curr_ladder = m_ladders->at(index);
+    CFbdLadder * curr_ladder = m_ladders->at(index);
 
     /// define one of visible by binary search method
     while ((right > left))
@@ -206,7 +272,7 @@ QPoint COglWorld::get_visible_range(const QPoint &)
         return {left, right};
     }
 
-    /// Definition of the visible ladders range starts from the range -(minus) "limit" items from defined
+    /// Definition of the visible visible_ladders range starts from the range -(minus) "limit" items from defined
     /// visible item till + "limit" items from defined visible item
 
     int first_number = curr_ladder->number() - limit;
@@ -255,65 +321,56 @@ QPoint COglWorld::get_visible_range(const QPoint &)
 
 void COglWorld::load_project()
 {
-    auto body = m_pou->bodies()->empty() ? nullptr : m_pou->bodies()->front();
+    m_project_loading = true;
 
-    if (!body)
+    CFbdLadder *cur_ladder;
+    CVariablesAnalytics analytics(this, m_pou->name());
+
+    /// loading diagram objects and locate them to the corresponding ladder (without connecting lines)
+    for (auto &block : *m_fbd_content->blocks())
     {
-        return;
-    }
+        check_local_id(block->local_id());
+        if (block->global_id().toLongLong() == 0)
+        {
+            block->set_global_id(QString::number(1));
+        }
+        uint64_t ladder_index = block->global_id().toLong();
+        cur_ladder = get_ladder(ladder_index);
 
-    auto fbd = body->fbd_content();
-    if (!fbd)
-    {
-        fbd = body->add_fbd_diagram();
-    }
 
-    CLadder *cur_ladder = nullptr;
-    CLadder *prev_ladder = nullptr;
-
-    for (auto &block : *fbd->blocks())
-    {
-        auto lad_index = block->local_id() / 10000000;
-        cur_ladder = get_ladder(lad_index);
-
+        analytics.setup_block(block);
         auto object = cur_ladder->add_object(block);
 
-        /// setup input/output variables
-        for (auto &pin : *object->pins())
-        {
-            if (pin->direction() == PD_INPUT)
-            {
-                find_in_variable(pin);
-            }
-            else
-            {
-                find_out_var(pin, block->local_id());
-            }
-        }
-
-        object->update_bound_rect();
         object->update_position();
-
-        /// resort ladder when it changed
-        if (cur_ladder != prev_ladder)
-        {
-            if (prev_ladder)
-            {
-                prev_ladder->update_real_position();
-                prev_ladder->resort();
-            }
-        }
-        prev_ladder = cur_ladder;
     }
 
-    if (cur_ladder)
+    analytics.load_connections();
+
+    /// need to shake projects graphics
+    if (!m_ladders->empty())
     {
-        cur_ladder->update_real_position();
-        cur_ladder->resort();
+        CFbdLadder *prev = nullptr;
+
+        for (auto &ladder : *m_ladders)
+        {
+            ladder->set_previous(prev);
+            if (prev)
+            {
+                prev->set_next(ladder);
+            }
+
+            ladder->resort();
+
+            prev = ladder;
+        }
+
+        m_ladders->front()->update_real_position();
     }
+
+    m_project_loading = false;
 }
 
-void COglWorld::initial_shot()
+void COglWorld::load_later()
 {
     if (m_diagram_type == BT_COUNT)
     {
@@ -324,20 +381,27 @@ void COglWorld::initial_shot()
         case BT_FBD:
             load_project();
             break;
+        case BT_LD:
         default:
             break;
     }
 
-    /// for develop purposes only
-    for (int i = 0; i < 100; i++)
+    if (m_ladders->empty())
     {
-        add_new_ladder();
-    }
+        CFbdLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
+        auto last = new CFbdLadder(this,m_hatch_topLeft, &m_hatch_size, prev);
 
-    m_ladders->front()->update_real_position();
+        m_ladders->push_back(last);
+        if (prev)
+        {
+            prev->set_next(last);
+        }
+    }
 
     check_diagram_size();
     update_visible_ladders();
+
+    emit set_current_pou(m_pou);
 
     emit update_hatch();
 }
@@ -356,35 +420,6 @@ void COglWorld::check_diagram_size()
     }
 }
 
-void COglWorld::mouse_clicked(const QPoint &pos)
-{
-    for (auto &ladder : *m_ladders)
-    {
-        if (ladder->is_selected())
-        {
-            ladder->set_selected(false);
-            break;
-        }
-    }
-
-    for (auto ladder : *m_visible_ladders)
-    {
-        if (ladder->is_clicked_here(pos))
-        {
-            ladder->set_selected(true);
-            break;
-        }
-    }
-}
-
-void COglWorld::mouse_drag_over(QDragMoveEvent *event)
-{
-    for (auto &ladder : *m_visible_ladders)
-    {
-        ladder->drag_object(event);
-    }
-}
-
 void COglWorld::shutdown_highlights()
 {
     for (auto lad : *m_visible_ladders)
@@ -393,29 +428,43 @@ void COglWorld::shutdown_highlights()
     }
 }
 
-CLadder *COglWorld::insert_new_ladder(CLadder *next)
+CFbdLadder *COglWorld::insert_new_ladder(CFbdLadder *next)
 {
-    if (!next)
+    auto cmd_insert_ladder = new CInsertNewLadder(this, next);
+    m_undo_stack->push(cmd_insert_ladder);
+
+    emit undo_enabled();
+
+    return cmd_insert_ladder->new_ladder();
+}
+
+CFbdObject * COglWorld::insert_new_component(CFbdLadder *p_ladder, const EPaletteElements &element,
+                                                 const QString &pou_name,
+                                                 const QPoint &pos)
+{
+    if (!m_fbd_content)
     {
+        QtDialogs::warn_user(tr("There is no FBD POUs"));
         return nullptr;
     }
 
-    int index = next->number() - 1;
-    CLadder *prev = index - 1 < 0 ? nullptr : m_ladders->at(index-1);
-
-    auto ladder = new CLadder(m_hatch_topLeft, &m_hatch_size, prev, next);
-
-    if (prev)
+    if (element < EL_AND || element >= E_COUNT)
     {
-        prev->set_next(ladder);
+        QtDialogs::warn_user(tr("At the moment the component is not supported. But in the process of development"));
+        return nullptr;
     }
 
-    m_ladders->insert(m_ladders->begin() + index, ladder);
-    view_hatch_moved({});
+    auto cmd_insert_obj = new CInsertNewObject(this, m_fbd_content, p_ladder, element, pou_name, pos);
+    m_undo_stack->push(cmd_insert_obj);
+    auto object = cmd_insert_obj->inserted_object();
 
-    check_diagram_size();
+    if (!m_project_loading)
+    {
+        convert_to_XML();
+        emit undo_enabled();
+    }
 
-    return ladder;
+    return object;
 }
 
 void COglWorld::update_visible_ladders()
@@ -426,131 +475,69 @@ void COglWorld::update_visible_ladders()
     }
 
     auto range = get_visible_range(*m_hatch_topLeft);
+    if (range == QPoint())
+    {
+        if (!m_ladders->empty())
+            range = QPoint(0, (int)m_ladders->size());
+    }
+
+    if ((range.y() + 1) <= m_ladders->size())
+    {
+        range.setY(range.y()+1);
+    }
 
     m_visible_ladders->clear();
     m_visible_ladders->insert(m_visible_ladders->end(),
-                              m_ladders->begin()+range.x(),
+                              m_ladders->begin() + range.x(),
                               m_ladders->begin() + range.y());
 
-    for (int i = range.x(); i < range.y(); i++)
+    for (auto &item : *m_visible_ladders)
     {
-        m_ladders->at(i)->update_rel_position();
+        item->update_relative_position();
     }
 
-    //emit update_hatch();
+    emit update_hatch();
 }
 
-void COglWorld::find_in_variable(CConnectorPin *&p_pin)
+CFbdLadder *COglWorld::get_ladder(const unsigned long &ied_ladder)
 {
-    if (m_pou->bodies()->isEmpty() || p_pin->ref_local_id() == 0)
+    CFbdLadder *ladder;
+
+    uint64_t ladder_index = ied_ladder - 1;
+
+    if (ladder_index >= m_ladders->size())
     {
-        return;
-    }
+        size_t ind = m_ladders->size();
+        CFbdLadder *prev = m_ladders->empty() ? nullptr : m_ladders->back();
 
-    auto body = m_pou->bodies()->front()->fbd_content();
-    if (!body)
-    {
-        return;
-    }
-
-    uint64_t ref_id = p_pin->ref_local_id();
-
-
-    for (auto &block : *body->blocks())
-    {
-        if (block->local_id() == ref_id)
+        for (auto i = ind; i <= (ladder_index); i++)
         {
-            QString pin_formal = p_pin->block_var()->point_in()->connections()->empty() ? ""
-                    : p_pin->block_var()->point_in()->connections()->front()->formal_parameter();
-            QString formal = block->instance_name().isEmpty() ?
-                    block->type_name() + "_" + QString::number(ref_id) + "."+pin_formal :
-                    block->instance_name() + "." + pin_formal;
-            p_pin->set_formal_param(formal);
-            return;
+            ladder = new CFbdLadder(this, m_hatch_topLeft, &m_hatch_size, prev);
+
+            if (prev)
+            {
+                prev->set_next(ladder);
+            }
+
+            m_ladders->push_back(ladder);
+            prev = ladder;
         }
-    }
-
-    for (auto &input : *body->inVariables())
-    {
-        if (input->local_id() == ref_id)
-        {
-            p_pin->set_in_variable(input);
-            return;
-        }
-    }
-}
-
-bool COglWorld::find_out_var(CConnectorPin *p_pin, const uint64_t &block_id)
-{
-    if (m_pou->bodies()->isEmpty())
-    {
-        return false;
-    }
-
-    auto body = m_pou->bodies()->front()->fbd_content();
-    if (!body)
-    {
-        return false;
-    }
-
-    QList<COutVariable*> * outs = body->out_variables();
-    uint64_t  point_ref;
-    QString var_formal;
-
-    for (COutVariable * &out : *outs)
-    {
-        point_ref = 0;
-        var_formal.clear();
-        if (!out->point_in()->connections()->empty())
-        {
-            point_ref = out->point_in()->connections()->front()->ref_local_id();
-            var_formal = out->point_in()->connections()->front()->formal_parameter();
-        }
-        if (!point_ref) { continue; }
-
-        if (point_ref == block_id && var_formal == p_pin->formal_param())
-        {
-            p_pin->set_out_variable(out);
-            return true;
-        }
-    }
-    return false;
-}
-
-CLadder *COglWorld::get_ladder(const unsigned long &id_ladder)
-{
-    CLadder *cur_ladder;
-    if (id_ladder >= m_ladders->size())
-    {
-        if (m_ladders->empty())
-        {
-            cur_ladder = add_new_ladder();
-        }
-        else
-            cur_ladder = m_ladders->back();
     }
     else
     {
-        cur_ladder = m_ladders->at(id_ladder);
+        ladder = m_ladders->at(ladder_index);
     }
-    return cur_ladder;
+    return ladder;
 }
 
 void COglWorld::mouse_left_pressed(const QPoint &pos)
 {
-    m_selection.reset();
+
+    m_selection = get_selection(pos);
 
     for (auto &ladder : *m_ladders)
     {
-        if (ladder->is_selected() && ladder != m_selection.ladder)
-        {
-            ladder->set_selected(false);
-        }
-
-        if (ladder->is_clicked_here(pos))
-        {
-            ladder->get_selected(pos, &m_selection);
-        }
+        ladder->set_selected(false);
     }
 
     if (m_selection.ladder)
@@ -558,7 +545,14 @@ void COglWorld::mouse_left_pressed(const QPoint &pos)
         m_selection.ladder->set_selected(true);
     }
 
+    if (m_selection.object)
+    {
+        m_selection.object->set_selected(true);
+        emit  object_selected();
+    }
+
     m_mouse_pressed = pos;
+    emit  user_clicked();
 }
 
 void COglWorld::mouse_move(QMouseEvent *event)
@@ -571,6 +565,11 @@ void COglWorld::mouse_move(QMouseEvent *event)
     if ( (event->pos() - m_mouse_pressed).manhattanLength()
          < QApplication::startDragDistance()
        )
+    {
+        return;
+    }
+
+    if(m_selection.pin && m_selection.pin->direction() == PD_INPUT && m_selection.pin->is_connected())
     {
         return;
     }
@@ -598,148 +597,310 @@ void COglWorld::mouse_move(QMouseEvent *event)
         mime->setProperty("object", "object");
         mime->setProperty("object_id", (int)m_selection.object->local_id());
         mime->setImageData(QImage(":/16/images/16x16/brick_link.png"));
-        m_drag_pin = m_selection.pin;
+        //m_dra = m_selection.pin;
     }
 
     if (m_selection.pin)
     {
+        if (m_selection.pin->parent()->instance_name() == "???")
+        {
+            QtDialogs::warn_user(tr("Give the object a valid name"));
+            return;
+        }
         QPixmap pix = QPixmap::fromImage(*m_selection.pin->image());
         drag->setPixmap(pix);
         mime->setProperty("source", "canvas");
         mime->setProperty("object", "pin");
         drag->setHotSpot(pix.rect().center());
+        m_drag_pin = m_selection.pin;
     }
 
-    //m_selection.reset();
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
 
-    /*Qt::DropAction dropAction =*/ drag->exec(Qt::CopyAction | Qt::MoveAction);
-
+    emit drag_complete();
 }
 
-s_selection *COglWorld::get_selection()
+s_selection *COglWorld::selected()
 {
     return &m_selection;
 }
 
-void COglWorld::insert_ladder(CLadder *dragged_ladder, CLadder *before)
+void COglWorld::insert_ladder(CFbdLadder *dragged_ladder, CFbdLadder *before)
 {
-    if (m_ladders->size() == 1)
+    if (m_ladders->size() == 1 || before == dragged_ladder)
     {
         return;
     }
 
-    if (before == dragged_ladder)
-    {
-        return;
-    }
-
-
-    int index = dragged_ladder->number() - 1;
-    m_ladders->erase(m_ladders->begin() + index);
-    /// откуда (начало/конец/середина) взяли, там надо "сшить"<BR>
-
-    /// from the begin
-    if (!dragged_ladder->previous_ladder())
-    {
-        dragged_ladder->next_ladder()->set_previous(nullptr);
-    }
-    /// from the end
-    if (!dragged_ladder->next_ladder())
-    {
-        dragged_ladder->previous_ladder()->set_next(nullptr);
-    }
-    /// from the middle
-    if (dragged_ladder->previous_ladder() && dragged_ladder->next_ladder())
-    {
-        dragged_ladder->next_ladder()->set_previous(dragged_ladder->previous_ladder());
-        dragged_ladder->previous_ladder()->set_next(dragged_ladder->next_ladder());
-    }
-
-    CLadder * start = dragged_ladder->previous_ladder() ? dragged_ladder->previous_ladder()
-            : dragged_ladder->next_ladder();
-
-    start->update_real_position();
-    start->update_rel_position();
-    view_hatch_moved({});
-
-
-    /// куда (начало конец середина) вставка - там "разрезаем"<BR>
-
-    /// to the end
-    if (!before)
-    {
-        dragged_ladder->set_previous(m_ladders->back());
-        m_ladders->back()->set_next(dragged_ladder);
-        m_ladders->push_back(dragged_ladder);
-    }
-
-    /// to the middle
-    if (before && before->next_ladder() && before->previous_ladder())
-    {
-        index = before->number() - 1;
-
-        /// setup inserting ladder new prev and next
-        dragged_ladder->set_previous(before->previous_ladder());
-        dragged_ladder->set_next(before);
-
-        /// setup old ladders new prev and next
-        before->previous_ladder()->set_next(dragged_ladder);
-        before->set_previous(dragged_ladder);
-
-
-        m_ladders->insert(m_ladders->begin() + index, dragged_ladder);
-    }
-
-    /// to the begin
-    if (before && !before->previous_ladder())
-    {
-        dragged_ladder->set_previous(nullptr);
-        dragged_ladder->set_next(m_ladders->front());
-        m_ladders->front()->set_previous(dragged_ladder);
-        m_ladders->insert(m_ladders->begin(), dragged_ladder);
-    }
-
-    CLadder * start_refresh;
-
-    if (!dragged_ladder->previous_ladder())
-    {
-        start_refresh = dragged_ladder;
-    }
-    else
-    {
-        start_refresh = dragged_ladder->previous_ladder();
-    }
-
-    start_refresh->update_real_position();
-    view_hatch_moved({});
-
-    check_diagram_size();
+    auto cmd_insert = new CInsertLadder(this, dragged_ladder, before);
+    emit undo_enabled();
+    m_undo_stack->push(cmd_insert);
 }
 
-void COglWorld::ladder_size_changed()
+void COglWorld::check_local_id(const uint16_t &local_id)
 {
-    check_diagram_size();
+    if (local_id > max_local_id)
+    {
+        max_local_id = local_id;
+    }
 }
 
-void COglWorld::insert_new_component(CLadder *p_ladder, const EPaletteElements &element, const QPoint &pos)
+QUndoStack *COglWorld::undo_stack()
 {
-    if (!m_fbd_content)
+    return m_undo_stack;
+}
+
+void COglWorld::mouse_dblClicked(QMouseEvent *evt)
+{
+    if (m_selection.empty() || !m_selection.ladder)
     {
-        QtDialogs::warn_user("There is no FBD POUs");
         return;
     }
 
-    // TODO: расширить диапазон для любых компонент
-    if (element < 9 || element > 12)
+    /// define pin's variable or object's instance name
+    if (m_selection.pin)
     {
-        QtDialogs::warn_user("Пока компонент не поддерживается.");
+        /// pin variable
+        if (m_selection.pin->direction() == PD_INPUT && m_selection.pin->is_connected())
+        {
+            QtDialogs::warn_user(tr("The pin already has a connection"));
+            return;
+        }
+
+        if (m_selection.pin->parent()->instance_name() == "???")
+        {
+            QtDialogs::warn_user(tr("Specify a name for the object"));
+            return;
+        }
+
+        text_based_connecting_pin(m_selection.pin);
         return;
     }
 
-    auto block = new DBlock(init[element]);
-    m_fbd_content->blocks()->push_back(block);
+    QRect rect;
+    for (auto &obj : *m_selection.ladder->draw_components())
+    {
+        auto text_obj = obj->inst_text();
+        rect.setRect(text_obj->pos().x(), text_obj->pos().y() - text_obj->text_rect().height(),
+                     obj->inst_text()->text_rect().width(), obj->inst_text()->text_rect().height());
 
-    p_ladder->insert_new_component(pos, block);
+        if (rect.contains(evt->pos()))
+        {
+            m_selection.object = obj;
+            m_editors->show_line_edit(obj);
+            break;
+        }
+    }
 }
 
+void COglWorld::iface_new_var(const QString &type, const QString &name)
+{
+    if (m_selection.object->type_name() == "function")
+    {
+        return;
+    }
 
+    auto cmd_rename = new CRenameInst(this, m_selection.object,
+                                      m_selection.object->type_name(), name);
+    m_undo_stack->push(cmd_rename);
+    m_selection.reset();
+
+    emit undo_enabled();
+    //emit iface_var_new(type, name);
+}
+
+void COglWorld::iface_rename(const QString &old_name, const QString &new_name)
+{
+    if (!m_selection.object)
+    {
+        return;
+    }
+    auto cmd_rename = new CRenameInst(this, m_selection.object,
+                                      old_name, new_name);
+    m_undo_stack->push(cmd_rename);
+    m_selection.reset();
+
+    emit undo_enabled();
+}
+
+void COglWorld::pin_variable_rename()
+{
+    emit undo_enabled();
+}
+
+bool COglWorld::check_pins_to_connection(CPin *target_pin, s_compare_types &comparable_types)
+{
+    if (!m_drag_pin || (target_pin == m_drag_pin))
+    {
+        return false;
+    }
+
+    /// check target pin is busy
+    if (target_pin->direction() == PD_INPUT && target_pin->is_connected())
+    {
+        comparable_types.target_type = tr("to many");
+        comparable_types.dragged_type = tr("single");
+        return false;
+    }
+
+    /// info about dragged pin type
+    QString dragged_pin_type_name = m_drag_pin->type() == DDT_DERIVED ? m_drag_pin->type_name() :
+                                                base_types_names[m_drag_pin->type()];
+    EDefinedDataTypes dragged_pin_type = m_drag_pin->type();
+
+    /// info about target pin type
+    QString target_pin_type_name = target_pin->type() == DDT_DERIVED ? target_pin->type_name() :
+                                        base_types_names[target_pin->type()];
+    EDefinedDataTypes target_pin_type = target_pin->type();
+
+    comparable_types.dragged_type = dragged_pin_type_name;
+    comparable_types.target_type = target_pin_type_name;
+
+    /// check if out connecting to out (wrong)
+    if (m_drag_pin->direction() == target_pin->direction())
+    {
+        return false;
+    }
+
+    if (target_pin_type_name.isEmpty() || dragged_pin_type_name.isEmpty())
+    {
+        throw std::runtime_error("Logic is broken in 'COglWorld::check_pins_to_connection(...)'");
+    }
+
+    /// compatibility check
+    CVariablesAnalytics analytics(this, m_pou->name());
+    bool res = CVariablesAnalytics::check_pin_compatibility(dragged_pin_type_name, dragged_pin_type,
+                                                target_pin_type_name, target_pin_type,
+                                                comparable_types);
+
+    return res;
+}
+
+void COglWorld::connect_pins(CPin *dragged_pin, CPin *target_pin)
+{
+    if (dragged_pin->direction() == target_pin->direction())
+    {
+        QtDialogs::warn_user(tr("Can't connect pins with with the same direction"));
+    }
+    auto cmd = new CPinConnecting(this, dragged_pin, target_pin);
+    m_undo_stack->push(cmd);
+
+    if (!m_project_loading)
+    {
+        emit undo_enabled();
+    }
+}
+
+std::vector<CFbdLadder *> *COglWorld::all_ladders()
+{
+    return m_ladders;
+}
+
+void COglWorld::text_based_connecting_pin(CPin *selected_pin)
+{
+    /// connecting itself is in CEditors::new_pin_connection and here we just show comboBox
+    m_editors->show_combo(m_selection.pin);
+}
+
+void COglWorld::convert_to_XML()
+{
+    const QDomNode pou_node = m_pou->dom_node();
+
+    if (pou_node.isNull())
+    {
+        return;
+    }
+
+    save_to_file(pou_node);
+
+
+    //QUndoStack loc_stack;
+
+    /// когда из диаграммы
+
+
+    /*QDomDocument doc;
+    QDomElement root = doc.documentElement();
+    if (root.isNull())
+    {
+        root = doc.createElement("project_pou");
+        doc.appendChild(root);
+    }
+
+
+    QDomNode node = m_pou->dom_node();
+
+    if (node.isNull())
+    {
+        QtDialogs::warn_user("pou's node is null");
+        return;
+    }
+    root.appendChild(node);
+
+    QString sFilePath = qApp->applicationDirPath() + "/" + "XML_project.xml";
+    QFile file(sFilePath);
+    if (!file.open(QFile::WriteOnly|QFile::Truncate | QFile::Text))
+    {
+        QtDialogs::warn_user("Can't save pou");
+        return;
+    }
+    QTextStream stream( &file );
+    //stream << doc.toString();
+    doc.save(stream, 4);
+    file.close();*/
+}
+
+CPou *COglWorld::current_pou()
+{
+    return m_pou;
+}
+
+void COglWorld::erase_object(CFbdObject *object)
+{
+    if (!object)
+    {
+        return;
+    }
+
+    auto cmd = new CRemoveObject(object);
+    m_undo_stack->push(cmd);
+
+    if (!object->instance_name().isEmpty())
+        emit instance_removed(object->type_name(), object->instance_name());
+}
+
+void COglWorld::delete_selected()
+{
+    if (m_selection.object || m_selection.connection_line)
+    {
+        if (m_selection.object)
+        {
+            erase_object(m_selection.object);
+        }
+        if (m_selection.connection_line)
+        {
+
+        }
+    }
+}
+
+void COglWorld::save_to_file( const QDomNode &node )
+{
+    QFile outFile( "fbd_diag.xml" );
+    /*if( !outFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
+    {
+        qDebug( "Failed to open file for writing." );
+        return;
+    }*/
+
+    QDomDocument document;// = node.toDocument();
+    document.appendChild(node);
+    QDomElement root = document.createElement("FBD_POU");
+    root.appendChild(node);
+    document.appendChild(root);
+
+    //QTextStream stream( &outFile );
+    //stream << document.toString(4);
+
+    //outFile.close();
+}

@@ -28,7 +28,7 @@ ui_*.h
 *.qmlc
 *.jsc
 Makefile*
-/build*
+/build
 *.qm
 *.prl
 
@@ -55,5 +55,10 @@ compile_commands.json
 /Diff.cmake
 
 cmake-build-debug/
-
 cmake-build-debug-qt/
+cmake-build-*/
+
+matiec/
+matiec/cmake-build-*/
+
+build/

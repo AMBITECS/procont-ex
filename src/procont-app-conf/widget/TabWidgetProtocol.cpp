@@ -5,6 +5,8 @@
 
 #include "log/Logger.h"
 
+#include "main/MainWindow.h"
+
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QUndoView>
@@ -15,6 +17,7 @@
 #include <QToolBar>
 #include <QActionGroup>
 #include <QFileInfo>
+#include <QUndoStack>
 
 #include <QDebug>
 
@@ -31,12 +34,12 @@ IWidgetProtocolTab::IWidgetProtocolTab(QWidget *parent_) : QWidget(parent_)
 //
 CWidgetProtocolTab_message::CWidgetProtocolTab_message(QWidget *parent_) : IWidgetProtocolTab(parent_)
 {
-    m_pWidget = new QTreeWidget(this);
+    m_pWidget = new TreeWidget(this);
     m_pWidget->setColumnCount(6);
     m_pWidget->header()->resizeSection(1, 150);
-    m_pWidget->header()->resizeSection(2, 160);
+    m_pWidget->header()->resizeSection(2, 200);
     m_pWidget->header()->resizeSection(3, 220);
-    m_pWidget->header()->resizeSection(4, 150);
+    m_pWidget->header()->resizeSection(4, 200);
     m_pWidget->setHeaderLabels(QStringList() << tr("Number") << tr("Type") << tr("Time") << tr("Source") << tr("Object") << tr("Message"));
 
     auto *layout = new QVBoxLayout(this);
@@ -111,7 +114,7 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     auto container = new QWidget(this);
     m_pErrorPlainTextWidget = new QPlainTextEdit(this);
     m_pErrorPlainTextWidget->setReadOnly(true);
-    m_pErrorTreeWidget = new QTreeWidget(this);
+    m_pErrorTreeWidget = new TreeWidget(this);
     m_pErrorTreeWidget->setColumnCount(4);
     m_pErrorTreeWidget->header()->resizeSection(0, 900);
     m_pErrorTreeWidget->header()->resizeSection(1, 100);
@@ -120,7 +123,7 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     m_pErrorTreeWidget->setHeaderLabels(QStringList() << tr("Message") << tr("Project") << tr("Object") << tr("Position"));
     m_pErrorTreeWidget->setWordWrap(true);
     m_pErrorTreeWidget->hide();
-    m_pCodePlainTextWidget = new CodeEditorWidget(this);
+    m_pCodePlainTextWidget = new CodeEditorWidget(true, this);
     m_pCodePlainTextWidget->hide();
     auto hb = new QHBoxLayout;
     hb->addWidget(m_pErrorPlainTextWidget);
@@ -234,20 +237,19 @@ void CWidgetProtocolTab_build::set(const CText &text_)
 // *** CWidgetProtocol ***
 //
 
-CWidgetProtocol * CWidgetProtocol::m_pInstance = nullptr;
+CWidgetProtocol * CWidgetProtocol::_m_instance = nullptr;
 
 CWidgetProtocol::CWidgetProtocol(QWidget *parent) :
     QTabWidget{parent}
 {
-    m_pWidgetMessage = new CWidgetProtocolTab_message(this);
-    addTab(m_pWidgetMessage, tr("Messages"));
+    _m_widget_message = new CWidgetProtocolTab_message(this);
+    addTab(_m_widget_message, tr("Messages"));
 
-    m_pWidgetBuild = new CWidgetProtocolTab_build(this);
-    addTab(m_pWidgetBuild, tr("Build"));
+    _m_widget_build = new CWidgetProtocolTab_build(this);
+    addTab(_m_widget_build, tr("Build"));
 
-    m_pWidgetAction = new QUndoView(this);
-    // m_pActionUndoView->setStack(CWidgetProject::instance()->undoStack());
-    addTab(m_pWidgetAction, tr("Actions"));
+    _m_widget_action = new UndoView(this);
+    addTab(_m_widget_action, tr("Actions"));
 
     setMinimumHeight(200);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -265,10 +267,15 @@ CWidgetProtocol::~CWidgetProtocol()
 
 CWidgetProtocol * CWidgetProtocol::instance()
 {
-    if(!m_pInstance)
-        m_pInstance = new CWidgetProtocol;
+    if(!_m_instance)
+        _m_instance = new CWidgetProtocol;
 
-    return  m_pInstance;
+    return  _m_instance;
+}
+
+void CWidgetProtocol::setUndoGroup(QUndoGroup* group_) const
+{
+    _m_widget_action->setGroup(group_);
 }
 
 void CWidgetProtocol::slot_add_msg(const CMessage &message_)
@@ -276,13 +283,13 @@ void CWidgetProtocol::slot_add_msg(const CMessage &message_)
     switch(message_.type())
     {
     case CMessage::eMT_Message:
-        m_pWidgetMessage->add(message_);
+        _m_widget_message->add(message_);
         break;
     case CMessage::eMT_Build:
-        m_pWidgetBuild->add(message_);
+        _m_widget_build->add(message_);
         break;
     default:
-        m_pWidgetMessage->add(message_);
+        _m_widget_message->add(message_);
         break;
     }
 }
@@ -298,13 +305,13 @@ void CWidgetProtocol::slot_exec_cmd(const CCmd &cmd_)
     switch(cmd_.type())
     {
     case CMessage::eMT_Message:
-        m_pWidgetMessage->exec(cmd_);
+        _m_widget_message->exec(cmd_);
         break;
     case CMessage::eMT_Build:
-        m_pWidgetBuild->exec(cmd_);
+        _m_widget_build->exec(cmd_);
         break;
     default:
-        m_pWidgetBuild->exec(cmd_);
+        _m_widget_build->exec(cmd_);
         break;
     }
 }
@@ -314,22 +321,22 @@ void CWidgetProtocol::exec(const CCmd &cmd_)
     switch(cmd_.type())
     {
     case CMessage::eMT_Message:
-        setCurrentWidget(m_pWidgetMessage);
+        setCurrentWidget(_m_widget_message);
         break;
     case CMessage::eMT_Action:
-        setCurrentWidget(m_pWidgetAction);
+        setCurrentWidget(_m_widget_action);
         break;
     case CMessage::eMT_Build:
-        setCurrentWidget(m_pWidgetBuild);
+        setCurrentWidget(_m_widget_build);
         break;
     default:
-        setCurrentWidget(m_pWidgetMessage);
+        setCurrentWidget(_m_widget_message);
         break;
     }
 }
 
 void CWidgetProtocol::slot_set_txt(const CText &text_)
 {
-    m_pWidgetBuild->set(text_);
+    _m_widget_build->set(text_);
 }
 // ----------------------------------------------------------------------------

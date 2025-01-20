@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<CFile xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <includes>
+    <xhtml:p><![CDATA[]]></xhtml:p>
+  </includes>
+  <variables/>
+  <globals>
+    <xhtml:p><![CDATA[]]></xhtml:p>
+  </globals>
+  <initFunction>
+    <xhtml:p><![CDATA[]]></xhtml:p>
+  </initFunction>
+  <cleanUpFunction>
+    <xhtml:p><![CDATA[]]></xhtml:p>
+  </cleanUpFunction>
+  <retrieveFunction>
+    <xhtml:p><![CDATA[]]></xhtml:p>
+  </retrieveFunction>
+  <publishFunction>
+    <xhtml:p><![CDATA[]]></xhtml:p>
+  </publishFunction>
+</CFile>

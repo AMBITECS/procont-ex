@@ -10,8 +10,9 @@
 #include <QTreeWidget>
 #include <QDomNode>
 
-#include "../../general/types.h"
+#include "editor/fbd/common/general/types.h"
 #include "coglwidget.h"
+#include "editor/fbd/common/general/ctreeobject.h"
 
 typedef struct s_fbd_start_data
 {
@@ -21,8 +22,10 @@ typedef struct s_fbd_start_data
     QString pou_to_derive_name;
     QString pou_to_implement_name;
     QDomNode *xml_data{nullptr};
-    CTreeObject *tree;
+    CTreeObject *tree{nullptr};
 } SFbdStartupData;
+
+
 
 namespace Ui {
     class Form;
@@ -48,37 +51,41 @@ public:
     explicit CDiagramWidget(const QDomNode &pou_node, CTreeObject * tree_object,
                             const bool &is_editable = true, QWidget *parent = nullptr);
     ~CDiagramWidget() override;
-
     void  set_active();
 
+    QUndoStack *    undo_stack();
 
 signals:
-    void    changed_diagram(const QDomNode & node); //!< diagram was changed
-    void    changed_interface();                    //!< The interface has been changed from the diagram.
-                                                    //!< It needs to be visually updated
-
+    void    changed_diagram(const QDomNode & node);
+    void    undo_enabled();
+    void    interface_variable_new(const QString &type, const QString &name);
+    void    interface_variable_rename(const QString &old_name, const QString &new_name);
+    void    instance_removed(const QString &type, const QString &name);
+    void    object_selected();
+    void    user_clicked();
 public slots:
-    void    updated_diagram();
-    void    updated_interface(const QDomNode &node);
+    /** @brief пользователь ввёл новую переменную. Необходимо обновить данные о локальном интерфейсе */
+    void    update_interface(const QDomNode &node);
+    void    delete_selected_object();
 
 protected:
 
 
-
 protected slots:
     void build_tree();
+    void diagram_object_is_selected();
+    void diagram_has_changed(const QDomNode &node);
 
 
 private:
     Ui::Form   *ui;
     COglWidget          * m_ogl_widget;
     CTreeObject         * m_tree_widget;
-    //QTabWidget          * m_parent;
-    //int                   m_this_index{-1};
-    //bool                  m_active{false};
     bool                  m_is_editable{true};
     QDomNode            * m_dom_node;
+    CPou *              m_current_pou{nullptr};
 
+    void save_to_file( const QDomNode &node );
 };
 
 

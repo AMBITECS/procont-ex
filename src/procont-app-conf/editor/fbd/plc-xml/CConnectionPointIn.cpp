@@ -106,6 +106,7 @@ CConnectionPointIn &CConnectionPointIn::operator=(const CConnectionPointIn &rhs)
     m_add_data = rhs.m_add_data;
     m_rel_position = rhs.m_rel_position;
     m_attr_global_id = rhs.m_attr_global_id;
+    m_expression = rhs.m_expression;
 
     return *this;
 }

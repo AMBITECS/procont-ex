@@ -40,6 +40,44 @@ public:
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** IOMapping ***
+
+/*!
+ * \brief The IOMapping class
+ */
+
+class IOMapping : public QWidget
+{
+    Q_OBJECT
+public:
+    IOMapping() = default;
+
+protected:
+    virtual void createContent() = 0;
+};
+
+class IOMapping_default : public IOMapping
+{
+    Q_OBJECT
+public:
+    IOMapping_default();
+
+protected:
+    void createContent() override;
+};
+
+class IOMapping_CANopen_remote_device : public IOMapping
+{
+    Q_OBJECT
+public:
+    IOMapping_CANopen_remote_device();
+
+protected:
+    void createContent() override;
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** WidgetSettings ***
 
 /*!

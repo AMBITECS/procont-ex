@@ -55,6 +55,7 @@ AddDeviceDialog::AddDeviceDialog()
     // device group
     // vendor
     auto _vendor_search_lineEdit = new QLineEdit;
+    _vendor_search_lineEdit->setPlaceholderText(tr("String for a full text search"));
     auto _vendor_list_comboBox = new QComboBox;
     auto _vendor_layout = new QHBoxLayout;
     _vendor_layout->addWidget(_vendor_search_lineEdit);

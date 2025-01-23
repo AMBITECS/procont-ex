@@ -82,6 +82,9 @@
         <file>images/arrow-3-up.svg</file>
         <file>images/arrow-2-down-bottom.svg</file>
         <file>images/arrow-2-up-top.svg</file>
+        <file>images/arrow-5-down.svg</file>
+        <file>images/arrow-5-up.svg</file>
+        <file>images/arrow-right.svg</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/AdditionalFunctionBlocks.xml</file>

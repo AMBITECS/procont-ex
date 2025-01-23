@@ -59,6 +59,8 @@ matiec/
 matiec/cmake-build-*/
 
 build/
-/src/procont-ex/tmp/*
-/src/procont-ex/iec/*
+/src/procont-ex/tmp/
+/src/procont-ex/iec/tmp/
+/src/procont-ex/iec/
 !src/procont-ex/iec/CMakeLists.txt
+

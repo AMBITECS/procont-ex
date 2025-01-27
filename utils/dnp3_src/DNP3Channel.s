@@ -1,0 +1,13526 @@
+	.file	"DNP3Channel.cpp"
+	.text
+	.section	.rodata._ZNK4asio6detail15system_category4nameEv.str1.1,"aMS",@progbits,1
+.LC0:
+	.string	"asio.system"
+	.section	.text._ZNK4asio6detail15system_category4nameEv,"axG",@progbits,_ZNK4asio6detail15system_category4nameEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNK4asio6detail15system_category4nameEv
+	.type	_ZNK4asio6detail15system_category4nameEv, @function
+_ZNK4asio6detail15system_category4nameEv:
+.LFB3672:
+	.cfi_startproc
+	leaq	.LC0(%rip), %rax
+	ret
+	.cfi_endproc
+.LFE3672:
+	.size	_ZNK4asio6detail15system_category4nameEv, .-_ZNK4asio6detail15system_category4nameEv
+	.section	.rodata._ZNK4asio5error6detail14netdb_category4nameEv.str1.1,"aMS",@progbits,1
+.LC1:
+	.string	"asio.netdb"
+	.section	.text._ZNK4asio5error6detail14netdb_category4nameEv,"axG",@progbits,_ZNK4asio5error6detail14netdb_category4nameEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNK4asio5error6detail14netdb_category4nameEv
+	.type	_ZNK4asio5error6detail14netdb_category4nameEv, @function
+_ZNK4asio5error6detail14netdb_category4nameEv:
+.LFB3712:
+	.cfi_startproc
+	leaq	.LC1(%rip), %rax
+	ret
+	.cfi_endproc
+.LFE3712:
+	.size	_ZNK4asio5error6detail14netdb_category4nameEv, .-_ZNK4asio5error6detail14netdb_category4nameEv
+	.section	.rodata._ZNK4asio5error6detail17addrinfo_category4nameEv.str1.1,"aMS",@progbits,1
+.LC2:
+	.string	"asio.addrinfo"
+	.section	.text._ZNK4asio5error6detail17addrinfo_category4nameEv,"axG",@progbits,_ZNK4asio5error6detail17addrinfo_category4nameEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNK4asio5error6detail17addrinfo_category4nameEv
+	.type	_ZNK4asio5error6detail17addrinfo_category4nameEv, @function
+_ZNK4asio5error6detail17addrinfo_category4nameEv:
+.LFB3718:
+	.cfi_startproc
+	leaq	.LC2(%rip), %rax
+	ret
+	.cfi_endproc
+.LFE3718:
+	.size	_ZNK4asio5error6detail17addrinfo_category4nameEv, .-_ZNK4asio5error6detail17addrinfo_category4nameEv
+	.section	.rodata._ZNK4asio5error6detail13misc_category4nameEv.str1.1,"aMS",@progbits,1
+.LC3:
+	.string	"asio.misc"
+	.section	.text._ZNK4asio5error6detail13misc_category4nameEv,"axG",@progbits,_ZNK4asio5error6detail13misc_category4nameEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNK4asio5error6detail13misc_category4nameEv
+	.type	_ZNK4asio5error6detail13misc_category4nameEv, @function
+_ZNK4asio5error6detail13misc_category4nameEv:
+.LFB3724:
+	.cfi_startproc
+	leaq	.LC3(%rip), %rax
+	ret
+	.cfi_endproc
+.LFE3724:
+	.size	_ZNK4asio5error6detail13misc_category4nameEv, .-_ZNK4asio5error6detail13misc_category4nameEv
+	.section	.text._ZNSt13__future_base13_State_baseV217_M_complete_asyncEv,"axG",@progbits,_ZNSt13__future_base13_State_baseV217_M_complete_asyncEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base13_State_baseV217_M_complete_asyncEv
+	.type	_ZNSt13__future_base13_State_baseV217_M_complete_asyncEv, @function
+_ZNSt13__future_base13_State_baseV217_M_complete_asyncEv:
+.LFB7722:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE7722:
+	.size	_ZNSt13__future_base13_State_baseV217_M_complete_asyncEv, .-_ZNSt13__future_base13_State_baseV217_M_complete_asyncEv
+	.section	.text._ZNKSt13__future_base13_State_baseV221_M_is_deferred_futureEv,"axG",@progbits,_ZNKSt13__future_base13_State_baseV221_M_is_deferred_futureEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNKSt13__future_base13_State_baseV221_M_is_deferred_futureEv
+	.type	_ZNKSt13__future_base13_State_baseV221_M_is_deferred_futureEv, @function
+_ZNKSt13__future_base13_State_baseV221_M_is_deferred_futureEv:
+.LFB7723:
+	.cfi_startproc
+	xorl	%eax, %eax
+	ret
+	.cfi_endproc
+.LFE7723:
+	.size	_ZNKSt13__future_base13_State_baseV221_M_is_deferred_futureEv, .-_ZNKSt13__future_base13_State_baseV221_M_is_deferred_futureEv
+	.section	.text._ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv,"axG",@progbits,_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv,comdat
+	.p2align 4
+	.weak	_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv
+	.type	_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv, @function
+_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv:
+.LFB9520:
+	.cfi_startproc
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 16
+	data16	leaq	_ZSt15__once_callable@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	movq	(%rax), %rdx
+	movq	24(%rax), %rsi
+	movq	16(%rax), %rcx
+	movq	8(%rax), %rax
+	movq	8(%rdx), %rdi
+	addq	(%rax), %rdi
+	movq	(%rdx), %rax
+	testb	$1, %al
+	je	.L9
+	movq	(%rdi), %rdx
+	movq	-1(%rdx,%rax), %rax
+.L9:
+	movq	(%rsi), %rdx
+	movq	(%rcx), %rsi
+	addq	$8, %rsp
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.cfi_endproc
+.LFE9520:
+	.size	_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv, .-_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv
+	.section	.text._ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv,"axG",@progbits,_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv,comdat
+	.p2align 4
+	.weak	_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv
+	.type	_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv, @function
+_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv:
+.LFB10301:
+	.cfi_startproc
+	movq	(%rdi), %rax
+	jmp	*(%rax)
+	.cfi_endproc
+.LFE10301:
+	.size	_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv, .-_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv
+	.text
+	.p2align 4
+	.type	_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E9_M_invokeERKSt9_Any_data, @function
+_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E9_M_invokeERKSt9_Any_data:
+.LFB10546:
+	.cfi_startproc
+	movq	(%rsi), %rdx
+	movq	%rdi, %rax
+	movq	72(%rdx), %rdx
+	movq	96(%rdx), %rcx
+	movdqu	80(%rdx), %xmm0
+	movdqu	248(%rdx), %xmm1
+	movq	%rcx, 16(%rdi)
+	movq	264(%rdx), %rcx
+	movl	272(%rdx), %edx
+	movups	%xmm0, (%rdi)
+	movq	%rcx, 40(%rdi)
+	movl	%edx, 48(%rdi)
+	movups	%xmm1, 24(%rdi)
+	ret
+	.cfi_endproc
+.LFE10546:
+	.size	_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E9_M_invokeERKSt9_Any_data, .-_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E9_M_invokeERKSt9_Any_data
+	.p2align 4
+	.type	_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E9_M_invokeERKSt9_Any_data, @function
+_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E9_M_invokeERKSt9_Any_data:
+.LFB10567:
+	.cfi_startproc
+	movq	(%rdi), %rax
+	movq	40(%rax), %rax
+	movl	32(%rax), %eax
+	ret
+	.cfi_endproc
+.LFE10567:
+	.size	_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E9_M_invokeERKSt9_Any_data, .-_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E9_M_invokeERKSt9_Any_data
+	.section	.text._ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE9_M_invokeERKSt9_Any_data,"axG",@progbits,_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE9_M_invokeERKSt9_Any_data,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE9_M_invokeERKSt9_Any_data
+	.type	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE9_M_invokeERKSt9_Any_data, @function
+_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE9_M_invokeERKSt9_Any_data:
+.LFB11445:
+	.cfi_startproc
+	movq	8(%rsi), %rdx
+	movq	(%rsi), %rcx
+	movdqu	(%rdx), %xmm0
+	movq	16(%rcx), %rax
+	movups	%xmm0, 16(%rax)
+	movdqu	16(%rdx), %xmm1
+	movups	%xmm1, 32(%rax)
+	movdqu	32(%rdx), %xmm2
+	movups	%xmm2, 48(%rax)
+	movl	48(%rdx), %edx
+	movb	$1, 68(%rax)
+	movl	%edx, 64(%rax)
+	movq	$0, 16(%rcx)
+	movq	%rax, (%rdi)
+	movq	%rdi, %rax
+	ret
+	.cfi_endproc
+.LFE11445:
+	.size	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE9_M_invokeERKSt9_Any_data, .-_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE9_M_invokeERKSt9_Any_data
+	.section	.text._ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE9_M_invokeERKSt9_Any_data,"axG",@progbits,_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE9_M_invokeERKSt9_Any_data,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE9_M_invokeERKSt9_Any_data
+	.type	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE9_M_invokeERKSt9_Any_data, @function
+_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE9_M_invokeERKSt9_Any_data:
+.LFB11478:
+	.cfi_startproc
+	movq	(%rsi), %rcx
+	movq	8(%rsi), %rsi
+	movq	%rdi, %rax
+	movq	16(%rcx), %rdx
+	movl	(%rsi), %esi
+	movb	$1, 20(%rdx)
+	movl	%esi, 16(%rdx)
+	movq	$0, 16(%rcx)
+	movq	%rdx, (%rdi)
+	ret
+	.cfi_endproc
+.LFE11478:
+	.size	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE9_M_invokeERKSt9_Any_data, .-_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE9_M_invokeERKSt9_Any_data
+	.section	.text._ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE9_M_invokeERKSt9_Any_data,"axG",@progbits,_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE9_M_invokeERKSt9_Any_data,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE9_M_invokeERKSt9_Any_data
+	.type	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE9_M_invokeERKSt9_Any_data, @function
+_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE9_M_invokeERKSt9_Any_data:
+.LFB11823:
+	.cfi_startproc
+	movq	(%rsi), %rcx
+	movq	8(%rsi), %rsi
+	movq	%rdi, %rax
+	movq	16(%rcx), %rdx
+	movzbl	(%rsi), %esi
+	movb	$1, 17(%rdx)
+	movb	%sil, 16(%rdx)
+	movq	$0, 16(%rcx)
+	movq	%rdx, (%rdi)
+	ret
+	.cfi_endproc
+.LFE11823:
+	.size	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE9_M_invokeERKSt9_Any_data, .-_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE9_M_invokeERKSt9_Any_data
+	.section	.text._ZNSt13__future_base13_State_baseV2D2Ev,"axG",@progbits,_ZNSt13__future_base13_State_baseV2D5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base13_State_baseV2D2Ev
+	.type	_ZNSt13__future_base13_State_baseV2D2Ev, @function
+_ZNSt13__future_base13_State_baseV2D2Ev:
+.LFB12868:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA12868
+	movq	_ZTVNSt13__future_base13_State_baseV2E@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	8(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L26
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 16
+	movq	(%rdi), %rax
+	call	*(%rax)
+	addq	$8, %rsp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L26:
+	ret
+	.cfi_endproc
+.LFE12868:
+	.globl	__gxx_personality_v0
+	.section	.gcc_except_table._ZNSt13__future_base13_State_baseV2D2Ev,"aG",@progbits,_ZNSt13__future_base13_State_baseV2D5Ev,comdat
+.LLSDA12868:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE12868-.LLSDACSB12868
+.LLSDACSB12868:
+.LLSDACSE12868:
+	.section	.text._ZNSt13__future_base13_State_baseV2D2Ev,"axG",@progbits,_ZNSt13__future_base13_State_baseV2D5Ev,comdat
+	.size	_ZNSt13__future_base13_State_baseV2D2Ev, .-_ZNSt13__future_base13_State_baseV2D2Ev
+	.weak	_ZNSt13__future_base13_State_baseV2D1Ev
+	.set	_ZNSt13__future_base13_State_baseV2D1Ev,_ZNSt13__future_base13_State_baseV2D2Ev
+	.section	.text._ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED2Ev,"axG",@progbits,_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED2Ev
+	.type	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED2Ev, @function
+_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED2Ev:
+.LFB12937:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12937:
+	.size	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED2Ev, .-_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED2Ev
+	.weak	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED1Ev
+	.set	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED1Ev,_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED2Ev
+	.section	.text._ZN4asio6detail10service_idINS0_13epoll_reactorEED2Ev,"axG",@progbits,_ZN4asio6detail10service_idINS0_13epoll_reactorEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio6detail10service_idINS0_13epoll_reactorEED2Ev
+	.type	_ZN4asio6detail10service_idINS0_13epoll_reactorEED2Ev, @function
+_ZN4asio6detail10service_idINS0_13epoll_reactorEED2Ev:
+.LFB12940:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12940:
+	.size	_ZN4asio6detail10service_idINS0_13epoll_reactorEED2Ev, .-_ZN4asio6detail10service_idINS0_13epoll_reactorEED2Ev
+	.weak	_ZN4asio6detail10service_idINS0_13epoll_reactorEED1Ev
+	.set	_ZN4asio6detail10service_idINS0_13epoll_reactorEED1Ev,_ZN4asio6detail10service_idINS0_13epoll_reactorEED2Ev
+	.section	.text._ZN4asio6detail10service_idINS0_15task_io_serviceEED2Ev,"axG",@progbits,_ZN4asio6detail10service_idINS0_15task_io_serviceEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio6detail10service_idINS0_15task_io_serviceEED2Ev
+	.type	_ZN4asio6detail10service_idINS0_15task_io_serviceEED2Ev, @function
+_ZN4asio6detail10service_idINS0_15task_io_serviceEED2Ev:
+.LFB12943:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12943:
+	.size	_ZN4asio6detail10service_idINS0_15task_io_serviceEED2Ev, .-_ZN4asio6detail10service_idINS0_15task_io_serviceEED2Ev
+	.weak	_ZN4asio6detail10service_idINS0_15task_io_serviceEED1Ev
+	.set	_ZN4asio6detail10service_idINS0_15task_io_serviceEED1Ev,_ZN4asio6detail10service_idINS0_15task_io_serviceEED2Ev
+	.section	.text._ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED2Ev,"axG",@progbits,_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED2Ev
+	.type	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED2Ev, @function
+_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED2Ev:
+.LFB12946:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12946:
+	.size	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED2Ev, .-_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED2Ev
+	.weak	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED1Ev
+	.set	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED1Ev,_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED2Ev
+	.section	.text._ZN4asio6detail10service_idINS0_14strand_serviceEED2Ev,"axG",@progbits,_ZN4asio6detail10service_idINS0_14strand_serviceEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio6detail10service_idINS0_14strand_serviceEED2Ev
+	.type	_ZN4asio6detail10service_idINS0_14strand_serviceEED2Ev, @function
+_ZN4asio6detail10service_idINS0_14strand_serviceEED2Ev:
+.LFB12949:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12949:
+	.size	_ZN4asio6detail10service_idINS0_14strand_serviceEED2Ev, .-_ZN4asio6detail10service_idINS0_14strand_serviceEED2Ev
+	.weak	_ZN4asio6detail10service_idINS0_14strand_serviceEED1Ev
+	.set	_ZN4asio6detail10service_idINS0_14strand_serviceEED1Ev,_ZN4asio6detail10service_idINS0_14strand_serviceEED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB12952:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12952:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB12959:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12959:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB12962:
+	.cfi_startproc
+	movq	16(%rdi), %rax
+	leaq	16(%rdi), %r8
+	movq	%r8, %rdi
+	movq	16(%rax), %rax
+	jmp	*%rax
+	.cfi_endproc
+.LFE12962:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB12980:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12980:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB12994:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE12994:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB12997:
+	.cfi_startproc
+	movq	16(%rdi), %rax
+	leaq	16(%rdi), %r8
+	movq	%r8, %rdi
+	movq	(%rax), %rax
+	jmp	*%rax
+	.cfi_endproc
+.LFE12997:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB13008:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE13008:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt13__future_base13_State_baseV2D0Ev,"axG",@progbits,_ZNSt13__future_base13_State_baseV2D5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base13_State_baseV2D0Ev
+	.type	_ZNSt13__future_base13_State_baseV2D0Ev, @function
+_ZNSt13__future_base13_State_baseV2D0Ev:
+.LFB12870:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA12870
+	movq	_ZTVNSt13__future_base13_State_baseV2E@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	8(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L42
+	movq	(%rdi), %rax
+	call	*(%rax)
+.L42:
+	movq	%rbp, %rdi
+	movl	$32, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12870:
+	.section	.gcc_except_table._ZNSt13__future_base13_State_baseV2D0Ev,"aG",@progbits,_ZNSt13__future_base13_State_baseV2D5Ev,comdat
+.LLSDA12870:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE12870-.LLSDACSB12870
+.LLSDACSB12870:
+.LLSDACSE12870:
+	.section	.text._ZNSt13__future_base13_State_baseV2D0Ev,"axG",@progbits,_ZNSt13__future_base13_State_baseV2D5Ev,comdat
+	.size	_ZNSt13__future_base13_State_baseV2D0Ev, .-_ZNSt13__future_base13_State_baseV2D0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB13010:
+	.cfi_startproc
+	movl	$56, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13010:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB12996:
+	.cfi_startproc
+	movl	$48, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12996:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB12982:
+	.cfi_startproc
+	movl	$120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12982:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB12961:
+	.cfi_startproc
+	movl	$704, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12961:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB12954:
+	.cfi_startproc
+	movl	$1120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12954:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB12956:
+	.cfi_startproc
+	movl	$1120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12956:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB12963:
+	.cfi_startproc
+	movl	$704, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12963:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB12984:
+	.cfi_startproc
+	movl	$120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12984:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB12998:
+	.cfi_startproc
+	movl	$48, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12998:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB13012:
+	.cfi_startproc
+	movl	$56, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13012:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB13011:
+	.cfi_startproc
+	movq	16(%rdi), %r8
+	leaq	32(%rdi), %rax
+	cmpq	%rax, %r8
+	je	.L57
+	movq	32(%rdi), %rsi
+	movq	%r8, %rdi
+	addq	$1, %rsi
+	jmp	_ZdlPvm@PLT
+	.p2align 4,,10
+	.p2align 3
+.L57:
+	ret
+	.cfi_endproc
+.LFE13011:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZN7openpal5ArrayIhjED2Ev,"axG",@progbits,_ZN7openpal5ArrayIhjED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIhjED2Ev
+	.type	_ZN7openpal5ArrayIhjED2Ev, @function
+_ZN7openpal5ArrayIhjED2Ev:
+.LFB9761:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIhjEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L59
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L59:
+	ret
+	.cfi_endproc
+.LFE9761:
+	.size	_ZN7openpal5ArrayIhjED2Ev, .-_ZN7openpal5ArrayIhjED2Ev
+	.weak	_ZN7openpal5ArrayIhjED1Ev
+	.set	_ZN7openpal5ArrayIhjED1Ev,_ZN7openpal5ArrayIhjED2Ev
+	.section	.text._ZN7openpal5ArrayIhjED0Ev,"axG",@progbits,_ZN7openpal5ArrayIhjED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIhjED0Ev
+	.type	_ZN7openpal5ArrayIhjED0Ev, @function
+_ZN7openpal5ArrayIhjED0Ev:
+.LFB9763:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIhjEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L62
+	call	_ZdaPv@PLT
+.L62:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE9763:
+	.size	_ZN7openpal5ArrayIhjED0Ev, .-_ZN7openpal5ArrayIhjED0Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED2Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED2Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED2Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED2Ev:
+.LFB13287:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L67
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L67:
+	ret
+	.cfi_endproc
+.LFE13287:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED2Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED2Ev
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED1Ev
+	.set	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED1Ev,_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED2Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED0Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED0Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED0Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED0Ev:
+.LFB13289:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L70
+	call	_ZdaPv@PLT
+.L70:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13289:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED0Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED0Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED2Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED2Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED2Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED2Ev:
+.LFB13283:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L75
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L75:
+	ret
+	.cfi_endproc
+.LFE13283:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED2Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED2Ev
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED1Ev
+	.set	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED1Ev,_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED2Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED0Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED0Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED0Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED0Ev:
+.LFB13285:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L78
+	call	_ZdaPv@PLT
+.L78:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13285:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED0Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED0Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED2Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED2Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED2Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED2Ev:
+.LFB13279:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L83
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L83:
+	ret
+	.cfi_endproc
+.LFE13279:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED2Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED2Ev
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED1Ev
+	.set	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED1Ev,_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED2Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED0Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED0Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED0Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED0Ev:
+.LFB13281:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L86
+	call	_ZdaPv@PLT
+.L86:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13281:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED0Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED0Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED2Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED2Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED2Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED2Ev:
+.LFB13275:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L91
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L91:
+	ret
+	.cfi_endproc
+.LFE13275:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED2Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED2Ev
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED1Ev
+	.set	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED1Ev,_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED2Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED0Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED0Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED0Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED0Ev:
+.LFB13277:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L94
+	call	_ZdaPv@PLT
+.L94:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13277:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED0Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED0Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED2Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED2Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED2Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED2Ev:
+.LFB13271:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L99
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L99:
+	ret
+	.cfi_endproc
+.LFE13271:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED2Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED2Ev
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED1Ev
+	.set	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED1Ev,_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED2Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED0Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED0Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED0Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED0Ev:
+.LFB13273:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L102
+	call	_ZdaPv@PLT
+.L102:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13273:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED0Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED0Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED2Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED2Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED2Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED2Ev:
+.LFB13267:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L107
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L107:
+	ret
+	.cfi_endproc
+.LFE13267:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED2Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED2Ev
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED1Ev
+	.set	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED1Ev,_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED2Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED0Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED0Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED0Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED0Ev:
+.LFB13269:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L110
+	call	_ZdaPv@PLT
+.L110:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13269:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED0Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED0Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED2Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED2Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED2Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED2Ev:
+.LFB13263:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L115
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L115:
+	ret
+	.cfi_endproc
+.LFE13263:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED2Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED2Ev
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED1Ev
+	.set	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED1Ev,_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED2Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED0Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED0Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED0Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED0Ev:
+.LFB13265:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L118
+	call	_ZdaPv@PLT
+.L118:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13265:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED0Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED0Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED2Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED2Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED2Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED2Ev:
+.LFB13259:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L123
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L123:
+	ret
+	.cfi_endproc
+.LFE13259:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED2Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED2Ev
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED1Ev
+	.set	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED1Ev,_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED2Ev
+	.section	.text._ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED0Ev,"axG",@progbits,_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED0Ev
+	.type	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED0Ev, @function
+_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED0Ev:
+.LFB13261:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L126
+	call	_ZdaPv@PLT
+.L126:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13261:
+	.size	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED0Ev, .-_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED0Ev
+	.section	.text._ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED2Ev,"axG",@progbits,_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED2Ev
+	.type	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED2Ev, @function
+_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED2Ev:
+.LFB13255:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L131
+	jmp	_ZdaPv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L131:
+	ret
+	.cfi_endproc
+.LFE13255:
+	.size	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED2Ev, .-_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED2Ev
+	.weak	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED1Ev
+	.set	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED1Ev,_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED2Ev
+	.section	.text._ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED0Ev,"axG",@progbits,_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED0Ev
+	.type	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED0Ev, @function
+_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED0Ev:
+.LFB13257:
+	.cfi_startproc
+	movq	_ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	16(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L134
+	call	_ZdaPv@PLT
+.L134:
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13257:
+	.size	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED0Ev, .-_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED0Ev
+	.section	.text._ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED2Ev,"axG",@progbits,_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED2Ev
+	.type	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED2Ev, @function
+_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED2Ev:
+.LFB13040:
+	.cfi_startproc
+	movq	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	.cfi_endproc
+.LFE13040:
+	.size	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED2Ev, .-_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED2Ev
+	.weak	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED1Ev
+	.set	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED1Ev,_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED2Ev
+	.section	.text._ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev,"axG",@progbits,_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev
+	.type	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev, @function
+_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev:
+.LFB13042:
+	.cfi_startproc
+	movq	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$72, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13042:
+	.size	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev, .-_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev
+	.section	.text._ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED2Ev,"axG",@progbits,_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED2Ev
+	.type	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED2Ev, @function
+_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED2Ev:
+.LFB13035:
+	.cfi_startproc
+	movq	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	.cfi_endproc
+.LFE13035:
+	.size	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED2Ev, .-_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED2Ev
+	.weak	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED1Ev
+	.set	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED1Ev,_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED2Ev
+	.section	.text._ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev,"axG",@progbits,_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev
+	.type	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev, @function
+_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev:
+.LFB13037:
+	.cfi_startproc
+	movq	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13037:
+	.size	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev, .-_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev
+	.section	.text._ZNSt13__future_base7_ResultIbED2Ev,"axG",@progbits,_ZNSt13__future_base7_ResultIbED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIbED2Ev
+	.type	_ZNSt13__future_base7_ResultIbED2Ev, @function
+_ZNSt13__future_base7_ResultIbED2Ev:
+.LFB13030:
+	.cfi_startproc
+	movq	_ZTVNSt13__future_base7_ResultIbEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	.cfi_endproc
+.LFE13030:
+	.size	_ZNSt13__future_base7_ResultIbED2Ev, .-_ZNSt13__future_base7_ResultIbED2Ev
+	.weak	_ZNSt13__future_base7_ResultIbED1Ev
+	.set	_ZNSt13__future_base7_ResultIbED1Ev,_ZNSt13__future_base7_ResultIbED2Ev
+	.section	.text._ZNSt13__future_base7_ResultIbED0Ev,"axG",@progbits,_ZNSt13__future_base7_ResultIbED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIbED0Ev
+	.type	_ZNSt13__future_base7_ResultIbED0Ev, @function
+_ZNSt13__future_base7_ResultIbED0Ev:
+.LFB13032:
+	.cfi_startproc
+	movq	_ZTVNSt13__future_base7_ResultIbEE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE13032:
+	.size	_ZNSt13__future_base7_ResultIbED0Ev, .-_ZNSt13__future_base7_ResultIbED0Ev
+	.section	.text._ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb,"axG",@progbits,_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb
+	.type	_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb, @function
+_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb:
+.LFB7715:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA7715
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	subq	$24, %rsp
+	.cfi_def_cfa_offset 48
+	movq	%fs:40, %rax
+	movq	%rax, 8(%rsp)
+	xorl	%eax, %eax
+	cmpq	$0, 16(%rsi)
+	je	.L156
+	movq	%rdi, %rbx
+	movq	%rdx, %rbp
+	movq	%rsp, %rdi
+.LEHB0:
+	call	*24(%rsi)
+.LEHE0:
+	movq	8(%rbx), %rdi
+	movq	(%rsp), %rax
+	movb	$1, 0(%rbp)
+	movq	%rdi, (%rsp)
+	movq	%rax, 8(%rbx)
+	testq	%rdi, %rdi
+	je	.L148
+	movq	(%rdi), %rax
+	call	*(%rax)
+.L148:
+	movq	8(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L157
+	addq	$24, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+.L156:
+	.cfi_restore_state
+.LEHB1:
+	call	_ZSt25__throw_bad_function_callv@PLT
+.LEHE1:
+.L157:
+	call	__stack_chk_fail@PLT
+	.cfi_endproc
+.LFE7715:
+	.section	.gcc_except_table._ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb,"aG",@progbits,_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb,comdat
+.LLSDA7715:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE7715-.LLSDACSB7715
+.LLSDACSB7715:
+	.uleb128 .LEHB0-.LFB7715
+	.uleb128 .LEHE0-.LEHB0
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB1-.LFB7715
+	.uleb128 .LEHE1-.LEHB1
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE7715:
+	.section	.text._ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb,"axG",@progbits,_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb,comdat
+	.size	_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb, .-_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb
+	.section	.text._ZN4asio6detail15system_categoryD2Ev,"axG",@progbits,_ZN4asio6detail15system_categoryD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio6detail15system_categoryD2Ev
+	.type	_ZN4asio6detail15system_categoryD2Ev, @function
+_ZN4asio6detail15system_categoryD2Ev:
+.LFB12912:
+	.cfi_startproc
+	movq	_ZTVN4asio6detail15system_categoryE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZNSt3_V214error_categoryD2Ev@PLT
+	.cfi_endproc
+.LFE12912:
+	.size	_ZN4asio6detail15system_categoryD2Ev, .-_ZN4asio6detail15system_categoryD2Ev
+	.weak	_ZN4asio6detail15system_categoryD1Ev
+	.set	_ZN4asio6detail15system_categoryD1Ev,_ZN4asio6detail15system_categoryD2Ev
+	.section	.text._ZN4asio6detail15system_categoryD0Ev,"axG",@progbits,_ZN4asio6detail15system_categoryD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio6detail15system_categoryD0Ev
+	.type	_ZN4asio6detail15system_categoryD0Ev, @function
+_ZN4asio6detail15system_categoryD0Ev:
+.LFB12914:
+	.cfi_startproc
+	movq	_ZTVN4asio6detail15system_categoryE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt3_V214error_categoryD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$8, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12914:
+	.size	_ZN4asio6detail15system_categoryD0Ev, .-_ZN4asio6detail15system_categoryD0Ev
+	.section	.text._ZN4asio5error6detail14netdb_categoryD2Ev,"axG",@progbits,_ZN4asio5error6detail14netdb_categoryD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio5error6detail14netdb_categoryD2Ev
+	.type	_ZN4asio5error6detail14netdb_categoryD2Ev, @function
+_ZN4asio5error6detail14netdb_categoryD2Ev:
+.LFB12900:
+	.cfi_startproc
+	movq	_ZTVN4asio5error6detail14netdb_categoryE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZNSt3_V214error_categoryD2Ev@PLT
+	.cfi_endproc
+.LFE12900:
+	.size	_ZN4asio5error6detail14netdb_categoryD2Ev, .-_ZN4asio5error6detail14netdb_categoryD2Ev
+	.weak	_ZN4asio5error6detail14netdb_categoryD1Ev
+	.set	_ZN4asio5error6detail14netdb_categoryD1Ev,_ZN4asio5error6detail14netdb_categoryD2Ev
+	.section	.text._ZN4asio5error6detail14netdb_categoryD0Ev,"axG",@progbits,_ZN4asio5error6detail14netdb_categoryD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio5error6detail14netdb_categoryD0Ev
+	.type	_ZN4asio5error6detail14netdb_categoryD0Ev, @function
+_ZN4asio5error6detail14netdb_categoryD0Ev:
+.LFB12902:
+	.cfi_startproc
+	movq	_ZTVN4asio5error6detail14netdb_categoryE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt3_V214error_categoryD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$8, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12902:
+	.size	_ZN4asio5error6detail14netdb_categoryD0Ev, .-_ZN4asio5error6detail14netdb_categoryD0Ev
+	.section	.text._ZN4asio5error6detail17addrinfo_categoryD2Ev,"axG",@progbits,_ZN4asio5error6detail17addrinfo_categoryD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio5error6detail17addrinfo_categoryD2Ev
+	.type	_ZN4asio5error6detail17addrinfo_categoryD2Ev, @function
+_ZN4asio5error6detail17addrinfo_categoryD2Ev:
+.LFB12896:
+	.cfi_startproc
+	movq	_ZTVN4asio5error6detail17addrinfo_categoryE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZNSt3_V214error_categoryD2Ev@PLT
+	.cfi_endproc
+.LFE12896:
+	.size	_ZN4asio5error6detail17addrinfo_categoryD2Ev, .-_ZN4asio5error6detail17addrinfo_categoryD2Ev
+	.weak	_ZN4asio5error6detail17addrinfo_categoryD1Ev
+	.set	_ZN4asio5error6detail17addrinfo_categoryD1Ev,_ZN4asio5error6detail17addrinfo_categoryD2Ev
+	.section	.text._ZN4asio5error6detail17addrinfo_categoryD0Ev,"axG",@progbits,_ZN4asio5error6detail17addrinfo_categoryD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio5error6detail17addrinfo_categoryD0Ev
+	.type	_ZN4asio5error6detail17addrinfo_categoryD0Ev, @function
+_ZN4asio5error6detail17addrinfo_categoryD0Ev:
+.LFB12898:
+	.cfi_startproc
+	movq	_ZTVN4asio5error6detail17addrinfo_categoryE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt3_V214error_categoryD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$8, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12898:
+	.size	_ZN4asio5error6detail17addrinfo_categoryD0Ev, .-_ZN4asio5error6detail17addrinfo_categoryD0Ev
+	.section	.text._ZN4asio5error6detail13misc_categoryD2Ev,"axG",@progbits,_ZN4asio5error6detail13misc_categoryD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio5error6detail13misc_categoryD2Ev
+	.type	_ZN4asio5error6detail13misc_categoryD2Ev, @function
+_ZN4asio5error6detail13misc_categoryD2Ev:
+.LFB12892:
+	.cfi_startproc
+	movq	_ZTVN4asio5error6detail13misc_categoryE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZNSt3_V214error_categoryD2Ev@PLT
+	.cfi_endproc
+.LFE12892:
+	.size	_ZN4asio5error6detail13misc_categoryD2Ev, .-_ZN4asio5error6detail13misc_categoryD2Ev
+	.weak	_ZN4asio5error6detail13misc_categoryD1Ev
+	.set	_ZN4asio5error6detail13misc_categoryD1Ev,_ZN4asio5error6detail13misc_categoryD2Ev
+	.section	.text._ZN4asio5error6detail13misc_categoryD0Ev,"axG",@progbits,_ZN4asio5error6detail13misc_categoryD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio5error6detail13misc_categoryD0Ev
+	.type	_ZN4asio5error6detail13misc_categoryD0Ev, @function
+_ZN4asio5error6detail13misc_categoryD0Ev:
+.LFB12894:
+	.cfi_startproc
+	movq	_ZTVN4asio5error6detail13misc_categoryE@GOTPCREL(%rip), %rax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt3_V214error_categoryD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$8, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE12894:
+	.size	_ZN4asio5error6detail13misc_categoryD0Ev, .-_ZN4asio5error6detail13misc_categoryD0Ev
+	.text
+	.p2align 4
+	.type	_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation, @function
+_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation:
+.LFB10547:
+	.cfi_startproc
+	testl	%edx, %edx
+	je	.L171
+	cmpl	$1, %edx
+	je	.L172
+	cmpl	$2, %edx
+	je	.L176
+.L174:
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L171:
+	leaq	_ZTIZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_(%rip), %rax
+	movq	%rax, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L172:
+	movq	%rsi, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L176:
+	movq	(%rsi), %rax
+	movq	%rax, (%rdi)
+	jmp	.L174
+	.cfi_endproc
+.LFE10547:
+	.size	_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation, .-_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation
+	.p2align 4
+	.type	_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation, @function
+_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation:
+.LFB10568:
+	.cfi_startproc
+	testl	%edx, %edx
+	je	.L178
+	cmpl	$1, %edx
+	je	.L179
+	cmpl	$2, %edx
+	je	.L183
+.L181:
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L178:
+	leaq	_ZTIZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_(%rip), %rax
+	movq	%rax, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L179:
+	movq	%rsi, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L183:
+	movq	(%rsi), %rax
+	movq	%rax, (%rdi)
+	jmp	.L181
+	.cfi_endproc
+.LFE10568:
+	.size	_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation, .-_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation
+	.section	.rodata.str1.1,"aMS",@progbits,1
+.LC4:
+	.string	"std::future_error: "
+	.section	.text.unlikely,"ax",@progbits
+	.align 2
+.LCOLDB5:
+	.text
+.LHOTB5:
+	.align 2
+	.p2align 4
+	.type	_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0, @function
+_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0:
+.LFB13400:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA13400
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	movq	%rsi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	pushq	%rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	movq	%rdi, %rbx
+	addq	$-128, %rsp
+	.cfi_def_cfa_offset 176
+	movq	%fs:40, %rax
+	movq	%rax, 120(%rsp)
+	xorl	%eax, %eax
+	leaq	48(%rsp), %r13
+	call	_ZSt15future_categoryv@PLT
+	movl	$4, %edx
+	movq	%r13, %rdi
+	movq	%rax, %rbp
+	movq	(%rax), %rax
+	movq	%rbp, %rsi
+.LEHB2:
+	call	*32(%rax)
+.LEHE2:
+	movl	$19, %r8d
+	xorl	%edx, %edx
+	xorl	%esi, %esi
+	leaq	.LC4(%rip), %rcx
+	movq	%r13, %rdi
+.LEHB3:
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm@PLT
+.LEHE3:
+	leaq	96(%rsp), %r14
+	leaq	16(%rax), %rdx
+	movq	%r14, 80(%rsp)
+	movq	(%rax), %rcx
+	cmpq	%rdx, %rcx
+	je	.L202
+	movq	%rcx, 80(%rsp)
+	movq	16(%rax), %rcx
+	movq	%rcx, 96(%rsp)
+.L186:
+	movq	8(%rax), %rcx
+	movb	$0, 16(%rax)
+	leaq	16(%rsp), %r13
+	leaq	80(%rsp), %rsi
+	movq	%r13, %rdi
+	movq	%rcx, 88(%rsp)
+	movq	%rdx, (%rax)
+	movq	$0, 8(%rax)
+.LEHB4:
+	call	_ZNSt11logic_errorC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE@PLT
+.LEHE4:
+	movq	80(%rsp), %rdi
+	cmpq	%r14, %rdi
+	je	.L187
+	movq	96(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L187:
+	movq	48(%rsp), %rdi
+	leaq	64(%rsp), %rax
+	cmpq	%rax, %rdi
+	je	.L188
+	movq	64(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L188:
+	movq	_ZTVSt12future_error@GOTPCREL(%rip), %rax
+	movl	$32, %edi
+	movq	%rbp, 40(%rsp)
+	movl	$4, 32(%rsp)
+	leaq	16(%rax), %r14
+	movq	%r14, 16(%rsp)
+	call	__cxa_allocate_exception@PLT
+	movq	_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv@GOTPCREL(%rip), %rdx
+	movq	_ZTISt12future_error@GOTPCREL(%rip), %rsi
+	movq	%rax, %rbp
+	movq	%rax, %rdi
+	call	__cxa_init_primary_exception@PLT
+	movq	%r13, %rsi
+	movq	%rbp, %rdi
+	call	_ZNSt11logic_errorC2ERKS_@PLT
+	movdqa	32(%rsp), %xmm0
+	movq	%r14, 0(%rbp)
+	movq	%rbp, %rsi
+	leaq	8(%rsp), %r14
+	movups	%xmm0, 16(%rbp)
+	movq	%r14, %rdi
+	movq	%rsp, %rbp
+	call	_ZNSt15__exception_ptr13exception_ptrC1EPv@PLT
+	movq	(%r12), %rax
+	movq	%rbp, %rdi
+	leaq	8(%rax), %rsi
+	movq	8(%rsp), %rax
+	movq	$0, 8(%rsp)
+	movq	%rax, (%rsp)
+	call	_ZNSt15__exception_ptr13exception_ptr4swapERS0_@PLT
+	movq	%rbp, %rdi
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	movq	%r14, %rdi
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	movq	%r13, %rdi
+	call	_ZNSt12future_errorD1Ev@PLT
+	movq	8(%rbx), %rax
+	movq	(%r12), %rdx
+	leaq	16(%rbx), %rdi
+	movq	%rdx, 8(%rbx)
+	movq	%rax, (%r12)
+	movl	$1, %eax
+	xchgl	(%rdi), %eax
+	testl	%eax, %eax
+	js	.L203
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L201
+	subq	$-128, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 48
+	popq	%rbx
+	.cfi_def_cfa_offset 40
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L202:
+	.cfi_restore_state
+	movdqu	16(%rax), %xmm1
+	movaps	%xmm1, 96(%rsp)
+	jmp	.L186
+	.p2align 4,,10
+	.p2align 3
+.L203:
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L201
+	subq	$-128, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 48
+	popq	%rbx
+	.cfi_def_cfa_offset 40
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+.LEHB5:
+	jmp	_ZNSt28__atomic_futex_unsigned_base19_M_futex_notify_allEPj@PLT
+.LEHE5:
+.L201:
+	.cfi_restore_state
+	call	__stack_chk_fail@PLT
+.L198:
+	movq	%rax, %rbp
+	jmp	.L191
+.L197:
+	movq	%rax, %rbp
+	jmp	.L193
+	.section	.gcc_except_table,"a",@progbits
+.LLSDA13400:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE13400-.LLSDACSB13400
+.LLSDACSB13400:
+	.uleb128 .LEHB2-.LFB13400
+	.uleb128 .LEHE2-.LEHB2
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB3-.LFB13400
+	.uleb128 .LEHE3-.LEHB3
+	.uleb128 .L197-.LFB13400
+	.uleb128 0
+	.uleb128 .LEHB4-.LFB13400
+	.uleb128 .LEHE4-.LEHB4
+	.uleb128 .L198-.LFB13400
+	.uleb128 0
+	.uleb128 .LEHB5-.LFB13400
+	.uleb128 .LEHE5-.LEHB5
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE13400:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC13400
+	.type	_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0.cold, @function
+_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0.cold:
+.LFSB13400:
+.L191:
+	.cfi_def_cfa_offset 176
+	.cfi_offset 3, -48
+	.cfi_offset 6, -40
+	.cfi_offset 12, -32
+	.cfi_offset 13, -24
+	.cfi_offset 14, -16
+	movq	80(%rsp), %rdi
+	cmpq	%r14, %rdi
+	je	.L193
+	movq	96(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L193:
+	movq	48(%rsp), %rdi
+	leaq	64(%rsp), %rax
+	cmpq	%rax, %rdi
+	je	.L194
+	movq	64(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L194:
+	movq	%rbp, %rdi
+.LEHB6:
+	call	_Unwind_Resume@PLT
+.LEHE6:
+	.cfi_endproc
+.LFE13400:
+	.section	.gcc_except_table
+.LLSDAC13400:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC13400-.LLSDACSBC13400
+.LLSDACSBC13400:
+	.uleb128 .LEHB6-.LCOLDB5
+	.uleb128 .LEHE6-.LEHB6
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC13400:
+	.section	.text.unlikely
+	.text
+	.size	_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0, .-_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0
+	.section	.text.unlikely
+	.size	_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0.cold, .-_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0.cold
+.LCOLDE5:
+	.text
+.LHOTE5:
+	.section	.text._ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation,"axG",@progbits,_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation
+	.type	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation, @function
+_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation:
+.LFB11446:
+	.cfi_startproc
+	testl	%edx, %edx
+	je	.L205
+	cmpl	$1, %edx
+	je	.L206
+	cmpl	$2, %edx
+	je	.L210
+.L208:
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L205:
+	movq	_ZTINSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE@GOTPCREL(%rip), %rax
+	movq	%rax, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L206:
+	movq	%rsi, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L210:
+	movdqu	(%rsi), %xmm0
+	movups	%xmm0, (%rdi)
+	jmp	.L208
+	.cfi_endproc
+.LFE11446:
+	.size	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation, .-_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation
+	.section	.text._ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation,"axG",@progbits,_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation
+	.type	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation, @function
+_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation:
+.LFB11479:
+	.cfi_startproc
+	testl	%edx, %edx
+	je	.L212
+	cmpl	$1, %edx
+	je	.L213
+	cmpl	$2, %edx
+	je	.L217
+.L215:
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L212:
+	movq	_ZTINSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE@GOTPCREL(%rip), %rax
+	movq	%rax, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L213:
+	movq	%rsi, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L217:
+	movdqu	(%rsi), %xmm0
+	movups	%xmm0, (%rdi)
+	jmp	.L215
+	.cfi_endproc
+.LFE11479:
+	.size	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation, .-_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation
+	.section	.text._ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE10_M_managerERSt9_Any_dataRKSB_St18_Manager_operation,"axG",@progbits,_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE10_M_managerERSt9_Any_dataRKSB_St18_Manager_operation,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE10_M_managerERSt9_Any_dataRKSB_St18_Manager_operation
+	.type	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE10_M_managerERSt9_Any_dataRKSB_St18_Manager_operation, @function
+_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE10_M_managerERSt9_Any_dataRKSB_St18_Manager_operation:
+.LFB11824:
+	.cfi_startproc
+	testl	%edx, %edx
+	je	.L219
+	cmpl	$1, %edx
+	je	.L220
+	cmpl	$2, %edx
+	je	.L224
+.L222:
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L219:
+	movq	_ZTINSt13__future_base13_State_baseV27_SetterIbObEE@GOTPCREL(%rip), %rax
+	movq	%rax, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L220:
+	movq	%rsi, (%rdi)
+	xorl	%eax, %eax
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L224:
+	movdqu	(%rsi), %xmm0
+	movups	%xmm0, (%rdi)
+	jmp	.L222
+	.cfi_endproc
+.LFE11824:
+	.size	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE10_M_managerERSt9_Any_dataRKSB_St18_Manager_operation, .-_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE10_M_managerERSt9_Any_dataRKSB_St18_Manager_operation
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB12957:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L225
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L225
+	cmpb	$42, (%rdi)
+	je	.L227
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L225:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L227:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE12957:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt13__future_base7_ResultIbE10_M_destroyEv,"axG",@progbits,_ZNSt13__future_base7_ResultIbE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIbE10_M_destroyEv
+	.type	_ZNSt13__future_base7_ResultIbE10_M_destroyEv, @function
+_ZNSt13__future_base7_ResultIbE10_M_destroyEv:
+.LFB13028:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	(%rdi), %rax
+	movq	%rdi, %rbp
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIbED0Ev@GOTPCREL(%rip), %rax
+	jne	.L231
+	movq	_ZTVNSt13__future_base7_ResultIbEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.p2align 4,,10
+	.p2align 3
+.L231:
+	.cfi_restore_state
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.cfi_endproc
+.LFE13028:
+	.size	_ZNSt13__future_base7_ResultIbE10_M_destroyEv, .-_ZNSt13__future_base7_ResultIbE10_M_destroyEv
+	.section	.text._ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv,"axG",@progbits,_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv
+	.type	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv, @function
+_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv:
+.LFB13033:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	(%rdi), %rax
+	movq	%rdi, %rbp
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev@GOTPCREL(%rip), %rax
+	jne	.L234
+	movq	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	popq	%rbp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.p2align 4,,10
+	.p2align 3
+.L234:
+	.cfi_restore_state
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.cfi_endproc
+.LFE13033:
+	.size	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv, .-_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv
+	.section	.text._ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv,"axG",@progbits,_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv
+	.type	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv, @function
+_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv:
+.LFB13038:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	(%rdi), %rax
+	movq	%rdi, %rbp
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev@GOTPCREL(%rip), %rax
+	jne	.L237
+	movq	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$72, %esi
+	popq	%rbp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.p2align 4,,10
+	.p2align 3
+.L237:
+	.cfi_restore_state
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.cfi_endproc
+.LFE13038:
+	.size	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv, .-_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB12964:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L239
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L239
+	cmpb	$42, (%rdi)
+	je	.L241
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L239:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L241:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE12964:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB12999:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L244
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L244
+	cmpb	$42, (%rdi)
+	je	.L246
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L244:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L246:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE12999:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB13013:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L249
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L249
+	cmpb	$42, (%rdi)
+	je	.L251
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L249:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L251:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE13013:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB12985:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L254
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L254
+	cmpb	$42, (%rdi)
+	je	.L256
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L254:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L256:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE12985:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,"axG",@progbits,_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,comdat
+	.p2align 4
+	.weak	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem
+	.type	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, @function
+_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem:
+.LFB11773:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA11773
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	movq	%rsi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	movq	%rdi, %rbx
+	subq	$200, %rsp
+	.cfi_def_cfa_offset 240
+	movq	24(%rsi), %r13
+	movq	32(%rsi), %r12
+	movq	%fs:40, %rax
+	movq	%rax, 184(%rsp)
+	xorl	%eax, %eax
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L260
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L260
+	cmpq	$0, (%rax)
+	je	.L292
+.L260:
+	movq	%rbp, %rdi
+	call	_ZdlPv@PLT
+.L261:
+	testq	%rbx, %rbx
+	je	.L259
+	cmpq	$0, 16(%r12)
+	je	.L293
+	leaq	80(%rsp), %rbp
+	movq	%r12, %rsi
+	movq	%rbp, %rdi
+.LEHB7:
+	call	*24(%r12)
+.LEHE7:
+	movq	0(%r13), %rbx
+	testq	%rbx, %rbx
+	je	.L294
+	leaq	7(%rsp), %rax
+	movq	%rbp, 152(%rsp)
+	movq	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation@GOTPCREL(%rip), %xmm0
+	leaq	144(%rsp), %rbp
+	movq	%rax, 24(%rsp)
+	movq	_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb@GOTPCREL(%rip), %rax
+	movhps	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS9_EEE9_M_invokeERKSt9_Any_data@GOTPCREL(%rip), %xmm0
+	movq	%r13, 144(%rsp)
+	movq	%rax, 32(%rsp)
+	leaq	32(%rsp), %rax
+	movaps	%xmm0, 160(%rsp)
+	movq	%rax, %xmm0
+	leaq	8(%rsp), %rax
+	movq	%rax, %xmm1
+	leaq	16(%rsp), %rax
+	movb	$0, 7(%rsp)
+	punpcklqdq	%xmm1, %xmm0
+	movq	%rbp, 16(%rsp)
+	movaps	%xmm0, 48(%rsp)
+	movq	%rax, %xmm0
+	leaq	24(%rsp), %rax
+	movq	%rax, %xmm2
+	movq	%rbx, 8(%rsp)
+	movq	$0, 40(%rsp)
+	punpcklqdq	%xmm2, %xmm0
+	movaps	%xmm0, 64(%rsp)
+	data16	leaq	_ZSt15__once_callable@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	leaq	48(%rsp), %rdx
+	movq	%rdx, (%rax)
+	data16	leaq	_ZSt11__once_call@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv@GOTPCREL(%rip), %rdx
+	leaq	24(%rbx), %rdi
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	movq	%rdx, (%rax)
+	je	.L276
+	movq	__once_proxy@GOTPCREL(%rip), %rsi
+.LEHB8:
+	call	_ZL20__gthrw_pthread_oncePiPFvvE@PLT
+	testl	%eax, %eax
+	jne	.L265
+	cmpb	$0, 7(%rsp)
+	jne	.L295
+	movl	$2, %edi
+	call	_ZSt20__throw_future_errori@PLT
+.LEHE8:
+	.p2align 4,,10
+	.p2align 3
+.L295:
+	leaq	16(%rbx), %rdi
+	movl	$1, %eax
+	xchgl	(%rdi), %eax
+	testl	%eax, %eax
+	js	.L268
+.L271:
+	movq	160(%rsp), %rax
+	testq	%rax, %rax
+	je	.L270
+	movl	$3, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	*%rax
+.L270:
+	sfence
+.L259:
+	movq	184(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L296
+	addq	$200, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L292:
+	.cfi_restore_state
+	movzbl	40(%rbp), %edx
+	movb	%dl, 0(%rbp)
+	movq	%rbp, (%rax)
+	jmp	.L261
+	.p2align 4,,10
+	.p2align 3
+.L268:
+.LEHB9:
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_notify_allEPj@PLT
+	jmp	.L271
+.L276:
+	movl	$-1, %eax
+.L265:
+	movl	%eax, %edi
+	call	_ZSt20__throw_system_errori@PLT
+.LEHE9:
+.L294:
+	movl	$3, %edi
+.LEHB10:
+	call	_ZSt20__throw_future_errori@PLT
+.L293:
+	call	_ZSt25__throw_bad_function_callv@PLT
+.LEHE10:
+.L296:
+	call	__stack_chk_fail@PLT
+.L277:
+	movq	%rax, %rdi
+	jmp	.L274
+.L278:
+	movq	%rax, %rbx
+.L272:
+	movq	160(%rsp), %rax
+	testq	%rax, %rax
+	je	.L273
+	movl	$3, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	*%rax
+.L273:
+	movq	%rbx, %rdi
+.L274:
+	sfence
+.LEHB11:
+	call	_Unwind_Resume@PLT
+.LEHE11:
+	.cfi_endproc
+.LFE11773:
+	.section	.gcc_except_table
+.LLSDA11773:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE11773-.LLSDACSB11773
+.LLSDACSB11773:
+	.uleb128 .LEHB7-.LFB11773
+	.uleb128 .LEHE7-.LEHB7
+	.uleb128 .L277-.LFB11773
+	.uleb128 0
+	.uleb128 .LEHB8-.LFB11773
+	.uleb128 .LEHE8-.LEHB8
+	.uleb128 .L278-.LFB11773
+	.uleb128 0
+	.uleb128 .LEHB9-.LFB11773
+	.uleb128 .LEHE9-.LEHB9
+	.uleb128 .L278-.LFB11773
+	.uleb128 0
+	.uleb128 .LEHB10-.LFB11773
+	.uleb128 .LEHE10-.LEHB10
+	.uleb128 .L277-.LFB11773
+	.uleb128 0
+	.uleb128 .LEHB11-.LFB11773
+	.uleb128 .LEHE11-.LEHB11
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE11773:
+	.section	.text._ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,"axG",@progbits,_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,comdat
+	.size	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, .-_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem
+	.section	.text._ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,"axG",@progbits,_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,comdat
+	.p2align 4
+	.weak	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem
+	.type	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, @function
+_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem:
+.LFB12307:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA12307
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	movq	%rsi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	movq	%rdi, %rbx
+	subq	$136, %rsp
+	.cfi_def_cfa_offset 176
+	movq	24(%rsi), %r13
+	movq	32(%rsi), %r12
+	movq	%fs:40, %rax
+	movq	%rax, 120(%rsp)
+	xorl	%eax, %eax
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L298
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L298
+	cmpq	$0, (%rax)
+	je	.L330
+.L298:
+	movq	%rbp, %rdi
+	call	_ZdlPv@PLT
+.L299:
+	testq	%rbx, %rbx
+	je	.L297
+	cmpq	$0, 16(%r12)
+	je	.L331
+	movq	%r12, %rdi
+.LEHB12:
+	call	*24(%r12)
+.LEHE12:
+	movq	0(%r13), %rbx
+	movb	%al, 6(%rsp)
+	testq	%rbx, %rbx
+	je	.L332
+	leaq	6(%rsp), %rax
+	leaq	80(%rsp), %rbp
+	movq	%r13, 80(%rsp)
+	movq	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE10_M_managerERSt9_Any_dataRKSB_St18_Manager_operation@GOTPCREL(%rip), %xmm0
+	movq	%rax, 88(%rsp)
+	leaq	7(%rsp), %rax
+	movq	%rax, 24(%rsp)
+	movq	_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb@GOTPCREL(%rip), %rax
+	movhps	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIbObEEE9_M_invokeERKSt9_Any_data@GOTPCREL(%rip), %xmm0
+	movaps	%xmm0, 96(%rsp)
+	movq	%rax, 32(%rsp)
+	leaq	32(%rsp), %rax
+	movq	%rax, %xmm0
+	leaq	8(%rsp), %rax
+	movb	$0, 7(%rsp)
+	movq	%rax, %xmm1
+	leaq	16(%rsp), %rax
+	movq	%rbp, 16(%rsp)
+	punpcklqdq	%xmm1, %xmm0
+	movq	%rbx, 8(%rsp)
+	movaps	%xmm0, 48(%rsp)
+	movq	%rax, %xmm0
+	leaq	24(%rsp), %rax
+	movq	$0, 40(%rsp)
+	movq	%rax, %xmm2
+	punpcklqdq	%xmm2, %xmm0
+	movaps	%xmm0, 64(%rsp)
+	data16	leaq	_ZSt15__once_callable@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	leaq	48(%rsp), %rdx
+	movq	%rdx, (%rax)
+	data16	leaq	_ZSt11__once_call@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv@GOTPCREL(%rip), %rdx
+	leaq	24(%rbx), %rdi
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	movq	%rdx, (%rax)
+	je	.L314
+	movq	__once_proxy@GOTPCREL(%rip), %rsi
+.LEHB13:
+	call	_ZL20__gthrw_pthread_oncePiPFvvE@PLT
+	testl	%eax, %eax
+	jne	.L303
+	cmpb	$0, 7(%rsp)
+	jne	.L333
+	movl	$2, %edi
+	call	_ZSt20__throw_future_errori@PLT
+.LEHE13:
+	.p2align 4,,10
+	.p2align 3
+.L333:
+	leaq	16(%rbx), %rdi
+	movl	$1, %eax
+	xchgl	(%rdi), %eax
+	testl	%eax, %eax
+	js	.L306
+.L309:
+	movq	96(%rsp), %rax
+	testq	%rax, %rax
+	je	.L308
+	movl	$3, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	*%rax
+.L308:
+	sfence
+.L297:
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L334
+	addq	$136, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L330:
+	.cfi_restore_state
+	movzbl	40(%rbp), %edx
+	movb	%dl, 0(%rbp)
+	movq	%rbp, (%rax)
+	jmp	.L299
+	.p2align 4,,10
+	.p2align 3
+.L306:
+.LEHB14:
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_notify_allEPj@PLT
+	jmp	.L309
+.L314:
+	movl	$-1, %eax
+.L303:
+	movl	%eax, %edi
+	call	_ZSt20__throw_system_errori@PLT
+.LEHE14:
+.L332:
+	movl	$3, %edi
+.LEHB15:
+	call	_ZSt20__throw_future_errori@PLT
+.L331:
+	call	_ZSt25__throw_bad_function_callv@PLT
+.LEHE15:
+.L334:
+	call	__stack_chk_fail@PLT
+.L315:
+	movq	%rax, %rdi
+	jmp	.L312
+.L316:
+	movq	%rax, %rbx
+.L310:
+	movq	96(%rsp), %rax
+	testq	%rax, %rax
+	je	.L311
+	movl	$3, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	*%rax
+.L311:
+	movq	%rbx, %rdi
+.L312:
+	sfence
+.LEHB16:
+	call	_Unwind_Resume@PLT
+.LEHE16:
+	.cfi_endproc
+.LFE12307:
+	.section	.gcc_except_table
+.LLSDA12307:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE12307-.LLSDACSB12307
+.LLSDACSB12307:
+	.uleb128 .LEHB12-.LFB12307
+	.uleb128 .LEHE12-.LEHB12
+	.uleb128 .L315-.LFB12307
+	.uleb128 0
+	.uleb128 .LEHB13-.LFB12307
+	.uleb128 .LEHE13-.LEHB13
+	.uleb128 .L316-.LFB12307
+	.uleb128 0
+	.uleb128 .LEHB14-.LFB12307
+	.uleb128 .LEHE14-.LEHB14
+	.uleb128 .L316-.LFB12307
+	.uleb128 0
+	.uleb128 .LEHB15-.LFB12307
+	.uleb128 .LEHE15-.LEHB15
+	.uleb128 .L315-.LFB12307
+	.uleb128 0
+	.uleb128 .LEHB16-.LFB12307
+	.uleb128 .LEHE16-.LEHB16
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE12307:
+	.section	.text._ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,"axG",@progbits,_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,comdat
+	.size	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, .-_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem
+	.section	.text._ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,"axG",@progbits,_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,comdat
+	.p2align 4
+	.weak	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem
+	.type	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, @function
+_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem:
+.LFB11802:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA11802
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	movq	%rsi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	movq	%rdi, %rbx
+	subq	$136, %rsp
+	.cfi_def_cfa_offset 176
+	movq	24(%rsi), %r13
+	movq	32(%rsi), %r12
+	movq	%fs:40, %rax
+	movq	%rax, 120(%rsp)
+	xorl	%eax, %eax
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L336
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L336
+	cmpq	$0, (%rax)
+	je	.L368
+.L336:
+	movq	%rbp, %rdi
+	call	_ZdlPv@PLT
+.L337:
+	testq	%rbx, %rbx
+	je	.L335
+	cmpq	$0, 16(%r12)
+	je	.L369
+	movq	%r12, %rdi
+.LEHB17:
+	call	*24(%r12)
+.LEHE17:
+	movq	0(%r13), %rbx
+	movl	%eax, 4(%rsp)
+	testq	%rbx, %rbx
+	je	.L370
+	leaq	4(%rsp), %rax
+	leaq	80(%rsp), %rbp
+	movq	%r13, 80(%rsp)
+	movq	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation@GOTPCREL(%rip), %xmm0
+	movq	%rax, 88(%rsp)
+	leaq	3(%rsp), %rax
+	movq	%rax, 24(%rsp)
+	movq	_ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb@GOTPCREL(%rip), %rax
+	movhps	_ZNSt17_Function_handlerIFSt10unique_ptrINSt13__future_base12_Result_baseENS2_8_DeleterEEvENS1_13_State_baseV27_SetterIN7openpal10LogFiltersEOS9_EEE9_M_invokeERKSt9_Any_data@GOTPCREL(%rip), %xmm0
+	movaps	%xmm0, 96(%rsp)
+	movq	%rax, 32(%rsp)
+	leaq	32(%rsp), %rax
+	movq	%rax, %xmm0
+	leaq	8(%rsp), %rax
+	movb	$0, 3(%rsp)
+	movq	%rax, %xmm1
+	leaq	16(%rsp), %rax
+	movq	%rbp, 16(%rsp)
+	punpcklqdq	%xmm1, %xmm0
+	movq	%rbx, 8(%rsp)
+	movaps	%xmm0, 48(%rsp)
+	movq	%rax, %xmm0
+	leaq	24(%rsp), %rax
+	movq	$0, 40(%rsp)
+	movq	%rax, %xmm2
+	punpcklqdq	%xmm2, %xmm0
+	movaps	%xmm0, 64(%rsp)
+	data16	leaq	_ZSt15__once_callable@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	leaq	48(%rsp), %rdx
+	movq	%rdx, (%rax)
+	data16	leaq	_ZSt11__once_call@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	_ZZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_ENUlvE0_4_FUNEv@GOTPCREL(%rip), %rdx
+	leaq	24(%rbx), %rdi
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	movq	%rdx, (%rax)
+	je	.L352
+	movq	__once_proxy@GOTPCREL(%rip), %rsi
+.LEHB18:
+	call	_ZL20__gthrw_pthread_oncePiPFvvE@PLT
+	testl	%eax, %eax
+	jne	.L341
+	cmpb	$0, 3(%rsp)
+	jne	.L371
+	movl	$2, %edi
+	call	_ZSt20__throw_future_errori@PLT
+.LEHE18:
+	.p2align 4,,10
+	.p2align 3
+.L371:
+	leaq	16(%rbx), %rdi
+	movl	$1, %eax
+	xchgl	(%rdi), %eax
+	testl	%eax, %eax
+	js	.L344
+.L347:
+	movq	96(%rsp), %rax
+	testq	%rax, %rax
+	je	.L346
+	movl	$3, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	*%rax
+.L346:
+	sfence
+.L335:
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L372
+	addq	$136, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L368:
+	.cfi_restore_state
+	movzbl	40(%rbp), %edx
+	movb	%dl, 0(%rbp)
+	movq	%rbp, (%rax)
+	jmp	.L337
+	.p2align 4,,10
+	.p2align 3
+.L344:
+.LEHB19:
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_notify_allEPj@PLT
+	jmp	.L347
+.L352:
+	movl	$-1, %eax
+.L341:
+	movl	%eax, %edi
+	call	_ZSt20__throw_system_errori@PLT
+.LEHE19:
+.L370:
+	movl	$3, %edi
+.LEHB20:
+	call	_ZSt20__throw_future_errori@PLT
+.L369:
+	call	_ZSt25__throw_bad_function_callv@PLT
+.LEHE20:
+.L372:
+	call	__stack_chk_fail@PLT
+.L353:
+	movq	%rax, %rdi
+	jmp	.L350
+.L354:
+	movq	%rax, %rbx
+.L348:
+	movq	96(%rsp), %rax
+	testq	%rax, %rax
+	je	.L349
+	movl	$3, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	*%rax
+.L349:
+	movq	%rbx, %rdi
+.L350:
+	sfence
+.LEHB21:
+	call	_Unwind_Resume@PLT
+.LEHE21:
+	.cfi_endproc
+.LFE11802:
+	.section	.gcc_except_table
+.LLSDA11802:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE11802-.LLSDACSB11802
+.LLSDACSB11802:
+	.uleb128 .LEHB17-.LFB11802
+	.uleb128 .LEHE17-.LEHB17
+	.uleb128 .L353-.LFB11802
+	.uleb128 0
+	.uleb128 .LEHB18-.LFB11802
+	.uleb128 .LEHE18-.LEHB18
+	.uleb128 .L354-.LFB11802
+	.uleb128 0
+	.uleb128 .LEHB19-.LFB11802
+	.uleb128 .LEHE19-.LEHB19
+	.uleb128 .L354-.LFB11802
+	.uleb128 0
+	.uleb128 .LEHB20-.LFB11802
+	.uleb128 .LEHE20-.LEHB20
+	.uleb128 .L353-.LFB11802
+	.uleb128 0
+	.uleb128 .LEHB21-.LFB11802
+	.uleb128 .LEHE21-.LEHB21
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE11802:
+	.section	.text._ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,"axG",@progbits,_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem,comdat
+	.size	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, .-_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem
+	.section	.rodata._ZNK4asio6detail15system_category7messageB5cxx11Ei.str1.8,"aMS",@progbits,1
+	.align 8
+.LC6:
+	.string	"basic_string::_M_construct null not valid"
+	.section	.text._ZNK4asio6detail15system_category7messageB5cxx11Ei,"axG",@progbits,_ZNK4asio6detail15system_category7messageB5cxx11Ei,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNK4asio6detail15system_category7messageB5cxx11Ei
+	.type	_ZNK4asio6detail15system_category7messageB5cxx11Ei, @function
+_ZNK4asio6detail15system_category7messageB5cxx11Ei:
+.LFB3673:
+	.cfi_startproc
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	movq	%rdi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	leaq	16(%rdi), %rbp
+	subq	$296, %rsp
+	.cfi_def_cfa_offset 336
+	movq	%fs:40, %rax
+	movq	%rax, 280(%rsp)
+	xorl	%eax, %eax
+	cmpl	$125, %edx
+	je	.L388
+	pxor	%xmm0, %xmm0
+	movl	%edx, %edi
+	leaq	16(%rsp), %rsi
+	movl	$256, %edx
+	movups	%xmm0, 16(%rsp)
+	movups	%xmm0, 32(%rsp)
+	movups	%xmm0, 48(%rsp)
+	movups	%xmm0, 64(%rsp)
+	movups	%xmm0, 80(%rsp)
+	movups	%xmm0, 96(%rsp)
+	movups	%xmm0, 112(%rsp)
+	movups	%xmm0, 128(%rsp)
+	movups	%xmm0, 144(%rsp)
+	movups	%xmm0, 160(%rsp)
+	movups	%xmm0, 176(%rsp)
+	movups	%xmm0, 192(%rsp)
+	movups	%xmm0, 208(%rsp)
+	movups	%xmm0, 224(%rsp)
+	movups	%xmm0, 240(%rsp)
+	movups	%xmm0, 256(%rsp)
+	call	strerror_r@PLT
+	movq	%rbp, (%r12)
+	movq	%rax, %r13
+	testq	%rax, %rax
+	je	.L376
+	movq	%rax, %rdi
+	call	strlen@PLT
+	movq	%rax, 8(%rsp)
+	movq	%rax, %r14
+	cmpq	$15, %rax
+	ja	.L389
+	cmpq	$1, %rax
+	jne	.L380
+	movzbl	0(%r13), %edx
+	movb	%dl, 16(%r12)
+.L381:
+	movq	%rax, 8(%r12)
+	movb	$0, 0(%rbp,%rax)
+.L373:
+	movq	280(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L390
+	addq	$296, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	movq	%r12, %rax
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L389:
+	.cfi_restore_state
+	leaq	8(%rsp), %rsi
+	xorl	%edx, %edx
+	movq	%r12, %rdi
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	%rax, (%r12)
+	movq	%rax, %rbp
+	movq	8(%rsp), %rax
+	movq	%rax, 16(%r12)
+.L379:
+	movq	%rbp, %rdi
+	movq	%r14, %rdx
+	movq	%r13, %rsi
+	call	memcpy@PLT
+	movq	8(%rsp), %rax
+	movq	(%r12), %rbp
+	jmp	.L381
+	.p2align 4,,10
+	.p2align 3
+.L388:
+	movq	%rbp, (%rdi)
+	xorl	%edx, %edx
+	leaq	8(%rsp), %rsi
+	movq	$18, 8(%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	8(%rsp), %rdx
+	movdqa	.LC7(%rip), %xmm0
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movl	$11876, %edx
+	movw	%dx, 16(%rax)
+	movups	%xmm0, (%rax)
+	movq	8(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L373
+	.p2align 4,,10
+	.p2align 3
+.L380:
+	testq	%rax, %rax
+	je	.L381
+	jmp	.L379
+.L376:
+	leaq	.LC6(%rip), %rdi
+	call	_ZSt19__throw_logic_errorPKc@PLT
+.L390:
+	call	__stack_chk_fail@PLT
+	.cfi_endproc
+.LFE3673:
+	.size	_ZNK4asio6detail15system_category7messageB5cxx11Ei, .-_ZNK4asio6detail15system_category7messageB5cxx11Ei
+	.section	.text._ZNK4asio5error6detail17addrinfo_category7messageB5cxx11Ei,"axG",@progbits,_ZNK4asio5error6detail17addrinfo_category7messageB5cxx11Ei,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNK4asio5error6detail17addrinfo_category7messageB5cxx11Ei
+	.type	_ZNK4asio5error6detail17addrinfo_category7messageB5cxx11Ei, @function
+_ZNK4asio5error6detail17addrinfo_category7messageB5cxx11Ei:
+.LFB3719:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	movq	%rdi, %r12
+	subq	$16, %rsp
+	.cfi_def_cfa_offset 32
+	movq	%fs:40, %rax
+	movq	%rax, 8(%rsp)
+	xorl	%eax, %eax
+	leaq	16(%rdi), %rax
+	movq	%rax, (%rdi)
+	cmpl	$-8, %edx
+	je	.L397
+	cmpl	$-7, %edx
+	je	.L398
+	xorl	%edx, %edx
+	movq	%rsp, %rsi
+	movq	$19, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movdqa	.LC10(%rip), %xmm0
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movl	$28530, %edx
+	movw	%dx, 16(%rax)
+	movb	$114, 18(%rax)
+	movups	%xmm0, (%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+.L391:
+	movq	8(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L399
+	addq	$16, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 16
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L398:
+	.cfi_restore_state
+	xorl	%edx, %edx
+	movq	%rsp, %rsi
+	movq	$25, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movdqa	.LC9(%rip), %xmm0
+	movabsq	$7310593918082512243, %rcx
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movq	%rcx, 16(%rax)
+	movb	$100, 24(%rax)
+	movups	%xmm0, (%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L391
+	.p2align 4,,10
+	.p2align 3
+.L397:
+	xorl	%edx, %edx
+	movq	%rsp, %rsi
+	movq	$17, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movdqa	.LC8(%rip), %xmm0
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movb	$100, 16(%rax)
+	movups	%xmm0, (%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L391
+.L399:
+	call	__stack_chk_fail@PLT
+	.cfi_endproc
+.LFE3719:
+	.size	_ZNK4asio5error6detail17addrinfo_category7messageB5cxx11Ei, .-_ZNK4asio5error6detail17addrinfo_category7messageB5cxx11Ei
+	.section	.text._ZNK4asio5error6detail14netdb_category7messageB5cxx11Ei,"axG",@progbits,_ZNK4asio5error6detail14netdb_category7messageB5cxx11Ei,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNK4asio5error6detail14netdb_category7messageB5cxx11Ei
+	.type	_ZNK4asio5error6detail14netdb_category7messageB5cxx11Ei, @function
+_ZNK4asio5error6detail14netdb_category7messageB5cxx11Ei:
+.LFB3713:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	movq	%rdi, %r12
+	subq	$16, %rsp
+	.cfi_def_cfa_offset 32
+	movq	%fs:40, %rax
+	movq	%rax, 8(%rsp)
+	xorl	%eax, %eax
+	leaq	16(%rdi), %rax
+	movq	%rax, (%rdi)
+	cmpl	$1, %edx
+	je	.L408
+	cmpl	$2, %edx
+	je	.L409
+	cmpl	$4, %edx
+	je	.L410
+	cmpl	$3, %edx
+	je	.L411
+	xorl	%edx, %edx
+	movq	%rsp, %rsi
+	movq	$16, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movdqa	.LC20(%rip), %xmm0
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movups	%xmm0, (%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+.L400:
+	movq	8(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L412
+	addq	$16, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 16
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L408:
+	.cfi_restore_state
+	movq	%rsp, %rsi
+	xorl	%edx, %edx
+	movq	$30, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movl	$10597, %esi
+	movdqa	.LC11(%rip), %xmm0
+	movabsq	$8388361603773658465, %rcx
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movq	%rcx, 16(%rax)
+	movl	$1986622561, 24(%rax)
+	movw	%si, 28(%rax)
+	movups	%xmm0, (%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L400
+	.p2align 4,,10
+	.p2align 3
+.L411:
+	xorl	%edx, %edx
+	movq	%rsp, %rsi
+	movq	$55, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movdqa	.LC17(%rip), %xmm0
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movl	$30059, %edx
+	movups	%xmm0, (%rax)
+	movdqa	.LC18(%rip), %xmm0
+	movl	$1869573152, 48(%rax)
+	movups	%xmm0, 16(%rax)
+	movdqa	.LC19(%rip), %xmm0
+	movw	%dx, 52(%rax)
+	movb	$112, 54(%rax)
+	movups	%xmm0, 32(%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L400
+	.p2align 4,,10
+	.p2align 3
+.L409:
+	xorl	%edx, %edx
+	movq	%rsp, %rsi
+	movq	$51, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movl	$25972, %ecx
+	movdqa	.LC11(%rip), %xmm0
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movups	%xmm0, (%rax)
+	movdqa	.LC12(%rip), %xmm0
+	movw	%cx, 48(%rax)
+	movups	%xmm0, 16(%rax)
+	movdqa	.LC13(%rip), %xmm0
+	movb	$114, 50(%rax)
+	movups	%xmm0, 32(%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L400
+	.p2align 4,,10
+	.p2align 3
+.L410:
+	xorl	%edx, %edx
+	movq	%rsp, %rsi
+	movq	$56, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movdqa	.LC14(%rip), %xmm0
+	movabsq	$7022344801645520244, %rcx
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movups	%xmm0, (%rax)
+	movdqa	.LC15(%rip), %xmm0
+	movq	%rcx, 48(%rax)
+	movups	%xmm0, 16(%rax)
+	movdqa	.LC16(%rip), %xmm0
+	movups	%xmm0, 32(%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L400
+.L412:
+	call	__stack_chk_fail@PLT
+	.cfi_endproc
+.LFE3713:
+	.size	_ZNK4asio5error6detail14netdb_category7messageB5cxx11Ei, .-_ZNK4asio5error6detail14netdb_category7messageB5cxx11Ei
+	.section	.text._ZNK4asio5error6detail13misc_category7messageB5cxx11Ei,"axG",@progbits,_ZNK4asio5error6detail13misc_category7messageB5cxx11Ei,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNK4asio5error6detail13misc_category7messageB5cxx11Ei
+	.type	_ZNK4asio5error6detail13misc_category7messageB5cxx11Ei, @function
+_ZNK4asio5error6detail13misc_category7messageB5cxx11Ei:
+.LFB3725:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	movq	%rdi, %r12
+	subq	$16, %rsp
+	.cfi_def_cfa_offset 32
+	movq	%fs:40, %rax
+	movq	%rax, 8(%rsp)
+	xorl	%eax, %eax
+	leaq	16(%rdi), %rax
+	movq	%rax, (%rdi)
+	cmpl	$1, %edx
+	je	.L421
+	cmpl	$2, %edx
+	je	.L422
+	cmpl	$3, %edx
+	je	.L423
+	cmpl	$4, %edx
+	je	.L424
+	movabsq	$8316298233121436513, %rcx
+	movl	$28530, %edx
+	movq	%rcx, 16(%rdi)
+	movl	$1919230051, 8(%rax)
+	movw	%dx, 12(%rax)
+	movb	$114, 14(%rax)
+	movq	$15, 8(%rdi)
+	movb	$0, 31(%rdi)
+.L413:
+	movq	8(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L425
+	addq	$16, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 16
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L421:
+	.cfi_restore_state
+	movabsq	$2340011850872286273, %rcx
+	movq	%rcx, 16(%rdi)
+	movl	$1852141679, 8(%rax)
+	movq	$12, 8(%rdi)
+	movb	$0, 28(%rdi)
+	jmp	.L413
+	.p2align 4,,10
+	.p2align 3
+.L424:
+	movq	%rsp, %rsi
+	xorl	%edx, %edx
+	movq	$57, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movdqa	.LC22(%rip), %xmm0
+	movabsq	$7310291504967217959, %rsi
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movups	%xmm0, (%rax)
+	movdqa	.LC23(%rip), %xmm0
+	movq	%rsi, 48(%rax)
+	movups	%xmm0, 16(%rax)
+	movdqa	.LC24(%rip), %xmm0
+	movb	$116, 56(%rax)
+	movups	%xmm0, 32(%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L413
+	.p2align 4,,10
+	.p2align 3
+.L422:
+	movabsq	$7358994418594246213, %rcx
+	movq	%rcx, 16(%rdi)
+	movl	$27753, %ecx
+	movw	%cx, 8(%rax)
+	movb	$101, 10(%rax)
+	movq	$11, 8(%rdi)
+	movb	$0, 27(%rdi)
+	jmp	.L413
+	.p2align 4,,10
+	.p2align 3
+.L423:
+	xorl	%edx, %edx
+	movq	%rsp, %rsi
+	movq	$17, (%rsp)
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	(%rsp), %rdx
+	movdqa	.LC21(%rip), %xmm0
+	movq	%rax, (%r12)
+	movq	%rdx, 16(%r12)
+	movb	$100, 16(%rax)
+	movups	%xmm0, (%rax)
+	movq	(%rsp), %rax
+	movq	(%r12), %rdx
+	movq	%rax, 8(%r12)
+	movb	$0, (%rdx,%rax)
+	jmp	.L413
+.L425:
+	call	__stack_chk_fail@PLT
+	.cfi_endproc
+.LFE3725:
+	.size	_ZNK4asio5error6detail13misc_category7messageB5cxx11Ei, .-_ZNK4asio5error6detail13misc_category7messageB5cxx11Ei
+	.section	.text.unlikely._ZSt20__throw_bad_weak_ptrv,"axG",@progbits,_ZSt20__throw_bad_weak_ptrv,comdat
+	.weak	_ZSt20__throw_bad_weak_ptrv
+	.type	_ZSt20__throw_bad_weak_ptrv, @function
+_ZSt20__throw_bad_weak_ptrv:
+.LFB1494:
+	.cfi_startproc
+	pushq	%rax
+	.cfi_def_cfa_offset 16
+	popq	%rax
+	.cfi_def_cfa_offset 8
+	movl	$8, %edi
+	pushq	%rax
+	.cfi_def_cfa_offset 16
+	call	__cxa_allocate_exception@PLT
+	movq	_ZNSt12bad_weak_ptrD1Ev@GOTPCREL(%rip), %rdx
+	movq	_ZTISt12bad_weak_ptr@GOTPCREL(%rip), %rsi
+	movq	%rax, %rdi
+	movq	_ZTVSt12bad_weak_ptr@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	call	__cxa_throw@PLT
+	.cfi_endproc
+.LFE1494:
+	.size	_ZSt20__throw_bad_weak_ptrv, .-_ZSt20__throw_bad_weak_ptrv
+	.section	.text._ZN7openpal6LoggerD2Ev,"axG",@progbits,_ZN7openpal6LoggerD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal6LoggerD2Ev
+	.type	_ZN7openpal6LoggerD2Ev, @function
+_ZN7openpal6LoggerD2Ev:
+.LFB2870:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	pushq	%rbp
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	24(%rdi), %rbp
+	movq	%rdi, %rbx
+	testq	%rbp, %rbp
+	je	.L430
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L444
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L432:
+	cmpl	$1, %eax
+	je	.L445
+.L430:
+	movq	8(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L428
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L446
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L439:
+	cmpl	$1, %eax
+	je	.L447
+.L428:
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L445:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L448
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L435:
+	cmpl	$1, %eax
+	jne	.L430
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L430
+	.p2align 4,,10
+	.p2align 3
+.L447:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L449
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L442:
+	cmpl	$1, %eax
+	jne	.L428
+	movq	0(%rbp), %rax
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	movq	%rbp, %rdi
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	movq	24(%rax), %rax
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L444:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L432
+	.p2align 4,,10
+	.p2align 3
+.L446:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L439
+	.p2align 4,,10
+	.p2align 3
+.L448:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L435
+	.p2align 4,,10
+	.p2align 3
+.L449:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L442
+	.cfi_endproc
+.LFE2870:
+	.size	_ZN7openpal6LoggerD2Ev, .-_ZN7openpal6LoggerD2Ev
+	.weak	_ZN7openpal6LoggerD1Ev
+	.set	_ZN7openpal6LoggerD1Ev,_ZN7openpal6LoggerD2Ev
+	.section	.text._ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb,"axG",@progbits,_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb
+	.type	_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb, @function
+_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb:
+.LFB7404:
+	.cfi_startproc
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	movl	%ecx, %r13d
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	movq	%rdi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	movq	%rsi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	movq	%rdx, %rbx
+	subq	$40, %rsp
+	.cfi_def_cfa_offset 80
+	movq	%fs:40, %rax
+	movq	%rax, 24(%rsp)
+	movq	(%rsi), %rax
+	leaq	24(%rax), %rdi
+	call	pthread_mutex_lock@PLT
+	movq	0(%rbp), %rdi
+	cmpb	$0, 64(%rdi)
+	je	.L451
+	cmpq	$0, 80(%rdi)
+	movq	$0, (%rbx)
+	je	.L452
+	movq	80(%rdi), %rax
+	movq	%rbx, (%rax)
+	movq	%rbx, 80(%rdi)
+.L453:
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L483
+	addq	$40, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	addq	$24, %rdi
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	jmp	pthread_mutex_unlock@PLT
+	.p2align 4,,10
+	.p2align 3
+.L452:
+	.cfi_restore_state
+	movq	%rbx, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 72(%rdi)
+	jmp	.L453
+	.p2align 4,,10
+	.p2align 3
+.L451:
+	movb	$1, 64(%rdi)
+	addq	$24, %rdi
+	call	pthread_mutex_unlock@PLT
+	movq	0(%rbp), %rbp
+	movq	$0, (%rbx)
+	cmpq	$0, 96(%rbp)
+	je	.L455
+	movq	96(%rbp), %rax
+	movq	%rbx, (%rax)
+	movq	%rbx, 96(%rbp)
+.L456:
+	movq	40(%r12), %rbx
+	cmpb	$0, 40(%rbx)
+	jne	.L471
+	testb	%r13b, %r13b
+	je	.L457
+.L471:
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	jne	.L461
+	jmp	.L457
+	.p2align 4,,10
+	.p2align 3
+.L459:
+	movq	16(%rax), %rax
+	testq	%rax, %rax
+	je	.L457
+.L461:
+	cmpq	(%rax), %rbx
+	jne	.L459
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L457
+	addq	$1, 24(%rax)
+	cmpq	$0, 16(%rax)
+	movq	$0, 0(%rbp)
+	je	.L462
+	movq	16(%rax), %rdx
+	movq	%rbp, (%rdx)
+	movq	%rbp, 16(%rax)
+.L450:
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L483
+	addq	$40, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L457:
+	.cfi_restore_state
+	lock addq	$1, 184(%rbx)
+	leaq	48(%rbx), %r12
+	movq	%r12, %rdi
+	call	pthread_mutex_lock@PLT
+	cmpq	$0, 200(%rbx)
+	movq	$0, 0(%rbp)
+	je	.L464
+	movq	200(%rbx), %rax
+	movq	%rbp, (%rax)
+	movq	%rbp, 200(%rbx)
+.L465:
+	movq	136(%rbx), %rax
+	orq	$1, %rax
+	movq	%rax, 136(%rbx)
+	cmpq	$1, %rax
+	je	.L466
+	movq	%r12, %rdi
+	call	pthread_mutex_unlock@PLT
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L483
+	addq	$40, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	leaq	88(%rbx), %rdi
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	jmp	pthread_cond_signal@PLT
+	.p2align 4,,10
+	.p2align 3
+.L466:
+	.cfi_restore_state
+	cmpb	$0, 176(%rbx)
+	jne	.L468
+	movq	144(%rbx), %rax
+	testq	%rax, %rax
+	je	.L468
+	leaq	88(%rax), %rdx
+	movb	$1, 176(%rbx)
+	movl	96(%rax), %edi
+	leaq	12(%rsp), %rcx
+	movq	%rdx, 16(%rsp)
+	movl	88(%rax), %edx
+	movl	$3, %esi
+	movl	$-2147483639, 12(%rsp)
+	call	epoll_ctl@PLT
+.L468:
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L483
+	addq	$40, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	movq	%r12, %rdi
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	jmp	pthread_mutex_unlock@PLT
+	.p2align 4,,10
+	.p2align 3
+.L455:
+	.cfi_restore_state
+	movq	%rbx, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 88(%rbp)
+	jmp	.L456
+	.p2align 4,,10
+	.p2align 3
+.L464:
+	movq	%rbp, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 192(%rbx)
+	jmp	.L465
+	.p2align 4,,10
+	.p2align 3
+.L462:
+	movq	%rbp, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 8(%rax)
+	jmp	.L450
+.L483:
+	call	__stack_chk_fail@PLT
+	.cfi_endproc
+.LFE7404:
+	.size	_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb, .-_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb
+	.section	.text._ZNSt13__future_base13_State_baseV24waitEv,"axG",@progbits,_ZNSt13__future_base13_State_baseV24waitEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt13__future_base13_State_baseV24waitEv
+	.type	_ZNSt13__future_base13_State_baseV24waitEv, @function
+_ZNSt13__future_base13_State_baseV24waitEv:
+.LFB7666:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 32
+	movq	(%rdi), %rax
+	call	*16(%rax)
+	movl	16(%rbp), %edx
+	andl	$2147483647, %edx
+	cmpl	$1, %edx
+	je	.L485
+	leaq	16(%rbp), %rbx
+	jmp	.L486
+	.p2align 4,,10
+	.p2align 3
+.L494:
+	cmpl	$1, %edx
+	je	.L485
+.L486:
+	lock orl	$-2147483648, (%rbx)
+	xorl	%r9d, %r9d
+	xorl	%r8d, %r8d
+	xorl	%ecx, %ecx
+	orl	$-2147483648, %edx
+	movq	%rbx, %rsi
+	movq	%rbx, %rdi
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_wait_untilEPjjbNSt6chrono8durationIlSt5ratioILl1ELl1EEEENS2_IlS3_ILl1ELl1000000000EEEE@PLT
+	movl	(%rbx), %edx
+	andl	$2147483647, %edx
+	cmpb	$1, %al
+	je	.L494
+.L485:
+	movq	8(%rbp), %rax
+	addq	$8, %rsp
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE7666:
+	.size	_ZNSt13__future_base13_State_baseV24waitEv, .-_ZNSt13__future_base13_State_baseV24waitEv
+	.section	.text._ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev,"axG",@progbits,_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev
+	.type	_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev, @function
+_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev:
+.LFB9906:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	pushq	%rbp
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	32(%rdi), %rbp
+	movq	%rdi, %rbx
+	testq	%rbp, %rbp
+	je	.L497
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L511
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L499:
+	cmpl	$1, %eax
+	je	.L512
+.L497:
+	movq	8(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L495
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L513
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L506:
+	cmpl	$1, %eax
+	je	.L514
+.L495:
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L512:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L515
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L502:
+	cmpl	$1, %eax
+	jne	.L497
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L497
+	.p2align 4,,10
+	.p2align 3
+.L514:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L516
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L509:
+	cmpl	$1, %eax
+	jne	.L495
+	movq	0(%rbp), %rax
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	movq	%rbp, %rdi
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	movq	24(%rax), %rax
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L511:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L499
+	.p2align 4,,10
+	.p2align 3
+.L513:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L506
+	.p2align 4,,10
+	.p2align 3
+.L515:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L502
+	.p2align 4,,10
+	.p2align 3
+.L516:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L509
+	.cfi_endproc
+.LFE9906:
+	.size	_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev, .-_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev
+	.weak	_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D1Ev
+	.set	_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D1Ev,_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev
+	.section	.text._ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev,"axG",@progbits,_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev
+	.type	_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev, @function
+_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev:
+.LFB9918:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	pushq	%rbp
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	32(%rdi), %rbp
+	movq	%rdi, %rbx
+	testq	%rbp, %rbp
+	je	.L519
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L533
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L521:
+	cmpl	$1, %eax
+	je	.L534
+.L519:
+	movq	8(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L517
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L535
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L528:
+	cmpl	$1, %eax
+	je	.L536
+.L517:
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L534:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L537
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L524:
+	cmpl	$1, %eax
+	jne	.L519
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L519
+	.p2align 4,,10
+	.p2align 3
+.L536:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L538
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L531:
+	cmpl	$1, %eax
+	jne	.L517
+	movq	0(%rbp), %rax
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	movq	%rbp, %rdi
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	movq	24(%rax), %rax
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L533:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L521
+	.p2align 4,,10
+	.p2align 3
+.L535:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L528
+	.p2align 4,,10
+	.p2align 3
+.L537:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L524
+	.p2align 4,,10
+	.p2align 3
+.L538:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L531
+	.cfi_endproc
+.LFE9918:
+	.size	_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev, .-_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev
+	.weak	_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D1Ev
+	.set	_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D1Ev,_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev
+	.section	.text._ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev,"axG",@progbits,_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev
+	.type	_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev, @function
+_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev:
+.LFB9940:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	pushq	%rbp
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	32(%rdi), %rbp
+	movq	%rdi, %rbx
+	testq	%rbp, %rbp
+	je	.L541
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L555
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L543:
+	cmpl	$1, %eax
+	je	.L556
+.L541:
+	movq	8(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L539
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L557
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L550:
+	cmpl	$1, %eax
+	je	.L558
+.L539:
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L556:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L559
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L546:
+	cmpl	$1, %eax
+	jne	.L541
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L541
+	.p2align 4,,10
+	.p2align 3
+.L558:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L560
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L553:
+	cmpl	$1, %eax
+	jne	.L539
+	movq	0(%rbp), %rax
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	movq	%rbp, %rdi
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	movq	24(%rax), %rax
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L555:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L543
+	.p2align 4,,10
+	.p2align 3
+.L557:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L550
+	.p2align 4,,10
+	.p2align 3
+.L559:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L546
+	.p2align 4,,10
+	.p2align 3
+.L560:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L553
+	.cfi_endproc
+.LFE9940:
+	.size	_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev, .-_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev
+	.weak	_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D1Ev
+	.set	_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D1Ev,_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D2Ev
+	.section	.text._ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev,"axG",@progbits,_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev
+	.type	_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev, @function
+_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev:
+.LFB9949:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	pushq	%rbp
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	32(%rdi), %rbp
+	movq	%rdi, %rbx
+	testq	%rbp, %rbp
+	je	.L563
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L577
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L565:
+	cmpl	$1, %eax
+	je	.L578
+.L563:
+	movq	8(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L561
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L579
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L572:
+	cmpl	$1, %eax
+	je	.L580
+.L561:
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L578:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L581
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L568:
+	cmpl	$1, %eax
+	jne	.L563
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L563
+	.p2align 4,,10
+	.p2align 3
+.L580:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L582
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L575:
+	cmpl	$1, %eax
+	jne	.L561
+	movq	0(%rbp), %rax
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	movq	%rbp, %rdi
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	movq	24(%rax), %rax
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L577:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L565
+	.p2align 4,,10
+	.p2align 3
+.L579:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L572
+	.p2align 4,,10
+	.p2align 3
+.L581:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L568
+	.p2align 4,,10
+	.p2align 3
+.L582:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L575
+	.cfi_endproc
+.LFE9949:
+	.size	_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev, .-_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev
+	.weak	_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D1Ev
+	.set	_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D1Ev,_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D2Ev
+	.section	.text._ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv,"axG",@progbits,_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv
+	.type	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv, @function
+_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
+.LFB9975:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 32
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L592
+	movl	8(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rdi)
+.L585:
+	cmpl	$1, %eax
+	je	.L593
+.L583:
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L593:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L594
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L589:
+	cmpl	$1, %eax
+	jne	.L583
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	movq	24(%rax), %rax
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L592:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rdi)
+	jmp	.L585
+	.p2align 4,,10
+	.p2align 3
+.L594:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L589
+	.cfi_endproc
+.LFE9975:
+	.size	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv, .-_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv
+	.section	.text._ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data,"axG",@progbits,_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data
+	.type	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data, @function
+_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data:
+.LFB11178:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA11178
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	subq	$56, %rsp
+	.cfi_def_cfa_offset 80
+	movq	(%rdi), %rdx
+	movq	%fs:40, %rax
+	movq	%rax, 40(%rsp)
+	xorl	%eax, %eax
+	movq	24(%rdx), %rax
+	leaq	16(%rdx), %r8
+	movq	72(%rax), %rdi
+	movq	(%rdx), %rax
+	leaq	16(%rax), %rcx
+	testq	%rax, %rax
+	cmovne	%rcx, %rax
+	movq	%rax, 16(%rsp)
+	movq	8(%rdx), %rax
+	movq	%rax, 24(%rsp)
+	testq	%rax, %rax
+	je	.L597
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L619
+	addl	$1, 8(%rax)
+.L597:
+	leaq	16(%rsp), %rsi
+	movq	%r8, %rdx
+.LEHB22:
+	call	_ZN8asiodnp39IOHandler10AddContextERKSt10shared_ptrIN8opendnp312ILinkSessionEERKNS2_5RouteE@PLT
+.LEHE22:
+	movq	24(%rsp), %rbp
+	testq	%rbp, %rbp
+	je	.L595
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L620
+	movl	8(%rbp), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rbp)
+.L602:
+	cmpl	$1, %edx
+	je	.L621
+.L595:
+	movq	40(%rsp), %rbx
+	subq	%fs:40, %rbx
+	jne	.L622
+	addq	$56, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L621:
+	.cfi_restore_state
+	movq	0(%rbp), %rdx
+	movb	%al, 15(%rsp)
+	movq	%rbp, %rdi
+	call	*16(%rdx)
+	testq	%rbx, %rbx
+	movzbl	15(%rsp), %eax
+	jne	.L623
+	movl	12(%rbp), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 12(%rbp)
+.L605:
+	cmpl	$1, %edx
+	jne	.L595
+	movq	0(%rbp), %rdx
+	movb	%al, 15(%rsp)
+	movq	%rbp, %rdi
+	call	*24(%rdx)
+	movzbl	15(%rsp), %eax
+	jmp	.L595
+	.p2align 4,,10
+	.p2align 3
+.L620:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rbp)
+	jmp	.L602
+	.p2align 4,,10
+	.p2align 3
+.L619:
+	lock addl	$1, 8(%rax)
+	jmp	.L597
+	.p2align 4,,10
+	.p2align 3
+.L623:
+	movl	$-1, %edx
+	lock xaddl	%edx, 12(%rbp)
+	jmp	.L605
+.L622:
+	call	__stack_chk_fail@PLT
+.L609:
+	movq	%rax, %rbp
+.L606:
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L607
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L607:
+	movq	%rbp, %rdi
+.LEHB23:
+	call	_Unwind_Resume@PLT
+.LEHE23:
+	.cfi_endproc
+.LFE11178:
+	.section	.gcc_except_table
+.LLSDA11178:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE11178-.LLSDACSB11178
+.LLSDACSB11178:
+	.uleb128 .LEHB22-.LFB11178
+	.uleb128 .LEHE22-.LEHB22
+	.uleb128 .L609-.LFB11178
+	.uleb128 0
+	.uleb128 .LEHB23-.LFB11178
+	.uleb128 .LEHE23-.LEHB23
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE11178:
+	.section	.text._ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data,"axG",@progbits,_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data,comdat
+	.size	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data, .-_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data
+	.section	.text._ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data,"axG",@progbits,_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data
+	.type	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data, @function
+_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data:
+.LFB11225:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA11225
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	subq	$56, %rsp
+	.cfi_def_cfa_offset 80
+	movq	(%rdi), %rdx
+	movq	%fs:40, %rax
+	movq	%rax, 40(%rsp)
+	xorl	%eax, %eax
+	movq	24(%rdx), %rax
+	leaq	16(%rdx), %r8
+	movq	72(%rax), %rdi
+	movq	(%rdx), %rax
+	leaq	8(%rax), %rcx
+	testq	%rax, %rax
+	cmovne	%rcx, %rax
+	movq	%rax, 16(%rsp)
+	movq	8(%rdx), %rax
+	movq	%rax, 24(%rsp)
+	testq	%rax, %rax
+	je	.L626
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L648
+	addl	$1, 8(%rax)
+.L626:
+	leaq	16(%rsp), %rsi
+	movq	%r8, %rdx
+.LEHB24:
+	call	_ZN8asiodnp39IOHandler10AddContextERKSt10shared_ptrIN8opendnp312ILinkSessionEERKNS2_5RouteE@PLT
+.LEHE24:
+	movq	24(%rsp), %rbp
+	testq	%rbp, %rbp
+	je	.L624
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L649
+	movl	8(%rbp), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rbp)
+.L631:
+	cmpl	$1, %edx
+	je	.L650
+.L624:
+	movq	40(%rsp), %rbx
+	subq	%fs:40, %rbx
+	jne	.L651
+	addq	$56, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L650:
+	.cfi_restore_state
+	movq	0(%rbp), %rdx
+	movb	%al, 15(%rsp)
+	movq	%rbp, %rdi
+	call	*16(%rdx)
+	testq	%rbx, %rbx
+	movzbl	15(%rsp), %eax
+	jne	.L652
+	movl	12(%rbp), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 12(%rbp)
+.L634:
+	cmpl	$1, %edx
+	jne	.L624
+	movq	0(%rbp), %rdx
+	movb	%al, 15(%rsp)
+	movq	%rbp, %rdi
+	call	*24(%rdx)
+	movzbl	15(%rsp), %eax
+	jmp	.L624
+	.p2align 4,,10
+	.p2align 3
+.L649:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rbp)
+	jmp	.L631
+	.p2align 4,,10
+	.p2align 3
+.L648:
+	lock addl	$1, 8(%rax)
+	jmp	.L626
+	.p2align 4,,10
+	.p2align 3
+.L652:
+	movl	$-1, %edx
+	lock xaddl	%edx, 12(%rbp)
+	jmp	.L634
+.L651:
+	call	__stack_chk_fail@PLT
+.L638:
+	movq	%rax, %rbp
+.L635:
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L636
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L636:
+	movq	%rbp, %rdi
+.LEHB25:
+	call	_Unwind_Resume@PLT
+.LEHE25:
+	.cfi_endproc
+.LFE11225:
+	.section	.gcc_except_table
+.LLSDA11225:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE11225-.LLSDACSB11225
+.LLSDACSB11225:
+	.uleb128 .LEHB24-.LFB11225
+	.uleb128 .LEHE24-.LEHB24
+	.uleb128 .L638-.LFB11225
+	.uleb128 0
+	.uleb128 .LEHB25-.LFB11225
+	.uleb128 .LEHE25-.LEHB25
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE11225:
+	.section	.text._ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data,"axG",@progbits,_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data,comdat
+	.size	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data, .-_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data
+	.section	.text.unlikely
+	.align 2
+.LCOLDB25:
+	.text
+.LHOTB25:
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3Channel8ShutdownEv
+	.type	_ZN8asiodnp311DNP3Channel8ShutdownEv, @function
+_ZN8asiodnp311DNP3Channel8ShutdownEv:
+.LFB8606:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8606
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	pushq	%rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	subq	$48, %rsp
+	.cfi_def_cfa_offset 96
+	movq	16(%rdi), %rbp
+	movq	%fs:40, %rax
+	movq	%rax, 40(%rsp)
+	xorl	%eax, %eax
+	testq	%rbp, %rbp
+	je	.L654
+	movl	8(%rbp), %eax
+	leaq	8(%rbp), %rbx
+.L656:
+	testl	%eax, %eax
+	je	.L654
+	leal	1(%rax), %edx
+	lock cmpxchgl	%edx, (%rbx)
+	jne	.L656
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r13
+	movq	8(%rdi), %r12
+	movq	56(%rdi), %r14
+	testq	%r13, %r13
+	jne	.L694
+	addl	$1, 8(%rbp)
+.L658:
+	movq	$0, 16(%rsp)
+	movl	$16, %edi
+.LEHB26:
+	call	_Znwm@PLT
+.LEHE26:
+	movq	%r12, %xmm0
+	movq	%rbp, %xmm1
+	movq	%rsp, %r12
+	movq	%r14, %rdi
+	punpcklqdq	%xmm1, %xmm0
+	movq	%rax, (%rsp)
+	leaq	_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E10_M_managerERSt9_Any_dataRKS5_St18_Manager_operation(%rip), %rcx
+	movq	%r12, %rsi
+	movups	%xmm0, (%rax)
+	leaq	_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E9_M_invokeERKSt9_Any_data(%rip), %rax
+	movq	%rcx, %xmm0
+	movq	%rax, %xmm2
+	punpcklqdq	%xmm2, %xmm0
+	movaps	%xmm0, 16(%rsp)
+.LEHB27:
+	call	_ZN7asiopal8Executor18BlockUntilAndFlushERKSt8functionIFvvEE@PLT
+.LEHE27:
+	movq	16(%rsp), %rax
+	testq	%rax, %rax
+	je	.L663
+	movl	$3, %edx
+	movq	%r12, %rsi
+	movq	%r12, %rdi
+	call	*%rax
+.L663:
+	testq	%r13, %r13
+	jne	.L695
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+	cmpl	$1, %eax
+	je	.L696
+.L653:
+	movq	40(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L693
+	addq	$48, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 48
+	popq	%rbx
+	.cfi_def_cfa_offset 40
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L696:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r13, %r13
+	jne	.L697
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L669:
+	cmpl	$1, %eax
+	jne	.L653
+	movq	40(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L693
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	movq	24(%rax), %rax
+	addq	$48, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 48
+	popq	%rbx
+	.cfi_def_cfa_offset 40
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L695:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, (%rbx)
+	cmpl	$1, %eax
+	jne	.L653
+	jmp	.L696
+	.p2align 4,,10
+	.p2align 3
+.L694:
+	lock addl	$1, (%rbx)
+	jmp	.L658
+	.p2align 4,,10
+	.p2align 3
+.L697:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L669
+.L693:
+	call	__stack_chk_fail@PLT
+.L675:
+	movq	%rax, %rbx
+	jmp	.L672
+.L676:
+	movq	%rax, %r12
+	jmp	.L660
+	.section	.gcc_except_table
+.LLSDA8606:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8606-.LLSDACSB8606
+.LLSDACSB8606:
+	.uleb128 .LEHB26-.LFB8606
+	.uleb128 .LEHE26-.LEHB26
+	.uleb128 .L676-.LFB8606
+	.uleb128 0
+	.uleb128 .LEHB27-.LFB8606
+	.uleb128 .LEHE27-.LEHB27
+	.uleb128 .L675-.LFB8606
+	.uleb128 0
+.LLSDACSE8606:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC8606
+	.type	_ZN8asiodnp311DNP3Channel8ShutdownEv.cold, @function
+_ZN8asiodnp311DNP3Channel8ShutdownEv.cold:
+.LFSB8606:
+.L654:
+	.cfi_def_cfa_offset 96
+	.cfi_offset 3, -48
+	.cfi_offset 6, -40
+	.cfi_offset 12, -32
+	.cfi_offset 13, -24
+	.cfi_offset 14, -16
+.LEHB28:
+	call	_ZSt20__throw_bad_weak_ptrv@PLT
+.LEHE28:
+.L672:
+	movq	16(%rsp), %rax
+	testq	%rax, %rax
+	je	.L673
+	movl	$3, %edx
+	movq	%r12, %rsi
+	movq	%r12, %rdi
+	call	*%rax
+.L673:
+	movq	%rbx, %r12
+.L662:
+	movq	%rbp, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	movq	%r12, %rdi
+.LEHB29:
+	call	_Unwind_Resume@PLT
+.LEHE29:
+.L660:
+	movq	16(%rsp), %rax
+	testq	%rax, %rax
+	je	.L661
+	movq	%rsp, %rdi
+	movl	$3, %edx
+	movq	%rdi, %rsi
+	call	*%rax
+.L661:
+	movq	%rbp, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L662
+	.cfi_endproc
+.LFE8606:
+	.section	.gcc_except_table
+.LLSDAC8606:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC8606-.LLSDACSBC8606
+.LLSDACSBC8606:
+	.uleb128 .LEHB28-.LCOLDB25
+	.uleb128 .LEHE28-.LEHB28
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB29-.LCOLDB25
+	.uleb128 .LEHE29-.LEHB29
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC8606:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8asiodnp311DNP3Channel8ShutdownEv, .-_ZN8asiodnp311DNP3Channel8ShutdownEv
+	.section	.text.unlikely
+	.size	_ZN8asiodnp311DNP3Channel8ShutdownEv.cold, .-_ZN8asiodnp311DNP3Channel8ShutdownEv.cold
+.LCOLDE25:
+	.text
+.LHOTE25:
+	.section	.text.unlikely
+	.align 2
+.LCOLDB26:
+	.text
+.LHOTB26:
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3Channel12ShutdownImplEv
+	.type	_ZN8asiodnp311DNP3Channel12ShutdownImplEv, @function
+_ZN8asiodnp311DNP3Channel12ShutdownImplEv:
+.LFB8626:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8626
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	pushq	%rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	subq	$32, %rsp
+	.cfi_def_cfa_offset 80
+	movq	%fs:40, %rax
+	movq	%rax, 24(%rsp)
+	xorl	%eax, %eax
+	cmpq	$0, 104(%rdi)
+	je	.L760
+	movq	%rdi, %rbx
+	movq	72(%rdi), %rdi
+.LEHB30:
+	call	_ZN8asiodnp39IOHandler8ShutdownEv@PLT
+	movq	80(%rbx), %rdi
+	pxor	%xmm0, %xmm0
+	movups	%xmm0, 72(%rbx)
+	testq	%rdi, %rdi
+	je	.L701
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L701:
+	movq	104(%rbx), %rdi
+	call	_ZN7asiopal15ResourceManager8ShutdownEv@PLT
+.LEHE30:
+	movq	112(%rbx), %rdi
+	pxor	%xmm0, %xmm0
+	movups	%xmm0, 104(%rbx)
+	testq	%rdi, %rdi
+	je	.L702
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L702:
+	movq	16(%rbx), %r12
+	testq	%r12, %r12
+	je	.L703
+	movl	8(%r12), %eax
+	leaq	8(%r12), %rdx
+.L705:
+	testl	%eax, %eax
+	je	.L703
+	leal	1(%rax), %ecx
+	lock cmpxchgl	%ecx, (%rdx)
+	jne	.L705
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	movq	8(%rbx), %r13
+	movq	56(%rbx), %rbx
+	jne	.L763
+	addl	$1, 8(%r12)
+.L707:
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	40(%rbx), %r14
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L708
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L708
+	movq	(%rax), %rbp
+	testq	%rbp, %rbp
+	je	.L708
+	movq	$0, (%rax)
+	movzbl	0(%rbp), %eax
+	cmpb	$39, %al
+	jbe	.L709
+	movb	%al, 40(%rbp)
+.L710:
+	movq	%r12, %xmm1
+	movq	%r13, %xmm0
+	leaq	_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem(%rip), %rax
+	movq	$0, 0(%rbp)
+	punpcklqdq	%xmm1, %xmm0
+	movq	%rax, 8(%rbp)
+	movups	%xmm0, 24(%rbp)
+	movq	48(%rbx), %rax
+	movl	$0, 16(%rbp)
+	leaq	24(%rax), %rdi
+	call	pthread_mutex_lock@PLT
+	movq	48(%rbx), %rdi
+	cmpb	$0, 64(%rdi)
+	je	.L711
+	cmpq	$0, 80(%rdi)
+	movq	$0, 0(%rbp)
+	je	.L712
+	movq	80(%rdi), %rax
+	movq	%rbp, (%rax)
+	movq	%rbp, 80(%rdi)
+.L713:
+	addq	$24, %rdi
+	call	pthread_mutex_unlock@PLT
+.L714:
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L762
+	addq	$32, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 48
+	movq	%r12, %rdi
+	popq	%rbx
+	.cfi_def_cfa_offset 40
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	jmp	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L709:
+	.cfi_restore_state
+	movq	%rbp, %rdi
+	call	_ZdlPv@PLT
+.L708:
+	movl	$41, %edi
+.LEHB31:
+	call	_Znwm@PLT
+.LEHE31:
+	movb	$40, 40(%rax)
+	movq	%rax, %rbp
+	jmp	.L710
+	.p2align 4,,10
+	.p2align 3
+.L760:
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L762
+	addq	$32, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 48
+	popq	%rbx
+	.cfi_def_cfa_offset 40
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L711:
+	.cfi_restore_state
+	movb	$1, 64(%rdi)
+	addq	$24, %rdi
+	call	pthread_mutex_unlock@PLT
+	movq	48(%rbx), %r13
+	movq	$0, 0(%rbp)
+	cmpq	$0, 96(%r13)
+	je	.L715
+	movq	96(%r13), %rax
+	movq	%rbp, (%rax)
+	movq	%rbp, 96(%r13)
+.L716:
+	movq	40(%r14), %rbx
+	cmpb	$0, 40(%rbx)
+	jne	.L764
+.L717:
+	lock addq	$1, 184(%rbx)
+	leaq	48(%rbx), %rbp
+	movq	%rbp, %rdi
+	call	pthread_mutex_lock@PLT
+	cmpq	$0, 200(%rbx)
+	movq	$0, 0(%r13)
+	je	.L722
+	movq	200(%rbx), %rax
+	movq	%r13, (%rax)
+	movq	%r13, 200(%rbx)
+.L723:
+	movq	136(%rbx), %rax
+	orq	$1, %rax
+	movq	%rax, 136(%rbx)
+	cmpq	$1, %rax
+	je	.L724
+	movq	%rbp, %rdi
+	call	pthread_mutex_unlock@PLT
+	leaq	88(%rbx), %rdi
+	call	pthread_cond_signal@PLT
+	jmp	.L714
+	.p2align 4,,10
+	.p2align 3
+.L715:
+	movq	%rbp, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 88(%r13)
+	jmp	.L716
+	.p2align 4,,10
+	.p2align 3
+.L764:
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	jne	.L720
+	jmp	.L717
+	.p2align 4,,10
+	.p2align 3
+.L718:
+	movq	16(%rax), %rax
+	testq	%rax, %rax
+	je	.L717
+.L720:
+	cmpq	(%rax), %rbx
+	jne	.L718
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L717
+	addq	$1, 24(%rax)
+	cmpq	$0, 16(%rax)
+	movq	$0, 0(%r13)
+	je	.L721
+	movq	16(%rax), %rdx
+	movq	%r13, (%rdx)
+	movq	%r13, 16(%rax)
+	jmp	.L714
+	.p2align 4,,10
+	.p2align 3
+.L712:
+	movq	%rbp, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 72(%rdi)
+	jmp	.L713
+	.p2align 4,,10
+	.p2align 3
+.L724:
+	cmpb	$0, 176(%rbx)
+	jne	.L726
+	movq	144(%rbx), %rax
+	testq	%rax, %rax
+	je	.L726
+	leaq	88(%rax), %rdx
+	movb	$1, 176(%rbx)
+	movl	96(%rax), %edi
+	leaq	12(%rsp), %rcx
+	movq	%rdx, 16(%rsp)
+	movl	88(%rax), %edx
+	movl	$3, %esi
+	movl	$-2147483639, 12(%rsp)
+	call	epoll_ctl@PLT
+.L726:
+	movq	%rbp, %rdi
+	call	pthread_mutex_unlock@PLT
+	jmp	.L714
+	.p2align 4,,10
+	.p2align 3
+.L763:
+	lock addl	$1, (%rdx)
+	jmp	.L707
+	.p2align 4,,10
+	.p2align 3
+.L722:
+	movq	%r13, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 192(%rbx)
+	jmp	.L723
+	.p2align 4,,10
+	.p2align 3
+.L721:
+	movq	%r13, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 8(%rax)
+	jmp	.L714
+.L762:
+	call	__stack_chk_fail@PLT
+.L730:
+	movq	%rax, %rbp
+	jmp	.L728
+	.section	.gcc_except_table
+.LLSDA8626:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8626-.LLSDACSB8626
+.LLSDACSB8626:
+	.uleb128 .LEHB30-.LFB8626
+	.uleb128 .LEHE30-.LEHB30
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB31-.LFB8626
+	.uleb128 .LEHE31-.LEHB31
+	.uleb128 .L730-.LFB8626
+	.uleb128 0
+.LLSDACSE8626:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC8626
+	.type	_ZN8asiodnp311DNP3Channel12ShutdownImplEv.cold, @function
+_ZN8asiodnp311DNP3Channel12ShutdownImplEv.cold:
+.LFSB8626:
+.L703:
+	.cfi_def_cfa_offset 80
+	.cfi_offset 3, -48
+	.cfi_offset 6, -40
+	.cfi_offset 12, -32
+	.cfi_offset 13, -24
+	.cfi_offset 14, -16
+.LEHB32:
+	call	_ZSt20__throw_bad_weak_ptrv@PLT
+.L728:
+	movq	%r12, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	movq	%r12, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.LEHE32:
+	.cfi_endproc
+.LFE8626:
+	.section	.gcc_except_table
+.LLSDAC8626:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC8626-.LLSDACSBC8626
+.LLSDACSBC8626:
+	.uleb128 .LEHB32-.LCOLDB26
+	.uleb128 .LEHE32-.LEHB32
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC8626:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8asiodnp311DNP3Channel12ShutdownImplEv, .-_ZN8asiodnp311DNP3Channel12ShutdownImplEv
+	.section	.text.unlikely
+	.size	_ZN8asiodnp311DNP3Channel12ShutdownImplEv.cold, .-_ZN8asiodnp311DNP3Channel12ShutdownImplEv.cold
+.LCOLDE26:
+	.text
+.LHOTE26:
+	.p2align 4
+	.type	_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E9_M_invokeERKSt9_Any_data, @function
+_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E9_M_invokeERKSt9_Any_data:
+.LFB10514:
+	.cfi_startproc
+	movq	(%rdi), %rax
+	movq	(%rax), %rdi
+	jmp	_ZN8asiodnp311DNP3Channel12ShutdownImplEv@PLT
+	.cfi_endproc
+.LFE10514:
+	.size	_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E9_M_invokeERKSt9_Any_data, .-_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E9_M_invokeERKSt9_Any_data
+	.section	.text.unlikely
+	.align 2
+.LCOLDB27:
+	.text
+.LHOTB27:
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE
+	.type	_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE, @function
+_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE:
+.LFB8651:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8651
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	pushq	%rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	subq	$64, %rsp
+	.cfi_def_cfa_offset 112
+	movq	16(%rdi), %r12
+	movq	%fs:40, %rax
+	movq	%rax, 56(%rsp)
+	xorl	%eax, %eax
+	testq	%r12, %r12
+	je	.L767
+	movl	8(%r12), %eax
+	leaq	8(%r12), %rdx
+.L769:
+	testl	%eax, %eax
+	je	.L767
+	leal	1(%rax), %ecx
+	lock cmpxchgl	%ecx, (%rdx)
+	jne	.L769
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	movq	8(%rdi), %r14
+	movl	(%rsi), %eax
+	movq	56(%rdi), %rbx
+	jne	.L819
+	addl	$1, 8(%r12)
+.L771:
+	movl	%eax, 32(%rsp)
+	movq	40(%rbx), %r13
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L772
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L772
+	movq	(%rax), %rbp
+	testq	%rbp, %rbp
+	je	.L772
+	movq	$0, (%rax)
+	movzbl	0(%rbp), %eax
+	cmpb	$47, %al
+	jbe	.L773
+	movb	%al, 48(%rbp)
+	jmp	.L774
+	.p2align 4,,10
+	.p2align 3
+.L773:
+	movq	%rbp, %rdi
+	call	_ZdlPv@PLT
+.L772:
+	movl	$49, %edi
+.LEHB33:
+	call	_Znwm@PLT
+.LEHE33:
+	movb	$48, 48(%rax)
+	movq	%rax, %rbp
+.L774:
+	leaq	_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem(%rip), %rax
+	movq	%r12, %xmm1
+	movq	%r14, %xmm0
+	movq	$0, 0(%rbp)
+	movq	%rax, 8(%rbp)
+	movl	32(%rsp), %eax
+	punpcklqdq	%xmm1, %xmm0
+	movups	%xmm0, 24(%rbp)
+	movl	%eax, 40(%rbp)
+	movq	48(%rbx), %rax
+	movl	$0, 16(%rbp)
+	leaq	24(%rax), %rdi
+	call	pthread_mutex_lock@PLT
+	movq	48(%rbx), %rdi
+	cmpb	$0, 64(%rdi)
+	je	.L775
+	cmpq	$0, 80(%rdi)
+	movq	$0, 0(%rbp)
+	je	.L776
+	movq	80(%rdi), %rax
+	movq	%rbp, (%rax)
+	movq	%rbp, 80(%rdi)
+.L777:
+	addq	$24, %rdi
+	call	pthread_mutex_unlock@PLT
+.L778:
+	movq	56(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L820
+	addq	$64, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 48
+	movq	%r12, %rdi
+	popq	%rbx
+	.cfi_def_cfa_offset 40
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	jmp	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	.p2align 4,,10
+	.p2align 3
+.L776:
+	.cfi_restore_state
+	movq	%rbp, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 72(%rdi)
+	jmp	.L777
+	.p2align 4,,10
+	.p2align 3
+.L775:
+	movb	$1, 64(%rdi)
+	addq	$24, %rdi
+	call	pthread_mutex_unlock@PLT
+	movq	48(%rbx), %rbx
+	movq	$0, 0(%rbp)
+	cmpq	$0, 96(%rbx)
+	je	.L779
+	movq	96(%rbx), %rax
+	movq	%rbp, (%rax)
+	movq	%rbp, 96(%rbx)
+.L780:
+	movq	40(%r13), %rbp
+	cmpb	$0, 40(%rbp)
+	jne	.L821
+.L781:
+	lock addq	$1, 184(%rbp)
+	leaq	48(%rbp), %r13
+	movq	%r13, %rdi
+	call	pthread_mutex_lock@PLT
+	cmpq	$0, 200(%rbp)
+	movq	$0, (%rbx)
+	je	.L786
+	movq	200(%rbp), %rax
+	movq	%rbx, (%rax)
+	movq	%rbx, 200(%rbp)
+.L787:
+	movq	136(%rbp), %rax
+	orq	$1, %rax
+	movq	%rax, 136(%rbp)
+	cmpq	$1, %rax
+	je	.L788
+	movq	%r13, %rdi
+	call	pthread_mutex_unlock@PLT
+	leaq	88(%rbp), %rdi
+	call	pthread_cond_signal@PLT
+	jmp	.L778
+	.p2align 4,,10
+	.p2align 3
+.L821:
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	jne	.L784
+	jmp	.L781
+	.p2align 4,,10
+	.p2align 3
+.L782:
+	movq	16(%rax), %rax
+	testq	%rax, %rax
+	je	.L781
+.L784:
+	cmpq	(%rax), %rbp
+	jne	.L782
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L781
+	addq	$1, 24(%rax)
+	cmpq	$0, 16(%rax)
+	movq	$0, (%rbx)
+	je	.L785
+	movq	16(%rax), %rdx
+	movq	%rbx, (%rdx)
+	movq	%rbx, 16(%rax)
+	jmp	.L778
+	.p2align 4,,10
+	.p2align 3
+.L788:
+	cmpb	$0, 176(%rbp)
+	jne	.L790
+	movq	144(%rbp), %rax
+	testq	%rax, %rax
+	je	.L790
+	leaq	88(%rax), %rdx
+	movb	$1, 176(%rbp)
+	movl	96(%rax), %edi
+	leaq	4(%rsp), %rcx
+	movq	%rdx, 8(%rsp)
+	movl	88(%rax), %edx
+	movl	$3, %esi
+	movl	$-2147483639, 4(%rsp)
+	call	epoll_ctl@PLT
+.L790:
+	movq	%r13, %rdi
+	call	pthread_mutex_unlock@PLT
+	jmp	.L778
+	.p2align 4,,10
+	.p2align 3
+.L819:
+	lock addl	$1, (%rdx)
+	jmp	.L771
+	.p2align 4,,10
+	.p2align 3
+.L779:
+	movq	%rbp, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 88(%rbx)
+	jmp	.L780
+	.p2align 4,,10
+	.p2align 3
+.L786:
+	movq	%rbx, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 192(%rbp)
+	jmp	.L787
+	.p2align 4,,10
+	.p2align 3
+.L785:
+	movq	%rbx, %xmm0
+	punpcklqdq	%xmm0, %xmm0
+	movups	%xmm0, 8(%rax)
+	jmp	.L778
+.L820:
+	call	__stack_chk_fail@PLT
+.L794:
+	movq	%rax, %rbp
+	jmp	.L792
+	.section	.gcc_except_table
+.LLSDA8651:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8651-.LLSDACSB8651
+.LLSDACSB8651:
+	.uleb128 .LEHB33-.LFB8651
+	.uleb128 .LEHE33-.LEHB33
+	.uleb128 .L794-.LFB8651
+	.uleb128 0
+.LLSDACSE8651:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC8651
+	.type	_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE.cold, @function
+_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE.cold:
+.LFSB8651:
+.L767:
+	.cfi_def_cfa_offset 112
+	.cfi_offset 3, -48
+	.cfi_offset 6, -40
+	.cfi_offset 12, -32
+	.cfi_offset 13, -24
+	.cfi_offset 14, -16
+.LEHB34:
+	call	_ZSt20__throw_bad_weak_ptrv@PLT
+.L792:
+	movq	%r12, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	movq	%r12, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.LEHE34:
+	.cfi_endproc
+.LFE8651:
+	.section	.gcc_except_table
+.LLSDAC8651:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC8651-.LLSDACSBC8651
+.LLSDACSBC8651:
+	.uleb128 .LEHB34-.LCOLDB27
+	.uleb128 .LEHE34-.LEHB34
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC8651:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE, .-_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE
+	.section	.text.unlikely
+	.size	_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE.cold, .-_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE.cold
+.LCOLDE27:
+	.text
+.LHOTE27:
+	.section	.text.unlikely
+	.align 2
+.LCOLDB29:
+	.text
+.LHOTB29:
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE
+	.type	_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE, @function
+_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE:
+.LFB8600:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8600
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	movq	%rdi, %rbx
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 32
+	movq	_ZTVN8asiodnp311DNP3ChannelE@GOTPCREL(%rip), %rax
+	movq	$0, 8(%rdi)
+	movq	$0, 16(%rdi)
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	movq	(%rsi), %rax
+	movq	%rax, 24(%rdi)
+	movq	8(%rsi), %rax
+	movq	%rax, 32(%rdi)
+	testq	%rax, %rax
+	je	.L823
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L869
+	addl	$1, 8(%rax)
+.L823:
+	movq	16(%rsi), %rax
+	movq	%rax, 40(%rbx)
+	movq	24(%rsi), %rax
+	movq	%rax, 48(%rbx)
+	testq	%rax, %rax
+	je	.L825
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L870
+	addl	$1, 8(%rax)
+.L825:
+	movq	(%rdx), %rax
+	movq	%rax, 56(%rbx)
+	movq	8(%rdx), %rax
+	movq	%rax, 64(%rbx)
+	testq	%rax, %rax
+	je	.L827
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L871
+	addl	$1, 8(%rax)
+.L827:
+	movq	(%rcx), %rax
+	movq	%rax, 72(%rbx)
+	movq	8(%rcx), %rax
+	movq	%rax, 80(%rbx)
+	testq	%rax, %rax
+	je	.L829
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L872
+	addl	$1, 8(%rax)
+.L829:
+	movq	(%r8), %rax
+	movq	%rax, 88(%rbx)
+	movq	8(%r8), %rax
+	movq	%rax, 96(%rbx)
+	testq	%rax, %rax
+	je	.L831
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L873
+	addl	$1, 8(%rax)
+.L831:
+	movq	$0, 104(%rbx)
+	movl	$120, %edi
+.LEHB35:
+	call	_Znwm@PLT
+.LEHE35:
+	movq	%rax, %rdx
+	movq	.LC28(%rip), %rax
+	movl	$13, %ecx
+	leaq	16(%rdx), %rdi
+	movq	%rdx, 112(%rbx)
+	movq	%rax, 8(%rdx)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rdx)
+	xorl	%eax, %eax
+	rep stosq
+	movq	_ZTVN7asiopal15ResourceManagerE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, 16(%rdx)
+	leaq	80(%rdx), %rax
+	addq	$16, %rdx
+	movq	%rax, 80(%rdx)
+	movq	%rax, 88(%rdx)
+	movq	%rdx, 104(%rbx)
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L869:
+	.cfi_restore_state
+	lock addl	$1, 8(%rax)
+	jmp	.L823
+	.p2align 4,,10
+	.p2align 3
+.L870:
+	lock addl	$1, 8(%rax)
+	jmp	.L825
+	.p2align 4,,10
+	.p2align 3
+.L871:
+	lock addl	$1, 8(%rax)
+	jmp	.L827
+	.p2align 4,,10
+	.p2align 3
+.L872:
+	lock addl	$1, 8(%rax)
+	jmp	.L829
+	.p2align 4,,10
+	.p2align 3
+.L873:
+	lock addl	$1, 8(%rax)
+	jmp	.L831
+.L842:
+	movq	%rax, %rbp
+	jmp	.L833
+	.section	.gcc_except_table
+.LLSDA8600:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8600-.LLSDACSB8600
+.LLSDACSB8600:
+	.uleb128 .LEHB35-.LFB8600
+	.uleb128 .LEHE35-.LEHB35
+	.uleb128 .L842-.LFB8600
+	.uleb128 0
+.LLSDACSE8600:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC8600
+	.type	_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE.cold, @function
+_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE.cold:
+.LFSB8600:
+.L833:
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -24
+	.cfi_offset 6, -16
+	movq	96(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L834
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L834:
+	movq	80(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L835
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L835:
+	movq	64(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L836
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L836:
+	leaq	24(%rbx), %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+	movq	16(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L838
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	leaq	12(%rdi), %rdx
+	je	.L839
+	orl	$-1, %eax
+	lock xaddl	%eax, (%rdx)
+.L840:
+	subl	$1, %eax
+	jne	.L838
+	movq	(%rdi), %rax
+	call	*24(%rax)
+.L838:
+	movq	%rbp, %rdi
+.LEHB36:
+	call	_Unwind_Resume@PLT
+.LEHE36:
+.L839:
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+	jmp	.L840
+	.cfi_endproc
+.LFE8600:
+	.section	.gcc_except_table
+.LLSDAC8600:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC8600-.LLSDACSBC8600
+.LLSDACSBC8600:
+	.uleb128 .LEHB36-.LCOLDB29
+	.uleb128 .LEHE36-.LEHB36
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC8600:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE, .-_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE
+	.section	.text.unlikely
+	.size	_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE.cold, .-_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE.cold
+.LCOLDE29:
+	.text
+.LHOTE29:
+	.globl	_ZN8asiodnp311DNP3ChannelC1ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE
+	.set	_ZN8asiodnp311DNP3ChannelC1ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE,_ZN8asiodnp311DNP3ChannelC2ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEE
+	.p2align 4
+	.type	_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E10_M_managerERSt9_Any_dataRKS5_St18_Manager_operation, @function
+_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E10_M_managerERSt9_Any_dataRKS5_St18_Manager_operation:
+.LFB10515:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	movq	%rdi, %rbx
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 32
+	testl	%edx, %edx
+	je	.L875
+	cmpl	$1, %edx
+	je	.L876
+	cmpl	$2, %edx
+	je	.L879
+	cmpl	$3, %edx
+	jne	.L878
+	movq	(%rdi), %rbp
+	testq	%rbp, %rbp
+	je	.L878
+	movq	8(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L883
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L883:
+	movl	$16, %esi
+	movq	%rbp, %rdi
+	call	_ZdlPvm@PLT
+.L878:
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L875:
+	.cfi_restore_state
+	leaq	_ZTIZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_(%rip), %rax
+	movq	%rax, (%rdi)
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L876:
+	.cfi_restore_state
+	movq	(%rsi), %rax
+	movq	%rax, (%rdi)
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L879:
+	.cfi_restore_state
+	movq	(%rsi), %rbp
+	movl	$16, %edi
+	call	_Znwm@PLT
+	movq	0(%rbp), %rdx
+	movq	%rdx, (%rax)
+	movq	8(%rbp), %rdx
+	movq	%rdx, 8(%rax)
+	testq	%rdx, %rdx
+	je	.L881
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L895
+	addl	$1, 8(%rdx)
+.L881:
+	movq	%rax, (%rbx)
+	jmp	.L878
+.L895:
+	lock addl	$1, 8(%rdx)
+	jmp	.L881
+	.cfi_endproc
+.LFE10515:
+	.size	_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E10_M_managerERSt9_Any_dataRKS5_St18_Manager_operation, .-_ZNSt17_Function_handlerIFvvEZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_E10_M_managerERSt9_Any_dataRKS5_St18_Manager_operation
+	.p2align 4
+	.type	_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, @function
+_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem:
+.LFB11498:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	movq	%rsi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	movq	%rdi, %rbx
+	subq	$40, %rsp
+	.cfi_def_cfa_offset 80
+	movl	40(%rsi), %eax
+	movq	24(%rsi), %r13
+	movq	32(%rsi), %r12
+	movl	%eax, 16(%rsp)
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L897
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L897
+	cmpq	$0, (%rax)
+	je	.L917
+.L897:
+	movq	%rbp, %rdi
+	call	_ZdlPv@PLT
+.L898:
+	testq	%rbx, %rbx
+	je	.L899
+	movq	40(%r13), %rax
+	movl	16(%rsp), %edx
+	movl	%edx, 32(%rax)
+	sfence
+.L899:
+	testq	%r12, %r12
+	je	.L896
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L918
+	movl	8(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r12)
+.L903:
+	cmpl	$1, %eax
+	je	.L919
+.L896:
+	addq	$40, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L919:
+	.cfi_restore_state
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L920
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L906:
+	cmpl	$1, %eax
+	jne	.L896
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	movq	24(%rax), %rax
+	addq	$40, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L918:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r12)
+	jmp	.L903
+	.p2align 4,,10
+	.p2align 3
+.L917:
+	movzbl	48(%rbp), %edx
+	movb	%dl, 0(%rbp)
+	movq	%rbp, (%rax)
+	jmp	.L898
+	.p2align 4,,10
+	.p2align 3
+.L920:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L906
+	.cfi_endproc
+.LFE11498:
+	.size	_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, .-_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3ChannelD2Ev
+	.type	_ZN8asiodnp311DNP3ChannelD2Ev, @function
+_ZN8asiodnp311DNP3ChannelD2Ev:
+.LFB8603:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8603
+	movq	_ZTVN8asiodnp311DNP3ChannelE@GOTPCREL(%rip), %rax
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	pushq	%rbp
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	addq	$16, %rax
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	%rdi, %rbx
+	movq	%rax, (%rdi)
+	call	_ZN8asiodnp311DNP3Channel12ShutdownImplEv@PLT
+	movq	112(%rbx), %r12
+	testq	%r12, %r12
+	je	.L923
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbp
+	testq	%rbp, %rbp
+	jne	.L967
+	movl	8(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r12)
+.L925:
+	cmpl	$1, %eax
+	je	.L968
+.L923:
+	movq	96(%rbx), %r12
+	testq	%r12, %r12
+	je	.L930
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbp
+	testq	%rbp, %rbp
+	jne	.L969
+	movl	8(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r12)
+.L932:
+	cmpl	$1, %eax
+	je	.L970
+.L930:
+	movq	80(%rbx), %r12
+	testq	%r12, %r12
+	je	.L937
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbp
+	testq	%rbp, %rbp
+	jne	.L971
+	movl	8(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r12)
+.L939:
+	cmpl	$1, %eax
+	je	.L972
+.L937:
+	movq	64(%rbx), %r12
+	testq	%r12, %r12
+	je	.L944
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbp
+	testq	%rbp, %rbp
+	jne	.L973
+	movl	8(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r12)
+.L946:
+	cmpl	$1, %eax
+	je	.L974
+.L944:
+	movq	48(%rbx), %r12
+	testq	%r12, %r12
+	je	.L951
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbp
+	testq	%rbp, %rbp
+	jne	.L975
+	movl	8(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r12)
+.L953:
+	cmpl	$1, %eax
+	je	.L976
+.L951:
+	movq	32(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L957
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L957:
+	movq	16(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L921
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L977
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L961:
+	cmpl	$1, %eax
+	je	.L978
+.L921:
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L968:
+	.cfi_restore_state
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*16(%rax)
+	testq	%rbp, %rbp
+	jne	.L979
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L928:
+	cmpl	$1, %eax
+	jne	.L923
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L923
+	.p2align 4,,10
+	.p2align 3
+.L970:
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*16(%rax)
+	testq	%rbp, %rbp
+	jne	.L980
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L935:
+	cmpl	$1, %eax
+	jne	.L930
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L930
+	.p2align 4,,10
+	.p2align 3
+.L972:
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*16(%rax)
+	testq	%rbp, %rbp
+	jne	.L981
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L942:
+	cmpl	$1, %eax
+	jne	.L937
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L937
+	.p2align 4,,10
+	.p2align 3
+.L974:
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*16(%rax)
+	testq	%rbp, %rbp
+	jne	.L982
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L949:
+	cmpl	$1, %eax
+	jne	.L944
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L944
+	.p2align 4,,10
+	.p2align 3
+.L976:
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*16(%rax)
+	testq	%rbp, %rbp
+	jne	.L983
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L956:
+	cmpl	$1, %eax
+	jne	.L951
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L951
+	.p2align 4,,10
+	.p2align 3
+.L978:
+	movq	(%rdi), %rax
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	movq	24(%rax), %rax
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L971:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r12)
+	jmp	.L939
+	.p2align 4,,10
+	.p2align 3
+.L973:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r12)
+	jmp	.L946
+	.p2align 4,,10
+	.p2align 3
+.L967:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r12)
+	jmp	.L925
+	.p2align 4,,10
+	.p2align 3
+.L969:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r12)
+	jmp	.L932
+	.p2align 4,,10
+	.p2align 3
+.L975:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r12)
+	jmp	.L953
+	.p2align 4,,10
+	.p2align 3
+.L977:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L961
+	.p2align 4,,10
+	.p2align 3
+.L979:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L928
+	.p2align 4,,10
+	.p2align 3
+.L980:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L935
+	.p2align 4,,10
+	.p2align 3
+.L981:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L942
+	.p2align 4,,10
+	.p2align 3
+.L982:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L949
+	.p2align 4,,10
+	.p2align 3
+.L983:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L956
+	.cfi_endproc
+.LFE8603:
+	.section	.gcc_except_table
+.LLSDA8603:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8603-.LLSDACSB8603
+.LLSDACSB8603:
+.LLSDACSE8603:
+	.text
+	.size	_ZN8asiodnp311DNP3ChannelD2Ev, .-_ZN8asiodnp311DNP3ChannelD2Ev
+	.globl	_ZN8asiodnp311DNP3ChannelD1Ev
+	.set	_ZN8asiodnp311DNP3ChannelD1Ev,_ZN8asiodnp311DNP3ChannelD2Ev
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3ChannelD0Ev
+	.type	_ZN8asiodnp311DNP3ChannelD0Ev, @function
+_ZN8asiodnp311DNP3ChannelD0Ev:
+.LFB8605:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	call	_ZN8asiodnp311DNP3ChannelD1Ev@PLT
+	movq	%rbp, %rdi
+	movl	$120, %esi
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE8605:
+	.size	_ZN8asiodnp311DNP3ChannelD0Ev, .-_ZN8asiodnp311DNP3ChannelD0Ev
+	.section	.text.unlikely
+.LCOLDB30:
+	.text
+.LHOTB30:
+	.p2align 4
+	.type	_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, @function
+_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem:
+.LFB11427:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA11427
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	movq	%rsi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	movq	%rdi, %rbx
+	subq	$40, %rsp
+	.cfi_def_cfa_offset 80
+	movq	24(%rsi), %r13
+	movq	32(%rsi), %rbp
+	movq	%fs:40, %rax
+	movq	%rax, 24(%rsp)
+	xorl	%eax, %eax
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L987
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L987
+	cmpq	$0, (%rax)
+	je	.L1031
+.L987:
+	movq	%r12, %rdi
+	call	_ZdlPv@PLT
+.L988:
+	testq	%rbx, %rbx
+	je	.L989
+	movq	88(%r13), %rdi
+	movq	%r13, %xmm0
+	movq	%rbp, %xmm1
+	punpcklqdq	%xmm1, %xmm0
+	movq	(%rdi), %rax
+	movaps	%xmm0, (%rsp)
+	movq	16(%rax), %rax
+	testq	%rbp, %rbp
+	je	.L990
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1032
+	addl	$1, 8(%rbp)
+.L990:
+	movq	%rsp, %rsi
+.LEHB37:
+	call	*%rax
+.LEHE37:
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L992
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L992:
+	movq	96(%r13), %rdi
+	pxor	%xmm0, %xmm0
+	movups	%xmm0, 88(%r13)
+	testq	%rdi, %rdi
+	je	.L993
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L993:
+	sfence
+.L989:
+	testq	%rbp, %rbp
+	je	.L986
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L1033
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L1001:
+	cmpl	$1, %eax
+	je	.L1034
+.L986:
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1030
+	addq	$40, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1034:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L1035
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L1004:
+	cmpl	$1, %eax
+	jne	.L986
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1030
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	movq	24(%rax), %rax
+	addq	$40, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L1033:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L1001
+	.p2align 4,,10
+	.p2align 3
+.L1031:
+	movzbl	40(%r12), %edx
+	movb	%dl, (%r12)
+	movq	%r12, (%rax)
+	jmp	.L988
+	.p2align 4,,10
+	.p2align 3
+.L1032:
+	lock addl	$1, 8(%rbp)
+	jmp	.L990
+	.p2align 4,,10
+	.p2align 3
+.L1035:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L1004
+.L1030:
+	call	__stack_chk_fail@PLT
+.L1007:
+	movq	%rax, %r12
+	jmp	.L994
+	.section	.gcc_except_table
+.LLSDA11427:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE11427-.LLSDACSB11427
+.LLSDACSB11427:
+	.uleb128 .LEHB37-.LFB11427
+	.uleb128 .LEHE37-.LEHB37
+	.uleb128 .L1007-.LFB11427
+	.uleb128 0
+.LLSDACSE11427:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC11427
+	.type	_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem.cold, @function
+_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem.cold:
+.LFSB11427:
+.L994:
+	.cfi_def_cfa_offset 80
+	.cfi_offset 3, -40
+	.cfi_offset 6, -32
+	.cfi_offset 12, -24
+	.cfi_offset 13, -16
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L995
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L995:
+	sfence
+	testq	%rbp, %rbp
+	je	.L997
+	movq	%rbp, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L997:
+	movq	%r12, %rdi
+.LEHB38:
+	call	_Unwind_Resume@PLT
+.LEHE38:
+	.cfi_endproc
+.LFE11427:
+	.section	.gcc_except_table
+.LLSDAC11427:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC11427-.LLSDACSBC11427
+.LLSDACSBC11427:
+	.uleb128 .LEHB38-.LCOLDB30
+	.uleb128 .LEHE38-.LEHB38
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC11427:
+	.section	.text.unlikely
+	.text
+	.size	_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem, .-_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem
+	.section	.text.unlikely
+	.size	_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem.cold, .-_ZN4asio6detail18completion_handlerIZN8asiodnp311DNP3Channel12ShutdownImplEvEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem.cold
+.LCOLDE30:
+	.text
+.LHOTE30:
+	.section	.text._ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation,"axG",@progbits,_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation
+	.type	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation, @function
+_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation:
+.LFB11226:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	movq	%rdi, %rbx
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 32
+	testl	%edx, %edx
+	je	.L1037
+	cmpl	$1, %edx
+	je	.L1038
+	cmpl	$2, %edx
+	je	.L1041
+	cmpl	$3, %edx
+	jne	.L1040
+	movq	(%rdi), %rbp
+	testq	%rbp, %rbp
+	je	.L1040
+	movq	32(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1047
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1047:
+	movq	8(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1048
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1048:
+	movl	$40, %esi
+	movq	%rbp, %rdi
+	call	_ZdlPvm@PLT
+.L1040:
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1037:
+	.cfi_restore_state
+	movq	_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_@GOTPCREL(%rip), %rax
+	movq	%rax, (%rdi)
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1038:
+	.cfi_restore_state
+	movq	(%rsi), %rax
+	movq	%rax, (%rdi)
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1041:
+	.cfi_restore_state
+	movq	(%rsi), %rbp
+	movl	$40, %edi
+	call	_Znwm@PLT
+	movq	0(%rbp), %rdx
+	movq	%rdx, (%rax)
+	movq	8(%rbp), %rdx
+	movq	%rdx, 8(%rax)
+	testq	%rdx, %rdx
+	je	.L1043
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1066
+	addl	$1, 8(%rdx)
+.L1043:
+	movl	16(%rbp), %edx
+	movl	%edx, 16(%rax)
+	movq	24(%rbp), %rdx
+	movq	%rdx, 24(%rax)
+	movq	32(%rbp), %rdx
+	movq	%rdx, 32(%rax)
+	testq	%rdx, %rdx
+	je	.L1045
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1067
+	addl	$1, 8(%rdx)
+.L1045:
+	movq	%rax, (%rbx)
+	jmp	.L1040
+.L1067:
+	lock addl	$1, 8(%rdx)
+	jmp	.L1045
+.L1066:
+	lock addl	$1, 8(%rdx)
+	jmp	.L1043
+	.cfi_endproc
+.LFE11226:
+	.size	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation, .-_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation
+	.section	.text._ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation,"axG",@progbits,_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation,comdat
+	.p2align 4
+	.weak	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation
+	.type	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation, @function
+_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation:
+.LFB11179:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	movq	%rdi, %rbx
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 32
+	testl	%edx, %edx
+	je	.L1069
+	cmpl	$1, %edx
+	je	.L1070
+	cmpl	$2, %edx
+	je	.L1073
+	cmpl	$3, %edx
+	jne	.L1072
+	movq	(%rdi), %rbp
+	testq	%rbp, %rbp
+	je	.L1072
+	movq	32(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1079
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1079:
+	movq	8(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1080
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1080:
+	movl	$40, %esi
+	movq	%rbp, %rdi
+	call	_ZdlPvm@PLT
+.L1072:
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1069:
+	.cfi_restore_state
+	movq	_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_@GOTPCREL(%rip), %rax
+	movq	%rax, (%rdi)
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1070:
+	.cfi_restore_state
+	movq	(%rsi), %rax
+	movq	%rax, (%rdi)
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	xorl	%eax, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1073:
+	.cfi_restore_state
+	movq	(%rsi), %rbp
+	movl	$40, %edi
+	call	_Znwm@PLT
+	movq	0(%rbp), %rdx
+	movq	%rdx, (%rax)
+	movq	8(%rbp), %rdx
+	movq	%rdx, 8(%rax)
+	testq	%rdx, %rdx
+	je	.L1075
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1098
+	addl	$1, 8(%rdx)
+.L1075:
+	movl	16(%rbp), %edx
+	movl	%edx, 16(%rax)
+	movq	24(%rbp), %rdx
+	movq	%rdx, 24(%rax)
+	movq	32(%rbp), %rdx
+	movq	%rdx, 32(%rax)
+	testq	%rdx, %rdx
+	je	.L1077
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1099
+	addl	$1, 8(%rdx)
+.L1077:
+	movq	%rax, (%rbx)
+	jmp	.L1072
+.L1099:
+	lock addl	$1, 8(%rdx)
+	jmp	.L1077
+.L1098:
+	lock addl	$1, 8(%rdx)
+	jmp	.L1075
+	.cfi_endproc
+.LFE11179:
+	.size	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation, .-_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB12955:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	pushq	%rbp
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	%rdi, %rbx
+	subq	$16, %rsp
+	.cfi_def_cfa_offset 48
+	movq	_ZTVN8asiodnp315OutstationStackE@GOTPCREL(%rip), %rax
+	movq	_ZTVN7openpal5ArrayIhjEE@GOTPCREL(%rip), %rbp
+	leaq	144(%rax), %rdx
+	leaq	16(%rax), %rcx
+	addq	$208, %rax
+	movq	%rax, 32(%rdi)
+	movq	_ZTVN8opendnp38OContextE@GOTPCREL(%rip), %rax
+	movq	%rcx, %xmm0
+	movq	%rdx, %xmm1
+	punpcklqdq	%xmm1, %xmm0
+	addq	$16, %rax
+	movups	%xmm0, 16(%rdi)
+	movq	%rax, 168(%rdi)
+	leaq	16(%rbp), %rax
+	movq	%rax, 1088(%rdi)
+	movq	1104(%rdi), %rdi
+	testq	%rdi, %rdi
+	je	.L1101
+	call	_ZdaPv@PLT
+.L1101:
+	movq	1048(%rbx), %rdi
+	leaq	16(%rbp), %rax
+	movq	%rax, 1032(%rbx)
+	testq	%rdi, %rdi
+	je	.L1102
+	call	_ZdaPv@PLT
+.L1102:
+	movq	968(%rbx), %rdi
+	leaq	16(%rbp), %rax
+	movq	%rax, 952(%rbx)
+	testq	%rdi, %rdi
+	je	.L1103
+	call	_ZdaPv@PLT
+.L1103:
+	movq	_ZTVN8opendnp315DatabaseBuffersE@GOTPCREL(%rip), %rbp
+	leaq	896(%rbx), %rdi
+	leaq	88(%rbp), %rax
+	leaq	16(%rbp), %rsi
+	movq	%rax, %xmm2
+	movq	%rsi, %xmm0
+	punpcklqdq	%xmm2, %xmm0
+	movaps	%xmm0, (%rsp)
+	call	_ZN7openpal8TimerRefD1Ev@PLT
+	movq	_ZTVN8opendnp38DatabaseE@GOTPCREL(%rip), %rax
+	movdqa	(%rsp), %xmm0
+	movq	760(%rbx), %rdi
+	addq	$16, %rax
+	movups	%xmm0, 552(%rbx)
+	movq	%rax, 528(%rbx)
+	leaq	120(%rbp), %rax
+	movq	%rax, 568(%rbx)
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, 744(%rbx)
+	testq	%rdi, %rdi
+	je	.L1104
+	call	_ZdaPv@PLT
+.L1104:
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE@GOTPCREL(%rip), %rax
+	movq	736(%rbx), %rdi
+	addq	$16, %rax
+	movq	%rax, 720(%rbx)
+	testq	%rdi, %rdi
+	je	.L1105
+	call	_ZdaPv@PLT
+.L1105:
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE@GOTPCREL(%rip), %rax
+	movq	712(%rbx), %rdi
+	addq	$16, %rax
+	movq	%rax, 696(%rbx)
+	testq	%rdi, %rdi
+	je	.L1106
+	call	_ZdaPv@PLT
+.L1106:
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE@GOTPCREL(%rip), %rax
+	movq	688(%rbx), %rdi
+	addq	$16, %rax
+	movq	%rax, 672(%rbx)
+	testq	%rdi, %rdi
+	je	.L1107
+	call	_ZdaPv@PLT
+.L1107:
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE@GOTPCREL(%rip), %rax
+	movq	664(%rbx), %rdi
+	addq	$16, %rax
+	movq	%rax, 648(%rbx)
+	testq	%rdi, %rdi
+	je	.L1108
+	call	_ZdaPv@PLT
+.L1108:
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE@GOTPCREL(%rip), %rax
+	movq	640(%rbx), %rdi
+	addq	$16, %rax
+	movq	%rax, 624(%rbx)
+	testq	%rdi, %rdi
+	je	.L1109
+	call	_ZdaPv@PLT
+.L1109:
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE@GOTPCREL(%rip), %rax
+	movq	616(%rbx), %rdi
+	addq	$16, %rax
+	movq	%rax, 600(%rbx)
+	testq	%rdi, %rdi
+	je	.L1110
+	call	_ZdaPv@PLT
+.L1110:
+	movq	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE@GOTPCREL(%rip), %rax
+	movq	592(%rbx), %rdi
+	addq	$16, %rax
+	movq	%rax, 576(%rbx)
+	testq	%rdi, %rdi
+	je	.L1111
+	call	_ZdaPv@PLT
+.L1111:
+	movq	_ZTVN8opendnp311EventBufferE@GOTPCREL(%rip), %rax
+	movq	376(%rbx), %rdi
+	leaq	160(%rax), %rdx
+	leaq	16(%rax), %rcx
+	movq	%rdx, %xmm3
+	movq	%rcx, %xmm0
+	leaq	224(%rax), %rdx
+	addq	$192, %rax
+	punpcklqdq	%xmm3, %xmm0
+	movq	%rdx, %xmm4
+	movups	%xmm0, 272(%rbx)
+	movq	%rax, %xmm0
+	movq	_ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE@GOTPCREL(%rip), %rax
+	punpcklqdq	%xmm4, %xmm0
+	addq	$16, %rax
+	movups	%xmm0, 288(%rbx)
+	movq	%rax, 360(%rbx)
+	testq	%rdi, %rdi
+	je	.L1112
+	call	_ZdaPv@PLT
+.L1112:
+	movq	264(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1113
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1113:
+	movq	248(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1114
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1114:
+	movq	232(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1115
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1115:
+	movq	216(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L1117
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L1213
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L1119:
+	cmpl	$1, %eax
+	je	.L1214
+.L1117:
+	movq	200(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1123
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1123:
+	movq	184(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L1125
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L1215
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L1127:
+	cmpl	$1, %eax
+	je	.L1216
+.L1125:
+	movq	160(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1131
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1131:
+	movq	144(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1132
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1132:
+	movq	128(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1133
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1133:
+	movq	112(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1134
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1134:
+	movq	96(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1135
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1135:
+	movq	80(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1136
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1136:
+	movq	64(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1137
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1137:
+	movq	48(%rbx), %rdi
+	testq	%rdi, %rdi
+	je	.L1100
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1217
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L1141:
+	cmpl	$1, %eax
+	je	.L1218
+.L1100:
+	addq	$16, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 32
+	popq	%rbx
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1214:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L1219
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L1122:
+	cmpl	$1, %eax
+	jne	.L1117
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L1117
+	.p2align 4,,10
+	.p2align 3
+.L1216:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L1220
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L1130:
+	cmpl	$1, %eax
+	jne	.L1125
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L1125
+	.p2align 4,,10
+	.p2align 3
+.L1218:
+	movq	(%rdi), %rax
+	movq	24(%rax), %rax
+	addq	$16, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 32
+	popq	%rbx
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L1217:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L1141
+	.p2align 4,,10
+	.p2align 3
+.L1213:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L1119
+	.p2align 4,,10
+	.p2align 3
+.L1215:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L1127
+	.p2align 4,,10
+	.p2align 3
+.L1219:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L1122
+	.p2align 4,,10
+	.p2align 3
+.L1220:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L1130
+	.cfi_endproc
+.LFE12955:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt7promiseIN8opendnp314LinkStatisticsEED2Ev,"axG",@progbits,_ZNSt7promiseIN8opendnp314LinkStatisticsEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt7promiseIN8opendnp314LinkStatisticsEED2Ev
+	.type	_ZNSt7promiseIN8opendnp314LinkStatisticsEED2Ev, @function
+_ZNSt7promiseIN8opendnp314LinkStatisticsEED2Ev:
+.LFB10553:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA10553
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	movq	%rdi, %rbx
+	subq	$136, %rsp
+	.cfi_def_cfa_offset 192
+	movq	(%rdi), %r12
+	movq	%fs:40, %rax
+	movq	%rax, 120(%rsp)
+	xorl	%eax, %eax
+	testq	%r12, %r12
+	je	.L1262
+	movq	8(%rdi), %rbp
+	testq	%rbp, %rbp
+	je	.L1224
+	movl	8(%rbp), %eax
+	cmpl	$1, %eax
+	je	.L1262
+.L1224:
+	movq	16(%rbx), %r13
+	movq	$0, 16(%rbx)
+	testq	%r13, %r13
+	je	.L1226
+	call	_ZSt15future_categoryv@PLT
+	leaq	48(%rsp), %r14
+	movl	$4, %edx
+	movq	%rax, %rbp
+	movq	(%rax), %rax
+	movq	%r14, %rdi
+	movq	%rbp, %rsi
+	call	*32(%rax)
+	movl	$19, %r8d
+	xorl	%edx, %edx
+	xorl	%esi, %esi
+	leaq	.LC4(%rip), %rcx
+	movq	%r14, %rdi
+.LEHB39:
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm@PLT
+.LEHE39:
+	leaq	96(%rsp), %r14
+	leaq	16(%rax), %rdx
+	movq	%r14, 80(%rsp)
+	movq	(%rax), %rcx
+	cmpq	%rdx, %rcx
+	je	.L1265
+	movq	%rcx, 80(%rsp)
+	movq	16(%rax), %rcx
+	movq	%rcx, 96(%rsp)
+.L1228:
+	movq	8(%rax), %rcx
+	movb	$0, 16(%rax)
+	leaq	16(%rsp), %r15
+	leaq	80(%rsp), %rsi
+	movq	%r15, %rdi
+	movq	%rcx, 88(%rsp)
+	movq	%rdx, (%rax)
+	movq	$0, 8(%rax)
+.LEHB40:
+	call	_ZNSt11logic_errorC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE@PLT
+.LEHE40:
+	movq	80(%rsp), %rdi
+	cmpq	%r14, %rdi
+	je	.L1229
+	movq	96(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1229:
+	movq	48(%rsp), %rdi
+	leaq	64(%rsp), %rax
+	cmpq	%rax, %rdi
+	je	.L1230
+	movq	64(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1230:
+	movq	_ZTVSt12future_error@GOTPCREL(%rip), %rax
+	movl	$32, %edi
+	movq	%rbp, 40(%rsp)
+	movl	$4, 32(%rsp)
+	leaq	16(%rax), %r14
+	movq	%r14, 16(%rsp)
+	call	__cxa_allocate_exception@PLT
+	movq	_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv@GOTPCREL(%rip), %rdx
+	movq	_ZTISt12future_error@GOTPCREL(%rip), %rsi
+	movq	%rax, %rbp
+	movq	%rax, %rdi
+	call	__cxa_init_primary_exception@PLT
+	movq	%r15, %rsi
+	movq	%rbp, %rdi
+	call	_ZNSt11logic_errorC2ERKS_@PLT
+	movdqa	32(%rsp), %xmm0
+	movq	%r14, 0(%rbp)
+	movq	%rbp, %rsi
+	leaq	8(%rsp), %r14
+	movups	%xmm0, 16(%rbp)
+	movq	%r14, %rdi
+	movq	%rsp, %rbp
+	call	_ZNSt15__exception_ptr13exception_ptrC1EPv@PLT
+	movq	8(%rsp), %rax
+	leaq	8(%r13), %rsi
+	movq	%rbp, %rdi
+	movq	$0, 8(%rsp)
+	movq	%rax, (%rsp)
+	call	_ZNSt15__exception_ptr13exception_ptr4swapERS0_@PLT
+	movq	%rbp, %rdi
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	movq	%r14, %rdi
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	movq	%r15, %rdi
+	call	_ZNSt12future_errorD1Ev@PLT
+	movq	8(%r12), %rbp
+	leaq	16(%r12), %rdi
+	movl	$1, %eax
+	movq	%r13, 8(%r12)
+	xchgl	(%rdi), %eax
+	testl	%eax, %eax
+	js	.L1266
+.L1232:
+	testq	%rbp, %rbp
+	je	.L1262
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*(%rax)
+.L1262:
+	movq	16(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L1263
+	movq	0(%rbp), %rax
+	movq	(%rax), %rdx
+	cmpq	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv@GOTPCREL(%rip), %rdx
+	jne	.L1239
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev@GOTPCREL(%rip), %rax
+	jne	.L1240
+	movq	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE@GOTPCREL(%rip), %rax
+	movq	%rbp, %rdi
+	addq	$16, %rax
+	movq	%rax, 0(%rbp)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$72, %esi
+	call	_ZdlPvm@PLT
+	movq	8(%rbx), %rbp
+.L1226:
+	testq	%rbp, %rbp
+	je	.L1221
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L1267
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L1244:
+	cmpl	$1, %eax
+	je	.L1268
+.L1221:
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1264
+	addq	$136, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1239:
+	.cfi_restore_state
+	movq	%rbp, %rdi
+	call	*%rdx
+.L1263:
+	movq	8(%rbx), %rbp
+	jmp	.L1226
+	.p2align 4,,10
+	.p2align 3
+.L1268:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L1269
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L1247:
+	cmpl	$1, %eax
+	jne	.L1221
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1264
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	movq	24(%rax), %rax
+	addq	$136, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L1267:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L1244
+	.p2align 4,,10
+	.p2align 3
+.L1240:
+	movq	%rbp, %rdi
+	call	*%rax
+	movq	8(%rbx), %rbp
+	jmp	.L1226
+	.p2align 4,,10
+	.p2align 3
+.L1265:
+	movdqu	16(%rax), %xmm1
+	movaps	%xmm1, 96(%rsp)
+	jmp	.L1228
+	.p2align 4,,10
+	.p2align 3
+.L1266:
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_notify_allEPj@PLT
+	jmp	.L1232
+	.p2align 4,,10
+	.p2align 3
+.L1269:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L1247
+.L1264:
+	call	__stack_chk_fail@PLT
+.L1250:
+	jmp	.L1235
+.L1251:
+.L1233:
+	movq	80(%rsp), %rdi
+	cmpq	%r14, %rdi
+	je	.L1235
+	movq	96(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1235:
+	movq	48(%rsp), %rdi
+	leaq	64(%rsp), %rax
+	cmpq	%rax, %rdi
+	je	.L1236
+	movq	64(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1236:
+	call	_ZSt9terminatev@PLT
+	.cfi_endproc
+.LFE10553:
+	.section	.gcc_except_table
+.LLSDA10553:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE10553-.LLSDACSB10553
+.LLSDACSB10553:
+	.uleb128 .LEHB39-.LFB10553
+	.uleb128 .LEHE39-.LEHB39
+	.uleb128 .L1250-.LFB10553
+	.uleb128 0
+	.uleb128 .LEHB40-.LFB10553
+	.uleb128 .LEHE40-.LEHB40
+	.uleb128 .L1251-.LFB10553
+	.uleb128 0
+.LLSDACSE10553:
+	.section	.text._ZNSt7promiseIN8opendnp314LinkStatisticsEED2Ev,"axG",@progbits,_ZNSt7promiseIN8opendnp314LinkStatisticsEED5Ev,comdat
+	.size	_ZNSt7promiseIN8opendnp314LinkStatisticsEED2Ev, .-_ZNSt7promiseIN8opendnp314LinkStatisticsEED2Ev
+	.weak	_ZNSt7promiseIN8opendnp314LinkStatisticsEED1Ev
+	.set	_ZNSt7promiseIN8opendnp314LinkStatisticsEED1Ev,_ZNSt7promiseIN8opendnp314LinkStatisticsEED2Ev
+	.section	.text.unlikely
+	.align 2
+.LCOLDB31:
+	.text
+.LHOTB31:
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3Channel13GetStatisticsEv
+	.type	_ZN8asiodnp311DNP3Channel13GetStatisticsEv, @function
+_ZN8asiodnp311DNP3Channel13GetStatisticsEv:
+.LFB8641:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8641
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	leaq	_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation(%rip), %rcx
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	movq	%rcx, %xmm0
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	movq	%rsi, %r13
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	movq	%rdi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	subq	$120, %rsp
+	.cfi_def_cfa_offset 176
+	movq	56(%rsi), %rbp
+	movq	%fs:40, %rax
+	movq	%rax, 104(%rsp)
+	xorl	%eax, %eax
+	leaq	_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E9_M_invokeERKSt9_Any_data(%rip), %rax
+	movq	%rsi, 64(%rsp)
+	movq	%rax, %xmm1
+	movq	48(%rbp), %rbx
+	punpcklqdq	%xmm1, %xmm0
+	movaps	%xmm0, 80(%rsp)
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	jne	.L1274
+	jmp	.L1271
+	.p2align 4,,10
+	.p2align 3
+.L1272:
+	movq	16(%rax), %rax
+	testq	%rax, %rax
+	je	.L1271
+.L1274:
+	cmpq	(%rax), %rbx
+	jne	.L1272
+	cmpq	$0, 8(%rax)
+	je	.L1271
+	movq	72(%r13), %rax
+	leaq	64(%rsp), %r13
+	movq	96(%rax), %rdx
+	movdqu	80(%rax), %xmm2
+	movdqu	248(%rax), %xmm3
+	movq	%rdx, 16(%r12)
+	movq	264(%rax), %rdx
+	movl	272(%rax), %eax
+	movups	%xmm2, (%r12)
+	movq	%rdx, 40(%r12)
+	movl	%eax, 48(%r12)
+	leaq	_ZNSt17_Function_handlerIFN8opendnp314LinkStatisticsEvEZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation(%rip), %rax
+	movups	%xmm3, 24(%r12)
+.L1275:
+	movl	$3, %edx
+	movq	%r13, %rsi
+	movq	%r13, %rdi
+	call	*%rax
+.L1270:
+	movq	104(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1370
+	addq	$120, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	movq	%r12, %rax
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1271:
+	.cfi_restore_state
+	movq	$0, 32(%rsp)
+	movl	$48, %edi
+.LEHB41:
+	call	_Znwm@PLT
+.LEHE41:
+	movq	.LC28(%rip), %rdx
+	movl	$0, 32(%rax)
+	movl	$72, %edi
+	movq	$0, 24(%rax)
+	movq	%rdx, 8(%rax)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rdx
+	movb	$0, 36(%rax)
+	addq	$16, %rdx
+	movl	$0, 40(%rax)
+	movq	%rdx, (%rax)
+	movq	_ZTVNSt13__future_base13_State_baseV2E@GOTPCREL(%rip), %rdx
+	movq	%rax, 40(%rsp)
+	addq	$16, %rax
+	addq	$16, %rdx
+	movq	%rdx, (%rax)
+	movq	%rax, 32(%rsp)
+.LEHB42:
+	call	_Znwm@PLT
+.LEHE42:
+	movq	%rax, %rdi
+	movq	%rax, %rbx
+	call	_ZNSt13__future_base12_Result_baseC2Ev@PLT
+	movq	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE@GOTPCREL(%rip), %rax
+	movq	40(%rsp), %r14
+	movb	$0, 68(%rbx)
+	movq	%rbx, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rbx)
+	movq	32(%rsp), %rbx
+	testq	%r14, %r14
+	je	.L1277
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1371
+	addl	$1, 8(%r14)
+.L1277:
+	testq	%rbx, %rbx
+	je	.L1372
+	movl	$1, %eax
+	xchgb	20(%rbx), %al
+	testb	%al, %al
+	jne	.L1373
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	40(%rbp), %r15
+	addq	$48, %rbp
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L1287
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L1287
+	movq	(%rax), %rdx
+	testq	%rdx, %rdx
+	je	.L1287
+	movq	$0, (%rax)
+	movzbl	(%rdx), %eax
+	cmpb	$39, %al
+	jbe	.L1288
+	movb	%al, 40(%rdx)
+.L1289:
+	movq	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN8opendnp314LinkStatisticsEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem@GOTPCREL(%rip), %rax
+	movq	%r15, %rdi
+	xorl	%ecx, %ecx
+	movq	%rbp, %rsi
+	leaq	64(%rsp), %r13
+	movq	$0, (%rdx)
+	movq	%rax, 8(%rdx)
+	leaq	32(%rsp), %rax
+	movq	%r13, %xmm4
+	movq	%rax, %xmm0
+	movl	$0, 16(%rdx)
+	punpcklqdq	%xmm4, %xmm0
+	movq	%rax, 8(%rsp)
+	movups	%xmm0, 24(%rdx)
+	call	_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb@PLT
+	movq	%rbx, %rdi
+.LEHB43:
+	call	_ZNSt13__future_base13_State_baseV24waitEv@PLT
+.LEHE43:
+	movq	(%rbx), %rax
+	movq	%rbx, %rdi
+.LEHB44:
+	call	*16(%rax)
+	movl	16(%rbx), %edx
+	leaq	16(%rbx), %rbp
+	andl	$2147483647, %edx
+	cmpl	$1, %edx
+	jne	.L1291
+	jmp	.L1290
+	.p2align 4,,10
+	.p2align 3
+.L1374:
+	cmpb	$1, %al
+	jne	.L1290
+.L1291:
+	lock orl	$-2147483648, 0(%rbp)
+	xorl	%r9d, %r9d
+	xorl	%r8d, %r8d
+	xorl	%ecx, %ecx
+	orl	$-2147483648, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_wait_untilEPjjbNSt6chrono8durationIlSt5ratioILl1ELl1EEEENS2_IlS3_ILl1ELl1000000000EEEE@PLT
+.LEHE44:
+	movl	0(%rbp), %edx
+	andl	$2147483647, %edx
+	cmpl	$1, %edx
+	jne	.L1374
+.L1290:
+	movq	8(%rbx), %rbx
+	leaq	24(%rsp), %rbp
+	movq	$0, 24(%rsp)
+	movq	%rbp, %rsi
+	leaq	8(%rbx), %r8
+	movq	%r8, %rdi
+	movq	%r8, (%rsp)
+	call	_ZNSt15__exception_ptreqERKNS_13exception_ptrES2_@PLT
+	movq	%rbp, %rdi
+	movl	%eax, %r15d
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	testb	%r15b, %r15b
+	movq	(%rsp), %r8
+	je	.L1375
+	movdqu	16(%rbx), %xmm5
+	movdqu	32(%rbx), %xmm6
+	movdqu	48(%rbx), %xmm7
+	movl	64(%rbx), %eax
+	movups	%xmm5, (%r12)
+	movl	%eax, 48(%r12)
+	movups	%xmm6, 16(%r12)
+	movups	%xmm7, 32(%r12)
+	testq	%r14, %r14
+	je	.L1295
+	movq	%r14, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1295:
+	movq	32(%rsp), %r8
+	testq	%r8, %r8
+	je	.L1366
+	movq	40(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1302
+	movl	8(%rdi), %eax
+	cmpl	$1, %eax
+	je	.L1366
+.L1302:
+	movq	48(%rsp), %rax
+	movq	$0, 48(%rsp)
+	movq	%rax, 24(%rsp)
+	testq	%rax, %rax
+	je	.L1305
+	movq	%r8, %rdi
+	movq	%rbp, %rsi
+	call	_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1366
+	movq	(%rdi), %rax
+	call	*(%rax)
+.L1366:
+	movq	48(%rsp), %rbp
+	testq	%rbp, %rbp
+	je	.L1367
+	movq	0(%rbp), %rax
+	movq	(%rax), %rdx
+	cmpq	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv@GOTPCREL(%rip), %rdx
+	jne	.L1308
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev@GOTPCREL(%rip), %rax
+	jne	.L1309
+	movq	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE@GOTPCREL(%rip), %rax
+	movq	%rbp, %rdi
+	addq	$16, %rax
+	movq	%rax, 0(%rbp)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$72, %esi
+	call	_ZdlPvm@PLT
+	movq	40(%rsp), %rdi
+.L1305:
+	testq	%rdi, %rdi
+	je	.L1310
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1310:
+	movq	80(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1270
+	jmp	.L1275
+	.p2align 4,,10
+	.p2align 3
+.L1288:
+	movq	%rdx, %rdi
+	call	_ZdlPv@PLT
+.L1287:
+	leaq	32(%rsp), %rax
+	movl	$41, %edi
+	movq	%rax, 8(%rsp)
+.LEHB45:
+	call	_Znwm@PLT
+.LEHE45:
+	movb	$40, 40(%rax)
+	movq	%rax, %rdx
+	jmp	.L1289
+.L1308:
+	movq	%rbp, %rdi
+	call	*%rdx
+.L1367:
+	movq	40(%rsp), %rdi
+	jmp	.L1305
+.L1371:
+	lock addl	$1, 8(%r14)
+	jmp	.L1277
+.L1309:
+	movq	%rbp, %rdi
+	call	*%rax
+	movq	40(%rsp), %rdi
+	jmp	.L1305
+.L1370:
+	call	__stack_chk_fail@PLT
+.L1375:
+	movq	%rbp, %rdi
+	movq	%r8, %rsi
+	call	_ZNSt15__exception_ptr13exception_ptrC1ERKS0_@PLT
+	movq	%rbp, %rdi
+.LEHB46:
+	call	_ZSt17rethrow_exceptionNSt15__exception_ptr13exception_ptrE@PLT
+.LEHE46:
+.L1373:
+	movl	$1, %edi
+.LEHB47:
+	call	_ZSt20__throw_future_errori@PLT
+.L1372:
+	movl	$3, %edi
+	call	_ZSt20__throw_future_errori@PLT
+.LEHE47:
+.L1318:
+	movq	%rax, %rbp
+	jmp	.L1312
+.L1320:
+	movq	%rax, %rbp
+	jmp	.L1312
+.L1315:
+	movq	%rax, %rbp
+	jmp	.L1280
+.L1316:
+	movq	%rax, %rbp
+	jmp	.L1278
+.L1319:
+	movq	%rax, %rbx
+	jmp	.L1296
+.L1317:
+	movq	%rax, %rbp
+	jmp	.L1284
+	.section	.gcc_except_table
+.LLSDA8641:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8641-.LLSDACSB8641
+.LLSDACSB8641:
+	.uleb128 .LEHB41-.LFB8641
+	.uleb128 .LEHE41-.LEHB41
+	.uleb128 .L1315-.LFB8641
+	.uleb128 0
+	.uleb128 .LEHB42-.LFB8641
+	.uleb128 .LEHE42-.LEHB42
+	.uleb128 .L1316-.LFB8641
+	.uleb128 0
+	.uleb128 .LEHB43-.LFB8641
+	.uleb128 .LEHE43-.LEHB43
+	.uleb128 .L1320-.LFB8641
+	.uleb128 0
+	.uleb128 .LEHB44-.LFB8641
+	.uleb128 .LEHE44-.LEHB44
+	.uleb128 .L1318-.LFB8641
+	.uleb128 0
+	.uleb128 .LEHB45-.LFB8641
+	.uleb128 .LEHE45-.LEHB45
+	.uleb128 .L1320-.LFB8641
+	.uleb128 0
+	.uleb128 .LEHB46-.LFB8641
+	.uleb128 .LEHE46-.LEHB46
+	.uleb128 .L1319-.LFB8641
+	.uleb128 0
+	.uleb128 .LEHB47-.LFB8641
+	.uleb128 .LEHE47-.LEHB47
+	.uleb128 .L1317-.LFB8641
+	.uleb128 0
+.LLSDACSE8641:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC8641
+	.type	_ZN8asiodnp311DNP3Channel13GetStatisticsEv.cold, @function
+_ZN8asiodnp311DNP3Channel13GetStatisticsEv.cold:
+.LFSB8641:
+.L1296:
+	.cfi_def_cfa_offset 176
+	.cfi_offset 3, -56
+	.cfi_offset 6, -48
+	.cfi_offset 12, -40
+	.cfi_offset 13, -32
+	.cfi_offset 14, -24
+	.cfi_offset 15, -16
+	movq	%rbp, %rdi
+	movq	%rbx, %rbp
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+.L1312:
+	testq	%r14, %r14
+	je	.L1286
+	movq	%r14, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1286:
+	movq	8(%rsp), %rdi
+	call	_ZNSt7promiseIN8opendnp314LinkStatisticsEED1Ev@PLT
+.L1280:
+	movq	80(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1313
+	leaq	64(%rsp), %rdi
+	movl	$3, %edx
+	movq	%rdi, %rsi
+	call	*%rax
+.L1313:
+	movq	%rbp, %rdi
+.LEHB48:
+	call	_Unwind_Resume@PLT
+.LEHE48:
+.L1278:
+	movq	40(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1280
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L1280
+.L1284:
+	testq	%r14, %r14
+	je	.L1285
+	movq	%r14, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1285:
+	leaq	32(%rsp), %rax
+	movq	%rax, 8(%rsp)
+	jmp	.L1286
+	.cfi_endproc
+.LFE8641:
+	.section	.gcc_except_table
+.LLSDAC8641:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC8641-.LLSDACSBC8641
+.LLSDACSBC8641:
+	.uleb128 .LEHB48-.LCOLDB31
+	.uleb128 .LEHE48-.LEHB48
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC8641:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8asiodnp311DNP3Channel13GetStatisticsEv, .-_ZN8asiodnp311DNP3Channel13GetStatisticsEv
+	.section	.text.unlikely
+	.size	_ZN8asiodnp311DNP3Channel13GetStatisticsEv.cold, .-_ZN8asiodnp311DNP3Channel13GetStatisticsEv.cold
+.LCOLDE31:
+	.text
+.LHOTE31:
+	.section	.text._ZNSt7promiseIN7openpal10LogFiltersEED2Ev,"axG",@progbits,_ZNSt7promiseIN7openpal10LogFiltersEED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt7promiseIN7openpal10LogFiltersEED2Ev
+	.type	_ZNSt7promiseIN7openpal10LogFiltersEED2Ev, @function
+_ZNSt7promiseIN7openpal10LogFiltersEED2Ev:
+.LFB10574:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA10574
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	movq	%rdi, %rbx
+	subq	$136, %rsp
+	.cfi_def_cfa_offset 192
+	movq	(%rdi), %r12
+	movq	%fs:40, %rax
+	movq	%rax, 120(%rsp)
+	xorl	%eax, %eax
+	testq	%r12, %r12
+	je	.L1417
+	movq	8(%rdi), %rbp
+	testq	%rbp, %rbp
+	je	.L1379
+	movl	8(%rbp), %eax
+	cmpl	$1, %eax
+	je	.L1417
+.L1379:
+	movq	16(%rbx), %r13
+	movq	$0, 16(%rbx)
+	testq	%r13, %r13
+	je	.L1381
+	call	_ZSt15future_categoryv@PLT
+	leaq	48(%rsp), %r14
+	movl	$4, %edx
+	movq	%rax, %rbp
+	movq	(%rax), %rax
+	movq	%r14, %rdi
+	movq	%rbp, %rsi
+	call	*32(%rax)
+	movl	$19, %r8d
+	xorl	%edx, %edx
+	xorl	%esi, %esi
+	leaq	.LC4(%rip), %rcx
+	movq	%r14, %rdi
+.LEHB49:
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm@PLT
+.LEHE49:
+	leaq	96(%rsp), %r14
+	leaq	16(%rax), %rdx
+	movq	%r14, 80(%rsp)
+	movq	(%rax), %rcx
+	cmpq	%rdx, %rcx
+	je	.L1420
+	movq	%rcx, 80(%rsp)
+	movq	16(%rax), %rcx
+	movq	%rcx, 96(%rsp)
+.L1383:
+	movq	8(%rax), %rcx
+	movb	$0, 16(%rax)
+	leaq	16(%rsp), %r15
+	leaq	80(%rsp), %rsi
+	movq	%r15, %rdi
+	movq	%rcx, 88(%rsp)
+	movq	%rdx, (%rax)
+	movq	$0, 8(%rax)
+.LEHB50:
+	call	_ZNSt11logic_errorC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE@PLT
+.LEHE50:
+	movq	80(%rsp), %rdi
+	cmpq	%r14, %rdi
+	je	.L1384
+	movq	96(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1384:
+	movq	48(%rsp), %rdi
+	leaq	64(%rsp), %rax
+	cmpq	%rax, %rdi
+	je	.L1385
+	movq	64(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1385:
+	movq	_ZTVSt12future_error@GOTPCREL(%rip), %rax
+	movl	$32, %edi
+	movq	%rbp, 40(%rsp)
+	movl	$4, 32(%rsp)
+	leaq	16(%rax), %r14
+	movq	%r14, 16(%rsp)
+	call	__cxa_allocate_exception@PLT
+	movq	_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv@GOTPCREL(%rip), %rdx
+	movq	_ZTISt12future_error@GOTPCREL(%rip), %rsi
+	movq	%rax, %rbp
+	movq	%rax, %rdi
+	call	__cxa_init_primary_exception@PLT
+	movq	%r15, %rsi
+	movq	%rbp, %rdi
+	call	_ZNSt11logic_errorC2ERKS_@PLT
+	movdqa	32(%rsp), %xmm0
+	movq	%r14, 0(%rbp)
+	movq	%rbp, %rsi
+	leaq	8(%rsp), %r14
+	movups	%xmm0, 16(%rbp)
+	movq	%r14, %rdi
+	movq	%rsp, %rbp
+	call	_ZNSt15__exception_ptr13exception_ptrC1EPv@PLT
+	movq	8(%rsp), %rax
+	leaq	8(%r13), %rsi
+	movq	%rbp, %rdi
+	movq	$0, 8(%rsp)
+	movq	%rax, (%rsp)
+	call	_ZNSt15__exception_ptr13exception_ptr4swapERS0_@PLT
+	movq	%rbp, %rdi
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	movq	%r14, %rdi
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	movq	%r15, %rdi
+	call	_ZNSt12future_errorD1Ev@PLT
+	movq	8(%r12), %rbp
+	leaq	16(%r12), %rdi
+	movl	$1, %eax
+	movq	%r13, 8(%r12)
+	xchgl	(%rdi), %eax
+	testl	%eax, %eax
+	js	.L1421
+.L1387:
+	testq	%rbp, %rbp
+	je	.L1417
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*(%rax)
+.L1417:
+	movq	16(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L1418
+	movq	0(%rbp), %rax
+	movq	(%rax), %rdx
+	cmpq	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv@GOTPCREL(%rip), %rdx
+	jne	.L1394
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev@GOTPCREL(%rip), %rax
+	jne	.L1395
+	movq	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE@GOTPCREL(%rip), %rax
+	movq	%rbp, %rdi
+	addq	$16, %rax
+	movq	%rax, 0(%rbp)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	call	_ZdlPvm@PLT
+	movq	8(%rbx), %rbp
+.L1381:
+	testq	%rbp, %rbp
+	je	.L1376
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L1422
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L1399:
+	cmpl	$1, %eax
+	je	.L1423
+.L1376:
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1419
+	addq	$136, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1394:
+	.cfi_restore_state
+	movq	%rbp, %rdi
+	call	*%rdx
+.L1418:
+	movq	8(%rbx), %rbp
+	jmp	.L1381
+	.p2align 4,,10
+	.p2align 3
+.L1423:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L1424
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L1402:
+	cmpl	$1, %eax
+	jne	.L1376
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1419
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	movq	24(%rax), %rax
+	addq	$136, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L1422:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L1399
+	.p2align 4,,10
+	.p2align 3
+.L1395:
+	movq	%rbp, %rdi
+	call	*%rax
+	movq	8(%rbx), %rbp
+	jmp	.L1381
+	.p2align 4,,10
+	.p2align 3
+.L1420:
+	movdqu	16(%rax), %xmm1
+	movaps	%xmm1, 96(%rsp)
+	jmp	.L1383
+	.p2align 4,,10
+	.p2align 3
+.L1421:
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_notify_allEPj@PLT
+	jmp	.L1387
+	.p2align 4,,10
+	.p2align 3
+.L1424:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L1402
+.L1419:
+	call	__stack_chk_fail@PLT
+.L1405:
+	jmp	.L1390
+.L1406:
+.L1388:
+	movq	80(%rsp), %rdi
+	cmpq	%r14, %rdi
+	je	.L1390
+	movq	96(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1390:
+	movq	48(%rsp), %rdi
+	leaq	64(%rsp), %rax
+	cmpq	%rax, %rdi
+	je	.L1391
+	movq	64(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1391:
+	call	_ZSt9terminatev@PLT
+	.cfi_endproc
+.LFE10574:
+	.section	.gcc_except_table
+.LLSDA10574:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE10574-.LLSDACSB10574
+.LLSDACSB10574:
+	.uleb128 .LEHB49-.LFB10574
+	.uleb128 .LEHE49-.LEHB49
+	.uleb128 .L1405-.LFB10574
+	.uleb128 0
+	.uleb128 .LEHB50-.LFB10574
+	.uleb128 .LEHE50-.LEHB50
+	.uleb128 .L1406-.LFB10574
+	.uleb128 0
+.LLSDACSE10574:
+	.section	.text._ZNSt7promiseIN7openpal10LogFiltersEED2Ev,"axG",@progbits,_ZNSt7promiseIN7openpal10LogFiltersEED5Ev,comdat
+	.size	_ZNSt7promiseIN7openpal10LogFiltersEED2Ev, .-_ZNSt7promiseIN7openpal10LogFiltersEED2Ev
+	.weak	_ZNSt7promiseIN7openpal10LogFiltersEED1Ev
+	.set	_ZNSt7promiseIN7openpal10LogFiltersEED1Ev,_ZNSt7promiseIN7openpal10LogFiltersEED2Ev
+	.section	.text.unlikely
+	.align 2
+.LCOLDB32:
+	.text
+.LHOTB32:
+	.align 2
+	.p2align 4
+	.globl	_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv
+	.type	_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv, @function
+_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv:
+.LFB8646:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8646
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	leaq	_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation(%rip), %rcx
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	movq	%rcx, %xmm0
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	movq	%rdi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	subq	$120, %rsp
+	.cfi_def_cfa_offset 176
+	movq	56(%rdi), %rbp
+	movq	%fs:40, %rax
+	movq	%rax, 104(%rsp)
+	xorl	%eax, %eax
+	leaq	_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E9_M_invokeERKSt9_Any_data(%rip), %rax
+	movq	%rdi, 64(%rsp)
+	movq	%rax, %xmm1
+	movq	48(%rbp), %rbx
+	punpcklqdq	%xmm1, %xmm0
+	movaps	%xmm0, 80(%rsp)
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	jne	.L1429
+	jmp	.L1426
+	.p2align 4,,10
+	.p2align 3
+.L1427:
+	movq	16(%rax), %rax
+	testq	%rax, %rax
+	je	.L1426
+.L1429:
+	cmpq	(%rax), %rbx
+	jne	.L1427
+	cmpq	$0, 8(%rax)
+	je	.L1426
+	movq	40(%r12), %rax
+	leaq	64(%rsp), %r12
+	movl	32(%rax), %r13d
+	leaq	_ZNSt17_Function_handlerIFN7openpal10LogFiltersEvEZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_E10_M_managerERSt9_Any_dataRKS7_St18_Manager_operation(%rip), %rax
+.L1430:
+	movl	$3, %edx
+	movq	%r12, %rsi
+	movq	%r12, %rdi
+	call	*%rax
+.L1466:
+	movq	104(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1526
+	addq	$120, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	movl	%r13d, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1426:
+	.cfi_restore_state
+	movq	$0, 32(%rsp)
+	movl	$48, %edi
+.LEHB51:
+	call	_Znwm@PLT
+.LEHE51:
+	movq	.LC28(%rip), %rdx
+	movl	$0, 32(%rax)
+	movl	$24, %edi
+	movq	$0, 24(%rax)
+	movq	%rdx, 8(%rax)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rdx
+	movb	$0, 36(%rax)
+	addq	$16, %rdx
+	movl	$0, 40(%rax)
+	movq	%rdx, (%rax)
+	movq	_ZTVNSt13__future_base13_State_baseV2E@GOTPCREL(%rip), %rdx
+	movq	%rax, 40(%rsp)
+	addq	$16, %rax
+	addq	$16, %rdx
+	movq	%rdx, (%rax)
+	movq	%rax, 32(%rsp)
+.LEHB52:
+	call	_Znwm@PLT
+.LEHE52:
+	movq	%rax, %rdi
+	movq	%rax, %rbx
+	call	_ZNSt13__future_base12_Result_baseC2Ev@PLT
+	movq	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE@GOTPCREL(%rip), %rax
+	movq	40(%rsp), %r13
+	movb	$0, 20(%rbx)
+	movq	%rbx, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rbx)
+	movq	32(%rsp), %rbx
+	testq	%r13, %r13
+	je	.L1432
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1527
+	addl	$1, 8(%r13)
+.L1432:
+	testq	%rbx, %rbx
+	je	.L1528
+	movl	$1, %eax
+	xchgb	20(%rbx), %al
+	testb	%al, %al
+	jne	.L1529
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	40(%rbp), %r15
+	addq	$48, %rbp
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L1442
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L1442
+	movq	(%rax), %rdx
+	testq	%rdx, %rdx
+	je	.L1442
+	movq	$0, (%rax)
+	movzbl	(%rdx), %eax
+	cmpb	$39, %al
+	jbe	.L1443
+	movb	%al, 40(%rdx)
+.L1444:
+	movq	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIN7openpal10LogFiltersEEET_RKSt8functionIFS7_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem@GOTPCREL(%rip), %rax
+	movq	%r15, %rdi
+	xorl	%ecx, %ecx
+	movq	%rbp, %rsi
+	leaq	64(%rsp), %r12
+	movq	$0, (%rdx)
+	movq	%rax, 8(%rdx)
+	leaq	32(%rsp), %rax
+	movq	%r12, %xmm2
+	movq	%rax, %xmm0
+	movl	$0, 16(%rdx)
+	punpcklqdq	%xmm2, %xmm0
+	movq	%rax, 8(%rsp)
+	movups	%xmm0, 24(%rdx)
+	call	_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb@PLT
+	movq	%rbx, %rdi
+.LEHB53:
+	call	_ZNSt13__future_base13_State_baseV24waitEv@PLT
+.LEHE53:
+	movq	(%rbx), %rax
+	movq	%rbx, %rdi
+.LEHB54:
+	call	*16(%rax)
+	movl	16(%rbx), %edx
+	leaq	16(%rbx), %rbp
+	andl	$2147483647, %edx
+	cmpl	$1, %edx
+	jne	.L1446
+	jmp	.L1445
+	.p2align 4,,10
+	.p2align 3
+.L1530:
+	cmpb	$1, %al
+	jne	.L1445
+.L1446:
+	lock orl	$-2147483648, 0(%rbp)
+	xorl	%r9d, %r9d
+	xorl	%r8d, %r8d
+	xorl	%ecx, %ecx
+	orl	$-2147483648, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_wait_untilEPjjbNSt6chrono8durationIlSt5ratioILl1ELl1EEEENS2_IlS3_ILl1ELl1000000000EEEE@PLT
+.LEHE54:
+	movl	0(%rbp), %edx
+	andl	$2147483647, %edx
+	cmpl	$1, %edx
+	jne	.L1530
+.L1445:
+	movq	8(%rbx), %r15
+	leaq	24(%rsp), %rbp
+	movq	$0, 24(%rsp)
+	movq	%rbp, %rsi
+	leaq	8(%r15), %r14
+	movq	%r14, %rdi
+	call	_ZNSt15__exception_ptreqERKNS_13exception_ptrES2_@PLT
+	movq	%rbp, %rdi
+	movl	%eax, %ebx
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	testb	%bl, %bl
+	je	.L1531
+	movl	16(%r15), %ebx
+	testq	%r13, %r13
+	je	.L1450
+	movq	%r13, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1450:
+	movq	32(%rsp), %r8
+	testq	%r8, %r8
+	je	.L1522
+	movq	40(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1457
+	movl	8(%rdi), %eax
+	cmpl	$1, %eax
+	je	.L1522
+.L1457:
+	movq	48(%rsp), %rax
+	movq	$0, 48(%rsp)
+	movq	%rax, 24(%rsp)
+	testq	%rax, %rax
+	je	.L1460
+	movq	%r8, %rdi
+	movq	%rbp, %rsi
+	call	_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1522
+	movq	(%rdi), %rax
+	call	*(%rax)
+.L1522:
+	movq	48(%rsp), %rbp
+	testq	%rbp, %rbp
+	je	.L1523
+	movq	0(%rbp), %rax
+	movq	(%rax), %rdx
+	cmpq	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv@GOTPCREL(%rip), %rdx
+	jne	.L1463
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev@GOTPCREL(%rip), %rax
+	jne	.L1464
+	movq	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE@GOTPCREL(%rip), %rax
+	movq	%rbp, %rdi
+	addq	$16, %rax
+	movq	%rax, 0(%rbp)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	call	_ZdlPvm@PLT
+	movq	40(%rsp), %rdi
+.L1460:
+	testq	%rdi, %rdi
+	je	.L1465
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1465:
+	movq	80(%rsp), %rax
+	movl	%ebx, %r13d
+	testq	%rax, %rax
+	je	.L1466
+	jmp	.L1430
+	.p2align 4,,10
+	.p2align 3
+.L1443:
+	movq	%rdx, %rdi
+	call	_ZdlPv@PLT
+.L1442:
+	leaq	32(%rsp), %rax
+	movl	$41, %edi
+	movq	%rax, 8(%rsp)
+.LEHB55:
+	call	_Znwm@PLT
+.LEHE55:
+	movb	$40, 40(%rax)
+	movq	%rax, %rdx
+	jmp	.L1444
+.L1463:
+	movq	%rbp, %rdi
+	call	*%rdx
+.L1523:
+	movq	40(%rsp), %rdi
+	jmp	.L1460
+.L1527:
+	lock addl	$1, 8(%r13)
+	jmp	.L1432
+.L1464:
+	movq	%rbp, %rdi
+	call	*%rax
+	movq	40(%rsp), %rdi
+	jmp	.L1460
+.L1526:
+	call	__stack_chk_fail@PLT
+.L1531:
+	movq	%rbp, %rdi
+	movq	%r14, %rsi
+	call	_ZNSt15__exception_ptr13exception_ptrC1ERKS0_@PLT
+	movq	%rbp, %rdi
+.LEHB56:
+	call	_ZSt17rethrow_exceptionNSt15__exception_ptr13exception_ptrE@PLT
+.LEHE56:
+.L1529:
+	movl	$1, %edi
+.LEHB57:
+	call	_ZSt20__throw_future_errori@PLT
+.L1528:
+	movl	$3, %edi
+	call	_ZSt20__throw_future_errori@PLT
+.LEHE57:
+.L1473:
+	movq	%rax, %rbp
+	jmp	.L1467
+.L1475:
+	movq	%rax, %rbp
+	jmp	.L1467
+.L1470:
+	movq	%rax, %rbp
+	jmp	.L1435
+.L1471:
+	movq	%rax, %rbp
+	jmp	.L1433
+.L1474:
+	movq	%rax, %rbx
+	jmp	.L1451
+.L1472:
+	movq	%rax, %rbp
+	jmp	.L1439
+	.section	.gcc_except_table
+.LLSDA8646:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8646-.LLSDACSB8646
+.LLSDACSB8646:
+	.uleb128 .LEHB51-.LFB8646
+	.uleb128 .LEHE51-.LEHB51
+	.uleb128 .L1470-.LFB8646
+	.uleb128 0
+	.uleb128 .LEHB52-.LFB8646
+	.uleb128 .LEHE52-.LEHB52
+	.uleb128 .L1471-.LFB8646
+	.uleb128 0
+	.uleb128 .LEHB53-.LFB8646
+	.uleb128 .LEHE53-.LEHB53
+	.uleb128 .L1475-.LFB8646
+	.uleb128 0
+	.uleb128 .LEHB54-.LFB8646
+	.uleb128 .LEHE54-.LEHB54
+	.uleb128 .L1473-.LFB8646
+	.uleb128 0
+	.uleb128 .LEHB55-.LFB8646
+	.uleb128 .LEHE55-.LEHB55
+	.uleb128 .L1475-.LFB8646
+	.uleb128 0
+	.uleb128 .LEHB56-.LFB8646
+	.uleb128 .LEHE56-.LEHB56
+	.uleb128 .L1474-.LFB8646
+	.uleb128 0
+	.uleb128 .LEHB57-.LFB8646
+	.uleb128 .LEHE57-.LEHB57
+	.uleb128 .L1472-.LFB8646
+	.uleb128 0
+.LLSDACSE8646:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC8646
+	.type	_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv.cold, @function
+_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv.cold:
+.LFSB8646:
+.L1451:
+	.cfi_def_cfa_offset 176
+	.cfi_offset 3, -56
+	.cfi_offset 6, -48
+	.cfi_offset 12, -40
+	.cfi_offset 13, -32
+	.cfi_offset 14, -24
+	.cfi_offset 15, -16
+	movq	%rbp, %rdi
+	movq	%rbx, %rbp
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+.L1467:
+	testq	%r13, %r13
+	je	.L1441
+	movq	%r13, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1441:
+	movq	8(%rsp), %rdi
+	call	_ZNSt7promiseIN7openpal10LogFiltersEED1Ev@PLT
+.L1435:
+	movq	80(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1468
+	leaq	64(%rsp), %rdi
+	movl	$3, %edx
+	movq	%rdi, %rsi
+	call	*%rax
+.L1468:
+	movq	%rbp, %rdi
+.LEHB58:
+	call	_Unwind_Resume@PLT
+.LEHE58:
+.L1433:
+	movq	40(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1435
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L1435
+.L1439:
+	testq	%r13, %r13
+	je	.L1440
+	movq	%r13, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1440:
+	leaq	32(%rsp), %rax
+	movq	%rax, 8(%rsp)
+	jmp	.L1441
+	.cfi_endproc
+.LFE8646:
+	.section	.gcc_except_table
+.LLSDAC8646:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC8646-.LLSDACSBC8646
+.LLSDACSBC8646:
+	.uleb128 .LEHB58-.LCOLDB32
+	.uleb128 .LEHE58-.LEHB58
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC8646:
+	.section	.text.unlikely
+	.text
+	.size	_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv, .-_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv
+	.section	.text.unlikely
+	.size	_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv.cold, .-_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv.cold
+.LCOLDE32:
+	.text
+.LHOTE32:
+	.section	.text._ZNSt7promiseIbED2Ev,"axG",@progbits,_ZNSt7promiseIbED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt7promiseIbED2Ev
+	.type	_ZNSt7promiseIbED2Ev, @function
+_ZNSt7promiseIbED2Ev:
+.LFB11185:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA11185
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	movq	%rdi, %rbx
+	subq	$136, %rsp
+	.cfi_def_cfa_offset 192
+	movq	(%rdi), %r12
+	movq	%fs:40, %rax
+	movq	%rax, 120(%rsp)
+	xorl	%eax, %eax
+	testq	%r12, %r12
+	je	.L1573
+	movq	8(%rdi), %rbp
+	testq	%rbp, %rbp
+	je	.L1535
+	movl	8(%rbp), %eax
+	cmpl	$1, %eax
+	je	.L1573
+.L1535:
+	movq	16(%rbx), %r13
+	movq	$0, 16(%rbx)
+	testq	%r13, %r13
+	je	.L1537
+	call	_ZSt15future_categoryv@PLT
+	leaq	48(%rsp), %r14
+	movl	$4, %edx
+	movq	%rax, %rbp
+	movq	(%rax), %rax
+	movq	%r14, %rdi
+	movq	%rbp, %rsi
+	call	*32(%rax)
+	movl	$19, %r8d
+	xorl	%edx, %edx
+	xorl	%esi, %esi
+	leaq	.LC4(%rip), %rcx
+	movq	%r14, %rdi
+.LEHB59:
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm@PLT
+.LEHE59:
+	leaq	96(%rsp), %r14
+	leaq	16(%rax), %rdx
+	movq	%r14, 80(%rsp)
+	movq	(%rax), %rcx
+	cmpq	%rdx, %rcx
+	je	.L1576
+	movq	%rcx, 80(%rsp)
+	movq	16(%rax), %rcx
+	movq	%rcx, 96(%rsp)
+.L1539:
+	movq	8(%rax), %rcx
+	movb	$0, 16(%rax)
+	leaq	16(%rsp), %r15
+	leaq	80(%rsp), %rsi
+	movq	%r15, %rdi
+	movq	%rcx, 88(%rsp)
+	movq	%rdx, (%rax)
+	movq	$0, 8(%rax)
+.LEHB60:
+	call	_ZNSt11logic_errorC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE@PLT
+.LEHE60:
+	movq	80(%rsp), %rdi
+	cmpq	%r14, %rdi
+	je	.L1540
+	movq	96(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1540:
+	movq	48(%rsp), %rdi
+	leaq	64(%rsp), %rax
+	cmpq	%rax, %rdi
+	je	.L1541
+	movq	64(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1541:
+	movq	_ZTVSt12future_error@GOTPCREL(%rip), %rax
+	movl	$32, %edi
+	movq	%rbp, 40(%rsp)
+	movl	$4, 32(%rsp)
+	leaq	16(%rax), %r14
+	movq	%r14, 16(%rsp)
+	call	__cxa_allocate_exception@PLT
+	movq	_ZNSt15__exception_ptr12__dest_thunkISt12future_errorEEvPv@GOTPCREL(%rip), %rdx
+	movq	_ZTISt12future_error@GOTPCREL(%rip), %rsi
+	movq	%rax, %rbp
+	movq	%rax, %rdi
+	call	__cxa_init_primary_exception@PLT
+	movq	%r15, %rsi
+	movq	%rbp, %rdi
+	call	_ZNSt11logic_errorC2ERKS_@PLT
+	movdqa	32(%rsp), %xmm0
+	movq	%r14, 0(%rbp)
+	movq	%rbp, %rsi
+	leaq	8(%rsp), %r14
+	movups	%xmm0, 16(%rbp)
+	movq	%r14, %rdi
+	movq	%rsp, %rbp
+	call	_ZNSt15__exception_ptr13exception_ptrC1EPv@PLT
+	movq	8(%rsp), %rax
+	leaq	8(%r13), %rsi
+	movq	%rbp, %rdi
+	movq	$0, 8(%rsp)
+	movq	%rax, (%rsp)
+	call	_ZNSt15__exception_ptr13exception_ptr4swapERS0_@PLT
+	movq	%rbp, %rdi
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	movq	%r14, %rdi
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	movq	%r15, %rdi
+	call	_ZNSt12future_errorD1Ev@PLT
+	movq	8(%r12), %rbp
+	leaq	16(%r12), %rdi
+	movl	$1, %eax
+	movq	%r13, 8(%r12)
+	xchgl	(%rdi), %eax
+	testl	%eax, %eax
+	js	.L1577
+.L1543:
+	testq	%rbp, %rbp
+	je	.L1573
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*(%rax)
+.L1573:
+	movq	16(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L1574
+	movq	0(%rbp), %rax
+	movq	(%rax), %rdx
+	cmpq	_ZNSt13__future_base7_ResultIbE10_M_destroyEv@GOTPCREL(%rip), %rdx
+	jne	.L1550
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIbED0Ev@GOTPCREL(%rip), %rax
+	jne	.L1551
+	movq	_ZTVNSt13__future_base7_ResultIbEE@GOTPCREL(%rip), %rax
+	movq	%rbp, %rdi
+	addq	$16, %rax
+	movq	%rax, 0(%rbp)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	call	_ZdlPvm@PLT
+	movq	8(%rbx), %rbp
+.L1537:
+	testq	%rbp, %rbp
+	je	.L1532
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L1578
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L1555:
+	cmpl	$1, %eax
+	je	.L1579
+.L1532:
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1575
+	addq	$136, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1550:
+	.cfi_restore_state
+	movq	%rbp, %rdi
+	call	*%rdx
+.L1574:
+	movq	8(%rbx), %rbp
+	jmp	.L1537
+	.p2align 4,,10
+	.p2align 3
+.L1579:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L1580
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L1558:
+	cmpl	$1, %eax
+	jne	.L1532
+	movq	120(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1575
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	movq	24(%rax), %rax
+	addq	$136, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L1578:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L1555
+	.p2align 4,,10
+	.p2align 3
+.L1551:
+	movq	%rbp, %rdi
+	call	*%rax
+	movq	8(%rbx), %rbp
+	jmp	.L1537
+	.p2align 4,,10
+	.p2align 3
+.L1576:
+	movdqu	16(%rax), %xmm1
+	movaps	%xmm1, 96(%rsp)
+	jmp	.L1539
+	.p2align 4,,10
+	.p2align 3
+.L1577:
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_notify_allEPj@PLT
+	jmp	.L1543
+	.p2align 4,,10
+	.p2align 3
+.L1580:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L1558
+.L1575:
+	call	__stack_chk_fail@PLT
+.L1561:
+	jmp	.L1546
+.L1562:
+.L1544:
+	movq	80(%rsp), %rdi
+	cmpq	%r14, %rdi
+	je	.L1546
+	movq	96(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1546:
+	movq	48(%rsp), %rdi
+	leaq	64(%rsp), %rax
+	cmpq	%rax, %rdi
+	je	.L1547
+	movq	64(%rsp), %rax
+	leaq	1(%rax), %rsi
+	call	_ZdlPvm@PLT
+.L1547:
+	call	_ZSt9terminatev@PLT
+	.cfi_endproc
+.LFE11185:
+	.section	.gcc_except_table
+.LLSDA11185:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE11185-.LLSDACSB11185
+.LLSDACSB11185:
+	.uleb128 .LEHB59-.LFB11185
+	.uleb128 .LEHE59-.LEHB59
+	.uleb128 .L1561-.LFB11185
+	.uleb128 0
+	.uleb128 .LEHB60-.LFB11185
+	.uleb128 .LEHE60-.LEHB60
+	.uleb128 .L1562-.LFB11185
+	.uleb128 0
+.LLSDACSE11185:
+	.section	.text._ZNSt7promiseIbED2Ev,"axG",@progbits,_ZNSt7promiseIbED5Ev,comdat
+	.size	_ZNSt7promiseIbED2Ev, .-_ZNSt7promiseIbED2Ev
+	.weak	_ZNSt7promiseIbED1Ev
+	.set	_ZNSt7promiseIbED1Ev,_ZNSt7promiseIbED2Ev
+	.section	.text._ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE,"axG",@progbits,_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE
+	.type	_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE, @function
+_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE:
+.LFB10605:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA10605
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	movq	%rdi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	movq	%rsi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	subq	$56, %rsp
+	.cfi_def_cfa_offset 112
+	movq	48(%rdi), %rbx
+	movq	%fs:40, %rax
+	movq	%rax, 40(%rsp)
+	xorl	%eax, %eax
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	jne	.L1585
+	jmp	.L1582
+	.p2align 4,,10
+	.p2align 3
+.L1583:
+	movq	16(%rax), %rax
+	testq	%rax, %rax
+	je	.L1582
+.L1585:
+	cmpq	(%rax), %rbx
+	jne	.L1583
+	cmpq	$0, 8(%rax)
+	je	.L1582
+	cmpq	$0, 16(%rbp)
+	je	.L1678
+	movq	40(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1674
+	movq	24(%rbp), %rax
+	addq	$56, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	movq	%rbp, %rdi
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+.LEHB61:
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L1582:
+	.cfi_restore_state
+	movq	$0, 16(%rsp)
+	movl	$48, %edi
+	call	_Znwm@PLT
+.LEHE61:
+	movq	.LC28(%rip), %rdx
+	movl	$24, %edi
+	movq	$0, 24(%rax)
+	movq	%rdx, 8(%rax)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rdx
+	movl	$0, 32(%rax)
+	addq	$16, %rdx
+	movb	$0, 36(%rax)
+	movq	%rdx, (%rax)
+	movq	_ZTVNSt13__future_base13_State_baseV2E@GOTPCREL(%rip), %rdx
+	movl	$0, 40(%rax)
+	addq	$16, %rdx
+	movq	%rax, 24(%rsp)
+	addq	$16, %rax
+	movq	%rdx, (%rax)
+	movq	%rax, 16(%rsp)
+.LEHB62:
+	call	_Znwm@PLT
+.LEHE62:
+	movq	%rax, %rdi
+	movq	%rax, %rbx
+	call	_ZNSt13__future_base12_Result_baseC2Ev@PLT
+	movq	_ZTVNSt13__future_base7_ResultIbEE@GOTPCREL(%rip), %rax
+	movq	24(%rsp), %r13
+	movb	$0, 17(%rbx)
+	movq	%rbx, 32(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rbx)
+	movq	16(%rsp), %rbx
+	testq	%r13, %r13
+	je	.L1589
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1679
+	addl	$1, 8(%r13)
+.L1589:
+	testq	%rbx, %rbx
+	je	.L1680
+	movl	$1, %eax
+	xchgb	20(%rbx), %al
+	testb	%al, %al
+	jne	.L1681
+	data16	leaq	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E@tlsgd(%rip), %rdi
+	.value	0x6666
+	rex64
+	call	__tls_get_addr@PLT
+	movq	40(%r12), %r15
+	addq	$48, %r12
+	movq	(%rax), %rax
+	testq	%rax, %rax
+	je	.L1598
+	movq	8(%rax), %rax
+	testq	%rax, %rax
+	je	.L1598
+	movq	(%rax), %rdx
+	testq	%rdx, %rdx
+	je	.L1598
+	movq	$0, (%rax)
+	movzbl	(%rdx), %eax
+	cmpb	$39, %al
+	jbe	.L1599
+	movb	%al, 40(%rdx)
+.L1600:
+	movq	_ZN4asio6detail18completion_handlerIZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS5_vEEEUlvE_E11do_completeEPNS0_15task_io_serviceEPNS0_25task_io_service_operationERKSt10error_codem@GOTPCREL(%rip), %rax
+	movq	%rbp, 32(%rdx)
+	movq	%r15, %rdi
+	xorl	%ecx, %ecx
+	leaq	16(%rsp), %r14
+	movq	$0, (%rdx)
+	movq	%r12, %rsi
+	movq	%rax, 8(%rdx)
+	movl	$0, 16(%rdx)
+	movq	%r14, 24(%rdx)
+	call	_ZN4asio6detail14strand_service7do_postERPNS1_11strand_implEPNS0_25task_io_service_operationEb@PLT
+	movq	%rbx, %rdi
+.LEHB63:
+	call	_ZNSt13__future_base13_State_baseV24waitEv@PLT
+.LEHE63:
+	movq	(%rbx), %rax
+	movq	%rbx, %rdi
+.LEHB64:
+	call	*16(%rax)
+	movl	16(%rbx), %edx
+	leaq	16(%rbx), %rbp
+	andl	$2147483647, %edx
+	cmpl	$1, %edx
+	jne	.L1602
+	jmp	.L1601
+	.p2align 4,,10
+	.p2align 3
+.L1682:
+	cmpb	$1, %al
+	jne	.L1601
+.L1602:
+	lock orl	$-2147483648, 0(%rbp)
+	xorl	%r9d, %r9d
+	xorl	%r8d, %r8d
+	xorl	%ecx, %ecx
+	orl	$-2147483648, %edx
+	movq	%rbp, %rsi
+	movq	%rbp, %rdi
+	call	_ZNSt28__atomic_futex_unsigned_base19_M_futex_wait_untilEPjjbNSt6chrono8durationIlSt5ratioILl1ELl1EEEENS2_IlS3_ILl1ELl1000000000EEEE@PLT
+.LEHE64:
+	movl	0(%rbp), %edx
+	andl	$2147483647, %edx
+	cmpl	$1, %edx
+	jne	.L1682
+.L1601:
+	movq	8(%rbx), %r12
+	leaq	8(%rsp), %rbp
+	movq	$0, 8(%rsp)
+	movq	%rbp, %rsi
+	leaq	8(%r12), %r15
+	movq	%r15, %rdi
+	call	_ZNSt15__exception_ptreqERKNS_13exception_ptrES2_@PLT
+	movq	%rbp, %rdi
+	movl	%eax, %ebx
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+	testb	%bl, %bl
+	je	.L1683
+	movzbl	16(%r12), %r12d
+	testq	%r13, %r13
+	je	.L1606
+	movq	%r13, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1606:
+	movq	16(%rsp), %r8
+	testq	%r8, %r8
+	je	.L1671
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1613
+	movl	8(%rdi), %eax
+	cmpl	$1, %eax
+	je	.L1671
+.L1613:
+	movq	32(%rsp), %rax
+	movq	$0, 32(%rsp)
+	movq	%rax, 8(%rsp)
+	testq	%rax, %rax
+	je	.L1616
+	movq	%r8, %rdi
+	movq	%rbp, %rsi
+	call	_ZNSt13__future_base13_State_baseV216_M_break_promiseESt10unique_ptrINS_12_Result_baseENS2_8_DeleterEE.part.0
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1671
+	movq	(%rdi), %rax
+	call	*(%rax)
+.L1671:
+	movq	32(%rsp), %rbp
+	testq	%rbp, %rbp
+	je	.L1672
+	movq	0(%rbp), %rax
+	movq	(%rax), %rdx
+	cmpq	_ZNSt13__future_base7_ResultIbE10_M_destroyEv@GOTPCREL(%rip), %rdx
+	jne	.L1619
+	movq	16(%rax), %rax
+	cmpq	_ZNSt13__future_base7_ResultIbED0Ev@GOTPCREL(%rip), %rax
+	jne	.L1620
+	movq	_ZTVNSt13__future_base7_ResultIbEE@GOTPCREL(%rip), %rax
+	movq	%rbp, %rdi
+	addq	$16, %rax
+	movq	%rax, 0(%rbp)
+	call	_ZNSt13__future_base12_Result_baseD2Ev@PLT
+	movq	%rbp, %rdi
+	movl	$24, %esi
+	call	_ZdlPvm@PLT
+	movq	24(%rsp), %rdi
+.L1616:
+	testq	%rdi, %rdi
+	je	.L1581
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1581:
+	movq	40(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1674
+	addq	$56, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	movl	%r12d, %eax
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+.L1599:
+	.cfi_restore_state
+	movq	%rdx, %rdi
+	call	_ZdlPv@PLT
+.L1598:
+	movl	$41, %edi
+	leaq	16(%rsp), %r14
+.LEHB65:
+	call	_Znwm@PLT
+.LEHE65:
+	movb	$40, 40(%rax)
+	movq	%rax, %rdx
+	jmp	.L1600
+.L1619:
+	movq	%rbp, %rdi
+	call	*%rdx
+.L1672:
+	movq	24(%rsp), %rdi
+	jmp	.L1616
+.L1679:
+	lock addl	$1, 8(%r13)
+	jmp	.L1589
+.L1620:
+	movq	%rbp, %rdi
+	call	*%rax
+	movq	24(%rsp), %rdi
+	jmp	.L1616
+.L1674:
+	call	__stack_chk_fail@PLT
+.L1678:
+.LEHB66:
+	call	_ZSt25__throw_bad_function_callv@PLT
+.LEHE66:
+.L1683:
+	movq	%rbp, %rdi
+	movq	%r15, %rsi
+	call	_ZNSt15__exception_ptr13exception_ptrC1ERKS0_@PLT
+	movq	%rbp, %rdi
+.LEHB67:
+	call	_ZSt17rethrow_exceptionNSt15__exception_ptr13exception_ptrE@PLT
+.LEHE67:
+.L1681:
+	movl	$1, %edi
+.LEHB68:
+	call	_ZSt20__throw_future_errori@PLT
+.L1680:
+	movl	$3, %edi
+	call	_ZSt20__throw_future_errori@PLT
+.LEHE68:
+.L1625:
+	movq	%rax, %rbp
+	jmp	.L1590
+.L1626:
+.L1677:
+	movq	%rax, %rbp
+	jmp	.L1622
+.L1627:
+	movq	%rax, %rbx
+	jmp	.L1607
+.L1628:
+	jmp	.L1677
+.L1624:
+	movq	%rax, %rbp
+.L1595:
+	testq	%r13, %r13
+	je	.L1596
+	movq	%r13, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1596:
+	leaq	16(%rsp), %r14
+.L1597:
+	movq	%r14, %rdi
+	call	_ZNSt7promiseIbED1Ev@PLT
+.L1675:
+	movq	%rbp, %rdi
+.LEHB69:
+	call	_Unwind_Resume@PLT
+.LEHE69:
+.L1607:
+	movq	%rbp, %rdi
+	movq	%rbx, %rbp
+	call	_ZNSt15__exception_ptr13exception_ptrD1Ev@PLT
+.L1622:
+	testq	%r13, %r13
+	je	.L1597
+	movq	%r13, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L1597
+.L1590:
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1675
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L1675
+	.cfi_endproc
+.LFE10605:
+	.section	.gcc_except_table
+.LLSDA10605:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE10605-.LLSDACSB10605
+.LLSDACSB10605:
+	.uleb128 .LEHB61-.LFB10605
+	.uleb128 .LEHE61-.LEHB61
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB62-.LFB10605
+	.uleb128 .LEHE62-.LEHB62
+	.uleb128 .L1625-.LFB10605
+	.uleb128 0
+	.uleb128 .LEHB63-.LFB10605
+	.uleb128 .LEHE63-.LEHB63
+	.uleb128 .L1628-.LFB10605
+	.uleb128 0
+	.uleb128 .LEHB64-.LFB10605
+	.uleb128 .LEHE64-.LEHB64
+	.uleb128 .L1626-.LFB10605
+	.uleb128 0
+	.uleb128 .LEHB65-.LFB10605
+	.uleb128 .LEHE65-.LEHB65
+	.uleb128 .L1628-.LFB10605
+	.uleb128 0
+	.uleb128 .LEHB66-.LFB10605
+	.uleb128 .LEHE66-.LEHB66
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB67-.LFB10605
+	.uleb128 .LEHE67-.LEHB67
+	.uleb128 .L1627-.LFB10605
+	.uleb128 0
+	.uleb128 .LEHB68-.LFB10605
+	.uleb128 .LEHE68-.LEHB68
+	.uleb128 .L1624-.LFB10605
+	.uleb128 0
+	.uleb128 .LEHB69-.LFB10605
+	.uleb128 .LEHE69-.LEHB69
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE10605:
+	.section	.text._ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE,"axG",@progbits,_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE,comdat
+	.size	_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE, .-_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE
+	.section	.text._ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_,"axG",@progbits,_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_
+	.type	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_, @function
+_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_:
+.LFB11551:
+	.cfi_startproc
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	leaq	8(%rdi), %r14
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	movq	%rsi, %r13
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	movq	%rdi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 64
+	movq	16(%rdi), %r12
+	testq	%r12, %r12
+	je	.L1685
+	movq	(%rsi), %rbx
+	.p2align 4,,10
+	.p2align 3
+.L1690:
+	movq	32(%r12), %rax
+	movq	16(%r12), %rdx
+	movq	24(%r12), %rcx
+	cmpq	%rax, %rbx
+	jb	.L1686
+	testq	%rcx, %rcx
+	je	.L1687
+	movq	%rcx, %r12
+	jmp	.L1690
+	.p2align 4,,10
+	.p2align 3
+.L1686:
+	testq	%rdx, %rdx
+	je	.L1689
+	movq	%rdx, %r12
+	jmp	.L1690
+	.p2align 4,,10
+	.p2align 3
+.L1687:
+	cmpq	%rax, %rbx
+	jbe	.L1695
+.L1694:
+	movl	$1, %r15d
+	cmpq	%r12, %r14
+	jne	.L1700
+.L1691:
+	movl	$48, %edi
+	call	_Znwm@PLT
+	pxor	%xmm0, %xmm0
+	movq	%r12, %rdx
+	movq	%r14, %rcx
+	movdqu	0(%r13), %xmm1
+	movq	%rax, %rsi
+	movl	%r15d, %edi
+	movq	%rax, %rbx
+	movups	%xmm0, 0(%r13)
+	movups	%xmm1, 32(%rax)
+	call	_ZSt29_Rb_tree_insert_and_rebalancebPSt18_Rb_tree_node_baseS0_RS_@PLT
+	addq	$1, 40(%rbp)
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	movq	%rbx, %rax
+	movl	$1, %edx
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1689:
+	.cfi_restore_state
+	cmpq	24(%rbp), %r12
+	je	.L1694
+.L1693:
+	movq	%r12, %rdi
+	call	_ZSt18_Rb_tree_decrementPSt18_Rb_tree_node_base@PLT
+	cmpq	32(%rax), %rbx
+	ja	.L1694
+	movq	%rax, %r12
+.L1695:
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	movq	%r12, %rax
+	xorl	%edx, %edx
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1700:
+	.cfi_restore_state
+	xorl	%r15d, %r15d
+	cmpq	32(%r12), %rbx
+	setb	%r15b
+	jmp	.L1691
+	.p2align 4,,10
+	.p2align 3
+.L1685:
+	movq	%r14, %r12
+	cmpq	%r14, 24(%rdi)
+	je	.L1697
+	movq	(%rsi), %rbx
+	jmp	.L1693
+.L1697:
+	movl	$1, %r15d
+	jmp	.L1691
+	.cfi_endproc
+.LFE11551:
+	.size	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_, .-_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_
+	.section	.text._ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_,"axG",@progbits,_ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_
+	.type	_ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_, @function
+_ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_:
+.LFB9896:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA9896
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	movq	%rdi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	subq	$216, %rsp
+	.cfi_def_cfa_offset 272
+	movdqu	(%rcx), %xmm1
+	movq	%fs:40, %rax
+	movq	%rax, 200(%rsp)
+	movq	8(%rcx), %rax
+	movaps	%xmm1, 16(%rsp)
+	testq	%rax, %rax
+	je	.L1702
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1840
+	addl	$1, 8(%rax)
+.L1702:
+	movzwl	8(%rdx), %eax
+	movzwl	10(%rdx), %edx
+	movw	%ax, 34(%rsp)
+	movq	16(%rsi), %rax
+	movw	%dx, 32(%rsp)
+	movq	%rax, 48(%rsp)
+	testq	%rax, %rax
+	je	.L1704
+	leaq	8(%rax), %rdx
+	movl	8(%rax), %eax
+.L1706:
+	testl	%eax, %eax
+	je	.L1841
+	leal	1(%rax), %ecx
+	lock cmpxchgl	%ecx, (%rdx)
+	jne	.L1706
+	movq	8(%rsi), %rax
+	movq	104(%rsi), %rbp
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	movq	%rax, 40(%rsp)
+	leaq	8(%rbp), %r13
+	testq	%rbx, %rbx
+	je	.L1707
+	movq	%r13, %rdi
+	call	_ZL26__gthrw_pthread_mutex_lockP15pthread_mutex_t@PLT
+	testl	%eax, %eax
+	jne	.L1842
+.L1707:
+	cmpb	$0, 48(%rbp)
+	je	.L1708
+	pxor	%xmm0, %xmm0
+	movups	%xmm0, (%r12)
+.L1709:
+	testq	%rbx, %rbx
+	je	.L1741
+	movq	%r13, %rdi
+	call	_ZL28__gthrw_pthread_mutex_unlockP15pthread_mutex_t@PLT
+.L1741:
+	movq	48(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1743
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1743:
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1701
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1701:
+	movq	200(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L1843
+	addq	$216, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	movq	%r12, %rax
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1708:
+	.cfi_restore_state
+	movdqa	16(%rsp), %xmm2
+	movq	24(%rsp), %rax
+	movaps	%xmm2, 64(%rsp)
+	testq	%rax, %rax
+	je	.L1710
+	testq	%rbx, %rbx
+	jne	.L1844
+	addl	$1, 8(%rax)
+.L1710:
+	movl	32(%rsp), %eax
+	movdqu	40(%rsp), %xmm3
+	movq	40(%rsp), %rdx
+	movl	%eax, 80(%rsp)
+	movq	48(%rsp), %rax
+	movups	%xmm3, 88(%rsp)
+	testq	%rax, %rax
+	je	.L1712
+	testq	%rbx, %rbx
+	jne	.L1845
+	addl	$1, 8(%rax)
+.L1712:
+	movdqa	64(%rsp), %xmm4
+	movq	72(%rsp), %rax
+	movq	56(%rdx), %r14
+	movaps	%xmm4, 112(%rsp)
+	testq	%rax, %rax
+	je	.L1714
+	testq	%rbx, %rbx
+	jne	.L1846
+	addl	$1, 8(%rax)
+.L1714:
+	movl	80(%rsp), %eax
+	movdqu	88(%rsp), %xmm5
+	movl	%eax, 128(%rsp)
+	movq	96(%rsp), %rax
+	movups	%xmm5, 136(%rsp)
+	testq	%rax, %rax
+	je	.L1716
+	testq	%rbx, %rbx
+	jne	.L1847
+	addl	$1, 8(%rax)
+.L1716:
+	movl	$40, %edi
+	movq	$0, 176(%rsp)
+.LEHB70:
+	call	_Znwm@PLT
+.LEHE70:
+	movdqa	112(%rsp), %xmm6
+	movq	120(%rsp), %rdx
+	movups	%xmm6, (%rax)
+	testq	%rdx, %rdx
+	je	.L1718
+	testq	%rbx, %rbx
+	jne	.L1848
+	addl	$1, 8(%rdx)
+.L1718:
+	movdqu	136(%rsp), %xmm7
+	movl	128(%rsp), %edx
+	movl	%edx, 16(%rax)
+	movq	144(%rsp), %rdx
+	movups	%xmm7, 24(%rax)
+	testq	%rdx, %rdx
+	je	.L1720
+	testq	%rbx, %rbx
+	jne	.L1849
+	addl	$1, 8(%rdx)
+.L1720:
+	movq	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation@GOTPCREL(%rip), %xmm0
+	leaq	160(%rsp), %r15
+	movq	%r14, %rdi
+	movq	%rax, 160(%rsp)
+	movq	%r15, %rsi
+	movhps	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data@GOTPCREL(%rip), %xmm0
+	movaps	%xmm0, 176(%rsp)
+.LEHB71:
+	call	_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE@PLT
+.LEHE71:
+	movq	$0, 8(%rsp)
+	xorl	%r14d, %r14d
+	testb	%al, %al
+	jne	.L1850
+.L1726:
+	movq	176(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1728
+	movl	$3, %edx
+	movq	%r15, %rsi
+	movq	%r15, %rdi
+	call	*%rax
+.L1728:
+	movq	144(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1729
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1729:
+	movq	120(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1730
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1730:
+	movq	96(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1731
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1731:
+	movq	72(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1732
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1732:
+	cmpq	$0, 8(%rsp)
+	je	.L1734
+	movq	8(%rsp), %rax
+	movq	%r14, 120(%rsp)
+	addq	$8, %rax
+	movq	%rax, 112(%rsp)
+	testq	%r14, %r14
+	je	.L1738
+	testq	%rbx, %rbx
+	jne	.L1851
+	addl	$1, 8(%r14)
+.L1738:
+	leaq	112(%rsp), %rsi
+	leaq	56(%rbp), %rdi
+.LEHB72:
+	call	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_@PLT
+.LEHE72:
+	movq	120(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1734
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1734:
+	movq	8(%rsp), %xmm0
+	movq	%r14, %xmm2
+	punpcklqdq	%xmm2, %xmm0
+	movups	%xmm0, (%r12)
+	jmp	.L1709
+	.p2align 4,,10
+	.p2align 3
+.L1840:
+	lock addl	$1, 8(%rax)
+	jmp	.L1702
+	.p2align 4,,10
+	.p2align 3
+.L1850:
+	movq	16(%rsp), %rax
+	movq	24(%rsp), %r14
+	movq	%rax, 8(%rsp)
+	testq	%r14, %r14
+	je	.L1726
+	testq	%rbx, %rbx
+	jne	.L1852
+	addl	$1, 8(%r14)
+	jmp	.L1726
+	.p2align 4,,10
+	.p2align 3
+.L1846:
+	lock addl	$1, 8(%rax)
+	jmp	.L1714
+	.p2align 4,,10
+	.p2align 3
+.L1847:
+	lock addl	$1, 8(%rax)
+	jmp	.L1716
+	.p2align 4,,10
+	.p2align 3
+.L1849:
+	lock addl	$1, 8(%rdx)
+	jmp	.L1720
+	.p2align 4,,10
+	.p2align 3
+.L1848:
+	lock addl	$1, 8(%rdx)
+	jmp	.L1718
+	.p2align 4,,10
+	.p2align 3
+.L1844:
+	lock addl	$1, 8(%rax)
+	jmp	.L1710
+	.p2align 4,,10
+	.p2align 3
+.L1845:
+	lock addl	$1, 8(%rax)
+	movq	40(%rsp), %rdx
+	jmp	.L1712
+	.p2align 4,,10
+	.p2align 3
+.L1851:
+	lock addl	$1, 8(%r14)
+	jmp	.L1738
+	.p2align 4,,10
+	.p2align 3
+.L1852:
+	lock addl	$1, 8(%r14)
+	jmp	.L1726
+.L1843:
+	call	__stack_chk_fail@PLT
+.L1842:
+	movl	%eax, %edi
+.LEHB73:
+	call	_ZSt20__throw_system_errori@PLT
+.LEHE73:
+.L1756:
+	movq	%rax, %rbp
+	jmp	.L1744
+.L1755:
+	movq	%rax, %rbp
+	jmp	.L1748
+.L1744:
+	movq	120(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1745
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1745:
+	testq	%r14, %r14
+	je	.L1737
+	movq	%r14, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1737:
+	testq	%rbx, %rbx
+	jne	.L1853
+.L1748:
+	leaq	16(%rsp), %rdi
+	call	_ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D1Ev@PLT
+.L1839:
+	movq	%rbp, %rdi
+.LEHB74:
+	call	_Unwind_Resume@PLT
+.LEHE74:
+.L1853:
+	movq	%r13, %rdi
+	call	_ZL28__gthrw_pthread_mutex_unlockP15pthread_mutex_t@PLT
+	jmp	.L1748
+.L1841:
+.LEHB75:
+	call	_ZSt20__throw_bad_weak_ptrv@PLT
+.L1704:
+	call	_ZSt20__throw_bad_weak_ptrv@PLT
+.LEHE75:
+.L1754:
+	movq	%rax, %rbp
+	jmp	.L1750
+.L1757:
+	movq	%rax, %rbp
+	jmp	.L1735
+.L1758:
+	movq	%rax, %rbp
+	jmp	.L1723
+.L1750:
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1839
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L1839
+.L1735:
+	movq	176(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1725
+	movl	$3, %edx
+	movq	%r15, %rsi
+	movq	%r15, %rdi
+	call	*%rax
+	jmp	.L1725
+.L1723:
+	movq	176(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1725
+	leaq	160(%rsp), %rdi
+	movl	$3, %edx
+	movq	%rdi, %rsi
+	call	*%rax
+.L1725:
+	leaq	112(%rsp), %rdi
+	call	_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D1Ev@PLT
+	leaq	64(%rsp), %rdi
+	call	_ZZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D1Ev@PLT
+	jmp	.L1737
+	.cfi_endproc
+.LFE9896:
+	.section	.gcc_except_table
+.LLSDA9896:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE9896-.LLSDACSB9896
+.LLSDACSB9896:
+	.uleb128 .LEHB70-.LFB9896
+	.uleb128 .LEHE70-.LEHB70
+	.uleb128 .L1758-.LFB9896
+	.uleb128 0
+	.uleb128 .LEHB71-.LFB9896
+	.uleb128 .LEHE71-.LEHB71
+	.uleb128 .L1757-.LFB9896
+	.uleb128 0
+	.uleb128 .LEHB72-.LFB9896
+	.uleb128 .LEHE72-.LEHB72
+	.uleb128 .L1756-.LFB9896
+	.uleb128 0
+	.uleb128 .LEHB73-.LFB9896
+	.uleb128 .LEHE73-.LEHB73
+	.uleb128 .L1755-.LFB9896
+	.uleb128 0
+	.uleb128 .LEHB74-.LFB9896
+	.uleb128 .LEHE74-.LEHB74
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB75-.LFB9896
+	.uleb128 .LEHE75-.LEHB75
+	.uleb128 .L1754-.LFB9896
+	.uleb128 0
+.LLSDACSE9896:
+	.section	.text._ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_,"axG",@progbits,_ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_,comdat
+	.size	_ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_, .-_ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_
+	.section	.text.unlikely
+	.align 2
+.LCOLDB33:
+	.text
+.LHOTB33:
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE
+	.type	_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE, @function
+_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE:
+.LFB8659:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8659
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	pushq	%r15
+	pushq	%r14
+	.cfi_offset 15, -24
+	.cfi_offset 14, -32
+	movq	%rdi, %r14
+	pushq	%r13
+	.cfi_offset 13, -40
+	movq	%rdx, %r13
+	pushq	%r12
+	.cfi_offset 12, -48
+	movq	%rsi, %r12
+	pushq	%rbx
+	subq	$168, %rsp
+	.cfi_offset 3, -56
+	movq	%rcx, -192(%rbp)
+	movdqu	104(%rsi), %xmm1
+	movq	%r8, -200(%rbp)
+	movq	%r9, -144(%rbp)
+	movq	%fs:40, %rax
+	movq	%rax, -56(%rbp)
+	movq	72(%rsi), %rax
+	movaps	%xmm1, -112(%rbp)
+	addq	$648, %rax
+	movq	%rax, -176(%rbp)
+	movq	112(%rsi), %rax
+	testq	%rax, %rax
+	je	.L1855
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L1941
+	addl	$1, 8(%rax)
+.L1855:
+	leaq	72(%r12), %rax
+	movl	$56, %edi
+	movq	40(%r12), %rbx
+	movq	%rax, -160(%rbp)
+	leaq	56(%r12), %rax
+	movq	%rax, -168(%rbp)
+.LEHB76:
+	call	_Znwm@PLT
+.LEHE76:
+	movq	%rax, %rcx
+	movq	%rax, -136(%rbp)
+	leaq	8(%rax), %rax
+	movq	%rax, -208(%rbp)
+	movq	.LC28(%rip), %rax
+	leaq	32(%rcx), %rdi
+	movq	%rax, 8(%rcx)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rcx)
+	movl	32(%rbx), %eax
+	leaq	16(%rcx), %rbx
+	movq	%rbx, -152(%rbp)
+	movq	0(%r13), %rbx
+	movq	8(%r13), %r13
+	movl	%eax, -180(%rbp)
+	movq	%rbx, %rax
+	movq	%rdi, 16(%rcx)
+	addq	%r13, %rax
+	je	.L1857
+	testq	%rbx, %rbx
+	je	.L1942
+.L1857:
+	movq	%r13, -96(%rbp)
+	cmpq	$15, %r13
+	ja	.L1943
+	cmpq	$1, %r13
+	jne	.L1860
+	movzbl	(%rbx), %eax
+	movq	-136(%rbp), %rbx
+	leaq	-96(%rbp), %r15
+	movb	%al, 32(%rbx)
+.L1861:
+	movq	-136(%rbp), %rax
+	movl	-180(%rbp), %esi
+	movq	%r13, 24(%rax)
+	movb	$0, (%rdi,%r13)
+	movdqu	24(%r12), %xmm2
+	movl	%esi, 48(%rax)
+	movq	32(%r12), %rax
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r13
+	movaps	%xmm2, -96(%rbp)
+	testq	%rax, %rax
+	je	.L1863
+	testq	%r13, %r13
+	jne	.L1944
+	addl	$1, 8(%rax)
+.L1863:
+	movq	-152(%rbp), %xmm0
+	movhps	-136(%rbp), %xmm0
+	movaps	%xmm0, -80(%rbp)
+	testq	%r13, %r13
+	jne	.L1945
+	movq	-136(%rbp), %rax
+	addl	$1, 8(%rax)
+	movq	%rax, %rdi
+.L1867:
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	movl	$704, %edi
+	movq	$0, -128(%rbp)
+.LEHB77:
+	call	_Znwm@PLT
+.LEHE77:
+	movq	%rax, %rdx
+	subq	$8, %rsp
+	movq	%rax, -136(%rbp)
+	movq	.LC28(%rip), %rax
+	leaq	16(%rdx), %rbx
+	movq	-160(%rbp), %r9
+	movq	%r15, %rsi
+	movq	-200(%rbp), %r8
+	movq	%rax, 8(%rdx)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	movq	%rbx, %rdi
+	movq	-192(%rbp), %rcx
+	addq	$16, %rax
+	movq	%rax, (%rdx)
+	leaq	-112(%rbp), %rax
+	movq	-168(%rbp), %rdx
+	pushq	-176(%rbp)
+	pushq	-144(%rbp)
+	pushq	%rax
+.LEHB78:
+	.cfi_escape 0x2e,0x20
+	call	_ZN8asiodnp311MasterStackC1ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_IN8opendnp311ISOEHandlerEERKS5_INSB_18IMasterApplicationEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEERKNS_17MasterStackConfigERNSB_9ITaskLockE@PLT
+.LEHE78:
+	movq	-136(%rbp), %rax
+	movq	%rbx, %xmm0
+	addq	$32, %rsp
+	movq	%rax, %xmm4
+	movq	64(%rax), %rdi
+	punpcklqdq	%xmm4, %xmm0
+	movaps	%xmm0, -128(%rbp)
+	testq	%rdi, %rdi
+	je	.L1946
+	movl	8(%rdi), %eax
+	testl	%eax, %eax
+	je	.L1947
+.L1872:
+	movq	-128(%rbp), %rax
+	movq	152(%rax), %rdi
+	leaq	24(%rax), %rsi
+.LEHB79:
+	.cfi_escape 0x2e,0
+	call	_ZN8opendnp39LinkLayer9SetRouterERNS_7ILinkTxE@PLT
+.LEHE79:
+	movq	-72(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1883
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1883:
+	movq	-88(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1884
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1884:
+	movq	-104(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1885
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1885:
+	movq	-144(%rbp), %rdx
+	leaq	-128(%rbp), %rcx
+	movq	%r12, %rsi
+	movq	%r15, %rdi
+	addq	$40, %rdx
+.LEHB80:
+	call	_ZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_@PLT
+.LEHE80:
+	movdqa	-96(%rbp), %xmm3
+	movq	-120(%rbp), %rdi
+	movups	%xmm3, (%r14)
+	testq	%rdi, %rdi
+	je	.L1854
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1854:
+	movq	-56(%rbp), %rax
+	subq	%fs:40, %rax
+	jne	.L1948
+	leaq	-40(%rbp), %rsp
+	movq	%r14, %rax
+	popq	%rbx
+	popq	%r12
+	popq	%r13
+	popq	%r14
+	popq	%r15
+	popq	%rbp
+	.cfi_remember_state
+	.cfi_def_cfa 7, 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1860:
+	.cfi_restore_state
+	leaq	-96(%rbp), %r15
+	testq	%r13, %r13
+	je	.L1861
+	jmp	.L1859
+	.p2align 4,,10
+	.p2align 3
+.L1943:
+	leaq	-96(%rbp), %r15
+	movq	-152(%rbp), %rdi
+	xorl	%edx, %edx
+	movq	%r15, %rsi
+.LEHB81:
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	-136(%rbp), %rsi
+	movq	%rax, %rdi
+	movq	%rax, 16(%rsi)
+	movq	-96(%rbp), %rax
+	movq	%rax, 32(%rsi)
+.L1859:
+	movq	%r13, %rdx
+	movq	%rbx, %rsi
+	call	memcpy@PLT
+	movq	-136(%rbp), %rax
+	movq	-96(%rbp), %r13
+	movq	16(%rax), %rdi
+	jmp	.L1861
+	.p2align 4,,10
+	.p2align 3
+.L1946:
+	movq	%rbx, 56(%rax)
+.L1893:
+	testq	%r13, %r13
+	jne	.L1949
+	addl	$1, 12(%rax)
+.L1873:
+	testq	%rdi, %rdi
+	je	.L1876
+	testq	%r13, %r13
+	jne	.L1950
+	movl	12(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 12(%rdi)
+.L1878:
+	cmpl	$1, %edx
+	jne	.L1876
+	movq	(%rdi), %rdx
+	movq	%rax, -152(%rbp)
+	call	*24(%rdx)
+	movq	-152(%rbp), %rax
+	.p2align 4,,10
+	.p2align 3
+.L1876:
+	movq	-136(%rbp), %rbx
+	movq	%rax, 64(%rbx)
+	jmp	.L1872
+	.p2align 4,,10
+	.p2align 3
+.L1947:
+	movq	-136(%rbp), %rsi
+	movq	-120(%rbp), %rax
+	movq	%rbx, 56(%rsi)
+	testq	%rax, %rax
+	je	.L1873
+	jmp	.L1893
+	.p2align 4,,10
+	.p2align 3
+.L1950:
+	movl	$-1, %edx
+	lock xaddl	%edx, 12(%rdi)
+	jmp	.L1878
+	.p2align 4,,10
+	.p2align 3
+.L1945:
+	movq	-208(%rbp), %rax
+	lock addl	$1, (%rax)
+	movq	-136(%rbp), %rdi
+	jmp	.L1867
+	.p2align 4,,10
+	.p2align 3
+.L1944:
+	lock addl	$1, 8(%rax)
+	jmp	.L1863
+	.p2align 4,,10
+	.p2align 3
+.L1941:
+	lock addl	$1, 8(%rax)
+	jmp	.L1855
+	.p2align 4,,10
+	.p2align 3
+.L1949:
+	lock addl	$1, 12(%rax)
+	movq	-136(%rbp), %rbx
+	movq	64(%rbx), %rdi
+	jmp	.L1873
+.L1942:
+	leaq	.LC6(%rip), %rdi
+	call	_ZSt19__throw_logic_errorPKc@PLT
+.LEHE81:
+.L1948:
+	call	__stack_chk_fail@PLT
+.L1897:
+	movq	%rax, %rbx
+	jmp	.L1888
+.L1895:
+	movq	%rax, %rbx
+	jmp	.L1865
+.L1899:
+	movq	%rax, %rbx
+	jmp	.L1881
+.L1900:
+	movq	%rax, %rbx
+	jmp	.L1870
+.L1898:
+	movq	%rax, %rbx
+	jmp	.L1864
+.L1896:
+	movq	%rax, %rbx
+	jmp	.L1871
+	.section	.gcc_except_table
+.LLSDA8659:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8659-.LLSDACSB8659
+.LLSDACSB8659:
+	.uleb128 .LEHB76-.LFB8659
+	.uleb128 .LEHE76-.LEHB76
+	.uleb128 .L1895-.LFB8659
+	.uleb128 0
+	.uleb128 .LEHB77-.LFB8659
+	.uleb128 .LEHE77-.LEHB77
+	.uleb128 .L1896-.LFB8659
+	.uleb128 0
+	.uleb128 .LEHB78-.LFB8659
+	.uleb128 .LEHE78-.LEHB78
+	.uleb128 .L1900-.LFB8659
+	.uleb128 0
+	.uleb128 .LEHB79-.LFB8659
+	.uleb128 .LEHE79-.LEHB79
+	.uleb128 .L1899-.LFB8659
+	.uleb128 0
+	.uleb128 .LEHB80-.LFB8659
+	.uleb128 .LEHE80-.LEHB80
+	.uleb128 .L1897-.LFB8659
+	.uleb128 0
+	.uleb128 .LEHB81-.LFB8659
+	.uleb128 .LEHE81-.LEHB81
+	.uleb128 .L1898-.LFB8659
+	.uleb128 0
+.LLSDACSE8659:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC8659
+	.type	_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE.cold, @function
+_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE.cold:
+.LFSB8659:
+.L1888:
+	.cfi_def_cfa 6, 16
+	.cfi_offset 3, -56
+	.cfi_offset 6, -16
+	.cfi_offset 12, -48
+	.cfi_offset 13, -40
+	.cfi_offset 14, -32
+	.cfi_offset 15, -24
+	movq	-120(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1889
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1889:
+	movq	%rbx, %rdi
+.LEHB82:
+	call	_Unwind_Resume@PLT
+.L1870:
+	movq	-136(%rbp), %rdi
+	movl	$704, %esi
+	call	_ZdlPvm@PLT
+.L1871:
+	movq	%r15, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+.L1865:
+	movq	-104(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1887
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1887:
+	movq	%rbx, %rdi
+	call	_Unwind_Resume@PLT
+.LEHE82:
+.L1881:
+	movq	-120(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L1871
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L1871
+.L1864:
+	movq	-136(%rbp), %rdi
+	movl	$56, %esi
+	call	_ZdlPvm@PLT
+	jmp	.L1865
+	.cfi_endproc
+.LFE8659:
+	.section	.gcc_except_table
+.LLSDAC8659:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC8659-.LLSDACSBC8659
+.LLSDACSBC8659:
+	.uleb128 .LEHB82-.LCOLDB33
+	.uleb128 .LEHE82-.LEHB82
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC8659:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE, .-_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE
+	.section	.text.unlikely
+	.size	_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE.cold, .-_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE.cold
+.LCOLDE33:
+	.text
+.LHOTE33:
+	.section	.text._ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_,"axG",@progbits,_ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_
+	.type	_ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_, @function
+_ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_:
+.LFB9930:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA9930
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	movq	%rdi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	subq	$216, %rsp
+	.cfi_def_cfa_offset 272
+	movdqu	(%rcx), %xmm1
+	movq	%fs:40, %rax
+	movq	%rax, 200(%rsp)
+	movq	8(%rcx), %rax
+	movaps	%xmm1, 16(%rsp)
+	testq	%rax, %rax
+	je	.L1952
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L2090
+	addl	$1, 8(%rax)
+.L1952:
+	movzwl	8(%rdx), %eax
+	movzwl	10(%rdx), %edx
+	movw	%ax, 34(%rsp)
+	movq	16(%rsi), %rax
+	movw	%dx, 32(%rsp)
+	movq	%rax, 48(%rsp)
+	testq	%rax, %rax
+	je	.L1954
+	leaq	8(%rax), %rdx
+	movl	8(%rax), %eax
+.L1956:
+	testl	%eax, %eax
+	je	.L2091
+	leal	1(%rax), %ecx
+	lock cmpxchgl	%ecx, (%rdx)
+	jne	.L1956
+	movq	8(%rsi), %rax
+	movq	104(%rsi), %rbp
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	movq	%rax, 40(%rsp)
+	leaq	8(%rbp), %r13
+	testq	%rbx, %rbx
+	je	.L1957
+	movq	%r13, %rdi
+	call	_ZL26__gthrw_pthread_mutex_lockP15pthread_mutex_t@PLT
+	testl	%eax, %eax
+	jne	.L2092
+.L1957:
+	cmpb	$0, 48(%rbp)
+	je	.L1958
+	pxor	%xmm0, %xmm0
+	movups	%xmm0, (%r12)
+.L1959:
+	testq	%rbx, %rbx
+	je	.L1991
+	movq	%r13, %rdi
+	call	_ZL28__gthrw_pthread_mutex_unlockP15pthread_mutex_t@PLT
+.L1991:
+	movq	48(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1993
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1993:
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1951
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1951:
+	movq	200(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L2093
+	addq	$216, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	movq	%r12, %rax
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L1958:
+	.cfi_restore_state
+	movdqa	16(%rsp), %xmm4
+	movq	24(%rsp), %rax
+	movaps	%xmm4, 64(%rsp)
+	testq	%rax, %rax
+	je	.L1960
+	testq	%rbx, %rbx
+	jne	.L2094
+	addl	$1, 8(%rax)
+.L1960:
+	movl	32(%rsp), %eax
+	movdqu	40(%rsp), %xmm5
+	movq	40(%rsp), %rdx
+	movl	%eax, 80(%rsp)
+	movq	48(%rsp), %rax
+	movups	%xmm5, 88(%rsp)
+	testq	%rax, %rax
+	je	.L1962
+	testq	%rbx, %rbx
+	jne	.L2095
+	addl	$1, 8(%rax)
+.L1962:
+	movdqa	64(%rsp), %xmm6
+	movq	72(%rsp), %rax
+	movq	56(%rdx), %r14
+	movaps	%xmm6, 112(%rsp)
+	testq	%rax, %rax
+	je	.L1964
+	testq	%rbx, %rbx
+	jne	.L2096
+	addl	$1, 8(%rax)
+.L1964:
+	movl	80(%rsp), %eax
+	movdqu	88(%rsp), %xmm7
+	movl	%eax, 128(%rsp)
+	movq	96(%rsp), %rax
+	movups	%xmm7, 136(%rsp)
+	testq	%rax, %rax
+	je	.L1966
+	testq	%rbx, %rbx
+	jne	.L2097
+	addl	$1, 8(%rax)
+.L1966:
+	movl	$40, %edi
+	movq	$0, 176(%rsp)
+.LEHB83:
+	call	_Znwm@PLT
+.LEHE83:
+	movdqa	112(%rsp), %xmm4
+	movq	120(%rsp), %rdx
+	movups	%xmm4, (%rax)
+	testq	%rdx, %rdx
+	je	.L1968
+	testq	%rbx, %rbx
+	jne	.L2098
+	addl	$1, 8(%rdx)
+.L1968:
+	movdqu	136(%rsp), %xmm5
+	movl	128(%rsp), %edx
+	movl	%edx, 16(%rax)
+	movq	144(%rsp), %rdx
+	movups	%xmm5, 24(%rax)
+	testq	%rdx, %rdx
+	je	.L1970
+	testq	%rbx, %rbx
+	jne	.L2099
+	addl	$1, 8(%rdx)
+.L1970:
+	movq	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E10_M_managerERSt9_Any_dataRKSH_St18_Manager_operation@GOTPCREL(%rip), %xmm0
+	leaq	160(%rsp), %r15
+	movq	%r14, %rdi
+	movq	%rax, 160(%rsp)
+	movq	%r15, %rsi
+	movhps	_ZNSt17_Function_handlerIFbvEZZN8asiodnp311DNP3Channel8AddStackINS1_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS7_ENKUlvE_clEvEUlvE_E9_M_invokeERKSt9_Any_data@GOTPCREL(%rip), %xmm0
+	movaps	%xmm0, 176(%rsp)
+.LEHB84:
+	call	_ZN7asiopal8Executor10ReturnFromIbEET_RKSt8functionIFS2_vEE@PLT
+.LEHE84:
+	movq	$0, (%rsp)
+	xorl	%r14d, %r14d
+	testb	%al, %al
+	jne	.L2100
+.L1976:
+	movq	176(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1978
+	movl	$3, %edx
+	movq	%r15, %rsi
+	movq	%r15, %rdi
+	call	*%rax
+.L1978:
+	movq	144(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1979
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1979:
+	movq	120(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1980
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1980:
+	movq	96(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1981
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1981:
+	movq	72(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1982
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1982:
+	movq	(%rsp), %rax
+	testq	%rax, %rax
+	je	.L2101
+	movq	%rax, %xmm2
+	movq	%r14, %xmm7
+	punpcklqdq	%xmm7, %xmm2
+	movaps	%xmm2, (%rsp)
+	movaps	%xmm2, 112(%rsp)
+	testq	%r14, %r14
+	je	.L1988
+	testq	%rbx, %rbx
+	jne	.L2102
+	addl	$1, 8(%r14)
+.L1988:
+	leaq	112(%rsp), %rsi
+	leaq	56(%rbp), %rdi
+.LEHB85:
+	call	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE16_M_insert_uniqueIS3_EESt4pairISt17_Rb_tree_iteratorIS3_EbEOT_@PLT
+.LEHE85:
+	movq	120(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1984
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1984:
+	movdqa	(%rsp), %xmm6
+	movups	%xmm6, (%r12)
+	jmp	.L1959
+	.p2align 4,,10
+	.p2align 3
+.L2101:
+	movq	%rax, %xmm3
+	movq	%r14, %xmm7
+	punpcklqdq	%xmm7, %xmm3
+	movaps	%xmm3, (%rsp)
+	jmp	.L1984
+	.p2align 4,,10
+	.p2align 3
+.L2090:
+	lock addl	$1, 8(%rax)
+	jmp	.L1952
+	.p2align 4,,10
+	.p2align 3
+.L2100:
+	movq	16(%rsp), %rax
+	movq	24(%rsp), %r14
+	movq	%rax, (%rsp)
+	testq	%r14, %r14
+	je	.L1976
+	testq	%rbx, %rbx
+	jne	.L2103
+	addl	$1, 8(%r14)
+	jmp	.L1976
+	.p2align 4,,10
+	.p2align 3
+.L2099:
+	lock addl	$1, 8(%rdx)
+	jmp	.L1970
+	.p2align 4,,10
+	.p2align 3
+.L2094:
+	lock addl	$1, 8(%rax)
+	jmp	.L1960
+	.p2align 4,,10
+	.p2align 3
+.L2095:
+	lock addl	$1, 8(%rax)
+	movq	40(%rsp), %rdx
+	jmp	.L1962
+	.p2align 4,,10
+	.p2align 3
+.L2096:
+	lock addl	$1, 8(%rax)
+	jmp	.L1964
+	.p2align 4,,10
+	.p2align 3
+.L2097:
+	lock addl	$1, 8(%rax)
+	jmp	.L1966
+	.p2align 4,,10
+	.p2align 3
+.L2098:
+	lock addl	$1, 8(%rdx)
+	jmp	.L1968
+	.p2align 4,,10
+	.p2align 3
+.L2102:
+	lock addl	$1, 8(%r14)
+	jmp	.L1988
+	.p2align 4,,10
+	.p2align 3
+.L2103:
+	lock addl	$1, 8(%r14)
+	jmp	.L1976
+.L2093:
+	call	__stack_chk_fail@PLT
+.L2092:
+	movl	%eax, %edi
+.LEHB86:
+	call	_ZSt20__throw_system_errori@PLT
+.LEHE86:
+.L2006:
+	movq	%rax, %rbp
+	jmp	.L1994
+.L2005:
+	movq	%rax, %rbp
+	jmp	.L1998
+.L1994:
+	movq	120(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L1995
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1995:
+	testq	%r14, %r14
+	je	.L1987
+	movq	%r14, %rdi
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L1987:
+	testq	%rbx, %rbx
+	jne	.L2104
+.L1998:
+	leaq	16(%rsp), %rdi
+	call	_ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENUlvE_D1Ev@PLT
+.L2089:
+	movq	%rbp, %rdi
+.LEHB87:
+	call	_Unwind_Resume@PLT
+.LEHE87:
+.L2104:
+	movq	%r13, %rdi
+	call	_ZL28__gthrw_pthread_mutex_unlockP15pthread_mutex_t@PLT
+	jmp	.L1998
+.L1954:
+.LEHB88:
+	call	_ZSt20__throw_bad_weak_ptrv@PLT
+.LEHE88:
+.L2008:
+	movq	%rax, %rbp
+	jmp	.L1973
+.L2004:
+	movq	%rax, %rbp
+	jmp	.L2000
+.L1973:
+	movq	176(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1975
+	leaq	160(%rsp), %rdi
+	movl	$3, %edx
+	movq	%rdi, %rsi
+	call	*%rax
+.L1975:
+	leaq	112(%rsp), %rdi
+	call	_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D1Ev@PLT
+	leaq	64(%rsp), %rdi
+	call	_ZZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvENUlvE_D1Ev@PLT
+	jmp	.L1987
+.L2000:
+	movq	24(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L2089
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L2089
+.L2091:
+.LEHB89:
+	call	_ZSt20__throw_bad_weak_ptrv@PLT
+.LEHE89:
+.L2007:
+	movq	%rax, %rbp
+.L1985:
+	movq	176(%rsp), %rax
+	testq	%rax, %rax
+	je	.L1975
+	movl	$3, %edx
+	movq	%r15, %rsi
+	movq	%r15, %rdi
+	call	*%rax
+	jmp	.L1975
+	.cfi_endproc
+.LFE9930:
+	.section	.gcc_except_table
+.LLSDA9930:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE9930-.LLSDACSB9930
+.LLSDACSB9930:
+	.uleb128 .LEHB83-.LFB9930
+	.uleb128 .LEHE83-.LEHB83
+	.uleb128 .L2008-.LFB9930
+	.uleb128 0
+	.uleb128 .LEHB84-.LFB9930
+	.uleb128 .LEHE84-.LEHB84
+	.uleb128 .L2007-.LFB9930
+	.uleb128 0
+	.uleb128 .LEHB85-.LFB9930
+	.uleb128 .LEHE85-.LEHB85
+	.uleb128 .L2006-.LFB9930
+	.uleb128 0
+	.uleb128 .LEHB86-.LFB9930
+	.uleb128 .LEHE86-.LEHB86
+	.uleb128 .L2005-.LFB9930
+	.uleb128 0
+	.uleb128 .LEHB87-.LFB9930
+	.uleb128 .LEHE87-.LEHB87
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB88-.LFB9930
+	.uleb128 .LEHE88-.LEHB88
+	.uleb128 .L2004-.LFB9930
+	.uleb128 0
+	.uleb128 .LEHB89-.LFB9930
+	.uleb128 .LEHE89-.LEHB89
+	.uleb128 .L2004-.LFB9930
+	.uleb128 0
+.LLSDACSE9930:
+	.section	.text._ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_,"axG",@progbits,_ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_,comdat
+	.size	_ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_, .-_ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_
+	.section	.text.unlikely
+	.align 2
+.LCOLDB34:
+	.text
+.LHOTB34:
+	.align 2
+	.p2align 4
+	.globl	_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE
+	.type	_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE, @function
+_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE:
+.LFB8667:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA8667
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	pushq	%r15
+	pushq	%r14
+	.cfi_offset 15, -24
+	.cfi_offset 14, -32
+	movq	%rdi, %r14
+	pushq	%r13
+	.cfi_offset 13, -40
+	movq	%rdx, %r13
+	pushq	%r12
+	.cfi_offset 12, -48
+	movq	%rsi, %r12
+	pushq	%rbx
+	subq	$168, %rsp
+	.cfi_offset 3, -56
+	movq	%rcx, -184(%rbp)
+	movdqu	104(%rsi), %xmm1
+	movq	%r8, -192(%rbp)
+	movq	%r9, -144(%rbp)
+	movq	%fs:40, %rax
+	movq	%rax, -56(%rbp)
+	movq	112(%rsi), %rax
+	movaps	%xmm1, -112(%rbp)
+	testq	%rax, %rax
+	je	.L2106
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L2192
+	addl	$1, 8(%rax)
+.L2106:
+	leaq	72(%r12), %rax
+	movl	$56, %edi
+	movq	40(%r12), %rbx
+	movq	%rax, -160(%rbp)
+	leaq	56(%r12), %rax
+	movq	%rax, -168(%rbp)
+.LEHB90:
+	call	_Znwm@PLT
+.LEHE90:
+	movq	%rax, %rcx
+	movq	%rax, -136(%rbp)
+	leaq	8(%rax), %rax
+	movq	%rax, -200(%rbp)
+	movq	.LC28(%rip), %rax
+	leaq	32(%rcx), %rdi
+	movq	%rax, 8(%rcx)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	addq	$16, %rax
+	movq	%rax, (%rcx)
+	movl	32(%rbx), %eax
+	leaq	16(%rcx), %rbx
+	movq	%rbx, -152(%rbp)
+	movq	0(%r13), %rbx
+	movq	8(%r13), %r13
+	movl	%eax, -172(%rbp)
+	movq	%rbx, %rax
+	movq	%rdi, 16(%rcx)
+	addq	%r13, %rax
+	je	.L2108
+	testq	%rbx, %rbx
+	je	.L2193
+.L2108:
+	movq	%r13, -96(%rbp)
+	cmpq	$15, %r13
+	ja	.L2194
+	cmpq	$1, %r13
+	jne	.L2111
+	movzbl	(%rbx), %eax
+	movq	-136(%rbp), %rbx
+	leaq	-96(%rbp), %r15
+	movb	%al, 32(%rbx)
+.L2112:
+	movq	-136(%rbp), %rax
+	movl	-172(%rbp), %esi
+	movq	%r13, 24(%rax)
+	movb	$0, (%rdi,%r13)
+	movdqu	24(%r12), %xmm2
+	movl	%esi, 48(%rax)
+	movq	32(%r12), %rax
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r13
+	movaps	%xmm2, -96(%rbp)
+	testq	%rax, %rax
+	je	.L2114
+	testq	%r13, %r13
+	jne	.L2195
+	addl	$1, 8(%rax)
+.L2114:
+	movq	-152(%rbp), %xmm0
+	movhps	-136(%rbp), %xmm0
+	movaps	%xmm0, -80(%rbp)
+	testq	%r13, %r13
+	jne	.L2196
+	movq	-136(%rbp), %rax
+	addl	$1, 8(%rax)
+	movq	%rax, %rdi
+.L2118:
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	movl	$1120, %edi
+	movq	$0, -128(%rbp)
+.LEHB91:
+	call	_Znwm@PLT
+.LEHE91:
+	movq	%rax, %rdx
+	movq	%rax, -136(%rbp)
+	movq	.LC28(%rip), %rax
+	movq	%r15, %rsi
+	leaq	16(%rdx), %rbx
+	movq	-160(%rbp), %r9
+	movq	-192(%rbp), %r8
+	movq	%rax, 8(%rdx)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	movq	%rbx, %rdi
+	movq	-184(%rbp), %rcx
+	addq	$16, %rax
+	movq	%rax, (%rdx)
+	leaq	-112(%rbp), %rax
+	movq	-168(%rbp), %rdx
+	pushq	-144(%rbp)
+	pushq	%rax
+.LEHB92:
+	.cfi_escape 0x2e,0x10
+	call	_ZN8asiodnp315OutstationStackC1ERKN7openpal6LoggerERKSt10shared_ptrIN7asiopal8ExecutorEERKS5_IN8opendnp315ICommandHandlerEERKS5_INSB_22IOutstationApplicationEERKS5_INS_9IOHandlerEERKS5_INS6_16IResourceManagerEERKNS_21OutstationStackConfigE@PLT
+.LEHE92:
+	popq	%rax
+	movq	-136(%rbp), %rax
+	movq	%rbx, %xmm0
+	popq	%rdx
+	movq	%rax, %xmm4
+	movq	48(%rax), %rdi
+	punpcklqdq	%xmm4, %xmm0
+	movaps	%xmm0, -128(%rbp)
+	testq	%rdi, %rdi
+	je	.L2197
+	movl	8(%rdi), %eax
+	testl	%eax, %eax
+	je	.L2198
+.L2123:
+	movq	-128(%rbp), %rax
+	movq	136(%rax), %rdi
+	leaq	16(%rax), %rsi
+.LEHB93:
+	.cfi_escape 0x2e,0
+	call	_ZN8opendnp39LinkLayer9SetRouterERNS_7ILinkTxE@PLT
+.LEHE93:
+	movq	-72(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L2134
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L2134:
+	movq	-88(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L2135
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L2135:
+	movq	-104(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L2136
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L2136:
+	movq	-144(%rbp), %rdx
+	leaq	-128(%rbp), %rcx
+	movq	%r12, %rsi
+	movq	%r15, %rdi
+	addq	$280, %rdx
+.LEHB94:
+	call	_ZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_@PLT
+.LEHE94:
+	movdqa	-96(%rbp), %xmm3
+	movq	-120(%rbp), %rdi
+	movups	%xmm3, (%r14)
+	testq	%rdi, %rdi
+	je	.L2105
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L2105:
+	movq	-56(%rbp), %rax
+	subq	%fs:40, %rax
+	jne	.L2199
+	leaq	-40(%rbp), %rsp
+	movq	%r14, %rax
+	popq	%rbx
+	popq	%r12
+	popq	%r13
+	popq	%r14
+	popq	%r15
+	popq	%rbp
+	.cfi_remember_state
+	.cfi_def_cfa 7, 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L2111:
+	.cfi_restore_state
+	leaq	-96(%rbp), %r15
+	testq	%r13, %r13
+	je	.L2112
+	jmp	.L2110
+	.p2align 4,,10
+	.p2align 3
+.L2194:
+	leaq	-96(%rbp), %r15
+	movq	-152(%rbp), %rdi
+	xorl	%edx, %edx
+	movq	%r15, %rsi
+.LEHB95:
+	call	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm@PLT
+	movq	-136(%rbp), %rsi
+	movq	%rax, %rdi
+	movq	%rax, 16(%rsi)
+	movq	-96(%rbp), %rax
+	movq	%rax, 32(%rsi)
+.L2110:
+	movq	%r13, %rdx
+	movq	%rbx, %rsi
+	call	memcpy@PLT
+	movq	-136(%rbp), %rax
+	movq	-96(%rbp), %r13
+	movq	16(%rax), %rdi
+	jmp	.L2112
+	.p2align 4,,10
+	.p2align 3
+.L2197:
+	movq	%rbx, 40(%rax)
+.L2144:
+	testq	%r13, %r13
+	jne	.L2200
+	addl	$1, 12(%rax)
+.L2124:
+	testq	%rdi, %rdi
+	je	.L2127
+	testq	%r13, %r13
+	jne	.L2201
+	movl	12(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 12(%rdi)
+.L2129:
+	cmpl	$1, %edx
+	jne	.L2127
+	movq	(%rdi), %rdx
+	movq	%rax, -152(%rbp)
+	call	*24(%rdx)
+	movq	-152(%rbp), %rax
+	.p2align 4,,10
+	.p2align 3
+.L2127:
+	movq	-136(%rbp), %rbx
+	movq	%rax, 48(%rbx)
+	jmp	.L2123
+	.p2align 4,,10
+	.p2align 3
+.L2198:
+	movq	-136(%rbp), %rsi
+	movq	-120(%rbp), %rax
+	movq	%rbx, 40(%rsi)
+	testq	%rax, %rax
+	je	.L2124
+	jmp	.L2144
+	.p2align 4,,10
+	.p2align 3
+.L2201:
+	movl	$-1, %edx
+	lock xaddl	%edx, 12(%rdi)
+	jmp	.L2129
+	.p2align 4,,10
+	.p2align 3
+.L2196:
+	movq	-200(%rbp), %rax
+	lock addl	$1, (%rax)
+	movq	-136(%rbp), %rdi
+	jmp	.L2118
+	.p2align 4,,10
+	.p2align 3
+.L2195:
+	lock addl	$1, 8(%rax)
+	jmp	.L2114
+	.p2align 4,,10
+	.p2align 3
+.L2192:
+	lock addl	$1, 8(%rax)
+	jmp	.L2106
+	.p2align 4,,10
+	.p2align 3
+.L2200:
+	lock addl	$1, 12(%rax)
+	movq	-136(%rbp), %rbx
+	movq	48(%rbx), %rdi
+	jmp	.L2124
+.L2193:
+	leaq	.LC6(%rip), %rdi
+	call	_ZSt19__throw_logic_errorPKc@PLT
+.LEHE95:
+.L2199:
+	call	__stack_chk_fail@PLT
+.L2148:
+	movq	%rax, %rbx
+	jmp	.L2139
+.L2146:
+	movq	%rax, %rbx
+	jmp	.L2116
+.L2150:
+	movq	%rax, %rbx
+	jmp	.L2132
+.L2151:
+	movq	%rax, %rbx
+	jmp	.L2121
+.L2149:
+	movq	%rax, %rbx
+	jmp	.L2115
+.L2147:
+	movq	%rax, %rbx
+	jmp	.L2122
+	.section	.gcc_except_table
+.LLSDA8667:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE8667-.LLSDACSB8667
+.LLSDACSB8667:
+	.uleb128 .LEHB90-.LFB8667
+	.uleb128 .LEHE90-.LEHB90
+	.uleb128 .L2146-.LFB8667
+	.uleb128 0
+	.uleb128 .LEHB91-.LFB8667
+	.uleb128 .LEHE91-.LEHB91
+	.uleb128 .L2147-.LFB8667
+	.uleb128 0
+	.uleb128 .LEHB92-.LFB8667
+	.uleb128 .LEHE92-.LEHB92
+	.uleb128 .L2151-.LFB8667
+	.uleb128 0
+	.uleb128 .LEHB93-.LFB8667
+	.uleb128 .LEHE93-.LEHB93
+	.uleb128 .L2150-.LFB8667
+	.uleb128 0
+	.uleb128 .LEHB94-.LFB8667
+	.uleb128 .LEHE94-.LEHB94
+	.uleb128 .L2148-.LFB8667
+	.uleb128 0
+	.uleb128 .LEHB95-.LFB8667
+	.uleb128 .LEHE95-.LEHB95
+	.uleb128 .L2149-.LFB8667
+	.uleb128 0
+.LLSDACSE8667:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC8667
+	.type	_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE.cold, @function
+_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE.cold:
+.LFSB8667:
+.L2139:
+	.cfi_def_cfa 6, 16
+	.cfi_offset 3, -56
+	.cfi_offset 6, -16
+	.cfi_offset 12, -48
+	.cfi_offset 13, -40
+	.cfi_offset 14, -32
+	.cfi_offset 15, -24
+	movq	-120(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L2140
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L2140:
+	movq	%rbx, %rdi
+.LEHB96:
+	call	_Unwind_Resume@PLT
+.L2121:
+	movq	-136(%rbp), %rdi
+	movl	$1120, %esi
+	call	_ZdlPvm@PLT
+.L2122:
+	movq	%r15, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+.L2116:
+	movq	-104(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L2138
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L2138:
+	movq	%rbx, %rdi
+	call	_Unwind_Resume@PLT
+.LEHE96:
+.L2132:
+	movq	-120(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L2122
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L2122
+.L2115:
+	movq	-136(%rbp), %rdi
+	movl	$56, %esi
+	call	_ZdlPvm@PLT
+	jmp	.L2116
+	.cfi_endproc
+.LFE8667:
+	.section	.gcc_except_table
+.LLSDAC8667:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC8667-.LLSDACSBC8667
+.LLSDACSBC8667:
+	.uleb128 .LEHB96-.LCOLDB34
+	.uleb128 .LEHE96-.LEHB96
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC8667:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE, .-_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE
+	.section	.text.unlikely
+	.size	_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE.cold, .-_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE.cold
+.LCOLDE34:
+	.text
+.LHOTE34:
+	.section	.text._ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E,"axG",@progbits,_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E
+	.type	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E, @function
+_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E:
+.LFB12821:
+	.cfi_startproc
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	subq	$56, %rsp
+	.cfi_def_cfa_offset 112
+	movq	%rdi, 8(%rsp)
+	movq	%rsi, 40(%rsp)
+	testq	%rsi, %rsi
+	je	.L2202
+.L2284:
+	movq	40(%rsp), %rax
+	movq	24(%rax), %rax
+	movq	%rax, 16(%rsp)
+	testq	%rax, %rax
+	je	.L2204
+.L2276:
+	movq	16(%rsp), %rax
+	movq	24(%rax), %rax
+	movq	%rax, 24(%rsp)
+	testq	%rax, %rax
+	je	.L2205
+.L2268:
+	movq	24(%rsp), %rax
+	movq	24(%rax), %rax
+	movq	%rax, 32(%rsp)
+	testq	%rax, %rax
+	je	.L2206
+.L2260:
+	movq	32(%rsp), %rax
+	movq	24(%rax), %rbp
+	testq	%rbp, %rbp
+	je	.L2207
+.L2252:
+	movq	24(%rbp), %r13
+	testq	%r13, %r13
+	je	.L2208
+.L2244:
+	movq	24(%r13), %r14
+	testq	%r14, %r14
+	je	.L2209
+.L2236:
+	movq	24(%r14), %r12
+	testq	%r12, %r12
+	je	.L2210
+.L2228:
+	movq	24(%r12), %r15
+	testq	%r15, %r15
+	je	.L2211
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L2212
+.L2217:
+	movq	24(%r15), %rsi
+	movq	8(%rsp), %rdi
+	call	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E@PLT
+	movq	%r15, %r8
+	movq	16(%r15), %r15
+	movq	40(%r8), %rbx
+	testq	%rbx, %rbx
+	je	.L2215
+	movl	8(%rbx), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rbx)
+	cmpl	$1, %edx
+	je	.L2216
+.L2215:
+	movl	$48, %esi
+	movq	%r8, %rdi
+	call	_ZdlPvm@PLT
+	testq	%r15, %r15
+	jne	.L2217
+.L2211:
+	movq	40(%r12), %rdi
+	movq	16(%r12), %rbx
+	testq	%rdi, %rdi
+	je	.L2222
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r15
+	testq	%r15, %r15
+	jne	.L2326
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L2224:
+	cmpl	$1, %edx
+	je	.L2327
+.L2222:
+	movl	$48, %esi
+	movq	%r12, %rdi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2210
+	movq	%rbx, %r12
+	jmp	.L2228
+	.p2align 4,,10
+	.p2align 3
+.L2212:
+	movq	24(%r15), %rsi
+	movq	8(%rsp), %rdi
+	movq	%r15, %rbx
+	call	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E@PLT
+	movq	40(%rbx), %rdi
+	movq	16(%r15), %r15
+	testq	%rdi, %rdi
+	je	.L2219
+	lock subl	$1, 8(%rdi)
+	je	.L2328
+.L2219:
+	movl	$48, %esi
+	movq	%rbx, %rdi
+	call	_ZdlPvm@PLT
+	testq	%r15, %r15
+	jne	.L2212
+	jmp	.L2211
+.L2208:
+	movq	40(%rbp), %r12
+	movq	16(%rbp), %rbx
+	testq	%r12, %r12
+	je	.L2246
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r15
+	testq	%r15, %r15
+	jne	.L2329
+	movl	8(%r12), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%r12)
+.L2248:
+	cmpl	$1, %edx
+	je	.L2330
+.L2246:
+	movl	$48, %esi
+	movq	%rbp, %rdi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2207
+	movq	%rbx, %rbp
+	jmp	.L2252
+	.p2align 4,,10
+	.p2align 3
+.L2327:
+	movq	(%rdi), %rdx
+	movq	%rdi, (%rsp)
+	call	*16(%rdx)
+	testq	%r15, %r15
+	movq	(%rsp), %rdi
+	jne	.L2331
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L2227:
+	cmpl	$1, %eax
+	jne	.L2222
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L2222
+	.p2align 4,,10
+	.p2align 3
+.L2331:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L2227
+	.p2align 4,,10
+	.p2align 3
+.L2326:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L2224
+	.p2align 4,,10
+	.p2align 3
+.L2216:
+	movq	(%rbx), %rdx
+	movq	%r8, (%rsp)
+	movq	%rbx, %rdi
+	call	*16(%rdx)
+	movl	12(%rbx), %edx
+	movq	(%rsp), %r8
+	leal	-1(%rdx), %ecx
+	cmpl	$1, %edx
+	movl	%ecx, 12(%rbx)
+	jne	.L2215
+	movq	(%rbx), %rdx
+	movq	%rbx, %rdi
+	call	*24(%rdx)
+	movq	(%rsp), %r8
+	jmp	.L2215
+	.p2align 4,,10
+	.p2align 3
+.L2209:
+	movq	40(%r13), %r12
+	movq	16(%r13), %rbx
+	testq	%r12, %r12
+	je	.L2238
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r15
+	testq	%r15, %r15
+	jne	.L2332
+	movl	8(%r12), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%r12)
+.L2240:
+	cmpl	$1, %edx
+	je	.L2333
+.L2238:
+	movl	$48, %esi
+	movq	%r13, %rdi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2208
+	movq	%rbx, %r13
+	jmp	.L2244
+.L2333:
+	movq	(%r12), %rdx
+	movq	%r12, %rdi
+	call	*16(%rdx)
+	testq	%r15, %r15
+	jne	.L2334
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L2243:
+	cmpl	$1, %eax
+	jne	.L2238
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L2238
+.L2332:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%r12)
+	jmp	.L2240
+.L2207:
+	movq	32(%rsp), %rax
+	movq	40(%rax), %rbp
+	movq	16(%rax), %rbx
+	testq	%rbp, %rbp
+	je	.L2254
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r15
+	testq	%r15, %r15
+	jne	.L2335
+	movl	8(%rbp), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rbp)
+.L2256:
+	cmpl	$1, %edx
+	je	.L2336
+.L2254:
+	movq	32(%rsp), %rdi
+	movl	$48, %esi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2206
+	movq	%rbx, 32(%rsp)
+	jmp	.L2260
+.L2334:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L2243
+.L2330:
+	movq	(%r12), %rdx
+	movq	%r12, %rdi
+	call	*16(%rdx)
+	testq	%r15, %r15
+	jne	.L2337
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L2251:
+	cmpl	$1, %eax
+	jne	.L2246
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L2246
+.L2329:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%r12)
+	jmp	.L2248
+	.p2align 4,,10
+	.p2align 3
+.L2328:
+	movq	(%rdi), %rdx
+	movq	%rdi, (%rsp)
+	call	*16(%rdx)
+	movq	(%rsp), %rdi
+	movl	$-1, %edx
+	lock xaddl	%edx, 12(%rdi)
+	cmpl	$1, %edx
+	jne	.L2219
+	movq	(%rdi), %rdx
+	call	*24(%rdx)
+	jmp	.L2219
+	.p2align 4,,10
+	.p2align 3
+.L2210:
+	movq	40(%r14), %r12
+	movq	16(%r14), %rbx
+	testq	%r12, %r12
+	je	.L2230
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r15
+	testq	%r15, %r15
+	jne	.L2338
+	movl	8(%r12), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%r12)
+.L2232:
+	cmpl	$1, %edx
+	je	.L2339
+.L2230:
+	movl	$48, %esi
+	movq	%r14, %rdi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2209
+	movq	%rbx, %r14
+	jmp	.L2236
+	.p2align 4,,10
+	.p2align 3
+.L2339:
+	movq	(%r12), %rdx
+	movq	%r12, %rdi
+	call	*16(%rdx)
+	testq	%r15, %r15
+	jne	.L2340
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L2235:
+	cmpl	$1, %eax
+	jne	.L2230
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L2230
+.L2340:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L2235
+	.p2align 4,,10
+	.p2align 3
+.L2338:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%r12)
+	jmp	.L2232
+.L2206:
+	movq	24(%rsp), %rax
+	movq	40(%rax), %rbp
+	movq	16(%rax), %rbx
+	testq	%rbp, %rbp
+	je	.L2262
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r15
+	testq	%r15, %r15
+	jne	.L2341
+	movl	8(%rbp), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rbp)
+.L2264:
+	cmpl	$1, %edx
+	je	.L2342
+.L2262:
+	movq	24(%rsp), %rdi
+	movl	$48, %esi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2205
+	movq	%rbx, 24(%rsp)
+	jmp	.L2268
+.L2337:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L2251
+.L2336:
+	movq	0(%rbp), %rdx
+	movq	%rbp, %rdi
+	call	*16(%rdx)
+	testq	%r15, %r15
+	jne	.L2343
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L2259:
+	cmpl	$1, %eax
+	jne	.L2254
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L2254
+.L2335:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rbp)
+	jmp	.L2256
+.L2343:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L2259
+.L2205:
+	movq	16(%rsp), %rax
+	movq	40(%rax), %rbp
+	movq	16(%rax), %rbx
+	testq	%rbp, %rbp
+	je	.L2270
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r15
+	testq	%r15, %r15
+	jne	.L2344
+	movl	8(%rbp), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rbp)
+.L2272:
+	cmpl	$1, %edx
+	je	.L2345
+.L2270:
+	movq	16(%rsp), %rdi
+	movl	$48, %esi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2204
+	movq	%rbx, 16(%rsp)
+	jmp	.L2276
+.L2342:
+	movq	0(%rbp), %rdx
+	movq	%rbp, %rdi
+	call	*16(%rdx)
+	testq	%r15, %r15
+	jne	.L2346
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L2267:
+	cmpl	$1, %eax
+	jne	.L2262
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L2262
+.L2341:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rbp)
+	jmp	.L2264
+.L2346:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L2267
+.L2345:
+	movq	0(%rbp), %rdx
+	movq	%rbp, %rdi
+	call	*16(%rdx)
+	testq	%r15, %r15
+	jne	.L2347
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L2275:
+	cmpl	$1, %eax
+	jne	.L2270
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L2270
+.L2344:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rbp)
+	jmp	.L2272
+.L2347:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L2275
+.L2202:
+	addq	$56, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+.L2204:
+	.cfi_restore_state
+	movq	40(%rsp), %rax
+	movq	40(%rax), %rbp
+	movq	16(%rax), %rbx
+	testq	%rbp, %rbp
+	je	.L2278
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r15
+	testq	%r15, %r15
+	jne	.L2348
+	movl	8(%rbp), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rbp)
+.L2280:
+	cmpl	$1, %edx
+	je	.L2349
+.L2278:
+	movq	40(%rsp), %rdi
+	movl	$48, %esi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2202
+	movq	%rbx, 40(%rsp)
+	jmp	.L2284
+.L2349:
+	movq	0(%rbp), %rdx
+	movq	%rbp, %rdi
+	call	*16(%rdx)
+	testq	%r15, %r15
+	jne	.L2350
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+	jmp	.L2283
+.L2348:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rbp)
+	jmp	.L2280
+.L2350:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+.L2283:
+	cmpl	$1, %eax
+	jne	.L2278
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L2278
+	.cfi_endproc
+.LFE12821:
+	.size	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E, .-_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB12983:
+	.cfi_startproc
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 48
+	movq	_ZTVN7asiopal15ResourceManagerE@GOTPCREL(%rip), %rax
+	movq	88(%rdi), %rbx
+	addq	$16, %rax
+	movq	%rax, 16(%rdi)
+	testq	%rbx, %rbx
+	je	.L2351
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	leaq	72(%rdi), %r13
+	jne	.L2353
+.L2358:
+	movq	24(%rbx), %rsi
+	movq	%rbx, %r12
+	movq	%r13, %rdi
+	call	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E@PLT
+	movq	40(%r12), %rbp
+	movq	16(%rbx), %rbx
+	testq	%rbp, %rbp
+	je	.L2356
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+	cmpl	$1, %eax
+	je	.L2357
+.L2356:
+	movl	$48, %esi
+	movq	%r12, %rdi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	jne	.L2358
+.L2351:
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L2372:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	lock subl	$1, 12(%rbp)
+	je	.L2371
+	.p2align 4,,10
+	.p2align 3
+.L2360:
+	movl	$48, %esi
+	movq	%r12, %rdi
+	call	_ZdlPvm@PLT
+	testq	%rbx, %rbx
+	je	.L2351
+.L2353:
+	movq	24(%rbx), %rsi
+	movq	%rbx, %r12
+	movq	%r13, %rdi
+	call	_ZNSt8_Rb_treeISt10shared_ptrIN7asiopal9IResourceEES3_St9_IdentityIS3_ESt4lessIS3_ESaIS3_EE8_M_eraseEPSt13_Rb_tree_nodeIS3_E@PLT
+	movq	40(%r12), %rbp
+	movq	16(%rbx), %rbx
+	testq	%rbp, %rbp
+	je	.L2360
+	lock subl	$1, 8(%rbp)
+	jne	.L2360
+	jmp	.L2372
+	.p2align 4,,10
+	.p2align 3
+.L2357:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+	cmpl	$1, %eax
+	jne	.L2356
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L2356
+	.p2align 4,,10
+	.p2align 3
+.L2371:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L2360
+	.cfi_endproc
+.LFE12983:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text.startup,"ax",@progbits
+	.p2align 4
+	.type	_GLOBAL__sub_I_DNP3Channel.cpp, @function
+_GLOBAL__sub_I_DNP3Channel.cpp:
+.LFB13388:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movl	$5000, %edi
+	call	_ZN7openpal12TimeDuration12MillisecondsEl@PLT
+	movq	_ZGVZN4asio15system_categoryEvE8instance@GOTPCREL(%rip), %rbp
+	movzbl	0(%rbp), %eax
+	testb	%al, %al
+	je	.L2404
+.L2375:
+	movq	_ZGVZN4asio5error18get_netdb_categoryEvE8instance@GOTPCREL(%rip), %rbp
+	movzbl	0(%rbp), %eax
+	testb	%al, %al
+	je	.L2405
+.L2378:
+	movq	_ZGVZN4asio5error21get_addrinfo_categoryEvE8instance@GOTPCREL(%rip), %rbp
+	movzbl	0(%rbp), %eax
+	testb	%al, %al
+	je	.L2406
+.L2381:
+	movq	_ZGVZN4asio5error17get_misc_categoryEvE8instance@GOTPCREL(%rip), %rbp
+	movzbl	0(%rbp), %eax
+	testb	%al, %al
+	je	.L2407
+.L2384:
+	movq	_ZGVN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E@GOTPCREL(%rip), %rax
+	cmpb	$0, (%rax)
+	je	.L2408
+.L2386:
+	movq	_ZGVN4asio6detail12service_baseINS0_13epoll_reactorEE2idE@GOTPCREL(%rip), %rax
+	cmpb	$0, (%rax)
+	je	.L2409
+.L2387:
+	movq	_ZGVN4asio6detail12service_baseINS0_15task_io_serviceEE2idE@GOTPCREL(%rip), %rax
+	cmpb	$0, (%rax)
+	je	.L2410
+.L2388:
+	movq	_ZGVN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E@GOTPCREL(%rip), %rax
+	cmpb	$0, (%rax)
+	je	.L2411
+.L2389:
+	movq	_ZGVN4asio6detail12service_baseINS0_14strand_serviceEE2idE@GOTPCREL(%rip), %rax
+	cmpb	$0, (%rax)
+	je	.L2412
+	popq	%rbp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+.L2404:
+	.cfi_restore_state
+	movq	%rbp, %rdi
+	call	__cxa_guard_acquire@PLT
+	testl	%eax, %eax
+	je	.L2375
+	movq	_ZZN4asio15system_categoryEvE8instance@GOTPCREL(%rip), %rsi
+	movq	_ZN4asio6detail15system_categoryD1Ev@GOTPCREL(%rip), %rdi
+	leaq	__dso_handle(%rip), %rdx
+	call	__cxa_atexit@PLT
+	movq	%rbp, %rdi
+	call	__cxa_guard_release@PLT
+	jmp	.L2375
+.L2412:
+	movb	$1, (%rax)
+	leaq	__dso_handle(%rip), %rdx
+	movq	_ZN4asio6detail12service_baseINS0_14strand_serviceEE2idE@GOTPCREL(%rip), %rsi
+	movq	_ZN4asio6detail10service_idINS0_14strand_serviceEED1Ev@GOTPCREL(%rip), %rdi
+	popq	%rbp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	jmp	__cxa_atexit@PLT
+.L2411:
+	.cfi_restore_state
+	movb	$1, (%rax)
+	movq	_ZN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E@GOTPCREL(%rip), %rsi
+	leaq	__dso_handle(%rip), %rdx
+	movq	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEED1Ev@GOTPCREL(%rip), %rdi
+	call	__cxa_atexit@PLT
+	jmp	.L2389
+.L2410:
+	movb	$1, (%rax)
+	movq	_ZN4asio6detail12service_baseINS0_15task_io_serviceEE2idE@GOTPCREL(%rip), %rsi
+	leaq	__dso_handle(%rip), %rdx
+	movq	_ZN4asio6detail10service_idINS0_15task_io_serviceEED1Ev@GOTPCREL(%rip), %rdi
+	call	__cxa_atexit@PLT
+	jmp	.L2388
+.L2409:
+	movb	$1, (%rax)
+	movq	_ZN4asio6detail12service_baseINS0_13epoll_reactorEE2idE@GOTPCREL(%rip), %rsi
+	leaq	__dso_handle(%rip), %rdx
+	movq	_ZN4asio6detail10service_idINS0_13epoll_reactorEED1Ev@GOTPCREL(%rip), %rdi
+	call	__cxa_atexit@PLT
+	jmp	.L2387
+.L2408:
+	movb	$1, (%rax)
+	movq	_ZN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E@GOTPCREL(%rip), %rsi
+	leaq	__dso_handle(%rip), %rdx
+	movq	_ZN4asio6detail7tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEED1Ev@GOTPCREL(%rip), %rdi
+	call	__cxa_atexit@PLT
+	jmp	.L2386
+.L2407:
+	movq	%rbp, %rdi
+	call	__cxa_guard_acquire@PLT
+	testl	%eax, %eax
+	je	.L2384
+	movq	_ZZN4asio5error17get_misc_categoryEvE8instance@GOTPCREL(%rip), %rsi
+	movq	_ZN4asio5error6detail13misc_categoryD1Ev@GOTPCREL(%rip), %rdi
+	leaq	__dso_handle(%rip), %rdx
+	call	__cxa_atexit@PLT
+	movq	%rbp, %rdi
+	call	__cxa_guard_release@PLT
+	jmp	.L2384
+.L2406:
+	movq	%rbp, %rdi
+	call	__cxa_guard_acquire@PLT
+	testl	%eax, %eax
+	je	.L2381
+	movq	_ZZN4asio5error21get_addrinfo_categoryEvE8instance@GOTPCREL(%rip), %rsi
+	movq	_ZN4asio5error6detail17addrinfo_categoryD1Ev@GOTPCREL(%rip), %rdi
+	leaq	__dso_handle(%rip), %rdx
+	call	__cxa_atexit@PLT
+	movq	%rbp, %rdi
+	call	__cxa_guard_release@PLT
+	jmp	.L2381
+.L2405:
+	movq	%rbp, %rdi
+	call	__cxa_guard_acquire@PLT
+	testl	%eax, %eax
+	je	.L2378
+	movq	_ZZN4asio5error18get_netdb_categoryEvE8instance@GOTPCREL(%rip), %rsi
+	movq	_ZN4asio5error6detail14netdb_categoryD1Ev@GOTPCREL(%rip), %rdi
+	leaq	__dso_handle(%rip), %rdx
+	call	__cxa_atexit@PLT
+	movq	%rbp, %rdi
+	call	__cxa_guard_release@PLT
+	jmp	.L2378
+	.cfi_endproc
+.LFE13388:
+	.size	_GLOBAL__sub_I_DNP3Channel.cpp, .-_GLOBAL__sub_I_DNP3Channel.cpp
+	.section	.init_array,"aw"
+	.align 8
+	.quad	_GLOBAL__sub_I_DNP3Channel.cpp
+	.weak	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE
+	.section	.rodata._ZTSN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE,"aG",@progbits,_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE, @object
+	.size	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE, 64
+_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE:
+	.string	"N7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE"
+	.weak	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE
+	.section	.rodata._ZTSN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE,"aG",@progbits,_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE, @object
+	.size	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE, 55
+_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE:
+	.string	"N7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE"
+	.weak	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE
+	.section	.rodata._ZTSN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE,"aG",@progbits,_ZTSN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE, @object
+	.size	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE, 56
+_ZTSN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE:
+	.string	"N7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE"
+	.weak	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE
+	.section	.rodata._ZTSN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE,"aG",@progbits,_ZTSN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE, @object
+	.size	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE, 62
+_ZTSN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE:
+	.string	"N7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE"
+	.weak	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE
+	.section	.rodata._ZTSN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE,"aG",@progbits,_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE, @object
+	.size	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE, 67
+_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE:
+	.string	"N7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE"
+	.weak	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE
+	.section	.rodata._ZTSN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE,"aG",@progbits,_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE, @object
+	.size	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE, 67
+_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE:
+	.string	"N7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE"
+	.weak	_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE, 47
+_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE, 16
+_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE
+	.section	.rodata._ZTSN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE,"aG",@progbits,_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE, @object
+	.size	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE, 64
+_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE:
+	.string	"N7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE"
+	.weak	_ZTSSt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE
+	.section	.rodata._ZTSSt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE,"aG",@progbits,_ZTSSt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE,comdat
+	.align 32
+	.type	_ZTSSt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE, @object
+	.size	_ZTSSt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE, 54
+_ZTSSt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE:
+	.string	"St23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE"
+	.weak	_ZTISt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE
+	.section	.data.rel.ro._ZTISt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE,"awG",@progbits,_ZTISt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE,comdat
+	.align 8
+	.type	_ZTISt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE, @object
+	.size	_ZTISt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE, 16
+_ZTISt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSSt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE
+	.weak	_ZTSN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE
+	.section	.rodata._ZTSN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE,"aG",@progbits,_ZTSN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE, @object
+	.size	_ZTSN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE, 56
+_ZTSN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE:
+	.string	"N7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE"
+	.weak	_ZTSN7openpal7HasSizeIjEE
+	.section	.rodata._ZTSN7openpal7HasSizeIjEE,"aG",@progbits,_ZTSN7openpal7HasSizeIjEE,comdat
+	.align 16
+	.type	_ZTSN7openpal7HasSizeIjEE, @object
+	.size	_ZTSN7openpal7HasSizeIjEE, 22
+_ZTSN7openpal7HasSizeIjEE:
+	.string	"N7openpal7HasSizeIjEE"
+	.weak	_ZTIN7openpal7HasSizeIjEE
+	.section	.data.rel.ro._ZTIN7openpal7HasSizeIjEE,"awG",@progbits,_ZTIN7openpal7HasSizeIjEE,comdat
+	.align 8
+	.type	_ZTIN7openpal7HasSizeIjEE, @object
+	.size	_ZTIN7openpal7HasSizeIjEE, 16
+_ZTIN7openpal7HasSizeIjEE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSN7openpal7HasSizeIjEE
+	.weak	_ZTSN7openpal7HasSizeItEE
+	.section	.rodata._ZTSN7openpal7HasSizeItEE,"aG",@progbits,_ZTSN7openpal7HasSizeItEE,comdat
+	.align 16
+	.type	_ZTSN7openpal7HasSizeItEE, @object
+	.size	_ZTSN7openpal7HasSizeItEE, 22
+_ZTSN7openpal7HasSizeItEE:
+	.string	"N7openpal7HasSizeItEE"
+	.weak	_ZTIN7openpal7HasSizeItEE
+	.section	.data.rel.ro._ZTIN7openpal7HasSizeItEE,"awG",@progbits,_ZTIN7openpal7HasSizeItEE,comdat
+	.align 8
+	.type	_ZTIN7openpal7HasSizeItEE, @object
+	.size	_ZTIN7openpal7HasSizeItEE, 16
+_ZTIN7openpal7HasSizeItEE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSN7openpal7HasSizeItEE
+	.weak	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE
+	.section	.rodata._ZTSN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE,"aG",@progbits,_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE,comdat
+	.align 32
+	.type	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE, @object
+	.size	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE, 55
+_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE:
+	.string	"N7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE"
+	.weak	_ZTSSt19_Sp_make_shared_tag
+	.section	.rodata._ZTSSt19_Sp_make_shared_tag,"aG",@progbits,_ZTSSt19_Sp_make_shared_tag,comdat
+	.align 16
+	.type	_ZTSSt19_Sp_make_shared_tag, @object
+	.size	_ZTSSt19_Sp_make_shared_tag, 24
+_ZTSSt19_Sp_make_shared_tag:
+	.string	"St19_Sp_make_shared_tag"
+	.weak	_ZGVN4asio6detail12service_baseINS0_14strand_serviceEE2idE
+	.section	.bss._ZGVN4asio6detail12service_baseINS0_14strand_serviceEE2idE,"awG",@nobits,_ZGVN4asio6detail12service_baseINS0_14strand_serviceEE2idE,comdat
+	.align 8
+	.type	_ZGVN4asio6detail12service_baseINS0_14strand_serviceEE2idE, @gnu_unique_object
+	.size	_ZGVN4asio6detail12service_baseINS0_14strand_serviceEE2idE, 8
+_ZGVN4asio6detail12service_baseINS0_14strand_serviceEE2idE:
+	.zero	8
+	.weak	_ZGVN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E
+	.section	.bss._ZGVN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E,"awG",@nobits,_ZGVN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E,comdat
+	.align 8
+	.type	_ZGVN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E, @gnu_unique_object
+	.size	_ZGVN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E, 8
+_ZGVN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E:
+	.zero	8
+	.weak	_ZGVN4asio6detail12service_baseINS0_15task_io_serviceEE2idE
+	.section	.bss._ZGVN4asio6detail12service_baseINS0_15task_io_serviceEE2idE,"awG",@nobits,_ZGVN4asio6detail12service_baseINS0_15task_io_serviceEE2idE,comdat
+	.align 8
+	.type	_ZGVN4asio6detail12service_baseINS0_15task_io_serviceEE2idE, @gnu_unique_object
+	.size	_ZGVN4asio6detail12service_baseINS0_15task_io_serviceEE2idE, 8
+_ZGVN4asio6detail12service_baseINS0_15task_io_serviceEE2idE:
+	.zero	8
+	.weak	_ZGVN4asio6detail12service_baseINS0_13epoll_reactorEE2idE
+	.section	.bss._ZGVN4asio6detail12service_baseINS0_13epoll_reactorEE2idE,"awG",@nobits,_ZGVN4asio6detail12service_baseINS0_13epoll_reactorEE2idE,comdat
+	.align 8
+	.type	_ZGVN4asio6detail12service_baseINS0_13epoll_reactorEE2idE, @gnu_unique_object
+	.size	_ZGVN4asio6detail12service_baseINS0_13epoll_reactorEE2idE, 8
+_ZGVN4asio6detail12service_baseINS0_13epoll_reactorEE2idE:
+	.zero	8
+	.weak	_ZGVN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E
+	.section	.bss._ZGVN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E,"awG",@nobits,_ZGVN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E,comdat
+	.align 8
+	.type	_ZGVN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E, @gnu_unique_object
+	.size	_ZGVN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E, 8
+_ZGVN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E:
+	.zero	8
+	.weak	_ZN4asio6detail12service_baseINS0_14strand_serviceEE2idE
+	.section	.bss._ZN4asio6detail12service_baseINS0_14strand_serviceEE2idE,"awG",@nobits,_ZN4asio6detail12service_baseINS0_14strand_serviceEE2idE,comdat
+	.type	_ZN4asio6detail12service_baseINS0_14strand_serviceEE2idE, @gnu_unique_object
+	.size	_ZN4asio6detail12service_baseINS0_14strand_serviceEE2idE, 1
+_ZN4asio6detail12service_baseINS0_14strand_serviceEE2idE:
+	.zero	1
+	.weak	_ZN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E
+	.section	.bss._ZN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E,"awG",@nobits,_ZN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E,comdat
+	.type	_ZN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E, @gnu_unique_object
+	.size	_ZN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E, 1
+_ZN4asio6detail10call_stackINS0_14strand_service11strand_implEhE4top_E:
+	.zero	1
+	.weak	_ZN4asio6detail12service_baseINS0_15task_io_serviceEE2idE
+	.section	.bss._ZN4asio6detail12service_baseINS0_15task_io_serviceEE2idE,"awG",@nobits,_ZN4asio6detail12service_baseINS0_15task_io_serviceEE2idE,comdat
+	.type	_ZN4asio6detail12service_baseINS0_15task_io_serviceEE2idE, @gnu_unique_object
+	.size	_ZN4asio6detail12service_baseINS0_15task_io_serviceEE2idE, 1
+_ZN4asio6detail12service_baseINS0_15task_io_serviceEE2idE:
+	.zero	1
+	.weak	_ZN4asio6detail12service_baseINS0_13epoll_reactorEE2idE
+	.section	.bss._ZN4asio6detail12service_baseINS0_13epoll_reactorEE2idE,"awG",@nobits,_ZN4asio6detail12service_baseINS0_13epoll_reactorEE2idE,comdat
+	.type	_ZN4asio6detail12service_baseINS0_13epoll_reactorEE2idE, @gnu_unique_object
+	.size	_ZN4asio6detail12service_baseINS0_13epoll_reactorEE2idE, 1
+_ZN4asio6detail12service_baseINS0_13epoll_reactorEE2idE:
+	.zero	1
+	.weak	_ZN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E
+	.section	.bss._ZN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E,"awG",@nobits,_ZN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E,comdat
+	.type	_ZN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E, @gnu_unique_object
+	.size	_ZN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E, 1
+_ZN4asio6detail10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE4top_E:
+	.zero	1
+	.weak	_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE, 52
+_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSN7asiopal9IResourceE
+	.section	.rodata._ZTSN7asiopal9IResourceE,"aG",@progbits,_ZTSN7asiopal9IResourceE,comdat
+	.align 16
+	.type	_ZTSN7asiopal9IResourceE, @object
+	.size	_ZTSN7asiopal9IResourceE, 21
+_ZTSN7asiopal9IResourceE:
+	.string	"N7asiopal9IResourceE"
+	.weak	_ZTIN7asiopal9IResourceE
+	.section	.data.rel.ro._ZTIN7asiopal9IResourceE,"awG",@progbits,_ZTIN7asiopal9IResourceE,comdat
+	.align 8
+	.type	_ZTIN7asiopal9IResourceE, @object
+	.size	_ZTIN7asiopal9IResourceE, 16
+_ZTIN7asiopal9IResourceE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSN7asiopal9IResourceE
+	.weak	_ZTSN8asiodnp38IChannelE
+	.section	.rodata._ZTSN8asiodnp38IChannelE,"aG",@progbits,_ZTSN8asiodnp38IChannelE,comdat
+	.align 16
+	.type	_ZTSN8asiodnp38IChannelE, @object
+	.size	_ZTSN8asiodnp38IChannelE, 21
+_ZTSN8asiodnp38IChannelE:
+	.string	"N8asiodnp38IChannelE"
+	.weak	_ZTIN8asiodnp38IChannelE
+	.section	.data.rel.ro._ZTIN8asiodnp38IChannelE,"awG",@progbits,_ZTIN8asiodnp38IChannelE,comdat
+	.align 8
+	.type	_ZTIN8asiodnp38IChannelE, @object
+	.size	_ZTIN8asiodnp38IChannelE, 24
+_ZTIN8asiodnp38IChannelE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSN8asiodnp38IChannelE
+	.quad	_ZTIN7asiopal9IResourceE
+	.weak	_ZTSN4asio6detail15system_categoryE
+	.section	.rodata._ZTSN4asio6detail15system_categoryE,"aG",@progbits,_ZTSN4asio6detail15system_categoryE,comdat
+	.align 32
+	.type	_ZTSN4asio6detail15system_categoryE, @object
+	.size	_ZTSN4asio6detail15system_categoryE, 32
+_ZTSN4asio6detail15system_categoryE:
+	.string	"N4asio6detail15system_categoryE"
+	.weak	_ZTIN4asio6detail15system_categoryE
+	.section	.data.rel.ro._ZTIN4asio6detail15system_categoryE,"awG",@progbits,_ZTIN4asio6detail15system_categoryE,comdat
+	.align 8
+	.type	_ZTIN4asio6detail15system_categoryE, @object
+	.size	_ZTIN4asio6detail15system_categoryE, 24
+_ZTIN4asio6detail15system_categoryE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSN4asio6detail15system_categoryE
+	.quad	_ZTINSt3_V214error_categoryE
+	.weak	_ZTSN4asio5error6detail14netdb_categoryE
+	.section	.rodata._ZTSN4asio5error6detail14netdb_categoryE,"aG",@progbits,_ZTSN4asio5error6detail14netdb_categoryE,comdat
+	.align 32
+	.type	_ZTSN4asio5error6detail14netdb_categoryE, @object
+	.size	_ZTSN4asio5error6detail14netdb_categoryE, 37
+_ZTSN4asio5error6detail14netdb_categoryE:
+	.string	"N4asio5error6detail14netdb_categoryE"
+	.weak	_ZTIN4asio5error6detail14netdb_categoryE
+	.section	.data.rel.ro._ZTIN4asio5error6detail14netdb_categoryE,"awG",@progbits,_ZTIN4asio5error6detail14netdb_categoryE,comdat
+	.align 8
+	.type	_ZTIN4asio5error6detail14netdb_categoryE, @object
+	.size	_ZTIN4asio5error6detail14netdb_categoryE, 24
+_ZTIN4asio5error6detail14netdb_categoryE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSN4asio5error6detail14netdb_categoryE
+	.quad	_ZTINSt3_V214error_categoryE
+	.weak	_ZTSN4asio5error6detail17addrinfo_categoryE
+	.section	.rodata._ZTSN4asio5error6detail17addrinfo_categoryE,"aG",@progbits,_ZTSN4asio5error6detail17addrinfo_categoryE,comdat
+	.align 32
+	.type	_ZTSN4asio5error6detail17addrinfo_categoryE, @object
+	.size	_ZTSN4asio5error6detail17addrinfo_categoryE, 40
+_ZTSN4asio5error6detail17addrinfo_categoryE:
+	.string	"N4asio5error6detail17addrinfo_categoryE"
+	.weak	_ZTIN4asio5error6detail17addrinfo_categoryE
+	.section	.data.rel.ro._ZTIN4asio5error6detail17addrinfo_categoryE,"awG",@progbits,_ZTIN4asio5error6detail17addrinfo_categoryE,comdat
+	.align 8
+	.type	_ZTIN4asio5error6detail17addrinfo_categoryE, @object
+	.size	_ZTIN4asio5error6detail17addrinfo_categoryE, 24
+_ZTIN4asio5error6detail17addrinfo_categoryE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSN4asio5error6detail17addrinfo_categoryE
+	.quad	_ZTINSt3_V214error_categoryE
+	.weak	_ZTSN4asio5error6detail13misc_categoryE
+	.section	.rodata._ZTSN4asio5error6detail13misc_categoryE,"aG",@progbits,_ZTSN4asio5error6detail13misc_categoryE,comdat
+	.align 32
+	.type	_ZTSN4asio5error6detail13misc_categoryE, @object
+	.size	_ZTSN4asio5error6detail13misc_categoryE, 36
+_ZTSN4asio5error6detail13misc_categoryE:
+	.string	"N4asio5error6detail13misc_categoryE"
+	.weak	_ZTIN4asio5error6detail13misc_categoryE
+	.section	.data.rel.ro._ZTIN4asio5error6detail13misc_categoryE,"awG",@progbits,_ZTIN4asio5error6detail13misc_categoryE,comdat
+	.align 8
+	.type	_ZTIN4asio5error6detail13misc_categoryE, @object
+	.size	_ZTIN4asio5error6detail13misc_categoryE, 24
+_ZTIN4asio5error6detail13misc_categoryE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSN4asio5error6detail13misc_categoryE
+	.quad	_ZTINSt3_V214error_categoryE
+	.weak	_ZTSNSt13__future_base13_State_baseV2E
+	.section	.rodata._ZTSNSt13__future_base13_State_baseV2E,"aG",@progbits,_ZTSNSt13__future_base13_State_baseV2E,comdat
+	.align 32
+	.type	_ZTSNSt13__future_base13_State_baseV2E, @object
+	.size	_ZTSNSt13__future_base13_State_baseV2E, 35
+_ZTSNSt13__future_base13_State_baseV2E:
+	.string	"NSt13__future_base13_State_baseV2E"
+	.weak	_ZTINSt13__future_base13_State_baseV2E
+	.section	.data.rel.ro._ZTINSt13__future_base13_State_baseV2E,"awG",@progbits,_ZTINSt13__future_base13_State_baseV2E,comdat
+	.align 8
+	.type	_ZTINSt13__future_base13_State_baseV2E, @object
+	.size	_ZTINSt13__future_base13_State_baseV2E, 16
+_ZTINSt13__future_base13_State_baseV2E:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSNSt13__future_base13_State_baseV2E
+	.weak	_ZTSN8asiodnp311DNP3ChannelE
+	.section	.rodata._ZTSN8asiodnp311DNP3ChannelE,"aG",@progbits,_ZTSN8asiodnp311DNP3ChannelE,comdat
+	.align 16
+	.type	_ZTSN8asiodnp311DNP3ChannelE, @object
+	.size	_ZTSN8asiodnp311DNP3ChannelE, 25
+_ZTSN8asiodnp311DNP3ChannelE:
+	.string	"N8asiodnp311DNP3ChannelE"
+	.weak	_ZTIN8asiodnp311DNP3ChannelE
+	.section	.data.rel.ro._ZTIN8asiodnp311DNP3ChannelE,"awG",@progbits,_ZTIN8asiodnp311DNP3ChannelE,comdat
+	.align 8
+	.type	_ZTIN8asiodnp311DNP3ChannelE, @object
+	.size	_ZTIN8asiodnp311DNP3ChannelE, 56
+_ZTIN8asiodnp311DNP3ChannelE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN8asiodnp311DNP3ChannelE
+	.long	0
+	.long	2
+	.quad	_ZTIN8asiodnp38IChannelE
+	.quad	2
+	.quad	_ZTISt23enable_shared_from_thisIN8asiodnp311DNP3ChannelEE
+	.quad	2050
+	.weak	_ZTSN7openpal5ArrayIhjEE
+	.section	.rodata._ZTSN7openpal5ArrayIhjEE,"aG",@progbits,_ZTSN7openpal5ArrayIhjEE,comdat
+	.align 16
+	.type	_ZTSN7openpal5ArrayIhjEE, @object
+	.size	_ZTSN7openpal5ArrayIhjEE, 21
+_ZTSN7openpal5ArrayIhjEE:
+	.string	"N7openpal5ArrayIhjEE"
+	.weak	_ZTIN7openpal5ArrayIhjEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIhjEE,"awG",@progbits,_ZTIN7openpal5ArrayIhjEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIhjEE, @object
+	.size	_ZTIN7openpal5ArrayIhjEE, 40
+_ZTIN7openpal5ArrayIhjEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIhjEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeIjEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE,"awG",@progbits,_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE, @object
+	.size	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE, 40
+_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeItEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE,"awG",@progbits,_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE, @object
+	.size	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE, 40
+_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeItEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE,"awG",@progbits,_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE, @object
+	.size	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE, 40
+_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeItEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE,"awG",@progbits,_ZTIN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE, @object
+	.size	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE, 40
+_ZTIN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeItEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE,"awG",@progbits,_ZTIN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE, @object
+	.size	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE, 40
+_ZTIN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeItEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE,"awG",@progbits,_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE, @object
+	.size	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE, 40
+_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeItEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE,"awG",@progbits,_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE, @object
+	.size	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE, 40
+_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeItEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE,"awG",@progbits,_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE, @object
+	.size	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE, 40
+_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeItEE
+	.quad	2050
+	.weak	_ZTIN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE
+	.section	.data.rel.ro._ZTIN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE,"awG",@progbits,_ZTIN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE,comdat
+	.align 8
+	.type	_ZTIN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE, @object
+	.size	_ZTIN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE, 40
+_ZTIN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE:
+	.quad	_ZTVN10__cxxabiv121__vmi_class_type_infoE+16
+	.quad	_ZTSN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE
+	.long	0
+	.long	1
+	.quad	_ZTIN7openpal7HasSizeIjEE
+	.quad	2050
+	.section	.data.rel.ro,"aw"
+	.align 8
+	.type	_ZTIZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_, @object
+	.size	_ZTIZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_, 16
+_ZTIZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_
+	.section	.rodata
+	.align 32
+	.type	_ZTSZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_, @object
+	.size	_ZTSZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_, 43
+_ZTSZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_:
+	.string	"*ZN8asiodnp311DNP3Channel8ShutdownEvEUlvE_"
+	.section	.data.rel.ro
+	.align 8
+	.type	_ZTIZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_, @object
+	.size	_ZTIZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_, 16
+_ZTIZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_
+	.section	.rodata
+	.align 32
+	.type	_ZTSZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_, @object
+	.size	_ZTSZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_, 49
+_ZTSZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_:
+	.string	"*ZN8asiodnp311DNP3Channel13GetStatisticsEvEUlvE_"
+	.weak	_ZTSNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE
+	.section	.rodata._ZTSNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE,"aG",@progbits,_ZTSNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE,comdat
+	.align 32
+	.type	_ZTSNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE, @object
+	.size	_ZTSNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE, 57
+_ZTSNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE:
+	.string	"NSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE"
+	.weak	_ZTINSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE
+	.section	.data.rel.ro._ZTINSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE,"awG",@progbits,_ZTINSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE,comdat
+	.align 8
+	.type	_ZTINSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE, @object
+	.size	_ZTINSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE, 24
+_ZTINSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE
+	.quad	_ZTINSt13__future_base12_Result_baseE
+	.section	.data.rel.ro
+	.align 8
+	.type	_ZTIZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_, @object
+	.size	_ZTIZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_, 16
+_ZTIZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_
+	.section	.rodata
+	.align 32
+	.type	_ZTSZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_, @object
+	.size	_ZTSZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_, 50
+_ZTSZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_:
+	.string	"*ZNK8asiodnp311DNP3Channel13GetLogFiltersEvEUlvE_"
+	.weak	_ZTSNSt13__future_base7_ResultIN7openpal10LogFiltersEEE
+	.section	.rodata._ZTSNSt13__future_base7_ResultIN7openpal10LogFiltersEEE,"aG",@progbits,_ZTSNSt13__future_base7_ResultIN7openpal10LogFiltersEEE,comdat
+	.align 32
+	.type	_ZTSNSt13__future_base7_ResultIN7openpal10LogFiltersEEE, @object
+	.size	_ZTSNSt13__future_base7_ResultIN7openpal10LogFiltersEEE, 52
+_ZTSNSt13__future_base7_ResultIN7openpal10LogFiltersEEE:
+	.string	"NSt13__future_base7_ResultIN7openpal10LogFiltersEEE"
+	.weak	_ZTINSt13__future_base7_ResultIN7openpal10LogFiltersEEE
+	.section	.data.rel.ro._ZTINSt13__future_base7_ResultIN7openpal10LogFiltersEEE,"awG",@progbits,_ZTINSt13__future_base7_ResultIN7openpal10LogFiltersEEE,comdat
+	.align 8
+	.type	_ZTINSt13__future_base7_ResultIN7openpal10LogFiltersEEE, @object
+	.size	_ZTINSt13__future_base7_ResultIN7openpal10LogFiltersEEE, 24
+_ZTINSt13__future_base7_ResultIN7openpal10LogFiltersEEE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSNSt13__future_base7_ResultIN7openpal10LogFiltersEEE
+	.quad	_ZTINSt13__future_base12_Result_baseE
+	.weak	_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_
+	.section	.rodata._ZTSZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_,"aG",@progbits,_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_,comdat
+	.align 32
+	.type	_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_, @object
+	.size	_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_, 121
+_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_:
+	.string	"ZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_"
+	.weak	_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_
+	.section	.data.rel.ro._ZTIZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_,"awG",@progbits,_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_,comdat
+	.align 8
+	.type	_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_, @object
+	.size	_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_, 16
+_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_11MasterStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_
+	.weak	_ZTSNSt13__future_base7_ResultIbEE
+	.section	.rodata._ZTSNSt13__future_base7_ResultIbEE,"aG",@progbits,_ZTSNSt13__future_base7_ResultIbEE,comdat
+	.align 16
+	.type	_ZTSNSt13__future_base7_ResultIbEE, @object
+	.size	_ZTSNSt13__future_base7_ResultIbEE, 31
+_ZTSNSt13__future_base7_ResultIbEE:
+	.string	"NSt13__future_base7_ResultIbEE"
+	.weak	_ZTINSt13__future_base7_ResultIbEE
+	.section	.data.rel.ro._ZTINSt13__future_base7_ResultIbEE,"awG",@progbits,_ZTINSt13__future_base7_ResultIbEE,comdat
+	.align 8
+	.type	_ZTINSt13__future_base7_ResultIbEE, @object
+	.size	_ZTINSt13__future_base7_ResultIbEE, 24
+_ZTINSt13__future_base7_ResultIbEE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSNSt13__future_base7_ResultIbEE
+	.quad	_ZTINSt13__future_base12_Result_baseE
+	.weak	_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_
+	.section	.rodata._ZTSZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_,"aG",@progbits,_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_,comdat
+	.align 32
+	.type	_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_, @object
+	.size	_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_, 125
+_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_:
+	.string	"ZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_"
+	.weak	_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_
+	.section	.data.rel.ro._ZTIZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_,"awG",@progbits,_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_,comdat
+	.align 8
+	.type	_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_, @object
+	.size	_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_, 16
+_ZTIZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSZZN8asiodnp311DNP3Channel8AddStackINS_15OutstationStackEEESt10shared_ptrIT_ERKN8opendnp310LinkConfigERKS5_ENKUlvE_clEvEUlvE_
+	.weak	_ZTSNSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE
+	.section	.rodata._ZTSNSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE,"aG",@progbits,_ZTSNSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE,comdat
+	.align 32
+	.type	_ZTSNSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE, @object
+	.size	_ZTSNSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE, 76
+_ZTSNSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE:
+	.string	"NSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE"
+	.weak	_ZTINSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE
+	.section	.data.rel.ro._ZTINSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE,"awG",@progbits,_ZTINSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE,comdat
+	.align 8
+	.type	_ZTINSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE, @object
+	.size	_ZTINSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE, 16
+_ZTINSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSNSt13__future_base13_State_baseV27_SetterIN8opendnp314LinkStatisticsEOS3_EE
+	.weak	_ZTSNSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE
+	.section	.rodata._ZTSNSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE,"aG",@progbits,_ZTSNSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE,comdat
+	.align 32
+	.type	_ZTSNSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE, @object
+	.size	_ZTSNSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE, 71
+_ZTSNSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE:
+	.string	"NSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE"
+	.weak	_ZTINSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE
+	.section	.data.rel.ro._ZTINSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE,"awG",@progbits,_ZTINSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE,comdat
+	.align 8
+	.type	_ZTINSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE, @object
+	.size	_ZTINSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE, 16
+_ZTINSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSNSt13__future_base13_State_baseV27_SetterIN7openpal10LogFiltersEOS3_EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE, 92
+_ZTSSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 100
+_ZTSSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 93
+_ZTSSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 90
+_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 94
+_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSNSt13__future_base13_State_baseV27_SetterIbObEE
+	.section	.rodata._ZTSNSt13__future_base13_State_baseV27_SetterIbObEE,"aG",@progbits,_ZTSNSt13__future_base13_State_baseV27_SetterIbObEE,comdat
+	.align 32
+	.type	_ZTSNSt13__future_base13_State_baseV27_SetterIbObEE, @object
+	.size	_ZTSNSt13__future_base13_State_baseV27_SetterIbObEE, 48
+_ZTSNSt13__future_base13_State_baseV27_SetterIbObEE:
+	.string	"NSt13__future_base13_State_baseV27_SetterIbObEE"
+	.weak	_ZTINSt13__future_base13_State_baseV27_SetterIbObEE
+	.section	.data.rel.ro._ZTINSt13__future_base13_State_baseV27_SetterIbObEE,"awG",@progbits,_ZTINSt13__future_base13_State_baseV27_SetterIbObEE,comdat
+	.align 8
+	.type	_ZTINSt13__future_base13_State_baseV27_SetterIbObEE, @object
+	.size	_ZTINSt13__future_base13_State_baseV27_SetterIbObEE, 16
+_ZTINSt13__future_base13_State_baseV27_SetterIbObEE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSNSt13__future_base13_State_baseV27_SetterIbObEE
+	.weak	_ZTVN4asio6detail15system_categoryE
+	.section	.data.rel.ro._ZTVN4asio6detail15system_categoryE,"awG",@progbits,_ZTVN4asio6detail15system_categoryE,comdat
+	.align 8
+	.type	_ZTVN4asio6detail15system_categoryE, @object
+	.size	_ZTVN4asio6detail15system_categoryE, 80
+_ZTVN4asio6detail15system_categoryE:
+	.quad	0
+	.quad	_ZTIN4asio6detail15system_categoryE
+	.quad	_ZN4asio6detail15system_categoryD1Ev
+	.quad	_ZN4asio6detail15system_categoryD0Ev
+	.quad	_ZNK4asio6detail15system_category4nameEv
+	.quad	_ZNKSt3_V214error_category10_M_messageB5cxx11Ei
+	.quad	_ZNK4asio6detail15system_category7messageB5cxx11Ei
+	.quad	_ZNKSt3_V214error_category23default_error_conditionEi
+	.quad	_ZNKSt3_V214error_category10equivalentEiRKSt15error_condition
+	.quad	_ZNKSt3_V214error_category10equivalentERKSt10error_codei
+	.weak	_ZTVN4asio5error6detail14netdb_categoryE
+	.section	.data.rel.ro._ZTVN4asio5error6detail14netdb_categoryE,"awG",@progbits,_ZTVN4asio5error6detail14netdb_categoryE,comdat
+	.align 8
+	.type	_ZTVN4asio5error6detail14netdb_categoryE, @object
+	.size	_ZTVN4asio5error6detail14netdb_categoryE, 80
+_ZTVN4asio5error6detail14netdb_categoryE:
+	.quad	0
+	.quad	_ZTIN4asio5error6detail14netdb_categoryE
+	.quad	_ZN4asio5error6detail14netdb_categoryD1Ev
+	.quad	_ZN4asio5error6detail14netdb_categoryD0Ev
+	.quad	_ZNK4asio5error6detail14netdb_category4nameEv
+	.quad	_ZNKSt3_V214error_category10_M_messageB5cxx11Ei
+	.quad	_ZNK4asio5error6detail14netdb_category7messageB5cxx11Ei
+	.quad	_ZNKSt3_V214error_category23default_error_conditionEi
+	.quad	_ZNKSt3_V214error_category10equivalentEiRKSt15error_condition
+	.quad	_ZNKSt3_V214error_category10equivalentERKSt10error_codei
+	.weak	_ZTVN4asio5error6detail17addrinfo_categoryE
+	.section	.data.rel.ro._ZTVN4asio5error6detail17addrinfo_categoryE,"awG",@progbits,_ZTVN4asio5error6detail17addrinfo_categoryE,comdat
+	.align 8
+	.type	_ZTVN4asio5error6detail17addrinfo_categoryE, @object
+	.size	_ZTVN4asio5error6detail17addrinfo_categoryE, 80
+_ZTVN4asio5error6detail17addrinfo_categoryE:
+	.quad	0
+	.quad	_ZTIN4asio5error6detail17addrinfo_categoryE
+	.quad	_ZN4asio5error6detail17addrinfo_categoryD1Ev
+	.quad	_ZN4asio5error6detail17addrinfo_categoryD0Ev
+	.quad	_ZNK4asio5error6detail17addrinfo_category4nameEv
+	.quad	_ZNKSt3_V214error_category10_M_messageB5cxx11Ei
+	.quad	_ZNK4asio5error6detail17addrinfo_category7messageB5cxx11Ei
+	.quad	_ZNKSt3_V214error_category23default_error_conditionEi
+	.quad	_ZNKSt3_V214error_category10equivalentEiRKSt15error_condition
+	.quad	_ZNKSt3_V214error_category10equivalentERKSt10error_codei
+	.weak	_ZTVN4asio5error6detail13misc_categoryE
+	.section	.data.rel.ro._ZTVN4asio5error6detail13misc_categoryE,"awG",@progbits,_ZTVN4asio5error6detail13misc_categoryE,comdat
+	.align 8
+	.type	_ZTVN4asio5error6detail13misc_categoryE, @object
+	.size	_ZTVN4asio5error6detail13misc_categoryE, 80
+_ZTVN4asio5error6detail13misc_categoryE:
+	.quad	0
+	.quad	_ZTIN4asio5error6detail13misc_categoryE
+	.quad	_ZN4asio5error6detail13misc_categoryD1Ev
+	.quad	_ZN4asio5error6detail13misc_categoryD0Ev
+	.quad	_ZNK4asio5error6detail13misc_category4nameEv
+	.quad	_ZNKSt3_V214error_category10_M_messageB5cxx11Ei
+	.quad	_ZNK4asio5error6detail13misc_category7messageB5cxx11Ei
+	.quad	_ZNKSt3_V214error_category23default_error_conditionEi
+	.quad	_ZNKSt3_V214error_category10equivalentEiRKSt15error_condition
+	.quad	_ZNKSt3_V214error_category10equivalentERKSt10error_codei
+	.weak	_ZTVNSt13__future_base13_State_baseV2E
+	.section	.data.rel.ro._ZTVNSt13__future_base13_State_baseV2E,"awG",@progbits,_ZTVNSt13__future_base13_State_baseV2E,comdat
+	.align 8
+	.type	_ZTVNSt13__future_base13_State_baseV2E, @object
+	.size	_ZTVNSt13__future_base13_State_baseV2E, 48
+_ZTVNSt13__future_base13_State_baseV2E:
+	.quad	0
+	.quad	_ZTINSt13__future_base13_State_baseV2E
+	.quad	_ZNSt13__future_base13_State_baseV2D1Ev
+	.quad	_ZNSt13__future_base13_State_baseV2D0Ev
+	.quad	_ZNSt13__future_base13_State_baseV217_M_complete_asyncEv
+	.quad	_ZNKSt13__future_base13_State_baseV221_M_is_deferred_futureEv
+	.weak	_ZTVN7openpal5ArrayIhjEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIhjEE,"awG",@progbits,_ZTVN7openpal5ArrayIhjEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIhjEE, @object
+	.size	_ZTVN7openpal5ArrayIhjEE, 32
+_ZTVN7openpal5ArrayIhjEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIhjEE
+	.quad	_ZN7openpal5ArrayIhjED1Ev
+	.quad	_ZN7openpal5ArrayIhjED0Ev
+	.weak	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE,"awG",@progbits,_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE, @object
+	.size	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE, 32
+_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtEE
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED1Ev
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_10BinarySpecEEEtED0Ev
+	.weak	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE,"awG",@progbits,_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE, @object
+	.size	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE, 32
+_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtEE
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED1Ev
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_19DoubleBitBinarySpecEEEtED0Ev
+	.weak	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE,"awG",@progbits,_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE, @object
+	.size	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE, 32
+_ZTVN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtEE
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED1Ev
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_10AnalogSpecEEEtED0Ev
+	.weak	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE,"awG",@progbits,_ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE, @object
+	.size	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE, 32
+_ZTVN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtEE
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED1Ev
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_11CounterSpecEEEtED0Ev
+	.weak	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE,"awG",@progbits,_ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE, @object
+	.size	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE, 32
+_ZTVN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtEE
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED1Ev
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_17FrozenCounterSpecEEEtED0Ev
+	.weak	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE,"awG",@progbits,_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE, @object
+	.size	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE, 32
+_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtEE
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED1Ev
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_22BinaryOutputStatusSpecEEEtED0Ev
+	.weak	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE,"awG",@progbits,_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE, @object
+	.size	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE, 32
+_ZTVN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtEE
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED1Ev
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_22AnalogOutputStatusSpecEEEtED0Ev
+	.weak	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE,"awG",@progbits,_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE, @object
+	.size	_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE, 32
+_ZTVN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtEE
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED1Ev
+	.quad	_ZN7openpal5ArrayIN8opendnp34CellINS1_19TimeAndIntervalSpecEEEtED0Ev
+	.weak	_ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE
+	.section	.data.rel.ro._ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE,"awG",@progbits,_ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE,comdat
+	.align 8
+	.type	_ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE, @object
+	.size	_ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE, 32
+_ZTVN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE:
+	.quad	0
+	.quad	_ZTIN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjEE
+	.quad	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED1Ev
+	.quad	_ZN7openpal5ArrayINS_8ListNodeIN8opendnp39SOERecordEEEjED0Ev
+	.weak	_ZTVN8asiodnp311DNP3ChannelE
+	.section	.data.rel.ro._ZTVN8asiodnp311DNP3ChannelE,"awG",@progbits,_ZTVN8asiodnp311DNP3ChannelE,comdat
+	.align 8
+	.type	_ZTVN8asiodnp311DNP3ChannelE, @object
+	.size	_ZTVN8asiodnp311DNP3ChannelE, 80
+_ZTVN8asiodnp311DNP3ChannelE:
+	.quad	0
+	.quad	_ZTIN8asiodnp311DNP3ChannelE
+	.quad	_ZN8asiodnp311DNP3ChannelD1Ev
+	.quad	_ZN8asiodnp311DNP3ChannelD0Ev
+	.quad	_ZN8asiodnp311DNP3Channel8ShutdownEv
+	.quad	_ZN8asiodnp311DNP3Channel13GetStatisticsEv
+	.quad	_ZNK8asiodnp311DNP3Channel13GetLogFiltersEv
+	.quad	_ZN8asiodnp311DNP3Channel13SetLogFiltersERKN7openpal10LogFiltersE
+	.quad	_ZN8asiodnp311DNP3Channel9AddMasterERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp311ISOEHandlerEES9_INSA_18IMasterApplicationEERKNS_17MasterStackConfigE
+	.quad	_ZN8asiodnp311DNP3Channel13AddOutstationERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt10shared_ptrIN8opendnp315ICommandHandlerEES9_INSA_22IOutstationApplicationEERKNS_21OutstationStackConfigE
+	.weak	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE
+	.section	.data.rel.ro._ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE,"awG",@progbits,_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE,comdat
+	.align 8
+	.type	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE, @object
+	.size	_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE, 40
+_ZTVNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE:
+	.quad	0
+	.quad	_ZTINSt13__future_base7_ResultIN8opendnp314LinkStatisticsEEE
+	.quad	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEE10_M_destroyEv
+	.quad	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED1Ev
+	.quad	_ZNSt13__future_base7_ResultIN8opendnp314LinkStatisticsEED0Ev
+	.weak	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE
+	.section	.data.rel.ro._ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE,"awG",@progbits,_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE,comdat
+	.align 8
+	.type	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE, @object
+	.size	_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE, 40
+_ZTVNSt13__future_base7_ResultIN7openpal10LogFiltersEEE:
+	.quad	0
+	.quad	_ZTINSt13__future_base7_ResultIN7openpal10LogFiltersEEE
+	.quad	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEE10_M_destroyEv
+	.quad	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED1Ev
+	.quad	_ZNSt13__future_base7_ResultIN7openpal10LogFiltersEED0Ev
+	.weak	_ZTVNSt13__future_base7_ResultIbEE
+	.section	.data.rel.ro._ZTVNSt13__future_base7_ResultIbEE,"awG",@progbits,_ZTVNSt13__future_base7_ResultIbEE,comdat
+	.align 8
+	.type	_ZTVNSt13__future_base7_ResultIbEE, @object
+	.size	_ZTVNSt13__future_base7_ResultIbEE, 40
+_ZTVNSt13__future_base7_ResultIbEE:
+	.quad	0
+	.quad	_ZTINSt13__future_base7_ResultIbEE
+	.quad	_ZNSt13__future_base7_ResultIbE10_M_destroyEv
+	.quad	_ZNSt13__future_base7_ResultIbED1Ev
+	.quad	_ZNSt13__future_base7_ResultIbED0Ev
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7openpal6Logger8SettingsESaIS2_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceINSt13__future_base13_State_baseV2ESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN7asiopal15ResourceManagerESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp311MasterStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8asiodnp315OutstationStackESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E
+	.section	.tbss._ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E,"awTG",@nobits,_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E,comdat
+	.align 8
+	.type	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E, @gnu_unique_object
+	.size	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E, 8
+_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_14strand_service11strand_implEhE7contextEE6value_E:
+	.zero	8
+	.weak	_ZGVZN4asio5error17get_misc_categoryEvE8instance
+	.section	.bss._ZGVZN4asio5error17get_misc_categoryEvE8instance,"awG",@nobits,_ZGVZN4asio5error17get_misc_categoryEvE8instance,comdat
+	.align 8
+	.type	_ZGVZN4asio5error17get_misc_categoryEvE8instance, @gnu_unique_object
+	.size	_ZGVZN4asio5error17get_misc_categoryEvE8instance, 8
+_ZGVZN4asio5error17get_misc_categoryEvE8instance:
+	.zero	8
+	.weak	_ZZN4asio5error17get_misc_categoryEvE8instance
+	.section	.data.rel._ZZN4asio5error17get_misc_categoryEvE8instance,"awG",@progbits,_ZZN4asio5error17get_misc_categoryEvE8instance,comdat
+	.align 8
+	.type	_ZZN4asio5error17get_misc_categoryEvE8instance, @gnu_unique_object
+	.size	_ZZN4asio5error17get_misc_categoryEvE8instance, 8
+_ZZN4asio5error17get_misc_categoryEvE8instance:
+	.quad	_ZTVN4asio5error6detail13misc_categoryE+16
+	.weak	_ZGVZN4asio5error21get_addrinfo_categoryEvE8instance
+	.section	.bss._ZGVZN4asio5error21get_addrinfo_categoryEvE8instance,"awG",@nobits,_ZGVZN4asio5error21get_addrinfo_categoryEvE8instance,comdat
+	.align 8
+	.type	_ZGVZN4asio5error21get_addrinfo_categoryEvE8instance, @gnu_unique_object
+	.size	_ZGVZN4asio5error21get_addrinfo_categoryEvE8instance, 8
+_ZGVZN4asio5error21get_addrinfo_categoryEvE8instance:
+	.zero	8
+	.weak	_ZZN4asio5error21get_addrinfo_categoryEvE8instance
+	.section	.data.rel._ZZN4asio5error21get_addrinfo_categoryEvE8instance,"awG",@progbits,_ZZN4asio5error21get_addrinfo_categoryEvE8instance,comdat
+	.align 8
+	.type	_ZZN4asio5error21get_addrinfo_categoryEvE8instance, @gnu_unique_object
+	.size	_ZZN4asio5error21get_addrinfo_categoryEvE8instance, 8
+_ZZN4asio5error21get_addrinfo_categoryEvE8instance:
+	.quad	_ZTVN4asio5error6detail17addrinfo_categoryE+16
+	.weak	_ZGVZN4asio5error18get_netdb_categoryEvE8instance
+	.section	.bss._ZGVZN4asio5error18get_netdb_categoryEvE8instance,"awG",@nobits,_ZGVZN4asio5error18get_netdb_categoryEvE8instance,comdat
+	.align 8
+	.type	_ZGVZN4asio5error18get_netdb_categoryEvE8instance, @gnu_unique_object
+	.size	_ZGVZN4asio5error18get_netdb_categoryEvE8instance, 8
+_ZGVZN4asio5error18get_netdb_categoryEvE8instance:
+	.zero	8
+	.weak	_ZZN4asio5error18get_netdb_categoryEvE8instance
+	.section	.data.rel._ZZN4asio5error18get_netdb_categoryEvE8instance,"awG",@progbits,_ZZN4asio5error18get_netdb_categoryEvE8instance,comdat
+	.align 8
+	.type	_ZZN4asio5error18get_netdb_categoryEvE8instance, @gnu_unique_object
+	.size	_ZZN4asio5error18get_netdb_categoryEvE8instance, 8
+_ZZN4asio5error18get_netdb_categoryEvE8instance:
+	.quad	_ZTVN4asio5error6detail14netdb_categoryE+16
+	.weak	_ZGVZN4asio15system_categoryEvE8instance
+	.section	.bss._ZGVZN4asio15system_categoryEvE8instance,"awG",@nobits,_ZGVZN4asio15system_categoryEvE8instance,comdat
+	.align 8
+	.type	_ZGVZN4asio15system_categoryEvE8instance, @gnu_unique_object
+	.size	_ZGVZN4asio15system_categoryEvE8instance, 8
+_ZGVZN4asio15system_categoryEvE8instance:
+	.zero	8
+	.weak	_ZZN4asio15system_categoryEvE8instance
+	.section	.data.rel._ZZN4asio15system_categoryEvE8instance,"awG",@progbits,_ZZN4asio15system_categoryEvE8instance,comdat
+	.align 8
+	.type	_ZZN4asio15system_categoryEvE8instance, @gnu_unique_object
+	.size	_ZZN4asio15system_categoryEvE8instance, 8
+_ZZN4asio15system_categoryEvE8instance:
+	.quad	_ZTVN4asio6detail15system_categoryE+16
+	.weak	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E
+	.section	.tbss._ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E,"awTG",@nobits,_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E,comdat
+	.align 8
+	.type	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E, @gnu_unique_object
+	.size	_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E, 8
+_ZN4asio6detail15keyword_tss_ptrINS0_10call_stackINS0_15task_io_serviceENS0_27task_io_service_thread_infoEE7contextEE6value_E:
+	.zero	8
+	.weak	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag
+	.section	.rodata._ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag,"aG",@progbits,_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag,comdat
+	.align 8
+	.type	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag, @gnu_unique_object
+	.size	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag, 16
+_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag:
+	.zero	16
+	.weakref	_ZL28__gthrw___pthread_key_createPjPFvPvE,__pthread_key_create
+	.weakref	_ZL28__gthrw_pthread_mutex_unlockP15pthread_mutex_t,pthread_mutex_unlock
+	.weakref	_ZL26__gthrw_pthread_mutex_lockP15pthread_mutex_t,pthread_mutex_lock
+	.weakref	_ZL20__gthrw_pthread_oncePiPFvvE,pthread_once
+	.section	.rodata.cst16,"aM",@progbits,16
+	.align 16
+.LC7:
+	.quad	8028075772644520015
+	.quad	7310593917846626414
+	.align 16
+.LC8:
+	.quad	2334381286471394643
+	.quad	7959390400869068654
+	.align 16
+.LC9:
+	.quad	8367816086596579155
+	.quad	2338616625292734585
+	.align 16
+.LC10:
+	.quad	7234013753529430881
+	.quad	8243030355803531634
+	.align 16
+.LC11:
+	.quad	8390045716486254408
+	.quad	2891421386351273504
+	.align 16
+.LC12:
+	.quad	7526769937477431150
+	.quad	8532478930943832687
+	.align 16
+.LC13:
+	.quad	2340027324477221221
+	.quad	7020021577750243169
+	.align 16
+.LC14:
+	.quad	8243123821706831956
+	.quad	7809653110584451193
+	.align 16
+.LC15:
+	.quad	2338623170819155049
+	.quad	2338324160631043177
+	.align 16
+.LC16:
+	.quad	7311138144931573614
+	.quad	7019250824563089696
+	.align 16
+.LC17:
+	.quad	7309955097514876993
+	.quad	7809911847770287971
+	.align 16
+.LC18:
+	.quad	2338053693894893669
+	.quad	7234314212361855855
+	.align 16
+.LC19:
+	.quad	2334956330985808928
+	.quad	7310293695322153316
+	.align 16
+.LC20:
+	.quad	8387231026764149601
+	.quad	8245935278387126884
+	.align 16
+.LC21:
+	.quad	2338615488418245701
+	.quad	7959390400869068654
+	.align 16
+.LC22:
+	.quad	7166182912791242836
+	.quad	7214892426067994994
+	.align 16
+.LC23:
+	.quad	2338616625293649263
+	.quad	8031165433303558502
+	.align 16
+.LC24:
+	.quad	7810775711721485344
+	.quad	7812726531955123045
+	.section	.rodata.cst8,"aM",@progbits,8
+	.align 8
+.LC28:
+	.long	1
+	.long	1
+	.hidden	DW.ref.__gxx_personality_v0
+	.weak	DW.ref.__gxx_personality_v0
+	.section	.data.rel.local.DW.ref.__gxx_personality_v0,"awG",@progbits,DW.ref.__gxx_personality_v0,comdat
+	.align 8
+	.type	DW.ref.__gxx_personality_v0, @object
+	.size	DW.ref.__gxx_personality_v0, 8
+DW.ref.__gxx_personality_v0:
+	.quad	__gxx_personality_v0
+	.hidden	__dso_handle
+	.ident	"GCC: (GNU) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2)"
+	.section	.note.GNU-stack,"",@progbits

@@ -16,6 +16,7 @@ set( PROJ_DIR                       ${CMAKE_CURRENT_SOURCE_DIR}     ) # PROJ pro
 set( CMAKE_DIR                      ${PROJ_DIR}/cmake               ) # PROJ cmake files directory
 
 set( PROJ_SRC_DIR                   ${PROJ_DIR}                     ) # PROJ sources directory
+set( PROJ_MOD_DIR                   ${PROJ_DIR}/utils               ) # PROJ iec2c directory
 set( PROJ_IEC_DIR                   ${PROJ_DIR}/iec                 ) # PROJ iec2c directory
 set( PROJ_INC_DIR                   ${PROJ_DIR}/lib                 ) # PROJ includes directory
 set( PROJ_CMP_DIR                   ${PROJ_DIR}/matiec              ) # IEC to C compiler directory
@@ -35,6 +36,15 @@ set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/plc.st     ) # ST sourc
 #message("== CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
 #message("== CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
+# dnp3 library
+#add_subdirectory("${PROJ_MOD_DIR}/dnp3_src")
+
+# Libmodbus library
+include(${CMAKE_DIR}/modbus_build.cmake)
+
+include(${CMAKE_DIR}/dnp3_build.cmake)
+
+
 ################################
 execute_process(
         WORKING_DIRECTORY "${PROJ_IEC_DIR}"
@@ -46,12 +56,13 @@ execute_process(
         ${PROJ_IEC_DIR}
 )
 
-#add_custom_target(build-iec
 execute_process(
     WORKING_DIRECTORY "${PROJ_IEC_DIR}"
     COMMAND ${CMAKE_COMMAND} --build . --target build-iec
 )
 ################################
+
+
 
 ##-------------------------------------------------------------------------------
 ## 4) Главный исполняемый модуль ${proj} = 'procont-ex'
@@ -61,10 +72,13 @@ include(${CMAKE_DIR}/tools.cmake)
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки
 #-------------------------------------------------------------------------------
-find_package(AsioPAL REQUIRED)
+find_package(AsioPAL  REQUIRED)
 find_package(AsioDNP3 REQUIRED)
-find_package(OpenPAL REQUIRED)
+find_package(OpenPAL  REQUIRED)
 find_package(OpenDNP3 REQUIRED)
+find_package(modbus   REQUIRED)
+
+message(STATUS "dist_include = \"${dist_include}\"")
 
 #-------------------------------------------------------------------------------
 # Главный исполняемый модуль ${proj}
@@ -74,10 +88,12 @@ build_target(
     EXE
     OPTS -g -O0 -w -fPIC
     INCS
+        ${dist_include}
         ${PROJ_SRC_DIR}
         ${PROJ_INC_DIR}
         ${PROJ_IEC_DIR}
-        "/usr/local/include/modbus"
+#        "~/.local/include/modbus"
+        ${modbus_INCLUDE_DIRS}
 
     SRCS
         ${PROJ_IEC_DIR}/glueVars.cpp
@@ -85,15 +101,19 @@ build_target(
         :MASK ${PROJ_IEC_DIR}/*.o
 
     LNKS
-        pthread
+        #pthread
+
         modbus
-        ${AsioPAL_LIBRARIES}  #asiopal
-        ${AsioDNP3_LIBRARIES} #asiodnp3
-        ${OpenPAL_LIBRARIES}  #openpal
-        ${OpenDNP3_LIBRARIES} #opendnp3
+        #${modbus_LIBRARIES}
+
+        ${AsioPAL_LIBRARIES}
+        ${AsioDNP3_LIBRARIES}
+        ${OpenPAL_LIBRARIES}
+        ${OpenDNP3_LIBRARIES}
+
 )
 
-#add_dependencies(${proj} build-iec)
+#add_dependencies(${proj} dnp3)
 
 #-------------------------------------------------------------------------------
 #add_custom_command(

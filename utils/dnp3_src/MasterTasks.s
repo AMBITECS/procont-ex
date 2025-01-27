@@ -1,0 +1,3334 @@
+	.file	"MasterTasks.cpp"
+	.text
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB4553:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE4553:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB4560:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE4560:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB4563:
+	.cfi_startproc
+	movq	16(%rdi), %rax
+	leaq	16(%rdi), %r8
+	movq	%r8, %rdi
+	movq	(%rax), %rax
+	jmp	*%rax
+	.cfi_endproc
+.LFE4563:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB4567:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE4567:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB4574:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE4574:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB4581:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE4581:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB4588:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE4588:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev:
+.LFB4595:
+	.cfi_startproc
+	ret
+	.cfi_endproc
+.LFE4595:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.set	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED2Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB4556:
+	.cfi_startproc
+	movq	_ZTVN8opendnp312PollTaskBaseE@GOTPCREL(%rip), %rax
+	addq	$16, %rdi
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZN8opendnp311IMasterTaskD2Ev@PLT
+	.cfi_endproc
+.LFE4556:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB4570:
+	.cfi_startproc
+	movq	_ZTVN8opendnp322DisableUnsolicitedTaskE@GOTPCREL(%rip), %rax
+	addq	$16, %rdi
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZN8opendnp311IMasterTaskD2Ev@PLT
+	.cfi_endproc
+.LFE4570:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB4577:
+	.cfi_startproc
+	movq	_ZTVN8opendnp312PollTaskBaseE@GOTPCREL(%rip), %rax
+	addq	$16, %rdi
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZN8opendnp311IMasterTaskD2Ev@PLT
+	.cfi_endproc
+.LFE4577:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB4584:
+	.cfi_startproc
+	movq	_ZTVN8opendnp315AssignClassTaskE@GOTPCREL(%rip), %rax
+	addq	$16, %rdi
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZN8opendnp311IMasterTaskD2Ev@PLT
+	.cfi_endproc
+.LFE4584:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB4591:
+	.cfi_startproc
+	movq	_ZTVN8opendnp316ClearRestartTaskE@GOTPCREL(%rip), %rax
+	addq	$16, %rdi
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZN8opendnp311IMasterTaskD2Ev@PLT
+	.cfi_endproc
+.LFE4591:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv:
+.LFB4598:
+	.cfi_startproc
+	movq	_ZTVN8opendnp321EnableUnsolicitedTaskE@GOTPCREL(%rip), %rax
+	addq	$16, %rdi
+	addq	$16, %rax
+	movq	%rax, (%rdi)
+	jmp	_ZN8opendnp311IMasterTaskD2Ev@PLT
+	.cfi_endproc
+.LFE4598:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB4597:
+	.cfi_startproc
+	movl	$120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4597:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB4590:
+	.cfi_startproc
+	movl	$112, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4590:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB4583:
+	.cfi_startproc
+	movl	$112, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4583:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB4576:
+	.cfi_startproc
+	movl	$136, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4576:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB4569:
+	.cfi_startproc
+	movl	$120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4569:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB4562:
+	.cfi_startproc
+	movl	$120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4562:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev:
+.LFB4555:
+	.cfi_startproc
+	movl	$136, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4555:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB4557:
+	.cfi_startproc
+	movl	$136, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4557:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB4564:
+	.cfi_startproc
+	movl	$120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4564:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB4571:
+	.cfi_startproc
+	movl	$120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4571:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB4578:
+	.cfi_startproc
+	movl	$136, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4578:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB4585:
+	.cfi_startproc
+	movl	$112, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4585:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB4592:
+	.cfi_startproc
+	movl	$112, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4592:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv:
+.LFB4599:
+	.cfi_startproc
+	movl	$120, %esi
+	jmp	_ZdlPvm@PLT
+	.cfi_endproc
+.LFE4599:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB4600:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L30
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L30
+	cmpb	$42, (%rdi)
+	je	.L32
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L30:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L32:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE4600:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB4558:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L35
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L35
+	cmpb	$42, (%rdi)
+	je	.L37
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L35:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L37:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE4558:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB4565:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L40
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L40
+	cmpb	$42, (%rdi)
+	je	.L42
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L40:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L42:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE4565:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB4572:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L45
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L45
+	cmpb	$42, (%rdi)
+	je	.L47
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L45:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L47:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE4572:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB4579:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L50
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L50
+	cmpb	$42, (%rdi)
+	je	.L52
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L50:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L52:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE4579:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB4586:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L55
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L55
+	cmpb	$42, (%rdi)
+	je	.L57
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L55:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L57:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE4586:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,"axG",@progbits,_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.type	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, @function
+_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info:
+.LFB4593:
+	.cfi_startproc
+	cmpq	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag@GOTPCREL(%rip), %rsi
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	leaq	16(%rdi), %r12
+	je	.L60
+	movq	8(%rsi), %rdi
+	movq	_ZTSSt19_Sp_make_shared_tag@GOTPCREL(%rip), %rsi
+	cmpq	%rsi, %rdi
+	je	.L60
+	cmpb	$42, (%rdi)
+	je	.L62
+	call	strcmp@PLT
+	testl	%eax, %eax
+	movl	$0, %eax
+	cmovne	%rax, %r12
+.L60:
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L62:
+	.cfi_restore_state
+	xorl	%r12d, %r12d
+	movq	%r12, %rax
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE4593:
+	.size	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info, .-_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.section	.text._ZN7openpal6LoggerD2Ev,"axG",@progbits,_ZN7openpal6LoggerD5Ev,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZN7openpal6LoggerD2Ev
+	.type	_ZN7openpal6LoggerD2Ev, @function
+_ZN7openpal6LoggerD2Ev:
+.LFB2043:
+	.cfi_startproc
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	pushq	%rbp
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	24(%rdi), %rbp
+	movq	%rdi, %rbx
+	testq	%rbp, %rbp
+	je	.L67
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L81
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L69:
+	cmpl	$1, %eax
+	je	.L82
+.L67:
+	movq	8(%rbx), %rbp
+	testq	%rbp, %rbp
+	je	.L65
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %r12
+	testq	%r12, %r12
+	jne	.L83
+	movl	8(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rbp)
+.L76:
+	cmpl	$1, %eax
+	je	.L84
+.L65:
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L82:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L85
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L72:
+	cmpl	$1, %eax
+	jne	.L67
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*24(%rax)
+	jmp	.L67
+	.p2align 4,,10
+	.p2align 3
+.L84:
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%r12, %r12
+	jne	.L86
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L79:
+	cmpl	$1, %eax
+	jne	.L65
+	movq	0(%rbp), %rax
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	movq	%rbp, %rdi
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
+	movq	24(%rax), %rax
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L81:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L69
+	.p2align 4,,10
+	.p2align 3
+.L83:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rbp)
+	jmp	.L76
+	.p2align 4,,10
+	.p2align 3
+.L85:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L72
+	.p2align 4,,10
+	.p2align 3
+.L86:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L79
+	.cfi_endproc
+.LFE2043:
+	.size	_ZN7openpal6LoggerD2Ev, .-_ZN7openpal6LoggerD2Ev
+	.weak	_ZN7openpal6LoggerD1Ev
+	.set	_ZN7openpal6LoggerD1Ev,_ZN7openpal6LoggerD2Ev
+	.section	.text._ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv,"axG",@progbits,_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv
+	.type	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv, @function
+_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
+.LFB3566:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rdi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 32
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L96
+	movl	8(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%rdi)
+.L89:
+	cmpl	$1, %eax
+	je	.L97
+.L87:
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L97:
+	.cfi_restore_state
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L98
+	movl	12(%rbp), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rbp)
+.L93:
+	cmpl	$1, %eax
+	jne	.L87
+	movq	0(%rbp), %rax
+	movq	%rbp, %rdi
+	movq	24(%rax), %rax
+	addq	$8, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 24
+	popq	%rbx
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
+	jmp	*%rax
+	.p2align 4,,10
+	.p2align 3
+.L96:
+	.cfi_restore_state
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%rdi)
+	jmp	.L89
+	.p2align 4,,10
+	.p2align 3
+.L98:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rbp)
+	jmp	.L93
+	.cfi_endproc
+.LFE3566:
+	.size	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv, .-_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv
+	.section	.text.unlikely,"ax",@progbits
+	.align 2
+.LCOLDB0:
+	.text
+.LHOTB0:
+	.align 2
+	.p2align 4
+	.globl	_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE
+	.type	_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE, @function
+_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE:
+.LFB3086:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA3086
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	movq	%rsi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	movq	%rdi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	subq	$32, %rsp
+	.cfi_def_cfa_offset 80
+	movdqu	(%rdi), %xmm0
+	movq	%fs:40, %rax
+	movq	%rax, 24(%rsp)
+	movq	8(%rdi), %rax
+	movaps	%xmm0, (%rsp)
+	testq	%rax, %rax
+	je	.L100
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L231
+	addl	$1, 8(%rax)
+.L100:
+	movq	%rsp, %r13
+	movq	%r12, %rdi
+	movq	%r13, %rsi
+.LEHB0:
+	call	_ZN8opendnp315MasterScheduler8ScheduleERKSt10shared_ptrINS_11IMasterTaskEE@PLT
+.LEHE0:
+	movq	8(%rsp), %r14
+	testq	%r14, %r14
+	je	.L103
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L232
+	movl	8(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r14)
+.L105:
+	cmpl	$1, %eax
+	je	.L233
+.L103:
+	movdqu	16(%rbp), %xmm1
+	movq	24(%rbp), %rax
+	movaps	%xmm1, (%rsp)
+	testq	%rax, %rax
+	je	.L109
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L234
+	addl	$1, 8(%rax)
+.L109:
+	movq	%r13, %rsi
+	movq	%r12, %rdi
+.LEHB1:
+	call	_ZN8opendnp315MasterScheduler8ScheduleERKSt10shared_ptrINS_11IMasterTaskEE@PLT
+.LEHE1:
+	movq	8(%rsp), %r14
+	testq	%r14, %r14
+	je	.L112
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L235
+	movl	8(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r14)
+.L114:
+	cmpl	$1, %eax
+	je	.L236
+.L112:
+	movdqu	32(%rbp), %xmm2
+	movq	40(%rbp), %rax
+	movaps	%xmm2, (%rsp)
+	testq	%rax, %rax
+	je	.L118
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L237
+	addl	$1, 8(%rax)
+.L118:
+	movq	%r13, %rsi
+	movq	%r12, %rdi
+.LEHB2:
+	call	_ZN8opendnp315MasterScheduler8ScheduleERKSt10shared_ptrINS_11IMasterTaskEE@PLT
+.LEHE2:
+	movq	8(%rsp), %r14
+	testq	%r14, %r14
+	je	.L121
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L238
+	movl	8(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r14)
+.L123:
+	cmpl	$1, %eax
+	je	.L239
+.L121:
+	movdqu	48(%rbp), %xmm3
+	movq	56(%rbp), %rax
+	movaps	%xmm3, (%rsp)
+	testq	%rax, %rax
+	je	.L127
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L240
+	addl	$1, 8(%rax)
+.L127:
+	movq	%r13, %rsi
+	movq	%r12, %rdi
+.LEHB3:
+	call	_ZN8opendnp315MasterScheduler8ScheduleERKSt10shared_ptrINS_11IMasterTaskEE@PLT
+.LEHE3:
+	movq	8(%rsp), %r14
+	testq	%r14, %r14
+	je	.L130
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L241
+	movl	8(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r14)
+.L132:
+	cmpl	$1, %eax
+	je	.L242
+.L130:
+	movdqu	64(%rbp), %xmm4
+	movq	72(%rbp), %rax
+	movaps	%xmm4, (%rsp)
+	testq	%rax, %rax
+	je	.L136
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L243
+	addl	$1, 8(%rax)
+.L136:
+	movq	%r13, %rsi
+	movq	%r12, %rdi
+.LEHB4:
+	call	_ZN8opendnp315MasterScheduler8ScheduleERKSt10shared_ptrINS_11IMasterTaskEE@PLT
+.LEHE4:
+	movq	8(%rsp), %r14
+	testq	%r14, %r14
+	je	.L139
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L244
+	movl	8(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r14)
+.L141:
+	cmpl	$1, %eax
+	je	.L245
+.L139:
+	movdqu	80(%rbp), %xmm5
+	movq	88(%rbp), %rax
+	movaps	%xmm5, (%rsp)
+	testq	%rax, %rax
+	je	.L145
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L246
+	addl	$1, 8(%rax)
+.L145:
+	movq	%r13, %rsi
+	movq	%r12, %rdi
+.LEHB5:
+	call	_ZN8opendnp315MasterScheduler8ScheduleERKSt10shared_ptrINS_11IMasterTaskEE@PLT
+.LEHE5:
+	movq	8(%rsp), %r14
+	testq	%r14, %r14
+	je	.L148
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L247
+	movl	8(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r14)
+.L150:
+	cmpl	$1, %eax
+	je	.L248
+.L148:
+	movdqu	96(%rbp), %xmm6
+	movq	104(%rbp), %rax
+	movaps	%xmm6, (%rsp)
+	testq	%rax, %rax
+	je	.L154
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L249
+	addl	$1, 8(%rax)
+.L154:
+	movq	%r13, %rsi
+	movq	%r12, %rdi
+.LEHB6:
+	call	_ZN8opendnp315MasterScheduler8ScheduleERKSt10shared_ptrINS_11IMasterTaskEE@PLT
+.LEHE6:
+	movq	8(%rsp), %r13
+	testq	%r13, %r13
+	je	.L157
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rbx
+	testq	%rbx, %rbx
+	jne	.L250
+	movl	8(%r13), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 8(%r13)
+.L159:
+	cmpl	$1, %eax
+	je	.L251
+.L157:
+	movq	112(%rbp), %rbx
+	movq	120(%rbp), %rbp
+	cmpq	%rbx, %rbp
+	je	.L99
+	.p2align 4,,10
+	.p2align 3
+.L164:
+	movq	%rbx, %rsi
+	movq	%r12, %rdi
+	addq	$16, %rbx
+.LEHB7:
+	call	_ZN8opendnp315MasterScheduler8ScheduleERKSt10shared_ptrINS_11IMasterTaskEE@PLT
+.LEHE7:
+	cmpq	%rbx, %rbp
+	jne	.L164
+.L99:
+	movq	24(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L252
+	addq	$32, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 48
+	popq	%rbx
+	.cfi_def_cfa_offset 40
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L233:
+	.cfi_restore_state
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L253
+	movl	12(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r14)
+.L108:
+	cmpl	$1, %eax
+	jne	.L103
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*24(%rax)
+	jmp	.L103
+	.p2align 4,,10
+	.p2align 3
+.L236:
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L254
+	movl	12(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r14)
+.L117:
+	cmpl	$1, %eax
+	jne	.L112
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*24(%rax)
+	jmp	.L112
+	.p2align 4,,10
+	.p2align 3
+.L242:
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L255
+	movl	12(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r14)
+.L135:
+	cmpl	$1, %eax
+	jne	.L130
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*24(%rax)
+	jmp	.L130
+	.p2align 4,,10
+	.p2align 3
+.L239:
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L256
+	movl	12(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r14)
+.L126:
+	cmpl	$1, %eax
+	jne	.L121
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*24(%rax)
+	jmp	.L121
+	.p2align 4,,10
+	.p2align 3
+.L245:
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L257
+	movl	12(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r14)
+.L144:
+	cmpl	$1, %eax
+	jne	.L139
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*24(%rax)
+	jmp	.L139
+	.p2align 4,,10
+	.p2align 3
+.L248:
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L258
+	movl	12(%r14), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r14)
+.L153:
+	cmpl	$1, %eax
+	jne	.L148
+	movq	(%r14), %rax
+	movq	%r14, %rdi
+	call	*24(%rax)
+	jmp	.L148
+	.p2align 4,,10
+	.p2align 3
+.L251:
+	movq	0(%r13), %rax
+	movq	%r13, %rdi
+	call	*16(%rax)
+	testq	%rbx, %rbx
+	jne	.L259
+	movl	12(%r13), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r13)
+.L162:
+	cmpl	$1, %eax
+	jne	.L157
+	movq	0(%r13), %rax
+	movq	%r13, %rdi
+	call	*24(%rax)
+	jmp	.L157
+	.p2align 4,,10
+	.p2align 3
+.L247:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r14)
+	jmp	.L150
+	.p2align 4,,10
+	.p2align 3
+.L232:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r14)
+	jmp	.L105
+	.p2align 4,,10
+	.p2align 3
+.L235:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r14)
+	jmp	.L114
+	.p2align 4,,10
+	.p2align 3
+.L241:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r14)
+	jmp	.L132
+	.p2align 4,,10
+	.p2align 3
+.L238:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r14)
+	jmp	.L123
+	.p2align 4,,10
+	.p2align 3
+.L244:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r14)
+	jmp	.L141
+	.p2align 4,,10
+	.p2align 3
+.L250:
+	movl	$-1, %eax
+	lock xaddl	%eax, 8(%r13)
+	jmp	.L159
+	.p2align 4,,10
+	.p2align 3
+.L249:
+	lock addl	$1, 8(%rax)
+	jmp	.L154
+	.p2align 4,,10
+	.p2align 3
+.L240:
+	lock addl	$1, 8(%rax)
+	jmp	.L127
+	.p2align 4,,10
+	.p2align 3
+.L243:
+	lock addl	$1, 8(%rax)
+	jmp	.L136
+	.p2align 4,,10
+	.p2align 3
+.L231:
+	lock addl	$1, 8(%rax)
+	jmp	.L100
+	.p2align 4,,10
+	.p2align 3
+.L234:
+	lock addl	$1, 8(%rax)
+	jmp	.L109
+	.p2align 4,,10
+	.p2align 3
+.L237:
+	lock addl	$1, 8(%rax)
+	jmp	.L118
+	.p2align 4,,10
+	.p2align 3
+.L246:
+	lock addl	$1, 8(%rax)
+	jmp	.L145
+.L259:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r13)
+	jmp	.L162
+.L253:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r14)
+	jmp	.L108
+.L255:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r14)
+	jmp	.L135
+.L254:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r14)
+	jmp	.L117
+.L256:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r14)
+	jmp	.L126
+.L257:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r14)
+	jmp	.L144
+.L258:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r14)
+	jmp	.L153
+.L252:
+	call	__stack_chk_fail@PLT
+.L181:
+	movq	%rax, %rbp
+	jmp	.L167
+.L180:
+	movq	%rax, %rbp
+	jmp	.L165
+.L186:
+	movq	%rax, %rbp
+	jmp	.L177
+.L184:
+	movq	%rax, %rbp
+	jmp	.L173
+.L182:
+	movq	%rax, %rbp
+	jmp	.L169
+.L183:
+	movq	%rax, %rbp
+	jmp	.L171
+.L185:
+	movq	%rax, %rbp
+	jmp	.L175
+	.globl	__gxx_personality_v0
+	.section	.gcc_except_table,"a",@progbits
+.LLSDA3086:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE3086-.LLSDACSB3086
+.LLSDACSB3086:
+	.uleb128 .LEHB0-.LFB3086
+	.uleb128 .LEHE0-.LEHB0
+	.uleb128 .L180-.LFB3086
+	.uleb128 0
+	.uleb128 .LEHB1-.LFB3086
+	.uleb128 .LEHE1-.LEHB1
+	.uleb128 .L181-.LFB3086
+	.uleb128 0
+	.uleb128 .LEHB2-.LFB3086
+	.uleb128 .LEHE2-.LEHB2
+	.uleb128 .L182-.LFB3086
+	.uleb128 0
+	.uleb128 .LEHB3-.LFB3086
+	.uleb128 .LEHE3-.LEHB3
+	.uleb128 .L183-.LFB3086
+	.uleb128 0
+	.uleb128 .LEHB4-.LFB3086
+	.uleb128 .LEHE4-.LEHB4
+	.uleb128 .L184-.LFB3086
+	.uleb128 0
+	.uleb128 .LEHB5-.LFB3086
+	.uleb128 .LEHE5-.LEHB5
+	.uleb128 .L185-.LFB3086
+	.uleb128 0
+	.uleb128 .LEHB6-.LFB3086
+	.uleb128 .LEHE6-.LEHB6
+	.uleb128 .L186-.LFB3086
+	.uleb128 0
+	.uleb128 .LEHB7-.LFB3086
+	.uleb128 .LEHE7-.LEHB7
+	.uleb128 0
+	.uleb128 0
+.LLSDACSE3086:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC3086
+	.type	_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE.cold, @function
+_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE.cold:
+.LFSB3086:
+.L167:
+	.cfi_def_cfa_offset 80
+	.cfi_offset 3, -48
+	.cfi_offset 6, -40
+	.cfi_offset 12, -32
+	.cfi_offset 13, -24
+	.cfi_offset 14, -16
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L168
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L168:
+	movq	%rbp, %rdi
+.LEHB8:
+	call	_Unwind_Resume@PLT
+.L165:
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L166
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L166:
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.L177:
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L178
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L178:
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.L173:
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L174
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L174:
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.L169:
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L170
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L170:
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.L171:
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L172
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L172:
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.L175:
+	movq	8(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L176
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L176:
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.LEHE8:
+	.cfi_endproc
+.LFE3086:
+	.section	.gcc_except_table
+.LLSDAC3086:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC3086-.LLSDACSBC3086
+.LLSDACSBC3086:
+	.uleb128 .LEHB8-.LCOLDB0
+	.uleb128 .LEHE8-.LEHB8
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC3086:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE, .-_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE
+	.section	.text.unlikely
+	.size	_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE.cold, .-_ZN8opendnp311MasterTasks10InitializeERNS_15MasterSchedulerE.cold
+.LCOLDE0:
+	.text
+.LHOTE0:
+	.section	.text.unlikely
+	.align 2
+.LCOLDB2:
+	.text
+.LHOTB2:
+	.align 2
+	.p2align 4
+	.globl	_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE
+	.type	_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE, @function
+_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE:
+.LFB3084:
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDA3084
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	movq	%rcx, %r13
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	movq	%rsi, %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	movq	%rdi, %rbp
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	movq	%rdx, %rbx
+	subq	$104, %rsp
+	.cfi_def_cfa_offset 160
+	movq	%r8, 16(%rsp)
+	movq	%fs:40, %rax
+	movq	%rax, 88(%rsp)
+	xorl	%eax, %eax
+	movq	$0, (%rdi)
+	movl	$120, %edi
+.LEHB9:
+	call	_Znwm@PLT
+.LEHE9:
+	movq	.LC1(%rip), %r15
+	movdqu	(%rbx), %xmm1
+	movq	%rax, %rsi
+	movq	%rax, 24(%rsp)
+	movq	16(%r12), %rcx
+	movq	%r15, 8(%rax)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	movzbl	11(%r12), %edx
+	movaps	%xmm1, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rsi)
+	leaq	16(%rsi), %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rbx), %rax
+	testq	%rax, %rax
+	je	.L261
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L494
+	addl	$1, 8(%rax)
+.L261:
+	movdqu	16(%rbx), %xmm2
+	movq	24(%rbx), %rax
+	movaps	%xmm2, 64(%rsp)
+	testq	%rax, %rax
+	je	.L263
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L495
+	addl	$1, 8(%rax)
+.L263:
+	leaq	48(%rsp), %r14
+	movq	8(%rsp), %rdi
+	movq	%r13, %rsi
+	movq	%r14, %r8
+.LEHB10:
+	call	_ZN8opendnp321EnableUnsolicitedTaskC1ERNS_18IMasterApplicationENS_10ClassFieldEN7openpal12TimeDurationENS4_6LoggerE@PLT
+.LEHE10:
+	movq	72(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L266
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L496
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L268:
+	cmpl	$1, %edx
+	je	.L497
+.L266:
+	movq	56(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L273
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L498
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L275:
+	cmpl	$1, %edx
+	je	.L499
+.L273:
+	movq	24(%rsp), %rax
+	movq	$0, 16(%rbp)
+	movl	$112, %edi
+	movq	%rax, 8(%rbp)
+	movq	8(%rsp), %rax
+	movq	%rax, 0(%rbp)
+.LEHB11:
+	call	_Znwm@PLT
+.LEHE11:
+	movq	%rax, %rsi
+	movdqu	(%rbx), %xmm3
+	movq	16(%r12), %rdx
+	movq	%r15, 8(%rax)
+	movq	%rax, 24(%rsp)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	movaps	%xmm3, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rsi)
+	leaq	16(%rsi), %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rbx), %rax
+	testq	%rax, %rax
+	je	.L281
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L500
+	addl	$1, 8(%rax)
+.L281:
+	movdqu	16(%rbx), %xmm4
+	movq	24(%rbx), %rax
+	movaps	%xmm4, 64(%rsp)
+	testq	%rax, %rax
+	je	.L283
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L501
+	addl	$1, 8(%rax)
+.L283:
+	movq	8(%rsp), %rdi
+	movq	%r14, %rcx
+	movq	%r13, %rsi
+.LEHB12:
+	call	_ZN8opendnp316ClearRestartTaskC1ERNS_18IMasterApplicationEN7openpal12TimeDurationENS3_6LoggerE@PLT
+.LEHE12:
+	movq	72(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L286
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L502
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L288:
+	cmpl	$1, %edx
+	je	.L503
+.L286:
+	movq	56(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L293
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L504
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L295:
+	cmpl	$1, %edx
+	je	.L505
+.L293:
+	movq	24(%rsp), %rax
+	movq	$0, 32(%rbp)
+	movl	$112, %edi
+	movq	%rax, 24(%rbp)
+	movq	8(%rsp), %rax
+	movq	%rax, 16(%rbp)
+.LEHB13:
+	call	_Znwm@PLT
+.LEHE13:
+	movq	%rax, %rcx
+	movdqu	(%rbx), %xmm5
+	movq	16(%r12), %rdx
+	movq	%r15, 8(%rax)
+	movq	%rax, 24(%rsp)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	movaps	%xmm5, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rcx)
+	leaq	16(%rcx), %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rbx), %rax
+	testq	%rax, %rax
+	je	.L302
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L506
+	addl	$1, 8(%rax)
+.L302:
+	movdqu	16(%rbx), %xmm6
+	movq	24(%rbx), %rax
+	movaps	%xmm6, 64(%rsp)
+	testq	%rax, %rax
+	je	.L304
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L507
+	addl	$1, 8(%rax)
+.L304:
+	movq	8(%rsp), %rdi
+	movq	%r14, %rcx
+	movq	%r13, %rsi
+.LEHB14:
+	call	_ZN8opendnp315AssignClassTaskC1ERNS_18IMasterApplicationEN7openpal12TimeDurationENS3_6LoggerE@PLT
+.LEHE14:
+	movq	72(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L307
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L508
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L309:
+	cmpl	$1, %edx
+	je	.L509
+.L307:
+	movq	56(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L314
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L510
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L316:
+	cmpl	$1, %edx
+	je	.L511
+.L314:
+	movq	24(%rsp), %rax
+	movq	$0, 48(%rbp)
+	movl	$136, %edi
+	movq	%rax, 40(%rbp)
+	movq	8(%rsp), %rax
+	movq	%rax, 32(%rbp)
+.LEHB15:
+	call	_Znwm@PLT
+.LEHE15:
+	movq	%rax, %rsi
+	movdqu	(%rbx), %xmm7
+	movq	16(%r12), %r8
+	movq	%r15, 8(%rax)
+	movq	%rax, 24(%rsp)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	movzbl	12(%r12), %ecx
+	movaps	%xmm7, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rsi)
+	leaq	16(%rsi), %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rbx), %rax
+	testq	%rax, %rax
+	je	.L323
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L512
+	addl	$1, 8(%rax)
+.L323:
+	movdqu	16(%rbx), %xmm1
+	movq	24(%rbx), %rax
+	movaps	%xmm1, 64(%rsp)
+	testq	%rax, %rax
+	je	.L325
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L513
+	addl	$1, 8(%rax)
+.L325:
+	movq	16(%rsp), %rdx
+	movq	8(%rsp), %rdi
+	movq	%r14, %r9
+	movq	%r13, %rsi
+.LEHB16:
+	call	_ZN8opendnp320StartupIntegrityPollC1ERNS_18IMasterApplicationERNS_11ISOEHandlerENS_10ClassFieldEN7openpal12TimeDurationENS6_6LoggerE@PLT
+.LEHE16:
+	movq	72(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L328
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L514
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L330:
+	cmpl	$1, %edx
+	je	.L515
+.L328:
+	movq	56(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L335
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L516
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L337:
+	cmpl	$1, %edx
+	je	.L517
+.L335:
+	movq	24(%rsp), %rax
+	movq	$0, 64(%rbp)
+	movl	$120, %edi
+	movq	%rax, 56(%rbp)
+	movq	8(%rsp), %rax
+	movq	%rax, 48(%rbp)
+.LEHB17:
+	call	_Znwm@PLT
+.LEHE17:
+	movq	%rax, %rcx
+	movq	%r15, 8(%rax)
+	movdqu	(%rbx), %xmm2
+	movq	%rax, 24(%rsp)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	movzbl	9(%r12), %edx
+	movaps	%xmm2, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rcx)
+	leaq	16(%rcx), %rax
+	movq	16(%r12), %rcx
+	movq	%rax, 8(%rsp)
+	movq	8(%rbx), %rax
+	testq	%rax, %rax
+	je	.L344
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L518
+	addl	$1, 8(%rax)
+.L344:
+	movdqu	16(%rbx), %xmm3
+	movq	24(%rbx), %rax
+	movaps	%xmm3, 64(%rsp)
+	testq	%rax, %rax
+	je	.L346
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L519
+	addl	$1, 8(%rax)
+.L346:
+	movq	8(%rsp), %rdi
+	movq	%r14, %r8
+	movq	%r13, %rsi
+.LEHB18:
+	call	_ZN8opendnp322DisableUnsolicitedTaskC1ERNS_18IMasterApplicationEbN7openpal12TimeDurationENS3_6LoggerE@PLT
+.LEHE18:
+	movq	72(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L349
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L520
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L351:
+	cmpl	$1, %edx
+	je	.L521
+.L349:
+	movq	56(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L356
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L522
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L358:
+	cmpl	$1, %edx
+	je	.L523
+.L356:
+	movq	24(%rsp), %rax
+	movq	$0, 80(%rbp)
+	movl	$120, %edi
+	movq	%rax, 72(%rbp)
+	movq	8(%rsp), %rax
+	movq	%rax, 64(%rbp)
+.LEHB19:
+	call	_Znwm@PLT
+.LEHE19:
+	movq	%rax, %rsi
+	movq	%r15, 8(%rax)
+	movdqu	(%rbx), %xmm4
+	movq	%rax, 24(%rsp)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	movaps	%xmm4, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rsi)
+	leaq	16(%rsi), %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rbx), %rax
+	testq	%rax, %rax
+	je	.L365
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L524
+	addl	$1, 8(%rax)
+.L365:
+	movdqu	16(%rbx), %xmm5
+	movq	24(%rbx), %rax
+	movaps	%xmm5, 64(%rsp)
+	testq	%rax, %rax
+	je	.L367
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L525
+	addl	$1, 8(%rax)
+.L367:
+	movq	8(%rsp), %rdi
+	movq	%r14, %rdx
+	movq	%r13, %rsi
+.LEHB20:
+	call	_ZN8opendnp318SerialTimeSyncTaskC1ERNS_18IMasterApplicationEN7openpal6LoggerE@PLT
+.LEHE20:
+	movq	72(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L370
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L526
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L372:
+	cmpl	$1, %edx
+	je	.L527
+.L370:
+	movq	56(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.L377
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L528
+	movl	8(%rdi), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%rdi)
+.L379:
+	cmpl	$1, %edx
+	je	.L529
+.L377:
+	movq	24(%rsp), %rax
+	movq	$0, 96(%rbp)
+	movl	$136, %edi
+	movq	%rax, 88(%rbp)
+	movq	8(%rsp), %rax
+	movq	%rax, 80(%rbp)
+.LEHB21:
+	call	_Znwm@PLT
+.LEHE21:
+	movq	%rax, %rcx
+	movdqu	(%rbx), %xmm6
+	movq	16(%r12), %r8
+	movq	%r15, 8(%rax)
+	movq	%rax, 8(%rsp)
+	movq	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE@GOTPCREL(%rip), %rax
+	leaq	16(%rcx), %r15
+	movaps	%xmm6, 48(%rsp)
+	addq	$16, %rax
+	movq	%rax, (%rcx)
+	movq	8(%rbx), %rax
+	movzbl	14(%r12), %ecx
+	testq	%rax, %rax
+	je	.L386
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L530
+	addl	$1, 8(%rax)
+.L386:
+	movdqu	16(%rbx), %xmm7
+	movq	24(%rbx), %rax
+	movaps	%xmm7, 64(%rsp)
+	testq	%rax, %rax
+	je	.L388
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L531
+	addl	$1, 8(%rax)
+.L388:
+	movq	16(%rsp), %rdx
+	movq	%r14, %r9
+	movq	%r13, %rsi
+	movq	%r15, %rdi
+.LEHB22:
+	call	_ZN8opendnp313EventScanTaskC1ERNS_18IMasterApplicationERNS_11ISOEHandlerENS_10ClassFieldEN7openpal12TimeDurationENS6_6LoggerE@PLT
+.LEHE22:
+	movq	72(%rsp), %r12
+	testq	%r12, %r12
+	je	.L391
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L532
+	movl	8(%r12), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%r12)
+.L393:
+	cmpl	$1, %edx
+	je	.L533
+.L391:
+	movq	56(%rsp), %r12
+	testq	%r12, %r12
+	je	.L398
+	movq	_ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip), %rax
+	testq	%rax, %rax
+	jne	.L534
+	movl	8(%r12), %edx
+	leal	-1(%rdx), %ecx
+	movl	%ecx, 8(%r12)
+.L400:
+	cmpl	$1, %edx
+	je	.L535
+.L398:
+	movq	$0, 128(%rbp)
+	movq	%r15, %xmm0
+	movhps	8(%rsp), %xmm0
+	movups	%xmm0, 96(%rbp)
+	pxor	%xmm0, %xmm0
+	movups	%xmm0, 112(%rbp)
+	movq	88(%rsp), %rax
+	subq	%fs:40, %rax
+	jne	.L536
+	addq	$104, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L497:
+	.cfi_restore_state
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L537
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L271:
+	cmpl	$1, %eax
+	jne	.L266
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L266
+	.p2align 4,,10
+	.p2align 3
+.L499:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L538
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L278:
+	cmpl	$1, %eax
+	jne	.L273
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L273
+	.p2align 4,,10
+	.p2align 3
+.L503:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L539
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L291:
+	cmpl	$1, %eax
+	jne	.L286
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L286
+	.p2align 4,,10
+	.p2align 3
+.L505:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L540
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L298:
+	cmpl	$1, %eax
+	jne	.L293
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L293
+	.p2align 4,,10
+	.p2align 3
+.L509:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L541
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L312:
+	cmpl	$1, %eax
+	jne	.L307
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L307
+	.p2align 4,,10
+	.p2align 3
+.L515:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L542
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L333:
+	cmpl	$1, %eax
+	jne	.L328
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L328
+	.p2align 4,,10
+	.p2align 3
+.L511:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L543
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L319:
+	cmpl	$1, %eax
+	jne	.L314
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L314
+	.p2align 4,,10
+	.p2align 3
+.L517:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L544
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L340:
+	cmpl	$1, %eax
+	jne	.L335
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L335
+	.p2align 4,,10
+	.p2align 3
+.L521:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L545
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L354:
+	cmpl	$1, %eax
+	jne	.L349
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L349
+	.p2align 4,,10
+	.p2align 3
+.L533:
+	movq	(%r12), %rdx
+	movq	%rax, 16(%rsp)
+	movq	%r12, %rdi
+	call	*16(%rdx)
+	movq	16(%rsp), %rax
+	testq	%rax, %rax
+	jne	.L546
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L396:
+	cmpl	$1, %eax
+	jne	.L391
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L391
+	.p2align 4,,10
+	.p2align 3
+.L527:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L547
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L375:
+	cmpl	$1, %eax
+	jne	.L370
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L370
+	.p2align 4,,10
+	.p2align 3
+.L535:
+	movq	(%r12), %rdx
+	movq	%rax, 16(%rsp)
+	movq	%r12, %rdi
+	call	*16(%rdx)
+	movq	16(%rsp), %rax
+	testq	%rax, %rax
+	jne	.L548
+	movl	12(%r12), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%r12)
+.L403:
+	cmpl	$1, %eax
+	jne	.L398
+	movq	(%r12), %rax
+	movq	%r12, %rdi
+	call	*24(%rax)
+	jmp	.L398
+	.p2align 4,,10
+	.p2align 3
+.L523:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L549
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L361:
+	cmpl	$1, %eax
+	jne	.L356
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L356
+	.p2align 4,,10
+	.p2align 3
+.L529:
+	movq	(%rdi), %rdx
+	movq	%rax, 40(%rsp)
+	movq	%rdi, 32(%rsp)
+	call	*16(%rdx)
+	movq	40(%rsp), %rax
+	movq	32(%rsp), %rdi
+	testq	%rax, %rax
+	jne	.L550
+	movl	12(%rdi), %eax
+	leal	-1(%rax), %edx
+	movl	%edx, 12(%rdi)
+.L382:
+	cmpl	$1, %eax
+	jne	.L377
+	movq	(%rdi), %rax
+	call	*24(%rax)
+	jmp	.L377
+	.p2align 4,,10
+	.p2align 3
+.L532:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%r12)
+	jmp	.L393
+	.p2align 4,,10
+	.p2align 3
+.L502:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L288
+	.p2align 4,,10
+	.p2align 3
+.L504:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L295
+	.p2align 4,,10
+	.p2align 3
+.L520:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L351
+	.p2align 4,,10
+	.p2align 3
+.L522:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L358
+	.p2align 4,,10
+	.p2align 3
+.L514:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L330
+	.p2align 4,,10
+	.p2align 3
+.L516:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L337
+	.p2align 4,,10
+	.p2align 3
+.L496:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L268
+	.p2align 4,,10
+	.p2align 3
+.L498:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L275
+	.p2align 4,,10
+	.p2align 3
+.L526:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L372
+	.p2align 4,,10
+	.p2align 3
+.L528:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L379
+	.p2align 4,,10
+	.p2align 3
+.L508:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L309
+	.p2align 4,,10
+	.p2align 3
+.L510:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%rdi)
+	jmp	.L316
+	.p2align 4,,10
+	.p2align 3
+.L534:
+	movl	$-1, %edx
+	lock xaddl	%edx, 8(%r12)
+	jmp	.L400
+	.p2align 4,,10
+	.p2align 3
+.L524:
+	lock addl	$1, 8(%rax)
+	jmp	.L365
+	.p2align 4,,10
+	.p2align 3
+.L525:
+	lock addl	$1, 8(%rax)
+	jmp	.L367
+	.p2align 4,,10
+	.p2align 3
+.L494:
+	lock addl	$1, 8(%rax)
+	jmp	.L261
+	.p2align 4,,10
+	.p2align 3
+.L495:
+	lock addl	$1, 8(%rax)
+	jmp	.L263
+	.p2align 4,,10
+	.p2align 3
+.L506:
+	lock addl	$1, 8(%rax)
+	jmp	.L302
+	.p2align 4,,10
+	.p2align 3
+.L507:
+	lock addl	$1, 8(%rax)
+	jmp	.L304
+	.p2align 4,,10
+	.p2align 3
+.L500:
+	lock addl	$1, 8(%rax)
+	jmp	.L281
+	.p2align 4,,10
+	.p2align 3
+.L501:
+	lock addl	$1, 8(%rax)
+	jmp	.L283
+	.p2align 4,,10
+	.p2align 3
+.L512:
+	lock addl	$1, 8(%rax)
+	jmp	.L323
+	.p2align 4,,10
+	.p2align 3
+.L513:
+	lock addl	$1, 8(%rax)
+	jmp	.L325
+	.p2align 4,,10
+	.p2align 3
+.L518:
+	lock addl	$1, 8(%rax)
+	jmp	.L344
+	.p2align 4,,10
+	.p2align 3
+.L519:
+	lock addl	$1, 8(%rax)
+	jmp	.L346
+	.p2align 4,,10
+	.p2align 3
+.L530:
+	lock addl	$1, 8(%rax)
+	jmp	.L386
+	.p2align 4,,10
+	.p2align 3
+.L531:
+	lock addl	$1, 8(%rax)
+	jmp	.L388
+	.p2align 4,,10
+	.p2align 3
+.L538:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L278
+	.p2align 4,,10
+	.p2align 3
+.L539:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L291
+	.p2align 4,,10
+	.p2align 3
+.L537:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L271
+	.p2align 4,,10
+	.p2align 3
+.L550:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L382
+	.p2align 4,,10
+	.p2align 3
+.L540:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L298
+	.p2align 4,,10
+	.p2align 3
+.L542:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L333
+	.p2align 4,,10
+	.p2align 3
+.L541:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L312
+	.p2align 4,,10
+	.p2align 3
+.L543:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L319
+	.p2align 4,,10
+	.p2align 3
+.L545:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L354
+	.p2align 4,,10
+	.p2align 3
+.L547:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L375
+	.p2align 4,,10
+	.p2align 3
+.L544:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L340
+	.p2align 4,,10
+	.p2align 3
+.L548:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L403
+	.p2align 4,,10
+	.p2align 3
+.L546:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%r12)
+	jmp	.L396
+	.p2align 4,,10
+	.p2align 3
+.L549:
+	movl	$-1, %eax
+	lock xaddl	%eax, 12(%rdi)
+	jmp	.L361
+.L536:
+	call	__stack_chk_fail@PLT
+.L420:
+	movq	%rax, %r12
+	jmp	.L300
+.L413:
+	movq	%rax, %r12
+	jmp	.L301
+.L418:
+	movq	%rax, %r12
+	jmp	.L405
+.L425:
+	movq	%rax, %r12
+	jmp	.L404
+.L424:
+	movq	%rax, %r12
+	jmp	.L384
+.L417:
+	movq	%rax, %r12
+	jmp	.L385
+.L422:
+	movq	%rax, %r12
+	jmp	.L342
+.L415:
+	movq	%rax, %r12
+	jmp	.L343
+.L421:
+	movq	%rax, %r12
+	jmp	.L321
+.L414:
+	movq	%rax, %r12
+	jmp	.L322
+.L423:
+	movq	%rax, %r12
+	jmp	.L363
+.L416:
+	movq	%rax, %r12
+	jmp	.L364
+.L419:
+	movq	%rax, %rbp
+	jmp	.L280
+	.section	.gcc_except_table
+.LLSDA3084:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSE3084-.LLSDACSB3084
+.LLSDACSB3084:
+	.uleb128 .LEHB9-.LFB3084
+	.uleb128 .LEHE9-.LEHB9
+	.uleb128 0
+	.uleb128 0
+	.uleb128 .LEHB10-.LFB3084
+	.uleb128 .LEHE10-.LEHB10
+	.uleb128 .L419-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB11-.LFB3084
+	.uleb128 .LEHE11-.LEHB11
+	.uleb128 .L413-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB12-.LFB3084
+	.uleb128 .LEHE12-.LEHB12
+	.uleb128 .L420-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB13-.LFB3084
+	.uleb128 .LEHE13-.LEHB13
+	.uleb128 .L414-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB14-.LFB3084
+	.uleb128 .LEHE14-.LEHB14
+	.uleb128 .L421-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB15-.LFB3084
+	.uleb128 .LEHE15-.LEHB15
+	.uleb128 .L415-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB16-.LFB3084
+	.uleb128 .LEHE16-.LEHB16
+	.uleb128 .L422-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB17-.LFB3084
+	.uleb128 .LEHE17-.LEHB17
+	.uleb128 .L416-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB18-.LFB3084
+	.uleb128 .LEHE18-.LEHB18
+	.uleb128 .L423-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB19-.LFB3084
+	.uleb128 .LEHE19-.LEHB19
+	.uleb128 .L417-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB20-.LFB3084
+	.uleb128 .LEHE20-.LEHB20
+	.uleb128 .L424-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB21-.LFB3084
+	.uleb128 .LEHE21-.LEHB21
+	.uleb128 .L418-.LFB3084
+	.uleb128 0
+	.uleb128 .LEHB22-.LFB3084
+	.uleb128 .LEHE22-.LEHB22
+	.uleb128 .L425-.LFB3084
+	.uleb128 0
+.LLSDACSE3084:
+	.text
+	.cfi_endproc
+	.section	.text.unlikely
+	.cfi_startproc
+	.cfi_personality 0x9b,DW.ref.__gxx_personality_v0
+	.cfi_lsda 0x1b,.LLSDAC3084
+	.type	_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE.cold, @function
+_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE.cold:
+.LFSB3084:
+.L300:
+	.cfi_def_cfa_offset 160
+	.cfi_offset 3, -56
+	.cfi_offset 6, -48
+	.cfi_offset 12, -40
+	.cfi_offset 13, -32
+	.cfi_offset 14, -24
+	.cfi_offset 15, -16
+	movq	%r14, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+	movq	24(%rsp), %rdi
+	movl	$112, %esi
+	call	_ZdlPvm@PLT
+.L301:
+	movq	8(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L411
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L411:
+	movq	%r12, %rdi
+.LEHB23:
+	call	_Unwind_Resume@PLT
+.L404:
+	movq	%r14, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+	movq	8(%rsp), %rdi
+	movl	$136, %esi
+	call	_ZdlPvm@PLT
+.L405:
+	movq	88(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L385
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L385
+.L384:
+	movq	%r14, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+	movq	24(%rsp), %rdi
+	movl	$120, %esi
+	call	_ZdlPvm@PLT
+.L385:
+	movq	72(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L364
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L364:
+	movq	56(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L343
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L343:
+	movq	40(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L322
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+.L322:
+	movq	24(%rbp), %rdi
+	testq	%rdi, %rdi
+	je	.L301
+	call	_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@PLT
+	jmp	.L301
+.L342:
+	movq	%r14, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+	movq	24(%rsp), %rdi
+	movl	$136, %esi
+	call	_ZdlPvm@PLT
+	jmp	.L343
+.L321:
+	movq	%r14, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+	movq	24(%rsp), %rdi
+	movl	$112, %esi
+	call	_ZdlPvm@PLT
+	jmp	.L322
+.L363:
+	movq	%r14, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+	movq	24(%rsp), %rdi
+	movl	$120, %esi
+	call	_ZdlPvm@PLT
+	jmp	.L364
+.L280:
+	movq	%r14, %rdi
+	call	_ZN7openpal6LoggerD1Ev@PLT
+	movq	24(%rsp), %rdi
+	movl	$120, %esi
+	call	_ZdlPvm@PLT
+	movq	%rbp, %rdi
+	call	_Unwind_Resume@PLT
+.LEHE23:
+	.cfi_endproc
+.LFE3084:
+	.section	.gcc_except_table
+.LLSDAC3084:
+	.byte	0xff
+	.byte	0xff
+	.byte	0x1
+	.uleb128 .LLSDACSEC3084-.LLSDACSBC3084
+.LLSDACSBC3084:
+	.uleb128 .LEHB23-.LCOLDB2
+	.uleb128 .LEHE23-.LEHB23
+	.uleb128 0
+	.uleb128 0
+.LLSDACSEC3084:
+	.section	.text.unlikely
+	.text
+	.size	_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE, .-_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE
+	.section	.text.unlikely
+	.size	_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE.cold, .-_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE.cold
+.LCOLDE2:
+	.text
+.LHOTE2:
+	.globl	_ZN8opendnp311MasterTasksC1ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE
+	.set	_ZN8opendnp311MasterTasksC1ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE,_ZN8opendnp311MasterTasksC2ERKNS_12MasterParamsERKN7openpal6LoggerERNS_18IMasterApplicationERNS_11ISOEHandlerE
+	.section	.rodata._ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_.str1.1,"aMS",@progbits,1
+.LC3:
+	.string	"vector::_M_realloc_insert"
+	.section	.text._ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_,"axG",@progbits,_ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_,comdat
+	.align 2
+	.p2align 4
+	.weak	_ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_
+	.type	_ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_, @function
+_ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_:
+.LFB3706:
+	.cfi_startproc
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	.cfi_offset 15, -16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	.cfi_offset 14, -24
+	movabsq	$576460752303423487, %r14
+	pushq	%r13
+	.cfi_def_cfa_offset 32
+	.cfi_offset 13, -32
+	pushq	%r12
+	.cfi_def_cfa_offset 40
+	.cfi_offset 12, -40
+	pushq	%rbp
+	.cfi_def_cfa_offset 48
+	.cfi_offset 6, -48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset 3, -56
+	subq	$24, %rsp
+	.cfi_def_cfa_offset 80
+	movq	8(%rdi), %r15
+	movq	(%rdi), %r12
+	movq	%r15, %rax
+	subq	%r12, %rax
+	sarq	$4, %rax
+	cmpq	%r14, %rax
+	je	.L578
+	movq	%rsi, %rbx
+	movq	%rdx, %rsi
+	movl	$1, %edx
+	movq	%rax, %rcx
+	testq	%rax, %rax
+	movq	%rdx, %rax
+	movq	%rbx, %rdx
+	movq	%rdi, %r13
+	cmovne	%rcx, %rax
+	addq	%rcx, %rax
+	setc	%cl
+	subq	%r12, %rdx
+	movzbl	%cl, %ecx
+	testq	%rcx, %rcx
+	jne	.L567
+	testq	%rax, %rax
+	jne	.L556
+	movl	$16, %ecx
+	xorl	%r14d, %r14d
+	xorl	%ebp, %ebp
+.L566:
+	movdqu	(%rsi), %xmm3
+	movq	8(%rsi), %rax
+	movups	%xmm3, 0(%rbp,%rdx)
+	testq	%rax, %rax
+	je	.L557
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L579
+	addl	$1, 8(%rax)
+.L557:
+	cmpq	%r12, %rbx
+	je	.L559
+.L580:
+	leaq	-16(%rbx), %rcx
+	xorl	%eax, %eax
+	xorl	%edx, %edx
+	subq	%r12, %rcx
+	shrq	$4, %rcx
+	addq	$1, %rcx
+	.p2align 4,,10
+	.p2align 3
+.L560:
+	movdqu	(%r12,%rax), %xmm1
+	addq	$1, %rdx
+	movups	%xmm1, 0(%rbp,%rax)
+	addq	$16, %rax
+	cmpq	%rdx, %rcx
+	ja	.L560
+	movq	%rbx, %rax
+	subq	%r12, %rax
+	leaq	16(%rbp,%rax), %rcx
+	cmpq	%r15, %rbx
+	je	.L561
+.L562:
+	movq	%r15, %rax
+	xorl	%edx, %edx
+	subq	%rbx, %rax
+	leaq	-16(%rax), %rsi
+	xorl	%eax, %eax
+	shrq	$4, %rsi
+	addq	$1, %rsi
+	.p2align 4,,10
+	.p2align 3
+.L564:
+	movdqu	(%rbx,%rax), %xmm2
+	addq	$1, %rdx
+	movups	%xmm2, (%rcx,%rax)
+	addq	$16, %rax
+	cmpq	%rsi, %rdx
+	jb	.L564
+	subq	%rbx, %r15
+	addq	%r15, %rcx
+.L563:
+	testq	%r12, %r12
+	je	.L565
+.L561:
+	movq	16(%r13), %rsi
+	movq	%r12, %rdi
+	movq	%rcx, (%rsp)
+	subq	%r12, %rsi
+	call	_ZdlPvm@PLT
+	movq	(%rsp), %rcx
+.L565:
+	movq	%rbp, %xmm0
+	movq	%rcx, %xmm4
+	movq	%r14, 16(%r13)
+	punpcklqdq	%xmm4, %xmm0
+	movups	%xmm0, 0(%r13)
+	addq	$24, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 56
+	popq	%rbx
+	.cfi_def_cfa_offset 48
+	popq	%rbp
+	.cfi_def_cfa_offset 40
+	popq	%r12
+	.cfi_def_cfa_offset 32
+	popq	%r13
+	.cfi_def_cfa_offset 24
+	popq	%r14
+	.cfi_def_cfa_offset 16
+	popq	%r15
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L556:
+	.cfi_restore_state
+	cmpq	%r14, %rax
+	cmovbe	%rax, %r14
+	salq	$4, %r14
+.L555:
+	movq	%r14, %rdi
+	movq	%rsi, 8(%rsp)
+	movq	%rdx, (%rsp)
+	call	_Znwm@PLT
+	movq	(%rsp), %rdx
+	movq	8(%rsp), %rsi
+	movq	%rax, %rbp
+	addq	%rax, %r14
+	leaq	16(%rax), %rcx
+	jmp	.L566
+	.p2align 4,,10
+	.p2align 3
+.L567:
+	movabsq	$9223372036854775792, %r14
+	jmp	.L555
+	.p2align 4,,10
+	.p2align 3
+.L579:
+	lock addl	$1, 8(%rax)
+	cmpq	%r12, %rbx
+	jne	.L580
+	.p2align 4,,10
+	.p2align 3
+.L559:
+	cmpq	%r15, %rbx
+	jne	.L562
+	jmp	.L563
+.L578:
+	leaq	.LC3(%rip), %rdi
+	call	_ZSt20__throw_length_errorPKc@PLT
+	.cfi_endproc
+.LFE3706:
+	.size	_ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_, .-_ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_
+	.text
+	.align 2
+	.p2align 4
+	.globl	_ZN8opendnp311MasterTasks8BindTaskERKSt10shared_ptrINS_11IMasterTaskEE
+	.type	_ZN8opendnp311MasterTasks8BindTaskERKSt10shared_ptrINS_11IMasterTaskEE, @function
+_ZN8opendnp311MasterTasks8BindTaskERKSt10shared_ptrINS_11IMasterTaskEE:
+.LFB3094:
+	.cfi_startproc
+	movq	%rsi, %rdx
+	movq	120(%rdi), %rsi
+	cmpq	128(%rdi), %rsi
+	je	.L582
+	movq	(%rdx), %rax
+	movq	%rax, (%rsi)
+	movq	8(%rdx), %rax
+	movq	%rax, 8(%rsi)
+	testq	%rax, %rax
+	je	.L583
+	cmpq	$0, _ZL28__gthrw___pthread_key_createPjPFvPvE@GOTPCREL(%rip)
+	jne	.L590
+	addl	$1, 8(%rax)
+.L583:
+	addq	$16, %rsi
+	movq	%rsi, 120(%rdi)
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L582:
+	addq	$112, %rdi
+	jmp	_ZNSt6vectorISt10shared_ptrIN8opendnp311IMasterTaskEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_@PLT
+	.p2align 4,,10
+	.p2align 3
+.L590:
+	lock addl	$1, 8(%rax)
+	movq	120(%rdi), %rsi
+	jmp	.L583
+	.cfi_endproc
+.LFE3094:
+	.size	_ZN8opendnp311MasterTasks8BindTaskERKSt10shared_ptrINS_11IMasterTaskEE, .-_ZN8opendnp311MasterTasks8BindTaskERKSt10shared_ptrINS_11IMasterTaskEE
+	.section	.text.startup,"ax",@progbits
+	.p2align 4
+	.type	_GLOBAL__sub_I_MasterTasks.cpp, @function
+_GLOBAL__sub_I_MasterTasks.cpp:
+.LFB4675:
+	.cfi_startproc
+	movl	$5000, %edi
+	jmp	_ZN7openpal12TimeDuration12MillisecondsEl@PLT
+	.cfi_endproc
+.LFE4675:
+	.size	_GLOBAL__sub_I_MasterTasks.cpp, .-_GLOBAL__sub_I_MasterTasks.cpp
+	.section	.init_array,"aw"
+	.align 8
+	.quad	_GLOBAL__sub_I_MasterTasks.cpp
+	.weak	_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE, 47
+_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE, 16
+_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv117__class_type_infoE+16
+	.quad	_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt19_Sp_make_shared_tag
+	.section	.rodata._ZTSSt19_Sp_make_shared_tag,"aG",@progbits,_ZTSSt19_Sp_make_shared_tag,comdat
+	.align 16
+	.type	_ZTSSt19_Sp_make_shared_tag, @object
+	.size	_ZTSSt19_Sp_make_shared_tag, 24
+_ZTSSt19_Sp_make_shared_tag:
+	.string	"St19_Sp_make_shared_tag"
+	.weak	_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE, 52
+_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 100
+_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 95
+_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 94
+_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 99
+_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 101
+_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 97
+_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.rodata._ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"aG",@progbits,_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 32
+	.type	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 92
+_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.string	"St23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE"
+	.weak	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTISt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 24
+_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	_ZTVN10__cxxabiv120__si_class_type_infoE+16
+	.quad	_ZTSSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp321EnableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp316ClearRestartTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp315AssignClassTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp320StartupIntegrityPollESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp322DisableUnsolicitedTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp318SerialTimeSyncTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.section	.data.rel.ro._ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,"awG",@progbits,_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE,comdat
+	.align 8
+	.type	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, @object
+	.size	_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE, 56
+_ZTVSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE:
+	.quad	0
+	.quad	_ZTISt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED1Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EED0Ev
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_disposeEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
+	.quad	_ZNSt23_Sp_counted_ptr_inplaceIN8opendnp313EventScanTaskESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE14_M_get_deleterERKSt9type_info
+	.weak	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag
+	.section	.rodata._ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag,"aG",@progbits,_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag,comdat
+	.align 8
+	.type	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag, @gnu_unique_object
+	.size	_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag, 16
+_ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag:
+	.zero	16
+	.weakref	_ZL28__gthrw___pthread_key_createPjPFvPvE,__pthread_key_create
+	.section	.rodata.cst8,"aM",@progbits,8
+	.align 8
+.LC1:
+	.long	1
+	.long	1
+	.hidden	DW.ref.__gxx_personality_v0
+	.weak	DW.ref.__gxx_personality_v0
+	.section	.data.rel.local.DW.ref.__gxx_personality_v0,"awG",@progbits,DW.ref.__gxx_personality_v0,comdat
+	.align 8
+	.type	DW.ref.__gxx_personality_v0, @object
+	.size	DW.ref.__gxx_personality_v0, 8
+DW.ref.__gxx_personality_v0:
+	.quad	__gxx_personality_v0
+	.ident	"GCC: (GNU) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2)"
+	.section	.note.GNU-stack,"",@progbits

@@ -64,3 +64,5 @@ build/
 /src/procont-ex/iec/
 !src/procont-ex/iec/CMakeLists.txt
 
+**/CMakeFiles/
+

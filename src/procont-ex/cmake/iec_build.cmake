@@ -8,11 +8,11 @@ STRING(REGEX REPLACE "\n" ";" IEC_FILES "${IEC_FILES}")
 STRING(REGEX REPLACE "/;$/" "" IEC_FILES "${IEC_FILES}")
 list(REMOVE_ITEM IEC_FILES POUS.c)
 
-#message("== IEC COMPILE FILES: ${IEC_FILES}")
+message("== IEC COMPILE FILES: ${IEC_FILES}")
 
 execute_process(
     WORKING_DIRECTORY ${PROJ_IEC_DIR}
-    COMMAND g++ -I ${PROJ_INC_DIR} -c ${IEC_FILES} -w
+    COMMAND g++ -I ${PROJ_LIB_DIR} -c ${IEC_FILES} -w
 )
 
 #------------------------------------------------------------------------------

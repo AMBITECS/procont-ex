@@ -18,7 +18,7 @@ set( CMAKE_DIR                      ${PROJ_DIR}/cmake               ) # PROJ cma
 set( PROJ_SRC_DIR                   ${PROJ_DIR}                     ) # PROJ sources directory
 set( PROJ_MOD_DIR                   ${PROJ_DIR}/utils               ) # PROJ iec2c directory
 set( PROJ_IEC_DIR                   ${PROJ_DIR}/iec                 ) # PROJ iec2c directory
-set( PROJ_INC_DIR                   ${PROJ_DIR}/lib                 ) # PROJ includes directory
+set( PROJ_LIB_DIR                   ${PROJ_DIR}/lib                 ) # PROJ includes directory
 set( PROJ_CMP_DIR                   ${PROJ_DIR}/matiec              ) # IEC to C compiler directory
 set( PROJ_IEC2C                     ${PROJ_CMP_DIR}/iec2c           ) # IEC to C compiler
 
@@ -36,12 +36,10 @@ set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/plc.st     ) # ST sourc
 #message("== CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
 #message("== CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
-# dnp3 library
-#add_subdirectory("${PROJ_MOD_DIR}/dnp3_src")
-
 # Libmodbus library
 include(${CMAKE_DIR}/modbus_build.cmake)
 
+# dnp3 library
 include(${CMAKE_DIR}/dnp3_build.cmake)
 
 
@@ -90,7 +88,7 @@ build_target(
     INCS
         ${dist_include}
         ${PROJ_SRC_DIR}
-        ${PROJ_INC_DIR}
+        ${PROJ_LIB_DIR}
         ${PROJ_IEC_DIR}
 #        "~/.local/include/modbus"
         ${modbus_INCLUDE_DIRS}

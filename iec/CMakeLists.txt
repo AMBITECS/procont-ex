@@ -16,7 +16,7 @@ set( PROJ_DIR       ${CMAKE_CURRENT_SOURCE_DIR}     ) # PROJ project
 
 set( PROJ_IEC_DIR   ${PROJ_DIR}                     ) # PROJ IEC work
 set( PROJ_SRC_DIR   ${PROJ_DIR}/..                  ) # PROJ up sources
-#set( PROJ_LIB_DIR   ${PROJ_SRC_DIR}/lib            ) # PROJ includes
+set( PROJ_LIB_DIR   ${PROJ_SRC_DIR}/lib             ) # PROJ lib includes
 set( CMAKE_DIR      ${PROJ_SRC_DIR}/cmake           ) # PROJ cmake files
 set( PROJ_CMP_DIR   ${PROJ_SRC_DIR}/matiec          ) # PROJ compiler
 set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c           ) # IEC to C compiler
@@ -60,12 +60,15 @@ add_custom_command(
 add_custom_command(
         COMMENT "(3) - Compiling 'C' to obj-files ..."
         OUTPUT  ${PROJ_IEC_DIR}/obj-sources
-        DEPENDS ${PROJ_IEC_DIR}/iec-sources ${PROJ_IEC_DIR}/glueVars.cpp
+        DEPENDS
+            ${PROJ_IEC_DIR}/iec-sources
+            ${PROJ_IEC_DIR}/glueVars.cpp
 
         WORKING_DIRECTORY ${PROJ_IEC_DIR}
         COMMAND ${CMAKE_COMMAND}
             -D PROJ_IEC_DIR=${PROJ_IEC_DIR}
-            -D PROJ_INC_DIR=${PROJ_INC_DIR}
+            #-D PROJ_INC_DIR=${PROJ_INC_DIR}
+            -D PROJ_LIB_DIR=${PROJ_LIB_DIR}
             -P ${CMAKE_DIR}/iec_build.cmake
 
         COMMAND ls ${PROJ_IEC_DIR}/*.o > ${PROJ_IEC_DIR}/obj-sources

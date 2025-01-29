@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(NAME ${PNME}-conf-app)
+set(NAME ${PNME}-conf)
 
 project(${NAME} VERSION 0.1 LANGUAGES CXX)
 

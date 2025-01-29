@@ -54,34 +54,32 @@ LogViewer::LogViewer()
 {
     auto _toolbar = new QToolBar;
     _toolbar->setIconSize(QSize(24, 24));
-    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-2-up-top.svg"), tr("Up top")));
-    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-3-up.svg"), tr("Up")));
-    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-4-down.svg"), tr("Down")));
-    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-2-down-bottom.svg"), tr("Down bottom")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-2-up-top.svg"), tr("Load the newest log entries and activate auto scrolling")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-5-up.svg"), tr("Load the next log page with newer entries")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-5-down.svg"), tr("Load the previous log page with older entries")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-2-down-bottom.svg"), tr("Load the log page with the oldest log entries")));
     _toolbar->addSeparator();
-    auto _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning), tr("0")); _action->setCheckable(true);
-    auto _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    _button->setText(tr("0")); _button->setIcon(qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning)); _button->setDefaultAction(_action);
+    auto _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical), tr("0 error(s)")); _action->setCheckable(true);
+    auto _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon); _button->setDefaultAction(_action);
     _toolbar->addWidget(_button);
-    _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical), tr("0")); _action->setCheckable(true);
-    _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    _button->setText(tr("0")); _button->setIcon(qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical)); _button->setDefaultAction(_action);
+    _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning), tr("0 warning(s)")); _action->setCheckable(true);
+    _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon); _button->setDefaultAction(_action);
     _toolbar->addWidget(_button);
-    _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("0")); _action->setCheckable(true);
-    _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    _button->setText(tr("0")); _button->setIcon(qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation)); _button->setDefaultAction(_action);
+    _action = new QAction(qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("0 information(s)")); _action->setCheckable(true);
+    _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon); _button->setDefaultAction(_action);
     _toolbar->addWidget(_button);
     _toolbar->addSeparator();
     auto _lineedit = new QLineEdit;
     _lineedit->setMinimumWidth(250);
+    _lineedit->setPlaceholderText(tr("Search in messages"));
     _toolbar->addWidget(_lineedit);
-    _toolbar->addAction(new QAction(QIcon(":/icon/images/find-up.svg"), tr("Find up")));
-    _toolbar->addAction(new QAction(QIcon(":/icon/images/find-down.svg"), tr("Find down")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/find-up.svg"), tr("")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/find-down.svg"), tr("")));
     _toolbar->addSeparator();
     _toolbar->addWidget(new QCheckBox(tr("UTC Time")));
     _toolbar->addSeparator();
-    _toolbar->addAction(new QAction(QIcon(":/icon/images/import-1.svg"), tr("Import")));
-    _toolbar->addAction(new QAction(QIcon(":/icon/images/export-1.svg"), tr("Export")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/import-1.svg"), tr("Import entries via existing XML file")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/export-1.svg"), tr("Export the displayed entries to a XML file")));
 
     auto _model = new QStandardItemModel;
     _model->setColumnCount(4);
@@ -98,6 +96,116 @@ LogViewer::LogViewer()
     auto _layout = new QVBoxLayout;
     _layout->addWidget(_toolbar);
     _layout->addWidget(_listview);
+
+    setLayout(_layout);
+}
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+// *** IOMapping ***
+
+#include <QGroupBox>
+
+IOMapping_default::IOMapping_default() :
+    IOMapping()
+{
+    createContent();
+}
+
+void IOMapping_default::createContent()
+{
+    auto _combobox = new QComboBox;
+    _combobox->addItems(QStringList() << "Use parrent bus cycle setting");
+    _combobox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _layout_group = new QFormLayout;
+    _layout_group->addRow(new QLabel(tr("Bus cycle task")), _combobox);
+
+    auto _group = new QGroupBox(tr("Bus Cycle Options"));
+    _group->setLayout(_layout_group);
+    _group->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    auto _layout = new QHBoxLayout;
+    _layout->addWidget(_group, Qt::AlignTop);
+    _layout->addWidget(new QPushButton(tr("Recreate required tasks")));
+    _layout->addStretch();
+
+    auto _l = new QVBoxLayout;
+    _l->addLayout(_layout);
+    _l->addStretch();
+
+    setLayout(_l);
+}
+
+IOMapping_CANopen_remote_device::IOMapping_CANopen_remote_device() :
+    IOMapping()
+{
+    createContent();
+}
+
+void IOMapping_CANopen_remote_device::createContent()
+{
+    auto _toolbar = new QToolBar;
+    _toolbar->setIconSize(QSize(24, 24));
+    _toolbar->setContentsMargins(0, 0, 100, 0);
+    _toolbar->addWidget(new QLabel(tr("Find")));
+    _toolbar->addWidget(new QLabel(tr("  ")));
+    auto _lineedit = new QLineEdit;
+    _lineedit->setMinimumWidth(250);
+    _lineedit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    _toolbar->addWidget(_lineedit);
+    _toolbar->addWidget(new QLabel(tr("  ")));
+    _toolbar->addWidget(new QLabel(tr("Filter")));
+    _toolbar->addWidget(new QLabel(tr("  ")));
+    auto _combobox = new QComboBox;
+    _combobox->addItems(QStringList() << tr("Show all") << tr("Show only inputs") << tr("Show only mapped variables") << tr("Show only mapping to existing variables")
+                                      << tr("Show only mapping to new variables") << tr("Show only outputs") << tr("Show only unmapped variables"));
+    _combobox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    _toolbar->addWidget(_combobox);
+    _toolbar->addWidget(new QLabel(tr("  ")));
+    auto _action = new QAction(QIcon(":/icon/images/plus2.svg"), tr("Add FB for IO channel..."));
+    _toolbar->addAction(_action);
+    // auto _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon); _button->setDefaultAction(_action);
+    // _toolbar->addWidget(_button);
+    _action = new QAction(QIcon(":/icon/images/arrow-right.svg"), tr("Go to instance"));
+    _toolbar->addAction(_action);
+    // _button = new QToolButton; _button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon); _button->setDefaultAction(_action);
+    // _toolbar->addWidget(_button);
+
+    auto _model = new QStandardItemModel;
+    _model->setColumnCount(7);
+    _model->setHeaderData(0, Qt::Horizontal, tr("Variable"));
+    _model->setHeaderData(1, Qt::Horizontal, tr("Mapping"));
+    _model->setHeaderData(2, Qt::Horizontal, tr("Channel"));
+    _model->setHeaderData(3, Qt::Horizontal, tr("Address"));
+    _model->setHeaderData(4, Qt::Horizontal, tr("Type"));
+    _model->setHeaderData(5, Qt::Horizontal, tr("Unit"));
+    _model->setHeaderData(6, Qt::Horizontal, tr("Description"));
+    auto _proxy = new QSortFilterProxyModel;
+    _proxy->setSourceModel(_model);
+    auto _listview = new QTreeView;
+    _listview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _listview->setModel(_proxy);
+
+    _lineedit = new QLineEdit;
+    _lineedit->setMinimumWidth(350);
+    auto _pushbutton = new QPushButton(tr("Reset mapping"));
+    _pushbutton->setMinimumWidth(200);
+    _pushbutton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    _combobox = new QComboBox;
+    _combobox->addItems(QStringList() << tr("Use parent device setting"));
+    auto _layout_combo = new QFormLayout;
+    _layout_combo->addRow(new QLabel(tr("Always update variables")), _combobox);
+    auto _layout_bottom = new QHBoxLayout;
+    _layout_bottom->addWidget(_lineedit);
+    _layout_bottom->addWidget(_pushbutton);
+    _layout_bottom->addLayout(_layout_combo);
+
+    auto _layout = new QVBoxLayout;
+    _layout->addWidget(_toolbar);
+    _layout->addWidget(_listview);
+    _layout->addLayout(_layout_bottom);
 
     setLayout(_layout);
 }
@@ -201,7 +309,9 @@ WidgetSettings_CANopen_manager::WidgetSettings_CANopen_manager(const QModelIndex
     auto _tab1 = new QScrollArea; _tab1->setWidget(createTab1());
     addTab(_tab1, tr("General"));
     addTab(new LogViewer, tr("Log"));
-    addTab(new QLabel(tr("CANopen manager - CANopen I/O Mapping")), tr("CANopen I/O Mapping"));
+    auto _tab3 = new IOMapping_default;
+    // _tab3->setFixedSize(600, 100);
+    addTab(_tab3, tr("CANopen I/O Mapping"));
     addTab(new QLabel(tr("CANopen manager - CANopen IEC Objects")), tr("CANopen IEC Objects"));
     addTab(new QLabel(tr("CANopen manager - Status")), tr("Status"));
     addTab(new QLabel(tr("CANopen manager - Information")), tr("Information"));
@@ -345,7 +455,9 @@ WidgetSettings_CANopen_device::WidgetSettings_CANopen_device(const QModelIndex &
     addTab(new QLabel(tr("CANopen device - Object Dictionary")), tr("Object Dictionary"));
     addTab(new QLabel(tr("CANopen device - PDOs")), tr("PDOs"));
     addTab(new LogViewer, tr("Log"));
-    addTab(new QLabel(tr("CANopen device - CANopen I/O Mapping")), tr("CANopen I/O Mapping"));
+    auto _tab5 = new IOMapping_default;
+    // _tab5->setFixedSize(600, 100);
+    addTab(_tab5, tr("CANopen I/O Mapping"));
     addTab(new QLabel(tr("CANopen device - CANopen IEC Objects")), tr("CANopen IEC Objects"));
     addTab(new QLabel(tr("CANopen device - Status")), tr("Status"));
     addTab(new QLabel(tr("CANopen device - Information")), tr("Information"));
@@ -469,7 +581,8 @@ WidgetSettings_CANopen_remote_device::WidgetSettings_CANopen_remote_device(const
     addTab(new QLabel(tr("CANopen remote device - PDOs")), tr("PDOs"));
     addTab(new QLabel(tr("CANopen remote device - SDOs")), tr("SDOs"));
     addTab(new LogViewer, tr("Log"));
-    addTab(new QLabel(tr("CANopen remote device - CANopen I/O Mapping")), tr("CANopen I/O Mapping"));
+    auto _tab3 = new IOMapping_CANopen_remote_device;
+    addTab(_tab3, tr("CANopen I/O Mapping"));
     addTab(new QLabel(tr("CANopen remote device - CANopen IEC Objects")), tr("CANopen IEC Objects"));
     addTab(new QLabel(tr("CANopen remote device - Status")), tr("Status"));
     addTab(new QLabel(tr("CANopen remote device - Information")), tr("Information"));

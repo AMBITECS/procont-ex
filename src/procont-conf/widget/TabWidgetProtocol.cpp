@@ -138,10 +138,10 @@ CWidgetProtocolTab_build::CWidgetProtocolTab_build(QWidget *parent_) : IWidgetPr
     connect(action, &QAction::triggered, this, &CWidgetProtocolTab_build::slot_textViewToggled);
     action->setCheckable(true); group->addAction(action);
     action->setChecked(true);
-    action = toolbar->addAction(QIcon(":/icon/images/diagram.svg"), tr("Tree"));
+    action = toolbar->addAction(QIcon(":/icon/images/list.svg"), tr("List"));
     connect(action, &QAction::triggered, this, &CWidgetProtocolTab_build::slot_treeViewToggled);
     action->setCheckable(true); group->addAction(action);
-    action = toolbar->addAction(QIcon(":/icon/images/text_3.svg"), tr("Code"));
+    action = toolbar->addAction(QIcon(":/icon/images/code-1.svg"), tr("Code"));
     connect(action, &QAction::triggered, this, &CWidgetProtocolTab_build::slot_codeViewToggled);
     action->setCheckable(true); group->addAction(action);
     toolbar->setIconSize(QSize(24, 24));

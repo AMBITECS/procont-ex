@@ -127,7 +127,7 @@ ASSERT_OUT_OF_SOURCE_BUILD("Fatal! ${PROJ} - Requires an out-of-source build!")
 # add_subdirectory("matiec")
 add_subdirectory("src/procont-conf")
 add_subdirectory("src/common/threads")
-add_subdirectory("src/procont-ex")
+# add_subdirectory("src/procont-ex")
 
 #-------------------------------------------------------------------------------
 # Устанавливаем дополнительные цели (иконки, конфиги, документацию)

@@ -90,6 +90,7 @@
         <file>images/code-1.svg</file>
         <file>images/code-2.svg</file>
         <file>images/list.svg</file>
+        <file>images/edit-1.svg</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/AdditionalFunctionBlocks.xml</file>

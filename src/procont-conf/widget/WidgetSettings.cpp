@@ -212,6 +212,52 @@ void IOMapping_CANopen_remote_device::createContent()
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** PDO ***
+
+#include <QToolBar>
+#include <QTreeView>
+
+PDO_widget::PDO_widget()
+{
+    auto _toolbar = new QToolBar;
+    _toolbar->setIconSize(QSize(24, 24));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/plus-large.svg"), tr("Add PDO")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/plus-large.svg"), tr("Add Mapping")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/edit-1.svg"), tr("Edit")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/delete2.svg"), tr("Delete")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-5-up.svg"), tr("Move up")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-5-down.svg"), tr("Mode down")));
+    // _toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    auto _model = new QStandardItemModel;
+    _model->setColumnCount(3);
+    _model->setHeaderData(0, Qt::Horizontal, tr("Name"));
+    _model->setHeaderData(1, Qt::Horizontal, tr("Object"));
+    _model->setHeaderData(2, Qt::Horizontal, tr("Bit length"));
+    auto _proxy = new QSortFilterProxyModel;
+    _proxy->setSourceModel(_model);
+    auto _listview = new QTreeView;
+    _listview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _listview->setModel(_proxy);
+
+    auto _layout = new QVBoxLayout;
+    _layout->addWidget(_toolbar);
+    _layout->addWidget(_listview);
+
+    setLayout(_layout);
+}
+
+PDO::PDO()
+{
+    auto _layout = new QHBoxLayout;
+    _layout->addWidget(new PDO_widget);
+    _layout->addWidget(new PDO_widget);
+
+    setLayout(_layout);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** WidgetSettings ***
 
 WidgetSettings::WidgetSettings(const QModelIndex & index_) :
@@ -578,7 +624,7 @@ WidgetSettings_CANopen_remote_device::WidgetSettings_CANopen_remote_device(const
 {
     auto _tab1 = new QScrollArea; _tab1->setWidget(createTab1());
     addTab(_tab1, tr("General"));
-    addTab(new QLabel(tr("CANopen remote device - PDOs")), tr("PDOs"));
+    addTab(new PDO, tr("PDOs"));
     addTab(new QLabel(tr("CANopen remote device - SDOs")), tr("SDOs"));
     addTab(new LogViewer, tr("Log"));
     auto _tab3 = new IOMapping_CANopen_remote_device;

@@ -242,11 +242,8 @@ void MainWindow::createMenu()
     edit_redo_act->setIcon(QIcon(":/icon/images/redo1.svg"));
     edit_redo_act->setShortcuts(QKeySequence::Redo);
 
-    //     editMenu->addAction(QIcon(":/icon/images/undo1.svg"), tr("Undo"), QKeySequence::Undo, this, &MainWindow::slot_undo);
-    // edit_undo_act->setEnabled(false);
-
-    //     auto edit_redo_act = editMenu->addAction(QIcon(":/icon/images/redo1.svg"), tr("Redo"), QKeySequence::Redo, this, &MainWindow::slot_redo);
-    // edit_redo_act->setEnabled(false);
+    editMenu->addAction(edit_undo_act);
+    editMenu->addAction(edit_redo_act);
 
     editMenu->addSeparator();
     auto edit_cut_act = editMenu->addAction(QIcon(":/icon/images/cut.svg"), tr("Cut"), QKeySequence::Cut, this, &MainWindow::slot_cut);
@@ -256,7 +253,7 @@ void MainWindow::createMenu()
     _m_dynamic_actions.insert("resource", DynamicAction(edit_cut_act, {_m_tree_dev}));
     _m_dynamic_actions.insert("task", DynamicAction(edit_cut_act, {_m_tree_dev}));
     _m_dynamic_actions.insert("pouInstance", DynamicAction(edit_cut_act, {_m_tree_dev}));
-    edit_cut_act->setEnabled(false);
+    // edit_cut_act->setEnabled(false);
     auto edit_copy_act = editMenu->addAction(QIcon(":/icon/images/copy.svg"), tr("Copy"), QKeySequence::Copy, this, &MainWindow::slot_copy);
     _m_dynamic_actions.insert("dataType", DynamicAction(edit_copy_act, {_m_tree_pou}));
     _m_dynamic_actions.insert("pou", DynamicAction(edit_copy_act, {_m_tree_pou}));
@@ -264,7 +261,7 @@ void MainWindow::createMenu()
     _m_dynamic_actions.insert("resource", DynamicAction(edit_copy_act, {_m_tree_dev}));
     _m_dynamic_actions.insert("task", DynamicAction(edit_copy_act, {_m_tree_dev}));
     _m_dynamic_actions.insert("pouInstance", DynamicAction(edit_copy_act, {_m_tree_dev}));
-    edit_copy_act->setEnabled(false);
+    // edit_copy_act->setEnabled(false);
     auto edit_paste_act = editMenu->addAction(QIcon(":/icon/images/paste.svg"), tr("Paste"), QKeySequence::Paste, this, &MainWindow::slot_paste);
     _m_dynamic_actions.insert("dataType", DynamicAction(edit_paste_act, {_m_tree_pou}));
     _m_dynamic_actions.insert("pou", DynamicAction(edit_paste_act, {_m_tree_pou}));
@@ -272,7 +269,7 @@ void MainWindow::createMenu()
     _m_dynamic_actions.insert("resource", DynamicAction(edit_paste_act, {_m_tree_dev}));
     _m_dynamic_actions.insert("task", DynamicAction(edit_paste_act, {_m_tree_dev}));
     _m_dynamic_actions.insert("pouInstance", DynamicAction(edit_paste_act, {_m_tree_dev}));
-    edit_paste_act->setEnabled(false);
+    // edit_paste_act->setEnabled(false);
     auto edit_delete_act = editMenu->addAction(QIcon(":/icon/images/delete2.svg"), tr("Delete"), QKeySequence::Delete, this, &MainWindow::slot_delete);
     _m_dynamic_actions.insert("dataType", DynamicAction(edit_delete_act, {_m_tree_pou}, true));
     _m_dynamic_actions.insert("pou", DynamicAction(edit_delete_act, {_m_tree_pou}, true));

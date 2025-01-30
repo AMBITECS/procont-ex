@@ -10,16 +10,11 @@ set(MODBUS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/utils/libmodbus_src)
 set(MODBUS_BIN ${CMAKE_CURRENT_BINARY_DIR}/utils/libmodbus)
 
 set(MODBUS_DIST ${CMAKE_INSTALL_PREFIX})
+message("== MODBUS_DIST:         ${MODBUS_DIST}")
 
 set(MODBUS_INCLUDES   ${MODBUS_DIST}/include)
 set(MODBUS_STATIC_LIB ${MODBUS_DIST}/lib/libmodbus.a)
 set(MODBUS_SHARED_LIB ${MODBUS_DIST}/lib/libmodbus.so)
-
-#message("== MODBUS_DIR:         ${MODBUS_DIR}")
-#message("== MODBUS_BIN:         ${MODBUS_BIN}")
-#message("== MODBUS_INCLUDES:    ${MODBUS_INCLUDES}")
-#message("== MODBUS_STATIC_LIB:  ${MODBUS_STATIC_LIB}")
-message("== MODBUS_DIST:         ${MODBUS_DIST}")
 
 file(MAKE_DIRECTORY ${MODBUS_INCLUDES})
 

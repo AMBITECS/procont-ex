@@ -22,10 +22,7 @@ set( PROJ_LIB_DIR                   ${PROJ_DIR}/lib                 ) # PROJ inc
 set( PROJ_CMP_DIR                   ${PROJ_DIR}/matiec              ) # IEC to C compiler directory
 set( PROJ_IEC2C                     ${PROJ_CMP_DIR}/iec2c           ) # IEC to C compiler
 
-set( CMAKE_MODULE_PATH              ${CMAKE_DIR} ${CMAKE_DIR}/find )
-
-#set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/generated.st     ) # ST source file
-#set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/wmt.st     ) # ST source file
+set( CMAKE_MODULE_PATH              ${CMAKE_DIR} ${CMAKE_DIR}/find  )
 set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/plc.st     ) # ST source file
 
 #message("== PROJ_DIR:     ${PROJ_DIR}")
@@ -36,14 +33,14 @@ set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/plc.st     ) # ST sourc
 #message("== CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
 #message("== CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
-# Libmodbus library
-include(${CMAKE_DIR}/modbus_build.cmake)
+# Libmodbus library (сделан через include, т.к. нет своего CMakeLists.txt)
+include(${CMAKE_DIR}/build-modbus.cmake)
 
 # dnp3 library
-include(${CMAKE_DIR}/dnp3_build.cmake)
-
+add_subdirectory(${PROJ_MOD_DIR}/dnp3_src)
 
 ################################
+# Запуск cmake для сборки target build-iec
 execute_process(
         WORKING_DIRECTORY "${PROJ_IEC_DIR}"
         COMMAND ${CMAKE_COMMAND}
@@ -60,12 +57,10 @@ execute_process(
 )
 ################################
 
-
-
 ##-------------------------------------------------------------------------------
 ## 4) Главный исполняемый модуль ${proj} = 'procont-ex'
 ##-------------------------------------------------------------------------------
-include(${CMAKE_DIR}/tools.cmake)
+include(${CMAKE_DIR}/build-tools.cmake)
 
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки
@@ -90,8 +85,7 @@ build_target(
         ${PROJ_SRC_DIR}
         ${PROJ_LIB_DIR}
         ${PROJ_IEC_DIR}
-#        "~/.local/include/modbus"
-        ${modbus_INCLUDE_DIRS}
+        ${modbus_INCLUDE_DIRS}  #"~/.local/include/modbus"
 
     SRCS
         ${PROJ_IEC_DIR}/glueVars.cpp
@@ -100,15 +94,12 @@ build_target(
 
     LNKS
         #pthread
-
-        modbus
-        #${modbus_LIBRARIES}
+        modbus  #${modbus_LIBRARIES}
 
         ${AsioPAL_LIBRARIES}
         ${AsioDNP3_LIBRARIES}
         ${OpenPAL_LIBRARIES}
         ${OpenDNP3_LIBRARIES}
-
 )
 
 #add_dependencies(${proj} dnp3)

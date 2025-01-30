@@ -66,3 +66,7 @@ build/
 
 **/CMakeFiles/
 
+
+src/procont-ex/utils/libmodbus_src/config.h.in~
+
+src/procont-ex/utils/libmodbus_src/configure~

@@ -69,7 +69,7 @@ add_custom_command(
             -D PROJ_IEC_DIR=${PROJ_IEC_DIR}
             #-D PROJ_INC_DIR=${PROJ_INC_DIR}
             -D PROJ_LIB_DIR=${PROJ_LIB_DIR}
-            -P ${CMAKE_DIR}/iec_build.cmake
+            -P ${CMAKE_DIR}/build-iec.cmake
 
         COMMAND ls ${PROJ_IEC_DIR}/*.o > ${PROJ_IEC_DIR}/obj-sources
 )

@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.5)
 
 set(NAME ${PNME}-conf)
 
-project(${NAME} VERSION 0.1 LANGUAGES CXX)
+project(${NAME}
+    VERSION 1.0.1
+    DESCRIPTION "Procont configurator"
+    LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

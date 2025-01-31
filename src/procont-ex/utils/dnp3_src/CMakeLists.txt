@@ -17,7 +17,7 @@ endif()
 
 message("CMake build is: ${CMAKE_BUILD_TYPE}")
 
-include(${PROJECT_SOURCE_DIR}/cmake/settings.cmake)
+# include(${PROJECT_SOURCE_DIR}/cmake/settings.cmake)
 
 # various optional libraries and projects
 

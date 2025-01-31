@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
-project( PROCONT-EX
+
+set(PNME procont)
+set(NAME ${PNME}-ex)
+
+project( ${NAME}
          VERSION 1.0.1
          DESCRIPTION "Procont execution environment"
          LANGUAGES C CXX
@@ -23,7 +27,11 @@ set( PROJ_CMP_DIR                   ${PROJ_DIR}/matiec              ) # IEC to C
 set( PROJ_IEC2C                     ${PROJ_CMP_DIR}/iec2c           ) # IEC to C compiler
 
 set( CMAKE_MODULE_PATH              ${CMAKE_DIR} ${CMAKE_DIR}/find  )
+
 set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/plc.st     ) # ST source file
+
+set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/${PNME}/bin)
+# set(LIBRARY_OUTPUT_PATH     ${CMAKE_BINARY_DIR}/${PNME}/${NAME}/lib)
 
 #message("== PROJ_DIR:     ${PROJ_DIR}")
 #message("== CMAKE_DIR:    ${CMAKE_DIR}")
@@ -34,7 +42,10 @@ set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/plc.st     ) # ST sourc
 #message("== CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
 # Libmodbus library (сделан через include, т.к. нет своего CMakeLists.txt)
-include(${CMAKE_DIR}/build-modbus.cmake)
+# include(${CMAKE_DIR}/build-modbus.cmake)
+
+# modbus library
+add_subdirectory(${PROJ_MOD_DIR}/libmodbus_src)
 
 # dnp3 library
 add_subdirectory(${PROJ_MOD_DIR}/dnp3_src)
@@ -65,11 +76,12 @@ include(${CMAKE_DIR}/build-tools.cmake)
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки
 #-------------------------------------------------------------------------------
-find_package(AsioPAL  REQUIRED)
-find_package(AsioDNP3 REQUIRED)
-find_package(OpenPAL  REQUIRED)
-find_package(OpenDNP3 REQUIRED)
-find_package(modbus   REQUIRED)
+# find_package(AsioPAL  REQUIRED)
+# find_package(AsioDNP3 REQUIRED)
+# find_package(OpenPAL  REQUIRED)
+# find_package(OpenDNP3 REQUIRED)
+
+include(${CMAKE_DIR}/find/Findmodbus.cmake)
 
 message(STATUS "dist_include = \"${dist_include}\"")
 
@@ -81,26 +93,35 @@ build_target(
     EXE
     OPTS -g -O0 -w -fPIC
     INCS
-        ${dist_include}
+        # ${dist_include}
         ${PROJ_SRC_DIR}
         ${PROJ_LIB_DIR}
         ${PROJ_IEC_DIR}
-        ${modbus_INCLUDE_DIRS}  #"~/.local/include/modbus"
+        # ${modbus_INCLUDE_DIRS}  #"~/.local/include/modbus"
 
     SRCS
         ${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp
         :MASK ${PROJ_IEC_DIR}/*.o
 
-    LNKS
+    # LNKS
         #pthread
-        modbus  #${modbus_LIBRARIES}
+        # modbus  #${modbus_LIBRARIES}
 
-        ${AsioPAL_LIBRARIES}
-        ${AsioDNP3_LIBRARIES}
-        ${OpenPAL_LIBRARIES}
-        ${OpenDNP3_LIBRARIES}
+        # ${AsioPAL_LIBRARIES}
+        # ${AsioDNP3_LIBRARIES}
+        # ${OpenPAL_LIBRARIES}
+        # ${OpenDNP3_LIBRARIES}
 )
+
+target_include_directories(${proj} PRIVATE ${PROJ_DIR}/utils/dnp3_src/cpp/libs/include)
+target_include_directories(${proj} PRIVATE ${PROJ_DIR}/utils/libmodbus_src/src)
+
+target_link_libraries(${proj} asiodnp3)
+target_link_libraries(${proj} asiopal)
+target_link_libraries(${proj} opendnp3)
+target_link_libraries(${proj} openpal)
+target_link_libraries(${proj} ${modbus_LIBRARIES})
 
 #add_dependencies(${proj} dnp3)
 

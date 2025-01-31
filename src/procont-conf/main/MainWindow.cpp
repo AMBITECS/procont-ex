@@ -287,7 +287,7 @@ void MainWindow::createMenu()
     projectMenu->addMenu(_m_addobject_menu);
 
     auto compileMenu = menuBar()->addMenu(tr("Compile"));
-    // auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
+    auto compile_compile_act = compileMenu->addAction(QIcon(":/icon/images/hammer2.svg"), tr("Compile"), this, &MainWindow::slot_compile);
     auto compile_build_act = compileMenu->addAction(QIcon(":/icon/images/hammer2.svg"), tr("Build"), QKeySequence(tr("Ctrl+Shift+B")), this, &MainWindow::slot_build);
 
     auto toolbar = addToolBar("main");
@@ -872,10 +872,6 @@ void MainWindow::slot_input_assistant()
 
 void MainWindow::slot_compile()
 {
-}
-
-void MainWindow::slot_build()
-{
     // *** подготовка ST-файла
     // создание папки для сборки
     auto _buildDir = QString("%1/build").arg(_m_base_directory);
@@ -901,9 +897,14 @@ void MainWindow::slot_build()
                 "generated.st",
                 _buildDir,
                 _m_settings->value("Compiler/matiec_path").toString()
-            );
+                );
     if( 0 == _m_compiler->compile())
         b_command(CCmd::eCT_Show);
     // ***
+}
+
+void MainWindow::slot_build()
+{
+
 }
 

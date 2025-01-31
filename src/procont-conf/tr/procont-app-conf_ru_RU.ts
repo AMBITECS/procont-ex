@@ -1190,6 +1190,7 @@ Please, enter different variable name</source>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="289"/>
+        <location filename="../main/MainWindow.cpp" line="290"/>
         <source>Compile</source>
         <translation>Компиляция</translation>
     </message>

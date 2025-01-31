@@ -91,6 +91,12 @@
         <file>images/code-2.svg</file>
         <file>images/list.svg</file>
         <file>images/edit-1.svg</file>
+        <file>images/clone.svg</file>
+        <file>images/import-2.svg</file>
+        <file>images/alphabet.svg</file>
+        <file>images/category-1.svg</file>
+        <file>images/category-2.svg</file>
+        <file>images/config-2.svg</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/AdditionalFunctionBlocks.xml</file>

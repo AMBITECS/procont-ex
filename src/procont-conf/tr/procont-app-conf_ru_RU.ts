@@ -1297,6 +1297,96 @@ Please, enter different variable name</source>
     </message>
 </context>
 <context>
+    <name>ObjectDictionary</name>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="351"/>
+        <source>Add object</source>
+        <translation type="unfinished">Добавить объект</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="352"/>
+        <source>Add subobject</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="353"/>
+        <source>Delete</source>
+        <translation type="unfinished">Удалить</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="354"/>
+        <source>Clone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="355"/>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="360"/>
+        <source>Index</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="361"/>
+        <source>Name</source>
+        <translation type="unfinished">Имя</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="362"/>
+        <source>Data type</source>
+        <translation type="unfinished">Тип данных</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="363"/>
+        <source>Default value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="364"/>
+        <source>Access type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="365"/>
+        <source>Variable mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="374"/>
+        <source>Categorized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="375"/>
+        <source>Alphabetical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="377"/>
+        <source>Property pages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="obsolete">Значение</translation>
+    </message>
+</context>
+<context>
+    <name>PDO</name>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="256"/>
+        <source>Receive PDOs (Master =&gt; Slave)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="266"/>
+        <source>Transmit PDOs (Slave =&gt; Master)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PDO_widget</name>
     <message>
         <location filename="../widget/WidgetSettings.cpp" line="224"/>
@@ -1674,6 +1764,94 @@ Enter a new name</source>
     </message>
 </context>
 <context>
+    <name>SDO</name>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="291"/>
+        <source>Add SDO</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="292"/>
+        <source>Edit</source>
+        <translation type="unfinished">Редактировать</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="293"/>
+        <source>Delete</source>
+        <translation type="unfinished">Удалить</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="294"/>
+        <source>Move up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="295"/>
+        <source>Mode down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="300"/>
+        <source>Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="301"/>
+        <source>Index:Subindex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="302"/>
+        <source>Name</source>
+        <translation type="unfinished">Имя</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="303"/>
+        <source>Value</source>
+        <translation type="unfinished">Значение</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="304"/>
+        <source>Bit length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="305"/>
+        <source>Abort on error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="306"/>
+        <source>Jump to line if error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="307"/>
+        <source>Next line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="308"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="318"/>
+        <source>SDO timeout (ms)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="323"/>
+        <source>Create all SDOs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="324"/>
+        <source>Write complite PDO configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>StandardLibrary</name>
     <message>
         <source>can&apos;t open library &apos;StandardLibrary&apos;</source>
@@ -1731,12 +1909,12 @@ Enter a new name</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="106"/>
+        <location filename="../widget/WidgetEditor.cpp" line="109"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetEditor.cpp" line="109"/>
+        <location filename="../widget/WidgetEditor.cpp" line="112"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
@@ -1794,60 +1972,60 @@ Enter a new name</source>
 <context>
     <name>WidgetSettings_CANbus</name>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="297"/>
-        <location filename="../widget/WidgetSettings.cpp" line="331"/>
+        <location filename="../widget/WidgetSettings.cpp" line="469"/>
+        <location filename="../widget/WidgetSettings.cpp" line="503"/>
         <source>General</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="298"/>
+        <location filename="../widget/WidgetSettings.cpp" line="470"/>
         <source>Log</source>
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="299"/>
+        <location filename="../widget/WidgetSettings.cpp" line="471"/>
         <source>CANbus IEC Objects</source>
         <translation type="unfinished">CANbus
 МЭК-объектов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="299"/>
+        <location filename="../widget/WidgetSettings.cpp" line="471"/>
         <source>CANbus - CANbus IEC Objects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="300"/>
+        <location filename="../widget/WidgetSettings.cpp" line="472"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="300"/>
+        <location filename="../widget/WidgetSettings.cpp" line="472"/>
         <source>CANbus - Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="301"/>
+        <location filename="../widget/WidgetSettings.cpp" line="473"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="301"/>
+        <location filename="../widget/WidgetSettings.cpp" line="473"/>
         <source>CANbus - Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="311"/>
-        <location filename="../widget/WidgetSettings.cpp" line="312"/>
+        <location filename="../widget/WidgetSettings.cpp" line="483"/>
+        <location filename="../widget/WidgetSettings.cpp" line="484"/>
         <source>Use current setting</source>
         <translation>Использовать текущую настройку</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="323"/>
+        <location filename="../widget/WidgetSettings.cpp" line="495"/>
         <source>Network</source>
         <translation>Сеть</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="326"/>
+        <location filename="../widget/WidgetSettings.cpp" line="498"/>
         <source>Baud rate (kbit/s)</source>
         <translation>Скорость передачи (кбит/c)</translation>
     </message>
@@ -1855,138 +2033,208 @@ Enter a new name</source>
 <context>
     <name>WidgetSettings_CANopen_device</name>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="500"/>
-        <location filename="../widget/WidgetSettings.cpp" line="553"/>
         <source>General</source>
-        <translation>Общее</translation>
+        <translation type="vanished">Общее</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="501"/>
         <source>Object Dictionary</source>
-        <translation>Словарь объектов</translation>
+        <translation type="vanished">Словарь объектов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="501"/>
-        <source>CANopen device - Object Dictionary</source>
-        <translation type="unfinished"></translation>
+        <source>Log</source>
+        <translation type="vanished">Журнал</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="502"/>
-        <source>CANopen device - PDOs</source>
-        <translation type="unfinished"></translation>
+        <source>CANopen I/O Mapping</source>
+        <translation type="vanished">CANopen соотнесение
+входов/выходов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="502"/>
+        <source>CANopen IEC Objects</source>
+        <translation type="vanished">CANopen МЭК-объектов</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation type="vanished">Состояние</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation type="vanished">Информация</translation>
+    </message>
+    <message>
+        <source>Node ID</source>
+        <translation type="vanished">ID узла</translation>
+    </message>
+    <message>
+        <source>Device profile</source>
+        <translation type="vanished">Профиль устройства</translation>
+    </message>
+    <message>
+        <source>Edit I/O Area...</source>
+        <translation type="vanished">Редактировать область I/O...</translation>
+    </message>
+    <message>
+        <source>Edit SDO Parameter Area...</source>
+        <translation type="vanished">Редактировать область параметров SDO...</translation>
+    </message>
+    <message>
+        <source>Vendor name</source>
+        <translation type="vanished">Имя поставщика</translation>
+    </message>
+    <message>
+        <source>Vendor number</source>
+        <translation type="vanished">Номер поставщика</translation>
+    </message>
+    <message>
+        <source>Product name</source>
+        <translation type="vanished">Имя продукта</translation>
+    </message>
+    <message>
+        <source>Product number</source>
+        <translation type="vanished">Номер продукта</translation>
+    </message>
+    <message>
+        <source>Revision number</source>
+        <translation type="vanished">Номер версии</translation>
+    </message>
+    <message>
+        <source>Install to Device Repository</source>
+        <translation type="vanished">Установить в репозиторий устройств</translation>
+    </message>
+    <message>
+        <source>Export EDS File...</source>
+        <translation type="vanished">Экспорт EDS-файла...</translation>
+    </message>
+    <message>
+        <source>EDS File</source>
+        <translation type="vanished">EDS-файл</translation>
+    </message>
+</context>
+<context>
+    <name>WidgetSettings_CANopen_local_device</name>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="672"/>
+        <location filename="../widget/WidgetSettings.cpp" line="725"/>
+        <source>General</source>
+        <translation type="unfinished">Общее</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="673"/>
+        <source>Object Dictionary</source>
+        <translation type="unfinished">Словарь объектов</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="674"/>
         <source>PDOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="503"/>
+        <location filename="../widget/WidgetSettings.cpp" line="675"/>
         <source>Log</source>
-        <translation>Журнал</translation>
+        <translation type="unfinished">Журнал</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="506"/>
+        <location filename="../widget/WidgetSettings.cpp" line="678"/>
         <source>CANopen I/O Mapping</source>
-        <translation>CANopen соотнесение
+        <translation type="unfinished">CANopen соотнесение
 входов/выходов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="507"/>
-        <source>CANopen IEC Objects</source>
-        <translation>CANopen МЭК-объектов</translation>
-    </message>
-    <message>
-        <location filename="../widget/WidgetSettings.cpp" line="507"/>
+        <location filename="../widget/WidgetSettings.cpp" line="679"/>
         <source>CANopen device - CANopen IEC Objects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="508"/>
-        <source>Status</source>
-        <translation>Состояние</translation>
+        <location filename="../widget/WidgetSettings.cpp" line="679"/>
+        <source>CANopen IEC Objects</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="508"/>
+        <location filename="../widget/WidgetSettings.cpp" line="680"/>
         <source>CANopen device - Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="509"/>
-        <source>Information</source>
-        <translation>Информация</translation>
+        <location filename="../widget/WidgetSettings.cpp" line="680"/>
+        <source>Status</source>
+        <translation type="unfinished">Состояние</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="509"/>
+        <location filename="../widget/WidgetSettings.cpp" line="681"/>
         <source>CANopen device - Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="530"/>
+        <location filename="../widget/WidgetSettings.cpp" line="681"/>
+        <source>Information</source>
+        <translation type="unfinished">Информация</translation>
+    </message>
+    <message>
+        <location filename="../widget/WidgetSettings.cpp" line="702"/>
         <source>Node ID</source>
-        <translation>ID узла</translation>
+        <translation type="unfinished">ID узла</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="533"/>
+        <location filename="../widget/WidgetSettings.cpp" line="705"/>
         <source>Device profile</source>
-        <translation>Профиль устройства</translation>
+        <translation type="unfinished">Профиль устройства</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="538"/>
+        <location filename="../widget/WidgetSettings.cpp" line="710"/>
         <source>Edit I/O Area...</source>
-        <translation>Редактировать область I/O...</translation>
+        <translation type="unfinished">Редактировать область I/O...</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="541"/>
+        <location filename="../widget/WidgetSettings.cpp" line="713"/>
         <source>Edit SDO Parameter Area...</source>
-        <translation>Редактировать область параметров SDO...</translation>
+        <translation type="unfinished">Редактировать область параметров SDO...</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="579"/>
+        <location filename="../widget/WidgetSettings.cpp" line="751"/>
         <source>Vendor name</source>
-        <translation>Имя поставщика</translation>
+        <translation type="unfinished">Имя поставщика</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="580"/>
+        <location filename="../widget/WidgetSettings.cpp" line="752"/>
         <source>Vendor number</source>
-        <translation>Номер поставщика</translation>
+        <translation type="unfinished">Номер поставщика</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="581"/>
+        <location filename="../widget/WidgetSettings.cpp" line="753"/>
         <source>Product name</source>
-        <translation>Имя продукта</translation>
+        <translation type="unfinished">Имя продукта</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="582"/>
+        <location filename="../widget/WidgetSettings.cpp" line="754"/>
         <source>Product number</source>
-        <translation>Номер продукта</translation>
+        <translation type="unfinished">Номер продукта</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="583"/>
+        <location filename="../widget/WidgetSettings.cpp" line="755"/>
         <source>Revision number</source>
-        <translation>Номер версии</translation>
+        <translation type="unfinished">Номер версии</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="585"/>
+        <location filename="../widget/WidgetSettings.cpp" line="757"/>
         <source>Install to Device Repository</source>
-        <translation>Установить в репозиторий устройств</translation>
+        <translation type="unfinished">Установить в репозиторий устройств</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="588"/>
+        <location filename="../widget/WidgetSettings.cpp" line="760"/>
         <source>Export EDS File...</source>
-        <translation>Экспорт EDS-файла...</translation>
+        <translation type="unfinished">Экспорт EDS-файла...</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="600"/>
+        <location filename="../widget/WidgetSettings.cpp" line="772"/>
         <source>EDS File</source>
-        <translation>EDS-файл</translation>
+        <translation type="unfinished">EDS-файл</translation>
     </message>
 </context>
 <context>
     <name>WidgetSettings_CANopen_manager</name>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="380"/>
-        <location filename="../widget/WidgetSettings.cpp" line="427"/>
+        <location filename="../widget/WidgetSettings.cpp" line="552"/>
+        <location filename="../widget/WidgetSettings.cpp" line="599"/>
         <source>Node ID</source>
         <translation>ID узла</translation>
     </message>
@@ -1995,146 +2243,146 @@ Enter a new name</source>
         <translation type="obsolete">Проверить и исправить конфигурацию</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="363"/>
+        <location filename="../widget/WidgetSettings.cpp" line="535"/>
         <source>CANopen manager - Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="382"/>
+        <location filename="../widget/WidgetSettings.cpp" line="554"/>
         <source>Check and Fix Configuration...</source>
         <translation>Проверить и исправить конфигурацию...</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="387"/>
+        <location filename="../widget/WidgetSettings.cpp" line="559"/>
         <source>Autostart CANopen Manager</source>
         <translation>Автозапуск CANopen Manager</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="388"/>
+        <location filename="../widget/WidgetSettings.cpp" line="560"/>
         <source>Polling of optional slaves</source>
         <translation>Опрашивание опционных слейвов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="392"/>
+        <location filename="../widget/WidgetSettings.cpp" line="564"/>
         <source>Restart slave</source>
         <translation>Перезапустить слейв</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="392"/>
+        <location filename="../widget/WidgetSettings.cpp" line="564"/>
         <source>Stop slave</source>
         <translation>Остановить слейв</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="395"/>
+        <location filename="../widget/WidgetSettings.cpp" line="567"/>
         <source>Start slaves</source>
         <translation>Запуск слейвов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="397"/>
+        <location filename="../widget/WidgetSettings.cpp" line="569"/>
         <source>NMT error bahavior</source>
         <translation>Поведение ошибки NMT</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="404"/>
+        <location filename="../widget/WidgetSettings.cpp" line="576"/>
         <source>NMT start all (if possible)</source>
         <translation>NMT запустить все (если возможно)</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="426"/>
+        <location filename="../widget/WidgetSettings.cpp" line="598"/>
         <source>Enable heartbeat producing</source>
         <translation>Генерация сердцебиения</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="428"/>
-        <location filename="../widget/WidgetSettings.cpp" line="470"/>
+        <location filename="../widget/WidgetSettings.cpp" line="600"/>
+        <location filename="../widget/WidgetSettings.cpp" line="642"/>
         <source>Producer time (ms)</source>
         <translation>Частота (мс)</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="430"/>
+        <location filename="../widget/WidgetSettings.cpp" line="602"/>
         <source>Guarding</source>
         <translation>Защита узла</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="448"/>
+        <location filename="../widget/WidgetSettings.cpp" line="620"/>
         <source>Enable SYNC producing</source>
         <translation>Синхронная генерация</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="449"/>
-        <location filename="../widget/WidgetSettings.cpp" line="469"/>
+        <location filename="../widget/WidgetSettings.cpp" line="621"/>
+        <location filename="../widget/WidgetSettings.cpp" line="641"/>
         <source>COB ID (Hex)     16#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="450"/>
+        <location filename="../widget/WidgetSettings.cpp" line="622"/>
         <source>Cycle period (us)</source>
         <translation>Общее время цикла (мкс)</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="451"/>
+        <location filename="../widget/WidgetSettings.cpp" line="623"/>
         <source>Window length (us)</source>
         <translation>Ширина окна (мкс)</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="452"/>
+        <location filename="../widget/WidgetSettings.cpp" line="624"/>
         <source>Enable SYNC consuming</source>
         <translation>Активация потребителя</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="454"/>
+        <location filename="../widget/WidgetSettings.cpp" line="626"/>
         <source>SYNC</source>
         <translation>SYNC</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="468"/>
+        <location filename="../widget/WidgetSettings.cpp" line="640"/>
         <source>Enable TIME producing</source>
         <translation>TIME-генерация</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="472"/>
+        <location filename="../widget/WidgetSettings.cpp" line="644"/>
         <source>TIME</source>
         <translation>TIME</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="356"/>
-        <location filename="../widget/WidgetSettings.cpp" line="412"/>
+        <location filename="../widget/WidgetSettings.cpp" line="528"/>
+        <location filename="../widget/WidgetSettings.cpp" line="584"/>
         <source>General</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="357"/>
+        <location filename="../widget/WidgetSettings.cpp" line="529"/>
         <source>Log</source>
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="360"/>
+        <location filename="../widget/WidgetSettings.cpp" line="532"/>
         <source>CANopen I/O Mapping</source>
         <translation>CANopen соотнесение
 входов/выходов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="361"/>
+        <location filename="../widget/WidgetSettings.cpp" line="533"/>
         <source>CANopen IEC Objects</source>
         <translation>CANopen МЭК-объектов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="361"/>
+        <location filename="../widget/WidgetSettings.cpp" line="533"/>
         <source>CANopen manager - CANopen IEC Objects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="362"/>
+        <location filename="../widget/WidgetSettings.cpp" line="534"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="362"/>
+        <location filename="../widget/WidgetSettings.cpp" line="534"/>
         <source>CANopen manager - Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="363"/>
+        <location filename="../widget/WidgetSettings.cpp" line="535"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
@@ -2142,187 +2390,182 @@ Enter a new name</source>
 <context>
     <name>WidgetSettings_CANopen_remote_device</name>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="626"/>
-        <location filename="../widget/WidgetSettings.cpp" line="679"/>
+        <location filename="../widget/WidgetSettings.cpp" line="798"/>
+        <location filename="../widget/WidgetSettings.cpp" line="851"/>
         <source>General</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="627"/>
+        <location filename="../widget/WidgetSettings.cpp" line="799"/>
         <source>PDOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="628"/>
-        <source>CANopen remote device - SDOs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widget/WidgetSettings.cpp" line="628"/>
+        <location filename="../widget/WidgetSettings.cpp" line="800"/>
         <source>SDOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="629"/>
+        <location filename="../widget/WidgetSettings.cpp" line="801"/>
         <source>Log</source>
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="631"/>
+        <location filename="../widget/WidgetSettings.cpp" line="803"/>
         <source>CANopen I/O Mapping</source>
         <translation type="unfinished">CANopen соотнесение
 входов/выходов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="632"/>
+        <location filename="../widget/WidgetSettings.cpp" line="804"/>
         <source>CANopen IEC Objects</source>
         <translation type="unfinished">CANopen
 МЭК-объектов</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="632"/>
+        <location filename="../widget/WidgetSettings.cpp" line="804"/>
         <source>CANopen remote device - CANopen IEC Objects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="633"/>
+        <location filename="../widget/WidgetSettings.cpp" line="805"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="633"/>
+        <location filename="../widget/WidgetSettings.cpp" line="805"/>
         <source>CANopen remote device - Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="634"/>
+        <location filename="../widget/WidgetSettings.cpp" line="806"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="634"/>
+        <location filename="../widget/WidgetSettings.cpp" line="806"/>
         <source>CANopen remote device - Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="650"/>
-        <location filename="../widget/WidgetSettings.cpp" line="696"/>
+        <location filename="../widget/WidgetSettings.cpp" line="822"/>
+        <location filename="../widget/WidgetSettings.cpp" line="868"/>
         <source>SDO Channels (1/1 Active)</source>
         <translation>SDO-каналы (1/1 активно)</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="659"/>
+        <location filename="../widget/WidgetSettings.cpp" line="831"/>
         <source>Node ID</source>
         <translation>ID узла</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="666"/>
+        <location filename="../widget/WidgetSettings.cpp" line="838"/>
         <source>Enable expert settings</source>
         <translation>Экспертные установки</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="667"/>
+        <location filename="../widget/WidgetSettings.cpp" line="839"/>
         <source>Enable SYNC producing</source>
         <translation>SYNC-генерация</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="669"/>
+        <location filename="../widget/WidgetSettings.cpp" line="841"/>
         <source>Optional device</source>
         <translation>Опциональное устройство</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="670"/>
+        <location filename="../widget/WidgetSettings.cpp" line="842"/>
         <source>No initialization</source>
         <translation>Без инициализации</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="671"/>
+        <location filename="../widget/WidgetSettings.cpp" line="843"/>
         <source>Reset node</source>
         <translation>Сброс узла</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="701"/>
+        <location filename="../widget/WidgetSettings.cpp" line="873"/>
         <source>Enable nodeguarding</source>
         <translation>Включить защиту узла</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="702"/>
+        <location filename="../widget/WidgetSettings.cpp" line="874"/>
         <source>Guard time (ms)</source>
         <translation>Интервал (мс)</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="703"/>
+        <location filename="../widget/WidgetSettings.cpp" line="875"/>
         <source>Life time factor (ms)</source>
         <translation>Время жизни (мс)</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="706"/>
+        <location filename="../widget/WidgetSettings.cpp" line="878"/>
         <source>Enable heartbeat producing</source>
         <translation>Включить генерацию сердцебиения</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="707"/>
-        <location filename="../widget/WidgetSettings.cpp" line="743"/>
+        <location filename="../widget/WidgetSettings.cpp" line="879"/>
+        <location filename="../widget/WidgetSettings.cpp" line="915"/>
         <source>Producer time (ms)</source>
         <translation>Частота (мс)</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="714"/>
+        <location filename="../widget/WidgetSettings.cpp" line="886"/>
         <source>Guarding</source>
         <translation>Защита узла</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="724"/>
+        <location filename="../widget/WidgetSettings.cpp" line="896"/>
         <source>Enable emergency (EMCY)</source>
         <translation>Экстренная телеграмма</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="725"/>
+        <location filename="../widget/WidgetSettings.cpp" line="897"/>
         <source>COB ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="727"/>
+        <location filename="../widget/WidgetSettings.cpp" line="899"/>
         <source>Emergency (EMCY)</source>
         <translation>Экстренная телеграмма</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="742"/>
+        <location filename="../widget/WidgetSettings.cpp" line="914"/>
         <source>COB ID (Hex)     16#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="744"/>
+        <location filename="../widget/WidgetSettings.cpp" line="916"/>
         <source>Enable TIME consuming</source>
         <translation>TIME-потребление</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="746"/>
+        <location filename="../widget/WidgetSettings.cpp" line="918"/>
         <source>TIME</source>
         <translation type="unfinished">TIME</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="752"/>
+        <location filename="../widget/WidgetSettings.cpp" line="924"/>
         <source>Check vendor ID</source>
         <translation>Проверка ID производителя</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="753"/>
+        <location filename="../widget/WidgetSettings.cpp" line="925"/>
         <source>Check product number</source>
         <translation>Проверка номера продукта</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="754"/>
+        <location filename="../widget/WidgetSettings.cpp" line="926"/>
         <source>Check revision number</source>
         <translation>Проверка номера версии</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="757"/>
+        <location filename="../widget/WidgetSettings.cpp" line="929"/>
         <source>Checks at Startup</source>
         <translation>Проверка при запуске</translation>
     </message>
     <message>
-        <location filename="../widget/WidgetSettings.cpp" line="741"/>
+        <location filename="../widget/WidgetSettings.cpp" line="913"/>
         <source>Enable TIME producing</source>
         <translation>TIME-генерация</translation>
     </message>

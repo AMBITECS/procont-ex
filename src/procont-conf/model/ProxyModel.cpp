@@ -194,8 +194,8 @@ QVariant ProxyModelTable_var::headerData(int section, Qt::Orientation orientatio
         }
     }
 
-    if (orientation == Qt::Vertical && role == Qt::DisplayRole)
-        return QString("   ");
+    // if (orientation == Qt::Vertical && role == Qt::DisplayRole)
+    //     return QString("   ");
 
     return sourceModel()->headerData(section, orientation, role);
 }

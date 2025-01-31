@@ -70,9 +70,12 @@ QWidget * WidgetEditor::createVarsEditor()
     connect(reinterpret_cast<ProxyModelTable_var*>(_m_proxy), &ProxyModelTable_var::signal_variable_changed, this, &WidgetEditor::slot_variable_change);
     _m_vars_table->setRootIndex(DomModel::p_index(DomModel::s_index(_m_index), _m_proxy));
     _m_vars_table->setColumnHidden(0, true);
+    // _m_vars_table->setColumnHidden(1, true);
     _m_vars_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     _m_vars_table->setSelectionMode(QAbstractItemView::SingleSelection);
     _m_vars_table->horizontalHeader()->setHighlightSections(false);
+    // _m_vars_table->verticalHeader()->setMinimumWidth(30);
+    _m_vars_table->verticalHeader()->setHidden(true);
     _m_vars_table->setItemDelegateForColumn(7, new CTextEditDelegate);
     QStringList varTypes = {"Scope",
                             "VAR",

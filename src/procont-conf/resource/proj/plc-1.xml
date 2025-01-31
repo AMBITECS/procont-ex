@@ -1190,7 +1190,7 @@ ST Out
 	    <device name="CANopen remote device" type="4">
 	    </device>
 	  </device>
-	  <device name="CANopen Device" type="3">
+	  <device name="CANopen local Device" type="3">
 	  </device>
 	</device>
       </configuration>

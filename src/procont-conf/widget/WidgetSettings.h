@@ -101,6 +101,37 @@ public:
 };
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// *** SDO ***
+
+/*!
+ * \brief The SDO class
+ */
+
+class SDO : public QWidget
+{
+    Q_OBJECT
+
+public:
+    SDO();
+};
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ObjectDictionary ***
+
+/*!
+ * \brief The ObjectDictionary class
+ */
+
+class ObjectDictionary : public QWidget
+{
+    Q_OBJECT
+
+public:
+    ObjectDictionary();
+};
+// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // *** WidgetSettings ***
@@ -168,13 +199,13 @@ private:
 // *** WidgetSettings_CANopen_device ***
 
 /*!
- * \brief The WidgetSettings_CANopen_device class
+ * \brief The WidgetSettings_CANopen_local_device class
  */
-class WidgetSettings_CANopen_device : public WidgetSettings
+class WidgetSettings_CANopen_local_device : public WidgetSettings
 {
     Q_OBJECT
 public:
-    WidgetSettings_CANopen_device(const QModelIndex & index_);
+    WidgetSettings_CANopen_local_device(const QModelIndex & index_);
 
 private:
     [[nodiscard]] QWidget * createTab1();
@@ -244,15 +275,15 @@ public:
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** WidgetSettings_creator_CANopen_device ***
+// *** WidgetSettings_creator_CANopen_local_device ***
 
 /*!
- * \brief The WidgetSettings_creator_CANopen_device class
+ * \brief The WidgetSettings_creator_CANopen_local_device class
  */
-class WidgetSettings_creator_CANopen_device : public WidgetSettings_creator
+class WidgetSettings_creator_CANopen_local_device : public WidgetSettings_creator
 {
 public:
-    WidgetSettings_creator_CANopen_device() = default;
+    WidgetSettings_creator_CANopen_local_device() = default;
 
     [[nodiscard]] WidgetSettings * create(const QModelIndex & index_);
 };

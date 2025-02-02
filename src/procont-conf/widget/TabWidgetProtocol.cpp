@@ -180,33 +180,33 @@ void CWidgetProtocolTab_build::add(const CMessage &message_)
     {
         m_pErrorPlainTextWidget->appendPlainText(i);
 
-        QString err = "error: ";
-        if(i.indexOf(err) != -1)
-        {
-            auto k = i.indexOf(':');
-            QString pos = i.mid(k+1, i.indexOf(':', k+1)-(k+1));
-            auto tmp1 = pos.split("..");
-            auto tmp2 = tmp1.at(0).split("-");
-            auto tmp3 = tmp1.at(1).split("-");
-            QString row = tmp2.at(0);
-            if(tmp2.at(0) != tmp3.at(0))
-                row += QString("-%1").arg(tmp3.at(0));
-            QString column = tmp2.at(1);
-            if(tmp2.at(1) != tmp3.at(1))
-                column += QString("-%1").arg(tmp3.at(1));
-            pos = QString(tr("Row %1, Column %2")).arg(row, column);
-            QString message = i.right(i.size() - i.indexOf(err) - err.size());
-            QString type = "error";
-            auto file = QFileInfo(i.left(k));
+        // QString err = "error: ";
+        // if(i.indexOf(err) != -1)
+        // {
+        //     auto k = i.indexOf(':');
+        //     QString pos = i.mid(k+1, i.indexOf(':', k+1)-(k+1));
+        //     auto tmp1 = pos.split("..");
+        //     auto tmp2 = tmp1.at(0).split("-");
+        //     auto tmp3 = tmp1.at(1).split("-");
+        //     QString row = tmp2.at(0);
+        //     if(tmp2.at(0) != tmp3.at(0))
+        //         row += QString("-%1").arg(tmp3.at(0));
+        //     QString column = tmp2.at(1);
+        //     if(tmp2.at(1) != tmp3.at(1))
+        //         column += QString("-%1").arg(tmp3.at(1));
+        //     pos = QString(tr("Row %1, Column %2")).arg(row, column);
+        //     QString message = i.right(i.size() - i.indexOf(err) - err.size());
+        //     QString type = "error";
+        //     auto file = QFileInfo(i.left(k));
 
-            auto item = new QTreeWidgetItem(m_pErrorTreeWidget);
-            set_type(item, type);
-            item->setText(0, message);
-            item->setText(2, file.fileName());
-            item->setText(3, pos);
-            auto child = new QTreeWidgetItem(item, QStringList(i));
-            child->setToolTip(0, i);
-        }
+        //     auto item = new QTreeWidgetItem(m_pErrorTreeWidget);
+        //     set_type(item, type);
+        //     item->setText(0, message);
+        //     item->setText(2, file.fileName());
+        //     item->setText(3, pos);
+        //     auto child = new QTreeWidgetItem(item, QStringList(i));
+        //     child->setToolTip(0, i);
+        // }
     }
 }
 

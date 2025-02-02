@@ -16,7 +16,7 @@
 #include "dialog/RenameDialog.h"
 #include "dialog/AddDeviceDialog.h"
 #include "generate/Translator.h"
-#include "generate/Compiler.h"
+#include "generate/Cmd.h"
 #include "editor/fbd/common/general/ctreeobject.h"
 #include "undo/cundocommand_remove.h"
 #include "undo/cundocommand_insert.h"
@@ -286,9 +286,16 @@ void MainWindow::createMenu()
     _m_addobject_menu = new QMenu(tr("Add object"));
     projectMenu->addMenu(_m_addobject_menu);
 
-    auto compileMenu = menuBar()->addMenu(tr("Compile"));
-    // auto compile_compile_act = compileMenu->addAction(tr("Compile"), this, &MainWindow::slot_compile);
-    auto compile_build_act = compileMenu->addAction(QIcon(":/icon/images/hammer2.svg"), tr("Build"), QKeySequence(tr("Ctrl+Shift+B")), this, &MainWindow::slot_build);
+    auto buildMenu = menuBar()->addMenu(tr("Build"));
+    // auto build_compile_act = buildMenu->addAction(QIcon(":/icon/images/compile.svg"), tr("Compile"), this, &MainWindow::slot_compile);
+    // build_compile_act->setStatusTip(tr("Translate application ST-program to C code"));
+    auto build_build_act = buildMenu->addAction(QIcon(":/icon/images/hammer2.svg"), tr("Build"), QKeySequence(tr("Ctrl+Shift+B")), this, &MainWindow::slot_build);
+    // build_build_act->setStatusTip(tr("Build execution enveronment"));
+    buildMenu->addSeparator();
+    /*auto build_clean_act = */buildMenu->addAction(QIcon(":/icon/images/clean-2.svg"), tr("Clean all"), this, &MainWindow::slot_clean_all);
+
+    auto debugMenu = menuBar()->addMenu(tr("Debug"));
+    auto debug_run_act = debugMenu->addAction(QIcon(":/icon/images/play-1.svg"), tr("Run"), this, &MainWindow::slot_run);
 
     auto toolbar = addToolBar("main");
     toolbar->addAction(file_open_act);
@@ -307,7 +314,10 @@ void MainWindow::createMenu()
     _m_button->setIcon(QIcon(":/icon/images/plus-large.svg"));
     _m_button->setPopupMode(QToolButton::InstantPopup);
     toolbar->addSeparator();
-    toolbar->addAction(compile_build_act);
+    // toolbar->addAction(build_compile_act);
+    toolbar->addAction(build_build_act);
+    toolbar->addSeparator();
+    toolbar->addAction(debug_run_act);
     toolbar->setIconSize(QSize(32, 32));
 }
 
@@ -872,10 +882,6 @@ void MainWindow::slot_input_assistant()
 
 void MainWindow::slot_compile()
 {
-}
-
-void MainWindow::slot_build()
-{
     // *** подготовка ST-файла
     // создание папки для сборки
     auto _buildDir = QString("%1/build").arg(_m_base_directory);
@@ -895,15 +901,60 @@ void MainWindow::slot_build()
     // ***
 
     // *** трансляция ST->C
-    if(_m_compiler == nullptr)
-        _m_compiler = new Compiler_matiec
-            (
-                "generated.st",
-                _buildDir,
-                _m_settings->value("Compiler/matiec_path").toString()
-            );
-    if( 0 == _m_compiler->compile())
+    auto _cmd = new Cmd_compile_matiec(
+            "generated.st",
+            _buildDir,
+            _m_settings->value("Compiler/matiec_path").toString());
+    if( 0 == _cmd->execute())
         b_command(CCmd::eCT_Show);
     // ***
 }
 
+void MainWindow::slot_build()
+{
+    // *** подготовка ST-файла
+    // создание папки для сборки
+    auto _buildDir = QString("%1/procont-ex").arg(_m_base_directory);
+    auto _buildDir_ex = QString("%1/procont-ex/build-ex").arg(_m_base_directory);
+    QDir(_m_base_directory).mkdir(_buildDir_ex);
+    auto _buildDir_iec = QString("%1/procont-ex/build-iec").arg(_m_base_directory);
+    QDir(_buildDir_iec).removeRecursively();
+    QDir(_m_base_directory).mkdir(_buildDir_iec);
+
+    // формирование ST-файла
+    QString st_text = Translator::translate(_m_model_project->document());
+    // отображение ST-файла
+    b_text(st_text);
+
+    // запись файла
+    QFile file(QString("%1/st_files/plc.st").arg(_buildDir));
+    file.open(QIODevice::WriteOnly);
+    file.write(st_text.toLocal8Bit());
+    file.close();
+    // ***
+
+    QFile::copy(QString("%1/iec/CMakeLists.txt").arg(_buildDir), QString("%1/build-iec/CMakeLists.txt").arg(_buildDir));
+
+    auto _cmake_generate = new Cmd_cmake_generate
+            (
+                _buildDir,
+                "/home/ambitecs/Qt/Tools/CMake/bin"
+                );
+    if( 0 == _cmake_generate->execute())
+        b_command(CCmd::eCT_Show);
+}
+
+void MainWindow::slot_clean_all()
+{
+    auto _buildDir_ex = QString("%1/procont-ex/build-ex").arg(_m_base_directory);
+    QDir(_buildDir_ex).removeRecursively();
+    QDir(_m_base_directory).mkdir(_buildDir_ex);
+    auto _buildDir_iec = QString("%1/procont-ex/build-iec").arg(_m_base_directory);
+    QDir(_buildDir_iec).removeRecursively();
+    QDir(_m_base_directory).mkdir(_buildDir_iec);
+}
+
+void MainWindow::slot_run()
+{
+    QProcess::execute(QString("fly-term"), QStringList() << "-e" << QString("%1/procont-ex/build-ex/procont-ex").arg(_m_base_directory));
+}

@@ -1169,7 +1169,7 @@ ST Out
   </types>
   <instances>
     <configurations>
-      <configuration name="PROCont_SoftPLC_v1">
+      <configuration name="Config0">
         <resource name="resource1">
           <task name="plc_task" priority="1" interval="T#100ms">
             <pouInstance name="plc_task_instance" typeName="plc_prg"/>

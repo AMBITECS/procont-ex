@@ -70,7 +70,7 @@ set(PROJECT_SOURCES
     translator/TranslatorLD.cpp translator/TranslatorLD.h
     translator/TranslatorST.cpp translator/TranslatorST.h
 
-    generate/Compiler.cpp generate/Compiler.h
+    generate/Cmd.cpp generate/Cmd.h
     generate/Translator.cpp generate/Translator.h
 
     iec/StandardLibrary.cpp iec/StandardLibrary.h

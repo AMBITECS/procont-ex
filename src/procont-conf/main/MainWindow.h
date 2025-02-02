@@ -104,6 +104,9 @@ private slots:
 
     void slot_compile();
     void slot_build();
+    void slot_clean_all();
+
+    void slot_run();
 
     void slot_add_DUT();
     void slot_add_POU();
@@ -140,8 +143,6 @@ private:
     ProxyModelTree_dev * _m_proxy_dev{nullptr};
 
     QString _m_proj_dir{};
-
-    Compiler * _m_compiler{nullptr};
 
     QMenu * _m_view_menu{nullptr};
     QMultiHash<QString, DynamicAction> _m_dynamic_actions;

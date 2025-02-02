@@ -553,9 +553,8 @@ Please, enter different variable name</source>
         <translation>Код</translation>
     </message>
     <message>
-        <location filename="../widget/TabWidgetProtocol.cpp" line="197"/>
         <source>Row %1, Column %2</source>
-        <translation>Строка %1, Столбец %2</translation>
+        <translation type="vanished">Строка %1, Столбец %2</translation>
     </message>
 </context>
 <context>
@@ -1074,37 +1073,52 @@ Please, enter different variable name</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="317"/>
+        <location filename="../main/MainWindow.cpp" line="295"/>
+        <source>Clean all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="297"/>
+        <source>Debug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="298"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="327"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="327"/>
+        <location filename="../main/MainWindow.cpp" line="337"/>
         <source>Properties</source>
         <translation>Свойства</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="349"/>
+        <location filename="../main/MainWindow.cpp" line="359"/>
         <source>Resource</source>
         <translation>Ресурс</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="354"/>
+        <location filename="../main/MainWindow.cpp" line="364"/>
         <source>Task</source>
         <translation>Задача</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="359"/>
+        <location filename="../main/MainWindow.cpp" line="369"/>
         <source>POU instance</source>
         <translation>Экземмпляр программы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="651"/>
+        <location filename="../main/MainWindow.cpp" line="661"/>
         <source>User defined</source>
         <translation>Пользовательские</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="838"/>
+        <location filename="../main/MainWindow.cpp" line="848"/>
         <source>Do you really want rename %1 from &apos;%2&apos; to &apos;%3&apos;</source>
         <translation>Вы действительно хотите переименовать %1 из &apos;%2&apos; в &apos;%3&apos;</translation>
     </message>
@@ -1117,16 +1131,16 @@ Please, enter different variable name</source>
         <translation type="vanished">Пользовательские типы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="374"/>
-        <location filename="../main/MainWindow.cpp" line="775"/>
-        <location filename="../main/MainWindow.cpp" line="804"/>
-        <location filename="../main/MainWindow.cpp" line="837"/>
+        <location filename="../main/MainWindow.cpp" line="384"/>
+        <location filename="../main/MainWindow.cpp" line="785"/>
+        <location filename="../main/MainWindow.cpp" line="814"/>
+        <location filename="../main/MainWindow.cpp" line="847"/>
         <source>Attention</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="776"/>
-        <location filename="../main/MainWindow.cpp" line="805"/>
+        <location filename="../main/MainWindow.cpp" line="786"/>
+        <location filename="../main/MainWindow.cpp" line="815"/>
         <source>Do you really want to delete %1 &apos;%2&apos;</source>
         <translation>Вы действительно хотите удалить %1 &apos;%2&apos;</translation>
     </message>
@@ -1150,12 +1164,12 @@ Please, enter different variable name</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="291"/>
+        <location filename="../main/MainWindow.cpp" line="292"/>
         <source>Ctrl+Shift+B</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="337"/>
+        <location filename="../main/MainWindow.cpp" line="347"/>
         <source>DUT</source>
         <translation></translation>
     </message>
@@ -1170,13 +1184,13 @@ Please, enter different variable name</source>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="286"/>
-        <location filename="../main/MainWindow.cpp" line="340"/>
-        <location filename="../main/MainWindow.cpp" line="346"/>
-        <location filename="../main/MainWindow.cpp" line="351"/>
+        <location filename="../main/MainWindow.cpp" line="350"/>
         <location filename="../main/MainWindow.cpp" line="356"/>
         <location filename="../main/MainWindow.cpp" line="361"/>
-        <location filename="../main/MainWindow.cpp" line="480"/>
-        <location filename="../main/MainWindow.cpp" line="499"/>
+        <location filename="../main/MainWindow.cpp" line="366"/>
+        <location filename="../main/MainWindow.cpp" line="371"/>
+        <location filename="../main/MainWindow.cpp" line="490"/>
+        <location filename="../main/MainWindow.cpp" line="509"/>
         <source>Add object</source>
         <translation>Добавить объект</translation>
     </message>
@@ -1189,18 +1203,18 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="289"/>
         <source>Compile</source>
-        <translation>Компиляция</translation>
+        <translation type="vanished">Компиляция</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="291"/>
+        <location filename="../main/MainWindow.cpp" line="289"/>
+        <location filename="../main/MainWindow.cpp" line="292"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="178"/>
-        <location filename="../main/MainWindow.cpp" line="343"/>
+        <location filename="../main/MainWindow.cpp" line="353"/>
         <source>POU</source>
         <translation></translation>
     </message>
@@ -1210,28 +1224,28 @@ Please, enter different variable name</source>
         <translation>Компоненты</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="364"/>
+        <location filename="../main/MainWindow.cpp" line="374"/>
         <source>Add device...</source>
         <translation>Добавить устройство...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="374"/>
+        <location filename="../main/MainWindow.cpp" line="384"/>
         <source>The project has been changed, do you want to save changes?</source>
         <translation>Проект был изменен, хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="595"/>
-        <location filename="../main/MainWindow.cpp" line="616"/>
+        <location filename="../main/MainWindow.cpp" line="605"/>
+        <location filename="../main/MainWindow.cpp" line="626"/>
         <source>open project %1</source>
         <translation>загрузка проекта %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="628"/>
+        <location filename="../main/MainWindow.cpp" line="638"/>
         <source>can&apos;t open file for read: %1</source>
         <translation>не могу открыть файл для чтения: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="678"/>
+        <location filename="../main/MainWindow.cpp" line="688"/>
         <source>project opened %1</source>
         <translation>проект загружен %1</translation>
     </message>
@@ -1248,26 +1262,26 @@ Please, enter different variable name</source>
         <translation type="vanished">проект загружен</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="596"/>
-        <location filename="../main/MainWindow.cpp" line="617"/>
-        <location filename="../main/MainWindow.cpp" line="679"/>
+        <location filename="../main/MainWindow.cpp" line="606"/>
+        <location filename="../main/MainWindow.cpp" line="627"/>
+        <location filename="../main/MainWindow.cpp" line="689"/>
         <source>project file: %1</source>
         <translation>файл проекта: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="603"/>
-        <location filename="../main/MainWindow.cpp" line="627"/>
-        <location filename="../main/MainWindow.cpp" line="640"/>
+        <location filename="../main/MainWindow.cpp" line="613"/>
+        <location filename="../main/MainWindow.cpp" line="637"/>
+        <location filename="../main/MainWindow.cpp" line="650"/>
         <source>can&apos;t open project %1</source>
         <translation>не могу загрузить проект %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="604"/>
+        <location filename="../main/MainWindow.cpp" line="614"/>
         <source>file not found: %1</source>
         <translation>файл не найден: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="641"/>
+        <location filename="../main/MainWindow.cpp" line="651"/>
         <source>file parse error: %1</source>
         <translation>ошибка парсинга файла: %1</translation>
     </message>
@@ -1276,13 +1290,13 @@ Please, enter different variable name</source>
         <translation type="vanished">&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="572"/>
+        <location filename="../main/MainWindow.cpp" line="582"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="572"/>
-        <location filename="../main/MainWindow.cpp" line="687"/>
+        <location filename="../main/MainWindow.cpp" line="582"/>
+        <location filename="../main/MainWindow.cpp" line="697"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
@@ -1291,7 +1305,7 @@ Please, enter different variable name</source>
         <translation type="vanished">открытие файла %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="687"/>
+        <location filename="../main/MainWindow.cpp" line="697"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
@@ -1620,27 +1634,30 @@ Please, enter different variable name</source>
         <translation type="vanished">Стандартные функции IEC</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="25"/>
         <source>Compiler not found, build is aborted</source>
-        <translation>Компилятор не найден, соборка прервана</translation>
+        <translation type="vanished">Компилятор не найден, соборка прервана</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="26"/>
+        <location filename="../generate/Cmd.cpp" line="32"/>
+        <source>Program not found, execution is aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generate/Cmd.cpp" line="33"/>
         <source>not found file &apos;%1&apos;</source>
         <translation>не найден файл &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="27"/>
         <source>enter correct compiler path in %1</source>
-        <translation>задайте верный путь к компилятору в %1</translation>
+        <translation type="vanished">задайте верный путь к компилятору в %1</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="36"/>
+        <location filename="../generate/Cmd.cpp" line="44"/>
         <source>build started</source>
         <translation>сборка запущена</translation>
     </message>
     <message>
-        <location filename="../generate/Compiler.cpp" line="65"/>
+        <location filename="../generate/Cmd.cpp" line="77"/>
         <source>build finished</source>
         <translation>сборка закончена</translation>
     </message>

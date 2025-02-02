@@ -97,6 +97,11 @@
         <file>images/category-1.svg</file>
         <file>images/category-2.svg</file>
         <file>images/config-2.svg</file>
+        <file>images/play-1.svg</file>
+        <file>images/play-2.svg</file>
+        <file>images/play-3.svg</file>
+        <file>images/clear-1.svg</file>
+        <file>images/clean-2.svg</file>
     </qresource>
     <qresource prefix="/lib">
         <file>lib/AdditionalFunctionBlocks.xml</file>

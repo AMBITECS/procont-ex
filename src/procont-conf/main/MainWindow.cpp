@@ -72,7 +72,8 @@ MainWindow::MainWindow(QWidget *parent) :
         for(const auto& [key, value] : _g_settings_def)
             _m_settings->setValue(key, value);
 
-        _m_settings->setValue("Compiler/matiec_path", QString("%1/matiec").arg(_m_base_directory));
+        _m_settings->setValue("Build/make_path", QString("%1/cmake").arg(_m_base_directory));
+        _m_settings->setValue("Build/matiec_path", QString("%1/matiec").arg(_m_base_directory));
     }
 
     auto width_min_def = _m_settings->value("Geometry/mainwindow_width_min").toInt();
@@ -904,7 +905,7 @@ void MainWindow::slot_compile()
     auto _cmd = new Cmd_compile_matiec(
             "generated.st",
             _buildDir,
-            _m_settings->value("Compiler/matiec_path").toString());
+            _m_settings->value("Build/matiec_path").toString());
     if( 0 == _cmd->execute())
         b_command(CCmd::eCT_Show);
     // ***
@@ -913,7 +914,7 @@ void MainWindow::slot_compile()
 void MainWindow::slot_build()
 {
     // *** подготовка ST-файла
-    // создание папки для сборки
+    // создание папок для сборки
     auto _buildDir = QString("%1/procont-ex").arg(_m_base_directory);
     auto _buildDir_ex = QString("%1/procont-ex/build-ex").arg(_m_base_directory);
     QDir(_m_base_directory).mkdir(_buildDir_ex);
@@ -933,28 +934,38 @@ void MainWindow::slot_build()
     file.close();
     // ***
 
+    // *** сборка
     QFile::copy(QString("%1/iec/CMakeLists.txt").arg(_buildDir), QString("%1/build-iec/CMakeLists.txt").arg(_buildDir));
 
-    auto _cmake_generate = new Cmd_cmake_generate
-            (
+    auto _cmake_generate = new Cmd_cmake_generate(
                 _buildDir,
-                "/home/ambitecs/Qt/Tools/CMake/bin"
-                );
-    if( 0 == _cmake_generate->execute())
-        b_command(CCmd::eCT_Show);
+                _m_settings->value("Build/cmake_path").toString());
+    /*if( 0 == */_cmake_generate->execute()/*)*/
+        /*b_command(CCmd::eCT_Show)*/;
+    // ***
 }
 
 void MainWindow::slot_clean_all()
 {
+    // m_command(CCmd::eCT_Show);
+
+    m_info(tr("clean started"));
+
     auto _buildDir_ex = QString("%1/procont-ex/build-ex").arg(_m_base_directory);
     QDir(_buildDir_ex).removeRecursively();
     QDir(_m_base_directory).mkdir(_buildDir_ex);
     auto _buildDir_iec = QString("%1/procont-ex/build-iec").arg(_m_base_directory);
     QDir(_buildDir_iec).removeRecursively();
     QDir(_m_base_directory).mkdir(_buildDir_iec);
+
+    m_info(tr("clean finished"));
 }
 
 void MainWindow::slot_run()
 {
+    m_info(tr("execution environment started"));
+
     QProcess::execute(QString("fly-term"), QStringList() << "-e" << QString("%1/procont-ex/build-ex/procont-ex").arg(_m_base_directory));
+
+    m_info(tr("execution environment stopped"));
 }

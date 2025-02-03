@@ -116,7 +116,8 @@ private:
 // ----------------------------------------------------------------------------
 // *** CWidgetProtocol ***
 
-#include <QTabWidget>
+#include "view/TabWidget.h"
+
 #include <QUndoView>
 
 QT_FORWARD_DECLARE_CLASS(QUndoGroup)
@@ -149,7 +150,7 @@ private slots:
     }
 };
 
-class CWidgetProtocol : public QTabWidget
+class CWidgetProtocol : public TabWidget
 {
     Q_OBJECT
 public:
@@ -165,6 +166,8 @@ private slots:
     void slot_add_msg(const CMessage &);
     void slot_exec_cmd(const CCmd &);
     void slot_set_txt(const CText &);
+
+    void slot_current_changed(int index_);
 
 private:
     void exec(const CCmd &);

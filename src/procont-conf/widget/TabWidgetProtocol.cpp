@@ -239,8 +239,11 @@ void CWidgetProtocolTab_build::set(const CText &text_)
 
 CWidgetProtocol * CWidgetProtocol::_m_instance = nullptr;
 
+#include <QGraphicsColorizeEffect>
+#include <QPropertyAnimation>
+
 CWidgetProtocol::CWidgetProtocol(QWidget *parent) :
-    QTabWidget{parent}
+    TabWidget{parent}
 {
     _m_widget_message = new CWidgetProtocolTab_message(this);
     addTab(_m_widget_message, tr("Messages"));
@@ -259,6 +262,8 @@ CWidgetProtocol::CWidgetProtocol(QWidget *parent) :
     connect(CMessanger::instance(), SIGNAL(signal_send_msg(CMessage)), this, SLOT(slot_add_msg(CMessage)));
     connect(CMessanger::instance(), SIGNAL(signal_send_cmd(CCmd)), this, SLOT(slot_exec_cmd(CCmd)));
     connect(CMessanger::instance(), SIGNAL(signal_send_txt(CText)), this, SLOT(slot_set_txt(CText)));
+
+    connect(this, &CWidgetProtocol::currentChanged, this, &CWidgetProtocol::slot_current_changed);
 }
 
 CWidgetProtocol::~CWidgetProtocol()
@@ -278,15 +283,28 @@ void CWidgetProtocol::setUndoGroup(QUndoGroup* group_) const
     _m_widget_action->setGroup(group_);
 }
 
+void CWidgetProtocol::slot_current_changed(int index_)
+{
+    setTabAnimate(index_, false);
+}
+
 void CWidgetProtocol::slot_add_msg(const CMessage &message_)
 {
     switch(message_.type())
     {
     case CMessage::eMT_Message:
+    {
         _m_widget_message->add(message_);
+        if(currentIndex() != indexOf(_m_widget_message))
+            setTabAnimate(indexOf(_m_widget_message), true);
+    }
         break;
     case CMessage::eMT_Build:
+    {
         _m_widget_build->add(message_);
+        if(currentIndex() != indexOf(_m_widget_build))
+            setTabAnimate(indexOf(_m_widget_build), true);
+    }
         break;
     default:
         _m_widget_message->add(message_);

@@ -41,7 +41,7 @@ protected:
 class Cmd_compile_matiec : public Cmd
 {
 public:
-    Cmd_compile_matiec(const QString &st_file_, const QString &build_path_, const QString &compiler_path_);
+    Cmd_compile_matiec(const QString &st_file_, const QString &build_path_, const QString &matiec_path_);
 };
 // ----------------------------------------------------------------------------
 

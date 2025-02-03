@@ -1,29 +1,9 @@
-/*
-    Elypson/qt-collapsible-section
-    (c) 2016 Michael A. Voelkel - michael.alexander.voelkel@gmail.com
-
-    This file is part of Elypson/qt-collapsible section.
-
-    Elypson/qt-collapsible-section is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Elypson/qt-collapsible-section is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Elypson/qt-collapsible-section. If not, see <http://www.gnu.org/licenses/>.
-*/    
+#include "Section.h"
 
 #include <QPropertyAnimation>
 
-#include "Section.h"
-
 Section::Section(const QString & title, const bool fixed, const int animationDuration, QWidget* parent)
-    : QWidget(parent), animationDuration(animationDuration)
+    : QWidget(parent), animationDuration(animationDuration), _m_fixed(fixed)
 {
     toggleButton = new QToolButton(this);
     headerLine = new QFrame(this);
@@ -62,19 +42,8 @@ Section::Section(const QString & title, const bool fixed, const int animationDur
     mainLayout->addWidget(contentArea, row, 0, 1, 3);
     setLayout(mainLayout);
 
-    if(fixed)
-        slot_toggle_btn(true);
-    else
+    if(!fixed)
         QObject::connect(toggleButton, &QToolButton::clicked, this, &Section::slot_toggle_btn);
-
-    // toggleButton->click();
-
-    // QObject::connect(toggleButton, &QToolButton::clicked, [this](const bool checked)
-    // {
-    //     toggleButton->setArrowType(checked ? Qt::ArrowType::DownArrow : Qt::ArrowType::RightArrow);
-    //     toggleAnimation->setDirection(checked ? QAbstractAnimation::Forward : QAbstractAnimation::Backward);
-    //     toggleAnimation->start();
-    // });
 }
 
 void Section::setContentLayout(QLayout & contentLayout)
@@ -96,6 +65,9 @@ void Section::setContentLayout(QLayout & contentLayout)
     contentAnimation->setDuration(animationDuration);
     contentAnimation->setStartValue(0);
     contentAnimation->setEndValue(contentHeight);
+
+    if(_m_fixed)
+        slot_toggle_btn(true);
 }
 
 void Section::slot_toggle_btn(const bool checked)

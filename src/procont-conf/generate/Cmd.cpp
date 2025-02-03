@@ -18,8 +18,6 @@ int Cmd::execute()
     if(!_m_procs.size())
         return 1;
 
-    qDebug() << __PRETTY_FUNCTION__;
-
     _m_current_proc = _m_procs.at(_m_current_index);
 
     connect(_m_current_proc.get(), &QProcess::readyReadStandardOutput, this, &Cmd::slot_readStandardOutput);
@@ -72,8 +70,6 @@ void Cmd::slot_readStandardError()
 
 void Cmd::slot_finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qDebug() << __PRETTY_FUNCTION__;
-
     QString message = QObject::tr("build finished");
     if(exitCode > 0)
     {
@@ -94,14 +90,14 @@ void Cmd::slot_finished(int exitCode, QProcess::ExitStatus exitStatus)
 // ----------------------------------------------------------------------------
 // *** Cmd_compile_matiec ***
 //
-Cmd_compile_matiec::Cmd_compile_matiec(const QString &st_file_, const QString &build_path_, const QString &compiler_path_)
+Cmd_compile_matiec::Cmd_compile_matiec(const QString &st_file_, const QString &build_path_, const QString &matiec_path_)
 {
     auto _proc = QSharedPointer<QProcess>::create();
 
-    _proc->setProgram(QString("/home/ambitecs/proj/procont/matiec/iec2c")/*.arg(compiler_path_)*/);
+    _proc->setProgram(QString("%1/iec2c").arg(matiec_path_));
     _proc->setArguments(
         QStringList() << "-f" << "-l" << "-p"
-                      << "-I" << QString("%1/lib").arg(compiler_path_)
+                      << "-I" << QString("%1/lib").arg(matiec_path_)
                       << "-T" << QString("%1").arg(build_path_)
                       << QString("%1/%2").arg(build_path_, st_file_));
 

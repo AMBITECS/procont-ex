@@ -180,33 +180,33 @@ void CWidgetProtocolTab_build::add(const CMessage &message_)
     {
         m_pErrorPlainTextWidget->appendPlainText(i);
 
-        QString err = "error: ";
-        if(i.indexOf(err) != -1)
-        {
-            auto k = i.indexOf(':');
-            QString pos = i.mid(k+1, i.indexOf(':', k+1)-(k+1));
-            auto tmp1 = pos.split("..");
-            auto tmp2 = tmp1.at(0).split("-");
-            auto tmp3 = tmp1.at(1).split("-");
-            QString row = tmp2.at(0);
-            if(tmp2.at(0) != tmp3.at(0))
-                row += QString("-%1").arg(tmp3.at(0));
-            QString column = tmp2.at(1);
-            if(tmp2.at(1) != tmp3.at(1))
-                column += QString("-%1").arg(tmp3.at(1));
-            pos = QString(tr("Row %1, Column %2")).arg(row, column);
-            QString message = i.right(i.size() - i.indexOf(err) - err.size());
-            QString type = "error";
-            auto file = QFileInfo(i.left(k));
+        // QString err = "error: ";
+        // if(i.indexOf(err) != -1)
+        // {
+        //     auto k = i.indexOf(':');
+        //     QString pos = i.mid(k+1, i.indexOf(':', k+1)-(k+1));
+        //     auto tmp1 = pos.split("..");
+        //     auto tmp2 = tmp1.at(0).split("-");
+        //     auto tmp3 = tmp1.at(1).split("-");
+        //     QString row = tmp2.at(0);
+        //     if(tmp2.at(0) != tmp3.at(0))
+        //         row += QString("-%1").arg(tmp3.at(0));
+        //     QString column = tmp2.at(1);
+        //     if(tmp2.at(1) != tmp3.at(1))
+        //         column += QString("-%1").arg(tmp3.at(1));
+        //     pos = QString(tr("Row %1, Column %2")).arg(row, column);
+        //     QString message = i.right(i.size() - i.indexOf(err) - err.size());
+        //     QString type = "error";
+        //     auto file = QFileInfo(i.left(k));
 
-            auto item = new QTreeWidgetItem(m_pErrorTreeWidget);
-            set_type(item, type);
-            item->setText(0, message);
-            item->setText(2, file.fileName());
-            item->setText(3, pos);
-            auto child = new QTreeWidgetItem(item, QStringList(i));
-            child->setToolTip(0, i);
-        }
+        //     auto item = new QTreeWidgetItem(m_pErrorTreeWidget);
+        //     set_type(item, type);
+        //     item->setText(0, message);
+        //     item->setText(2, file.fileName());
+        //     item->setText(3, pos);
+        //     auto child = new QTreeWidgetItem(item, QStringList(i));
+        //     child->setToolTip(0, i);
+        // }
     }
 }
 
@@ -239,8 +239,11 @@ void CWidgetProtocolTab_build::set(const CText &text_)
 
 CWidgetProtocol * CWidgetProtocol::_m_instance = nullptr;
 
+#include <QGraphicsColorizeEffect>
+#include <QPropertyAnimation>
+
 CWidgetProtocol::CWidgetProtocol(QWidget *parent) :
-    QTabWidget{parent}
+    TabWidget{parent}
 {
     _m_widget_message = new CWidgetProtocolTab_message(this);
     addTab(_m_widget_message, tr("Messages"));
@@ -259,6 +262,8 @@ CWidgetProtocol::CWidgetProtocol(QWidget *parent) :
     connect(CMessanger::instance(), SIGNAL(signal_send_msg(CMessage)), this, SLOT(slot_add_msg(CMessage)));
     connect(CMessanger::instance(), SIGNAL(signal_send_cmd(CCmd)), this, SLOT(slot_exec_cmd(CCmd)));
     connect(CMessanger::instance(), SIGNAL(signal_send_txt(CText)), this, SLOT(slot_set_txt(CText)));
+
+    connect(this, &CWidgetProtocol::currentChanged, this, &CWidgetProtocol::slot_current_changed);
 }
 
 CWidgetProtocol::~CWidgetProtocol()
@@ -278,15 +283,28 @@ void CWidgetProtocol::setUndoGroup(QUndoGroup* group_) const
     _m_widget_action->setGroup(group_);
 }
 
+void CWidgetProtocol::slot_current_changed(int index_)
+{
+    setTabAnimate(index_, false);
+}
+
 void CWidgetProtocol::slot_add_msg(const CMessage &message_)
 {
     switch(message_.type())
     {
     case CMessage::eMT_Message:
+    {
         _m_widget_message->add(message_);
+        if(currentIndex() != indexOf(_m_widget_message))
+            setTabAnimate(indexOf(_m_widget_message), true);
+    }
         break;
     case CMessage::eMT_Build:
+    {
         _m_widget_build->add(message_);
+        if(currentIndex() != indexOf(_m_widget_build))
+            setTabAnimate(indexOf(_m_widget_build), true);
+    }
         break;
     default:
         _m_widget_message->add(message_);

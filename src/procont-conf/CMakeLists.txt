@@ -62,6 +62,8 @@ set(PROJECT_SOURCES
     view/TableView.h view/TableView.cpp
     view/ComboBoxMultiListWidget.h view/ComboBoxMultiListWidget.cpp
     view/ItemDelegate_combobox.h view/ItemDelegate_combobox.cpp
+    view/Section.h view/Section.cpp
+    view/TabWidget.h view/TabWidget.cpp
 
     translator/SchemaViewer.cpp translator/SchemaViewer.h
     translator/GlobalType.h
@@ -73,7 +75,7 @@ set(PROJECT_SOURCES
     translator/TranslatorLD.cpp translator/TranslatorLD.h
     translator/TranslatorST.cpp translator/TranslatorST.h
 
-    generate/Compiler.cpp generate/Compiler.h
+    generate/Cmd.cpp generate/Cmd.h
     generate/Translator.cpp generate/Translator.h
 
     iec/StandardLibrary.cpp iec/StandardLibrary.h
@@ -111,7 +113,6 @@ qt_translate(
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} ${TR_RC_FILE}
-        view/Section.h view/Section.cpp
    )
 else()
     add_executable(${NAME} ${PROJECT_SOURCES} ${TR_RC_FILE})
@@ -135,6 +136,11 @@ endif ()
 if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
     set(glut_lib /usr/local/lib/libGLU.so)
 endif ()
+
+# add_custom_command(TARGET ${NAME} POST_BUILD
+#         COMMAND ${CMAKE_COMMAND} -E copy_directory
+#                 "${PROJ_SRC_DIR}/procont-ex"
+#                 "${CMAKE_BINARY_DIR}/${PNME}/${NAME}/procont-ex")
 
 target_link_libraries(${NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core

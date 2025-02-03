@@ -127,7 +127,7 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/qt_translate.cmake")
 # add_subdirectory("matiec")
 add_subdirectory("src/procont-conf")
 # add_subdirectory("src/common/threads")
-add_subdirectory("src/procont-ex")
+# add_subdirectory("src/procont-ex")
 
 #-------------------------------------------------------------------------------
 # Устанавливаем дополнительные цели (иконки, конфиги, документацию)

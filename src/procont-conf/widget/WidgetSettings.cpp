@@ -212,6 +212,224 @@ void IOMapping_CANopen_remote_device::createContent()
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
+// *** PDO ***
+
+#include <QToolBar>
+#include <QTreeView>
+
+PDO_widget::PDO_widget()
+{
+    auto _toolbar = new QToolBar;
+    _toolbar->setIconSize(QSize(24, 24));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/plus-large.svg"), tr("Add PDO")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/plus-large.svg"), tr("Add Mapping")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/edit-1.svg"), tr("Edit")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/delete2.svg"), tr("Delete")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-5-up.svg"), tr("Move up")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-5-down.svg"), tr("Mode down")));
+    // _toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    auto _model = new QStandardItemModel;
+    _model->setColumnCount(3);
+    _model->setHeaderData(0, Qt::Horizontal, tr("Name"));
+    _model->setHeaderData(1, Qt::Horizontal, tr("Object"));
+    _model->setHeaderData(2, Qt::Horizontal, tr("Bit length"));
+    auto _proxy = new QSortFilterProxyModel;
+    _proxy->setSourceModel(_model);
+    auto _listview = new QTreeView;
+    _listview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _listview->setModel(_proxy);
+
+    auto _layout = new QVBoxLayout;
+    _layout->setSpacing(0);
+    _layout->setContentsMargins(0, 0, 0, 0);
+    _layout->addWidget(_toolbar);
+    _layout->addWidget(_listview);
+
+    setLayout(_layout);
+}
+
+PDO::PDO()
+{
+    auto _layout = new QHBoxLayout;
+
+    auto _group = new QGroupBox(tr("Receive PDOs (Master => Slave)"));
+    _group->setContentsMargins(0, 0, 0, 0);
+    auto _layout_group = new QVBoxLayout;
+    _layout_group->setSpacing(0);
+    _layout_group->setContentsMargins(2, 2, 2, 2);
+    _layout_group->addWidget(new PDO_widget);
+    _group->setLayout(_layout_group);
+
+    _layout->addWidget(_group);
+
+    _group = new QGroupBox(tr("Transmit PDOs (Slave => Master)"));
+    _layout_group = new QVBoxLayout;
+    _layout_group->setSpacing(0);
+    _layout_group->setContentsMargins(2, 2, 2, 2);
+    _layout_group->addWidget(new PDO_widget);
+    _group->setLayout(_layout_group);
+
+    _layout->addWidget(_group);
+    _layout->setSpacing(0);
+
+    setLayout(_layout);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** SDO ***
+
+#include <QToolBar>
+#include <QTreeView>
+#include <QSortFilterProxyModel>
+
+SDO::SDO()
+{
+    auto _toolbar = new QToolBar;
+    _toolbar->setIconSize(QSize(24, 24));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/plus-large.svg"), tr("Add SDO")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/edit-1.svg"), tr("Edit")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/delete2.svg"), tr("Delete")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-5-up.svg"), tr("Move up")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/arrow-5-down.svg"), tr("Mode down")));
+    // _toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    auto _model = new QStandardItemModel;
+    _model->setColumnCount(9);
+    _model->setHeaderData(0, Qt::Horizontal, tr("Line"));
+    _model->setHeaderData(1, Qt::Horizontal, tr("Index:Subindex"));
+    _model->setHeaderData(2, Qt::Horizontal, tr("Name"));
+    _model->setHeaderData(3, Qt::Horizontal, tr("Value"));
+    _model->setHeaderData(4, Qt::Horizontal, tr("Bit length"));
+    _model->setHeaderData(5, Qt::Horizontal, tr("Abort on error"));
+    _model->setHeaderData(6, Qt::Horizontal, tr("Jump to line if error"));
+    _model->setHeaderData(7, Qt::Horizontal, tr("Next line"));
+    _model->setHeaderData(8, Qt::Horizontal, tr("Comment"));
+    auto _proxy = new QSortFilterProxyModel;
+    _proxy->setSourceModel(_model);
+    auto _listview = new QTreeView;
+    _listview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _listview->setModel(_proxy);
+
+    auto _spinbox = new QSpinBox;
+    _spinbox->setFixedWidth(100);
+    auto _layout_form = new QFormLayout;
+    _layout_form->addRow(new QLabel(tr("SDO timeout (ms)")), _spinbox);
+
+    auto _layout_h = new QHBoxLayout;
+    // _layout_h->addSpacing(5);
+    _layout_h->addLayout(_layout_form);
+    _layout_h->addWidget(new QCheckBox(tr("Create all SDOs")));
+    _layout_h->addWidget(new QCheckBox(tr("Write complite PDO configuration")));
+    _layout_h->addStretch();
+
+    auto _layout = new QVBoxLayout;
+    // _layout->setSpacing(0);
+    // _layout->setContentsMargins(0, 0, 0, 0);
+    _layout->addWidget(_toolbar);
+    _layout->addWidget(_listview);
+    _layout->addLayout(_layout_h);
+
+    setLayout(_layout);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// *** ObjectDictionary ***
+
+#include <QToolBar>
+#include <QTreeView>
+#include <QSortFilterProxyModel>
+#include <QHeaderView>
+#include <QSplitter>
+
+ObjectDictionary::ObjectDictionary()
+{
+    auto _toolbar = new QToolBar;
+    _toolbar->setIconSize(QSize(24, 24));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/plus-large.svg"), tr("Add object")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/plus-large.svg"), tr("Add subobject")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/delete2.svg"), tr("Delete")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/clone.svg"), tr("Clone")));
+    _toolbar->addAction(new QAction(QIcon(":/icon/images/import-2.svg"), tr("Export")));
+    // _toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    auto _model = new QStandardItemModel;
+    _model->setColumnCount(6);
+    _model->setHeaderData(0, Qt::Horizontal, tr("Index"));
+    _model->setHeaderData(1, Qt::Horizontal, tr("Name"));
+    _model->setHeaderData(2, Qt::Horizontal, tr("Data type"));
+    _model->setHeaderData(3, Qt::Horizontal, tr("Default value"));
+    _model->setHeaderData(4, Qt::Horizontal, tr("Access type"));
+    _model->setHeaderData(5, Qt::Horizontal, tr("Variable mapping"));
+    auto _proxy = new QSortFilterProxyModel;
+    _proxy->setSourceModel(_model);
+    auto _listview = new QTreeView;
+    _listview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _listview->setModel(_proxy);
+
+    auto _toolbar_properties = new QToolBar;
+    _toolbar_properties->setIconSize(QSize(16, 16));
+    _toolbar_properties->addAction(new QAction(QIcon(":/icon/images/category-1.svg"), tr("Categorized")));
+    _toolbar_properties->addAction(new QAction(QIcon(":/icon/images/alphabet.svg"), tr("Alphabetical")));
+    _toolbar_properties->addSeparator();
+    _toolbar_properties->addAction(new QAction(QIcon(":/icon/images/config-2.svg"), tr("Property pages")));
+
+    auto _model_properties = new QStandardItemModel;
+    _model_properties->setColumnCount(2);
+    auto _item_parent = new QStandardItem("Parent item 1");
+    auto _items = QList<QStandardItem *>();
+    _items << new QStandardItem("name1") << new QStandardItem("value1");
+    _items << new QStandardItem("name2") << new QStandardItem("value2");
+    _items << new QStandardItem("name3") << new QStandardItem("value3");
+    _items << new QStandardItem("name4") << new QStandardItem("value4");
+    _item_parent->insertRow(0, _items);
+    _model_properties->insertRow(0, _item_parent);
+    _item_parent = new QStandardItem("Parent item 2");
+    _items.clear();
+    _items << new QStandardItem("name1") << new QStandardItem("value1");
+    _items << new QStandardItem("name2") << new QStandardItem("value2");
+    _items << new QStandardItem("name3") << new QStandardItem("value3");
+    _items << new QStandardItem("name4") << new QStandardItem("value4");
+    _item_parent->insertRow(0, _items);
+    _model_properties->insertRow(0, _item_parent);
+    // _model_properties->setHeaderData(0, Qt::Horizontal, tr("Name"));
+    // _model_properties->setHeaderData(1, Qt::Horizontal, tr("Value"));
+    auto _proxy_properties = new QSortFilterProxyModel;
+    _proxy_properties->setSourceModel(_model_properties);
+    auto _listview_properties = new QTreeView;
+    _listview_properties->header()->hide();
+    _listview_properties->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _listview_properties->setModel(_proxy_properties);
+    _listview_properties->expandAll();
+    for(auto i = 0; i<_proxy_properties->columnCount();i++)
+        _listview_properties->resizeColumnToContents(i);
+
+    auto _layout_v = new QVBoxLayout;
+    _layout_v->setSpacing(0);
+    _layout_v->setContentsMargins(0, 0, 0, 0);
+    _layout_v->addWidget(_toolbar_properties);
+    _layout_v->addWidget(_listview_properties);
+
+    auto _container = new QWidget;
+    _container->setLayout(_layout_v);
+
+    auto _splitter = new QSplitter;
+    _splitter->addWidget(_listview);
+    _splitter->addWidget(_container);
+
+    auto _layout = new QVBoxLayout;
+    // _layout->setSpacing(0);
+    // _layout->setContentsMargins(0, 0, 0, 0);
+    _layout->addWidget(_toolbar);
+    _layout->addWidget(_splitter);
+
+    setLayout(_layout);
+}
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // *** WidgetSettings ***
 
 WidgetSettings::WidgetSettings(const QModelIndex & index_) :
@@ -445,15 +663,15 @@ QWidget * WidgetSettings_CANopen_manager::createTab1()
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** WidgetSettings_CANopen_device ***
+// *** WidgetSettings_CANopen_local_device ***
 
-WidgetSettings_CANopen_device::WidgetSettings_CANopen_device(const QModelIndex & index_) :
+WidgetSettings_CANopen_local_device::WidgetSettings_CANopen_local_device(const QModelIndex & index_) :
     WidgetSettings(index_)
 {
     auto _tab1 = new QScrollArea; _tab1->setWidget(createTab1());
     addTab(_tab1, tr("General"));
-    addTab(new QLabel(tr("CANopen device - Object Dictionary")), tr("Object Dictionary"));
-    addTab(new QLabel(tr("CANopen device - PDOs")), tr("PDOs"));
+    addTab(new ObjectDictionary, tr("Object Dictionary"));
+    addTab(new PDO, tr("PDOs"));
     addTab(new LogViewer, tr("Log"));
     auto _tab5 = new IOMapping_default;
     // _tab5->setFixedSize(600, 100);
@@ -463,7 +681,7 @@ WidgetSettings_CANopen_device::WidgetSettings_CANopen_device(const QModelIndex &
     addTab(new QLabel(tr("CANopen device - Information")), tr("Information"));
 }
 
-QWidget * WidgetSettings_CANopen_device::createTab1()
+QWidget * WidgetSettings_CANopen_local_device::createTab1()
 {
     // *** section - General
     auto _section_general_1_canopen_logo_label = new QLabel;
@@ -578,8 +796,8 @@ WidgetSettings_CANopen_remote_device::WidgetSettings_CANopen_remote_device(const
 {
     auto _tab1 = new QScrollArea; _tab1->setWidget(createTab1());
     addTab(_tab1, tr("General"));
-    addTab(new QLabel(tr("CANopen remote device - PDOs")), tr("PDOs"));
-    addTab(new QLabel(tr("CANopen remote device - SDOs")), tr("SDOs"));
+    addTab(new PDO, tr("PDOs"));
+    addTab(new SDO, tr("SDOs"));
     addTab(new LogViewer, tr("Log"));
     auto _tab3 = new IOMapping_CANopen_remote_device;
     addTab(_tab3, tr("CANopen I/O Mapping"));
@@ -749,11 +967,11 @@ WidgetSettings * WidgetSettings_creator_CANopen_manager::create(const QModelInde
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// *** WidgetSettings_creator_CANopen_device ***
+// *** WidgetSettings_creator_CANopen_local_device ***
 
-WidgetSettings * WidgetSettings_creator_CANopen_device::create(const QModelIndex & index_)
+WidgetSettings * WidgetSettings_creator_CANopen_local_device::create(const QModelIndex & index_)
 {
-    return new WidgetSettings_CANopen_device(index_);
+    return new WidgetSettings_CANopen_local_device(index_);
 }
 // ----------------------------------------------------------------------------
 
@@ -773,7 +991,7 @@ WidgetSettings_builder::WidgetSettings_builder()
 {
     m_creators.insert(WidgetSettings::eDT_CANbus, new WidgetSettings_creator_CANbus);
     m_creators.insert(WidgetSettings::eDT_CANopen_manager, new WidgetSettings_creator_CANopen_manager);
-    m_creators.insert(WidgetSettings::eDT_CANopen_device, new WidgetSettings_creator_CANopen_device);
+    m_creators.insert(WidgetSettings::eDT_CANopen_device, new WidgetSettings_creator_CANopen_local_device);
     m_creators.insert(WidgetSettings::eDT_CANopen_remote_device, new WidgetSettings_creator_CANopen_remote_device);
 }
 

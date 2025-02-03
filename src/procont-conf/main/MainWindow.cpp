@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
         for(const auto& [key, value] : _g_settings_def)
             _m_settings->setValue(key, value);
 
-        _m_settings->setValue("Build/make_path", QString("%1/cmake").arg(_m_base_directory));
+        _m_settings->setValue("Build/cmake_path", QString("%1/cmake").arg(_m_base_directory));
         _m_settings->setValue("Build/matiec_path", QString("%1/matiec").arg(_m_base_directory));
     }
 

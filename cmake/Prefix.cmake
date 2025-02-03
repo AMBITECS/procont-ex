@@ -57,23 +57,22 @@ if (WIN32)
     set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:/Qt/6.7.1/mingw_64")
     #set(QMAKE_LFLAGS_WINDOWS ${QMAKE_LFLAGS_WINDOWS} -Wl,--stack,32000000)
 
-elseif(UNIX)
+elseif (UNIX)
 
     message("-- OS of UNIX detected!")
     # Extend CMAKE_PREFIX_PATH
-    set(CMAKE_PREFIX_PATH
-            ${CMAKE_PREFIX_PATH}
-            "$ENV{HOME}/Qt/5.15.2/gcc_64/"
-            "$ENV{HOME}/Qt/6.7.1/gcc_64/"
+    set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}
+        "$ENV{HOME}/Qt/5.15.2/gcc_64/"
+        "$ENV{HOME}/Qt/6.7.1/gcc_64/"
     )
 
-else()
+else ()
 
     set(CMAKE_APPBUNDLE_PATH $ENV{PATH})
     set(CMAKE_FRAMEWORK_PATH $ENV{PATH})
     message(FATAL_ERROR "Unknown System Platform - STOP!!!")
 
-endif()
+endif ()
 
 #-------------------------------------------------------------------------------
 # Detect platform x86|x64

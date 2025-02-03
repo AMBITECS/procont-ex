@@ -1,0 +1,7 @@
+Для корректной работы сборуи среды исполнения из среды разработки необходимо:
+
+1. Cкопировать проект среды исполнения в директорию сборки среды разработки
+cp -rf src/procont-ex <buildDir>/procont/procont-conf/procont-ex
+
+2. Прописать путь к cmake в <buildDir>/procont/procont-conf/etc/procont.ini
+Параметр cmake_path

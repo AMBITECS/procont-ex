@@ -238,7 +238,7 @@ function(add_module MOD_NAME)
                     --copyright-holder=PROJTECS
                     --msgid-bugs-address=REPORT@AMBI.BIZ
                 LANGUAGES ${MOD_LNGS}
-                INSTALL_DESTINATION ${localedir_full}
+                INSTALL_DESTINATION ${dist_locale}
         )
     endif()
 

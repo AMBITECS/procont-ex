@@ -256,11 +256,11 @@ static inline IEC_TIMESPEC __tod_to_timespec(double seconds, double minutes, dou
 */
 #define __tod_to_timespec(seconds,minutes,hours) \
           ((IEC_TIMESPEC){\
-              /*tv_sec  =*/ ((long int)   ((((long double)hours)*60 + (long double)minutes)*60 + (long double)seconds)), \
-              /*tv_nsec =*/ ((long int)(( \
+              /*tv_sec  =*/ static_cast<int32_t>(((long int)   ((((long double)hours)*60 + (long double)minutes)*60 + (long double)seconds))), \
+              /*tv_nsec =*/ static_cast<int32_t>(((long int)(( \
                             ((long double)((((long double)hours)*60 + (long double)minutes)*60 + (long double)seconds)) - \
                             ((long int)   ((((long double)hours)*60 + (long double)minutes)*60 + (long double)seconds))   \
-                            )*1e9))\
+                            )*1e9)))\
         })
 
 
@@ -381,16 +381,16 @@ static inline TIME __time_mul(TIME IN1, LREAL IN2){
   LREAL s_f = IN1.tv_sec * IN2;
   time_t s = (time_t)s_f;
   div_t ns = div((int)((LREAL)IN1.tv_nsec * IN2), 1000000000);
-  TIME res = {(long)s + ns.quot,
-		      (long)ns.rem + (s_f - s) * 1000000000 };
+  TIME res = {static_cast<int32_t>((long)s + ns.quot),
+              static_cast<int32_t>((long)ns.rem + (s_f - s) * 1000000000) };
   __normalize_timespec(&res);
   return res;
 }
 static inline TIME __time_div(TIME IN1, LREAL IN2){
   LREAL s_f = IN1.tv_sec / IN2;
   time_t s = (time_t)s_f;
-  TIME res = {(long)s,
-              (long)(IN1.tv_nsec / IN2 + (s_f - s) * 1000000000) };
+  TIME res = {static_cast<int32_t>((long)s),
+              static_cast<int32_t>((long)(IN1.tv_nsec / IN2 + (s_f - s) * 1000000000)) };
   __normalize_timespec(&res);
   return res;
 }
@@ -539,8 +539,8 @@ static inline LREAL __string_to_real(STRING IN) {
     /***************/
     /*   TO_TIME   */
     /***************/
-static inline TIME    __int_to_time(LINT IN)  {return (TIME){IN, 0};}
-static inline TIME   __real_to_time(LREAL IN) {return (TIME){IN, (IN - (LINT)IN) * 1000000000};}
+static inline TIME    __int_to_time(LINT IN)  {return (TIME){static_cast<int32_t>(IN), 0};}
+static inline TIME   __real_to_time(LREAL IN) {return (TIME){static_cast<int32_t>(IN), static_cast<int32_t>((IN - (LINT)IN) * 1000000000)};}
 static inline TIME __string_to_time(STRING IN){
     __strlen_t l;
     /* TODO :
@@ -569,9 +569,9 @@ static inline TIME __string_to_time(STRING IN){
     while(--l > 0 && IN.body[l] != '.');
     if(l != 0){
         LREAL IN_val = atof((const char *)&IN.body);
-        return  (TIME){(long)IN_val, (long)(IN_val - (LINT)IN_val)*1000000000};
+        return  (TIME){static_cast<int32_t>((long)IN_val), static_cast<int32_t>((long)(IN_val - (LINT)IN_val)*1000000000)};
     }else{
-        return  (TIME){(long)__pstring_to_sint(&IN), 0};
+        return  (TIME){static_cast<int32_t>((long)__pstring_to_sint(&IN)), 0};
     }
 }
 

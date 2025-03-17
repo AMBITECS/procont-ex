@@ -187,8 +187,8 @@ void processMessage(unsigned char *buffer, int bufferSize, int client_fd, int pr
     }
     else if (protocol_type == ENIP_PROTOCOL)
     {
-        int messageSize = processEnipMessage(buffer, bufferSize);
-        write(client_fd, buffer, messageSize);
+//        int messageSize = processEnipMessage(buffer, bufferSize);
+//        write(client_fd, buffer, messageSize);
     }
 }
 

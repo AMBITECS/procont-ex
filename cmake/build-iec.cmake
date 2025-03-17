@@ -16,4 +16,4 @@ execute_process(
 )
 
 #------------------------------------------------------------------------------
-set(no_dev_warnings_backup "$CACHE{CMAKE_SUPPRESS_DEVELOPER_WARNINGS}")
+set(no_dev_warnings_backup $CACHE{CMAKE_SUPPRESS_DEVELOPER_WARNINGS})

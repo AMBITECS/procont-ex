@@ -1,31 +1,15 @@
-/*
- * Copyright (C) 2007-2011: Edouard TISSERANT and Laurent BESSARD
- *
- * See COPYING and COPYING.LESSER files for copyright details.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License 
- * along with this library. If not, see <http://www.gnu.org/licenses/>.
- *
- */
-
+// ----------------------------------------------------------------------------
+// Copyright (C) 2016-2024: AMBITECS LLC
+// ----------------------------------------------------------------------------
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "bugprone-reserved-identifier"
 
 #ifndef IEC_TYPES_ALL_H
 #define IEC_TYPES_ALL_H
 
-
-/* Macro that expand to subtypes */
+// ----------------------------------------------------------------------------
+// Macro that expand to subtypes
+// ----------------------------------------------------------------------------
 #define __ANY(DO)                 __ANY_DERIVED(DO) __ANY_ELEMENTARY(DO)
 #define __ANY_DERIVED(DO)
 #define __ANY_ELEMENTARY(DO)      __ANY_MAGNITUDE(DO) __ANY_BIT(DO) __ANY_STRING(DO) __ANY_DATE(DO)
@@ -40,8 +24,9 @@
 #define __ANY_SINT(DO)            DO(SINT) DO(INT) DO(DINT) DO(LINT)
 #define __ANY_UINT(DO)            DO(USINT) DO(UINT) DO(UDINT) DO(ULINT)
 
-
-/* Macro that expand to subtypes */
+// ----------------------------------------------------------------------------
+// Macro that expand to subtypes
+// ----------------------------------------------------------------------------
 #define __ANY_1(DO,P1)            __ANY_DERIVED_1(DO,P1) __ANY_ELEMENTARY_1(DO,P1)
 #define __ANY_DERIVED_1(DO,P1)
 #define __ANY_ELEMENTARY_1(DO,P1) __ANY_MAGNITUDE_1(DO,P1) __ANY_BIT_1(DO,P1) __ANY_STRING_1(DO,P1) __ANY_DATE_1(DO,P1)
@@ -56,22 +41,19 @@
 #define __ANY_SINT_1(DO,P1)       DO(SINT,P1) DO(INT,P1) DO(DINT,P1) DO(LINT,P1)
 #define __ANY_UINT_1(DO,P1)       DO(USINT,P1) DO(UINT,P1) DO(UDINT,P1) DO(ULINT,P1)
 
-
-
-/*********************/
-/*  IEC Types defs   */
-/*********************/
-
-/* Include non windows.h clashing typedefs */
+// ----------------------------------------------------------------------------
+//  IEC Types defs
+// ----------------------------------------------------------------------------
+// Include non windows.h clashing typedefs
 #include "iec_types.h"
 
 #ifndef TRUE
-  #define TRUE 1
+  #define TRUE  1
   #define FALSE 0
 #endif
 
-#define __IEC_DEBUG_FLAG 0x01
-#define __IEC_FORCE_FLAG 0x02
+#define __IEC_DEBUG_FLAG  0x01
+#define __IEC_FORCE_FLAG  0x02
 #define __IEC_RETAIN_FLAG 0x04
 #define __IEC_OUTPUT_FLAG 0x08
 
@@ -88,8 +70,6 @@ typedef struct {\
   IEC_BYTE flags;\
   IEC_##type fvalue;\
 } __IEC_##type##_p;
-
-
 
 #define __DECLARE_DERIVED_TYPE(type, base)\
 typedef base type;\

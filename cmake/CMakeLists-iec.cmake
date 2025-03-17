@@ -1,4 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
+
+#set(CMAKE_SYSTEM_NAME Linux)
+#set(CMAKE_SYSTEM_PROCESSOR aarch64)
+#set(CMAKE_C_COMPILER /usr/bin/aarch64-linux-gnu-gcc)
+#set(CMAKE_CXX_COMPILER /usr/bin/aarch64-linux-gnu-g++)
+#set(CMAKE_FIND_ROOT_PATH /home/master/Dist/.rootfs/aarch64)
+
 project( IEC-COMPILER
          VERSION 1.0.1
          DESCRIPTION "Procont iec st-file compiler"
@@ -55,7 +62,7 @@ add_custom_command(
 )
 
 #-------------------------------------------------------------------------------
-# 3) Компиляция C-шных файлов, полученные компиляцией iec2c
+# 3) Компиляция C- файлов, полученных компиляцией iec2c
 #-------------------------------------------------------------------------------
 add_custom_command(
         COMMENT "(3) - Compiling 'C' to obj-files ..."
@@ -66,6 +73,12 @@ add_custom_command(
 
         WORKING_DIRECTORY ${PROJ_IEC_DIR}
         COMMAND ${CMAKE_COMMAND}
+#            -DCMAKE_SYSTEM_NAME=Linux
+#            -DCMAKE_SYSTEM_PROCESSOR=aarch64
+#            -DCMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc
+#            -DCMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++
+#            -DCMAKE_FIND_ROOT_PATH=/home/master/Dist/.rootfs/aarch64
+
             -D PROJ_IEC_DIR=${PROJ_IEC_DIR}
             #-D PROJ_INC_DIR=${PROJ_INC_DIR}
             -D PROJ_LIB_DIR=${PROJ_LIB_DIR}

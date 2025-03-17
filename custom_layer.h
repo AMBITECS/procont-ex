@@ -50,7 +50,8 @@ void updateCustomOut() {
     // If you want to have %QW5 output to be sent over I2C instead of the
     // traditional output for your board, all you have to do is, first add
     // %QW5 to the ignored vectors, and then define a send_over_i2c()
-    // function for your platform. Finally you can call send_over_i2c() to 
+    // function for your platform.
+    // Finally, you can call send_over_i2c() to
     // send your %QW5 value, like this:
     //     if (int_output[5] != NULL) send_over_i2c(*int_output[5]);
     //

@@ -1,45 +1,24 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "bugprone-reserved-identifier"
-/*
- * copyright 2008 Edouard TISSERANT
- * copyright 2011 Mario de Sousa (msousa@fe.up.pt)
- *
- * Offered to the public under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
- * General Public License for more details.
- *
- * This code is made available on the understanding that it will not be
- * used in safety-critical situations without a full and competent review.
- */
-
-/****
- * IEC 61131-3 standard function library
- */
-
-/* NOTE: This file is full of (what may seem at first) very strange macros.
- *       If you want to know what all these strange macros are doing,
- *       just parse this file through a C preprocessor (e.g. cpp), 
- *       and analyse the output!
- *       $gcc -E iec_std_lib.h 
- */
-
+// ----------------------------------------------------------------------------
+// Copyright (C) 2016-2024: AMBITECS LLC
+// ----------------------------------------------------------------------------
+// NOTE: This file is full of (what may seem at first) very strange macros.
+//       If you want to know what all these strange macros are doing,
+//       just parse this file through a C preprocessor (e.g. cpp),
+//       and analyse the output!
+//       $gcc -E iec_std_lib.h
+//
+// ----------------------------------------------------------------------------
+// IEC 61131-3 standard function library
+// ----------------------------------------------------------------------------
 #ifndef _IEC_STD_FUNCTIONS_H
 #define _IEC_STD_FUNCTIONS_H
 
-
-/*****************************************************************/
-/*****************************************************************/
-/*****                                                       *****/
-/*****                 IEC 61131-3                           *****/
-/*****      S T A N D A R D     F U N C T I O N S            *****/
-/*****                                                       *****/
-/*****************************************************************/
-/*****************************************************************/
+// ----------------------------------------------------------------------------
+//                 IEC 61131-3
+//      S T A N D A R D     F U N C T I O N S
+// ----------------------------------------------------------------------------
 
 /* NOTE: If you want to know what all these strange macros are doing,
  *       just parse this file through a C preprocessor, and analyse the output!

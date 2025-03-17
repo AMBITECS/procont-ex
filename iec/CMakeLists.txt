@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
+
 project( IEC-COMPILER
          VERSION 1.0.1
          DESCRIPTION "Procont iec st-file compiler"
@@ -55,7 +56,7 @@ add_custom_command(
 )
 
 #-------------------------------------------------------------------------------
-# 3) Компиляция C-шных файлов, полученные компиляцией iec2c
+# 3) Компиляция C- файлов, полученных компиляцией iec2c
 #-------------------------------------------------------------------------------
 add_custom_command(
         COMMENT "(3) - Compiling 'C' to obj-files ..."

@@ -75,13 +75,13 @@ void *modbusThread(void *arg)
     startServer(modbus_port, MODBUS_PROTOCOL);
 }
 
-//-----------------------------------------------------------------------------
-// Start the DNP3 Thread
-//-----------------------------------------------------------------------------
-void *dnp3Thread(void *arg)
-{
-    dnp3StartServer(dnp3_port);
-}
+////-----------------------------------------------------------------------------
+//// Start the DNP3 Thread
+////-----------------------------------------------------------------------------
+//void *dnp3Thread(void *arg)
+//{
+//    dnp3StartServer(dnp3_port);
+//}
 
 //-----------------------------------------------------------------------------
 // Start the Enip Thread
@@ -318,24 +318,24 @@ void processCommand(/*unsigned*/ char *buffer, int client_fd)
     }
     else if (strncmp(buffer, "start_dnp3(", 11) == 0)
     {
-        processing_command = true;
-        dnp3_port = readCommandArgument(buffer);
-        sprintf(log_msg, "Issued start_dnp3() command to start on port: %d\n", dnp3_port);
-        log(log_msg);
-        if (run_dnp3)
-        {
-            sprintf(log_msg, "DNP3 server already active. Restarting on port: %d\n", dnp3_port);
-            log(log_msg);
-            //Stop DNP3 server
-            run_dnp3 = false;
-            pthread_join(dnp3_thread, nullptr);
-            sprintf(log_msg, "DNP3 server was stopped\n");
-            log(log_msg);
-        }
-        //Start DNP3 server
-        run_dnp3 = 1;
-        pthread_create(&dnp3_thread, nullptr, dnp3Thread, nullptr);
-        processing_command = false;
+//        processing_command = true;
+//        dnp3_port = readCommandArgument(buffer);
+//        sprintf(log_msg, "Issued start_dnp3() command to start on port: %d\n", dnp3_port);
+//        log(log_msg);
+//        if (run_dnp3)
+//        {
+//            sprintf(log_msg, "DNP3 server already active. Restarting on port: %d\n", dnp3_port);
+//            log(log_msg);
+//            //Stop DNP3 server
+//            run_dnp3 = false;
+//            pthread_join(dnp3_thread, nullptr);
+//            sprintf(log_msg, "DNP3 server was stopped\n");
+//            log(log_msg);
+//        }
+//        //Start DNP3 server
+//        run_dnp3 = 1;
+//        pthread_create(&dnp3_thread, nullptr, dnp3Thread, nullptr);
+//        processing_command = false;
     }
     else if (strncmp(buffer, "stop_dnp3()", 11) == 0)
     {

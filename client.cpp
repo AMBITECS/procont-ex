@@ -5,9 +5,7 @@
 // to create a socket and connect to a server.
 //-----------------------------------------------------------------------------
 #include <arpa/inet.h>
-#include <netdb.h>
 #include <cstdio>
-#include <cstdlib>
 #include <strings.h>
 #include <cstring>
 #include <sys/socket.h>
@@ -24,7 +22,7 @@
 
 //-----------------------------------------------------------------------------
 int connect_to_tcp_server(uint8_t *ip_address, uint16_t port, int method) {
-    int sockfd=-1; //, connfd;
+    int sockfd=-1;
     char log_msg[1000];
     struct sockaddr_in servaddr{}, cli{};
     

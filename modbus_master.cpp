@@ -24,18 +24,15 @@
 // Thiago Alves, Jul 2018
 //-----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <modbus.h>
-#include <errno.h>
-#include <string.h>
-#include <pthread.h>
-
-#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
+#include <cstring>
 #include <fstream>
 #include <string>
+
+#include <pthread.h>
+#include <modbus.h>
 
 #include "ladder.h"
 
@@ -49,16 +46,22 @@ uint8_t bool_input_buf[MAX_MB_IO];
 uint8_t bool_output_buf[MAX_MB_IO];
 uint16_t int_input_buf[MAX_MB_IO];
 uint16_t int_output_buf[MAX_MB_IO];
-extern uint8_t rpi_modbus_rts_pin;     // If <> 0, expect hardware RTS to be used with this pin
+
+int _atoi(const char *buf) {char *ptr; return (int) strtol(buf, &ptr, 10);} //NOLINT
+
+// If <> 0, expect hardware RTS to be used with this pin
+//extern uint8_t rpi_modbus_rts_pin;
 
 pthread_mutex_t ioLock;
 
+//-----------------------------------------------------------------------------
 struct MB_address
 {
     uint16_t start_address;
     uint16_t num_regs;
 };
 
+//-----------------------------------------------------------------------------
 struct MB_device
 {
     modbus_t *mb_ctx;
@@ -81,6 +84,7 @@ struct MB_device
     struct MB_address holding_registers;
 };
 
+//-----------------------------------------------------------------------------
 struct MB_device *mb_devices;
 uint8_t num_devices;
 uint16_t polling_period = 100;
@@ -89,7 +93,7 @@ uint16_t timeout = 1000;
 //-----------------------------------------------------------------------------
 // Finds the data between the separators on the line provided
 //-----------------------------------------------------------------------------
-void getData(char *line, char *buf, char separator1, char separator2)
+void getData(const char *line, char *buf, char separator1, char separator2)
 {
     int i=0, j=0;
     buf[j] = '\0';
@@ -112,7 +116,7 @@ void getData(char *line, char *buf, char separator1, char separator2)
 //-----------------------------------------------------------------------------
 // Get the number of the Modbus device
 //-----------------------------------------------------------------------------
-int getDeviceNumber(char *line)
+int getDeviceNumber(const char *line)
 {
     char temp[5];
     int i = 0, j = 6;
@@ -125,13 +129,13 @@ int getDeviceNumber(char *line)
         temp[i] = '\0';
     }
 
-    return(atoi(temp));
+    return( _atoi(temp) );
 }
 
 //-----------------------------------------------------------------------------
 // get the type of function or parameter for the Modbus device
 //-----------------------------------------------------------------------------
-void getFunction(char *line, char *parameter)
+void getFunction(const char *line, char *parameter)
 {
     int i = 0, j = 0;
 
@@ -150,6 +154,9 @@ void getFunction(char *line, char *parameter)
     }
 }
 
+//-----------------------------------------------------------------------------
+// Get the type of function or parameter for the Modbus device - mbconfig.cfg
+//-----------------------------------------------------------------------------
 void parseConfig()
 {
     string line;
@@ -167,7 +174,8 @@ void parseConfig()
                 {
                     char temp_buffer[5];
                     getData(line_str, temp_buffer, '"', '"');
-                    num_devices = atoi(temp_buffer);
+                    num_devices = _atoi(temp_buffer);
+                    
                     //initializes the allocated memory to zero
                     mb_devices = (struct MB_device *)malloc(num_devices*sizeof(struct MB_device));
                 }
@@ -175,13 +183,13 @@ void parseConfig()
                 {
                     char temp_buffer[10];
                     getData(line_str, temp_buffer, '"', '"');
-                    polling_period = atoi(temp_buffer);
+                    polling_period = _atoi(temp_buffer);
                 }
                 else if (!strncmp(line_str, "Timeout", 7))
                 {
                     char temp_buffer[10];
                     getData(line_str, temp_buffer, '"', '"');
-                    timeout = atoi(temp_buffer);
+                    timeout = _atoi(temp_buffer);
                 }
 
                 else if (!strncmp(line_str, "device", 6))
@@ -208,7 +216,7 @@ void parseConfig()
                     {
                         char temp_buffer[5];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].dev_id = atoi(temp_buffer);
+                        mb_devices[deviceNumber].dev_id = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "address", 7))
                     {
@@ -218,13 +226,13 @@ void parseConfig()
                     {
                         char temp_buffer[6];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].ip_port = atoi(temp_buffer);
+                        mb_devices[deviceNumber].ip_port = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "RTU_Baud_Rate", 13))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].rtu_baud = atoi(temp_buffer);
+                        mb_devices[deviceNumber].rtu_baud = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "RTU_Parity", 10))
                     {
@@ -236,79 +244,79 @@ void parseConfig()
                     {
                         char temp_buffer[6];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].rtu_data_bit = atoi(temp_buffer);
+                        mb_devices[deviceNumber].rtu_data_bit = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "RTU_Stop_Bits", 13))
                     {
                         char temp_buffer[20];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].rtu_stop_bit = atoi(temp_buffer);
+                        mb_devices[deviceNumber].rtu_stop_bit = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "RTU_TX_Pause", 12))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].rtu_tx_pause = atoi(temp_buffer);
+                        mb_devices[deviceNumber].rtu_tx_pause = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Discrete_Inputs_Start", 21))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].discrete_inputs.start_address = atoi(temp_buffer);
+                        mb_devices[deviceNumber].discrete_inputs.start_address = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Discrete_Inputs_Size", 20))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].discrete_inputs.num_regs = atoi(temp_buffer);
+                        mb_devices[deviceNumber].discrete_inputs.num_regs = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Coils_Start", 11))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].coils.start_address = atoi(temp_buffer);
+                        mb_devices[deviceNumber].coils.start_address = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Coils_Size", 10))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].coils.num_regs = atoi(temp_buffer);
+                        mb_devices[deviceNumber].coils.num_regs = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Input_Registers_Start", 21))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].input_registers.start_address = atoi(temp_buffer);
+                        mb_devices[deviceNumber].input_registers.start_address = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Input_Registers_Size", 20))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].input_registers.num_regs = atoi(temp_buffer);
+                        mb_devices[deviceNumber].input_registers.num_regs = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Holding_Registers_Read_Start", 28))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].holding_read_registers.start_address = atoi(temp_buffer);
+                        mb_devices[deviceNumber].holding_read_registers.start_address = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Holding_Registers_Read_Size", 27))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].holding_read_registers.num_regs = atoi(temp_buffer);
+                        mb_devices[deviceNumber].holding_read_registers.num_regs = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Holding_Registers_Start", 23))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].holding_registers.start_address = atoi(temp_buffer);
+                        mb_devices[deviceNumber].holding_registers.start_address = _atoi(temp_buffer);
                     }
                     else if (!strncmp(functionType, "Holding_Registers_Size", 22))
                     {
                         char temp_buffer[10];
                         getData(line_str, temp_buffer, '"', '"');
-                        mb_devices[deviceNumber].holding_registers.num_regs = atoi(temp_buffer);
+                        mb_devices[deviceNumber].holding_registers.num_regs = _atoi(temp_buffer);
                     }
                 }
             }
@@ -398,7 +406,7 @@ void *querySlaveDevices(void *arg)
                     sprintf(log_msg, "Connection failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
                     log(log_msg);
                     
-                    if (special_functions[2] != NULL) *special_functions[2]++;
+                    if (special_functions[2] != nullptr) *special_functions[2]++;
                     
                     // Because this device is not connected, we skip those input registers
                     bool_input_index += (mb_devices[i].discrete_inputs.num_regs);
@@ -417,7 +425,7 @@ void *querySlaveDevices(void *arg)
             if (mb_devices[i].isConnected || rtu_port_connected)
             {
 
-                struct timespec ts;
+                struct timespec ts{};
                 ts.tv_sec = 0;
                 if (mb_devices[i].protocol == MB_RTU)
                 {
@@ -434,7 +442,7 @@ void *querySlaveDevices(void *arg)
                     sleepms(mb_devices[i].rtu_tx_pause);
                     uint8_t *tempBuff;
                     tempBuff = (uint8_t *)malloc(mb_devices[i].discrete_inputs.num_regs);
-                    nanosleep(&ts, NULL); 
+                    nanosleep(&ts, nullptr); 
                     int return_val = modbus_read_input_bits(mb_devices[i].mb_ctx, mb_devices[i].discrete_inputs.start_address,
                                                             mb_devices[i].discrete_inputs.num_regs, tempBuff);
                     if (return_val == -1)
@@ -448,7 +456,7 @@ void *querySlaveDevices(void *arg)
                         sprintf(log_msg, "Modbus Read Discrete Input Registers failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
                         log(log_msg);
                         bool_input_index += (mb_devices[i].discrete_inputs.num_regs);
-                        if (special_functions[2] != NULL) *special_functions[2]++;
+                        if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
                     else
                     {
@@ -479,7 +487,7 @@ void *querySlaveDevices(void *arg)
                     }
                     pthread_mutex_unlock(&ioLock);
 
-                    nanosleep(&ts, NULL); 
+                    nanosleep(&ts, nullptr);
                     int return_val = modbus_write_bits(mb_devices[i].mb_ctx, mb_devices[i].coils.start_address, mb_devices[i].coils.num_regs, tempBuff);
                     if (return_val == -1)
                     {
@@ -491,7 +499,7 @@ void *querySlaveDevices(void *arg)
 
                         sprintf(log_msg, "Modbus Write Coils failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
                         log(log_msg);
-                        if (special_functions[2] != NULL) *special_functions[2]++;
+                        if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
                     
                     free(tempBuff);
@@ -503,7 +511,7 @@ void *querySlaveDevices(void *arg)
                     sleepms(mb_devices[i].rtu_tx_pause);
                     uint16_t *tempBuff;
                     tempBuff = (uint16_t *)malloc(2*mb_devices[i].input_registers.num_regs);
-                    nanosleep(&ts, NULL); 
+                    nanosleep(&ts, nullptr); 
                     int return_val = modbus_read_input_registers(    mb_devices[i].mb_ctx, mb_devices[i].input_registers.start_address,
                                                                     mb_devices[i].input_registers.num_regs, tempBuff);
                     if (return_val == -1)
@@ -517,7 +525,7 @@ void *querySlaveDevices(void *arg)
                         sprintf(log_msg, "Modbus Read Input Registers failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
                         log(log_msg);
                         int_input_index += (mb_devices[i].input_registers.num_regs);
-                        if (special_functions[2] != NULL) *special_functions[2]++;
+                        if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
                     else
                     {
@@ -539,7 +547,7 @@ void *querySlaveDevices(void *arg)
                     sleepms(mb_devices[i].rtu_tx_pause);
                     uint16_t *tempBuff;
                     tempBuff = (uint16_t *)malloc(2*mb_devices[i].holding_read_registers.num_regs);
-                    nanosleep(&ts, NULL); 
+                    nanosleep(&ts, nullptr); 
                     int return_val = modbus_read_registers(mb_devices[i].mb_ctx, mb_devices[i].holding_read_registers.start_address,
                                                            mb_devices[i].holding_read_registers.num_regs, tempBuff);
                     if (return_val == -1)
@@ -552,7 +560,7 @@ void *querySlaveDevices(void *arg)
                         sprintf(log_msg, "Modbus Read Holding Registers failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
                         log(log_msg);
                         int_input_index += (mb_devices[i].holding_read_registers.num_regs);
-                        if (special_functions[2] != NULL) *special_functions[2]++;
+                        if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
                     else
                     {
@@ -583,7 +591,7 @@ void *querySlaveDevices(void *arg)
                     }
                     pthread_mutex_unlock(&ioLock);
 
-                    nanosleep(&ts, NULL); 
+                    nanosleep(&ts, nullptr); 
                     int return_val = modbus_write_registers(mb_devices[i].mb_ctx, mb_devices[i].holding_registers.start_address,
                                                             mb_devices[i].holding_registers.num_regs, tempBuff);
                     if (return_val == -1)
@@ -596,7 +604,7 @@ void *querySlaveDevices(void *arg)
                         
                         sprintf(log_msg, "Modbus Write Holding Registers failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
                         log(log_msg);
-                        if (special_functions[2] != NULL) *special_functions[2]++;
+                        if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
                     
                     free(tempBuff);
@@ -633,7 +641,7 @@ void initializeMB()
                     break;
                 }
             }
-            if (share_index != -1)
+            if (share_index != -1) // TCP
             {
                 if (mb_devices[i].rtu_baud != mb_devices[share_index].rtu_baud || mb_devices[i].rtu_parity != mb_devices[share_index].rtu_parity || 
                     mb_devices[i].rtu_data_bit != mb_devices[share_index].rtu_data_bit || mb_devices[i].rtu_stop_bit != mb_devices[share_index].rtu_stop_bit)
@@ -644,43 +652,44 @@ void initializeMB()
                 }
                 mb_devices[i].mb_ctx = mb_devices[share_index].mb_ctx;
             }
-            else
+            else // RTU
             {
                 mb_devices[i].mb_ctx = modbus_new_rtu(mb_devices[i].dev_address, mb_devices[i].rtu_baud,
                                                 mb_devices[i].rtu_parity, mb_devices[i].rtu_data_bit,
                                                 mb_devices[i].rtu_stop_bit);
 
                 // If hardware layer set modbus_rts_pin, enable Pi specific rts handling
-//                if (rpi_modbus_rts_pin != 0)
-//                {
-//                    modbus_enable_rpi(mb_devices[i].mb_ctx,TRUE);
-//                    modbus_configure_rpi_bcm_pin(mb_devices[i].mb_ctx,rpi_modbus_rts_pin);
-//                    modbus_rpi_pin_export_direction(mb_devices[i].mb_ctx);
-//                }
+                //if (rpi_modbus_rts_pin != 0)
+                //{
+                //    modbus_enable_rpi(mb_devices[i].mb_ctx,TRUE);
+                //    modbus_configure_rpi_bcm_pin(mb_devices[i].mb_ctx,rpi_modbus_rts_pin);
+                //    modbus_rpi_pin_export_direction(mb_devices[i].mb_ctx);
+                //}
             }
         }
         
         //slave id
-
         modbus_set_slave(mb_devices[i].mb_ctx, mb_devices[i].dev_id);
-
 
         //timeout
         uint32_t to_sec = timeout / 1000;
         uint32_t to_usec = (timeout % 1000) * 1000;
         modbus_set_response_timeout(mb_devices[i].mb_ctx, to_sec, to_usec);
-        
     }
     
     //Initialize comm error counter
-    if (special_functions[2] != NULL) *special_functions[2] = 0;
-    
-    if (num_devices > 0)
-    {
+    if (special_functions[2] != nullptr)
+        *special_functions[2] = 0;
+
+    // Start thread for slaves
+    if (num_devices > 0) {
         pthread_t thread;
-        int ret = pthread_create(&thread, NULL, querySlaveDevices, NULL);
-        if (ret==0) 
-        {
+        int ret = pthread_create(
+                &thread, nullptr,
+                querySlaveDevices,
+                nullptr);
+
+        if (ret==0) {
             pthread_detach(thread);
         }
     }
@@ -696,8 +705,8 @@ void updateBuffersIn_MB()
 
     for (int i = 0; i < MAX_MB_IO; i++)
     {
-        if (bool_input[100+(i/8)][i%8] != NULL) *bool_input[100+(i/8)][i%8] = bool_input_buf[i];
-        if (int_input[100+i] != NULL) *int_input[100+i] = int_input_buf[i];
+        if (bool_input[100+(i/8)][i%8] != nullptr) *bool_input[100+(i/8)][i%8] = bool_input_buf[i];
+        if (int_input[100+i] != nullptr) *int_input[100+i] = int_input_buf[i];
     }
 
     pthread_mutex_unlock(&ioLock);
@@ -714,8 +723,8 @@ void updateBuffersOut_MB()
 
     for (int i = 0; i < MAX_MB_IO; i++)
     {
-        if (bool_output[100+(i/8)][i%8] != NULL) bool_output_buf[i] = *bool_output[100+(i/8)][i%8];
-        if (int_output[100+i] != NULL) int_output_buf[i] = *int_output[100+i];
+        if (bool_output[100+(i/8)][i%8] != nullptr) bool_output_buf[i] = *bool_output[100+(i/8)][i%8];
+        if (int_output[100+i] != nullptr) int_output_buf[i] = *int_output[100+i];
     }
 
     pthread_mutex_unlock(&ioLock);

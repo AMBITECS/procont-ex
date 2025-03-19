@@ -21,21 +21,23 @@
 // Thiago Alves, Oct 2024
 //-----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <pthread.h>
-#include <time.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <ctime>
+#include <cstdlib>
 #include <sys/mman.h>
 
 #include "ladder.h"
 
 pthread_mutex_t logLock; //mutex for the internal log
-unsigned char log_buffer[1000000]; //A very large buffer to store all logs
-int log_index = 0;
-int log_counter = 0;
+
+// A very large buffer to store all logs
+unsigned char log_buffer[1000*1000];
+
+size_t log_index = 0;
+size_t log_counter = 0;
+
 int64_t cycle_counter = 0;
 uint8_t rpi_modbus_rts_pin;     // If <> 0, expect hardware RTS to be used with this pin
 
@@ -48,16 +50,16 @@ uint8_t rpi_modbus_rts_pin;     // If <> 0, expect hardware RTS to be used with 
  * @param ts Pointer to a timespec structure representing the start time
  * @param delay The amount of time to sleep in nanoseconds
  */
-void sleep_until(struct timespec *ts, long long delay)
+void sleep_until(struct timespec *ts, unsigned long long delay)
 {
-    ts->tv_sec  += delay / (1000*1000*1000);
-    ts->tv_nsec += delay % (1000*1000*1000);
-    if(ts->tv_nsec >= 1000*1000*1000)
-    {
+    ts->tv_sec  += __time_t (delay / (1000*1000*1000));
+    ts->tv_nsec += __time_t (delay % (1000*1000*1000));
+    
+    if (ts->tv_nsec >= 1000*1000*1000) {
         ts->tv_nsec -= 1000*1000*1000;
         ts->tv_sec++;
     }
-    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, ts,  NULL);
+    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, ts,  nullptr);
 }
 
 /**
@@ -68,12 +70,11 @@ void sleep_until(struct timespec *ts, long long delay)
  *
  * @param milliseconds The amount of time to sleep in milliseconds
  */
-void sleepms(int milliseconds)
-{
-    struct timespec ts;
+void sleepms(int milliseconds) {
+    struct timespec ts{};
     ts.tv_sec = milliseconds / 1000;
     ts.tv_nsec = (milliseconds % 1000) * 1000000;
-    nanosleep(&ts, NULL);
+    nanosleep(&ts, nullptr);
 }
 
 /**
@@ -87,8 +88,7 @@ void sleepms(int milliseconds)
  * @param b Pointer to the subtrahend timespec
  * @param result Pointer to the timespec where the difference will be stored
  */
-void timespec_diff(struct timespec *a, struct timespec *b, struct timespec *result) 
-{
+void timespec_diff(struct timespec *a, struct timespec *b, struct timespec *result) {
     // Calculate the difference in seconds
     result->tv_sec = a->tv_sec - b->tv_sec;
     
@@ -112,10 +112,8 @@ void timespec_diff(struct timespec *a, struct timespec *b, struct timespec *resu
  *
  * @param logmsg Pointer to a null-terminated string containing the message to be logged
  */
-void log(char *logmsg)
-{
+void log(char *logmsg) {
     pthread_mutex_lock(&logLock); // lock mutex
-
     printf("%s", logmsg);
 
     size_t msg_len = strlen(logmsg);
@@ -147,12 +145,12 @@ void log(char *logmsg)
  * incoming commands.
  *
  * @param arg Unused parameter (required for pthread creation)
- * @return void* Always returns NULL
+ * @return void* Always returns nullptr
  */
 void *interactiveServerThread(void *arg)
 {
     startInteractiveServer(INTERACTIVE_PORT); // 43628
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -164,24 +162,24 @@ void *interactiveServerThread(void *arg)
 void disableOutputs()
 {
     //Disable digital outputs
-    for (int i = 0; i < BUFFER_SIZE; i++)
+    for (auto & i : bool_output)
     {
-        for (int j = 0; j < 8; j++)
+        for (auto & j : i)
         {
-            if (bool_output[i][j] != NULL) *bool_output[i][j] = 0;
+            if (j != nullptr) *j = 0;
         }
     }
     
     //Disable byte outputs
-    for (int i = 0; i < BUFFER_SIZE; i++)
+    for (auto & i : byte_output)
     {
-        if (byte_output[i] != NULL) *byte_output[i] = 0;
+        if (i != nullptr) *i = 0;
     }
     
     //Disable analog outputs
-    for (int i = 0; i < BUFFER_SIZE; i++)
+    for (auto & i : int_output)
     {
-        if (int_output[i] != NULL) *int_output[i] = 0;
+        if (i != nullptr) *i = 0;
     }
 }
 
@@ -205,7 +203,7 @@ void handleSpecialFunctions()
     time(&rawtime);
     
     // Store the UTC clock in [%ML1027]
-    if (special_functions[3] != NULL) 
+    if (special_functions[3] != nullptr) 
     {
         *special_functions[3] = rawtime;
     }
@@ -220,14 +218,14 @@ void handleSpecialFunctions()
     }
         
     // Store local time in [%ML1024]
-    if (special_functions[0] != NULL) 
+    if (special_functions[0] != nullptr) 
     {
         *special_functions[0] = localtime;
     }
     
     // Increment and store number of cycles [%ML1025]
     cycle_counter++;
-    if (special_functions[1] != NULL) 
+    if (special_functions[1] != nullptr) 
     {
         *special_functions[1] = cycle_counter;
     }
@@ -251,14 +249,14 @@ void handleSpecialFunctions()
  * @note The function assumes that special_functions[4] and special_functions[5]
  *       are properly initialized and point to valid memory locations.
  */
-void RecordCycletimeLatency(long cycle_time, long sleep_latency)
+__attribute__((unused)) void RecordCycletimeLatency(long cycle_time, long sleep_latency)
 {
-    if (special_functions[4] != NULL)
+    if (special_functions[4] != nullptr)
     {
         *special_functions[4] = static_cast<IEC_LINT>(cycle_time);
     }
     
-    if (special_functions[5] != NULL)
+    if (special_functions[5] != nullptr)
     {
         *special_functions[5] = static_cast<IEC_LINT>(sleep_latency);
     }

@@ -23,13 +23,13 @@
 // Thiago Alves, Dec 2015
 //-----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <pthread.h>
 
 #include "ladder.h"
-#include <string.h>
+#include <cstring>
 
 #define MAX_DISCRETE_INPUT              8192
 #define MAX_COILS                       8192
@@ -114,7 +114,7 @@ int word(unsigned char byte1, unsigned char byte2)
 }
 
 //-----------------------------------------------------------------------------
-// This function sets the internal NULL OpenPLC buffers to point to valid
+// This function sets the internal nullptr OpenPLC buffers to point to valid
 // positions on the Modbus buffer
 //-----------------------------------------------------------------------------
 void mapUnusedIO()
@@ -123,24 +123,24 @@ void mapUnusedIO()
 
     for(int i = 0; i < MAX_DISCRETE_INPUT; i++)
     {
-        if (bool_input[i/8][i%8] == NULL) bool_input[i/8][i%8] = &mb_discrete_input[i];
+        if (bool_input[i/8][i%8] == nullptr) bool_input[i/8][i%8] = &mb_discrete_input[i];
     }
 
     for(int i = 0; i < MAX_COILS; i++)
     {
-        if (bool_output[i/8][i%8] == NULL) bool_output[i/8][i%8] = &mb_coils[i];
+        if (bool_output[i/8][i%8] == nullptr) bool_output[i/8][i%8] = &mb_coils[i];
     }
 
     for (int i = 0; i < MAX_INP_REGS; i++)
     {
-        if (int_input[i] == NULL) int_input[i] = &mb_input_regs[i];
+        if (int_input[i] == nullptr) int_input[i] = &mb_input_regs[i];
     }
 
     for (int i = 0; i <= MAX_16B_RANGE; i++)
     {
         if (i < MIN_16B_RANGE)
         {
-            if (int_output[i] == NULL)
+            if (int_output[i] == nullptr)
             {
                 int_output[i] = &mb_holding_regs[i];
             }
@@ -148,7 +148,7 @@ void mapUnusedIO()
 
         else if (i >= MIN_16B_RANGE && i <= MAX_16B_RANGE)
         {
-            if (int_memory[i - MIN_16B_RANGE] == NULL)
+            if (int_memory[i - MIN_16B_RANGE] == nullptr)
             {
                 int_memory[i - MIN_16B_RANGE] = &mb_holding_regs[i];
             }
@@ -173,7 +173,7 @@ void ModbusError(unsigned char *buffer, int mb_error)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Read Coils
 //-----------------------------------------------------------------------------
-void ReadCoils(unsigned char *buffer, int bufferSize)
+void ReadCoils(unsigned char *buffer, long bufferSize)
 {
     int Start, ByteDataLength, CoilDataLength;
     int mb_error = ERR_NONE;
@@ -210,7 +210,7 @@ void ReadCoils(unsigned char *buffer, int bufferSize)
             int position = Start + i * 8 + j;
             if (position < MAX_COILS)
             {
-                if (bool_output[position/8][position%8] != NULL)
+                if (bool_output[position/8][position%8] != nullptr)
                 {
                     bitWrite(buffer[9 + i], j, *bool_output[position/8][position%8]);
                 }
@@ -240,7 +240,7 @@ void ReadCoils(unsigned char *buffer, int bufferSize)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Read Discrete Inputs
 //-----------------------------------------------------------------------------
-void ReadDiscreteInputs(unsigned char *buffer, int bufferSize)
+void ReadDiscreteInputs(unsigned char *buffer, long bufferSize)
 {
     int Start, ByteDataLength, InputDataLength;
     int mb_error = ERR_NONE;
@@ -277,7 +277,7 @@ void ReadDiscreteInputs(unsigned char *buffer, int bufferSize)
             int position = Start + i * 8 + j;
             if (position < MAX_DISCRETE_INPUT)
             {
-                if (bool_input[position/8][position%8] != NULL)
+                if (bool_input[position/8][position%8] != nullptr)
                 {
                     bitWrite(buffer[9 + i], j, *bool_input[position/8][position%8]);
                 }
@@ -307,7 +307,7 @@ void ReadDiscreteInputs(unsigned char *buffer, int bufferSize)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Read Holding Registers
 //-----------------------------------------------------------------------------
-void ReadHoldingRegisters(unsigned char *buffer, int bufferSize)
+void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
 {
     int Start, WordDataLength, ByteDataLength;
     int mb_error = ERR_NONE;
@@ -341,7 +341,7 @@ void ReadHoldingRegisters(unsigned char *buffer, int bufferSize)
         int position = Start + i;
         if (position <= MIN_16B_RANGE)
         {
-            if (int_output[position] != NULL)
+            if (int_output[position] != nullptr)
             {
                 buffer[ 9 + i * 2] = highByte(*int_output[position]);
                 buffer[10 + i * 2] = lowByte(*int_output[position]);
@@ -356,7 +356,7 @@ void ReadHoldingRegisters(unsigned char *buffer, int bufferSize)
         //16-bit registers
         else if (position >= MIN_16B_RANGE && position <= MAX_16B_RANGE)
         {
-            if (int_memory[position - MIN_16B_RANGE] != NULL)
+            if (int_memory[position - MIN_16B_RANGE] != nullptr)
             {
                 buffer[ 9 + i * 2] = highByte(*int_memory[position - MIN_16B_RANGE]);
                 buffer[10 + i * 2] = lowByte(*int_memory[position - MIN_16B_RANGE]);
@@ -370,17 +370,17 @@ void ReadHoldingRegisters(unsigned char *buffer, int bufferSize)
         //32-bit registers
         else if (position >= MIN_32B_RANGE && position <= MAX_32B_RANGE)
         {
-            if (dint_memory[(position - MIN_32B_RANGE)/2] != NULL)
+            if (dint_memory[(position - MIN_32B_RANGE)/2] != nullptr)
             {
                 if ((position - MIN_32B_RANGE) % 2 == 0) //first word
                 {
-                    uint16_t tempValue = (uint16_t)(*dint_memory[(position - MIN_32B_RANGE)/2] >> 16);
+                    auto tempValue = (uint16_t)(*dint_memory[(position - MIN_32B_RANGE)/2] >> 16);
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else //second word
                 {
-                    uint16_t tempValue = (uint16_t)(*dint_memory[(position - MIN_32B_RANGE)/2] & 0xffff);
+                    auto tempValue = (uint16_t)(*dint_memory[(position - MIN_32B_RANGE)/2] & 0xffff);
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
@@ -394,29 +394,29 @@ void ReadHoldingRegisters(unsigned char *buffer, int bufferSize)
         //64-bit registers
         else if (position >= MIN_64B_RANGE && position <= MAX_64B_RANGE)
         {
-            if (lint_memory[(position - MIN_64B_RANGE)/4] != NULL)
+            if (lint_memory[(position - MIN_64B_RANGE)/4] != nullptr)
             {
                 if ((position - MIN_64B_RANGE) % 4 == 0) //first word
                 {
-                    uint16_t tempValue = (uint16_t)(*lint_memory[(position - MIN_64B_RANGE)/4] >> 48);
+                    auto tempValue = (uint16_t)(*lint_memory[(position - MIN_64B_RANGE)/4] >> 48);
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 1)//second word
                 {
-                    uint16_t tempValue = (uint16_t)((*lint_memory[(position - MIN_64B_RANGE)/4] >> 32) & 0xffff);
+                    auto tempValue = (uint16_t)((*lint_memory[(position - MIN_64B_RANGE)/4] >> 32) & 0xffff);
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 2)//third word
                 {
-                    uint16_t tempValue = (uint16_t)((*lint_memory[(position - MIN_64B_RANGE)/4] >> 16) & 0xffff);
+                    auto tempValue = (uint16_t)((*lint_memory[(position - MIN_64B_RANGE)/4] >> 16) & 0xffff);
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 3)//fourth word
                 {
-                    uint16_t tempValue = (uint16_t)(*lint_memory[(position - MIN_64B_RANGE)/4] & 0xffff);
+                    auto tempValue = (uint16_t)(*lint_memory[(position - MIN_64B_RANGE)/4] & 0xffff);
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
@@ -448,7 +448,7 @@ void ReadHoldingRegisters(unsigned char *buffer, int bufferSize)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Read Input Registers
 //-----------------------------------------------------------------------------
-void ReadInputRegisters(unsigned char *buffer, int bufferSize)
+void ReadInputRegisters(unsigned char *buffer, long bufferSize)
 {
     int Start, WordDataLength, ByteDataLength;
     int mb_error = ERR_NONE;
@@ -482,7 +482,7 @@ void ReadInputRegisters(unsigned char *buffer, int bufferSize)
         int position = Start + i;
         if (position < MAX_INP_REGS)
         {
-            if (int_input[position] != NULL)
+            if (int_input[position] != nullptr)
             {
                 buffer[ 9 + i * 2] = highByte(*int_input[position]);
                 buffer[10 + i * 2] = lowByte(*int_input[position]);
@@ -513,7 +513,7 @@ void ReadInputRegisters(unsigned char *buffer, int bufferSize)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Write Coil
 //-----------------------------------------------------------------------------
-void WriteCoil(unsigned char *buffer, int bufferSize)
+void WriteCoil(unsigned char *buffer, long bufferSize)
 {
     int Start;
     int mb_error = ERR_NONE;
@@ -540,7 +540,7 @@ void WriteCoil(unsigned char *buffer, int bufferSize)
         }
 
         pthread_mutex_lock(&bufferLock);
-        if (bool_output[Start/8][Start%8] != NULL)
+        if (bool_output[Start/8][Start%8] != nullptr)
         {
             *bool_output[Start/8][Start%8] = value;
         }
@@ -577,18 +577,18 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
     //analog outputs
     if (position <= MIN_16B_RANGE)
     {
-        if (int_output[position] != NULL) *int_output[position] = value;
+        if (int_output[position] != nullptr) *int_output[position] = value;
     }
     //accessing memory
     //16-bit registers
     else if (position >= MIN_16B_RANGE && position <= MAX_16B_RANGE)
     {
-        if (int_memory[position - MIN_16B_RANGE] != NULL) *int_memory[position - MIN_16B_RANGE] = value;
+        if (int_memory[position - MIN_16B_RANGE] != nullptr) *int_memory[position - MIN_16B_RANGE] = value;
     }
     //32-bit registers
     else if (position >= MIN_32B_RANGE && position <= MAX_32B_RANGE)
     {
-        if (dint_memory[(position - MIN_32B_RANGE) / 2] == NULL)
+        if (dint_memory[(position - MIN_32B_RANGE) / 2] == nullptr)
         {
             mb_holding_regs[position] = value;
         }
@@ -606,7 +606,7 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
     //64-bit registers
     else if (position >= MIN_64B_RANGE && position <= MAX_64B_RANGE)
     {
-        if (lint_memory[(position - MIN_64B_RANGE) / 4] == NULL)
+        if (lint_memory[(position - MIN_64B_RANGE) / 4] == nullptr)
         {
             mb_holding_regs[position] = value;
         }
@@ -632,7 +632,7 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Write Holding Register
 //-----------------------------------------------------------------------------
-void WriteRegister(unsigned char *buffer, int bufferSize)
+void WriteRegister(unsigned char *buffer, long bufferSize)
 {
     int Start;
     int mb_error = ERR_NONE;
@@ -665,7 +665,7 @@ void WriteRegister(unsigned char *buffer, int bufferSize)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Write Multiple Coils
 //-----------------------------------------------------------------------------
-void WriteMultipleCoils(unsigned char *buffer, int bufferSize)
+void WriteMultipleCoils(unsigned char *buffer, long bufferSize)
 {
     int Start, ByteDataLength, CoilDataLength;
     int mb_error = ERR_NONE;
@@ -701,7 +701,7 @@ void WriteMultipleCoils(unsigned char *buffer, int bufferSize)
             int position = Start + i * 8 + j;
             if (position < MAX_COILS)
             {
-                if (bool_output[position/8][position%8] != NULL) *bool_output[position/8][position%8] = bitRead(buffer[13 + i], j);
+                if (bool_output[position/8][position%8] != nullptr) *bool_output[position/8][position%8] = bitRead(buffer[13 + i], j);
             }
             else //invalid address
             {
@@ -724,7 +724,7 @@ void WriteMultipleCoils(unsigned char *buffer, int bufferSize)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Write Multiple Registers
 //-----------------------------------------------------------------------------
-void WriteMultipleRegisters(unsigned char *buffer, int bufferSize)
+void WriteMultipleRegisters(unsigned char *buffer, long bufferSize)
 {
     int Start, WordDataLength, ByteDataLength;
     int mb_error = ERR_NONE;
@@ -937,7 +937,7 @@ void debugGetTrace(unsigned char *mb_frame, uint16_t startidx, uint16_t endidx)
  * 
  * @return void
  */
-void debugGetTraceList(unsigned char *mb_frame, uint16_t numIndexes, uint8_t *indexArray)
+void debugGetTraceList(unsigned char *mb_frame, uint16_t numIndexes, const uint8_t *indexArray)
 {
     uint16_t response_idx = 17;  // Start of response data in the response buffer
     uint16_t responseSize = 0;
@@ -1057,7 +1057,7 @@ void debugGetMd5(unsigned char *mb_frame, void *endianness)
 // response for it. The return value is the size of the response message in
 // bytes.
 //-----------------------------------------------------------------------------
-int processModbusMessage(unsigned char *buffer, int bufferSize)
+int processModbusMessage(unsigned char *buffer, long bufferSize)
 {
     MessageLength = 0;
     uint16_t field1 = (uint16_t)buffer[8] << 8 | (uint16_t)buffer[9];

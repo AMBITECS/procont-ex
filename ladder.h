@@ -115,21 +115,27 @@ void updateBuffersIn();
 void updateBuffersOut();
 
 //utils.cpp
-void sleep_until(struct timespec *ts, long long delay);
+void sleep_until(struct timespec *ts, unsigned long long delay);
 void sleepms(int milliseconds);
 void log(char *logmsg);
 void handleSpecialFunctions();
 void timespec_diff(struct timespec *a, struct timespec *b, struct timespec *result);
 void *interactiveServerThread(void *arg);
 void disableOutputs();
+
 void RecordCycletimeLatency(long cycle_time, long sleep_latency);
 
 void setModbusRtsPin(uint8_t pin);
 extern unsigned char log_buffer[1000000];
-extern int log_index;
+extern size_t log_index;
 
 //main.cpp
-extern uint8_t run_openplc;
+extern bool run_openplc;
+
+extern bool run_modbus;
+extern bool run_dnp3;
+extern bool run_enip;
+extern bool run_pstorage;
 
 //server.cpp
 void startServer(uint16_t port, int protocol_type);
@@ -139,16 +145,14 @@ bool SetSocketBlockingEnabled(int fd, bool blocking);
 
 //interactive_server.cpp
 void startInteractiveServer(int port);
-extern bool run_modbus;
-extern bool run_dnp3;
-extern bool run_enip;
-extern bool run_pstorage;
+
+// Protocol server run flags (see interactive_server)
 extern uint16_t pstorage_polling;
 extern time_t start_time;
 extern time_t end_time;
 
 //modbus.cpp
-int processModbusMessage(unsigned char *buffer, int bufferSize);
+int processModbusMessage(unsigned char *buffer, long bufferSize);
 void mapUnusedIO();
 
 //enip.cpp
@@ -169,4 +173,4 @@ void dnp3StartServer(int port);
 
 //persistent_storage.cpp
 void startPstorage();
-int readPersistentStorage();
+void readPersistentStorage();

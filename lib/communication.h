@@ -78,6 +78,7 @@ int send_tcp_message(uint8_t *msg, size_t msg_size, int socket_id);
 int receive_tcp_message(uint8_t *msg_buffer, size_t buffer_size, int socket_id);
 int close_tcp_connection(int socket_id);
 
+//-----------------------------------------------------------------------------
 static void TCP_CONNECT_init__(TCP_CONNECT *data__, BOOL retain) {
   __INIT_VAR(data__->EN,__BOOL_LITERAL(TRUE),retain)
   __INIT_VAR(data__->ENO,__BOOL_LITERAL(TRUE),retain)
@@ -98,6 +99,7 @@ static void TCP_CONNECT_body__(TCP_CONNECT *data__) {
   else {
     __SET_VAR(data__->,ENO,,__BOOL_LITERAL(TRUE));
   }
+
   // Block code
   //(*data__).SOCKET_ID = connect_to_tcp_server((*data__).IP_ADDRESS.body, (*data__).PORT);
   
@@ -111,6 +113,7 @@ static void TCP_CONNECT_body__(TCP_CONNECT *data__) {
     int method = GetFbVar(UDP);
 
     int tcp_socket = connect_to_tcp_server(tcp_ip.body, tcp_port, method);
+
     SetFbVar(SOCKET_ID, tcp_socket);
 
     #undef GetFbVar
@@ -121,9 +124,10 @@ static void TCP_CONNECT_body__(TCP_CONNECT *data__) {
 
 __end:
   return;
+
 } // TCP_CONNECT_body__()
 
-
+//-----------------------------------------------------------------------------
 static void TCP_SEND_init__(TCP_SEND *data__, BOOL retain) {
   __INIT_VAR(data__->EN,__BOOL_LITERAL(TRUE),retain)
   __INIT_VAR(data__->ENO,__BOOL_LITERAL(TRUE),retain)
@@ -134,7 +138,8 @@ static void TCP_SEND_init__(TCP_SEND *data__, BOOL retain) {
 }
 
 // Code part
-static void TCP_SEND_body__(TCP_SEND *data__) {
+static void TCP_SEND_body__(TCP_SEND *data__)
+{
   // Control execution
   if (!__GET_VAR(data__->EN)) {
     __SET_VAR(data__->,ENO,,__BOOL_LITERAL(FALSE));
@@ -143,6 +148,7 @@ static void TCP_SEND_body__(TCP_SEND *data__) {
   else {
     __SET_VAR(data__->,ENO,,__BOOL_LITERAL(TRUE));
   }
+
   // Block code
   if (__GET_VAR(data__->SEND))
   {
@@ -164,6 +170,7 @@ __end:
   return;
 } // TCP_SEND_body__()
 
+//-----------------------------------------------------------------------------
 static void TCP_RECEIVE_init__(TCP_RECEIVE *data__, BOOL retain) {
   __INIT_VAR(data__->EN,__BOOL_LITERAL(TRUE),retain)
   __INIT_VAR(data__->ENO,__BOOL_LITERAL(TRUE),retain)
@@ -209,7 +216,7 @@ __end:
   return;
 } // TCP_RECEIVE_body__()
 
-
+//-----------------------------------------------------------------------------
 static void TCP_CLOSE_init__(TCP_CLOSE *data__, BOOL retain) {
   __INIT_VAR(data__->EN,__BOOL_LITERAL(TRUE),retain)
   __INIT_VAR(data__->ENO,__BOOL_LITERAL(TRUE),retain)

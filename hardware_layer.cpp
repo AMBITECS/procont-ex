@@ -25,8 +25,8 @@
 // Thiago Alves, Dec 2015
 //-----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <pthread.h>
 
@@ -92,3 +92,4 @@ void updateBuffersOut()
     pthread_mutex_unlock(&bufferLock); //unlock mutex
 }
 
+//-----------------------------------------------------------------------------

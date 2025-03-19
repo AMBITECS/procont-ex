@@ -167,6 +167,7 @@ build_target(
         ${PROJ_SRC_DIR}
         ${PROJ_LIB_DIR}
         ${PROJ_IEC_DIR}
+
         ${modbus_INCLUDE_DIRS}
 
     SRCS
@@ -175,10 +176,7 @@ build_target(
         :MASK ${PROJ_IEC_DIR}/*.o
 
     LNKS
-        #pthread
-#        modbus
         ${modbus_LIBRARIES}
-
 #        ${AsioPAL_LIBRARIES}
 #        ${AsioDNP3_LIBRARIES}
 #        ${OpenPAL_LIBRARIES}
@@ -186,9 +184,6 @@ build_target(
 )
 
 #-------------------------------------------------------------------------------
-#add_dependencies(${proj} dnp3)
-#add_dependencies(${proj} modbus)
-
 add_dependencies(${proj} build-iec)
 
 #-------------------------------------------------------------------------------

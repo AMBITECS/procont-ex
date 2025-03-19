@@ -34,6 +34,7 @@
 
 #include "iec_types.h"
 #include "ladder.h"
+#include "custom_layer.h"
 
 #define OPLC_CYCLE          50000000
 
@@ -46,7 +47,10 @@ IEC_BOOL __DEBUG;
 unsigned long __tick = 0;
 pthread_mutex_t bufferLock; //mutex for the internal buffers
 //pthread_mutex_t logLock; //mutex for the internal log
-uint8_t run_openplc = 1; //Variable to control OpenPLC Runtime execution
+
+//Variable to control OpenPLC Runtime execution
+bool run_openplc = true; //uint8_t run_openplc = 1;
+
 //unsigned char log_buffer[1000000]; //A very large buffer to store all logs
 //int log_index = 0;
 //int log_counter = 0;
@@ -252,10 +256,13 @@ int main(int argc,char **argv)
     //              HARDWARE INITIALIZATION
     //======================================================
     initializeHardware();
+
     initializeMB();
 //    initCustomLayer();
+
     updateBuffersIn();
 //    updateCustomIn();
+
     updateBuffersOut();
 //    updateCustomOut();
 
@@ -265,6 +272,7 @@ int main(int argc,char **argv)
     glueVars();
     mapUnusedIO();
     readPersistentStorage();
+
     //pthread_t persistentThread;
     //pthread_create(&persistentThread, NULL, persistentStorage, NULL);
 
@@ -299,23 +307,26 @@ int main(int argc,char **argv)
 	//======================================================
 	while(run_openplc)
 	{
-		//make sure the buffer pointers are correct and
-		//attached to the user variables
+		//make sure the buffer pointers are correct and attached to the user variables
 		glueVars();
 
 		updateBuffersIn();			//read input image
+
 		pthread_mutex_lock(&bufferLock);	//lock mutex
+        {
+            updateCustomIn();
+            {
+                updateBuffersIn_MB();       // update input image table with data from slave devices
 
-//		updateCustomIn();
-		updateBuffersIn_MB();	// update input image table with data from slave devices
+                handleSpecialFunctions();
+                config_run__(__tick++); // execute plc program logic
 
-		handleSpecialFunctions();
-		config_run__(__tick++);	// execute plc program logic
-
-//		updateCustomOut();
-		updateBuffersOut_MB();	// update slave devices with data from the output image table
-
+                updateBuffersOut_MB();      // update slave devices with data from the output image table
+            }
+            updateCustomOut();
+        }
 		pthread_mutex_unlock(&bufferLock);	//unlock mutex
+
 		updateBuffersOut();			//write output image
 
 		updateTime();
@@ -327,10 +338,12 @@ int main(int argc,char **argv)
     //======================================================
     pthread_join(interactive_thread, NULL);
     printf("Disabling outputs\n");
+
     disableOutputs();
-//    updateCustomOut();
+    updateCustomOut();
     updateBuffersOut();
     finalizeHardware();
+
     printf("Shutting down ProCont Runtime...\n");
     exit(0);
 }

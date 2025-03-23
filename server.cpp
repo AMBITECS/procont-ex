@@ -233,7 +233,7 @@ void *handleConnections(void *arguments) {
             } else {
                 sprintf(log_msg,
                         "Modbus Server: Something is wrong with the  client ID: %d message Size : %i\n",
-                        client_fd, messageSize);
+                        client_fd, (int)messageSize);
                 log(log_msg);
             }
             break;

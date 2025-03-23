@@ -152,11 +152,11 @@ void readPersistentStorage()
         
         // Only assign if value is non-zero
         if (value != 0) {
-            // Allocate memory if the pointer is NULL
+            // Allocate memory if the pointer is nullptr
             if (int_memory[i] == nullptr) {
                 int_memory[i] = static_cast<IEC_UINT *>(malloc(sizeof(uint16_t)));
                 if (int_memory[i] == nullptr) {
-                    sprintf(log_msg, "Error allocating memory for int_memory[%d]", i);
+                    sprintf(log_msg, "Error allocating memory for int_memory[%d]", (int)i);
                     log(log_msg);
                     continue;
                 }
@@ -182,11 +182,11 @@ void readPersistentStorage()
         
         // Only assign if value is non-zero
         if (value != 0) {
-            // Allocate memory if the pointer is NULL
+            // Allocate memory if the pointer is nullptr
             if (dint_memory[i] == nullptr) {
                 dint_memory[i] = static_cast<IEC_UDINT *>(malloc(sizeof(uint32_t)));
                 if (dint_memory[i] == nullptr) {
-                    sprintf(log_msg, "Error allocating memory for dint_memory[%d]", i);
+                    sprintf(log_msg, "Error allocating memory for dint_memory[%d]", (int)i);
                     log(log_msg);
                     continue;
                 }
@@ -212,11 +212,11 @@ void readPersistentStorage()
         
         // Only assign if value is non-zero
         if (value != 0) {
-            // Allocate memory if the pointer is NULL
-            if (lint_memory[i] == NULL) {
+            // Allocate memory if the pointer is nullptr
+            if (lint_memory[i] == nullptr) {
                 lint_memory[i] = static_cast<IEC_ULINT *>(malloc(sizeof(uint64_t)));
-                if (lint_memory[i] == NULL) {
-                    sprintf(log_msg, "Error allocating memory for lint_memory[%d]", i);
+                if (lint_memory[i] == nullptr) {
+                    sprintf(log_msg, "Error allocating memory for lint_memory[%d]", (int)i);
                     log(log_msg);
                     continue;
                 }

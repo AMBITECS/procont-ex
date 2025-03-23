@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project( PROCONT-EX
          VERSION 1.0.1
          DESCRIPTION "Procont execution environment"
-         LANGUAGES C CXX
+         LANGUAGES CXX
 )
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} BEGIN")
 
@@ -17,7 +17,7 @@ set( CMAKE_DIR      ${PROJ_DIR}/cmake               ) # PROJ cmake files directo
 # === SET CMAKE_PREFIX_PATH ===
 if(NOT DEFINED CMAKE_PREFIX_PATH)
     set(CMAKE_PREFIX_PATH   "/home/master/Qt/6.7.1/gcc_64/")
-    MESSAGE(STATUS "SET CMAKE_PREFIX_PATH to DEFAULT ${CMAKE_PREFIX_PATH}")
+    MESSAGE(STATUS "SET CMAKE_PREFIX_PATH to ${CMAKE_PREFIX_PATH}")
 endif()
 
 # === SET ST_FILE param ===
@@ -171,15 +171,13 @@ include(${CMAKE_DIR}/build-tools.cmake)
 #-------------------------------------------------------------------------------
 add_subdirectory(${PROJ_MOD_DIR}/libmodbus)             # --- modbus
 add_subdirectory(${PROJ_MOD_DIR}/CANopen/MasterQtFree)  # --- can_master
+
 #add_subdirectory(${PROJ_MOD_DIR}/dnp3_src)             # --- dnp3
 
 #-------------------------------------------------------------------------------
 # Главный исполняемый модуль ${proj}
 #-------------------------------------------------------------------------------
-build_target(
-    ${proj}
-    EXE
-    OPTS -g -O0 -w -fPIC
+build_target( ${proj} EXE #OPTS -g -O0 -w -fPIC
     INCS
         ${PROJ_LIB_DIR}
         ${PROJ_SRC_DIR}
@@ -201,6 +199,10 @@ build_target(
         #${OpenPAL_LIBRARIES}
         #${OpenDNP3_LIBRARIES}
 )
+
+if(CMAKE_COMPILER_IS_GNUCC)
+    target_compile_options(${proj} PRIVATE -D_GNU_SOURCE -Wall -Wextra)
+endif()
 
 #-------------------------------------------------------------------------------
 ### Dependencies ###

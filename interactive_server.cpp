@@ -79,6 +79,7 @@ pthread_t pstorage_thread;
 void *modbusThread(void *arg)
 {
     startServer(modbus_port, MODBUS_PROTOCOL);
+    return nullptr;
 }
 
 ////-----------------------------------------------------------------------------
@@ -104,6 +105,7 @@ void *modbusThread(void *arg)
 void *pstorageThread(void *arg)
 {
     startPstorage();
+    return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -526,7 +528,8 @@ void *handleConnections_interactive(void *arguments)
             }
             else
             {
-                printf("Interactive Server: Something is wrong with the  client ID: %d message Size : %i\n", client_fd, messageSize);
+                printf("Interactive Server: Something is wrong with the  client ID: %d message Size : %i\n",
+                       client_fd, (int)messageSize);
             }
             break;
         }

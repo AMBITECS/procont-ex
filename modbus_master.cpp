@@ -429,7 +429,7 @@ void *querySlaveDevices(void *arg)
                 ts.tv_sec = 0;
                 if (mb_devices[i].protocol == MB_RTU)
                 {
-                    ts.tv_nsec = (1000*1000*1000*28)/mb_devices[i].rtu_baud;
+                    ts.tv_nsec = (1000L*1000L*1000L*28L)/(mb_devices[i].rtu_baud);
                 }
                 else
                 {
@@ -613,6 +613,8 @@ void *querySlaveDevices(void *arg)
         }
         sleepms(polling_period);
     }
+
+    return nullptr;
 }
 
 //-----------------------------------------------------------------------------

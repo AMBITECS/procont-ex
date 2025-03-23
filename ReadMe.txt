@@ -1,4 +1,4 @@
-#--------------------------------------
+ #--------------------------------------
 # (-A-) Сборка на системе хоста x86
 #--------------------------------------
 # (0) создание каталога сборки
@@ -35,6 +35,38 @@ cmake --build . --target procont-ex --clean-first
 #--------------------------------------
 # (-B-) Сборка на целевой системе arm64
 #--------------------------------------
-# (тестируется ...)
+# (-2) установка docker в вашу систему
+# (в соответствии с нормами системы)
 
+# (-1) установка dockcross и сборка контейнера
+git clone https://github.com/dockcross/dockcross.git
+cd dockcross
+docker run --rm dockcross/linux-arm64 > ./dockcross-linux-arm64
+chmod +x ./dockcross-linux-arm64
+mv ./dockcross-linux-arm64 /usr/local/bin/	
+# вместо "/usr/local/bin/" можно любой каталог из $PATH
 
+# (0) создание каталога сборки
+mkdir dockcross-linux-arm64
+
+# (1) сборка cmake (--fresh - очистка кеша) 
+# (!) Внимание: ключ '-S' со значением '.' - запуск из текущего каталога проекта (procont-ex)
+dockcross-linux-arm64 cmake -Bdockcross-linux-arm64 -S. -DCMAKE_BUILD_TYPE=Debug -DST_FILE=plc.st -G Ninja --fresh
+
+# (2) сборка целей (ninja)
+dockcross-linux-arm64 ninja -Cdockcross-linux-arm64
+
+# (!) Результат:
+# - в каталоге dockcross-linux-arm64 появился исполняемый файл procont-ex
+
+#======================
+# Общее примечание:
+#======================
+1. в каталоге procont-ex/cmake/find находятся файлы cmake для поиска библиотек (например, Findmodbus.cmake)
+2. библиотеки среды procont-ex устанавливаются в ./utils/<имя-каталога-библиотеки>/$install
+3. каталог $install содержит:
+ - include/ - каталог заголовочных файлов
+ - lib/     - каталог библиотеки aarch64
+ - lib64/   - каталог библиотеки (по умолчанию) x86
+
+(!) при сборке под arm64 каталог "lib64" переименовать, иначе библиотека при сборке cmake будет взята из него (а там- x86)

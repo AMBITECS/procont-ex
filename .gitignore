@@ -82,3 +82,5 @@ CMakeLists.txt.user*
 
 /__tmp/
 /iec/
+/utils/libmodbus/
+/utils/CANopen/

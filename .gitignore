@@ -81,7 +81,13 @@ CMakeLists.txt.user*
 /Platform.cmake
 
 /__tmp/
-/iec/
-/utils/libmodbus/
-/utils/CANopen/
+
 /dockcross-linux-arm64/
+/iec/
+/$install/
+
+/utils/libmodbus/
+/utils/libmodbus/.idea/
+
+/utils/CANopen/
+/utils/CANopen/.idea/

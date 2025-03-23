@@ -9,9 +9,33 @@ project( PROCONT-EX
 set( PROJECT_SO_VERSION          "1"  )
 set( CMAKE_CXX_STANDARD          11   )
 set( CMAKE_CXX_STANDARD_REQUIRED True )
+string( TOLOWER ${PROJECT_NAME}  proj )      # proj = project name in lowercase
 
-set( PROJ ${PROJECT_NAME} )         # PROJ = project name in orig case
-string( TOLOWER ${PROJ} proj )      # proj = project name in lowercase
+set( PROJ_DIR       ${CMAKE_CURRENT_SOURCE_DIR}     ) # PROJ project directory
+set( CMAKE_DIR      ${PROJ_DIR}/cmake               ) # PROJ cmake files directory
+
+# === SET CMAKE_PREFIX_PATH ===
+if(NOT DEFINED CMAKE_PREFIX_PATH)
+    set(CMAKE_PREFIX_PATH   "/home/master/Qt/6.7.1/gcc_64/")
+    MESSAGE(STATUS "SET CMAKE_PREFIX_PATH to DEFAULT ${CMAKE_PREFIX_PATH}")
+endif()
+
+# === SET ST_FILE param ===
+if(NOT DEFINED ST_FILE)
+    MESSAGE(STATUS "SET ST_FILE to DEFAULT \"./st_files/plc.st\"")
+    set(ST_FILE ${PROJ_DIR}/st_files/plc.st) # DEFAULT ST source file
+else()
+    if((NOT EXISTS "${ST_FILE}") OR (IS_DIRECTORY "${ST_FILE}"))
+        #MESSAGE(STATUS "(1) ST_FILE = ${ST_FILE}")
+        if(NOT ("${ST_FILE}" STREQUAL ""))
+            set (ST_FILE ${PROJ_DIR}/st_files/${ST_FILE})
+        endif()
+        #MESSAGE(STATUS "(2) ST_FILE = ${ST_FILE}")
+        if((NOT EXISTS "${ST_FILE}") OR (IS_DIRECTORY "${ST_FILE}"))
+            MESSAGE(FATAL_ERROR "- ${ST_FILE} is not a file")
+        endif()
+    endif()
+endif()
 
 # === rem this lines for cross-compiling ===
 # set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local")
@@ -20,27 +44,31 @@ string( TOLOWER ${PROJ} proj )      # proj = project name in lowercase
 #file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX})
 #set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_INSTALL_PREFIX})
 # ==========================================
+message(STATUS "C++   COMPILER  : ${CMAKE_CXX_COMPILER}!")
+message(STATUS "CMake GENERATOR : ${CMAKE_GENERATOR}")
+message(STATUS "CMake BUILD_TYPE: ${CMAKE_BUILD_TYPE}\n")
 
-message(STATUS "C++ COMPILER == ${CMAKE_CXX_COMPILER}!")
 message(STATUS "CMake prefix  path: \"${CMAKE_PREFIX_PATH}\"")
 message(STATUS "CMake project path: \"${CMAKE_SOURCE_DIR}\"")
 message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
 
 #-------------------------------------------------------------------------------
 # PROJ Project specific PVs
-set( PROJ_DIR                       ${CMAKE_CURRENT_SOURCE_DIR}     ) # PROJ project directory
-set( CMAKE_DIR                      ${PROJ_DIR}/cmake               ) # PROJ cmake files directory
+set( PROJ_SRC_DIR   ${PROJ_DIR}                     ) # PROJ sources directory
+set( PROJ_MOD_DIR   ${PROJ_DIR}/utils               ) # PROJ iec2c directory
+set( PROJ_IEC_DIR   ${PROJ_DIR}/iec                 ) # PROJ iec2c directory
+set( PROJ_LIB_DIR   ${PROJ_DIR}/lib                 ) # PROJ includes directory
+set( PROJ_CMP_DIR   ${PROJ_DIR}/matiec              ) # IEC to C compiler directory
+set( PROJ_INS_DIR   ${PROJ_DIR}/$install            ) # local install directory
+set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c           ) # IEC to C compiler
+set( PROJ_ST_FILE   ${ST_FILE}                      ) # SOURCE ST_FILE
 
-set( PROJ_SRC_DIR                   ${PROJ_DIR}                     ) # PROJ sources directory
-set( PROJ_MOD_DIR                   ${PROJ_DIR}/utils               ) # PROJ iec2c directory
-set( PROJ_IEC_DIR                   ${PROJ_DIR}/iec                 ) # PROJ iec2c directory
-set( PROJ_LIB_DIR                   ${PROJ_DIR}/lib                 ) # PROJ includes directory
-set( PROJ_CMP_DIR                   ${PROJ_DIR}/matiec              ) # IEC to C compiler directory
-set( PROJ_INS_DIR                   ${PROJ_DIR}/$install            ) # local install directory
-set( PROJ_IEC2C                     ${PROJ_CMP_DIR}/iec2c           ) # IEC to C compiler
+set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} )
+set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
 
-set( CMAKE_MODULE_PATH              ${CMAKE_DIR} ${CMAKE_DIR}/find  )
-set( PROJ_ST_FILE                   ${PROJ_DIR}/st_files/plc.st     ) # ST source file
+include_directories (${PROJ_INS_DIR}/include)
+link_directories    (${PROJ_INS_DIR}/lib)
+link_directories    (${PROJ_INS_DIR}/lib64)
 
 message("== PROJ_DIR:     ${PROJ_DIR}")
 message("== CMAKE_DIR:    ${CMAKE_DIR}")
@@ -49,13 +77,7 @@ message("== PROJ_MOD_DIR: ${PROJ_MOD_DIR}")
 message("== PROJ_ST_FILE: ${PROJ_ST_FILE}")
 message("== PROJ_IEC2C:   ${PROJ_IEC2C}")
 message("== PROJ_IEC_DIR: ${PROJ_IEC_DIR}")
-message("== CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
-message("== CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
-message("== PROJ_ST_FILE: ${PROJ_ST_FILE}")
-
-set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} )
-include_directories(${PROJ_INS_DIR}/include)
-link_directories(${PROJ_INS_DIR}/lib64)
+message("== PROJ_ST_FILE: ${PROJ_ST_FILE}\n")
 
 ### Libraries ###
 # --- modbus library (cmake)

@@ -236,44 +236,45 @@ int main(int argc,char **argv)
     // Инициализация конфигурации
     config_init__();
 
-    //------------------------------------------------------
-    // Connect to interactive server (client - socket_fd)
-    //------------------------------------------------------
-    // Create socket
-    int socket_fd = socket(AF_INET, SOCK_STREAM,0);
-    assert(socket_fd!=-1);
-    // Connect to interactive_server
-    sockaddr_in inet_server{};
-    memset(&inet_server, 0, sizeof(inet_server));
-    inet_server.sin_family = AF_INET;
-    inet_server.sin_addr.s_addr = inet_addr("127.0.0.1");
-    inet_server.sin_port = htons(INTERACTIVE_PORT);
-    int rc=-1, count=0;
-    while (rc=connect(socket_fd, (struct sockaddr *) &inet_server, sizeof(inet_server))) {
-        if (count++ < 10) {
-            printf("."); sleepms(500);
-        }
-        else { count=0; break; }
-    }
-    assert(rc==0);
+//    //------------------------------------------------------
+//    // Connect to interactive server (client - socket_fd)
+//    //------------------------------------------------------
+//    // Create socket
+//    int socket_fd = socket(AF_INET, SOCK_STREAM,0);
+//    assert(socket_fd!=-1);
+//
+//    // Connect to interactive_server
+//    sockaddr_in inet_server{};
+//    memset(&inet_server, 0, sizeof(inet_server));
+//    inet_server.sin_family = AF_INET;
+//    inet_server.sin_addr.s_addr = inet_addr("127.0.0.1");
+//    inet_server.sin_port = htons(INTERACTIVE_PORT);
+//    int rc=-1, count=0;
+//    while (rc=connect(socket_fd, (struct sockaddr *) &inet_server, sizeof(inet_server))) {
+//        if (count++ < 10) {
+//            printf("."); sleepms(500);
+//        }
+//        else { count=0; break; }
+//    }
+//    assert(rc==0);
+//
+//    printf("-- Internal client connected to %d!\n", INTERACTIVE_PORT);
+//    sleep(10);
 
-    printf("-- Internal client connected to %d!\n", INTERACTIVE_PORT);
-    sleep(10);
-
-    //------------------------------------------------------
-    // Start Modbus server manually
-    //------------------------------------------------------
-    printf("Modbus starting...\n");
-    char strCmd[127];
-    int portModbus = 1502;
-    // Send command to start modbus
-    sprintf(strCmd, "start_modbus(%d)", portModbus);
-    while ((rc=send(socket_fd, strCmd, strlen(strCmd) + 1, 0))==-1) {
-        if (count++ < 10) sleepms(500); else {count=0; break;}
-    }
-    assert(rc!=-1);
-    printf("-- Modbus server (Slave) RUNNING on port %d!\n", portModbus);
-    sleep(10);
+//    //------------------------------------------------------
+//    // Start Modbus server manually
+//    //------------------------------------------------------
+//    printf("Modbus starting...\n");
+//    char strCmd[127];
+//    int portModbus = 1502;
+//    // Send command to start modbus
+//    sprintf(strCmd, "start_modbus(%d)", portModbus);
+//    while ((rc=send(socket_fd, strCmd, strlen(strCmd) + 1, 0))==-1) {
+//        if (count++ < 10) sleepms(500); else {count=0; break;}
+//    }
+//    assert(rc!=-1);
+//    printf("-- Modbus server (Slave) RUNNING on port %d!\n", portModbus);
+//    sleep(10);
 
     //======================================================
     //               MUTEX INITIALIZATION
@@ -334,9 +335,8 @@ int main(int argc,char **argv)
     //======================================================
     //                    MAIN LOOP
     //======================================================
-    while (run_openplc)
-    {
-        glueVars();                 // make sure
+    while (run_openplc) {           // run_openplc - флаг работы
+        glueVars();                 // make sure for regidters (?)
 
         updateBuffersIn();			// read input image
         pthread_mutex_lock(&bufferLock);	//lock mutex
@@ -361,7 +361,7 @@ int main(int argc,char **argv)
     //======================================================
     //             SHUTTING DOWN PROCONT RUNTIME
     //======================================================
-    // Ожидание завершения потока сервера
+    // Ожидание завершения потока сервера (и дочерних)
     pthread_join(interactive_thread, nullptr);
     printf("Disabling outputs\n");
 

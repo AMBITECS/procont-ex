@@ -29,6 +29,7 @@
 #define MODBUS_PROTOCOL     0
 #define DNP3_PROTOCOL       1
 #define ENIP_PROTOCOL       2
+#define CAN_MASTER_PROTOCOL 3
 
 //Internal buffers for I/O and memory. These buffers are defined in the
 //auto-generated glueVars.cpp file
@@ -137,7 +138,9 @@ extern bool run_enip;
 extern bool run_pstorage;
 
 //server.cpp
-void startServer(uint16_t port, int protocol_type);
+//void startServer(uint16_t port, int protocol_type);
+void startServer(char *arg_str, int protocol_type);
+
 int getSO_ERROR(int fd);
 void closeSocket(int fd);
 bool SetSocketBlockingEnabled(int fd, bool blocking);

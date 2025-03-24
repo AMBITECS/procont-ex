@@ -1,27 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright 2018 Thiago Alves
-// This file is part of the OpenPLC Software Stack.
-//
-// OpenPLC is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// OpenPLC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with OpenPLC.  If not, see <http://www.gnu.org/licenses/>.
-//------
-//
-// This is the file for the interactive server. It has procedures to create
-// a socket, bind it, start network communication, and process commands. The 
-// interactive server only responds to localhost and it is used to communicate
-// with the Python webserver GUI only.
-//
-// Thiago Alves, Jun 2018
+// Copyright 2018 Ambitecs
 //-----------------------------------------------------------------------------
 
 #include <cstdio>
@@ -38,33 +16,36 @@
 #define BUFFER_SIZE 1024
 
 //Global Variables
-__attribute__((unused)) bool ethercat_configured = false;
+//__attribute__((unused))
+bool ethercat_configured = false;
 char ethercat_conf_file[BUFFER_SIZE];
-
-uint16_t modbus_port = 502;
-uint16_t dnp3_port = 20000;
-uint16_t enip_port = 44818;
-
-uint16_t pstorage_polling = 10;
-unsigned char server_command[1024];
-
-int  command_index = 0;
-bool processing_command = false;
 
 time_t start_time;
 time_t end_time;
 
+int  command_index = 0;
+bool processing_command = false;
+unsigned char server_command[1024];
+
+// Thread procedure arguments
+char arg_str[128]{};
+uint16_t pstorage_polling = 10;
+//uint16_t modbus_port = 502;
+//uint16_t dnp3_port = 20000;
+//uint16_t enip_port = 44818;
+
 // Global Threads
-bool run_modbus = false;
-bool run_dnp3 = false;
-bool run_enip = false;
+bool run_pstorage   = false;    // persistent storage
+bool run_modbus     = false;    // modbus
+bool run_can_master = false;    // can_master
+//bool run_dnp3 = false;
+//bool run_enip = false;
 
-pthread_t modbus_thread;
-pthread_t dnp3_thread;
-pthread_t enip_thread;
-
-bool run_pstorage = false;
 pthread_t pstorage_thread;
+pthread_t modbus_thread;
+pthread_t can_master_thread;
+//pthread_t dnp3_thread;
+//pthread_t enip_thread;
 
 ////-----------------------------------------------------------------------------
 //// Configure Ethercat (not used)
@@ -76,9 +57,20 @@ pthread_t pstorage_thread;
 //-----------------------------------------------------------------------------
 // Start the Modbus Thread
 //-----------------------------------------------------------------------------
-void *modbusThread(void *arg)
-{
-    startServer(modbus_port, MODBUS_PROTOCOL);
+void *modbusThread(void *arg) {
+    startServer(arg_str, MODBUS_PROTOCOL);
+    return nullptr;
+}
+
+//-----------------------------------------------------------------------------
+// Start the CAN Master Thread
+//-----------------------------------------------------------------------------
+void *can_masterThread(void *arg) {
+
+    while (run_can_master) {
+        sleep(1);
+    }
+
     return nullptr;
 }
 
@@ -102,8 +94,7 @@ void *modbusThread(void *arg)
 //-----------------------------------------------------------------------------
 // Start the Persistent Storage Thread
 //-----------------------------------------------------------------------------
-void *pstorageThread(void *arg)
-{
+void *pstorageThread(void *arg) {
     startPstorage();
     return nullptr;
 }
@@ -111,46 +102,34 @@ void *pstorageThread(void *arg)
 //-----------------------------------------------------------------------------
 // Read the argument from a command function
 //-----------------------------------------------------------------------------
-int readCommandArgument(const /*unsigned*/ char *command)
-{
-    int i = 0;
-    int j = 0;
-    /*unsigned*/ char argument[1024];
+int readCommandArgument(const char *command) {
+    int i = 0, j = 0;
+    char argument[1024];
     
     while (command[i] != '(' && command[i] != '\0') i++;
     if (command[i] == '(') i++;
     while (command[i] != ')' && command[i] != '\0')
     {
-        argument[j] = command[i];
-        i++;
-        j++;
+        argument[j++] = command[i++];
         argument[j] = '\0';
     }
-    
     return atoi(argument);
 }
 //-----------------------------------------------------------------------------
 // Read string argument from a command function
 //-----------------------------------------------------------------------------
-/*unsigned*/ char *readCommandArgumentStr(const /*unsigned*/ char *command)
-{
-    int i = 0;
-    int j = 0;
-
-    static /*unsigned*/ char argument[1024];
+char *readCommandArgumentStr(const char *command) {
+    int i = 0, j = 0;
+    static char argument[1024];
 //    unsigned char *argument;
 //    argument = (unsigned char *)malloc(1024 * sizeof(unsigned char));
     
     while (command[i] != '(' && command[i] != '\0') i++;
     if (command[i] == '(') i++;
-    while (command[i] != ')' && command[i] != '\0')
-    {
-        argument[j] = command[i];
-        i++;
-        j++;
+    while (command[i] != ')' && command[i] != '\0') {
+        argument[j++] = command[i++];
         argument[j] = '\0';
     }
-    
     return argument;
 }
 
@@ -158,8 +137,7 @@ int readCommandArgument(const /*unsigned*/ char *command)
 // Create the socket and bind it.
 // Returns the file descriptor for the socket created.
 //-----------------------------------------------------------------------------
-int createSocket_interactive(int port)
-{
+int createSocket_interactive(int port) {
     char log_msg[1000];
     int socket_fd;
     struct sockaddr_in server_addr{};
@@ -250,65 +228,18 @@ void processCommand(/*unsigned*/ char *buffer, int client_fd)
         return;
     }
 
-    if (cmdIs(buffer, "quit()"))
+    if (cmdIs(buffer, "start_modbus("))
     {
         processing_command = true;
         {
-            sprintf(log_msg, "Issued quit() command\n");
+            //modbus_port = readCommandArgument((buffer));
+            strncpy(arg_str, readCommandArgumentStr((buffer)), 127);
+
+            sprintf(log_msg, "Issued start_modbus() command to start on port: %s\n", arg_str);
             log(log_msg);
 
             if (run_modbus) {
-                run_modbus = false;
-                pthread_join(modbus_thread, nullptr);
-                sprintf(log_msg, "Modbus server was stopped\n");
-                log(log_msg);
-            }
-
-//            if (run_dnp3) {
-//                run_dnp3 = false;
-//                pthread_join(dnp3_thread, nullptr);
-//                sprintf(log_msg, "DNP3 server was stopped\n");
-//                log(log_msg);
-//            }
-//
-//            if (run_enip) {
-//                run_enip = false;
-//                pthread_join(enip_thread, nullptr);
-//                sprintf(log_msg, "ENIP server was stopped\n");
-//                log(log_msg);
-//            }
-
-            run_openplc = false;
-        }
-        processing_command = false;
-    }
-    else if (cmdIs(buffer, "start_ethercat("))
-    {
-        processing_command = true;
-        {
-            char *argument;
-            argument = readCommandArgumentStr(buffer);
-            strcpy(ethercat_conf_file, argument);
-            free(argument);
-            sprintf(log_msg, "Issued start_ethercat() command to start with config: %s\n", ethercat_conf_file);
-            log(log_msg);
-
-            //Configure ethercat (not used)
-            //ethercat_configured = configureEthercat();
-
-        }
-        processing_command = false;
-    }
-    else if (cmdIs(buffer, "start_modbus("))
-    {
-        processing_command = true;
-        {
-            modbus_port = readCommandArgument((buffer));
-            sprintf(log_msg, "Issued start_modbus() command to start on port: %d\n", modbus_port);
-            log(log_msg);
-
-            if (run_modbus) {
-                sprintf(log_msg, "Modbus server already active. Restarting on port: %d\n", modbus_port);
+                sprintf(log_msg, "Modbus server already active. Restarting on port: %s\n", arg_str);
                 log(log_msg);
 
                 //Stop Modbus server
@@ -320,10 +251,16 @@ void processCommand(/*unsigned*/ char *buffer, int client_fd)
 
             //Start Modbus server
             run_modbus = true;
-            pthread_create(&modbus_thread, nullptr, modbusThread, nullptr);
+            pthread_create(
+                    &modbus_thread,
+                    nullptr,
+                    modbusThread,
+                    nullptr
+                    );
         }
         processing_command = false;
     }
+
     else if (cmdIs(buffer, "stop_modbus()"))
     {
         processing_command = true;
@@ -340,82 +277,149 @@ void processCommand(/*unsigned*/ char *buffer, int client_fd)
         processing_command = false;
     }
 
-//    else if (cmdIs(buffer, "start_dnp3("))
-//    {
-//        processing_command = true;
-//        dnp3_port = readCommandArgument(buffer);
-//        sprintf(log_msg, "Issued start_dnp3() command to start on port: %d\n", dnp3_port);
-//        log(log_msg);
-//        if (run_dnp3)
-//        {
-//            sprintf(log_msg, "DNP3 server already active. Restarting on port: %d\n", dnp3_port);
-//            log(log_msg);
-//            //Stop DNP3 server
-//            run_dnp3 = false;
-//            pthread_join(dnp3_thread, nullptr);
-//            sprintf(log_msg, "DNP3 server was stopped\n");
-//            log(log_msg);
-//        }
-//        //Start DNP3 server
-//        run_dnp3 = 1;
-//        pthread_create(&dnp3_thread, nullptr, dnp3Thread, nullptr);
-//        processing_command = false;
-//    }
+    else if (cmdIs(buffer, "start_can_master(")) {
+        processing_command = true;
+        {
+            strncpy(arg_str, readCommandArgumentStr((buffer)), 127);
 
-//    else if (cmdIs(buffer, "stop_dnp3()"))
-//    {
-//        processing_command = true;
-//        {
-//            sprintf(log_msg, "Issued stop_dnp3() command\n");
-//            log(log_msg);
-//            if (run_dnp3) {
-//                run_dnp3 = false;
-//                pthread_join(dnp3_thread, nullptr);
-//                sprintf(log_msg, "DNP3 server was stopped\n");
-//                log(log_msg);
-//            }
-//        }
-//        processing_command = false;
-//    }
+            sprintf(log_msg, "Issued start_can_master() command to start on %s\n", arg_str);
+            log(log_msg);
 
-//    else if (cmdIs(buffer, "start_enip("))
-//    {
-//        processing_command = true;
-//        {
-//            enip_port = readCommandArgument(buffer);
-//            sprintf(log_msg, "Issued start_enip() command to start on port: %d\n", enip_port);
-//            log(log_msg);
-//            if (run_enip) {
-//                sprintf(log_msg, "EtherNet/IP server already active. Restarting on port: %d\n", enip_port);
-//                log(log_msg);
-//                //Stop Enip server
-//                run_enip = false;
-//                pthread_join(enip_thread, nullptr);
-//                sprintf(log_msg, "EtherNet/IP server was stopped\n");
-//                log(log_msg);
-//            }
-//            //Start Enip server
-//            run_enip = true;
-//            pthread_create(&enip_thread, nullptr, enipThread, nullptr);
-//        }
-//        processing_command = false;
-//    }
+            if (run_can_master) {
+                sprintf(log_msg, "CAN Master server already active. Restarting on %s\n", arg_str);
+                log(log_msg);
 
-//    else if (cmdIs(buffer, "stop_enip()"))
-//    {
-//        processing_command = true;
-//        {
-//            sprintf(log_msg, "Issued stop_enip() command\n");
-//            log(log_msg);
-//            if (run_enip) {
-//                run_enip = false;
-//                pthread_join(enip_thread, nullptr);
-//                sprintf(log_msg, "EtherNet/IP server was stopped\n");
-//                log(log_msg);
-//            }
-//        }
-//        processing_command = false;
-//    }
+                //Stop CAN Master server
+                run_can_master = false;
+                pthread_join(can_master_thread, nullptr);
+                sprintf(log_msg, "CAN Master server was stopped\n");
+                log(log_msg);
+            }
+
+            //Start CAN Master server
+            run_modbus = true;
+            pthread_create(
+                    &can_master_thread,
+                    nullptr,
+                    can_masterThread,
+                    nullptr
+                    );
+
+        }
+        processing_command = false;
+    }
+
+    else if (cmdIs(buffer, "stop_can_master()"))
+    {
+        processing_command = true;
+        {
+            sprintf(log_msg, "Issued stop_can_master() command\n");
+            log(log_msg);
+
+            if (run_can_master) {
+                run_can_master = false;
+                pthread_join(can_master_thread, nullptr);
+                sprintf(log_msg, "CAN Master server was stopped\n");
+                log(log_msg);
+            }
+        }
+        processing_command = false;
+    }
+
+        //else if (cmdIs(buffer, "start_ethercat("))
+    //{
+    //    processing_command = true;
+    //    {
+    //        char *argument;
+    //        argument = readCommandArgumentStr(buffer);
+    //        strcpy(ethercat_conf_file, argument);
+    //        free(argument);
+    //        sprintf(log_msg, "Issued start_ethercat() command to start with config: %s\n", ethercat_conf_file);
+    //        log(log_msg);
+    //
+    //        //Configure ethercat (not used)
+    //        //ethercat_configured = configureEthercat();
+    //
+    //    }
+    //    processing_command = false;
+    //}
+
+    //else if (cmdIs(buffer, "start_dnp3("))
+    //{
+    //    processing_command = true;
+    //    dnp3_port = readCommandArgument(buffer);
+    //    sprintf(log_msg, "Issued start_dnp3() command to start on port: %d\n", dnp3_port);
+    //    log(log_msg);
+    //    if (run_dnp3)
+    //    {
+    //        sprintf(log_msg, "DNP3 server already active. Restarting on port: %d\n", dnp3_port);
+    //        log(log_msg);
+    //        //Stop DNP3 server
+    //        run_dnp3 = false;
+    //        pthread_join(dnp3_thread, nullptr);
+    //        sprintf(log_msg, "DNP3 server was stopped\n");
+    //        log(log_msg);
+    //    }
+    //    //Start DNP3 server
+    //    run_dnp3 = 1;
+    //    pthread_create(&dnp3_thread, nullptr, dnp3Thread, nullptr);
+    //    processing_command = false;
+    //}
+
+    //else if (cmdIs(buffer, "stop_dnp3()"))
+    //{
+    //    processing_command = true;
+    //    {
+    //        sprintf(log_msg, "Issued stop_dnp3() command\n");
+    //        log(log_msg);
+    //        if (run_dnp3) {
+    //            run_dnp3 = false;
+    //            pthread_join(dnp3_thread, nullptr);
+    //            sprintf(log_msg, "DNP3 server was stopped\n");
+    //            log(log_msg);
+    //        }
+    //    }
+    //    processing_command = false;
+    //}
+
+    //else if (cmdIs(buffer, "start_enip("))
+    //{
+    //    processing_command = true;
+    //    {
+    //        enip_port = readCommandArgument(buffer);
+    //        sprintf(log_msg, "Issued start_enip() command to start on port: %d\n", enip_port);
+    //        log(log_msg);
+    //        if (run_enip) {
+    //            sprintf(log_msg, "EtherNet/IP server already active. Restarting on port: %d\n", enip_port);
+    //            log(log_msg);
+    //            //Stop Enip server
+    //            run_enip = false;
+    //            pthread_join(enip_thread, nullptr);
+    //            sprintf(log_msg, "EtherNet/IP server was stopped\n");
+    //            log(log_msg);
+    //        }
+    //        //Start Enip server
+    //        run_enip = true;
+    //        pthread_create(&enip_thread, nullptr, enipThread, nullptr);
+    //    }
+    //    processing_command = false;
+    //}
+
+    //else if (cmdIs(buffer, "stop_enip()"))
+    //{
+    //    processing_command = true;
+    //    {
+    //        sprintf(log_msg, "Issued stop_enip() command\n");
+    //        log(log_msg);
+    //        if (run_enip) {
+    //            run_enip = false;
+    //            pthread_join(enip_thread, nullptr);
+    //            sprintf(log_msg, "EtherNet/IP server was stopped\n");
+    //            log(log_msg);
+    //        }
+    //    }
+    //    processing_command = false;
+    //}
 
     else if (cmdIs(buffer, "start_pstorage("))
     {
@@ -474,6 +478,38 @@ void processCommand(/*unsigned*/ char *buffer, int client_fd)
         return;
     }
 
+    else if (cmdIs(buffer, "quit()"))
+    {
+        processing_command = true;
+        {
+            sprintf(log_msg, "Issued quit() command\n");
+            log(log_msg);
+
+            if (run_modbus) {
+                run_modbus = false;
+                pthread_join(modbus_thread, nullptr);
+                sprintf(log_msg, "Modbus server was stopped\n");
+                log(log_msg);
+            }
+
+            //if (run_dnp3) {
+            //    run_dnp3 = false;
+            //    pthread_join(dnp3_thread, nullptr);
+            //    sprintf(log_msg, "DNP3 server was stopped\n");
+            //    log(log_msg);
+            //}
+
+            //if (run_enip) {
+            //    run_enip = false;
+            //    pthread_join(enip_thread, nullptr);
+            //    sprintf(log_msg, "ENIP server was stopped\n");
+            //    log(log_msg);
+            //}
+
+            run_openplc = false;
+        }
+        processing_command = false;
+    }
     else
     {
         processing_command = true;
@@ -494,10 +530,9 @@ void processCommand(/*unsigned*/ char *buffer, int client_fd)
 //-----------------------------------------------------------------------------
 void processMessage_interactive(const unsigned char *buffer, long bufferSize, int client_fd)
 {
-    for (int i = 0; i < bufferSize; i++)
-    {
-        if (buffer[i] == '\r' || buffer[i] == '\n'  || buffer[i] == 0x00 || command_index >= 1024)
-        {
+    for (int i = 0; i < bufferSize; i++) {
+        if (buffer[i] == '\r' || buffer[i] == '\n' || buffer[i] == 0x00 || command_index >= 1024) {
+            //// PROCESS COMMAND
             processCommand((char*)server_command, client_fd);
             command_index = 0;
             break;
@@ -557,41 +592,44 @@ void startInteractiveServer(int port)
     socket_fd = createSocket_interactive(port);
     if (socket_fd == -1) exit(1);
 
-    while (run_openplc)
-    {
-        client_fd = waitForClient_interactive(socket_fd); //block until a client connects
-        if (client_fd < 0)
-        {
+    while (run_openplc) {
+
+        // (1) waitForClient - block until a client connects
+        client_fd = waitForClient_interactive(socket_fd);
+        if (client_fd < 0) {
             sprintf(log_msg, "Interactive Server: Error accepting client!\n");
             log(log_msg);
         }
-
         else
         {
-            int arguments[1];
-            pthread_t thread;
-            int ret = -1;
+            printf("Interactive Server: Client accepted! \n"
+                   "Creating thread for the new client ID: %d...\n", client_fd);
 
-            printf("Interactive Server: Client accepted!\nCreating thread for the new client ID: %d...\n", client_fd);
+            pthread_t thread{};
+            int arguments[1];
             arguments[0] = client_fd;
-            ret = pthread_create(&thread, nullptr, handleConnections_interactive, arguments);
-            if (ret==0) 
-            {
-                pthread_detach(thread);
+            int ret = ret = pthread_create(
+                    &thread,
+                    nullptr,
+                    handleConnections_interactive,
+                    arguments);
+
+            if (ret==0) {
+                pthread_detach(thread); // ZOMBIE
             }
         }
     }
     
     printf("Shutting down internal threads\n");
 
-    run_modbus = false;
-    run_dnp3 = false;
-    run_enip = false;
     run_pstorage = false;
+    run_modbus   = false;
+    //run_dnp3     = false;
+    //run_enip     = false;
 
     pthread_join(modbus_thread, nullptr);
-    pthread_join(dnp3_thread, nullptr);
-    pthread_join(enip_thread, nullptr);
+    //pthread_join(dnp3_thread, nullptr);
+    //pthread_join(enip_thread, nullptr);
     
     printf("Closing socket...\n");
     closeSocket(socket_fd);

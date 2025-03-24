@@ -22,7 +22,65 @@ int ignored_int_outputs[]  = {-1};
 // This function is called by the main OpenPLC routine when it is initializing.
 // Hardware initialization procedures for your custom layer should be here.
 //-----------------------------------------------------------------------------
-void initCustomLayer() { }
+void initCustomLayer() {
+    char strCmd[127];
+    int rc=-1, count=0;
+
+    // Create socket
+    int socket_fd = socket(AF_INET, SOCK_STREAM,0);
+    assert(socket_fd!=-1);
+
+    //------------------------------------------------------
+    // Connect to interactive server (client - socket_fd)
+    //------------------------------------------------------
+    // Connect to interactive_server
+    sockaddr_in inet_server{};
+    memset(&inet_server, 0, sizeof(inet_server));
+    inet_server.sin_family = AF_INET;
+    inet_server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    inet_server.sin_port = htons(INTERACTIVE_PORT);
+    while (rc=connect(
+            socket_fd,
+            (struct sockaddr *) &inet_server, sizeof(inet_server)))
+    {
+        if (count++ < 10) {
+            printf("."); sleepms(500);
+        }
+        else { count=0; break; }
+    }
+    assert(rc==0);
+
+    printf("-- Internal client connected to %d!\n", INTERACTIVE_PORT);
+    sleep(10);
+
+    //------------------------------------------------------
+    // Start Modbus server manually
+    //------------------------------------------------------
+    printf("Modbus starting...\n");
+    int portModbus = 1502;
+    // Send command to start modbus
+    sprintf(strCmd, "start_modbus(%d)", portModbus);
+    while ((rc=send(socket_fd, strCmd, strlen(strCmd) + 1, 0))==-1) {
+        if (count++ < 10) sleepms(500); else {count=0; break;}
+    }
+    assert(rc!=-1);
+    printf("-- Modbus server (Slave) RUNNING on port %d!\n", portModbus);
+    sleep(10);
+
+    //------------------------------------------------------
+    // Start CAN Master server manually
+    //------------------------------------------------------
+    printf("CAN Master starting...\n");
+    // Send command to start modbus
+    sprintf(strCmd, "start_can_master(%s)", "can0");
+    while ((rc=send(socket_fd, strCmd, strlen(strCmd) + 1, 0))==-1) {
+        if (count++ < 10) sleepms(500); else {count=0; break;}
+    }
+    assert(rc!=-1);
+    printf("-- CAN Master server RUNNING on '%s'!\n", "can0");
+    sleep(10);
+
+}
 
 //-----------------------------------------------------------------------------
 // This function is called by OpenPLC in a loop. Here the internal input

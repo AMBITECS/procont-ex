@@ -312,6 +312,126 @@ void parseConfig()
     //*/
 }
 
+//-----------------------------------------------------------------------------
+// This function is called by the main OpenPLC routine when it is initializing.
+// Modbus master initialization procedures are here.
+//-----------------------------------------------------------------------------
+void initializeMB()
+{
+    parseConfig();
+
+    for (int i = 0; i < num_devices; i++)
+    {
+        if (mb_devices[i].protocol == MB_TCP)
+        {
+            mb_devices[i].mb_ctx = modbus_new_tcp(
+                    mb_devices[i].dev_address,
+                    mb_devices[i].ip_port
+                    );
+        }
+        else if (mb_devices[i].protocol == MB_RTU)
+        {
+            //Check if there is a device using the same port
+            int share_index = -1;
+            for (int a = 0; a < num_devices && a < i; a++) {
+                if (strcmp(mb_devices[i].dev_address, mb_devices[a].dev_address) == 0) {
+                    share_index = a;
+                    break;
+                }
+            }
+
+            if (share_index != -1) { // use share_index
+                if (
+                        mb_devices[i].rtu_baud     != mb_devices[share_index].rtu_baud     ||
+                        mb_devices[i].rtu_parity   != mb_devices[share_index].rtu_parity   ||
+                        mb_devices[i].rtu_data_bit != mb_devices[share_index].rtu_data_bit ||
+                        mb_devices[i].rtu_stop_bit != mb_devices[share_index].rtu_stop_bit
+                        )
+                {
+                    char log_msg[1000];
+                    sprintf(log_msg, "Warning MB device %s port setting missmatch\n", mb_devices[i].dev_name);
+                    log(log_msg);
+                }
+                mb_devices[i].mb_ctx = mb_devices[share_index].mb_ctx;
+            }
+            else // use native index
+            {
+                mb_devices[i].mb_ctx = modbus_new_rtu(
+                        mb_devices[i].dev_address,
+                        mb_devices[i].rtu_baud,
+                        mb_devices[i].rtu_parity,
+                        mb_devices[i].rtu_data_bit,
+                        mb_devices[i].rtu_stop_bit
+                        );
+
+                // If hardware layer set modbus_rts_pin, enable Pi specific rts handling
+                //if (rpi_modbus_rts_pin != 0)
+                //{
+                //    modbus_enable_rpi(mb_devices[i].mb_ctx,TRUE);
+                //    modbus_configure_rpi_bcm_pin(mb_devices[i].mb_ctx,rpi_modbus_rts_pin);
+                //    modbus_rpi_pin_export_direction(mb_devices[i].mb_ctx);
+                //}
+            }
+        }
+        
+        //slave id
+        modbus_set_slave(mb_devices[i].mb_ctx, mb_devices[i].dev_id);
+
+        //timeout
+        uint32_t to_sec = timeout / 1000;
+        uint32_t to_usec = (timeout % 1000) * 1000;
+        modbus_set_response_timeout(mb_devices[i].mb_ctx, to_sec, to_usec);
+    }
+    
+    //Initialize comm error counter
+    if (special_functions[2] != nullptr) *special_functions[2] = 0;
+
+    // Start thread for slaves
+    if (num_devices > 0) {
+
+        // -> querySlaveDevices
+        pthread_t thread;
+        int ret = pthread_create(
+                &thread, nullptr,
+                querySlaveDevices,
+                nullptr);
+
+        if (ret==0) {
+            pthread_detach(thread);
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+// This function is called by the OpenPLC in a loop.
+// Here the internal buffers must be updated to reflect the actual Input state.
+//-----------------------------------------------------------------------------
+void updateBuffersIn_MB() {
+    pthread_mutex_lock(&ioLock);
+    {
+        for (int i = 0; i < MAX_MB_IO; i++) {
+            if (bool_input[100 + (i / 8)][i % 8] != nullptr) *bool_input[100 + (i / 8)][i % 8] = bool_input_buf[i];
+            if (int_input[100 + i] != nullptr) *int_input[100 + i] = int_input_buf[i];
+        }
+    }
+    pthread_mutex_unlock(&ioLock);
+}
+
+
+//-----------------------------------------------------------------------------
+// This function is called by the OpenPLC in a loop.
+// Here the internal buffers must be updated to reflect the actual Output state.
+//-----------------------------------------------------------------------------
+void updateBuffersOut_MB() {
+    pthread_mutex_lock(&ioLock);
+    {
+        for (int i = 0; i < MAX_MB_IO; i++) {
+            if (bool_output[100 + (i / 8)][i % 8] != nullptr) bool_output_buf[i] = *bool_output[100 + (i / 8)][i % 8];
+            if (int_output[100 + i] != nullptr) int_output_buf[i] = *int_output[100 + i];
+        }
+    }
+    pthread_mutex_unlock(&ioLock);
+}
 
 //-----------------------------------------------------------------------------
 // Thread to poll each slave device
@@ -320,7 +440,7 @@ void *querySlaveDevices(void *arg) {
     while (run_openplc)
     {
         char log_msg[1000];
-        
+
         uint16_t bool_input_index = 0;
         uint16_t bool_output_index = 0;
         uint16_t int_input_index = 0;
@@ -353,11 +473,11 @@ void *querySlaveDevices(void *arg) {
                     sprintf(log_msg, "Connection failed on MB device %s: %s\n",
                             mb_devices[i].dev_name,
                             modbus_strerror(errno)
-                            );
+                    );
                     log(log_msg);
-                    
+
                     if (special_functions[2] != nullptr) *special_functions[2]++;
-                    
+
                     // Because this device is not connected, we skip those input registers
                     bool_input_index += (mb_devices[i].discrete_inputs.num_regs);
                     int_input_index += (mb_devices[i].input_registers.num_regs);
@@ -375,13 +495,12 @@ void *querySlaveDevices(void *arg) {
 
             if (mb_devices[i].isConnected || rtu_port_connected)
             {
-
                 struct timespec ts{};
                 ts.tv_sec = 0;
                 if (mb_devices[i].protocol == MB_RTU) {
                     ts.tv_nsec = (1000L*1000L*1000L*28L)/(mb_devices[i].rtu_baud);
                 } else {
-                    ts.tv_nsec = 0;                    
+                    ts.tv_nsec = 0;
                 }
 
                 //Read discrete inputs
@@ -392,19 +511,19 @@ void *querySlaveDevices(void *arg) {
                     tempBuff = (uint8_t *)malloc(mb_devices[i].discrete_inputs.num_regs);
                     nanosleep(&ts, nullptr);
 
-                    int return_val = modbus_read_input_bits(
+                    int return_val = modbus_read_input_bits(        // Запрос на SLAVE
                             mb_devices[i].mb_ctx,
                             mb_devices[i].discrete_inputs.start_address,
                             mb_devices[i].discrete_inputs.num_regs,
                             tempBuff
-                            );
+                    );
 
                     if (return_val == -1) {
                         if (mb_devices[i].protocol != MB_RTU) {
                             modbus_close(mb_devices[i].mb_ctx);
                             mb_devices[i].isConnected = false;
                         }
-                        
+
                         sprintf(log_msg, "Modbus Read Discrete Input Registers failed on MB device %s: %s\n",
                                 mb_devices[i].dev_name, modbus_strerror(errno));
                         log(log_msg);
@@ -430,19 +549,23 @@ void *querySlaveDevices(void *arg) {
                     tempBuff = (uint8_t *)malloc(mb_devices[i].coils.num_regs);
 
                     pthread_mutex_lock(&ioLock);
-                    for (int j = 0; j < mb_devices[i].coils.num_regs; j++)
-                    {
+                    for (int j = 0; j < mb_devices[i].coils.num_regs; j++) {
                         tempBuff[j] = bool_output_buf[bool_output_index];
                         bool_output_index++;
                     }
                     pthread_mutex_unlock(&ioLock);
 
                     nanosleep(&ts, nullptr);
-                    int return_val = modbus_write_bits(mb_devices[i].mb_ctx, mb_devices[i].coils.start_address, mb_devices[i].coils.num_regs, tempBuff);
-                    if (return_val == -1)
-                    {
-                        if (mb_devices[i].protocol != MB_RTU)
-                        {
+
+                    int return_val = modbus_write_bits(             // Запрос на SLAVE
+                            mb_devices[i].mb_ctx,
+                            mb_devices[i].coils.start_address,
+                            mb_devices[i].coils.num_regs,
+                            tempBuff
+                    );
+
+                    if (return_val == -1) {
+                        if (mb_devices[i].protocol != MB_RTU) {
                             modbus_close(mb_devices[i].mb_ctx);
                             mb_devices[i].isConnected = false;
                         }
@@ -453,7 +576,7 @@ void *querySlaveDevices(void *arg) {
                         log(log_msg);
                         if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
-                    
+
                     free(tempBuff);
                 }
 
@@ -463,17 +586,22 @@ void *querySlaveDevices(void *arg) {
                     sleepms(mb_devices[i].rtu_tx_pause);
                     uint16_t *tempBuff;
                     tempBuff = (uint16_t *)malloc(2*mb_devices[i].input_registers.num_regs);
-                    nanosleep(&ts, nullptr); 
-                    int return_val = modbus_read_input_registers(    mb_devices[i].mb_ctx, mb_devices[i].input_registers.start_address,
-                                                                    mb_devices[i].input_registers.num_regs, tempBuff);
-                    if (return_val == -1)
-                    {
-                        if (mb_devices[i].protocol != MB_RTU)
-                        {
+
+                    nanosleep(&ts, nullptr);
+
+                    int return_val = modbus_read_input_registers(   // Запрос на SLAVE
+                            mb_devices[i].mb_ctx,
+                            mb_devices[i].input_registers.start_address,
+                            mb_devices[i].input_registers.num_regs,
+                            tempBuff
+                    );
+
+                    if (return_val == -1) {
+                        if (mb_devices[i].protocol != MB_RTU) {
                             modbus_close(mb_devices[i].mb_ctx);
                             mb_devices[i].isConnected = false;
                         }
-                        
+
                         sprintf(log_msg, "Modbus Read Input Registers failed on MB device %s: %s\n", mb_devices[i].dev_name,
                                 modbus_strerror(errno));
 
@@ -501,9 +629,15 @@ void *querySlaveDevices(void *arg) {
                     sleepms(mb_devices[i].rtu_tx_pause);
                     uint16_t *tempBuff;
                     tempBuff = (uint16_t *)malloc(2*mb_devices[i].holding_read_registers.num_regs);
-                    nanosleep(&ts, nullptr); 
-                    int return_val = modbus_read_registers(mb_devices[i].mb_ctx, mb_devices[i].holding_read_registers.start_address,
-                                                           mb_devices[i].holding_read_registers.num_regs, tempBuff);
+
+                    nanosleep(&ts, nullptr);
+
+                    int return_val = modbus_read_registers(         // Запрос на SLAVE
+                            mb_devices[i].mb_ctx,
+                            mb_devices[i].holding_read_registers.start_address,
+                            mb_devices[i].holding_read_registers.num_regs,
+                            tempBuff
+                    );
                     if (return_val == -1)
                     {
                         if (mb_devices[i].protocol != MB_RTU)
@@ -547,20 +681,21 @@ void *querySlaveDevices(void *arg) {
                     }
                     pthread_mutex_unlock(&ioLock);
 
-                    nanosleep(&ts, nullptr); 
-                    int return_val = modbus_write_registers(
+                    nanosleep(&ts, nullptr);
+
+                    int return_val = modbus_write_registers(        // Запрос на SLAVE
                             mb_devices[i].mb_ctx,
                             mb_devices[i].holding_registers.start_address,
                             mb_devices[i].holding_registers.num_regs,
                             tempBuff
-                            );
+                    );
 
                     if (return_val == -1) {
                         if (mb_devices[i].protocol != MB_RTU) {
                             modbus_close(mb_devices[i].mb_ctx);
                             mb_devices[i].isConnected = false;
                         }
-                        
+
                         sprintf(log_msg, "Modbus Write Holding Registers failed on MB device %s: %s\n",
                                 mb_devices[i].dev_name,
                                 modbus_strerror(errno));
@@ -568,7 +703,7 @@ void *querySlaveDevices(void *arg) {
                         log(log_msg);
                         if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
-                    
+
                     free(tempBuff);
                 }
             }
@@ -577,116 +712,6 @@ void *querySlaveDevices(void *arg) {
     }
 
     return nullptr;
-}
-
-//-----------------------------------------------------------------------------
-// This function is called by the main OpenPLC routine when it is initializing.
-// Modbus master initialization procedures are here.
-//-----------------------------------------------------------------------------
-void initializeMB()
-{
-    parseConfig();
-
-    for (int i = 0; i < num_devices; i++)
-    {
-        if (mb_devices[i].protocol == MB_TCP)
-        {
-            mb_devices[i].mb_ctx = modbus_new_tcp(mb_devices[i].dev_address, mb_devices[i].ip_port);
-        }
-        else if (mb_devices[i].protocol == MB_RTU)
-        {
-            //Check if there is a device using the same port
-            int share_index = -1;
-            for (int a = 0; a < num_devices && a < i; a++)
-            {
-                if (strcmp(mb_devices[i].dev_address, mb_devices[a].dev_address) == 0)
-                {
-                    share_index = a;
-                    break;
-                }
-            }
-            if (share_index != -1) // TCP
-            {
-                if (mb_devices[i].rtu_baud != mb_devices[share_index].rtu_baud || mb_devices[i].rtu_parity != mb_devices[share_index].rtu_parity || 
-                    mb_devices[i].rtu_data_bit != mb_devices[share_index].rtu_data_bit || mb_devices[i].rtu_stop_bit != mb_devices[share_index].rtu_stop_bit)
-                {
-                    char log_msg[1000];
-                    sprintf(log_msg, "Warning MB device %s port setting missmatch\n", mb_devices[i].dev_name);
-                    log(log_msg);
-                }
-                mb_devices[i].mb_ctx = mb_devices[share_index].mb_ctx;
-            }
-            else // RTU
-            {
-                mb_devices[i].mb_ctx = modbus_new_rtu(mb_devices[i].dev_address, mb_devices[i].rtu_baud,
-                                                mb_devices[i].rtu_parity, mb_devices[i].rtu_data_bit,
-                                                mb_devices[i].rtu_stop_bit);
-
-                // If hardware layer set modbus_rts_pin, enable Pi specific rts handling
-                //if (rpi_modbus_rts_pin != 0)
-                //{
-                //    modbus_enable_rpi(mb_devices[i].mb_ctx,TRUE);
-                //    modbus_configure_rpi_bcm_pin(mb_devices[i].mb_ctx,rpi_modbus_rts_pin);
-                //    modbus_rpi_pin_export_direction(mb_devices[i].mb_ctx);
-                //}
-            }
-        }
-        
-        //slave id
-        modbus_set_slave(mb_devices[i].mb_ctx, mb_devices[i].dev_id);
-
-        //timeout
-        uint32_t to_sec = timeout / 1000;
-        uint32_t to_usec = (timeout % 1000) * 1000;
-        modbus_set_response_timeout(mb_devices[i].mb_ctx, to_sec, to_usec);
-    }
-    
-    //Initialize comm error counter
-    if (special_functions[2] != nullptr) *special_functions[2] = 0;
-
-    // Start thread for slaves
-    if (num_devices > 0) {
-        pthread_t thread;
-        int ret = pthread_create(
-                &thread, nullptr,
-                querySlaveDevices,
-                nullptr);
-
-        if (ret==0) {
-            pthread_detach(thread);
-        }
-    }
-}
-
-//-----------------------------------------------------------------------------
-// This function is called by the OpenPLC in a loop.
-// Here the internal buffers must be updated to reflect the actual Input state.
-//-----------------------------------------------------------------------------
-void updateBuffersIn_MB() {
-    pthread_mutex_lock(&ioLock);
-    {
-        for (int i = 0; i < MAX_MB_IO; i++) {
-            if (bool_input[100 + (i / 8)][i % 8] != nullptr) *bool_input[100 + (i / 8)][i % 8] = bool_input_buf[i];
-            if (int_input[100 + i] != nullptr) *int_input[100 + i] = int_input_buf[i];
-        }
-    }
-    pthread_mutex_unlock(&ioLock);
-}
-
-
-//-----------------------------------------------------------------------------
-// This function is called by the OpenPLC in a loop.
-// Here the internal buffers must be updated to reflect the actual Output state.
-//-----------------------------------------------------------------------------
-void updateBuffersOut_MB() {
-    pthread_mutex_lock(&ioLock);
-    {
-        for (int i = 0; i < MAX_MB_IO; i++) {
-            if (bool_output[100 + (i / 8)][i % 8] != nullptr) bool_output_buf[i] = *bool_output[100 + (i / 8)][i % 8];
-            if (int_output[100 + i] != nullptr) int_output_buf[i] = *int_output[100 + i];
-        }
-    }
-    pthread_mutex_unlock(&ioLock);
 }
 
 //-----------------------------------------------------------------------------

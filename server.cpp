@@ -233,17 +233,19 @@ void *handleConnections(void *arguments) {
 // It receives the port number as argument and creates an infinite loop
 // to listen and parse the messages sent by the clients
 //-----------------------------------------------------------------------------
-void startServer(uint16_t port, int protocol_type)
+void startServer(char *arg_str, int protocol_type)
 {
     char log_msg[1000];
     int socket_fd, client_fd;
 
+    // Init server
+    int16_t port = atoi(arg_str);
     socket_fd = createSocket(port);
     if (socket_fd == -1) exit(1);
 
     bool *run_server = nullptr;
     switch (protocol_type) { //NOLINT
-        case MODBUS_PROTOCOL:   run_server = &run_modbus;   break;
+        case MODBUS_PROTOCOL: run_server = &run_modbus; break;
         //case DNP3_PROTOCOL:     run_server = &run_dnp3;     break;
         //case ENIP_PROTOCOL:     run_server = &run_enip;     break;
         default:;
@@ -267,8 +269,8 @@ void startServer(uint16_t port, int protocol_type)
             int arguments[2];
             arguments[0] = client_fd;
             arguments[1] = protocol_type;
-            pthread_t thread;
 
+            pthread_t thread;
             int ret = pthread_create
                     (
                     &thread,
@@ -286,6 +288,7 @@ void startServer(uint16_t port, int protocol_type)
 
     close(socket_fd);
     close(client_fd);
+
     sprintf(log_msg, "Terminating Server thread\r\n");
     log(log_msg);
 }

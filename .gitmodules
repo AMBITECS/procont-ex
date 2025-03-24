@@ -1,0 +1,6 @@
+[submodule "utils/CANopen"]
+	path = utils/CANopen
+	url = git@github.com:AMBITECS/CANopen.git
+[submodule "utils/libmodbus"]
+	path = utils/libmodbus
+	url = git@github.com:AMBITECS/libmodbus.git

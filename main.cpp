@@ -20,23 +20,31 @@
 // procedures for the hardware, network and the main loop
 // Thiago Alves, Jun 2018
 //-----------------------------------------------------------------------------
-
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <pthread.h>
-#include <time.h>
-#include <signal.h>
-#include <stdlib.h>
+#include <ctime>
+#include <cstdlib>
+#include <cassert>
+
+#include <iostream>
+#include <cstdarg>
+
 #include <unistd.h>
 #include <sys/mman.h>
 #include <arpa/inet.h>
-#include <assert.h>
+
+#include <sched.h>
+#include <syslog.h>
+#include <net/if.h>
 
 #include "iec_types.h"
 #include "ladder.h"
 #include "custom_layer.h"
 
 #define OPLC_CYCLE          50000000
+
+using namespace std;
 
 extern int opterr;
 //extern int common_ticktime__;
@@ -110,6 +118,44 @@ bool run_openplc = true; //uint8_t run_openplc = 1;
 //    unsigned char log_msg[LOGSTR_SIZE];
 //    //sprintf((char*)log_msg, "DNP3 ID %s: %s\n", entry.loggerid, entry.message);
 //}
+
+// ---------------------------------------------------
+// Функция пока нужна, можно сделать ее просто пустой
+// ---------------------------------------------------
+/* Message logging function */
+void log_printf(int priority, const char* format, ...)
+{
+    va_list ap;
+
+    va_start(ap, format);
+    vsyslog(priority, format, ap);
+    va_end(ap);
+
+    // #if (CO_CONFIG_GTW) & CO_CONFIG_GTW_ASCII_LOG
+    //     if(CO != NULL)
+    //     {
+    char buf[200];
+    time_t timer;
+    struct tm* tm_info;
+    size_t len;
+
+    timer = time(nullptr);
+    tm_info = localtime(&timer);
+    len = strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S: ", tm_info);
+
+    va_start(ap, format);
+    vsnprintf(buf + len, sizeof(buf) - len - 2, format, ap);
+    va_end(ap);
+
+//  strcat(buf, (char *)"\n");
+//  qDebug() << buf;
+
+    cout << buf << endl;
+
+    //         CO->gtwa->_co_gtwa_engien->CO_GTWA_log_print(CO->gtwa, buf);
+    //     }
+    // #endif
+}
 
 //-----------------------------------------------------------------------------
 // Interactive Server Thread. Creates the server to listen to commands on

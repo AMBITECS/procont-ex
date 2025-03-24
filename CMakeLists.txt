@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.27)
 project( PROCONT-EX
          VERSION 1.0.1
          DESCRIPTION "Procont execution environment"
@@ -9,10 +9,10 @@ MESSAGE("------------------- PROJECT: ${PROJECT_NAME} BEGIN")
 set( PROJECT_SO_VERSION          "1"  )
 set( CMAKE_CXX_STANDARD          17   )
 set( CMAKE_CXX_STANDARD_REQUIRED True )
-string( TOLOWER ${PROJECT_NAME}  proj )      # proj = project name in lowercase
 
-set( PROJ_DIR       ${CMAKE_CURRENT_SOURCE_DIR}     ) # PROJ project directory
-set( CMAKE_DIR      ${PROJ_DIR}/cmake               ) # PROJ cmake files directory
+string( TOLOWER ${PROJECT_NAME}  proj )      # proj = project name in lowercase
+set( PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project directory
+set( CMAKE_DIR ${PROJ_DIR}/cmake           ) # PROJ cmake files directory
 
 # === SET CMAKE_PREFIX_PATH ===
 if(NOT DEFINED CMAKE_PREFIX_PATH)
@@ -55,13 +55,15 @@ message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
 #-------------------------------------------------------------------------------
 # PROJ Project specific PVs
 set( PROJ_SRC_DIR   ${PROJ_DIR}           ) # PROJ sources directory
-set( PROJ_MOD_DIR   ${PROJ_DIR}/utils     ) # PROJ iec2c directory
 set( PROJ_IEC_DIR   ${PROJ_DIR}/iec       ) # PROJ iec2c directory
 set( PROJ_LIB_DIR   ${PROJ_DIR}/lib       ) # PROJ includes directory
+set( PROJ_MOD_DIR   ${PROJ_DIR}/utils     ) # PROJ iec2c directory
 set( PROJ_CMP_DIR   ${PROJ_DIR}/matiec    ) # IEC to C compiler directory
 set( PROJ_INS_DIR   ${PROJ_DIR}/$install  ) # local install directory
 set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c ) # IEC to C compiler
 set( PROJ_ST_FILE   ${ST_FILE}            ) # SOURCE ST_FILE
+#set( CMAKE_PREFIX_PATH ${PROJ_SRC_DIR} ) # CMake path
+
 
 set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} )
 set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
@@ -152,19 +154,11 @@ add_custom_command(
 #-------------------------------------------------------------------------------
 add_custom_target( build-iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
 
-##-------------------------------------------------------------------------------
-## 4) Главный исполняемый модуль ${proj} = 'procont-ex'
-##-------------------------------------------------------------------------------
-include(${CMAKE_DIR}/build-tools.cmake)
-
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки
 #-------------------------------------------------------------------------------
-#find_package(modbus   REQUIRED)
-#find_package(AsioDNP3 REQUIRED)
-#find_package(AsioPAL  REQUIRED)
-#find_package(OpenPAL  REQUIRED)
-#find_package(OpenDNP3 REQUIRED)
+#find_package(modbus     REQUIRED)
+#find_package(can_master REQUIRED)
 
 #-------------------------------------------------------------------------------
 # Подключаемые модули
@@ -172,12 +166,13 @@ include(${CMAKE_DIR}/build-tools.cmake)
 add_subdirectory(${PROJ_MOD_DIR}/libmodbus)             # --- modbus
 add_subdirectory(${PROJ_MOD_DIR}/CANopen/MasterQtFree)  # --- can_master
 
-#add_subdirectory(${PROJ_MOD_DIR}/dnp3_src)             # --- dnp3
+#-------------------------------------------------------------------------------
+# 4) Главный исполняемый модуль ${proj} = 'procont-ex'
+#-------------------------------------------------------------------------------
+include(${CMAKE_DIR}/build-tools.cmake)
 
-#-------------------------------------------------------------------------------
-# Главный исполняемый модуль ${proj}
-#-------------------------------------------------------------------------------
-build_target( ${proj} EXE #OPTS -g -O0 -w -fPIC
+build_target( ${proj} EXE
+    OPTS -g -O0 -w -fPIC
     INCS
         ${PROJ_LIB_DIR}
         ${PROJ_SRC_DIR}
@@ -193,11 +188,6 @@ build_target( ${proj} EXE #OPTS -g -O0 -w -fPIC
     LNKS
         modbus      #${modbus_LIBRARIES}
         can_master  #${can_master_LIBRARIES}
-
-        #${AsioPAL_LIBRARIES}
-        #${AsioDNP3_LIBRARIES}
-        #${OpenPAL_LIBRARIES}
-        #${OpenDNP3_LIBRARIES}
 )
 
 if(CMAKE_COMPILER_IS_GNUCC)
@@ -208,7 +198,8 @@ endif()
 ### Dependencies ###
 #-------------------------------------------------------------------------------
 add_dependencies(${proj} build-iec)
-#add_dependencies(${proj} modbus)
+add_dependencies(${proj} modbus)
+add_dependencies(${proj} can_master)
 
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")
 

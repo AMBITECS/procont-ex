@@ -1,8 +1,8 @@
 // ----------------------------------------------------------------------------
 // Copyright (C) 2016-2024: AMBITECS LLC
 // ----------------------------------------------------------------------------
-// This is the file for the network routines of the OpenPLC. It has procedures
-// to create a socket and connect to a server.
+// This is the file for the network routines of the OpenPLC.
+// It has procedures to create a socket and connect to a server.
 //-----------------------------------------------------------------------------
 #include <arpa/inet.h>
 #include <cstdio>

@@ -1,9 +1,6 @@
 //-----------------------------------------------------------------------------
-// DISCLAIMER: EDDITING THIS FILE CAN BREAK YOUR OPENPLC RUNTIME! IF YOU DON'T
+// DISCLAIMER: EDITING THIS FILE CAN BREAK YOUR OPENPLC RUNTIME! IF YOU DON'T
 // KNOW WHAT YOU'RE DOING, JUST DON'T DO IT. EDIT AT YOUR OWN RISK.
-//
-// PS: You can always restore original functionality if you broke something
-// in here by clicking on the "Restore Original Code" button above.
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -33,7 +30,7 @@ void initCustomLayer() { }
 // bufferLock to protect access to the buffers on a threaded environment.
 //-----------------------------------------------------------------------------
 void updateCustomIn() {
-    // Example Code - Overwritting %IW3 with a fixed value
+    // Example Code - Overwriting %IW3 with a fixed value
     // If you want to have %IW3 constantly reading a fixed value (for example, 53)
     // you must add %IW3 to the ignored vectors above, and then just insert this 
     // single line of code in this function:

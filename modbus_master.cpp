@@ -1,29 +1,6 @@
 //-----------------------------------------------------------------------------
-// Copyright 2015 Thiago Alves
-//
-// Based on the LDmicro software by Jonathan Westhues
-// This file is part of the OpenPLC Software Stack.
-//
-// OpenPLC is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// OpenPLC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with OpenPLC.  If not, see <http://www.gnu.org/licenses/>.
-//------
-//
-// This file is responsible for parse and discovery of slave devices by parsing
-// the mbconfig.cfg file. This code also updates OpenPLC internal buffers with
-// the data queried from the slave devices.
-// Thiago Alves, Jul 2018
+// Copyright 2018 Ambitecs
 //-----------------------------------------------------------------------------
-
 #include <cstdio>
 #include <cstdlib>
 #include <cerrno>
@@ -36,9 +13,9 @@
 
 #include "ladder.h"
 
-#define MB_TCP                1
-#define MB_RTU                2
-#define MAX_MB_IO            400
+#define MB_TCP     1
+#define MB_RTU     2
+#define MAX_MB_IO 400
 
 using namespace std;
 
@@ -64,18 +41,20 @@ struct MB_address
 //-----------------------------------------------------------------------------
 struct MB_device
 {
-    modbus_t *mb_ctx;
-    char dev_name[100];
-    uint8_t protocol;
-    char dev_address[100];
-    uint16_t ip_port;
-    int rtu_baud;
-    char rtu_parity;
-    int rtu_data_bit;
-    int rtu_stop_bit;
-    int rtu_tx_pause;
-    uint8_t dev_id;
-    bool isConnected;
+    int       rtu_baud;
+    char      rtu_parity;
+    int       rtu_data_bit;
+    int       rtu_stop_bit;
+    int       rtu_tx_pause;
+
+    uint8_t   dev_id;
+    char      dev_name[100];
+    uint8_t   protocol;
+    uint16_t  ip_port;
+    char      dev_address[100];
+
+    modbus_t* mb_ctx;
+    bool      isConnected;
 
     struct MB_address discrete_inputs;
     struct MB_address coils;
@@ -93,22 +72,15 @@ uint16_t timeout = 1000;
 //-----------------------------------------------------------------------------
 // Finds the data between the separators on the line provided
 //-----------------------------------------------------------------------------
-void getData(const char *line, char *buf, char separator1, char separator2)
-{
+void getData(const char *line, char *buf, char separator1, char separator2) {
     int i=0, j=0;
     buf[j] = '\0';
 
-    while (line[i] != separator1 && line[i] != '\0')
-    {
-        i++;
-    }
+    while (line[i] != separator1 && line[i] != '\0') i++;
     i++;
 
-    while (line[i] != separator2 && line[i] != '\0')
-    {
-        buf[j] = line[i];
-        i++;
-        j++;
+    while (line[i] != separator2 && line[i] != '\0') {
+        buf[j++] = line[i++];
         buf[j] = '\0';
     }
 }
@@ -116,40 +88,25 @@ void getData(const char *line, char *buf, char separator1, char separator2)
 //-----------------------------------------------------------------------------
 // Get the number of the Modbus device
 //-----------------------------------------------------------------------------
-int getDeviceNumber(const char *line)
-{
+int getDeviceNumber(const char *line) {
     char temp[5];
     int i = 0, j = 6;
-
-    while (line[j] != '.')
-    {
-        temp[i] = line[j];
-        i++;
-        j++;
+    while (line[j] != '.') {
+        temp[i++] = line[j++];
         temp[i] = '\0';
     }
-
     return( _atoi(temp) );
 }
 
 //-----------------------------------------------------------------------------
 // get the type of function or parameter for the Modbus device
 //-----------------------------------------------------------------------------
-void getFunction(const char *line, char *parameter)
-{
+void getFunction(const char *line, char *parameter) {
     int i = 0, j = 0;
-
-    while (line[j] != '.')
-    {
-        j++;
-    }
+    while (line[j] != '.') j++;
     j++;
-
-    while (line[j] != ' ' && line[j] != '=' && line[j] != '(')
-    {
-        parameter[i] = line[j];
-        i++;
-        j++;
+    while ( line[j] != ' ' && line[j] != '=' && line[j] != '(' ) {
+        parameter[i++] = line[j++];
         parameter[i] = '\0';
     }
 }
@@ -359,8 +316,7 @@ void parseConfig()
 //-----------------------------------------------------------------------------
 // Thread to poll each slave device
 //-----------------------------------------------------------------------------
-void *querySlaveDevices(void *arg)
-{
+void *querySlaveDevices(void *arg) {
     while (run_openplc)
     {
         char log_msg[1000];
@@ -370,40 +326,34 @@ void *querySlaveDevices(void *arg)
         uint16_t int_input_index = 0;
         uint16_t int_output_index = 0;
 
-        for (int i = 0; i < num_devices; i++)
-        {
-            //Check if there is a connected RTU device using the same port
+        for (int i = 0; i < num_devices; i++) {
+            // Check if there is a connected RTU device using the same port
             bool found_sharing = false;
             bool rtu_port_connected = false;
             if (mb_devices[i].protocol == MB_RTU)
             {
-                for (int a = 0; a < num_devices; a++)
-                {
-                    if (a != i && !strcmp(mb_devices[i].dev_address, mb_devices[a].dev_address))
-                    {
+                for (int a = 0; a < num_devices; a++) {
+                    if (a != i && !strcmp(mb_devices[i].dev_address, mb_devices[a].dev_address)) {
                         found_sharing = true;
-                        if (mb_devices[a].isConnected)
-                        {
-                            rtu_port_connected = true;
-                        }
+                        rtu_port_connected =  (mb_devices[a].isConnected);
                     }
                 }
-                if (found_sharing)
-                {
-                    //Must reset mb context to current device's slave id
-                    modbus_set_slave(mb_devices[i].mb_ctx, mb_devices[i].dev_id);
+                // Must reset mb context to current device's slave id
+                if (found_sharing) {
+                    modbus_set_slave( mb_devices[i].mb_ctx, mb_devices[i].dev_id );
                 }
             }
 
-            //Verify if device is connected
-            if (!mb_devices[i].isConnected && !rtu_port_connected)
-            {
+            // Verify if device is connected
+            if (!mb_devices[i].isConnected && !rtu_port_connected) {
                 sprintf(log_msg, "Device %s is disconnected. Attempting to reconnect...\n", mb_devices[i].dev_name);
                 log(log_msg);
-                if (modbus_connect(mb_devices[i].mb_ctx) == -1)
-                {
+                if (modbus_connect(mb_devices[i].mb_ctx) == -1) {
 
-                    sprintf(log_msg, "Connection failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
+                    sprintf(log_msg, "Connection failed on MB device %s: %s\n",
+                            mb_devices[i].dev_name,
+                            modbus_strerror(errno)
+                            );
                     log(log_msg);
                     
                     if (special_functions[2] != nullptr) *special_functions[2]++;
@@ -422,17 +372,15 @@ void *querySlaveDevices(void *arg)
                     mb_devices[i].isConnected = true;
                 }
             }
+
             if (mb_devices[i].isConnected || rtu_port_connected)
             {
 
                 struct timespec ts{};
                 ts.tv_sec = 0;
-                if (mb_devices[i].protocol == MB_RTU)
-                {
+                if (mb_devices[i].protocol == MB_RTU) {
                     ts.tv_nsec = (1000L*1000L*1000L*28L)/(mb_devices[i].rtu_baud);
-                }
-                else
-                {
+                } else {
                     ts.tv_nsec = 0;                    
                 }
 
@@ -442,37 +390,39 @@ void *querySlaveDevices(void *arg)
                     sleepms(mb_devices[i].rtu_tx_pause);
                     uint8_t *tempBuff;
                     tempBuff = (uint8_t *)malloc(mb_devices[i].discrete_inputs.num_regs);
-                    nanosleep(&ts, nullptr); 
-                    int return_val = modbus_read_input_bits(mb_devices[i].mb_ctx, mb_devices[i].discrete_inputs.start_address,
-                                                            mb_devices[i].discrete_inputs.num_regs, tempBuff);
-                    if (return_val == -1)
-                    {
-                        if (mb_devices[i].protocol != MB_RTU)
-                        {
+                    nanosleep(&ts, nullptr);
+
+                    int return_val = modbus_read_input_bits(
+                            mb_devices[i].mb_ctx,
+                            mb_devices[i].discrete_inputs.start_address,
+                            mb_devices[i].discrete_inputs.num_regs,
+                            tempBuff
+                            );
+
+                    if (return_val == -1) {
+                        if (mb_devices[i].protocol != MB_RTU) {
                             modbus_close(mb_devices[i].mb_ctx);
                             mb_devices[i].isConnected = false;
                         }
                         
-                        sprintf(log_msg, "Modbus Read Discrete Input Registers failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
+                        sprintf(log_msg, "Modbus Read Discrete Input Registers failed on MB device %s: %s\n",
+                                mb_devices[i].dev_name, modbus_strerror(errno));
                         log(log_msg);
+
                         bool_input_index += (mb_devices[i].discrete_inputs.num_regs);
                         if (special_functions[2] != nullptr) *special_functions[2]++;
-                    }
-                    else
-                    {
+                    } else {
                         pthread_mutex_lock(&ioLock);
-                        for (int j = 0; j < return_val; j++)
-                        {
+                        for (int j = 0; j < return_val; j++) {
                             bool_input_buf[bool_input_index] = tempBuff[j];
                             bool_input_index++;
                         }
                         pthread_mutex_unlock(&ioLock);
                     }
-
                     free(tempBuff);
                 }
 
-                //Write coils
+                // Write coils
                 if (mb_devices[i].coils.num_regs != 0)
                 {
                     sleepms(mb_devices[i].rtu_tx_pause);
@@ -497,7 +447,9 @@ void *querySlaveDevices(void *arg)
                             mb_devices[i].isConnected = false;
                         }
 
-                        sprintf(log_msg, "Modbus Write Coils failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
+                        sprintf(log_msg, "Modbus Write Coils failed on MB device %s: %s\n", mb_devices[i].dev_name,
+                                modbus_strerror(errno));
+
                         log(log_msg);
                         if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
@@ -522,7 +474,9 @@ void *querySlaveDevices(void *arg)
                             mb_devices[i].isConnected = false;
                         }
                         
-                        sprintf(log_msg, "Modbus Read Input Registers failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
+                        sprintf(log_msg, "Modbus Read Input Registers failed on MB device %s: %s\n", mb_devices[i].dev_name,
+                                modbus_strerror(errno));
+
                         log(log_msg);
                         int_input_index += (mb_devices[i].input_registers.num_regs);
                         if (special_functions[2] != nullptr) *special_functions[2]++;
@@ -557,7 +511,9 @@ void *querySlaveDevices(void *arg)
                             modbus_close(mb_devices[i].mb_ctx);
                             mb_devices[i].isConnected = false;
                         }
-                        sprintf(log_msg, "Modbus Read Holding Registers failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
+                        sprintf(log_msg, "Modbus Read Holding Registers failed on MB device %s: %s\n", mb_devices[i].dev_name,
+                                modbus_strerror(errno));
+
                         log(log_msg);
                         int_input_index += (mb_devices[i].holding_read_registers.num_regs);
                         if (special_functions[2] != nullptr) *special_functions[2]++;
@@ -592,17 +548,23 @@ void *querySlaveDevices(void *arg)
                     pthread_mutex_unlock(&ioLock);
 
                     nanosleep(&ts, nullptr); 
-                    int return_val = modbus_write_registers(mb_devices[i].mb_ctx, mb_devices[i].holding_registers.start_address,
-                                                            mb_devices[i].holding_registers.num_regs, tempBuff);
-                    if (return_val == -1)
-                    {
-                        if (mb_devices[i].protocol != MB_RTU)
-                        {
+                    int return_val = modbus_write_registers(
+                            mb_devices[i].mb_ctx,
+                            mb_devices[i].holding_registers.start_address,
+                            mb_devices[i].holding_registers.num_regs,
+                            tempBuff
+                            );
+
+                    if (return_val == -1) {
+                        if (mb_devices[i].protocol != MB_RTU) {
                             modbus_close(mb_devices[i].mb_ctx);
                             mb_devices[i].isConnected = false;
                         }
                         
-                        sprintf(log_msg, "Modbus Write Holding Registers failed on MB device %s: %s\n", mb_devices[i].dev_name, modbus_strerror(errno));
+                        sprintf(log_msg, "Modbus Write Holding Registers failed on MB device %s: %s\n",
+                                mb_devices[i].dev_name,
+                                modbus_strerror(errno));
+
                         log(log_msg);
                         if (special_functions[2] != nullptr) *special_functions[2]++;
                     }
@@ -610,7 +572,7 @@ void *querySlaveDevices(void *arg)
                     free(tempBuff);
                 }
             }
-        }
+        } // devices
         sleepms(polling_period);
     }
 
@@ -680,8 +642,7 @@ void initializeMB()
     }
     
     //Initialize comm error counter
-    if (special_functions[2] != nullptr)
-        *special_functions[2] = 0;
+    if (special_functions[2] != nullptr) *special_functions[2] = 0;
 
     // Start thread for slaves
     if (num_devices > 0) {
@@ -698,36 +659,34 @@ void initializeMB()
 }
 
 //-----------------------------------------------------------------------------
-// This function is called by the OpenPLC in a loop. Here the internal buffers
-// must be updated to reflect the actual Input state.
+// This function is called by the OpenPLC in a loop.
+// Here the internal buffers must be updated to reflect the actual Input state.
 //-----------------------------------------------------------------------------
-void updateBuffersIn_MB()
-{
+void updateBuffersIn_MB() {
     pthread_mutex_lock(&ioLock);
-
-    for (int i = 0; i < MAX_MB_IO; i++)
     {
-        if (bool_input[100+(i/8)][i%8] != nullptr) *bool_input[100+(i/8)][i%8] = bool_input_buf[i];
-        if (int_input[100+i] != nullptr) *int_input[100+i] = int_input_buf[i];
+        for (int i = 0; i < MAX_MB_IO; i++) {
+            if (bool_input[100 + (i / 8)][i % 8] != nullptr) *bool_input[100 + (i / 8)][i % 8] = bool_input_buf[i];
+            if (int_input[100 + i] != nullptr) *int_input[100 + i] = int_input_buf[i];
+        }
     }
-
     pthread_mutex_unlock(&ioLock);
 }
 
 
 //-----------------------------------------------------------------------------
-// This function is called by the OpenPLC in a loop. Here the internal buffers
-// must be updated to reflect the actual Output state.
+// This function is called by the OpenPLC in a loop.
+// Here the internal buffers must be updated to reflect the actual Output state.
 //-----------------------------------------------------------------------------
-void updateBuffersOut_MB()
-{
+void updateBuffersOut_MB() {
     pthread_mutex_lock(&ioLock);
-
-    for (int i = 0; i < MAX_MB_IO; i++)
     {
-        if (bool_output[100+(i/8)][i%8] != nullptr) bool_output_buf[i] = *bool_output[100+(i/8)][i%8];
-        if (int_output[100+i] != nullptr) int_output_buf[i] = *int_output[100+i];
+        for (int i = 0; i < MAX_MB_IO; i++) {
+            if (bool_output[100 + (i / 8)][i % 8] != nullptr) bool_output_buf[i] = *bool_output[100 + (i / 8)][i % 8];
+            if (int_output[100 + i] != nullptr) int_output_buf[i] = *int_output[100 + i];
+        }
     }
-
     pthread_mutex_unlock(&ioLock);
 }
+
+//-----------------------------------------------------------------------------

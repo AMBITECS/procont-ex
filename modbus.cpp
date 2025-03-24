@@ -1,35 +1,9 @@
 //-----------------------------------------------------------------------------
-// Copyright 2015 Thiago Alves
-//
-// Based on the LDmicro software by Jonathan Westhues
-// This file is part of the OpenPLC Software Stack.
-//
-// OpenPLC is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// OpenPLC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with OpenPLC.  If not, see <http://www.gnu.org/licenses/>.
-//------
-//
-// This file has all the MODBUS/TCP functions supported by the OpenPLC. If any
-// other function is to be added to the project, it must be added here
-// Thiago Alves, Dec 2015
+// Copyright 2019 Ambitecs
 //-----------------------------------------------------------------------------
-
-#include <cstdio>
-#include <cstdlib>
-#include <unistd.h>
-#include <pthread.h>
-
-#include "ladder.h"
 #include <cstring>
+#include "ladder.h"
+#include "debug.h"
 
 #define MAX_DISCRETE_INPUT              8192
 #define MAX_COILS                       8192
@@ -66,7 +40,6 @@
 #define ERR_SLAVE_DEVICE_FAILURE        4
 #define ERR_SLAVE_DEVICE_BUSY           6
 
-
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit) ((value) |= (1UL << (bit)))
 #define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
@@ -75,14 +48,12 @@
 #define lowByte(w) ((unsigned char) ((w) & 0xff))
 #define highByte(w) ((unsigned char) ((w) >> 8))
 
-IEC_BOOL mb_discrete_input[MAX_DISCRETE_INPUT];
-IEC_BOOL mb_coils[MAX_COILS];
-IEC_UINT mb_input_regs[MAX_INP_REGS];
-IEC_UINT mb_holding_regs[MAX_HOLD_REGS];
+IEC_BOOL mb_discrete_input  [MAX_DISCRETE_INPUT];
+IEC_BOOL mb_coils           [MAX_COILS];
+IEC_UINT mb_input_regs      [MAX_INP_REGS];
+IEC_UINT mb_holding_regs    [MAX_HOLD_REGS];
 
 int MessageLength;
-
-#include "debug.h"
 
 // Debugger functions
 // extern "C" uint16_t get_var_count(void);
@@ -92,6 +63,7 @@ int MessageLength;
 // extern "C" void set_trace(size_t, bool, void *);// {}
 // extern "C" void trace_reset(void);// {}
 // extern "C" void set_endianness(uint8_t value);
+
 extern char md5[];
 extern unsigned long __tick;
 
@@ -105,12 +77,8 @@ extern unsigned long __tick;
 //-----------------------------------------------------------------------------
 // Concatenate two bytes into an int
 //-----------------------------------------------------------------------------
-int word(unsigned char byte1, unsigned char byte2)
-{
-    int returnValue;
-    returnValue = (int)(byte1 << 8) | (int)byte2;
-
-    return returnValue;
+int word(unsigned char byte1, unsigned char byte2) {
+    return ((int)(byte1 << 8) | (int)byte2);
 }
 
 //-----------------------------------------------------------------------------
@@ -121,35 +89,25 @@ void mapUnusedIO()
 {
     pthread_mutex_lock(&bufferLock);
 
-    for(int i = 0; i < MAX_DISCRETE_INPUT; i++)
-    {
+    for(int i = 0; i < MAX_DISCRETE_INPUT; i++) {
         if (bool_input[i/8][i%8] == nullptr) bool_input[i/8][i%8] = &mb_discrete_input[i];
     }
 
-    for(int i = 0; i < MAX_COILS; i++)
-    {
+    for(int i = 0; i < MAX_COILS; i++) {
         if (bool_output[i/8][i%8] == nullptr) bool_output[i/8][i%8] = &mb_coils[i];
     }
 
-    for (int i = 0; i < MAX_INP_REGS; i++)
-    {
+    for (int i = 0; i < MAX_INP_REGS; i++) {
         if (int_input[i] == nullptr) int_input[i] = &mb_input_regs[i];
     }
 
-    for (int i = 0; i <= MAX_16B_RANGE; i++)
-    {
-        if (i < MIN_16B_RANGE)
-        {
-            if (int_output[i] == nullptr)
-            {
+    for (int i = 0; i <= MAX_16B_RANGE; i++) {
+        if (i < MIN_16B_RANGE) {
+            if (int_output[i] == nullptr) {
                 int_output[i] = &mb_holding_regs[i];
             }
-        }
-
-        else if (i >= MIN_16B_RANGE && i <= MAX_16B_RANGE)
-        {
-            if (int_memory[i - MIN_16B_RANGE] == nullptr)
-            {
+        } else {
+            if (int_memory[i - MIN_16B_RANGE] == nullptr) {
                 int_memory[i - MIN_16B_RANGE] = &mb_holding_regs[i];
             }
         }
@@ -173,8 +131,7 @@ void ModbusError(unsigned char *buffer, int mb_error)
 //-----------------------------------------------------------------------------
 // Implementation of Modbus/TCP Read Coils
 //-----------------------------------------------------------------------------
-void ReadCoils(unsigned char *buffer, long bufferSize)
-{
+void ReadCoils(unsigned char *buffer, long bufferSize) {
     int Start, ByteDataLength, CoilDataLength;
     int mb_error = ERR_NONE;
 
@@ -227,13 +184,9 @@ void ReadCoils(unsigned char *buffer, long bufferSize)
     }
     pthread_mutex_unlock(&bufferLock);
 
-    if (mb_error != ERR_NONE)
-    {
+    if (mb_error == ERR_NONE) MessageLength = ByteDataLength + 9;
+    else {
         ModbusError(buffer, mb_error);
-    }
-    else
-    {
-        MessageLength = ByteDataLength + 9;
     }
 }
 

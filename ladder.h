@@ -24,7 +24,7 @@
 //-----------------------------------------------------------------------------
 
 #include <pthread.h>
-#include <stdint.h>
+#include <cstdint>
 
 #define MODBUS_PROTOCOL     0
 #define DNP3_PROTOCOL       1
@@ -36,7 +36,6 @@
 
 //#define LOGSTR_SIZE		    1024
 #define INTERACTIVE_PORT    43628
-
 
 /*********************/
 /*  IEC Types defs   */
@@ -83,7 +82,7 @@ extern IEC_ULINT *lint_input[BUFFER_SIZE];
 extern IEC_ULINT *lint_output[BUFFER_SIZE];
 
 //Memory
-extern IEC_UINT *int_memory[BUFFER_SIZE];
+extern IEC_UINT  *int_memory[BUFFER_SIZE];
 extern IEC_UDINT *dint_memory[BUFFER_SIZE];
 extern IEC_ULINT *lint_memory[BUFFER_SIZE];
 

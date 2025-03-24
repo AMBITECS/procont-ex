@@ -1,26 +1,6 @@
 //-----------------------------------------------------------------------------
-// Copyright 2015 Thiago Alves
-// This file is part of the OpenPLC Software Stack.
-//
-// OpenPLC is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// OpenPLC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with OpenPLC.  If not, see <http://www.gnu.org/licenses/>.
-//------
-//
-// This is the file for the network routines of the OpenPLC. It has procedures
-// to create a socket, bind it and start network communication.
-// Thiago Alves, Dec 2015
+// Copyright 2020 Ambitecs
 //-----------------------------------------------------------------------------
-
 #include <cstdio>
 #include <cerrno>
 #include <netdb.h>
@@ -218,27 +198,25 @@ void *handleConnections(void *arguments) {
 
     while (run_server != nullptr && *run_server)
     {
+        // Чтение запроса
         long messageSize = 0;
         unsigned char buffer[NET_BUFFER_SIZE];
-
         messageSize = listenToClient(client_fd, buffer);
         if (messageSize <= 0 || messageSize > NET_BUFFER_SIZE) {
-            // something has gone wrong
-            // or the client has closed connection
+            // something has gone wrong or the client has closed connection
             if (messageSize == 0) {
-                sprintf(log_msg,
-                        "Modbus Server: client ID: %d has closed the connection\n",
-                        client_fd);
+                sprintf(log_msg,"Modbus Server: client ID: %d has closed the connection\n", client_fd);
                 log(log_msg);
             } else {
                 sprintf(log_msg,
-                        "Modbus Server: Something is wrong with the  client ID: %d message Size : %i\n",
+                        "Modbus Server: Something is wrong with the client ID: %d message Size : %i\n",
                         client_fd, (int)messageSize);
                 log(log_msg);
             }
             break;
         }
 
+        // Обработка запроса клиента
         processMessage(buffer, messageSize, client_fd, protocol_type);
     }
 
@@ -282,11 +260,11 @@ void startServer(uint16_t port, int protocol_type)
         }
         else
         {
-            int arguments[2];
             sprintf(log_msg,
-                    "Server: Client accepted! Creating thread for the new client ID: %d...\n", client_fd);
+                    "Server: Client accepted!\nCreating thread for the new client ID: %d...\n", client_fd);
             log(log_msg);
 
+            int arguments[2];
             arguments[0] = client_fd;
             arguments[1] = protocol_type;
             pthread_t thread;

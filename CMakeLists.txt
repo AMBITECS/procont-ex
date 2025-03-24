@@ -162,8 +162,9 @@ add_custom_target( build-iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
 #-------------------------------------------------------------------------------
 # Подключаемые модули
 #-------------------------------------------------------------------------------
-add_subdirectory(${PROJ_MOD_DIR}/libmodbus)             # --- modbus
-add_subdirectory(${PROJ_MOD_DIR}/CANopen/MasterQtFree)  # --- can_master
+add_subdirectory(${PROJ_MOD_DIR}/libmodbus)  # --- modbus
+add_subdirectory(${PROJ_MOD_DIR}/CANopen)    # --- CANopen tester
+#add_subdirectory(${PROJ_MOD_DIR}/CANopen/MasterQtFree)  # --- can_master
 
 #-------------------------------------------------------------------------------
 # 4) Главный исполняемый модуль ${proj} = 'procont-ex'

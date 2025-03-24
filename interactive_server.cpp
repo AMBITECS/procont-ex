@@ -572,7 +572,7 @@ void startInteractiveServer(int port)
             pthread_t thread;
             int ret = -1;
 
-            printf("Interactive Server: Client accepted! Creating thread for the new client ID: %d...\n", client_fd);
+            printf("Interactive Server: Client accepted!\nCreating thread for the new client ID: %d...\n", client_fd);
             arguments[0] = client_fd;
             ret = pthread_create(&thread, nullptr, handleConnections_interactive, arguments);
             if (ret==0) 

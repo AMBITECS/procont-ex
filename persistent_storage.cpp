@@ -50,9 +50,8 @@ uint32_t calculate_combined_checksum()
 }
 
 //-----------------------------------------------------------------------------
-// Main function for the thread. Should create a buffer for the persistent
-// data, compare it with the actual data and write back to the persistent
-// file if the data has changed
+// Main function for the thread. Should create a buffer for the persistent data,
+// compare it with actual data and write back to the persistent file if changed.
 //-----------------------------------------------------------------------------
 void startPstorage()
 {
@@ -119,8 +118,7 @@ void startPstorage()
 //-----------------------------------------------------------------------------
 // This function reads the contents from persistent.file into OpenPLC internal
 // buffers. Must be called when OpenPLC is initializing. If persistent storage
-// is disabled, the persistent.file will not be found and the function will
-// exit gracefully.
+// is disabled, the persistent.file will not be found and function exit.
 //-----------------------------------------------------------------------------
 void readPersistentStorage()
 {
@@ -176,6 +174,7 @@ void readPersistentStorage()
 
             pthread_mutex_unlock(&bufferLock); //unlock mutex
             fclose(file);
+
             pstorage_read_complete = true;
             return;
         }
@@ -206,6 +205,7 @@ void readPersistentStorage()
 
             pthread_mutex_unlock(&bufferLock); //unlock mutex
             fclose(file);
+
             pstorage_read_complete = true;
             return;
         }

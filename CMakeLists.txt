@@ -6,13 +6,13 @@ project( PROCONT-EX
 )
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} BEGIN")
 
+string( TOLOWER ${PROJECT_NAME}  proj )      # proj = project name in lowercase
 set( PROJECT_SO_VERSION          "1"  )
 set( CMAKE_CXX_STANDARD          17   )
 set( CMAKE_CXX_STANDARD_REQUIRED True )
 
-string( TOLOWER ${PROJECT_NAME}  proj )      # proj = project name in lowercase
 set( PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project directory
-set( CMAKE_DIR ${PROJ_DIR}/cmake           ) # PROJ cmake files directory
+set( CMAKE_DIR ${PROJ_DIR}/.cmake          ) # PROJ cmake files directory
 
 # === SET CMAKE_PREFIX_PATH ===
 if(NOT DEFINED CMAKE_PREFIX_PATH)
@@ -57,12 +57,11 @@ message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
 set( PROJ_SRC_DIR   ${PROJ_DIR}           ) # PROJ sources directory
 set( PROJ_IEC_DIR   ${PROJ_DIR}/iec       ) # PROJ iec2c directory
 set( PROJ_LIB_DIR   ${PROJ_DIR}/lib       ) # PROJ includes directory
-set( PROJ_MOD_DIR   ${PROJ_DIR}/utils     ) # PROJ iec2c directory
+set( PROJ_SUB_DIR   ${PROJ_DIR}/utils     ) # PROJ submodule directory
 set( PROJ_CMP_DIR   ${PROJ_DIR}/matiec    ) # IEC to C compiler directory
 set( PROJ_INS_DIR   ${PROJ_DIR}/$install  ) # local install directory
 set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c ) # IEC to C compiler
 set( PROJ_ST_FILE   ${ST_FILE}            ) # SOURCE ST_FILE
-#set( CMAKE_PREFIX_PATH ${PROJ_SRC_DIR} ) # CMake path
 
 set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} )
 set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
@@ -74,31 +73,11 @@ link_directories    (${PROJ_INS_DIR}/lib64)
 #message("== PROJ_DIR:     ${PROJ_DIR}")
 #message("== CMAKE_DIR:    ${CMAKE_DIR}")
 #message("== PROJ_INS_DIR: ${PROJ_INS_DIR}")
-#message("== PROJ_MOD_DIR: ${PROJ_MOD_DIR}")
+#message("== PROJ_SUB_DIR: ${PROJ_SUB_DIR}")
 #message("== PROJ_ST_FILE: ${PROJ_ST_FILE}")
 #message("== PROJ_IEC2C:   ${PROJ_IEC2C}")
 #message("== PROJ_IEC_DIR: ${PROJ_IEC_DIR}")
 #message("== PROJ_ST_FILE: ${PROJ_ST_FILE}\n")
-
-################################
-# Запуск сборки конвейера cmake для build-iec
-#execute_process(
-#        WORKING_DIRECTORY "${PROJ_IEC_DIR}"
-#        COMMAND ${CMAKE_COMMAND}
-#        -G ${CMAKE_GENERATOR}
-#        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-#        -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}
-#        -DPROJ_ST_FILE=${PROJ_ST_FILE}
-#        ${PROJ_IEC_DIR}
-#)
-
-# Запуск cmake для сборки target build-iec
-#execute_process(
-#    WORKING_DIRECTORY "${PROJ_IEC_DIR}"
-#    COMMAND ${CMAKE_COMMAND}
-#        --build . --target build-iec
-#)
-################################
 
 #-------------------------------------------------------------------------------
 # 1) Компиляция ST- файла в *.c *.h
@@ -145,31 +124,31 @@ add_custom_command(
         -D PROJ_IEC_DIR=${PROJ_IEC_DIR}
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
         -D PROJ_LIB_DIR=${PROJ_LIB_DIR}
-        -P ${CMAKE_DIR}/build-iec.cmake
+        -P ${CMAKE_DIR}/build_iec.cmake
 
         COMMAND ls ${PROJ_IEC_DIR}/*.o > ${PROJ_IEC_DIR}/obj-sources
 )
 
 #-------------------------------------------------------------------------------
-add_custom_target( build-iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
+add_custom_target( build_iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
 
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки
 #-------------------------------------------------------------------------------
+#include(${CMAKE_DIR}/find_tools.cmake)
 #find_package(modbus     REQUIRED)
 #find_package(can_master REQUIRED)
 
 #-------------------------------------------------------------------------------
 # Подключаемые модули
 #-------------------------------------------------------------------------------
-add_subdirectory(${PROJ_MOD_DIR}/libmodbus)  # --- modbus
-add_subdirectory(${PROJ_MOD_DIR}/CANopen)    # --- CANopen tester
-#add_subdirectory(${PROJ_MOD_DIR}/CANopen/MasterQtFree)  # --- can_master
+add_subdirectory(${PROJ_SUB_DIR}/libmodbus)  # --- modbus
+add_subdirectory(${PROJ_SUB_DIR}/CANopen)    # --- CANopen tester
 
 #-------------------------------------------------------------------------------
 # 4) Главный исполняемый модуль ${proj} = 'procont-ex'
 #-------------------------------------------------------------------------------
-include(${CMAKE_DIR}/build-tools.cmake)
+include(${CMAKE_DIR}/build_tools.cmake)
 
 build_target( ${proj} EXE
     OPTS -g -O0 -w -fPIC
@@ -177,15 +156,10 @@ build_target( ${proj} EXE
         ${PROJ_LIB_DIR}
         ${PROJ_SRC_DIR}
         ${PROJ_IEC_DIR}
-
-        #${modbus_INCLUDE_DIRS}
-
     SRCS
         ${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp
         :MASK ${PROJ_IEC_DIR}/*.o
-        #        :MASK ${PROJ_SRC_DIR}/tester/tester.cpp
-
     LNKS
         modbus      #${modbus_LIBRARIES}
         can_master  #${can_master_LIBRARIES}
@@ -198,9 +172,9 @@ endif()
 #-------------------------------------------------------------------------------
 ### Dependencies ###
 #-------------------------------------------------------------------------------
-add_dependencies(${proj} build-iec)
-add_dependencies(${proj} modbus)
-add_dependencies(${proj} can_master)
+add_dependencies(${proj} build_iec)
+#add_dependencies(${proj} modbus)
+#add_dependencies(${proj} can_master)
 
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")
 

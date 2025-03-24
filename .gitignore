@@ -82,13 +82,14 @@ CMakeLists.txt.user*
 
 /__tmp/
 
-/dockcross-linux-arm64/
+/*dockcross-*/
 /iec/
 /$install/
 
+/utils/CANopen/
 /utils/libmodbus/
+
+/utils/CANopen/.idea/
 /utils/libmodbus/.idea/
 
-/utils/CANopen/
-/utils/CANopen/.idea/
 

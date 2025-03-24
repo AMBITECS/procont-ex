@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.20)
 project( PROCONT-EX
          VERSION 1.0.1
          DESCRIPTION "Procont execution environment"
@@ -63,7 +63,6 @@ set( PROJ_INS_DIR   ${PROJ_DIR}/$install  ) # local install directory
 set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c ) # IEC to C compiler
 set( PROJ_ST_FILE   ${ST_FILE}            ) # SOURCE ST_FILE
 #set( CMAKE_PREFIX_PATH ${PROJ_SRC_DIR} ) # CMake path
-
 
 set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} )
 set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
@@ -184,6 +183,7 @@ build_target( ${proj} EXE
         ${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp
         :MASK ${PROJ_IEC_DIR}/*.o
+        #        :MASK ${PROJ_SRC_DIR}/tester/tester.cpp
 
     LNKS
         modbus      #${modbus_LIBRARIES}

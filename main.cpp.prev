@@ -1,27 +1,25 @@
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <unistd.h>
-#include <cstring>
-#include <sched.h>
-#include <csignal>
-#include <cerrno>
-#include <cstdarg>
-#include <syslog.h>
-#include <ctime>
-#include <sys/epoll.h>
-#include <net/if.h>
-#include <linux/reboot.h>
-#include <sys/reboot.h>
-
-#include <vector>
-
-#include "OD.h"
-#include "CIA405.h"
-#include "CO_error.h"
-#include "CO_epoll_interface.h"
-#include "CO_storageLinux.h"
-
+//-----------------------------------------------------------------------------
+// Copyright 2018 Thiago Alves
+// This file is part of the OpenPLC Software Stack.
+//
+// OpenPLC is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// OpenPLC is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with OpenPLC.  If not, see <http://www.gnu.org/licenses/>.
+//------
+//
+// This is the main file for the OpenPLC. It contains the initialization
+// procedures for the hardware, network and the main loop
+// Thiago Alves, Jun 2018
+//-----------------------------------------------------------------------------
 #include <cstdio>
 #include <cstring>
 #include <pthread.h>
@@ -44,9 +42,9 @@
 #include "ladder.h"
 #include "custom_layer.h"
 
-using namespace std;
-
 #define OPLC_CYCLE          50000000
+
+using namespace std;
 
 extern int opterr;
 //extern int common_ticktime__;
@@ -60,45 +58,6 @@ pthread_mutex_t bufferLock; //mutex for the internal buffers
 
 //Variable to control OpenPLC Runtime execution
 bool run_openplc = true; //uint8_t run_openplc = 1;
-
-
-// ---------------------------------------------------
-// Функция пока нужна, можно сделать ее просто пустой
-// ---------------------------------------------------
-/* Message logging function */
-void log_printf(int priority, const char* format, ...)
-{
-    va_list ap;
-
-    va_start(ap, format);
-    vsyslog(priority, format, ap);
-    va_end(ap);
-
-    // #if (CO_CONFIG_GTW) & CO_CONFIG_GTW_ASCII_LOG
-    //     if(CO != NULL)
-    //     {
-    char buf[200];
-    time_t timer;
-    struct tm* tm_info;
-    size_t len;
-
-    timer = time(nullptr);
-    tm_info = localtime(&timer);
-    len = strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S: ", tm_info);
-
-    va_start(ap, format);
-    vsnprintf(buf + len, sizeof(buf) - len - 2, format, ap);
-    va_end(ap);
-
-//  strcat(buf, (char *)"\n");
-//  qDebug() << buf;
-
-    cout << buf << endl;
-
-    //         CO->gtwa->_co_gtwa_engien->CO_GTWA_log_print(CO->gtwa, buf);
-    //     }
-    // #endif
-}
 
 //unsigned char log_buffer[1000000]; //A very large buffer to store all logs
 //int log_index = 0;
@@ -160,6 +119,44 @@ void log_printf(int priority, const char* format, ...)
 //    //sprintf((char*)log_msg, "DNP3 ID %s: %s\n", entry.loggerid, entry.message);
 //}
 
+// ---------------------------------------------------
+// Функция пока нужна, можно сделать ее просто пустой
+// ---------------------------------------------------
+/* Message logging function */
+void log_printf(int priority, const char* format, ...)
+{
+    va_list ap;
+
+    va_start(ap, format);
+    vsyslog(priority, format, ap);
+    va_end(ap);
+
+    // #if (CO_CONFIG_GTW) & CO_CONFIG_GTW_ASCII_LOG
+    //     if(CO != NULL)
+    //     {
+    char buf[200];
+    time_t timer;
+    struct tm* tm_info;
+    size_t len;
+
+    timer = time(nullptr);
+    tm_info = localtime(&timer);
+    len = strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S: ", tm_info);
+
+    va_start(ap, format);
+    vsnprintf(buf + len, sizeof(buf) - len - 2, format, ap);
+    va_end(ap);
+
+//  strcat(buf, (char *)"\n");
+//  qDebug() << buf;
+
+    cout << buf << endl;
+
+    //         CO->gtwa->_co_gtwa_engien->CO_GTWA_log_print(CO->gtwa, buf);
+    //     }
+    // #endif
+}
+
 //-----------------------------------------------------------------------------
 // Interactive Server Thread. Creates the server to listen to commands on
 // localhost
@@ -179,7 +176,7 @@ bool pinNotPresent(int *ignored_vector, int vector_size, int pinNumber)
         if (ignored_vector[i] == pinNumber)
             return false;
     }
-
+    
     return true;
 }
 
@@ -347,22 +344,22 @@ int main(int argc,char **argv)
     }
 #endif
 
-    //gets the starting point for the clock
-    printf("Getting current time\n");
-    struct timespec timer_start;
-    clock_gettime(CLOCK_MONOTONIC, &timer_start);
+	//gets the starting point for the clock
+	printf("Getting current time\n");
+	struct timespec timer_start;
+	clock_gettime(CLOCK_MONOTONIC, &timer_start);
 
-    //======================================================
-    //                    MAIN LOOP
-    //======================================================
-    while(run_openplc)
-    {
-        //make sure the buffer pointers are correct and attached to the user variables
-        glueVars();
+	//======================================================
+	//                    MAIN LOOP
+	//======================================================
+	while(run_openplc)
+	{
+		//make sure the buffer pointers are correct and attached to the user variables
+		glueVars();
 
-        updateBuffersIn();			//read input image
+		updateBuffersIn();			//read input image
 
-        pthread_mutex_lock(&bufferLock);	//lock mutex
+		pthread_mutex_lock(&bufferLock);	//lock mutex
         {
             updateCustomIn();
             {
@@ -375,13 +372,13 @@ int main(int argc,char **argv)
             }
             updateCustomOut();
         }
-        pthread_mutex_unlock(&bufferLock);	//unlock mutex
+		pthread_mutex_unlock(&bufferLock);	//unlock mutex
 
-        updateBuffersOut();			//write output image
+		updateBuffersOut();			//write output image
 
-        updateTime();
-        sleep_until(&timer_start, common_ticktime__);
-    }
+		updateTime();
+		sleep_until(&timer_start, common_ticktime__);
+	}
 
     //======================================================
     //             SHUTTING DOWN PROCONT RUNTIME
@@ -398,4 +395,3 @@ int main(int argc,char **argv)
     printf("Shutting down ProCont Runtime...\n");
     exit(0);
 }
-

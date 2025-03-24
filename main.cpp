@@ -75,7 +75,7 @@ bool run_openplc = true; //uint8_t run_openplc = 1;
 //        ts->tv_nsec -= 1000*1000*1000;
 //        ts->tv_sec++;
 //    }
-//    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, ts,  NULL);
+//    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, ts,  nullptr);
 //}
 
 //-----------------------------------------------------------------------------
@@ -87,7 +87,7 @@ bool run_openplc = true; //uint8_t run_openplc = 1;
 //	struct timespec ts;
 //	ts.tv_sec = milliseconds / 1000;
 //	ts.tv_nsec = (milliseconds % 1000) * 1000000;
-//	nanosleep(&ts, NULL);
+//	nanosleep(&ts, nullptr);
 //}
 
 //-----------------------------------------------------------------------------
@@ -132,7 +132,7 @@ void log_printf(int priority, const char* format, ...)
     va_end(ap);
 
     // #if (CO_CONFIG_GTW) & CO_CONFIG_GTW_ASCII_LOG
-    //     if(CO != NULL)
+    //     if(CO != nullptr)
     //     {
     char buf[200];
     time_t timer;
@@ -190,20 +190,20 @@ bool pinNotPresent(int *ignored_vector, int vector_size, int pinNumber)
 //    {
 //        for (int j = 0; j < 8; j++)
 //        {
-//            if (bool_output[i][j] != NULL) *bool_output[i][j] = 0;
+//            if (bool_output[i][j] != nullptr) *bool_output[i][j] = 0;
 //        }
 //    }
 //
 //    //Disable byte outputs
 //    for (int i = 0; i < BUFFER_SIZE; i++)
 //    {
-//        if (byte_output[i] != NULL) *byte_output[i] = 0;
+//        if (byte_output[i] != nullptr) *byte_output[i] = 0;
 //    }
 //
 //    //Disable analog outputs
 //    for (int i = 0; i < BUFFER_SIZE; i++)
 //    {
-//        if (int_output[i] != NULL) *int_output[i] = 0;
+//        if (int_output[i] != nullptr) *int_output[i] = 0;
 //    }
 //}
 
@@ -218,18 +218,18 @@ bool pinNotPresent(int *ignored_vector, int vector_size, int pinNumber)
 //
 //    time(&rawtime);
 //    // store the UTC clock in [%ML1027]
-//    if (special_functions[3] != NULL) *special_functions[3] = rawtime;
+//    if (special_functions[3] != nullptr) *special_functions[3] = rawtime;
 //
 //    current_time = localtime(&rawtime);
 //
 //    rawtime = rawtime - timezone;
 //    if (current_time->tm_isdst > 0) rawtime = rawtime + 3600;
 //
-//    if (special_functions[0] != NULL) *special_functions[0] = rawtime;
+//    if (special_functions[0] != nullptr) *special_functions[0] = rawtime;
 //
 //    //number of cycles [%ML1025]
 //    cycle_counter++;
-//    if (special_functions[1] != NULL) *special_functions[1] = cycle_counter;
+//    if (special_functions[1] != nullptr) *special_functions[1] = cycle_counter;
 //
 //    //comm error counter [%ML1026]
 //    /* Implemented in modbus_master.cpp */
@@ -239,7 +239,7 @@ bool pinNotPresent(int *ignored_vector, int vector_size, int pinNumber)
 
 int main(int argc,char **argv)
 {
-    /*unsigned*/ char log_msg[1000];
+    char log_msg[1000];
     sprintf(log_msg, "OpenPLC Runtime starting...\n");
     log(log_msg);
 
@@ -249,8 +249,9 @@ int main(int argc,char **argv)
     tzset();
     time(&start_time);
     pthread_t interactive_thread;
-    pthread_create(&interactive_thread, NULL, interactiveServerThread, NULL);
+    pthread_create(&interactive_thread, nullptr, interactiveServerThread, nullptr);
     config_init__();
+
     glueVars();
 
     //-------------------
@@ -263,7 +264,7 @@ int main(int argc,char **argv)
     assert(socket_fd!=-1);
 
     // Connect to interactive_server
-    sockaddr_in inet_server;
+    sockaddr_in inet_server{};
     memset(&inet_server, 0, sizeof(inet_server));
     inet_server.sin_family = AF_INET;
     inet_server.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -292,7 +293,7 @@ int main(int argc,char **argv)
     //======================================================
     //               MUTEX INITIALIZATION
     //======================================================
-    if (pthread_mutex_init(&bufferLock, NULL) != 0)
+    if (pthread_mutex_init(&bufferLock, nullptr) != 0)
     {
         printf("Mutex init failed\n");
         exit(1);
@@ -320,7 +321,7 @@ int main(int argc,char **argv)
     readPersistentStorage();
 
     //pthread_t persistentThread;
-    //pthread_create(&persistentThread, NULL, persistentStorage, NULL);
+    //pthread_create(&persistentThread, nullptr, persistentStorage, nullptr);
 
 #ifdef __linux__
     //======================================================
@@ -382,7 +383,8 @@ int main(int argc,char **argv)
     //======================================================
     //             SHUTTING DOWN PROCONT RUNTIME
     //======================================================
-    pthread_join(interactive_thread, NULL);
+    // Ожидание завершения потока сервера
+    pthread_join(interactive_thread, nullptr);
     printf("Disabling outputs\n");
 
     disableOutputs();

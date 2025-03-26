@@ -66,11 +66,9 @@ void *modbusThread(void *arg) {
 // Start the CAN Master Thread
 //-----------------------------------------------------------------------------
 void *can_masterThread(void *arg) {
-
     while (run_can_master) {
         sleep(1);
     }
-
     return nullptr;
 }
 

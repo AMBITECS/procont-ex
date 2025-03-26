@@ -22,56 +22,39 @@
 // * PRO100_TI_101_V13.eds
 // * PRO100_AO_041_V42.eds
 //-----------------------------------------------------------------------------
-void cb_work_func(std::vector<T_NETWORK_VARIABLE> _data)
-{
+void cb_work_func(std::vector<T_NETWORK_VARIABLE> _data){
     // _data[i]._var_name   - имя переменной (из EDS файла + Node_Id)
     // _data[i]._value      - значение переменной (указатель на void)
-
     // _data[i]._var_type   - тип переменной (не все, пока только основные)(взято из CANopen спецификации)
-    // BOOL    = 0x01,
-    // SIGN8   = 0x02,
-    // SIGN16  = 0x03,
-    // SIGN32  = 0x04,
-    // USIGN8  = 0x05,
-    // USIGN16 = 0x06,
-    // USIGN32 = 0x07,
-    // REAL32  = 0x08,
-
+    // BOOL    = 0x01, SIGN8   = 0x02, SIGN16  = 0x03, SIGN32  = 0x04,
+    // USIGN8  = 0x05, USIGN16 = 0x06, USIGN32 = 0x07, REAL32  = 0x08,
     // _data[i]._mem_link   - ссылка на память (типа "%ID3", "%IB12" и т.д.)
-    //                          - если "%Ixx" - то это "входная" переменная данные от удаленного узла в Master
-    //                          - если "%Qxx" - то это "выходная" переменная (данные Master в удаленный узел)
-    //                          - пока не понятно, т.к., например, и "REAL", и "UDINT" кодирует как "%IDx"
-    //                          (различать их по _data[i]._var_type)
+    //                      - если "%Ixx" - то это "входная" переменная данные от удаленного узла в Master
+    //                      - если "%Qxx" - то это "выходная" переменная (данные Master в удаленный узел)
+    //                      - пока не понятно, т.к., например, и "REAL", и "UDINT" кодирует как "%IDx"
+    //                      (различать их по _data[i]._var_type)
 
     static timespec time_now = {0};
     static timespec time_prev = {0};
     static bool flag_1 = false;
     static bool flag_2 = false;
-
     clock_gettime(CLOCK_MONOTONIC_RAW, &time_now);
 
-    if(time_prev.tv_sec != 0)
-    {
-        if((time_now.tv_sec - time_prev.tv_sec) > 5)
-        {
+    if (time_prev.tv_sec != 0) {
+        if((time_now.tv_sec - time_prev.tv_sec) > 5) {
             time_prev.tv_sec = time_now.tv_sec;
-            for (int _i = 0; _i < _data.size(); _i++)
-            {
-                if(strcmp("Analogue_Output_1_4", _data[_i]._var_name) == 0)
-                {
+            for (int _i = 0; _i < _data.size(); _i++) {
+                if (strcmp("Analogue_Output_1_4", _data[_i]._var_name) == 0) {
                     if (flag_1) { flag_1 = false; *(float32_t *)(_data[_i]._value) = 10.0; }
                     else         { flag_1 = true; *(float32_t *)(_data[_i]._value) = 0.0;  }
                 }
-                if(strcmp("Analogue_Output_2_4", _data[_i]._var_name) == 0)
-                {
+                if (strcmp("Analogue_Output_2_4", _data[_i]._var_name) == 0) {
                     if (flag_2) { flag_2 = false; *(float32_t *)(_data[_i]._value) = 0.0;  }
                     else         { flag_2 = true; *(float32_t *)(_data[_i]._value) = 15.0; }
                 }
             }
         }
-    } else {
-        time_prev.tv_sec = time_now.tv_sec;
-    }
+    } else { time_prev.tv_sec = time_now.tv_sec; }
 }
 
 

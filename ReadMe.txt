@@ -12,13 +12,13 @@ cd cmake-build-debug-master
 # 2. по умолчанию - generator 'Unix Makefiles'
 # для сборки ninja нужно указать явно параметр -G Ninja
 
-cmake -DCMAKE_BUILD_TYPE=Debug ../ -DST_FILE=plc.st -G Ninja
+cmake -DCMAKE_BUILD_TYPE=Debug ../ -DST_FILE=plc.st -G Ninja --fresh
 
 # (2) сборка целей
-# (2.1) цель "build-iec"
+# (2.1) цель "build_iec"
 # собирает артефакты в каталоге "<path-to-procont-ex>/iec"
 
-cmake --build . --target build-iec
+cmake --build . --target build_iec
 
 # (2.2) цель "procont-ex" 
 # собирает исполняемый модуль procont-ex 

@@ -63,7 +63,7 @@ void *modbusThread(void *arg) {
 }
 
 //-----------------------------------------------------------------------------
-// Start the CAN Master Thread
+// Start the CAN Master Thread (do nothing by circle)
 //-----------------------------------------------------------------------------
 void *can_masterThread(void *arg) {
     while (run_can_master) {

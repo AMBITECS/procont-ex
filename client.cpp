@@ -27,7 +27,7 @@ int connect_to_tcp_server(uint8_t *ip_address, uint16_t port, int method) {
     struct sockaddr_in servaddr{}, cli{};
     
     if (method == METHOD_TCP)       sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    else if (method == METHOD_UDP)  sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    else if (method == METHOD_UDP)  sockfd = socket(AF_INET, SOCK_DGRAM,  0);
     
     if (sockfd == -1) {
         sprintf(log_msg, "TCP Client: error creating TCP socket => %s\n", strerror(errno));

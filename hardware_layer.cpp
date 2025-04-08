@@ -444,7 +444,9 @@ bool parseReg(char *pSrc, char *code1, char *code2, int *index1, int *index2) {
 // * PRO100_TI_101_V13.eds
 // * PRO100_AO_041_V42.eds
 //-----------------------------------------------------------------------------
-void cb_work_func(std::vector<T_NETWORK_VARIABLE> _data){
+//void cb_work_func(std::vector<T_NETWORK_VARIABLE> _data)
+void cb_work_func(std::map<uint8_t, T_CIA405_SLAVE_NODE> _node, std::vector<T_NETWORK_VARIABLE> _data)
+{
     // _data[i]._var_name   - имя переменной (из EDS файла + Node_Id)
     // _data[i]._value      - значение переменной (указатель на void)
     // _data[i]._var_type   - тип переменной (не все, пока только основные)(взято из CANopen спецификации)

@@ -1,18 +1,6 @@
-//-----------------------------------------------------------------------------
-// DISCLAIMER: EDITING THIS FILE CAN BREAK YOUR OPENPLC RUNTIME! IF YOU DON'T
-// KNOW WHAT YOU'RE DOING, JUST DON'T DO IT. EDIT AT YOUR OWN RISK.
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// These are the ignored I/O vectors. If you want to override how OpenPLC
-// handles a particular input or output, you must put them in the ignored
-// vectors. For example, if you want to override %IX0.5, %IX0.6 and %IW3
-// your vectors must be:
-//     int ignored_bool_inputs[] = {5, 6}; //%IX0.5 and %IX0.6 ignored
-//     int ignored_int_inputs[] = {3}; //%IW3 ignored
 //
-// Every I/O on the ignored vectors will be skipped by OpenPLC hardware layer
-//-----------------------------------------------------------------------------
+// Copyright © 2016-2025 AMBITECS <info@ambi.biz>
+//
 int ignored_bool_inputs[]  = {-1};
 int ignored_bool_outputs[] = {-1};
 int ignored_int_inputs[]   = {-1};

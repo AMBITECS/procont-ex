@@ -35,7 +35,8 @@ using namespace std;
 IEC_BOOL __DEBUG;
 unsigned long __tick = 0;   // tick counter
 bool run_openplc = true;    //uint8_t run_openplc = 1;
-pthread_mutex_t bufferLock; //mutex for the internal buffers
+
+//pthread_mutex_t bufferLock; //mutex for the internal buffers
 
 // ---------------------------------------------------
 // Функция пока нужна, можно сделать ее просто пустой

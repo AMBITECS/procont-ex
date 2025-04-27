@@ -142,6 +142,7 @@ add_custom_target( build_iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
 #-------------------------------------------------------------------------------
 # Подключаемые модули
 #-------------------------------------------------------------------------------
+add_subdirectory(${PROJ_SUB_DIR}/Gateway)    # --- gateway
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus)  # --- modbus
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)    # --- CANopen tester
 
@@ -161,6 +162,7 @@ build_target( ${proj} EXE
         :MASK ${PROJ_SRC_DIR}/*.cpp
         :MASK ${PROJ_IEC_DIR}/*.o
     LNKS
+        pro-gateway
         modbus      #${modbus_LIBRARIES}
         can_master  #${can_master_LIBRARIES}
 )

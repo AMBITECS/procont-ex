@@ -11,11 +11,11 @@
 
 typedef std::array<unsigned char, 8> BITS8;
 
-typedef Vector<BITS8>       VEC_BOOL;
-typedef Vector<IEC_BYTE>    VEC_BYTE;
-typedef Vector<IEC_UINT>    VEC_UINT;
-typedef Vector<IEC_UDINT>   VEC_UDINT;
-typedef Vector<IEC_ULINT>   VEC_ULINT;
+typedef RangeObservableVector<BITS8>       VEC_BOOL;
+typedef RangeObservableVector<IEC_BYTE>    VEC_BYTE;
+typedef RangeObservableVector<IEC_UINT>    VEC_UINT;
+typedef RangeObservableVector<IEC_UDINT>   VEC_UDINT;
+typedef RangeObservableVector<IEC_ULINT>   VEC_ULINT;
 
 struct Registry {
     //Booleans
@@ -46,6 +46,7 @@ struct Registry {
     Registry() = default;
 };
 
-extern Registry reg;
+//extern Registry reg;
+const Registry& reg();
 
 #endif //PROCONT_EX_REGISTRY_H

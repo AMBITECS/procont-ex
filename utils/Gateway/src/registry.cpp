@@ -4,4 +4,8 @@
 
 #include "registry.h"
 
-Registry reg;
+Registry theRegistry;
+
+const Registry& reg() {
+    return theRegistry;
+}

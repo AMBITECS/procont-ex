@@ -25,40 +25,30 @@ void generateHeader(ostream& glueVars)
 \r\n\
 #include \"iec_std_lib.h\"\r\n\
 \r\n\
-TIME __CURRENT_TIME;\r\n\
-extern unsigned long long common_ticktime__;\r\n\
-\r\n\
-//Internal buffers for I/O and memory. These buffers are defined in the\r\n\
-//auto-generated glueVars.cpp file\r\n\
-#define BUFFER_SIZE		1024\r\n\
-\r\n\
 //Booleans\r\n\
-IEC_BOOL *bool_input[BUFFER_SIZE][8];\r\n\
-IEC_BOOL *bool_output[BUFFER_SIZE][8];\r\n\
+extern IEC_BOOL *bool_input[][8];\r\n\
+extern IEC_BOOL *bool_output[][8];\r\n\
 \r\n\
 //Bytes\r\n\
-IEC_BYTE *byte_input[BUFFER_SIZE];\r\n\
-IEC_BYTE *byte_output[BUFFER_SIZE];\r\n\
+extern IEC_BYTE *byte_input[];\r\n\
+extern IEC_BYTE *byte_output[];\r\n\
 \r\n\
 //Analog I/O\r\n\
-IEC_UINT *int_input[BUFFER_SIZE];\r\n\
-IEC_UINT *int_output[BUFFER_SIZE];\r\n\
+extern IEC_UINT *int_input[];\r\n\
+extern IEC_UINT *int_output[];\r\n\
 \r\n\
 //32bit I/O\r\n\
-IEC_UDINT *dint_input[BUFFER_SIZE];\r\n\
-IEC_UDINT *dint_output[BUFFER_SIZE];\r\n\
+extern IEC_UDINT *dint_input[];\r\n\
+extern IEC_UDINT *dint_output[];\r\n\
 \r\n\
 //64bit I/O\r\n\
-IEC_ULINT *lint_input[BUFFER_SIZE];\r\n\
-IEC_ULINT *lint_output[BUFFER_SIZE];\r\n\
+extern IEC_ULINT *lint_input[];\r\n\
+extern IEC_ULINT *lint_output[];\r\n\
 \r\n\
 //Memory\r\n\
-IEC_UINT *int_memory[BUFFER_SIZE];\r\n\
-IEC_UDINT *dint_memory[BUFFER_SIZE];\r\n\
-IEC_ULINT *lint_memory[BUFFER_SIZE];\r\n\
-\r\n\
-//Special Functions\r\n\
-IEC_ULINT *special_functions[BUFFER_SIZE];\r\n\
+extern IEC_UINT *int_memory[];\r\n\
+extern IEC_UDINT *dint_memory[];\r\n\
+extern IEC_ULINT *lint_memory[];\r\n\
 \r\n\
 \r\n\
 #define __LOCATED_VAR(type, name, ...) type __##name;\r\n\
@@ -222,19 +212,7 @@ void glueVar(ostream& glueVars, char *varName, char *varType)
 
 void generateBottom(ostream& glueVars)
 {
-	glueVars << "}\r\n\
-\r\n\
-void updateTime()\r\n\
-{\r\n\
-	__CURRENT_TIME.tv_sec  += common_ticktime__ / 1000000000ULL;\r\n\
-	__CURRENT_TIME.tv_nsec += common_ticktime__ % 1000000000ULL;\r\n\
-\r\n\
-	if (__CURRENT_TIME.tv_nsec >= 1000000000ULL)\r\n\
-	{\r\n\
-		__CURRENT_TIME.tv_nsec -= 1000000000ULL;\r\n\
-		__CURRENT_TIME.tv_sec += 1;\r\n\
-	}\r\n\
-}";
+	glueVars << "}\r\n";
 }
 
 void generateBody(istream& locatedVars, ostream& glueVars) {

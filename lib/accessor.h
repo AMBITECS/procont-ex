@@ -78,7 +78,7 @@
 #define __GET_VAL_REF(name, ...)                            (&__GET_VAL(name, __VA_ARGS__))
 #define __GET_VAL_DREF(name, ...)                           (*__GET_VAL(name, __VA_ARGS__))
 
-#define __GET_VAL2(name, ...)                               ((name.flags & __IEC_FORCE_FLAG) ?   name.fvalue __VA_ARGS__ :    (*(name.value)) __VA_ARGS__)
+#define __GET_VAL2(name, ...)                               ((name.flags & __IEC_FORCE_FLAG) ?   name.fvalue __VA_ARGS__  :   (*(name.value)) __VA_ARGS__)
 #define __GET_VAL2_PTR(name, ...)                           ((name.flags & __IEC_FORCE_FLAG) ? &(name.fvalue __VA_ARGS__) : &((*(name.value)) __VA_ARGS__))
 
 /*OLD&BAD*///#define __GET_VAR_BY_REF(name, ...)            ((name.flags & __IEC_FORCE_FLAG) ? &(name.fvalue __VA_ARGS__) : &(name.value __VA_ARGS__))

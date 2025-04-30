@@ -106,7 +106,9 @@ add_custom_command(
         DEPENDS ${PROJ_IEC_DIR}/LOCATED_VARIABLES.h
 
         WORKING_DIRECTORY ${PROJ_IEC_DIR}
-        COMMAND ${PROJ_SRC_DIR}/glue_generator > ${PROJ_IEC_DIR}/glue_generator.out
+
+        COMMAND
+        ${PROJ_SUB_DIR}/glue_generator/bin/glue_generator > ${PROJ_IEC_DIR}/glue_generator.out
 )
 
 #-------------------------------------------------------------------------------

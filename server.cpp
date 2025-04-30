@@ -198,7 +198,7 @@ void *handleConnections(void *arguments) {
 
     while (run_server != nullptr && *run_server)
     {
-        // Чтение запроса
+        // (1) Чтение запроса
         long messageSize = 0;
         unsigned char buffer[NET_BUFFER_SIZE];
         messageSize = listenToClient(client_fd, buffer);
@@ -216,7 +216,7 @@ void *handleConnections(void *arguments) {
             break;
         }
 
-        // Обработка запроса клиента
+        // (2) Обработка запроса клиента
         processMessage(buffer, messageSize, client_fd, protocol_type);
     }
 
@@ -271,13 +271,11 @@ void startServer(char *arg_str, int protocol_type)
             arguments[1] = protocol_type;
 
             pthread_t thread;
-            int ret = pthread_create
-                    (
-                    &thread,
-                    nullptr,
-                    handleConnections,
-                    (void*)arguments
-                    );
+            int ret = pthread_create( &thread,
+                                      nullptr,
+                                      handleConnections,
+                                      (void*)arguments
+                                      );
 
             if (ret==0) {
                 // if SUCCEEDED - detach thread (ZOMBIE)

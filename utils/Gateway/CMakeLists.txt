@@ -11,10 +11,11 @@ set( CMAKE_CXX_STANDARD_REQUIRED True )
 set( PROJ ${PROJECT_NAME} )             # PROJ = project name in orig case
 string ( TOLOWER ${PROJECT_NAME} proj )  # proj = project name in lowercase
 
-set( PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project  directory
-set( CMAKE_DIR ${PROJ_DIR}/../../.cmake    ) # PROJ cmake files directory
-set( PROJ_SRC_DIR ${PROJ_DIR}/src          ) # PROJ sources directory
-set( PROJ_INS_DIR ${PROJ_DIR}/$install     ) # PROJ install directory
+set( PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR} ) # current directory
+set( ROOT_DIR  ${PROJ_DIR}/../..           ) # root directory
+set( CMAKE_DIR ${ROOT_DIR}/.cmake          ) # cmake files directory
+set( PROJ_SRC_DIR ${PROJ_DIR}/src          ) # sources directory
+set( PROJ_INS_DIR ${PROJ_DIR}/$install     ) # install directory
 
 message(STATUS "SOURCES == ${PROJ_SRC_DIR}")
 message(STATUS "INSTALL == ${PROJ_INS_DIR}")
@@ -56,7 +57,10 @@ option(BUILD_SHARED_LIBS "Build ${proj} as a shared library" ON)
 ### TARGET: pro-gateway (shared lib)  ###
 # ---------------------------------------------------
 build_target( ${proj} LIB SHARED
-        INCS ${PROJ_SRC_DIR}
+        INCS
+        ${ROOT_DIR}/lib
+        ${PROJ_SRC_DIR}
+
         SRCS
         :MASK ${PROJ_SRC_DIR}/*.cpp
 )

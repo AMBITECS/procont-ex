@@ -6,7 +6,9 @@
 #include <pthread.h>
 #include <ctime>
 #include <sys/mman.h>
+
 #include "ladder.h"
+#include "iec_std_lib.h"
 
 pthread_mutex_t logLock;                //mutex for the internal log
 unsigned char log_buffer[1000*1000];    // A very large buffer to store all logs
@@ -14,6 +16,24 @@ size_t  log_index = 0;
 size_t  log_counter = 0;
 int64_t cycle_counter = 0;
 uint8_t rpi_modbus_rts_pin;             // If <> 0, expect hardware RTS to be used with this pin
+
+////Special Functions
+IEC_ULINT *special_functions[BUFFER_SIZE];
+
+TIME __CURRENT_TIME;
+
+void updateTime()
+{
+    __CURRENT_TIME.tv_sec  += common_ticktime__ / 1000000000ULL;
+    __CURRENT_TIME.tv_nsec += common_ticktime__ % 1000000000ULL;
+
+    if (__CURRENT_TIME.tv_nsec >= 1000000000ULL)
+    {
+        __CURRENT_TIME.tv_nsec -= 1000000000ULL;
+        __CURRENT_TIME.tv_sec += 1;
+    }
+}
+
 
 /**
  * @brief Makes the running thread sleep for the specified amount of time

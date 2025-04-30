@@ -24,7 +24,10 @@ uint8_t bool_output_buf[MAX_MB_IO];
 uint16_t int_input_buf[MAX_MB_IO];
 uint16_t int_output_buf[MAX_MB_IO];
 
-int _atoi(const char *buf) {char *ptr; return (int) strtol(buf, &ptr, 10);} //NOLINT
+int _atoi(const char *buf) {
+    char *ptr;
+    return (int) strtol(buf, &ptr, 10);
+}
 
 // If <> 0, expect hardware RTS to be used with this pin
 //extern uint8_t rpi_modbus_rts_pin;
@@ -134,7 +137,8 @@ void parseConfig()
                     num_devices = _atoi(temp_buffer);
                     
                     //initializes the allocated memory to zero
-                    mb_devices = (struct MB_device *)malloc(num_devices*sizeof(struct MB_device));
+                    //mb_devices = (struct MB_device *)malloc(num_devices*sizeof(struct MB_device));
+                    mb_devices = (struct MB_device *)calloc(num_devices, sizeof(struct MB_device));
                 }
                 else if (!strncmp(line_str, "Polling_Period", 14))
                 {
@@ -349,7 +353,9 @@ void initializeMB()
                         )
                 {
                     char log_msg[1000];
-                    sprintf(log_msg, "Warning MB device %s port setting missmatch\n", mb_devices[i].dev_name);
+                    sprintf(log_msg, "Warning MB device %s port setting missmatch\n",
+                                mb_devices[i].dev_name
+                            );
                     log(log_msg);
                 }
                 mb_devices[i].mb_ctx = mb_devices[share_index].mb_ctx;
@@ -403,15 +409,21 @@ void initializeMB()
 }
 
 //-----------------------------------------------------------------------------
-// This function is called by the OpenPLC in a loop.
+// This function is called by the PLC EE in a loop.
 // Here the internal buffers must be updated to reflect the actual Input state.
 //-----------------------------------------------------------------------------
 void updateBuffersIn_MB() {
     pthread_mutex_lock(&ioLock);
     {
-        for (int i = 0; i < MAX_MB_IO; i++) {
-            if (bool_input[100 + (i / 8)][i % 8] != nullptr) *bool_input[100 + (i / 8)][i % 8] = bool_input_buf[i];
-            if (int_input[100 + i] != nullptr) *int_input[100 + i] = int_input_buf[i];
+        for (int i = 0; i < MAX_MB_IO; i++)
+        {
+            if ( bool_input[100 + (i / 8)][i % 8] != nullptr) {
+                *bool_input[100 + (i / 8)][i % 8] =  bool_input_buf[i];
+            }
+
+            if ( int_input[100 + i] != nullptr) {
+                *int_input[100 + i] =  int_input_buf[i];
+            }
         }
     }
     pthread_mutex_unlock(&ioLock);
@@ -419,15 +431,21 @@ void updateBuffersIn_MB() {
 
 
 //-----------------------------------------------------------------------------
-// This function is called by the OpenPLC in a loop.
+// This function is called by the PLC EE in a loop.
 // Here the internal buffers must be updated to reflect the actual Output state.
 //-----------------------------------------------------------------------------
 void updateBuffersOut_MB() {
     pthread_mutex_lock(&ioLock);
     {
-        for (int i = 0; i < MAX_MB_IO; i++) {
-            if (bool_output[100 + (i / 8)][i % 8] != nullptr) bool_output_buf[i] = *bool_output[100 + (i / 8)][i % 8];
-            if (int_output[100 + i] != nullptr) int_output_buf[i] = *int_output[100 + i];
+        for (int i = 0; i < MAX_MB_IO; i++)
+        {
+            if (bool_output[100 + (i / 8)][i % 8] != nullptr) {
+                bool_output_buf[i] = *bool_output[100 + (i / 8)][i % 8];
+            }
+
+            if (int_output[100 + i] != nullptr) {
+                int_output_buf[i] = *int_output[100 + i];
+            }
         }
     }
     pthread_mutex_unlock(&ioLock);
@@ -450,6 +468,7 @@ void *querySlaveDevices(void *arg) {
             // Check if there is a connected RTU device using the same port
             bool found_sharing = false;
             bool rtu_port_connected = false;
+
             if (mb_devices[i].protocol == MB_RTU)
             {
                 for (int a = 0; a < num_devices; a++) {

@@ -5,6 +5,32 @@
 #include <cctype>
 
 #include "gateway.h"
+#include "vector.h"
+
+//Booleans
+IEC_BOOL *bool_input [BUFFER_SIZE][8];
+IEC_BOOL *bool_output[BUFFER_SIZE][8];
+
+//Bytes
+IEC_BYTE *byte_input [BUFFER_SIZE];
+IEC_BYTE *byte_output[BUFFER_SIZE];
+
+//Analog I/O
+IEC_UINT *int_input [BUFFER_SIZE];
+IEC_UINT *int_output[BUFFER_SIZE];
+
+//32bit I/O
+IEC_UDINT *dint_input [BUFFER_SIZE];
+IEC_UDINT *dint_output[BUFFER_SIZE];
+
+//64bit I/O
+IEC_ULINT *lint_input [BUFFER_SIZE];
+IEC_ULINT *lint_output[BUFFER_SIZE];
+
+//Memory
+IEC_UINT  *int_memory [BUFFER_SIZE];
+IEC_UDINT *dint_memory[BUFFER_SIZE];
+IEC_ULINT *lint_memory[BUFFER_SIZE];
 
 pthread_mutex_t bufferLock; //mutex for the internal buffers
 

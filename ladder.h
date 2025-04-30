@@ -36,6 +36,8 @@
 //#define LOGSTR_SIZE		    1024
 #define INTERACTIVE_PORT    43628
 
+//IEC_TIMESPEC __CURRENT_TIME;
+
 ///*********************/
 ///*  IEC Types defs   */
 ///*********************/
@@ -112,7 +114,11 @@ void finalizeHardware();
 void updateBuffersIn();
 void updateBuffersOut();
 
+//Special Functions
+extern IEC_ULINT *special_functions[BUFFER_SIZE];
+
 //utils.cpp
+
 void sleep_until(struct timespec *ts, unsigned long long delay);
 void sleepms(int milliseconds);
 void log(char *logmsg);

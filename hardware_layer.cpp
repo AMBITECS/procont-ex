@@ -73,61 +73,61 @@ void cb_work_func(
     //-------------------------------------------------------------------------
     pthread_mutex_lock(&bufferLock);
 
-    char dataScope=0, dataSize=0;
-    int index1=0, index2=0;
-    for (auto & item : _data)
-    {
-        // Извлекаем данные из _mem_link
-        if (parseAddressIEC(item._mem_link, &dataScope, &dataSize, &index1, &index2))
-        {
-            if (dataScope == 'I') {         // INPUT
-                // Значение CAN
-                VARIANT var(VARIANT::typeOf(item._var_type), item._value);
-
-                switch (dataSize) {
-                        case 'X': *bool_input[index1][index2] = (var.toBOOL().getBOOL() ? 1 : 0); break;
-                        case 'B': *byte_input[index1] = var.toUINT8 ().getUINT8 (); break;
-                        case 'W': *int_input [index1] = var.toUINT16().getUINT16(); break;
-                        case 'D': *dint_input[index1] = var.toUINT32().getUINT32(); break;
-                        case 'L': *lint_input[index1] = var.toUINT64().getUINT64(); break;
-                        default:;
-                }
-
-            } else if (dataScope == 'Q') {  //OUTPUT
-                VARIANT var;
-                switch (dataSize) {
-                    case 'X': var = VARIANT(*bool_input[index1][index2]);   break;
-                    case 'B': var = VARIANT(*byte_input[index1]);           break;
-                    case 'W': var = VARIANT(*int_input [index1]);           break;
-                    case 'D': var = VARIANT(*dint_input[index1]);           break;
-                    case 'L': var = VARIANT(*lint_input[index1]);           break;
-                    default:;
-                }
-
-                // Запись значения
-                switch (VARIANT::typeOf(item._var_type)) {
-                    case VT_BOOL  : (* (T_BOOL   *) item._value) = var.toBOOL().getBOOL();
-                    case VT_SINT8 : (* (T_SINT8  *) item._value) = var.toBOOL().getSINT8();
-                    case VT_SINT16: (* (T_SINT16 *) item._value) = var.toBOOL().getSINT16();
-                    case VT_SINT32: (* (T_SINT32 *) item._value) = var.toBOOL().getSINT32();
-                    case VT_SINT64: (* (T_SINT64 *) item._value) = var.toBOOL().getSINT64();
-                    case VT_UINT8 : (* (T_UINT8  *) item._value) = var.toBOOL().getUINT8();
-                    case VT_UINT16: (* (T_UINT16 *) item._value) = var.toBOOL().getUINT16();
-                    case VT_UINT32: (* (T_UINT32 *) item._value) = var.toBOOL().getUINT32();
-                    case VT_UINT64: (* (T_UINT64 *) item._value) = var.toBOOL().getUINT64();
-                    case VT_REAL32: (* (T_REAL32 *) item._value) = var.toBOOL().getREAL32();
-                    case VT_REAL64: (* (T_REAL64 *) item._value) = var.toBOOL().getREAL64();
-                }
-
-            } else if (dataScope == 'M') {
-                // MEMORY
-                // (не применяется)
-
-            } else {
-                //assert(false);
-            }
-        }
-    }
+//    char dataScope=0, dataSize=0;
+//    int index1=0, index2=0;
+//    for (auto & item : _data)
+//    {
+//        // Извлекаем данные из _mem_link
+//        if (parseAddressIEC(item._mem_link, &dataScope, &dataSize, &index1, &index2))
+//        {
+//            if (dataScope == 'I') {         // INPUT
+//                // Значение CAN
+//                VARIANT var(VARIANT::typeOf(item._var_type), item._value);
+//
+//                switch (dataSize) {
+//                        case 'X': *bool_input[index1][index2] = (var.toBOOL().getBOOL() ? 1 : 0); break;
+//                        case 'B': *byte_input[index1] = var.toUINT8 ().getUINT8 (); break;
+//                        case 'W': *int_input [index1] = var.toUINT16().getUINT16(); break;
+//                        case 'D': *dint_input[index1] = var.toUINT32().getUINT32(); break;
+//                        case 'L': *lint_input[index1] = var.toUINT64().getUINT64(); break;
+//                        default:;
+//                }
+//
+//            } else if (dataScope == 'Q') {  //OUTPUT
+//                VARIANT var;
+//                switch (dataSize) {
+//                    case 'X': var = VARIANT(*bool_input[index1][index2]);   break;
+//                    case 'B': var = VARIANT(*byte_input[index1]);           break;
+//                    case 'W': var = VARIANT(*int_input [index1]);           break;
+//                    case 'D': var = VARIANT(*dint_input[index1]);           break;
+//                    case 'L': var = VARIANT(*lint_input[index1]);           break;
+//                    default:;
+//                }
+//
+//                // Запись значения
+//                switch (VARIANT::typeOf(item._var_type)) {
+//                    case VT_BOOL  : (* (T_BOOL   *) item._value) = var.toBOOL().getBOOL();
+//                    case VT_SINT8 : (* (T_SINT8  *) item._value) = var.toBOOL().getSINT8();
+//                    case VT_SINT16: (* (T_SINT16 *) item._value) = var.toBOOL().getSINT16();
+//                    case VT_SINT32: (* (T_SINT32 *) item._value) = var.toBOOL().getSINT32();
+//                    case VT_SINT64: (* (T_SINT64 *) item._value) = var.toBOOL().getSINT64();
+//                    case VT_UINT8 : (* (T_UINT8  *) item._value) = var.toBOOL().getUINT8();
+//                    case VT_UINT16: (* (T_UINT16 *) item._value) = var.toBOOL().getUINT16();
+//                    case VT_UINT32: (* (T_UINT32 *) item._value) = var.toBOOL().getUINT32();
+//                    case VT_UINT64: (* (T_UINT64 *) item._value) = var.toBOOL().getUINT64();
+//                    case VT_REAL32: (* (T_REAL32 *) item._value) = var.toBOOL().getREAL32();
+//                    case VT_REAL64: (* (T_REAL64 *) item._value) = var.toBOOL().getREAL64();
+//                }
+//
+//            } else if (dataScope == 'M') {
+//                // MEMORY
+//                // (не применяется)
+//
+//            } else {
+//                //assert(false);
+//            }
+//        }
+//    }
 
     pthread_mutex_unlock(&bufferLock);
 }

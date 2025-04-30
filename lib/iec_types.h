@@ -11,25 +11,25 @@
 // ----------------------------------------------------------------------------
 //  IEC Types defs
 // ----------------------------------------------------------------------------
-typedef uint8_t   IEC_BOOL;
+typedef __uint8_t   IEC_BOOL;
 
-typedef int8_t    IEC_SINT;
-typedef int16_t   IEC_INT;
-typedef int32_t   IEC_DINT;
-typedef int64_t   IEC_LINT;
+typedef __int8_t    IEC_SINT;
+typedef __int16_t   IEC_INT;
+typedef __int32_t   IEC_DINT;
+typedef __int64_t   IEC_LINT;
 
-typedef uint8_t   IEC_USINT;
-typedef uint16_t  IEC_UINT;
-typedef uint32_t  IEC_UDINT;
-typedef uint64_t  IEC_ULINT;
+typedef __uint8_t   IEC_USINT;
+typedef __uint16_t  IEC_UINT;
+typedef __uint32_t  IEC_UDINT;
+typedef __uint64_t  IEC_ULINT;
 
-typedef uint8_t   IEC_BYTE;
-typedef uint16_t  IEC_WORD;
-typedef uint32_t  IEC_DWORD;
-typedef uint64_t  IEC_LWORD;
+typedef __uint8_t   IEC_BYTE;
+typedef __uint16_t  IEC_WORD;
+typedef __uint32_t  IEC_DWORD;
+typedef __uint64_t  IEC_LWORD;
 
-typedef float     IEC_REAL;
-typedef double    IEC_LREAL;
+typedef float       IEC_REAL;
+typedef double      IEC_LREAL;
 
 // ----------------------------------------------------------------------------
 // WARNING: When editing the definition of IEC_TIMESPEC, take note that
@@ -37,7 +37,7 @@ typedef double    IEC_LREAL;
 //          then the macros __time_to_timespec() and __tod_to_timespec()
 //          will need to be changed accordingly (iec_std_lib.h)
 // ----------------------------------------------------------------------------
-typedef int32_t ts_time_t;
+typedef uint32_t ts_time_t;
 typedef struct {
     ts_time_t tv_sec;            // Seconds
     ts_time_t tv_nsec;           // Nanoseconds

@@ -31,6 +31,7 @@ using T_UINT32 = uint32_t;
 using T_UINT64 = uint64_t;
 using T_REAL32 = float;
 using T_REAL64 = double;
+using T_STRING = std::string;
 
 //-----------------------------------------------------------------------------
 // Variant type codes
@@ -54,20 +55,20 @@ enum VAR_TYPE : uint8_t {
 //-----------------------------------------------------------------------------
 // Thread-safe string wrapper
 //-----------------------------------------------------------------------------
-struct SafeString {
-    std::string str;
+struct TS_STRING {
+    T_STRING str;
     mutable std::mutex mtx;
 
-    SafeString() = default;
-    explicit SafeString(const std::string& s) : str(s) {}
-    explicit SafeString(std::string&& s) : str(std::move(s)) {}
+    TS_STRING() = default;
+    explicit TS_STRING(const T_STRING& s) : str(s) {}
+    explicit TS_STRING(T_STRING&& s) : str(std::move(s)) {}
 
-    SafeString(const SafeString& other) {
+    TS_STRING(const TS_STRING& other) {
         std::lock_guard lock(other.mtx);
         str = other.str;
     }
 
-    SafeString& operator=(const SafeString& other) {
+    TS_STRING& operator=(const TS_STRING& other) {
         if (this != &other) {
             std::scoped_lock lock(mtx, other.mtx);
             str = other.str;
@@ -75,12 +76,12 @@ struct SafeString {
         return *this;
     }
 
-    SafeString(SafeString&& other) noexcept {
+    TS_STRING(TS_STRING&& other) noexcept {
         std::lock_guard lock(other.mtx);
         str = std::move(other.str);
     }
 
-    SafeString& operator=(SafeString&& other) noexcept {
+    TS_STRING& operator=(TS_STRING&& other) noexcept {
         if (this != &other) {
             std::scoped_lock lock(mtx, other.mtx);
             str = std::move(other.str);
@@ -93,18 +94,18 @@ struct SafeString {
 // Variant value union with proper alignment
 //-----------------------------------------------------------------------------
 union VAR_VALUE {
-    T_BOOL    _bool;
-    T_SINT8   _sint8;
-    T_SINT16  _sint16;
-    T_SINT32  _sint32;
-    T_SINT64  _sint64;
-    T_UINT8   _uint8;
-    T_UINT16  _uint16;
-    T_UINT32  _uint32;
-    T_UINT64  _uint64;
-    T_REAL32  _real32;
-    T_REAL64  _real64;
-    SafeString* _string;
+    T_BOOL     _bool;
+    T_SINT8    _sint8;
+    T_SINT16   _sint16;
+    T_SINT32   _sint32;
+    T_SINT64   _sint64;
+    T_UINT8    _uint8;
+    T_UINT16   _uint16;
+    T_UINT32   _uint32;
+    T_UINT64   _uint64;
+    T_REAL32   _real32;
+    T_REAL64   _real64;
+    TS_STRING* _string;
 
     VAR_VALUE() noexcept : _uint64(0) {}
     ~VAR_VALUE() noexcept = default;
@@ -122,8 +123,8 @@ union VAR_VALUE {
     explicit VAR_VALUE(T_UINT64 v) noexcept : _uint64(v) {}
     explicit VAR_VALUE(T_REAL32 v) noexcept : _real32(v) {}
     explicit VAR_VALUE(T_REAL64 v) noexcept : _real64(v) {}
-    explicit VAR_VALUE(const std::string& v) : _string(new SafeString(v)) {}
-    explicit VAR_VALUE(std::string&& v) : _string(new SafeString(std::move(v))) {}
+    explicit VAR_VALUE(const T_STRING& v) : _string(new TS_STRING(v)) {}
+    explicit VAR_VALUE(T_STRING&& v) : _string(new TS_STRING(std::move(v))) {}
 
     VAR_VALUE& operator=(const VAR_VALUE& val) noexcept {
         if (this != &val) {
@@ -157,7 +158,7 @@ class VARIANT {
 
     void copy_from(const VARIANT& other) {
         if (other.type_ == VT_STRING) {
-            value_._string = new SafeString(*other.value_._string);
+            value_._string = new TS_STRING(*other.value_._string);
         } else {
             value_ = other.value_;
         }
@@ -200,7 +201,7 @@ public:
 
     explicit VARIANT(VAR_TYPE type) noexcept : type_(type), value_() {
         value_._uint64 = 0;
-        if (type_ == VT_STRING) { value_._string = new SafeString(); }
+        if (type_ == VT_STRING) { value_._string = new TS_STRING(); }
     }
 
     VARIANT(VAR_TYPE type, const void* value) : type_(type) {
@@ -234,8 +235,8 @@ public:
     explicit VARIANT(T_UINT64 v) noexcept  : type_(VT_UINT64), value_(v) {}
     explicit VARIANT(T_REAL32 v) noexcept  : type_(VT_REAL32), value_(v) {}
     explicit VARIANT(T_REAL64 v) noexcept  : type_(VT_REAL64), value_(v) {}
-    explicit VARIANT(const std::string& v) : type_(VT_STRING), value_(v) {}
-    explicit VARIANT(const char* v) : type_(VT_STRING), value_(std::string(v)) {}
+    explicit VARIANT(const T_STRING& v) : type_(VT_STRING), value_(v) {}
+    explicit VARIANT(const char* v) : type_(VT_STRING), value_(T_STRING(v)) {}
     explicit VARIANT(std::nullptr_t) noexcept : type_(VT_NULL), value_() {}
 
     [[nodiscard]] bool isInitialized() const noexcept {
@@ -339,17 +340,17 @@ public:
         return *this;
     }
 
-    VARIANT& operator=(const std::string& v) {
+    VARIANT& operator=(const T_STRING& v) {
         cleanup();
         type_ = VT_STRING;
-        value_._string = new SafeString(v);
+        value_._string = new TS_STRING(v);
         return *this;
     }
 
     VARIANT& operator=(const char* v) {
         cleanup();
         type_ = VT_STRING;
-        value_._string = new SafeString(v);
+        value_._string = new TS_STRING(v);
         return *this;
     }
 
@@ -419,7 +420,7 @@ public:
             return getREAL32();
         } else if constexpr (std::is_same_v<T, T_REAL64>) {
             return getREAL64();
-        } else if constexpr (std::is_same_v<T, std::string>) {
+        } else if constexpr (std::is_same_v<T, T_STRING>) {
             return getSTRING();
         } else {
             static_assert(sizeof(T) == 0, "Unsupported type for VARIANT::get()");
@@ -986,7 +987,7 @@ public:
         }
     }
 
-    [[nodiscard]] std::string getSTRING() const {
+    [[nodiscard]] T_STRING getSTRING() const {
         if (type_ == VT_STRING) {
             std::lock_guard lock(value_._string->mtx);
             return value_._string->str;
@@ -1185,11 +1186,11 @@ public:
     //-----------------------------------------------------------------------------
     // Utility functions
     //-----------------------------------------------------------------------------
-    [[nodiscard]] std::string toString() const {
+    [[nodiscard]] T_STRING toString() const {
         return getSTRING();
     }
 
-    [[nodiscard]] static VARIANT fromString(const std::string& str, VAR_TYPE type = VT_STRING) {
+    [[nodiscard]] static VARIANT fromString(const T_STRING& str, VAR_TYPE type = VT_STRING) {
         if (type == VT_STRING) {
             return VARIANT(str);
         }
@@ -1197,7 +1198,7 @@ public:
         try {
             switch (type) {
                 case VT_BOOL: {
-                    std::string lower;
+                    T_STRING lower;
                     std::transform(str.begin(), str.end(), std::back_inserter(lower), ::tolower);
                     return VARIANT(lower == "true" || lower == "1" || lower == "yes");
                 }

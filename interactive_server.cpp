@@ -13,7 +13,7 @@
 #include <ctime>
 
 #include "ladder.h"
-#define BUFFER_SIZE 1024
+//#define BUFFER_SIZE 1024
 
 //Global Variables
 //__attribute__((unused))

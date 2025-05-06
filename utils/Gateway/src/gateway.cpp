@@ -5,7 +5,13 @@
 #include <cctype>
 
 #include "gateway.h"
-#include "vector.h"
+#include "registry.h"
+
+// Singleton registry instance
+Registry& reg() {
+    static Registry plc_registry;
+    return plc_registry;
+}
 
 //Booleans
 IEC_BOOL *bool_input [BUFFER_SIZE][8];

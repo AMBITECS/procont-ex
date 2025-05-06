@@ -8,7 +8,7 @@
 #define PRO_GATEWAY_H
 
 #include "registry.h"
-#include "VARIANT.h"
+#include "variant.h"
 
 //Booleans
 extern IEC_BOOL *bool_input [BUFFER_SIZE][8];

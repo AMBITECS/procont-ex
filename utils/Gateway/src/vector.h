@@ -1,313 +1,782 @@
-//-----------------------------------------------------------------------------
-// Copyright 2018 Ambitecs
-//-----------------------------------------------------------------------------
-#ifndef PROCONT_EX_VECTOR_H
-#define PROCONT_EX_VECTOR_H
+#ifndef PROCONT_EX_RANGE_OBSERVABLE_VECTOR_H
+#define PROCONT_EX_RANGE_OBSERVABLE_VECTOR_H
 
-#include "processor.h"
+#include <utility>
 #include <vector>
+#include <memory>
+#include <mutex>
+#include <shared_mutex>
 #include <stdexcept>
-
-using namespace std;
+#include <initializer_list>
+#include <utility>
+#include <limits>
+#include <chrono>
+#include <string>
+#include <type_traits>
+#include <atomic>
+#include <algorithm>
+#include "processor.h"
+#include "on_data_change.h"
+#include "variant.h"
 
 template <typename T>
-class RangeObservableVector
-{
-// ----------------------------------------------------------------------------
-// vector specific
-// ----------------------------------------------------------------------------
-// Data
-private:
-    vector<T> data_;
-    mutable shared_mutex data_mutex_;
+class RangeObservableVector {
+    static_assert(
+            std::is_same_v<T, T_BOOL>   || std::is_same_v<T, T_BOOL*>   ||
+            std::is_same_v<T, T_SINT8>  || std::is_same_v<T, T_SINT8*>  ||
+            std::is_same_v<T, T_SINT16> || std::is_same_v<T, T_SINT16*> ||
+            std::is_same_v<T, T_SINT32> || std::is_same_v<T, T_SINT32*> ||
+            std::is_same_v<T, T_SINT64> || std::is_same_v<T, T_SINT64*> ||
+            std::is_same_v<T, T_UINT8>  || std::is_same_v<T, T_UINT8*>  ||
+            std::is_same_v<T, T_UINT16> || std::is_same_v<T, T_UINT16*> ||
+            std::is_same_v<T, T_UINT32> || std::is_same_v<T, T_UINT32*> ||
+            std::is_same_v<T, T_UINT64> || std::is_same_v<T, T_UINT64*> ||
+            std::is_same_v<T, T_REAL32> || std::is_same_v<T, T_REAL32*> ||
+            std::is_same_v<T, T_REAL64> || std::is_same_v<T, T_REAL64*> ||
+            std::is_same_v<T, std::string> || std::is_same_v<T, std::string*>,
+            "Type T must be VAR_TYPE compatible or pointer to VAR_TYPE compatible"
+    );
 
-// Definitions
+    template<typename U>
+    struct is_pointer_to_var_type : std::false_type {};
+
+    template<typename U>
+    struct is_pointer_to_var_type<U*> :
+            std::bool_constant<
+                    std::is_same_v<U, T_BOOL>   ||
+                    std::is_same_v<U, T_SINT8>  ||
+                    std::is_same_v<U, T_SINT16> ||
+                    std::is_same_v<U, T_SINT32> ||
+                    std::is_same_v<U, T_SINT64> ||
+                    std::is_same_v<U, T_UINT8>  ||
+                    std::is_same_v<U, T_UINT16> ||
+                    std::is_same_v<U, T_UINT32> ||
+                    std::is_same_v<U, T_UINT64> ||
+                    std::is_same_v<U, T_REAL32> ||
+                    std::is_same_v<U, T_REAL64> ||
+                    std::is_same_v<U, std::string>
+            > {};
+
+    static constexpr bool is_pointer = is_pointer_to_var_type<T>::value;
+    using value_type = std::conditional_t<is_pointer, std::remove_pointer_t<T>, T>;
+
 public:
-    using iterator = typename vector<T>::iterator;
-    using const_iterator = typename vector<T>::const_iterator;
+    using size_type = size_t;
+    using difference_type = ptrdiff_t;
+    using reference = T&;
+    using const_reference = const T&;
+    using pointer = T*;
+    using const_pointer = const T*;
+    using iterator = typename std::vector<T>::iterator;
+    using const_iterator = typename std::vector<T>::const_iterator;
+    using TimePoint = std::chrono::system_clock::time_point;
 
-// Constructor
-public:
-    ~RangeObservableVector() = default;
+    template <bool IsConst>
+    class BasicProxy {
+    public:
+        using VectorType = std::conditional_t<IsConst, const RangeObservableVector, RangeObservableVector>;
+        using ValueType = std::conditional_t<IsConst, const T, T>;
 
-    // 1. Конструктор по умолчанию
-    RangeObservableVector() = default;
+        BasicProxy(VectorType& vec, size_t index) : vec_(vec), index_(index) {}
 
-    // 2. Конструктор с указанием размера
-    explicit RangeObservableVector(size_t count) {
-        unique_lock lock(data_mutex_);
-        data_.resize(count);
-    }
-
-    // 3. Конструктор с указанием размера и значения по умолчанию
-    RangeObservableVector(size_t count, const T& defaultValue) {
-        unique_lock lock(data_mutex_);
-        data_.assign(count, defaultValue);
-    }
-
-    // 4. Конструктор из initializer_list
-    RangeObservableVector(initializer_list<T> init) {
-        unique_lock lock(data_mutex_);
-        data_ = init;
-    }
-
-    // 5. Конструктор диапазона [first, last)
-    template <class InputIt>
-    RangeObservableVector(InputIt first, InputIt last) {
-        unique_lock lock(data_mutex_);
-        data_.assign(first, last);
-    }
-
-    // 6. Конструктор копирования
-    RangeObservableVector(const RangeObservableVector& other) {
-        shared_lock other_lock(other.data_mutex_);
-        unique_lock this_lock(data_mutex_);
-        data_ = other.data_;
-    }
-
-    // 7. Конструктор перемещения
-    RangeObservableVector(RangeObservableVector&& other) noexcept {
-        unique_lock other_lock(other.data_mutex_);
-        unique_lock this_lock(data_mutex_);
-        data_ = move(other.data_);
-    }
-
-    // 8. Конструктор с аллокатором (опционально)
-    template <class Alloc>
-    explicit RangeObservableVector(const Alloc& alloc) : data_(alloc) {}
-
-    // Оператор присваивания
-    RangeObservableVector& operator=(const RangeObservableVector& other) {
-        if (this != &other) {
-            unique_lock lock1(data_mutex_, defer_lock);
-            shared_lock lock2(other.data_mutex_, defer_lock);
-            lock(lock1, lock2);
-            data_ = other.data_;
+        operator value_type() const {
+            return vec_.get_at_index(index_);
         }
-        return *this;
-    }
 
-    // Оператор перемещающего присваивания
-    RangeObservableVector& operator=(RangeObservableVector&& other) noexcept {
-        if (this != &other) {
-            unique_lock lock1(data_mutex_, defer_lock);
-            unique_lock lock2(other.data_mutex_, defer_lock);
-            lock(lock1, lock2);
-            data_ = move(other.data_);
+        template <bool C = IsConst, std::enable_if_t<!C, int> = 0>
+        BasicProxy& operator=(const value_type& value) {
+            vec_.set(index_, value);
+            return *this;
         }
-        return *this;
-    }
 
-    // Оператор присваивания из initializer_list
-    RangeObservableVector& operator=(initializer_list<T> ilist) {
-        unique_lock lock(data_mutex_);
-        data_ = ilist;
-        return *this;
-    }
+        template <bool C = IsConst, std::enable_if_t<!C, int> = 0>
+        BasicProxy& operator=(value_type&& value) {
+            vec_.set(index_, std::move(value));
+            return *this;
+        }
 
-    // Методы доступа к итераторам
-    iterator        begin()         { shared_lock lock(data_mutex_); return data_.begin(); }
-    const_iterator  begin() const   { shared_lock lock(data_mutex_); return data_.begin(); }
-    iterator        end()           { shared_lock lock(data_mutex_); return data_.end();   }
-    const_iterator  end() const     { shared_lock lock(data_mutex_); return data_.end();   }
-
-    // Оператор доступа по индексу (без проверки границ)
-    T& operator[](size_t index) { shared_lock lock(data_mutex_); return data_[index]; }
-
-    // Константная версия оператора []
-    const T& operator[](size_t index) const { shared_lock lock(data_mutex_); return data_[index]; }
-
-    // Метод at() с проверкой границ
-    T& at(size_t index) {
-        shared_lock lock(data_mutex_);
-        if (index >= data_.size()) { throw out_of_range("Index out of range"); }
-        return data_[index];
-    }
-
-    // Константная версия at()
-    const T& at(size_t index) const {
-        shared_lock lock(data_mutex_);
-        if (index >= data_.size()) { throw out_of_range("Index out of range"); }
-        return data_[index];
-    }
-
-    // Доступ к первому элементу
-    T& front() { shared_lock lock(data_mutex_); return data_.front(); }
-    const T& front() const { shared_lock lock(data_mutex_); return data_.front(); }
-
-    // Доступ к последнему элементу
-    T& back() { shared_lock lock(data_mutex_); return data_.back(); }
-    const T& back() const { shared_lock lock(data_mutex_); return data_.back(); }
-
-    // Прямой доступ к данным (аналог data() у vector)
-    T* data() noexcept { shared_lock lock(data_mutex_); return data_.data(); }
-    const T* data() const noexcept { shared_lock lock(data_mutex_); return data_.data(); }
-
-    // Размер вектора
-    size_t size() const { shared_lock lock(data_mutex_); return data_.size(); }
-
-    // Безопасный доступ ко всему вектору
-    template <typename F>
-    void access(F&& func) const { shared_lock lock(data_mutex_); func(data_); }
-
-// ----------------------------------------------------------------------------
-// callback specific
-// ----------------------------------------------------------------------------
-public:
-    using TimePoint = chrono::system_clock::time_point;
-    struct ChangeEvent {
-        size_t index{};
-        T old_value{};
-        T new_value{};
-        TimePoint timestamp{};
+    private:
+        VectorType& vec_;
+        size_t index_;
     };
 
-//    using CallbackID    = string;
-//    using Range         = pair<size_t, size_t>;
-//    using Processor     = typename DataProcessor<T>::Callback;
-//    using OnDataChange  = typename DataProcessor<T>::OnDataChange;
-//    using RangeCallback = function<void(const ChangeEvent&)>;
+    using Proxy = BasicProxy<false>;
+    using ConstProxy = BasicProxy<true>;
 
-private:
-//    map<CallbackID, pair<Range, RangeCallback>> subscriptions_;
-//    mutable mutex subscriptions_mutex_;
-//    static const Range FULL_RANGE;
+    RangeObservableVector() : processor_(std::make_shared<DataProcessor>()) {}
 
-    DataProcessor<T> processor_;
+    explicit RangeObservableVector(std::shared_ptr<DataProcessor> processor)
+            : processor_(std::move(processor)) {}
 
-//    // Добавление элемента
-//    void push_back(const T& value) {
-//        unique_lock lock(data_mutex_);
-//        size_t index = data_.size();
-//        data_.push_back(value);
-//        lock.unlock();
-//
-//        notify_add(index, value);
-//    }
-//
-//    // Изменение элемента
-//    void set(size_t index, const T& value) {
-//        unique_lock lock(data_mutex_);
-//        if (index >= data_.size()) {
-//            throw out_of_range("Index out of range");
-//        }
-//
-//        T old_value = data_[index];
-//        data_[index] = value;
-//        lock.unlock();
-//
-//        notify_change(index, old_value, value);
-//    }
-
-// Добавление элемента
-    void push_back(const T& value) {
-        unique_lock lock(data_mutex_);
-        size_t index = data_.size();
-        data_.push_back(value);
-        lock.unlock();
-
-        notify_change(index, T{}, value);
+    explicit RangeObservableVector(size_type count)
+            : processor_(std::make_shared<DataProcessor>()) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        data_.resize(count);
+        if constexpr (is_pointer) {
+            for (auto& ptr : data_) {
+                ptr = new value_type();
+            }
+        }
     }
 
-    // Изменение элемента
-    void set(size_t index, const T& value) {
-        unique_lock lock(data_mutex_);
-        if (index >= data_.size()) {
-            throw out_of_range("Index out of range");
+    RangeObservableVector(size_type count, const value_type& defaultValue)
+            : processor_(std::make_shared<DataProcessor>()) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        data_.resize(count);
+        if constexpr (is_pointer) {
+            for (auto& ptr : data_) {
+                ptr = new value_type(defaultValue);
+            }
+        } else {
+            std::fill(data_.begin(), data_.end(), defaultValue);
+        }
+    }
+
+    RangeObservableVector(std::initializer_list<value_type> init)
+            : processor_(std::make_shared<DataProcessor>()) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            data_.reserve(init.size());
+            for (const auto& val : init) {
+                data_.push_back(new value_type(val));
+            }
+        } else {
+            data_ = init;
+        }
+    }
+
+    template<class InputIt>
+    RangeObservableVector(InputIt first, InputIt last)
+            : processor_(std::make_shared<DataProcessor>()) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            data_.reserve(std::distance(first, last));
+            for (auto it = first; it != last; ++it) {
+                data_.push_back(new value_type(*it));
+            }
+        } else {
+            data_.assign(first, last);
+        }
+    }
+
+    RangeObservableVector(const RangeObservableVector& other) {
+        std::shared_lock<std::shared_mutex> other_lock(other.data_mutex_);
+        std::unique_lock<std::shared_mutex> this_lock(data_mutex_);
+        if constexpr (is_pointer) {
+            data_.reserve(other.data_.size());
+            for (const auto& ptr : other.data_) {
+                data_.push_back(ptr ? new value_type(*ptr) : nullptr);
+            }
+        } else {
+            data_ = other.data_;
+        }
+        processor_ = other.processor_;
+    }
+
+    RangeObservableVector(RangeObservableVector&& other) noexcept {
+        std::unique_lock<std::shared_mutex> other_lock(other.data_mutex_);
+        std::unique_lock<std::shared_mutex> this_lock(data_mutex_);
+        data_ = std::move(other.data_);
+        processor_ = std::move(other.processor_);
+        other.data_.clear();
+    }
+
+    ~RangeObservableVector() {
+        if constexpr (is_pointer) {
+            std::unique_lock<std::shared_mutex> lock(data_mutex_);
+            for (auto ptr : data_) {
+                delete ptr;
+            }
+        }
+    }
+
+    RangeObservableVector& operator=(const RangeObservableVector& other) {
+        if (this != &other) {
+            std::unique_lock<std::shared_mutex> lock1(data_mutex_, std::defer_lock);
+            std::shared_lock<std::shared_mutex> lock2(other.data_mutex_, std::defer_lock);
+            std::lock(lock1, lock2);
+
+            if constexpr (is_pointer) {
+                for (auto ptr : data_) {
+                    delete ptr;
+                }
+                data_.resize(other.data_.size());
+                for (size_type i = 0; i < other.data_.size(); ++i) {
+                    data_[i] = other.data_[i] ? new value_type(*other.data_[i]) : nullptr;
+                }
+            } else {
+                data_ = other.data_;
+            }
+            processor_ = other.processor_;
+        }
+        return *this;
+    }
+
+    RangeObservableVector& operator=(RangeObservableVector&& other) noexcept {
+        if (this != &other) {
+            std::unique_lock<std::shared_mutex> lock1(data_mutex_, std::defer_lock);
+            std::unique_lock<std::shared_mutex> lock2(other.data_mutex_, std::defer_lock);
+            std::lock(lock1, lock2);
+
+            if constexpr (is_pointer) {
+                for (auto ptr : data_) {
+                    delete ptr;
+                }
+            }
+            data_ = std::move(other.data_);
+            processor_ = std::move(other.processor_);
+            other.data_.clear();
+        }
+        return *this;
+    }
+
+    RangeObservableVector& operator=(std::initializer_list<value_type> ilist) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            for (auto ptr : data_) {
+                delete ptr;
+            }
+            data_.clear();
+            data_.reserve(ilist.size());
+            for (const auto& val : ilist) {
+                data_.push_back(new value_type(val));
+            }
+        } else {
+            data_ = ilist;
+        }
+        lock.unlock();
+
+        for (size_type i = 0; i < data_.size(); ++i) {
+            notify_change(i, value_type{}, get_at_index(i));
+        }
+        return *this;
+    }
+
+    Proxy at(size_type pos) {
+        if (pos >= size()) {
+            throw std::out_of_range("Index out of range");
+        }
+        return Proxy(*this, pos);
+    }
+
+    ConstProxy at(size_type pos) const {
+        if (pos >= size()) {
+            throw std::out_of_range("Index out of range");
+        }
+        return ConstProxy(*this, pos);
+    }
+
+    Proxy operator[](size_type pos) {
+        return Proxy(*this, pos);
+    }
+
+    ConstProxy operator[](size_type pos) const {
+        return ConstProxy(*this, pos);
+    }
+
+    value_type get_at_index(size_type pos) const {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        if (pos >= data_.size()) {
+            throw std::out_of_range("Index out of range");
+        }
+        if constexpr (is_pointer) {
+            if (data_[pos] == nullptr) {
+                throw std::runtime_error("Null pointer dereference");
+            }
+            return *data_[pos];
+        } else {
+            return data_[pos];
+        }
+    }
+
+//    void set(size_type pos, const value_type& value) {
+//        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+//        if (pos >= data_.size()) {
+//            throw std::out_of_range("Index out of range");
+//        }
+//
+//        value_type old_value = get_at_index(pos);
+//        if constexpr (is_pointer) {
+//            if (data_[pos] == nullptr) {
+//                data_[pos] = new value_type(value);
+//            } else {
+//                *data_[pos] = value;
+//            }
+//        } else {
+//            data_[pos] = value;
+//        }
+//
+//        lock.unlock();
+//        notify_change(pos, old_value, get_at_index(pos));
+//    }
+    void set(size_type pos, const value_type& value) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if (pos >= data_.size()) {
+            throw std::out_of_range("Index out of range");
         }
 
-        T old_value = data_[index];
-        data_[index] = value;
+        if constexpr (is_pointer) {
+            if (data_[pos] == nullptr) {
+                // Создаём новый объект, но не генерируем уведомление
+                data_[pos] = new value_type(value);
+            } else {
+                // Генерируем уведомление только если значение изменилось
+                value_type old_value = *data_[pos];
+                if (old_value != value) {
+                    *data_[pos] = value;
+                    lock.unlock();
+                    notify_change(pos, old_value, value);
+                }
+            }
+        } else {
+            value_type old_value = data_[pos];
+            if (old_value != value) {
+                data_[pos] = value;
+                lock.unlock();
+                notify_change(pos, old_value, value);
+            }
+        }
+    }
+
+//    void set(size_type pos, value_type&& value) {
+//        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+//        if (pos >= data_.size()) {
+//            throw std::out_of_range("Index out of range");
+//        }
+//
+//        value_type old_value = get_at_index(pos);
+//        if constexpr (is_pointer) {
+//            if (data_[pos] == nullptr) {
+//                data_[pos] = new value_type(std::move(value));
+//            } else {
+//                *data_[pos] = std::move(value);
+//            }
+//        } else {
+//            data_[pos] = std::move(value);
+//        }
+//
+//        lock.unlock();
+//        notify_change(pos, old_value, get_at_index(pos));
+//    }
+    void set(size_type pos, value_type&& value) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if (pos >= data_.size()) {
+            throw std::out_of_range("Index out of range");
+        }
+
+        if constexpr (is_pointer) {
+            if (data_[pos] == nullptr) {
+                // Создаём новый объект, но не генерируем уведомление
+                data_[pos] = new value_type(std::move(value));
+            } else {
+                // Генерируем уведомление только если значение изменилось
+                value_type old_value = *data_[pos];
+                if (old_value != value) {
+                    *data_[pos] = std::move(value);
+                    lock.unlock();
+                    notify_change(pos, old_value, *data_[pos]);
+                }
+            }
+        } else {
+            value_type old_value = data_[pos];
+            if (old_value != value) {
+                data_[pos] = std::move(value);
+                lock.unlock();
+                notify_change(pos, old_value, data_[pos]);
+            }
+        }
+    }
+
+    Proxy front() {
+        if (empty()) {
+            throw std::out_of_range("Vector is empty");
+        }
+        return Proxy(*this, 0);
+    }
+
+    ConstProxy front() const {
+        if (empty()) {
+            throw std::out_of_range("Vector is empty");
+        }
+        return ConstProxy(*this, 0);
+    }
+
+    Proxy back() {
+        if (empty()) {
+            throw std::out_of_range("Vector is empty");
+        }
+        return Proxy(*this, size() - 1);
+    }
+
+    ConstProxy back() const {
+        if (empty()) {
+            throw std::out_of_range("Vector is empty");
+        }
+        return ConstProxy(*this, size() - 1);
+    }
+
+    pointer data() noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.data();
+    }
+
+    const_pointer data() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.data();
+    }
+
+    iterator begin() noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.begin();
+    }
+
+    const_iterator begin() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.begin();
+    }
+
+    const_iterator cbegin() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.cbegin();
+    }
+
+    iterator end() noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.end();
+    }
+
+    const_iterator end() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.end();
+    }
+
+    const_iterator cend() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.cend();
+    }
+
+    bool empty() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.empty();
+    }
+
+    size_type size() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.size();
+    }
+
+    size_type max_size() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.max_size();
+    }
+
+    size_type capacity() const noexcept {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        return data_.capacity();
+    }
+
+    void reserve(size_type new_cap) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        data_.reserve(new_cap);
+    }
+
+    void shrink_to_fit() {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        data_.shrink_to_fit();
+    }
+
+    void clear() noexcept {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            for (auto ptr : data_) {
+                delete ptr;
+            }
+        }
+        data_.clear();
+    }
+
+    void push_back(const value_type& value) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        size_type index = data_.size();
+        if constexpr (is_pointer) {
+            data_.push_back(new value_type(value));
+        } else {
+            data_.push_back(value);
+        }
         lock.unlock();
 
-        notify_change(index, old_value, value);
+        notify_change(index, value_type{}, value);
     }
 
-//    // Установка обработчика для процессора
-//    void set_processor(Processor callback) {
-//        processor_.set_callback(move(callback));
-//    }
+    void push_back(value_type&& value) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        size_type index = data_.size();
+        if constexpr (is_pointer) {
+            data_.push_back(new value_type(std::move(value)));
+        } else {
+            data_.push_back(std::move(value));
+        }
+        value_type& new_value = get_at_index(index);
+        lock.unlock();
 
-    // Доступ к процессору для управления подписками
-    DataProcessor<T>& get_processor() { return processor_; }
-    const DataProcessor<T>& get_processor() const { return processor_; }
+        notify_change(index, value_type{}, new_value);
+    }
 
-//    // Подписка на изменения
-//    // ------------------------------------------------------------------------
-//    CallbackID subscribe(Range range, RangeCallback callback, const CallbackID& id_prefix = "") {
-//        unique_lock lock(subscriptions_mutex_);
-//        CallbackID id = id_prefix.empty() ? generate_callback_id() : id_prefix + "_" + generate_callback_id();
-//        subscriptions_.emplace(id, make_pair(range, move(callback)));
-//        return id;
-//    }
-//
-//    // Удобные методы-обёртки
-//    CallbackID subscribe_to_element(size_t index, RangeCallback callback, const CallbackID& id_prefix = "") {
-//        return subscribe({index, index}, move(callback), id_prefix);
-//    }
-//
-//    CallbackID subscribe_to_all_changes(RangeCallback callback, const CallbackID& id_prefix = "") {
-//        return subscribe(FULL_RANGE, move(callback), id_prefix);
-//    }
-//
-//    // Отписка
-//    void unsubscribe(const CallbackID& id) {
-//        unique_lock lock(subscriptions_mutex_);
-//        subscriptions_.erase(id);
-//    }
+    template<class... Args>
+    value_type& emplace_back(Args&&... args) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        size_type index = data_.size();
+        if constexpr (is_pointer) {
+            data_.push_back(new value_type(std::forward<Args>(args)...));
+        } else {
+            data_.emplace_back(std::forward<Args>(args)...);
+        }
+        value_type& new_value = get_at_index(index);
+        lock.unlock();
+
+        notify_change(index, value_type{}, new_value);
+        return new_value;
+    }
+
+    void pop_back() {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if (data_.empty()) {
+            throw std::out_of_range("Vector is empty");
+        }
+        value_type old_value = get_at_index(data_.size() - 1);
+        if constexpr (is_pointer) {
+            delete data_.back();
+        }
+        data_.pop_back();
+        lock.unlock();
+
+        notify_change(data_.size(), old_value, value_type{});
+    }
+
+    void resize(size_type count) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        size_type old_size = data_.size();
+        if constexpr (is_pointer) {
+            if (count > old_size) {
+                data_.reserve(count);
+                for (size_type i = old_size; i < count; ++i) {
+                    data_.push_back(new value_type());
+                }
+            } else if (count < old_size) {
+                for (size_type i = count; i < old_size; ++i) {
+                    delete data_[i];
+                }
+                data_.resize(count);
+            }
+        } else {
+            data_.resize(count);
+        }
+        lock.unlock();
+
+        if (count > old_size) {
+            for (size_type i = old_size; i < count; ++i) {
+                notify_change(i, value_type{}, get_at_index(i));
+            }
+        }
+    }
+
+    void resize(size_type count, const value_type& value) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        size_type old_size = data_.size();
+        if constexpr (is_pointer) {
+            if (count > old_size) {
+                data_.reserve(count);
+                for (size_type i = old_size; i < count; ++i) {
+                    data_.push_back(new value_type(value));
+                }
+            } else if (count < old_size) {
+                for (size_type i = count; i < old_size; ++i) {
+                    delete data_[i];
+                }
+                data_.resize(count);
+            }
+        } else {
+            data_.resize(count, value);
+        }
+        lock.unlock();
+
+        if (count > old_size) {
+            for (size_type i = old_size; i < count; ++i) {
+                notify_change(i, value_type{}, value);
+            }
+        }
+    }
+
+    void swap(RangeObservableVector& other) noexcept {
+        if (this != &other) {
+            std::unique_lock<std::shared_mutex> lock1(data_mutex_, std::defer_lock);
+            std::unique_lock<std::shared_mutex> lock2(other.data_mutex_, std::defer_lock);
+            std::lock(lock1, lock2);
+            data_.swap(other.data_);
+        }
+    }
+
+    template<class InputIt>
+    void assign(InputIt first, InputIt last) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            for (auto ptr : data_) {
+                delete ptr;
+            }
+            data_.clear();
+            data_.reserve(std::distance(first, last));
+            for (auto it = first; it != last; ++it) {
+                data_.push_back(new value_type(*it));
+            }
+        } else {
+            data_.assign(first, last);
+        }
+        lock.unlock();
+
+        for (size_type i = 0; i < data_.size(); ++i) {
+            notify_change(i, value_type{}, get_at_index(i));
+        }
+    }
+
+    void assign(std::initializer_list<value_type> ilist) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            for (auto ptr : data_) {
+                delete ptr;
+            }
+            data_.clear();
+            data_.reserve(ilist.size());
+            for (const auto& val : ilist) {
+                data_.push_back(new value_type(val));
+            }
+        } else {
+            data_.assign(ilist);
+        }
+        lock.unlock();
+
+        for (size_type i = 0; i < data_.size(); ++i) {
+            notify_change(i, value_type{}, get_at_index(i));
+        }
+    }
+
+    void assign(size_type count, const value_type& value) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            for (auto ptr : data_) {
+                delete ptr;
+            }
+            data_.clear();
+            data_.reserve(count);
+            for (size_type i = 0; i < count; ++i) {
+                data_.push_back(new value_type(value));
+            }
+        } else {
+            data_.assign(count, value);
+        }
+        lock.unlock();
+
+        for (size_type i = 0; i < data_.size(); ++i) {
+            notify_change(i, value_type{}, value);
+        }
+    }
+
+    template <typename U = T, std::enable_if_t<std::is_integral_v<value_type>, int> = 0>
+    value_type fetch_add(size_type pos, value_type value) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if (pos >= data_.size()) {
+            throw std::out_of_range("Index out of range");
+        }
+        value_type old_value = get_at_index(pos);
+        value_type new_value = old_value + value;
+        if constexpr (is_pointer) {
+            *data_[pos] = new_value;
+        } else {
+            data_[pos] = new_value;
+        }
+        lock.unlock();
+
+        notify_change(pos, old_value, new_value);
+        return old_value;
+    }
+
+    template <typename U = T, std::enable_if_t<std::is_integral_v<value_type>, int> = 0>
+    value_type fetch_sub(size_type pos, value_type value) {
+        return fetch_add(pos, -value);
+    }
+
+    template<typename F>
+    void access(F&& func) const {
+        std::shared_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            std::vector<value_type> values;
+            values.reserve(data_.size());
+            for (auto ptr : data_) {
+                values.push_back(ptr ? *ptr : value_type{});
+            }
+            func(values);
+        } else {
+            func(data_);
+        }
+    }
+
+    template<typename F>
+    void modify(F&& func) {
+        std::unique_lock<std::shared_mutex> lock(data_mutex_);
+        if constexpr (is_pointer) {
+            std::vector<value_type> values;
+            values.reserve(data_.size());
+            for (auto ptr : data_) {
+                values.push_back(ptr ? *ptr : value_type{});
+            }
+            func(values);
+            for (size_type i = 0; i < data_.size(); ++i) {
+                if (data_[i]) {
+                    *data_[i] = values[i];
+                } else {
+                    data_[i] = new value_type(values[i]);
+                }
+            }
+        } else {
+            func(data_);
+        }
+    }
+
+    std::shared_ptr<DataProcessor> get_processor() noexcept {
+        return processor_;
+    }
+
+    std::shared_ptr<const DataProcessor> get_processor() const noexcept {
+        return processor_;
+    }
+
+    void set_processor(std::shared_ptr<DataProcessor> processor) {
+        processor_ = std::move(processor);
+    }
 
 private:
-//    // Генерация уникального ID
-//    static CallbackID generate_callback_id() {
-//        static atomic<size_t> counter{0};
-//        return "cb_" + to_string(counter++);
-//    }
-
-//    // Проверка диапазона
-//    bool is_in_range(size_t index, Range range) const {
-//        return range == FULL_RANGE || (index >= range.first && index <= range.second);
-//    }
-
-    // Уведомление об изменении
-//    void notify_change(size_t index, const T& old_value, const T& new_value) {
-//        ChangeEvent event{
-//                index,
-//                old_value,
-//                new_value,
-//                chrono::system_clock::now()
-//        };
-//
-//        // Отправка в процессор
-//        processor_.enqueue({new_value, event.timestamp, index});
-//
-//        // Вызов подписчиков
-//        shared_lock lock(subscriptions_mutex_);
-//        for (const auto& [id, sub] : subscriptions_) {
-//            if (is_in_range(index, sub.first)) {
-//                sub.second(event);
-//            }
-//        }
-//    }
-
-    void notify_change(size_t index, const T& old_value, const T& new_value) {
-        typename DataProcessor<T>::OnDataChange change{
-                index,
-                old_value,
-                new_value,
-                chrono::system_clock::now()
-        };
-        processor_.enqueue(move(change));
+    VARIANT convert_to_variant(const value_type& value) const {
+        return VARIANT(value);
     }
 
-//    // Уведомление о добавлении
-//    void notify_add(size_t index, const T& new_value) {
-//        static T empty{};
-//        notify_change(index, empty, new_value);
-//    }
+    void notify_change(size_type index, const value_type& old_value, const value_type& new_value) {
+        VARIANT old_var = convert_to_variant(old_value);
+        VARIANT new_var = convert_to_variant(new_value);
+
+        OnDataChange change{
+                index,
+                old_var,
+                new_var,
+                std::chrono::system_clock::now()
+        };
+
+        if (processor_) {
+            processor_->enqueue(std::move(change));
+        }
+    }
+
+    std::vector<T> data_;
+    mutable std::shared_mutex data_mutex_;
+    std::shared_ptr<DataProcessor> processor_;
 };
 
-//template <typename T>
-//const typename RangeObservableVector<T>::Range RangeObservableVector<T>::FULL_RANGE =
-//        {0, numeric_limits<size_t>::max()};
-//
-#endif //PROCONT_EX_VECTOR_H
+#endif // PROCONT_EX_RANGE_OBSERVABLE_VECTOR_H

@@ -9,9 +9,9 @@
 
 #define BUFFER_SIZE		1024
 
-typedef std::array<unsigned char, 8> BITS8;
+//typedef std::array<unsigned char, 8> BITS8;
 
-typedef RangeObservableVector<BITS8>       VEC_BOOL;
+typedef RangeObservableVector<IEC_ULINT>   VEC_BOOL;
 typedef RangeObservableVector<IEC_BYTE>    VEC_BYTE;
 typedef RangeObservableVector<IEC_UINT>    VEC_UINT;
 typedef RangeObservableVector<IEC_UDINT>   VEC_UDINT;

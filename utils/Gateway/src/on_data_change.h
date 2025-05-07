@@ -16,14 +16,14 @@ struct OnDataChange {
     std::chrono::system_clock::time_point timestamp;
 
     // Единый конструктор
-    OnDataChange(size_t idx, uint8_t mask, VARIANT old_val, VARIANT new_val)
+    OnDataChange(size_t idx, uint64_t mask, VARIANT old_val, VARIANT new_val)
             : index(idx),
               bit_mask(mask),
               old_value(std::move(old_val)),
               new_value(std::move(new_val)),
               timestamp(std::chrono::system_clock::now()) {}
 
-    bool is_bit_change() const { return bit_mask != 0; }
+    [[nodiscard]] bool is_bit_change() const { return bit_mask != 0; }
 };
 
 #endif //PROCONT_EX_ON_DATA_CHANGE_H

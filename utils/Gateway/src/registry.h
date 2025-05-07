@@ -8,16 +8,17 @@
 #include "iec_types.h"
 
 constexpr size_t BUFFER_MAXSIZE = 65536;    // Standard PLC addressing space
-constexpr size_t BUFFER_SIZE    = 1024;     // Current PLC addressing size
+constexpr size_t BUFFER_SIZE    = 1024;     // Current PLC registers size
 
 // ----------------------------------------------------------------------------
 // PLC Register Types
 // ----------------------------------------------------------------------------
-typedef BitwiseVector<IEC_BOOL>  VEC_BOOL;
-typedef BitwiseVector<IEC_BYTE>  VEC_BYTE;
-typedef BitwiseVector<IEC_UINT>  VEC_UINT;
-typedef BitwiseVector<IEC_UDINT> VEC_UDINT;
-typedef BitwiseVector<IEC_ULINT> VEC_ULINT;
+// Специализации для стандартных типов
+using VEC_BOOL  = BitwiseVector <IEC_BOOL*>;
+using VEC_BYTE  = BitwiseVector <IEC_BYTE*>;
+using VEC_UINT  = BitwiseVector <IEC_UINT*>;
+using VEC_UDINT = BitwiseVector <IEC_UDINT*>;
+using VEC_ULINT = BitwiseVector <IEC_ULINT*>;
 
 // ----------------------------------------------------------------------------
 // PLC Register Map

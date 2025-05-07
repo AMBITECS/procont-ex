@@ -179,11 +179,4 @@ public:
     }
 };
 
-
-//// Специализации для стандартных типов
-//using VEC_BOOL = BitwiseVector<IEC_BYTE>;
-//using VEC_UINT = BitwiseVector<IEC_UINT>;
-//using VEC_UDINT = BitwiseVector<IEC_UDINT>;
-//using VEC_ULINT = BitwiseVector<IEC_ULINT>;
-
 #endif //PROCONT_EX_BITWISE_H

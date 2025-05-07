@@ -94,26 +94,26 @@ void mapUnusedIO()
     pthread_mutex_lock(&bufferLock);
 
     for(int i = 0; i < MAX_DISCRETE_INPUT; i++) {
-        if (bool_input[i/8][i%8] == nullptr)  bool_input[i/8][i%8] = &mb_discrete_input[i];
+        if (IX[i / 8][i % 8] == nullptr) IX[i / 8][i % 8] = &mb_discrete_input[i];
     }
 
     for(int i = 0; i < MAX_COILS; i++) {
-        if (bool_output[i/8][i%8] == nullptr) bool_output[i/8][i%8] = &mb_coils[i];
+        if (QX[i / 8][i % 8] == nullptr) QX[i / 8][i % 8] = &mb_coils[i];
     }
 
     for (int i = 0; i < MAX_INP_REGS; i++) {
-        if (int_input[i] == nullptr)          int_input[i] = &mb_input_regs[i];
+        if (IW[i] == nullptr) IW[i] = &mb_input_regs[i];
     }
 
     for (int i = 0; i <= MAX_16B_RANGE; i++) // ***
     {
         if (i < MIN_16B_RANGE) {
-            if (int_output[i] == nullptr)   int_output[i] = &mb_holding_regs[i];
+            if (QW[i] == nullptr) QW[i] = &mb_holding_regs[i];
 
         } else {
-            if (int_memory[i - MIN_16B_RANGE] == nullptr)
+            if (MW[i - MIN_16B_RANGE] == nullptr)
             {
-                int_memory[i - MIN_16B_RANGE] = &mb_holding_regs[i];
+                MW[i - MIN_16B_RANGE] = &mb_holding_regs[i];
             }
         }
     }
@@ -172,9 +172,9 @@ void ReadCoils(unsigned char *buffer, long bufferSize) {
             int position = Start + i * 8 + j;
             if (position < MAX_COILS)
             {
-                if (bool_output[position/8][position%8] != nullptr)
+                if (QX[position / 8][position % 8] != nullptr)
                 {
-                    bitWrite(buffer[9 + i], j, *bool_output[position/8][position%8]);
+                    bitWrite(buffer[9 + i], j, *QX[position / 8][position % 8]);
                 }
                 else
                 {
@@ -235,9 +235,9 @@ void ReadDiscreteInputs(unsigned char *buffer, long bufferSize)
             int position = Start + i * 8 + j;
             if (position < MAX_DISCRETE_INPUT)
             {
-                if (bool_input[position/8][position%8] != nullptr)
+                if (IX[position / 8][position % 8] != nullptr)
                 {
-                    bitWrite(buffer[9 + i], j, *bool_input[position/8][position%8]);
+                    bitWrite(buffer[9 + i], j, *IX[position / 8][position % 8]);
                 }
                 else
                 {
@@ -299,10 +299,10 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
         int position = Start + i;
         if (position <= MIN_16B_RANGE)
         {
-            if (int_output[position] != nullptr)
+            if (QW[position] != nullptr)
             {
-                buffer[ 9 + i * 2] = highByte(*int_output[position]);
-                buffer[10 + i * 2] = lowByte(*int_output[position]);
+                buffer[ 9 + i * 2] = highByte(*QW[position]);
+                buffer[10 + i * 2] = lowByte(*QW[position]);
             }
             else
             {
@@ -315,10 +315,10 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
         //16-bit registers
         else if (position >= MIN_16B_RANGE && position <= MAX_16B_RANGE)
         {
-            if (int_memory[position - MIN_16B_RANGE] != nullptr)
+            if (MW[position - MIN_16B_RANGE] != nullptr)
             {
-                buffer[ 9 + i * 2] = highByte(*int_memory[position - MIN_16B_RANGE]);
-                buffer[10 + i * 2] = lowByte(*int_memory[position - MIN_16B_RANGE]);
+                buffer[ 9 + i * 2] = highByte(*MW[position - MIN_16B_RANGE]);
+                buffer[10 + i * 2] = lowByte(*MW[position - MIN_16B_RANGE]);
             }
             else
             {
@@ -330,19 +330,19 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
         //32-bit registers
         else if (position >= MIN_32B_RANGE && position <= MAX_32B_RANGE)
         {
-            if (dint_memory[(position - MIN_32B_RANGE)/2] != nullptr)
+            if (MD[(position - MIN_32B_RANGE) / 2] != nullptr)
             {
                 if ((position - MIN_32B_RANGE) % 2 == 0) //first word
                 {
 
-                    auto tempValue = (uint16_t)(*dint_memory[(position - MIN_32B_RANGE)/2] >> 16);
+                    auto tempValue = (uint16_t)(*MD[(position - MIN_32B_RANGE) / 2] >> 16);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else //second word
                 {
-                    auto tempValue = (uint16_t)(*dint_memory[(position - MIN_32B_RANGE)/2] & 0xffff);
+                    auto tempValue = (uint16_t)(*MD[(position - MIN_32B_RANGE) / 2] & 0xffff);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
@@ -358,31 +358,31 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
         //64-bit registers
         else if (position >= MIN_64B_RANGE && position <= MAX_64B_RANGE)
         {
-            if (lint_memory[(position - MIN_64B_RANGE)/4] != nullptr)
+            if (ML[(position - MIN_64B_RANGE) / 4] != nullptr)
             {
                 if ((position - MIN_64B_RANGE) % 4 == 0) //first word
                 {
-                    auto tempValue = (uint16_t)(*lint_memory[(position - MIN_64B_RANGE)/4] >> 48);
+                    auto tempValue = (uint16_t)(*ML[(position - MIN_64B_RANGE) / 4] >> 48);
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 1)//second word
                 {
-                    auto tempValue = (uint16_t)((*lint_memory[(position - MIN_64B_RANGE)/4] >> 32) & 0xffff);
+                    auto tempValue = (uint16_t)((*ML[(position - MIN_64B_RANGE) / 4] >> 32) & 0xffff);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 2)//third word
                 {
-                    auto tempValue = (uint16_t)((*lint_memory[(position - MIN_64B_RANGE)/4] >> 16) & 0xffff);
+                    auto tempValue = (uint16_t)((*ML[(position - MIN_64B_RANGE) / 4] >> 16) & 0xffff);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 3)//fourth word
                 {
-                    auto tempValue = (uint16_t)(*lint_memory[(position - MIN_64B_RANGE)/4] & 0xffff);
+                    auto tempValue = (uint16_t)(*ML[(position - MIN_64B_RANGE) / 4] & 0xffff);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
@@ -449,10 +449,10 @@ void ReadInputRegisters(unsigned char *buffer, long bufferSize)
         int position = Start + i;
         if (position < MAX_INP_REGS)
         {
-            if (int_input[position] != nullptr)
+            if (IW[position] != nullptr)
             {
-                buffer[ 9 + i * 2] = highByte(*int_input[position]);
-                buffer[10 + i * 2] = lowByte( *int_input[position]);
+                buffer[ 9 + i * 2] = highByte(*IW[position]);
+                buffer[10 + i * 2] = lowByte( *IW[position]);
             }
             else
             {
@@ -507,9 +507,9 @@ void WriteCoil(unsigned char *buffer, long bufferSize)
         }
 
         pthread_mutex_lock(&bufferLock);
-        if ( bool_output[Start/8][Start%8] != nullptr )
+        if (QX[Start / 8][Start % 8] != nullptr )
         {
-            (*bool_output)[Start/8][Start%8] = value;
+            (*QX)[Start / 8][Start % 8] = value;
         }
         pthread_mutex_unlock(&bufferLock);
     }
@@ -544,20 +544,20 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
     //analog outputs
     if (position <= MIN_16B_RANGE)
     {
-        if (int_output[position] != nullptr) *int_output[position] = value;
+        if (QW[position] != nullptr) *QW[position] = value;
     }
 
     //accessing memory
     //16-bit registers
     else if (position >= MIN_16B_RANGE && position <= MAX_16B_RANGE)
     {
-        if (int_memory[position - MIN_16B_RANGE] != nullptr) *int_memory[position - MIN_16B_RANGE] = value;
+        if (MW[position - MIN_16B_RANGE] != nullptr) *MW[position - MIN_16B_RANGE] = value;
     }
 
     //32-bit registers
     else if (position >= MIN_32B_RANGE && position <= MAX_32B_RANGE)
     {
-        if (dint_memory[(position - MIN_32B_RANGE) / 2] == nullptr)
+        if (MD[(position - MIN_32B_RANGE) / 2] == nullptr)
         {
             mb_holding_regs[position] = value;
         }
@@ -567,16 +567,16 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
             // Calculate the bit offset of the word in the 32 bit register.
             int bit_offset = (1 - ((position - MIN_32B_RANGE) % 2)) * 16;
             // Mask the word.
-            *dint_memory[(position - MIN_32B_RANGE) / 2] &= ~(((uint32_t) 0xffff) << bit_offset);
+            *MD[(position - MIN_32B_RANGE) / 2] &= ~(((uint32_t) 0xffff) << bit_offset);
             // Overwrite the word.
-            *dint_memory[(position - MIN_32B_RANGE) / 2] |= ((uint32_t) value) << bit_offset;
+            *MD[(position - MIN_32B_RANGE) / 2] |= ((uint32_t) value) << bit_offset;
         }
     }
 
     //64-bit registers
     else if (position >= MIN_64B_RANGE && position <= MAX_64B_RANGE)
     {
-        if (lint_memory[(position - MIN_64B_RANGE) / 4] == nullptr)
+        if (ML[(position - MIN_64B_RANGE) / 4] == nullptr)
         {
             mb_holding_regs[position] = value;
         }
@@ -586,9 +586,9 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
             // Calculate the bit offset of the word in the 64 bit register.
             int bit_offset = (3 - ((position - MIN_64B_RANGE) % 4)) * 16;
             // Mask the word.
-            *lint_memory[(position - MIN_64B_RANGE) / 4] &= ~(((uint64_t) 0xffff) << bit_offset);
+            *ML[(position - MIN_64B_RANGE) / 4] &= ~(((uint64_t) 0xffff) << bit_offset);
             // Overwrite the word.
-            *lint_memory[(position - MIN_64B_RANGE) / 4] |= ((uint64_t) value) << bit_offset;
+            *ML[(position - MIN_64B_RANGE) / 4] |= ((uint64_t) value) << bit_offset;
         }
     }
     else //invalid address
@@ -673,7 +673,7 @@ void WriteMultipleCoils(unsigned char *buffer, long bufferSize)
             int position = Start + i * 8 + j;
             if (position < MAX_COILS)
             {
-                if (bool_output[position/8][position%8] != nullptr) *bool_output[position/8][position%8] = bitRead(buffer[13 + i], j);
+                if (QX[position / 8][position % 8] != nullptr) *QX[position / 8][position % 8] = bitRead(buffer[13 + i], j);
             }
             else //invalid address
             {

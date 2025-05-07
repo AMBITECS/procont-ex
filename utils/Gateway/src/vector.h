@@ -54,6 +54,54 @@ public:
     using iterator = typename std::vector<T>::iterator;
     using const_iterator = typename std::vector<T>::const_iterator;
 
+    class BitReference {
+        ObservableVector& vec;
+        size_t elem_idx;
+        size_t bit_idx;
+
+    public:
+        BitReference(ObservableVector& v, size_t e_idx, size_t b_idx)
+                : vec(v), elem_idx(e_idx), bit_idx(b_idx)
+        {
+            if (bit_idx >= (sizeof(typename ObservableVector::value_type) * 8)) {
+                throw std::out_of_range("Bit index out of range");
+            }
+        }
+
+        operator bool() const {
+            auto val = vec.get_at_index(elem_idx);
+            return (val >> bit_idx) & 1;
+        }
+
+        BitReference& operator=(bool value) {
+            auto old_val = vec.get_at_index(elem_idx);
+            auto mask = 1 << bit_idx;
+            auto new_val = value ? (old_val | mask) : (old_val & ~mask);
+            vec.set(elem_idx, new_val, mask);
+            return *this;
+        }
+    };
+
+    class ConstBitReference {
+        const ObservableVector& vec;
+        size_t elem_idx;
+        size_t bit_idx;
+
+    public:
+        ConstBitReference(const ObservableVector& v, size_t e_idx, size_t b_idx)
+                : vec(v), elem_idx(e_idx), bit_idx(b_idx)
+        {
+            if (bit_idx >= (sizeof(typename ObservableVector::value_type) * 8)) {
+                throw std::out_of_range("Bit index out of range");
+            }
+        }
+
+        operator bool() const {
+            auto val = vec.get_at_index(elem_idx);
+            return (val >> bit_idx) & 1;
+        }
+    };
+
     template <bool IsConst>
     class BasicProxy {
     public:
@@ -69,6 +117,77 @@ public:
 
         operator value_type() const { //NOLINT
             return vec_.get_at_index(index_);
+        }
+
+        // Оператор доступа по индексу (только для не-const прокси)
+        template <bool C = IsConst, typename = std::enable_if_t<!C>>
+        auto operator[](size_t bit_idx) {
+            static_assert(std::is_integral_v<value_type>,
+                          "Bit access is only available for integral types");
+            return BitReference(vec_, index_, bit_idx);
+        }
+
+        // Const-версия оператора доступа по индексу
+        template <bool C = IsConst, typename = std::enable_if_t<C>>
+        auto operator[](size_t bit_idx) const {
+            static_assert(std::is_integral_v<value_type>,
+                          "Bit access is only available for integral types");
+            return ConstBitReference(vec_, index_, bit_idx);
+        }
+
+        // Универсальный оператор сравнения
+        bool operator==(const T& other) const {
+            return vec_.get_raw(index_) == other;
+        }
+
+        // Специальная перегрузка для nullptr
+        bool operator==(std::nullptr_t)  {
+            if constexpr (!is_pointer) throw std::runtime_error("Cannot compare with pointer");
+            return (vec_.get_raw(index_) == nullptr);
+        }
+
+        // Оператор разыменования
+        value_type& operator*() {
+            if constexpr (is_pointer) {
+                auto ptr = vec_.get_pointer(index_);
+                if (!ptr) throw std::runtime_error("Dereferencing nullptr");
+                return *ptr;
+            }
+            return vec_[index_];
+        }
+
+        const value_type& operator*() const {
+            if constexpr (is_pointer) {
+                auto ptr = vec_.get_pointer(index_);
+                if (!ptr) throw std::runtime_error("Dereferencing nullptr");
+                return *ptr;
+            }
+            return vec_[index_];
+        }
+
+        // Операторы сравнения
+        bool operator==(const value_type& other) const {
+            return vec_.get_at_index(index_) == other;
+        }
+
+        bool operator==(std::nullptr_t) const {
+            if constexpr (!is_pointer) throw std::runtime_error("Cannot compare with pointer");
+            return vec_.get_pointer(index_) == nullptr;
+        }
+
+        bool operator!=(const value_type& other) const {
+            return (*this != other);
+        }
+
+        bool operator!=(std::nullptr_t) const {
+            if constexpr (!is_pointer) throw std::runtime_error("Cannot compare with pointer");
+            return (*this != nullptr);
+        }
+
+        // Универсальный оператор присваивания
+        BasicProxy& operator=(const T& value) {
+            vec_.set_raw(index_, value);
+            return *this;
         }
 
         template <bool C = IsConst, typename = std::enable_if_t<!C>>
@@ -87,7 +206,7 @@ public:
             if constexpr (!IsConst && is_pointer) {
                 if (old_value_) {
                     auto ptr = vec_.get_pointer(index_);
-                    if (ptr && *ptr != *old_value_) {
+                    if (ptr && (*ptr != *old_value_)) {
                         vec_.notify_change(index_, *old_value_, *ptr);
                     }
                 }
@@ -97,6 +216,7 @@ public:
     private:
         VectorType& vec_;
         size_t index_;
+        //value_type old_value_;
         std::optional<value_type> old_value_;
     };
 
@@ -308,6 +428,17 @@ public:
             data_[pos] = value;
         }
         notify_change(pos, old_value, value, bit_mask);
+    }
+
+    T get_raw(size_type pos) const {
+        std::shared_lock lock(mutex_);
+        return (pos < data_.size()) ? data_[pos] : T{};
+    }
+
+    void set_raw(size_type pos, T value) {
+        std::unique_lock lock(mutex_);
+        if (pos >= data_.size()) throw std::out_of_range("...");
+        data_[pos] = value;
     }
 
     value_type get_at_index(size_type pos) const {

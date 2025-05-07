@@ -7,9 +7,8 @@
 #include "vector.h"
 
 template<typename T>
-struct BitwiseTraits {
-    //static constexpr size_t bit_size = sizeof(T) * 8;
-
+struct BitwiseTraits
+{
     static uint64_t get_bit_mask(size_t bit_pos) {
         if (bit_pos >= 64) throw std::out_of_range("Bit position out of 64-bit range");
         return static_cast<uint64_t>(1ULL << bit_pos);
@@ -28,8 +27,10 @@ struct BitwiseTraits {
 template<typename T>
 class BitwiseVector : public ObservableVector<T> {
 public:
+    using size_type = size_t;
     using Base = ObservableVector<T>;
     using Base::Base;
+    using value_type = typename Base::value_type;
 
     // Прокси для доступа к целым элементам
     class ElementProxy {
@@ -38,13 +39,33 @@ public:
     public:
         ElementProxy(Base& v, size_t idx) : vec(v), elem_idx(idx) {}
 
-        operator T() const { //NOLINT
+        operator value_type() const {
             return vec.get_at_index(elem_idx);
         }
 
-        ElementProxy& operator=(const T& value) {
+        // Универсальный оператор присваивания
+        ElementProxy& operator=(const value_type& value) {
             vec.set(elem_idx, value);
             return *this;
+        }
+
+        // Оператор присваивания для указателей
+        template<typename U = T>
+        ElementProxy& operator=(U* ptr) {
+                if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot compare with pointer");
+                vec.set_pointer(elem_idx, ptr);
+                return *this;
+        }
+
+        // Универсальный оператор сравнения
+        bool operator==(const value_type& other) const {
+            return vec.get_at_index(elem_idx) == other;
+        }
+
+        // Специальная перегрузка для nullptr
+        bool operator==(std::nullptr_t) const {
+                if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot compare with pointer");
+                return vec.get_pointer(elem_idx) == nullptr;
         }
     };
 
@@ -55,8 +76,17 @@ public:
     public:
         ConstElementProxy(const Base& v, size_t idx) : vec(v), elem_idx(idx) {}
 
-        operator T() const { //NOLINT
+        operator value_type() const {
             return vec.get_at_index(elem_idx);
+        }
+
+        bool operator==(const value_type& other) const {
+            return vec.get_at_index(elem_idx) == other;
+        }
+
+        bool operator==(std::nullptr_t) const {
+                if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot compare with pointer");
+                return vec.get_pointer(elem_idx) == nullptr;
         }
     };
 
@@ -136,22 +166,78 @@ public:
         }
     };
 
-    // Основной Accessor
+    // Основной Accessor с универсальными операторами
     class Accessor {
         Base& vec;
         size_t elem_idx;
     public:
         Accessor(Base& v, size_t idx) : vec(v), elem_idx(idx) {}
 
+        // Доступ к битам
+        BitReference operator[](size_t bit_idx) {
+            return BitReference(vec, elem_idx, bit_idx);
+        }
+
         // Доступ к целому элементу
         ElementProxy operator*() {
             return ElementProxy(vec, elem_idx);
         }
 
-        // Доступ к битам
-        BitReference operator[](size_t bit_idx) {
-            return BitReference(vec, elem_idx, bit_idx);
+//        // Оператор разыменования
+//        value_type& operator*() {
+//            if constexpr (Base::is_pointer) {
+//                auto ptr = vec.get_pointer(elem_idx);
+//                if (!ptr) throw std::runtime_error("Dereferencing nullptr");
+//                return *ptr;
+//            }
+//            return vec.get_at_index(elem_idx);
+//        }
+
+//        const value_type& operator*() const {
+//            if constexpr (Base::is_pointer) {
+//                auto ptr = vec.get_pointer(elem_idx);
+//                if (!ptr) throw std::runtime_error("Dereferencing nullptr");
+//                return *ptr;
+//            }
+//            return vec.get_at_index(elem_idx);
+//        }
+
+        // Операторы сравнения
+        bool operator!=(const value_type& other) const {
+            return (*this != other);
         }
+
+        // Специальная перегрузка для nullptr
+        bool operator!=(std::nullptr_t) const {
+            if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot compare with pointer");
+            return (*this != nullptr);
+        }
+
+        // Универсальный оператор сравнения
+        bool operator==(const value_type& other) const {
+            return vec.get_at_index(elem_idx) == other;
+        }
+
+        // Специальная перегрузка для nullptr
+        bool operator==(std::nullptr_t) const  {
+            if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot compare with pointer");
+            return vec.get_pointer(elem_idx) == nullptr;
+        }
+
+        // Универсальный оператор присваивания
+            Accessor& operator=(const value_type& value) {
+            vec.set(elem_idx, value);
+            return *this;
+        }
+
+        // Специальная перегрузка для указателей
+        template<typename U>
+        Accessor& operator=(U* ptr) {
+                if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot accept the pointer");
+                vec.set_pointer(elem_idx, ptr);
+                return *this;
+        }
+
     };
 
     // Const-версия Accessor
@@ -168,14 +254,31 @@ public:
         ConstBitReference operator[](size_t bit_idx) const {
             return ConstBitReference(vec, elem_idx, bit_idx);
         }
+
+        bool operator==(const value_type& other) const {
+            return vec.get_at_index(elem_idx) == other;
+        }
+
+        bool operator==(std::nullptr_t) const {
+                if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot compare with pointer");
+                return vec.get_pointer(elem_idx) == nullptr;
+        }
     };
 
+    // Операторы доступа
     Accessor operator[](size_t index) {
         return {*this, index};
     }
 
     ConstAccessor operator[](size_t index) const {
         return {*this, index};
+    }
+
+    // Дополнительные методы для работы с указателями
+    template<typename U = T>
+    void set_pointer(size_type pos, U* ptr) {
+        if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot accept the pointer");
+        Base::set_raw(pos, ptr);
     }
 };
 

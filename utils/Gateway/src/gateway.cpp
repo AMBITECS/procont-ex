@@ -5,38 +5,53 @@
 #include <cctype>
 
 #include "gateway.h"
-#include "registry.h"
 
-// Singleton registry instance
-Registry& reg() {
-    static Registry plc_registry;
-    return plc_registry;
-}
+//// Singleton registry instance
+//Registry& reg() {
+//    static Registry plc_registry;
+//    return plc_registry;
+//}
+
+
+//VEC_BOOL    IX = VEC_BOOL(BUFFER_SIZE);     // Digital Inputs (%IX)
+//VEC_BOOL    QX = VEC_BOOL(BUFFER_SIZE);     // Digital Outputs (%QX)
+
+VEC_BYTE    IB = VEC_BYTE(BUFFER_SIZE);     // Byte Inputs (%IB)
+VEC_BYTE    QB = VEC_BYTE(BUFFER_SIZE);     // Byte Outputs (%QB)
+VEC_UINT    IW = VEC_UINT(BUFFER_SIZE);     // Word Inputs (%IW)
+VEC_UINT    QW = VEC_UINT(BUFFER_SIZE);     // Word Outputs (%QW)
+VEC_UDINT   ID = VEC_UDINT(BUFFER_SIZE);    // Double Word Inputs (%ID)
+VEC_UDINT   QD = VEC_UDINT(BUFFER_SIZE);    // Double Word Outputs (%QD)
+VEC_ULINT   IL = VEC_ULINT(BUFFER_SIZE);    // Long Word Inputs (%IL)
+VEC_ULINT   QL = VEC_ULINT(BUFFER_SIZE);    // Long Word Outputs (%QL)
+VEC_UINT    MW = VEC_UINT(BUFFER_SIZE);     // Memory Words (%MW)
+VEC_UDINT   MD = VEC_UDINT(BUFFER_SIZE);    // Memory Double Words (%MD)
+VEC_ULINT   ML = VEC_ULINT(BUFFER_SIZE);    // Local Data (%ML)
 
 //Booleans
-IEC_BOOL *bool_input [BUFFER_SIZE][8];
-IEC_BOOL *bool_output[BUFFER_SIZE][8];
+IEC_BOOL *IX [BUFFER_SIZE][8];
+IEC_BOOL *QX [BUFFER_SIZE][8];
 
-//Bytes
-IEC_BYTE *byte_input [BUFFER_SIZE];
-IEC_BYTE *byte_output[BUFFER_SIZE];
-
-//Analog I/O
-IEC_UINT *int_input [BUFFER_SIZE];
-IEC_UINT *int_output[BUFFER_SIZE];
-
-//32bit I/O
-IEC_UDINT *dint_input [BUFFER_SIZE];
-IEC_UDINT *dint_output[BUFFER_SIZE];
-
-//64bit I/O
-IEC_ULINT *lint_input [BUFFER_SIZE];
-IEC_ULINT *lint_output[BUFFER_SIZE];
-
-//Memory
-IEC_UINT  *int_memory [BUFFER_SIZE];
-IEC_UDINT *dint_memory[BUFFER_SIZE];
-IEC_ULINT *lint_memory[BUFFER_SIZE];
+////Bytes
+//IEC_BYTE *IB [BUFFER_SIZE];
+//IEC_BYTE *QB [BUFFER_SIZE];
+//
+////Analog I/O
+//IEC_UINT *IW [BUFFER_SIZE];
+//IEC_UINT *QW [BUFFER_SIZE];
+//
+////32bit I/O
+//IEC_UDINT *ID [BUFFER_SIZE];
+//IEC_UDINT *QD [BUFFER_SIZE];
+//
+////64bit I/O
+//IEC_ULINT *IL [BUFFER_SIZE];
+//IEC_ULINT *QL [BUFFER_SIZE];
+//
+////Memory
+//IEC_UINT  *MW [BUFFER_SIZE];
+//IEC_UDINT *MD [BUFFER_SIZE];
+//IEC_ULINT *ML [BUFFER_SIZE];
 
 pthread_mutex_t bufferLock; //mutex for the internal buffers
 

@@ -43,9 +43,9 @@ uint32_t combined_checksum = 0; // Stored checksum for detecting changes
 uint32_t calculate_combined_checksum()
 {
     uint32_t checksum = 0;
-    for (auto & i : int_memory)  if (i != nullptr) checksum ^= *i; // checksum for int_memory
-    for (auto & i : dint_memory) if (i != nullptr) checksum ^= *i; // checksum for dint_memory
-    for (auto & i : lint_memory) if (i != nullptr) checksum ^= (uint32_t)(*i ^ (*i >> 32)); // lint_memory
+    for (auto & i : MW)  if (i != nullptr) checksum ^= *i; // checksum for int_memory
+    for (auto & i : MD) if (i != nullptr) checksum ^= *i; // checksum for dint_memory
+    for (auto & i : ML) if (i != nullptr) checksum ^= (uint32_t)(*i ^ (*i >> 32)); // lint_memory
     return checksum;
 }
 
@@ -79,7 +79,7 @@ void startPstorage()
             }
 
             // Write the contents of int_memory
-            for (auto &i: int_memory) {
+            for (auto &i: MW) {
                 uint16_t value = (i != nullptr) ? *i : 0;
                 if (fwrite(&value, sizeof(uint16_t), 1, file) != 1) {
                     sprintf(log_msg, "Persistent Storage: Error writing int_memory to file\n");
@@ -88,7 +88,7 @@ void startPstorage()
             }
 
             // Write the contents of dint_memory
-            for (auto &i: dint_memory) {
+            for (auto &i: MD) {
                 uint32_t value = (i != nullptr) ? *i : 0;
                 if (fwrite(&value, sizeof(uint32_t), 1, file) != 1) {
                     sprintf(log_msg, "Persistent Storage: Error writing dint_memory to file\n");
@@ -97,7 +97,7 @@ void startPstorage()
             }
 
             // Write the contents of lint_memory
-            for (auto &i: lint_memory) {
+            for (auto &i: ML) {
                 uint64_t value = (i != nullptr) ? *i : 0;
                 if (fwrite(&value, sizeof(uint64_t), 1, file) != 1) {
                     sprintf(log_msg, "Persistent Storage: Error writing lint_memory to file\n");
@@ -151,15 +151,15 @@ void readPersistentStorage()
         // Only assign if value is non-zero
         if (value != 0) {
             // Allocate memory if the pointer is nullptr
-            if (int_memory[i] == nullptr) {
-                int_memory[i] = static_cast<IEC_UINT *>(malloc(sizeof(uint16_t)));
-                if (int_memory[i] == nullptr) {
+            if (MW[i] == nullptr) {
+                MW[i] = static_cast<IEC_UINT *>(malloc(sizeof(uint16_t)));
+                if (MW[i] == nullptr) {
                     sprintf(log_msg, "Error allocating memory for int_memory[%d]", (int)i);
                     log(log_msg);
                     continue;
                 }
             }
-            *int_memory[i] = value; // Store the value
+            *MW[i] = value; // Store the value
         }
     }
 
@@ -182,15 +182,15 @@ void readPersistentStorage()
         // Only assign if value is non-zero
         if (value != 0) {
             // Allocate memory if the pointer is nullptr
-            if (dint_memory[i] == nullptr) {
-                dint_memory[i] = static_cast<IEC_UDINT *>(malloc(sizeof(uint32_t)));
-                if (dint_memory[i] == nullptr) {
+            if (MD[i] == nullptr) {
+                MD[i] = static_cast<IEC_UDINT *>(malloc(sizeof(uint32_t)));
+                if (MD[i] == nullptr) {
                     sprintf(log_msg, "Error allocating memory for dint_memory[%d]", (int)i);
                     log(log_msg);
                     continue;
                 }
             }
-            *dint_memory[i] = value; // Store the value
+            *MD[i] = value; // Store the value
         }
     }
 
@@ -213,15 +213,15 @@ void readPersistentStorage()
         // Only assign if value is non-zero
         if (value != 0) {
             // Allocate memory if the pointer is nullptr
-            if (lint_memory[i] == nullptr) {
-                lint_memory[i] = static_cast<IEC_ULINT *>(malloc(sizeof(uint64_t)));
-                if (lint_memory[i] == nullptr) {
+            if (ML[i] == nullptr) {
+                ML[i] = static_cast<IEC_ULINT *>(malloc(sizeof(uint64_t)));
+                if (ML[i] == nullptr) {
                     sprintf(log_msg, "Error allocating memory for lint_memory[%d]", (int)i);
                     log(log_msg);
                     continue;
                 }
             }
-            *lint_memory[i] = value; // Store the value
+            *ML[i] = value; // Store the value
         }
     }
 

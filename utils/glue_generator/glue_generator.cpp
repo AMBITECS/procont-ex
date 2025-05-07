@@ -26,29 +26,29 @@ void generateHeader(ostream& glueVars)
 #include \"iec_std_lib.h\"\r\n\
 \r\n\
 //Booleans\r\n\
-extern IEC_BOOL *bool_input[][8];\r\n\
-extern IEC_BOOL *bool_output[][8];\r\n\
+extern IEC_BOOL *IX[][8];\r\n\
+extern IEC_BOOL *QX[][8];\r\n\
 \r\n\
 //Bytes\r\n\
-extern IEC_BYTE *byte_input[];\r\n\
-extern IEC_BYTE *byte_output[];\r\n\
+extern IEC_BYTE *IB[];\r\n\
+extern IEC_BYTE *QB[];\r\n\
 \r\n\
 //Analog I/O\r\n\
-extern IEC_UINT *int_input[];\r\n\
-extern IEC_UINT *int_output[];\r\n\
+extern IEC_UINT *IW[];\r\n\
+extern IEC_UINT *QW[];\r\n\
 \r\n\
 //32bit I/O\r\n\
-extern IEC_UDINT *dint_input[];\r\n\
-extern IEC_UDINT *dint_output[];\r\n\
+extern IEC_UDINT *ID[];\r\n\
+extern IEC_UDINT *QD[];\r\n\
 \r\n\
 //64bit I/O\r\n\
-extern IEC_ULINT *lint_input[];\r\n\
-extern IEC_ULINT *lint_output[];\r\n\
+extern IEC_ULINT *IL[];\r\n\
+extern IEC_ULINT *QL[];\r\n\
 \r\n\
 //Memory\r\n\
-extern IEC_UINT *int_memory[];\r\n\
-extern IEC_UDINT *dint_memory[];\r\n\
-extern IEC_ULINT *lint_memory[];\r\n\
+extern IEC_UINT *MW[];\r\n\
+extern IEC_UDINT *MD[];\r\n\
+extern IEC_ULINT *ML[];\r\n\
 \r\n\
 \r\n\
 #define __LOCATED_VAR(type, name, ...) type __##name;\r\n\
@@ -151,19 +151,19 @@ void glueVar(ostream& glueVars, char *varName, char *varType)
 		switch (varName[3])
 		{
 			case 'X':
-				glueVars << "\tbool_input[" << pos1 << "][" << pos2 << "] = (IEC_BOOL *)" << varName << ";\r\n";
+				glueVars << "\tIX[" << pos1 << "][" << pos2 << "] = (IEC_BOOL *)" << varName << ";\r\n";
 				break;
 			case 'B':
-				glueVars << "\tbyte_input[" << pos1 << "] = (IEC_BYTE *)" << varName << ";\r\n";
+				glueVars << "\tIB[" << pos1 << "] = (IEC_BYTE *)" << varName << ";\r\n";
 				break;
 			case 'W':
-				glueVars << "\tint_input[" << pos1 << "] = (IEC_UINT *)" << varName << ";\r\n";
+				glueVars << "\tIW[" << pos1 << "] = (IEC_UINT *)" << varName << ";\r\n";
 				break;
 			case 'D':
-				glueVars << "\tdint_input[" << pos1 << "] = (IEC_UDINT *)" << varName << ";\r\n";
+				glueVars << "\tID[" << pos1 << "] = (IEC_UDINT *)" << varName << ";\r\n";
 				break;
 			case 'L':
-				glueVars << "\tlint_input[" << pos1 << "] = (IEC_ULINT *)" << varName << ";\r\n";
+				glueVars << "\tIL[" << pos1 << "] = (IEC_ULINT *)" << varName << ";\r\n";
 				break;
 		}
 	}
@@ -173,19 +173,19 @@ void glueVar(ostream& glueVars, char *varName, char *varType)
 		switch (varName[3])
 		{
 			case 'X':
-				glueVars << "\tbool_output[" << pos1 << "][" << pos2 << "] = (IEC_BOOL *)" << varName << ";\r\n";
+				glueVars << "\tQX[" << pos1 << "][" << pos2 << "] = (IEC_BOOL *)" << varName << ";\r\n";
 				break;
            	case 'B':
-				glueVars << "\tbyte_output[" << pos1 << "] = (IEC_BYTE *)" << varName << ";\r\n";
+				glueVars << "\tQB[" << pos1 << "] = (IEC_BYTE *)" << varName << ";\r\n";
 				break;
 			case 'W':
-				glueVars << "\tint_output[" << pos1 << "] = (IEC_UINT *)" << varName << ";\r\n";
+				glueVars << "\tQW[" << pos1 << "] = (IEC_UINT *)" << varName << ";\r\n";
 				break;
 			case 'D':
-				glueVars << "\tdint_output[" << pos1 << "] = (IEC_UDINT *)" << varName << ";\r\n";
+				glueVars << "\tQD[" << pos1 << "] = (IEC_UDINT *)" << varName << ";\r\n";
 				break;
 			case 'L':
-				glueVars << "\tlint_input[" << pos1 << "] = (IEC_ULINT *)" << varName << ";\r\n";
+				glueVars << "\tQL[" << pos1 << "] = (IEC_ULINT *)" << varName << ";\r\n";
 				break;
 		}
 	}
@@ -195,16 +195,16 @@ void glueVar(ostream& glueVars, char *varName, char *varType)
 		switch (varName[3])
 		{
 			case 'W':
-				glueVars << "\tint_memory[" << pos1 << "] = (IEC_UINT *)" << varName << ";\r\n";
+				glueVars << "\tMW[" << pos1 << "] = (IEC_UINT *)" << varName << ";\r\n";
 				break;
 			case 'D':
-				glueVars << "\tdint_memory[" << pos1 << "] = (IEC_UDINT *)" << varName << ";\r\n";
+				glueVars << "\tMD[" << pos1 << "] = (IEC_UDINT *)" << varName << ";\r\n";
 				break;
 			case 'L':
 				if (pos1 > 1023)
 					glueVars << "\tspecial_functions[" << (pos1-1024) << "] = (IEC_ULINT *)" << varName << ";\r\n";
 				else
-					glueVars << "\tlint_memory[" << pos1 << "] = (IEC_ULINT *)" << varName << ";\r\n";
+					glueVars << "\tML[" << pos1 << "] = (IEC_ULINT *)" << varName << ";\r\n";
 				break;
 		}
 	}

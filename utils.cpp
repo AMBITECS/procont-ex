@@ -149,11 +149,11 @@ void *interactiveServerThread(void *arg) {
  * effectively disabling them.
  */
 void disableOutputs() {
-    for (auto & i : bool_output) {
+    for (auto & i : QX) {
         for (auto &j: i) if (j != nullptr) *j = 0; // Disable digital outputs
     }
-    for (auto & i : byte_output) if (i != nullptr) *i = 0; // Disable byte outputs
-    for (auto & i : int_output)   if (i != nullptr) *i = 0; // Disable analog outputs
+    for (auto & i : QB) if (i != nullptr) *i = 0; // Disable byte outputs
+    for (auto & i : QW)   if (i != nullptr) *i = 0; // Disable analog outputs
 }
 
 /**

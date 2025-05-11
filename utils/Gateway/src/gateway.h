@@ -13,8 +13,8 @@
 #include "bitwise.h"
 #include "iec_types.h"
 
-constexpr size_t BUFFER_MAXSIZE = 65536;    // Standard PLC addressing space
-constexpr size_t BUFFER_SIZE    = 1024;     // Current PLC registers size
+#define BUFFER_MAXSIZE 65536;    // Standard PLC addressing space
+#define BUFFER_SIZE    1024     // Current PLC registers size
 
 // ----------------------------------------------------------------------------
 // PLC Register Types

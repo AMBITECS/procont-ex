@@ -40,7 +40,7 @@ public:
         ElementProxy(Base& v, size_t idx) : vec(v), elem_idx(idx) {}
 
         operator value_type() const {
-            return vec.get_at_index(elem_idx);
+            return vec.get(elem_idx);
         }
 
         // Универсальный оператор присваивания
@@ -59,7 +59,7 @@ public:
 
         // Универсальный оператор сравнения
         bool operator==(const value_type& other) const {
-            return vec.get_at_index(elem_idx) == other;
+            return vec.get(elem_idx) == other;
         }
 
         // Специальная перегрузка для nullptr
@@ -77,11 +77,11 @@ public:
         ConstElementProxy(const Base& v, size_t idx) : vec(v), elem_idx(idx) {}
 
         operator value_type() const {
-            return vec.get_at_index(elem_idx);
+            return vec.get(elem_idx);
         }
 
         bool operator==(const value_type& other) const {
-            return vec.get_at_index(elem_idx) == other;
+            return vec.get(elem_idx) == other;
         }
 
         bool operator==(std::nullptr_t) const {
@@ -110,7 +110,7 @@ public:
                 if (!ptr) throw std::runtime_error("Null pointer dereference");
                 return BitwiseTraits<T>::get_bit(*ptr, bit_idx);
             } else {
-                auto value = vec.get_at_index(elem_idx);
+                auto value = vec.get(elem_idx);
                 return BitwiseTraits<T>::get_bit(value, bit_idx);
             }
         }
@@ -129,7 +129,7 @@ public:
                     vec.notify_change(elem_idx, old_val, new_val, mask);
                 }
             } else {
-                T old_val = vec.get_at_index(elem_idx);
+                T old_val = vec.get(elem_idx);
                 T new_val = BitwiseTraits<T>::set_bit(old_val, bit_idx, value);
 
                 if (old_val != new_val) {
@@ -160,7 +160,7 @@ public:
                 if (!ptr) throw std::runtime_error("Null pointer dereference");
                 return BitwiseTraits<T>::get_bit(*ptr, bit_idx);
             } else {
-                const auto value = vec.get_at_index(elem_idx);
+                const auto value = vec.get(elem_idx);
                 return BitwiseTraits<T>::get_bit(value, bit_idx);
             }
         }
@@ -215,7 +215,7 @@ public:
 
         // Универсальный оператор сравнения
         bool operator==(const value_type& other) const {
-            return vec.get_at_index(elem_idx) == other;
+            return vec.get(elem_idx) == other;
         }
 
         // Специальная перегрузка для nullptr
@@ -256,7 +256,7 @@ public:
         }
 
         bool operator==(const value_type& other) const {
-            return vec.get_at_index(elem_idx) == other;
+            return vec.get(elem_idx) == other;
         }
 
         bool operator==(std::nullptr_t) const {

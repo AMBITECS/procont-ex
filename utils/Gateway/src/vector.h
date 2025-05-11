@@ -47,177 +47,115 @@ protected:
 public:
     using size_type = size_t;
     using difference_type = ptrdiff_t;
-    using reference = T&;
-    using const_reference = const T&;
-    using pointer = T*;
-    using const_pointer = const T*;
+    using reference = value_type&;
+    using const_reference = const value_type&;
+    using pointer = value_type*;
+    using const_pointer = const value_type*;
     using iterator = typename std::vector<T>::iterator;
     using const_iterator = typename std::vector<T>::const_iterator;
-
-    class BitReference {
-        ObservableVector& vec;
-        size_t elem_idx;
-        size_t bit_idx;
-
-    public:
-        BitReference(ObservableVector& v, size_t e_idx, size_t b_idx)
-                : vec(v), elem_idx(e_idx), bit_idx(b_idx)
-        {
-            if (bit_idx >= (sizeof(typename ObservableVector::value_type) * 8)) {
-                throw std::out_of_range("Bit index out of range");
-            }
-        }
-
-        operator bool() const {
-            auto val = vec.get_at_index(elem_idx);
-            return (val >> bit_idx) & 1;
-        }
-
-        BitReference& operator=(bool value) {
-            auto old_val = vec.get_at_index(elem_idx);
-            auto mask = 1 << bit_idx;
-            auto new_val = value ? (old_val | mask) : (old_val & ~mask);
-            vec.set(elem_idx, new_val, mask);
-            return *this;
-        }
-    };
-
-    class ConstBitReference {
-        const ObservableVector& vec;
-        size_t elem_idx;
-        size_t bit_idx;
-
-    public:
-        ConstBitReference(const ObservableVector& v, size_t e_idx, size_t b_idx)
-                : vec(v), elem_idx(e_idx), bit_idx(b_idx)
-        {
-            if (bit_idx >= (sizeof(typename ObservableVector::value_type) * 8)) {
-                throw std::out_of_range("Bit index out of range");
-            }
-        }
-
-        operator bool() const {
-            auto val = vec.get_at_index(elem_idx);
-            return (val >> bit_idx) & 1;
-        }
-    };
 
     template <bool IsConst>
     class BasicProxy {
     public:
         using VectorType = std::conditional_t<IsConst, const ObservableVector, ObservableVector>;
-
-        BasicProxy(VectorType& vec, size_t index) : vec_(vec), index_(index) {
-            if constexpr (!IsConst && is_pointer) {
-                if (auto ptr = vec_.get_pointer(index_)) {
-                    old_value_ = *ptr;
-                }
-            }
-        }
-
-        operator value_type() const { //NOLINT
-            return vec_.get_at_index(index_);
-        }
-
-        // Оператор доступа по индексу (только для не-const прокси)
-        template <bool C = IsConst, typename = std::enable_if_t<!C>>
-        auto operator[](size_t bit_idx) {
-            static_assert(std::is_integral_v<value_type>,
-                          "Bit access is only available for integral types");
-            return BitReference(vec_, index_, bit_idx);
-        }
-
-        // Const-версия оператора доступа по индексу
-        template <bool C = IsConst, typename = std::enable_if_t<C>>
-        auto operator[](size_t bit_idx) const {
-            static_assert(std::is_integral_v<value_type>,
-                          "Bit access is only available for integral types");
-            return ConstBitReference(vec_, index_, bit_idx);
-        }
-
-        // Универсальный оператор сравнения
-        bool operator==(const T& other) const {
-            return vec_.get_raw(index_) == other;
-        }
-
-        // Специальная перегрузка для nullptr
-        bool operator==(std::nullptr_t)  {
-            if constexpr (!is_pointer) throw std::runtime_error("Cannot compare with pointer");
-            return (vec_.get_raw(index_) == nullptr);
-        }
-
-        // Оператор разыменования
-        value_type& operator*() {
-            if constexpr (is_pointer) {
-                auto ptr = vec_.get_pointer(index_);
-                if (!ptr) throw std::runtime_error("Dereferencing nullptr");
-                return *ptr;
-            }
-            return vec_[index_];
-        }
-
-        const value_type& operator*() const {
-            if constexpr (is_pointer) {
-                auto ptr = vec_.get_pointer(index_);
-                if (!ptr) throw std::runtime_error("Dereferencing nullptr");
-                return *ptr;
-            }
-            return vec_[index_];
-        }
-
-        // Операторы сравнения
-        bool operator==(const value_type& other) const {
-            return vec_.get_at_index(index_) == other;
-        }
-
-        bool operator==(std::nullptr_t) const {
-            if constexpr (!is_pointer) throw std::runtime_error("Cannot compare with pointer");
-            return vec_.get_pointer(index_) == nullptr;
-        }
-
-        bool operator!=(const value_type& other) const {
-            return (*this != other);
-        }
-
-        bool operator!=(std::nullptr_t) const {
-            if constexpr (!is_pointer) throw std::runtime_error("Cannot compare with pointer");
-            return (*this != nullptr);
-        }
-
-        // Универсальный оператор присваивания
-        BasicProxy& operator=(const T& value) {
-            vec_.set_raw(index_, value);
-            return *this;
-        }
-
-        template <bool C = IsConst, typename = std::enable_if_t<!C>>
-        BasicProxy& operator=(const value_type& value) {
-            if constexpr (is_pointer) {
-                auto ptr = vec_.get_pointer(index_);
-                if (!ptr) throw std::runtime_error("Cannot assign to nullptr");
-                *ptr = value;
-            } else {
-                vec_.set(index_, value);
-            }
-            return *this;
-        }
-
-        ~BasicProxy() {
-            if constexpr (!IsConst && is_pointer) {
-                if (old_value_) {
-                    auto ptr = vec_.get_pointer(index_);
-                    if (ptr && (*ptr != *old_value_)) {
-                        vec_.notify_change(index_, *old_value_, *ptr);
-                    }
-                }
-            }
-        }
+        using original_type = T;
+        using value_type = typename ObservableVector::value_type; // Убираем element_type, используем только value_type
 
     private:
         VectorType& vec_;
         size_t index_;
-        //value_type old_value_;
-        std::optional<value_type> old_value_;
+        std::conditional_t<ObservableVector::is_pointer && !IsConst,
+                std::optional<value_type>,
+                std::monostate> old_value_;
+
+        pointer get_ptr() const noexcept {
+            std::shared_lock lock(vec_.mutex_);
+            //static_assert(ObservableVector::is_pointer, "call get_ptr() with non-pointer template");
+            return (index_ < vec_.data_.size()) ? vec_.data_[index_] : nullptr;
+        }
+
+    public:
+        BasicProxy(VectorType& vec, size_t index) : vec_(vec), index_(index) {
+            if constexpr (!IsConst && ObservableVector::is_pointer) {
+                if (auto ptr = get_ptr()) {
+                    old_value_.emplace(*ptr);
+                }
+            }
+        }
+
+        ~BasicProxy() {
+            if constexpr (!IsConst) {
+                if constexpr (ObservableVector::is_pointer) {
+                    if (old_value_) {
+                        if (auto ptr = get_ptr(); ptr && *ptr != *old_value_) {
+                            vec_.notify_change(index_, *old_value_, *ptr);
+                        }
+                    }
+                } else {
+                    // Для не-указателей уведомление отправляется в operator=
+                }
+            }
+        }
+
+        // Прозрачное преобразование к оригинальному типу T
+        operator original_type() const { //NOLINT
+            std::shared_lock lock(vec_.mutex_);
+            if (index_ >= vec_.data_.size())  throw std::out_of_range("Index out of range");
+            return vec_.data_[index_];
+        }
+
+        // Операторы сравнения с original_type
+        bool operator==(const original_type& other) const {
+            return static_cast<original_type>(*this) == other;
+        }
+
+        bool operator!=(const original_type& other) const {
+            return !(*this == other); //NOLINT
+        }
+
+        // Присваивание
+        BasicProxy& operator=(const original_type& value) {
+            static_assert(!IsConst, "Cannot assign to const proxy");
+            std::unique_lock lock(vec_.mutex_);
+
+            if constexpr (ObservableVector::is_pointer) {
+                auto old_ptr = vec_.data_[index_];
+                value_type old_val = old_ptr ? *old_ptr : value_type{};
+                vec_.data_[index_] = value;
+                if (!old_value_ && old_ptr) {
+                    old_value_.emplace(old_val);
+                }
+                if (value && old_ptr && *old_ptr != *value) {
+                    lock.unlock();
+                    vec_.notify_change(index_, old_val, *value);
+                }
+            } else {
+                value_type old_val = vec_.data_[index_];
+                vec_.data_[index_] = value;
+                if (old_val != value) {
+                    lock.unlock();
+                    vec_.notify_change(index_, old_val, value);
+                }
+            }
+            return *this;
+        }
+
+        // Разыменование (только для pointer-типов)
+        template <typename U = T>
+        auto operator*() -> std::enable_if_t<std::is_pointer_v<U>, value_type&> {
+            static_assert(!IsConst, "Cannot dereference const proxy");
+            auto ptr = get_ptr();
+            if (!ptr) throw std::runtime_error("Dereferencing nullptr");
+            if (!old_value_) old_value_.emplace(*ptr);
+            return *ptr;
+        }
+
+        template <typename U = T>
+        auto operator*() const -> std::enable_if_t<std::is_pointer_v<U>, const value_type&> {
+            auto ptr = get_ptr();
+            if (!ptr) throw std::runtime_error("Dereferencing nullptr");
+            return *ptr;
+        }
     };
 
     using Proxy = BasicProxy<false>;
@@ -405,7 +343,7 @@ public:
 
         // Уведомления для новых элементов
         for (size_type i = old_size; i < count; ++i) {
-            notify_change(i, value_type{}, get_at_index(i));
+            notify_change(i, value_type{}, get(i));
         }
     }
 
@@ -413,14 +351,24 @@ public:
         std::unique_lock lock(mutex_);
         size_type index = data_.size();
         data_.push_back(value);
-        notify_change(index, value_type{}, get_at_index(index));
+        notify_change(index, value_type{}, get(index));
+    }
+
+    value_type get(size_type pos) const {
+        std::shared_lock lock(mutex_);
+        if (pos >= data_.size())  throw std::out_of_range("Index out of range");
+        if constexpr (is_pointer) {
+            if (!data_[pos]) throw std::runtime_error("Null pointer dereference");
+            return *data_[pos];
+        } else {
+            return data_[pos];
+        }
     }
 
     void set(size_type pos, const value_type& value, uint64_t bit_mask = 0) {
         std::unique_lock lock(mutex_);
-        value_type old_value = get_at_index(pos);
+        value_type old_value = get(pos);
         if (old_value == value) return;
-
         if constexpr (is_pointer) {
             if (!data_[pos]) throw std::runtime_error("Null pointer");
             *data_[pos] = value;
@@ -439,27 +387,6 @@ public:
         std::unique_lock lock(mutex_);
         if (pos >= data_.size()) throw std::out_of_range("...");
         data_[pos] = value;
-    }
-
-    value_type get_at_index(size_type pos) const {
-        std::shared_lock lock(mutex_);
-        if (pos >= data_.size()) {
-            throw std::out_of_range("Index out of range");
-        }
-
-        if constexpr (is_pointer) {
-            if (!data_[pos]) {
-                throw std::runtime_error("Null pointer dereference");
-            }
-            return *data_[pos];
-        } else {
-            return data_[pos];
-        }
-    }
-
-    pointer get_pointer(size_type pos) noexcept {
-        std::shared_lock lock(mutex_);
-        return (pos < data_.size()) ? data_[pos] : nullptr;
     }
 
 protected:

@@ -1,49 +1,69 @@
-#ifndef DATA_SERVER_H
-#define DATA_SERVER_H
+//-----------------------------------------------------------------------------
+// Copyright © 2016-2025 AMBITECS <info@ambi.biz>
+//-----------------------------------------------------------------------------
+#pragma once
 
 #include <map>
 #include <set>
 #include <queue>
 #include <mutex>
-#include <shared_mutex>
 #include <thread>
 #include <functional>
 #include <condition_variable>
 #include <atomic>
 #include <chrono>
 #include <vector>
+#include <exception>
+#include <iostream>
 #include "variant.h"
-#include "on_data_change.h"
+
+struct OnDataChange {
+    using TimeStamp = std::chrono::system_clock::time_point;
+
+    std::string key;
+    uint64_t bit_mask;
+    VARIANT old_value;
+    VARIANT new_value;
+    TimeStamp timestamp;
+
+    OnDataChange(std::string k, uint64_t mask, VARIANT old_val, VARIANT new_val,
+                 TimeStamp time = std::chrono::system_clock::now())
+            : key(std::move(k)), bit_mask(mask),
+              old_value(std::move(old_val)),
+              new_value(std::move(new_val)),
+              timestamp(time) {}
+
+    [[nodiscard]] bool is_bit_change() const noexcept {
+        return bit_mask != 0;
+    }
+};
 
 class DataServer {
 public:
-    using Callback = std::function<void(const std::string& key, const OnDataChange&)>;
+    using Callback = std::function<void(const std::vector<OnDataChange>&)>;
     using ClientID = std::string;
     using Topic = std::string;
     using TopicMap = std::map<Topic, Callback>;
     using SubscriptionMap = std::map<Topic, std::set<std::string>>;
 
-    // Элемент данных клиента
     struct ClientItem {
-        size_t index{};       // Позиция в ObservableVector
-        uint64_t mask{};      // Отслеживаемая битовая маска
-        VAR_TYPE type{};      // Ожидаемый тип данных
-        VARIANT value{};      // Текущее значение
+        size_t index{};
+        uint64_t mask{};
+        VAR_TYPE type{};
+        VARIANT value{};
     };
     using ItemMap = std::map<std::string, ClientItem>;
 
-    // Данные клиента
     struct ClientData {
-        ItemMap items;          // Упорядоченные по key
-        TopicMap topics;        // Упорядоченные по topic
-        SubscriptionMap subscriptions; // Упорядоченные подписки
+        ItemMap items;
+        TopicMap topics;
+        SubscriptionMap subscriptions;
     };
     using ClientMap = std::map<ClientID, ClientData>;
 
     DataServer() : worker_thread_(&DataServer::worker_function, this) {}
     ~DataServer() { stop_processing(); }
 
-    // API для клиентов
     void addClient(const ClientID& id) {
         std::unique_lock lock(clients_mutex_);
         clients_.try_emplace(id);
@@ -54,12 +74,10 @@ public:
         clients_.erase(id);
     }
 
-    void addItems(const ClientID& id, const std::vector<std::pair<std::string, ClientItem>>& items) {
+    void addItems(const ClientID& id, const ItemMap& items) {
         std::unique_lock lock(clients_mutex_);
         auto& client = clients_[id];
-        for (const auto& [key, item] : items) {
-            client.items[key] = item;
-        }
+        client.items.insert(items.begin(), items.end());
     }
 
     void addTopic(const ClientID& id, const Topic& topic, Callback callback) {
@@ -67,18 +85,20 @@ public:
         clients_[id].topics[topic] = std::move(callback);
     }
 
-    void subscribe(const ClientID& id, const Topic& topic, const std::vector<std::string>& keys) {
+    void removeTopic(const ClientID& id, const Topic& topic) {
         std::unique_lock lock(clients_mutex_);
-        auto& subs = clients_[id].subscriptions[topic];  // Исправлено: было subscriptions -> subscriptions
-        for (const auto& key : keys) {
-            subs.insert(key);
-        }
+        clients_[id].topics.erase(topic);
     }
 
-    void unsubscribe(const ClientID& id, const Topic& topic, const std::vector<std::string>& keys) {
+    void subscribe(const ClientID& id, const Topic& topic, const std::set<std::string>& keys) {
         std::unique_lock lock(clients_mutex_);
-        if (auto it = clients_[id].subscriptions.find(topic);
-                it != clients_[id].subscriptions.end()) {
+        auto& subs = clients_[id].subscriptions[topic];
+        subs.insert(keys.begin(), keys.end());
+    }
+
+    void unsubscribe(const ClientID& id, const Topic& topic, const std::set<std::string>& keys) {
+        std::unique_lock lock(clients_mutex_);
+        if (auto it = clients_[id].subscriptions.find(topic); it != clients_[id].subscriptions.end()) {
             for (const auto& key : keys) {
                 it->second.erase(key);
             }
@@ -86,6 +106,10 @@ public:
     }
 
     void enqueue(const std::string& key, OnDataChange&& change) {
+        if (enable_logging_) {
+            log_message(change);
+        }
+
         {
             std::lock_guard lock(queue_mutex_);
             processing_queue_.emplace(key, std::move(change));
@@ -96,212 +120,93 @@ public:
     void stop_processing() noexcept {
         if (worker_running_.exchange(false)) {
             queue_cv_.notify_all();
-            if (worker_thread_.joinable()) {
-                worker_thread_.join();
-            }
         }
+    }
+
+    void enable_logging(bool enable) noexcept {
+        enable_logging_ = enable;
     }
 
 private:
     ClientMap clients_;
-    mutable std::shared_mutex clients_mutex_;
-
+    mutable std::mutex clients_mutex_;
     std::queue<std::pair<std::string, OnDataChange>> processing_queue_;
     mutable std::mutex queue_mutex_;
     std::condition_variable queue_cv_;
-
     std::thread worker_thread_;
     std::atomic<bool> worker_running_{true};
+    std::atomic<bool> enable_logging_{false};
 
     void worker_function() {
+        using namespace std::chrono_literals;
+
+        std::vector<OnDataChange> batch_changes;
+
         while (worker_running_) {
-            std::unique_lock lock(queue_mutex_);
-            queue_cv_.wait(lock, [this] {
-                return !processing_queue_.empty() || !worker_running_;
-            });
+            batch_changes.clear();
 
-            if (!worker_running_) break;
-            if (processing_queue_.empty()) continue;
+            {
+                std::unique_lock lock(queue_mutex_);
+                queue_cv_.wait_for(lock, 100ms, [this] {
+                    return !processing_queue_.empty() || !worker_running_;
+                });
 
-            auto [key, change] = std::move(processing_queue_.front());
-            processing_queue_.pop();
-            lock.unlock();
+                if (!worker_running_) break;
 
-            process_change(key, change);
+                while (!processing_queue_.empty()) {
+                    batch_changes.emplace_back(std::move(processing_queue_.front().second));
+                    processing_queue_.pop();
+                }
+            }
+
+            if (!batch_changes.empty()) {
+                process_changes(batch_changes);
+            }
         }
     }
 
-    void process_change(const std::string& key, const OnDataChange& change) {
-        std::shared_lock lock(clients_mutex_);
+    void process_changes(const std::vector<OnDataChange>& changes) {
+        std::lock_guard lock(clients_mutex_);
 
         for (auto& [client_id, client_data] : clients_) {
-            if (!client_data.items.count(key)) continue;
-
             for (auto& [topic, callback] : client_data.topics) {
-                if (auto subs = client_data.subscriptions.find(topic);
-                        subs != client_data.subscriptions.end() && subs->second.count(key))
-                {
+                std::vector<OnDataChange> filtered_changes;
+
+                for (const auto& change : changes) {
+                    if (auto subs = client_data.subscriptions.find(topic);
+                            subs != client_data.subscriptions.end() &&
+                            subs->second.count(change.key) &&
+                            client_data.items.count(change.key)) {
+                        filtered_changes.push_back(change);
+                    }
+                }
+
+                if (!filtered_changes.empty()) {
                     try {
-                        callback(key, change);
+                        callback(filtered_changes);
+                    } catch (const std::exception& e) {
+                        log_error(client_id, topic, e.what());
                     } catch (...) {
-                        // Логирование ошибки
+                        log_error(client_id, topic, "Unknown error");
                     }
                 }
             }
         }
     }
+
+    void log_message(const OnDataChange& change) {
+        std::lock_guard lock(queue_mutex_);
+        std::cout << "[LOG] Key: " << change.key
+                  << " Old: " << change.old_value
+                  << " New: " << change.new_value
+                  << std::endl;
+    }
+
+    void log_error(const ClientID& client, const Topic& topic, const std::string& error) {
+        std::lock_guard lock(queue_mutex_);
+        std::cerr << "[ERROR] Client: " << client
+                  << " Topic: " << topic
+                  << " Error: " << error
+                  << std::endl;
+    }
 };
-
-#endif // DATA_SERVER_H
-
-//#ifndef PROCONT_EX_PROCESSOR_H
-//#define PROCONT_EX_PROCESSOR_H
-//
-//#include <map>
-//#include <queue>
-//#include <mutex>
-//#include <shared_mutex>
-//#include <thread>
-//#include <functional>
-//#include <condition_variable>
-//#include <atomic>
-//#include <unordered_set>
-//#include "on_data_change.h"
-//#include "variant.h"
-//
-//class DataProcessor {
-//public:
-//    using Callback = std::function<void(const OnDataChange&)>;
-//    using TagType = int;
-//
-//    struct Subscription {
-//        size_t index;
-//        uint64_t bit_mask;
-//        Callback callback;
-//    };
-//
-//    DataProcessor() : worker_thread_(&DataProcessor::worker_function, this) {}
-//
-//    ~DataProcessor() {
-//        stop_processing();
-//    }
-//
-//    void subscribe(size_t index, uint64_t bit_mask, Callback callback, TagType tag = 0) {
-//        std::unique_lock lock(subscriptions_mutex_);
-//        tag_to_subscriptions_[tag].emplace_back(Subscription{index, bit_mask, std::move(callback)});
-//        tracked_indices_.insert(index);
-//    }
-//
-//    void unsubscribe_by_tag(TagType tag) {
-//        std::unique_lock lock(subscriptions_mutex_);
-//        if (auto it = tag_to_subscriptions_.find(tag); it != tag_to_subscriptions_.end()) {
-//            tag_to_subscriptions_.erase(it);
-//            rebuild_tracked_indices();
-//        }
-//    }
-//
-//    void enqueue(OnDataChange&& change) {
-//        {
-//            std::lock_guard lock(queue_mutex_);
-//            processing_queue_.push(std::move(change));
-//        }
-//        queue_cv_.notify_one();
-//    }
-//
-//    void stop_processing() noexcept {
-//        if (worker_running_.exchange(false)) {
-//            queue_cv_.notify_all();
-//            if (worker_thread_.joinable()) {
-//                worker_thread_.join();
-//            }
-//        }
-//    }
-//
-//    template<typename ValueGetter>
-//    void verify_values(ValueGetter&& getter) {
-//        std::shared_lock lock(subscriptions_mutex_);
-//        for (const auto& index : tracked_indices_) {
-//            for (const auto& [tag, subs] : tag_to_subscriptions_) {
-//                for (const auto& sub : subs) {
-//                    if (sub.index == index) {
-//                        try {
-//                            auto current_value = getter(index);
-//                            OnDataChange change{
-//                                    index,
-//                                    0, // bit_mask
-//                                    VARIANT(), // old_value (не используется при verify)
-//                                    convert_to_variant(current_value),
-//                                    std::chrono::system_clock::now()
-//                            };
-//                            enqueue(std::move(change));
-//                        } catch (...) {
-//                            // Логирование ошибки
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//private:
-//    std::map<TagType, std::vector<Subscription>> tag_to_subscriptions_;
-//    std::unordered_set<size_t> tracked_indices_;
-//    mutable std::shared_mutex subscriptions_mutex_;
-//
-//    std::queue<OnDataChange> processing_queue_;
-//    mutable std::mutex queue_mutex_;
-//    std::condition_variable queue_cv_;
-//
-//    std::thread worker_thread_;
-//    std::atomic<bool> worker_running_{true};
-//
-//    void rebuild_tracked_indices() {
-//        tracked_indices_.clear();
-//        for (const auto& [tag, subs] : tag_to_subscriptions_) {
-//            for (const auto& sub : subs) {
-//                tracked_indices_.insert(sub.index);
-//            }
-//        }
-//    }
-//
-//    void process_change(const OnDataChange& change) {
-//        std::shared_lock lock(subscriptions_mutex_);
-//        for (const auto& [tag, subs] : tag_to_subscriptions_) {
-//            for (const auto& sub : subs) {
-//                if (sub.index == change.index &&
-//                    (sub.bit_mask == 0 || (sub.bit_mask & change.bit_mask))) {
-//                    try {
-//                        sub.callback(change);
-//                    } catch (...) {
-//                        // Логирование ошибки
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    void worker_function() {
-//        while (worker_running_) {
-//            std::unique_lock lock(queue_mutex_);
-//            queue_cv_.wait(lock, [this] {
-//                return !processing_queue_.empty() || !worker_running_;
-//            });
-//
-//            if (!worker_running_) break;
-//            if (processing_queue_.empty()) continue;
-//
-//            OnDataChange change = std::move(processing_queue_.front());
-//            processing_queue_.pop();
-//            lock.unlock();
-//
-//            process_change(change);
-//        }
-//    }
-//
-//    template<typename T>
-//    static VARIANT convert_to_variant(const T& value) {
-//        return VARIANT(value);
-//    }
-//};
-//
-//#endif // PROCONT_EX_PROCESSOR_H

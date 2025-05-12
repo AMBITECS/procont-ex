@@ -76,7 +76,7 @@ public:
     public:
         ConstElementProxy(const Base& v, size_t idx) : vec(v), elem_idx(idx) {}
 
-        operator value_type() const {
+        operator value_type() const { //NOLINT
             return vec.get(elem_idx);
         }
 
@@ -292,11 +292,11 @@ public:
     }
 
     // Дополнительные методы для работы с указателями
-    template<typename U = T>
-    void set_pointer(size_type pos, U* ptr) {
-        if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot accept the pointer");
-        Base::set_raw(pos, ptr);
-    }
+//    template<typename U = T>
+//    void set_pointer(size_type pos, U* ptr) {
+//        if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot accept the pointer");
+//        Base::set_raw(pos, ptr);
+//    }
 
 
 };

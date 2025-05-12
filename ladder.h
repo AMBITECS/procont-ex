@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
-// Copyright 2015 Thiago Alves
-//
+// Copyright © 2016-2025 AMBITECS <info@ambi.biz>
+//-----------------------------------------------------------------------------
 // Based on the LDmicro software by Jonathan Westhues
 // This file is part of the OpenPLC Software Stack.
 //

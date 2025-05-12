@@ -49,34 +49,16 @@ class ObservableVector {
         if (!data_server_) return;
 
         try {
-            data_server_->enqueue(
-                    key_prefix_ + std::to_string(index),
-                    OnDataChange{
-                            key_prefix_ + std::to_string(index),
-                            bit_mask,
-                            convert_to_variant(old_value),
-                            convert_to_variant(new_value),
-                            std::chrono::system_clock::now()
-                    }
-            );
+            const auto key = key_prefix_ + std::to_string(index);
+            data_server_->enqueue(key, OnDataChange{
+                    key,
+                    bit_mask,
+                    convert_to_variant(old_value),
+                    convert_to_variant(new_value),
+                    std::chrono::system_clock::now()
+            });
         } catch (...) {
             // Логирование ошибки
-        }
-    }
-
-    value_type get_value_unsafe(size_t pos) const noexcept {
-        if constexpr (is_pointer) {
-            return data_[pos] ? *data_[pos] : value_type{};
-        } else {
-            return data_[pos];
-        }
-    }
-
-    void set_value_unsafe(size_t pos, T value) noexcept {
-        if constexpr (is_pointer) {
-            *data_[pos] = *value;  // Предполагаем, что память управляется пользователем
-        } else {
-            data_[pos] = value;
         }
     }
 
@@ -290,20 +272,20 @@ public:
         return ConstProxy(*this, pos);  // Явно используем тип ConstProxy
     }
 
-    T get_raw(size_type pos) const {
-        std::shared_lock lock(mutex_);
-        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
-        return data_[pos];
-    }
-
-    void set_raw(size_type pos, T value) {
-        std::unique_lock lock(mutex_);
-        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
-
-        value_type old_value = get_value_unsafe(pos);
-        set_value_unsafe(pos, value);
-        notify_change_unsafe(pos, old_value, get_value_unsafe(pos));
-    }
+//    T get_raw(size_type pos) const {
+//        std::shared_lock lock(mutex_);
+//        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
+//        return data_[pos];
+//    }
+//
+//    void set_raw(size_type pos, T value) {
+//        std::unique_lock lock(mutex_);
+//        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
+//
+//        value_type old_value = get_value_unsafe(pos);
+//        set_value_unsafe(pos, value);
+//        notify_change_unsafe(pos, old_value, get_value_unsafe(pos));
+//    }
 
     // Основные методы
     value_type get(size_type pos) const {
@@ -431,6 +413,24 @@ public:
     iterator end() noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.end(); }
     const_iterator end() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.end(); }
     const_iterator cend() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.cend(); }
+
+private:
+    value_type get_value_unsafe(size_t pos) const noexcept {
+        if constexpr (is_pointer) {
+            return data_[pos] ? *data_[pos] : value_type{};
+        } else {
+            return data_[pos];
+        }
+    }
+
+    void set_value_unsafe(size_t pos, T value) noexcept {
+        if constexpr (is_pointer) {
+            *data_[pos] = *value;  // Предполагаем, что память управляется пользователем
+        } else {
+            data_[pos] = value;
+        }
+    }
+
 };
 
 #endif // PROCONT_EX_RANGE_OBSERVABLE_VECTOR_H

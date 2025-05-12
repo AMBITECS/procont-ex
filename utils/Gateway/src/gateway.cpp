@@ -13,9 +13,10 @@
 //}
 
 
-//VEC_BOOL    IX = VEC_BOOL(BUFFER_SIZE);     // Digital Inputs (%IX)
-//VEC_BOOL    QX = VEC_BOOL(BUFFER_SIZE);     // Digital Outputs (%QX)
+//VEC_BOOL    IX(BUFFER_SIZE);     // Digital Inputs (%IX)
+//VEC_BOOL    QX(BUFFER_SIZE);     // Digital Outputs (%QX)
 
+/*
 VEC_BYTE    IB(BUFFER_SIZE);    // Byte Inputs (%IB)
 VEC_BYTE    QB(BUFFER_SIZE);    // Byte Outputs (%QB)
 VEC_UINT    IW(BUFFER_SIZE);    // Word Inputs (%IW)
@@ -28,6 +29,7 @@ VEC_ULINT   QL(BUFFER_SIZE);    // Long Word Outputs (%QL)
 VEC_UINT    MW(BUFFER_SIZE);    // Memory Words (%MW)
 VEC_UDINT   MD(BUFFER_SIZE);    // Memory Double Words (%MD)
 VEC_ULINT   ML(BUFFER_SIZE);    // Local Data (%ML)
+*/
 
 //Booleans
 IEC_BOOL *IX [BUFFER_SIZE][8];

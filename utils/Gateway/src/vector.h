@@ -214,8 +214,7 @@ public:
     explicit ObservableVector(std::shared_ptr<DataServer> server) : data_server_(std::move(server)) {}
 
     explicit ObservableVector(size_type count) : data_(count) {
-        std::cout << "Constructor, this=" << this
-                  << ", size=" << data_.size() << std::endl;
+        //std::cout << "Constructor, this=" << this << ", size=" << data_.size() << std::endl;
         resize(count);
     }
 
@@ -226,52 +225,51 @@ public:
     ObservableVector(InputIt first, InputIt last) : data_(first, last) {}
 
     // Копирование и перемещение
-//    ObservableVector(const ObservableVector& other) {
-//        std::shared_lock lock(other.mutex_);
-//        data_ = other.data_;
-//        data_server_ = other.data_server_;
-//        key_prefix_ = other.key_prefix_;
-//    }
-//
-//    ObservableVector(ObservableVector&& other) noexcept {
-//        std::unique_lock lock(other.mutex_);
-//        data_ = std::move(other.data_);
-//        data_server_ = std::move(other.data_server_);
-//        key_prefix_ = std::move(other.key_prefix_);
-//    }
-
-    ~ObservableVector() {
-        std::cout << "Destructor, this=" << this
-                  << ", size=" << data_.size() << std::endl;
+    ObservableVector(const ObservableVector& other) {
+        std::shared_lock lock(other.mutex_);
+        data_ = other.data_;
+        data_server_ = other.data_server_;
+        key_prefix_ = other.key_prefix_;
     }
 
+    ObservableVector(ObservableVector&& other) noexcept {
+        std::unique_lock lock(other.mutex_);
+        data_ = std::move(other.data_);
+        data_server_ = std::move(other.data_server_);
+        key_prefix_ = std::move(other.key_prefix_);
+    }
+
+    ~ObservableVector() = default;
+        //std::cout << "Destructor, this=" << this << ", size=" << data_.size() << std::endl;
+
+
     // Операторы присваивания
-//    ObservableVector& operator=(const ObservableVector& other) {
-//        if (this == &other) return *this;
-//
-//        std::unique_lock lock1(mutex_, std::defer_lock);
-//        std::shared_lock lock2(other.mutex_, std::defer_lock);
-//        std::lock(lock1, lock2);
-//
-//        data_ = other.data_;
-//        data_server_ = other.data_server_;
-//        key_prefix_ = other.key_prefix_;
-//
-//        return *this;
-//    }
-//
-//    ObservableVector& operator=(ObservableVector&& other) noexcept {
-//        if (this != &other) {
-//            std::unique_lock lock1(mutex_, std::defer_lock);
-//            std::unique_lock lock2(other.mutex_, std::defer_lock);
-//            std::lock(lock1, lock2);
-//
-//            data_ = std::move(other.data_);
-//            data_server_ = std::move(other.data_server_);
-//            key_prefix_ = std::move(other.key_prefix_);
-//        }
-//        return *this;
-//    }
+    ObservableVector& operator=(const ObservableVector& other) {
+        if (this == &other) return *this;
+
+        std::unique_lock lock1(mutex_, std::defer_lock);
+        std::shared_lock lock2(other.mutex_, std::defer_lock);
+        std::lock(lock1, lock2);
+
+        data_ = other.data_;
+        data_server_ = other.data_server_;
+        key_prefix_ = other.key_prefix_;
+
+        return *this;
+    }
+
+    ObservableVector& operator=(ObservableVector&& other) noexcept {
+        if (this != &other) {
+            std::unique_lock lock1(mutex_, std::defer_lock);
+            std::unique_lock lock2(other.mutex_, std::defer_lock);
+            std::lock(lock1, lock2);
+
+            data_ = std::move(other.data_);
+            data_server_ = std::move(other.data_server_);
+            key_prefix_ = std::move(other.key_prefix_);
+        }
+        return *this;
+    }
 
     // Доступ к элементам
     Proxy operator[](size_type pos) {
@@ -380,21 +378,21 @@ public:
     }
 
     // Работа с битовыми полями
-    void set_bits(size_type pos, uint64_t mask, uint64_t bits) {
-        static_assert(std::is_integral_v<value_type> && !is_pointer,
-                      "Bit operations require non-pointer integral types");
-
-        std::unique_lock lock(mutex_);
-        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
-
-        value_type old_value = data_[pos];
-        value_type new_value = (old_value & ~mask) | (bits & mask);
-
-        if (old_value != new_value) {
-            data_[pos] = new_value;
-            notify_change(pos, old_value, new_value, mask);
-        }
-    }
+//    void set_bits(size_type pos, uint64_t mask, uint64_t bits) {
+//        static_assert(std::is_integral_v<value_type> && !is_pointer,
+//                      "Bit operations require non-pointer integral types");
+//
+//        std::unique_lock lock(mutex_);
+//        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
+//
+//        value_type old_value = data_[pos];
+//        value_type new_value = (old_value & ~mask) | (bits & mask);
+//
+//        if (old_value != new_value) {
+//            data_[pos] = new_value;
+//            notify_change(pos, old_value, new_value, mask);
+//        }
+//    }
 
     // Привязка к DataServer
     void bindToDataServer(std::shared_ptr<DataServer> server, const std::string& prefix = "vec_") {
@@ -404,16 +402,21 @@ public:
     }
 
     // Информационные методы
-//    size_type size() const noexcept {
-//        std::shared_lock lock(mutex_);
-//        return data_.size();
-//    }
-//
-//    bool empty() const noexcept {
-//        std::shared_lock lock(mutex_);
-//        return data_.empty();
-//    }
-//
+    Proxy front() { if (empty())  throw std::out_of_range("Vector is empty"); return Proxy(*this, 0); }
+    ConstProxy front() const { if (empty())  throw std::out_of_range("Vector is empty"); return ConstProxy(*this, 0); }
+    Proxy back() { if (empty())  throw std::out_of_range("Vector is empty"); return Proxy(*this, size() - 1); }
+    ConstProxy back() const { if (empty())  throw std::out_of_range("Vector is empty"); return ConstProxy(*this, size() - 1); }
+    pointer data() noexcept { std::shared_lock lock(mutex_); return data_.empty() ? nullptr : data_.data(); }
+    const_pointer data() const noexcept { std::shared_lock lock(mutex_); return data_.empty() ? nullptr : data_.data(); }
+
+    bool      empty()    const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.empty();    }
+    size_type size()     const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.size();     }
+    size_type max_size() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.max_size(); }
+    size_type capacity() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.capacity(); }
+
+    void reserve(size_type new_cap) { std::unique_lock<std::shared_mutex> lock(mutex_); data_.reserve(new_cap); }
+    void shrink_to_fit() { std::unique_lock<std::shared_mutex> lock(mutex_); data_.shrink_to_fit(); }
+
 //    // Итераторы (базовые)
 //    auto begin() noexcept { return data_.begin(); }
 //    auto end() noexcept { return data_.end(); }
@@ -422,96 +425,12 @@ public:
 //    auto cbegin() const noexcept { return data_.cbegin(); }
 //    auto cend() const noexcept { return data_.cend(); }
 
-    Proxy front() {
-        if (empty())  throw std::out_of_range("Vector is empty");
-        return Proxy(*this, 0);
-    }
-
-    ConstProxy front() const {
-        if (empty())  throw std::out_of_range("Vector is empty");
-        return ConstProxy(*this, 0);
-    }
-
-    Proxy back() {
-        if (empty())  throw std::out_of_range("Vector is empty");
-        return Proxy(*this, size() - 1);
-    }
-
-    ConstProxy back() const {
-        if (empty())  throw std::out_of_range("Vector is empty");
-        return ConstProxy(*this, size() - 1);
-    }
-
-    pointer data() noexcept {
-        std::shared_lock lock(mutex_);
-        return data_.empty() ? nullptr : data_.data();
-    }
-
-    const_pointer data() const noexcept {
-        std::shared_lock lock(mutex_);
-        return data_.empty() ? nullptr : data_.data();
-    }
-
-    iterator begin() noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.begin();
-    }
-
-    const_iterator begin() const noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.begin();
-    }
-
-    const_iterator cbegin() const noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.cbegin();
-    }
-
-    iterator end() noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.end();
-    }
-
-    const_iterator end() const noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.end();
-    }
-
-    const_iterator cend() const noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.cend();
-    }
-
-    bool empty() const noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.empty();
-    }
-
-    size_type size() const noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.size();
-    }
-
-    size_type max_size() const noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.max_size();
-    }
-
-    size_type capacity() const noexcept {
-        std::shared_lock<std::shared_mutex> lock(mutex_);
-        return data_.capacity();
-    }
-
-    void reserve(size_type new_cap) {
-        std::unique_lock<std::shared_mutex> lock(mutex_);
-        data_.reserve(new_cap);
-    }
-
-    void shrink_to_fit() {
-        std::unique_lock<std::shared_mutex> lock(mutex_);
-        data_.shrink_to_fit();
-    }
-
+    iterator begin() noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.begin(); }
+    const_iterator begin() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.begin(); }
+    const_iterator cbegin() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.cbegin(); }
+    iterator end() noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.end(); }
+    const_iterator end() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.end(); }
+    const_iterator cend() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.cend(); }
 };
 
 #endif // PROCONT_EX_RANGE_OBSERVABLE_VECTOR_H

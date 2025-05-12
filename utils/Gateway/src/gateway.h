@@ -7,17 +7,15 @@
 #ifndef PRO_GATEWAY_H
 #define PRO_GATEWAY_H
 
-//#include "registry.h"
+#include "registry.h"
 #include "variant.h"
 
-#include "bitwise.h"
-#include "iec_types.h"
+/*
 
 #define BUFFER_MAXSIZE 65536;    // Standard PLC addressing space
-//#define BUFFER_SIZE    1024     // Current PLC registers size
+//#define BUFFER_SIZE 1024 // Current PLC registers size
 
-constexpr unsigned short BUFFER_SIZE  =  1024;     // Current PLC registers size
-
+constexpr unsigned short BUFFER_SIZE = 1024;     // Current PLC registers size
 
 // ----------------------------------------------------------------------------
 // PLC Register Types
@@ -70,10 +68,6 @@ using VEC_ULINT = ObservableVector <IEC_ULINT*>;
 //// Global registry access
 //Registry& reg();
 
-//Booleans
-extern IEC_BOOL *IX [BUFFER_SIZE][8];
-extern IEC_BOOL *QX [BUFFER_SIZE][8];
-
 extern VEC_BYTE    IB;
 extern VEC_BYTE    QB;
 extern VEC_UINT    IW;
@@ -85,6 +79,12 @@ extern VEC_ULINT   QL;
 extern VEC_UINT    MW;
 extern VEC_UDINT   MD;
 extern VEC_ULINT   ML;
+
+*/
+
+//Booleans
+extern IEC_BOOL *IX [BUFFER_SIZE][8];
+extern IEC_BOOL *QX [BUFFER_SIZE][8];
 
 
 //////Bytes

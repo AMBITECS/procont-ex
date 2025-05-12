@@ -274,12 +274,31 @@ public:
         return {*this, index};
     }
 
+    // Работа с битовыми полями
+    void set_bits(size_t elem_idx, uint64_t mask, uint64_t values) {
+        std::unique_lock lock(this->mutex_);
+        if constexpr (Base::is_pointer) {
+            auto ptr = this->get_pointer(elem_idx);
+            if (!ptr) throw std::runtime_error("Null pointer");
+            auto old_val = *ptr;
+            auto new_val = (old_val & ~mask) | (values & mask);
+            *ptr = new_val;
+            this->notify_change(elem_idx, old_val, new_val, mask);
+        } else {
+            auto old_val = this->get(elem_idx);
+            auto new_val = (old_val & ~mask) | (values & mask);
+            this->set(elem_idx, new_val, mask);
+        }
+    }
+
     // Дополнительные методы для работы с указателями
     template<typename U = T>
     void set_pointer(size_type pos, U* ptr) {
         if constexpr (!Base::is_pointer) throw std::runtime_error("Cannot accept the pointer");
         Base::set_raw(pos, ptr);
     }
+
+
 };
 
 #endif //PROCONT_EX_BITWISE_H

@@ -16,17 +16,18 @@
 //VEC_BOOL    IX = VEC_BOOL(BUFFER_SIZE);     // Digital Inputs (%IX)
 //VEC_BOOL    QX = VEC_BOOL(BUFFER_SIZE);     // Digital Outputs (%QX)
 
-VEC_BYTE    IB = VEC_BYTE(BUFFER_SIZE);     // Byte Inputs (%IB)
-VEC_BYTE    QB = VEC_BYTE(BUFFER_SIZE);     // Byte Outputs (%QB)
-VEC_UINT    IW = VEC_UINT(BUFFER_SIZE);     // Word Inputs (%IW)
-VEC_UINT    QW = VEC_UINT(BUFFER_SIZE);     // Word Outputs (%QW)
-VEC_UDINT   ID = VEC_UDINT(BUFFER_SIZE);    // Double Word Inputs (%ID)
-VEC_UDINT   QD = VEC_UDINT(BUFFER_SIZE);    // Double Word Outputs (%QD)
-VEC_ULINT   IL = VEC_ULINT(BUFFER_SIZE);    // Long Word Inputs (%IL)
-VEC_ULINT   QL = VEC_ULINT(BUFFER_SIZE);    // Long Word Outputs (%QL)
-VEC_UINT    MW = VEC_UINT(BUFFER_SIZE);     // Memory Words (%MW)
-VEC_UDINT   MD = VEC_UDINT(BUFFER_SIZE);    // Memory Double Words (%MD)
-VEC_ULINT   ML = VEC_ULINT(BUFFER_SIZE);    // Local Data (%ML)
+VEC_BYTE    IB(BUFFER_SIZE);    // Byte Inputs (%IB)
+VEC_BYTE    QB(BUFFER_SIZE);    // Byte Outputs (%QB)
+VEC_UINT    IW(BUFFER_SIZE);    // Word Inputs (%IW)
+VEC_UINT    QW(BUFFER_SIZE);    // Word Outputs (%QW)
+VEC_UDINT   ID(BUFFER_SIZE);    // Double Word Inputs (%ID)
+VEC_UDINT   QD(BUFFER_SIZE);    // Double Word Outputs (%QD)
+VEC_ULINT   IL(BUFFER_SIZE);    // Long Word Inputs (%IL)
+VEC_ULINT   QL(BUFFER_SIZE);    // Long Word Outputs (%QL)
+
+VEC_UINT    MW(BUFFER_SIZE);    // Memory Words (%MW)
+VEC_UDINT   MD(BUFFER_SIZE);    // Memory Double Words (%MD)
+VEC_ULINT   ML(BUFFER_SIZE);    // Local Data (%ML)
 
 //Booleans
 IEC_BOOL *IX [BUFFER_SIZE][8];

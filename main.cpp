@@ -337,7 +337,7 @@ int main(int argc,char **argv)
     //                    MAIN LOOP
     //======================================================
     while (run_openplc) {           // run_openplc - флаг работы
-        glueVars();                 // make sure for regidters (?)
+        //glueVars();                 // make sure for regidters (?)
 
         updateBuffersIn();			// read input image
         pthread_mutex_lock(&bufferLock);	//lock mutex

@@ -144,6 +144,118 @@ add_custom_target( build_iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
 #-------------------------------------------------------------------------------
 # Подключаемые модули
 #-------------------------------------------------------------------------------
+# Включаем необходимые модули
+include(FetchContent)
+include(ExternalProject)  # <- Критически важная строка
+
+## 1. Настройка путей для ZMQ и OpenSSL
+#set(ZMQ_SOURCE_DIR      ${PROJ_SUB_DIR}/libzmq)
+#set(OPENSSL_SOURCE_DIR  ${PROJ_SUB_DIR}/openssl)  # Путь к исходникам
+#
+#set(ZMQ_INSTALL_DIR     ${PROJ_INS_DIR}/zmq)
+#set(OPENSSL_INSTALL_DIR ${PROJ_INS_DIR}/openssl) # Каталог установки
+#
+## 2. Добавление OpenSSL как подпроекта
+#ExternalProject_Add(
+#        openssl
+#        SOURCE_DIR ${OPENSSL_SOURCE_DIR}
+#        CONFIGURE_COMMAND ${OPENSSL_SOURCE_DIR}/config
+#        --prefix=${OPENSSL_INSTALL_DIR}
+#        --openssldir=${OPENSSL_INSTALL_DIR}/ssl
+#        no-shared
+#        no-zlib
+#        BUILD_COMMAND make -j${CMAKE_BUILD_PARALLEL_LEVEL}
+#        INSTALL_COMMAND make install
+#        BUILD_IN_SOURCE TRUE
+#        INSTALL_DIR ${OPENSSL_INSTALL_DIR}
+#)
+#
+## 3. Настройка путей для основного проекта
+#set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)
+#set(OPENSSL_INCLUDE_DIR ${OPENSSL_ROOT_DIR}/include)
+##set(OPENSSL_INCLUDE_DIR ${OPENSSL_INSTALL_DIR}/include)
+#set(OPENSSL_LIBRARIES
+#        ${OPENSSL_INSTALL_DIR}/lib/libssl.so
+#        ${OPENSSL_INSTALL_DIR}/lib/libcrypto.so
+#)
+#
+## 4. Создание импортируемых целей
+#add_library(OpenSSL::SSL STATIC IMPORTED)
+#set_target_properties(OpenSSL::SSL PROPERTIES
+#        IMPORTED_LOCATION ${OPENSSL_INSTALL_DIR}/lib/libssl.so
+#        INTERFACE_INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR}
+#)
+#
+#add_library(OpenSSL::Crypto STATIC IMPORTED)
+#set_target_properties(OpenSSL::Crypto PROPERTIES
+#        IMPORTED_LOCATION ${OPENSSL_INSTALL_DIR}/lib/libcrypto.so
+#        INTERFACE_INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR}
+#)
+#
+## 5. Настройки libzmq
+#set(WITH_TLS ON CACHE BOOL "Enable TLS")
+#set(WITH_LIBSODIUM OFF CACHE BOOL "Disable libsodium")
+#set(ZMQ_TLS_ENGINE "openssl" CACHE STRING "Use OpenSSL")
+#
+## 6. Сборка ZeroMQ
+#ExternalProject_Add(
+#        libzmq
+#        SOURCE_DIR ${ZMQ_SOURCE_DIR}
+#        DEPENDS openssl
+#        CMAKE_ARGS
+#        -DCMAKE_INSTALL_PREFIX=${ZMQ_INSTALL_DIR}
+#        -DWITH_TLS=ON
+#        -DZMQ_TLS_ENGINE=openssl
+#        -DOPENSSL_ROOT_DIR=${ZMQ_INSTALL_DIR}
+#)
+#
+## 7. Создаем интерфейсные цели для удобного использования
+#target_include_directories(openssl_interface INTERFACE
+#        ${OPENSSL_INSTALL_DIR}/include
+#)
+#
+#add_library(zmq_interface INTERFACE)
+#target_include_directories(zmq_interface INTERFACE
+#        ${ZMQ_INSTALL_DIR}/include
+#)
+
+# Настройка путей
+set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)
+set(ZMQ_ROOT_DIR ${PROJ_SUB_DIR}/libzmq)
+
+# Сборка OpenSSL
+ExternalProject_Add(
+        openssl
+        SOURCE_DIR ${OPENSSL_ROOT_DIR}
+        CONFIGURE_COMMAND ${OPENSSL_ROOT_DIR}/config --prefix=${PROJ_INS_DIR}/openssl
+        BUILD_COMMAND make -j${CMAKE_BUILD_PARALLEL_LEVEL}
+        INSTALL_COMMAND make install
+)
+
+# Сборка ZeroMQ
+ExternalProject_Add(
+        libzmq
+        SOURCE_DIR ${ZMQ_ROOT_DIR}
+        DEPENDS openssl
+        CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=${PROJ_INS_DIR}/zmq
+        -DWITH_TLS=ON
+        -DZMQ_TLS_ENGINE=openssl
+        -DOPENSSL_ROOT_DIR=${PROJ_INS_DIR}/openssl
+)
+
+# Создаем интерфейсные цели для удобного использования
+add_library(openssl_interface INTERFACE)
+target_include_directories(openssl_interface INTERFACE
+        ${PROJ_INS_DIR}/openssl/include
+)
+
+add_library(zmq_interface INTERFACE)
+target_include_directories(zmq_interface INTERFACE
+        ${PROJ_INS_DIR}/zmq/include
+)
+
+#add_subdirectory(${PROJ_SUB_DIR}/libzmq)    # --- libzmq
 add_subdirectory(${PROJ_SUB_DIR}/Gateway)    # --- gateway
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus)  # --- modbus
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)    # --- CANopen tester
@@ -159,11 +271,20 @@ build_target( ${proj} EXE
         ${PROJ_LIB_DIR}
         ${PROJ_SRC_DIR}
         ${PROJ_IEC_DIR}
+        ${PROJ_SUB_DIR}/libzmq/include
     SRCS
         ${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp
         :MASK ${PROJ_IEC_DIR}/*.o
     LNKS
+        #openssl_interface
+        #${PROJ_INS_DIR}/openssl/lib/libssl.a
+        #${PROJ_INS_DIR}/openssl/lib/libcrypto.a
+
+        #zmq
+        zmq_interface
+        #${PROJ_INS_DIR}/zmq/lib64/libzmq.so
+
         pro-gateway
         modbus      #${modbus_LIBRARIES}
         can_master  #${can_master_LIBRARIES}
@@ -177,8 +298,7 @@ endif()
 ### Dependencies ###
 #-------------------------------------------------------------------------------
 add_dependencies(${proj} build_iec)
-#add_dependencies(${proj} modbus)
-#add_dependencies(${proj} can_master)
+add_dependencies(${proj} libzmq)
 
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")
 

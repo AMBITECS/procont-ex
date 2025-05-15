@@ -105,7 +105,7 @@ public:
         }
     }
 
-    void enqueue(const std::string& key, OnDataChange&& change) {
+    void enqueue(const std::string& key, OnDataChange&& change) { // ***
         if (enable_logging_) {
             log_message(change);
         }

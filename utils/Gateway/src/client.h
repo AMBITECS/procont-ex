@@ -2,7 +2,8 @@
 // Copyright © 2016-2025 AMBITECS <info@ambi.biz>
 //-----------------------------------------------------------------------------
 #pragma once
-//#include "dto.h"
+#include "dto.h"
+
 #include <memory>
 #include <functional>
 #include <queue>
@@ -13,35 +14,27 @@
 
 class Client {
 public:
-    using DataHandler = std::function<void(std::shared_ptr<Recv>)>;
+    using DataHandler = std::function<void(std::shared_ptr<Receive>)>;
 
-    explicit Client(std::string key);
+    explicit Client(const std::string& key, size_t maxQueueSize = 1000);
     ~Client();
 
-    // Запрет копирования
-    Client(const Client&) = delete;
-    Client& operator=(const Client&) = delete;
-
-    std::string getKey() const { return key_; }
-
+    [[nodiscard]] std::string getKey() const;
     void setDataHandler(DataHandler handler);
-    void onDataReceived(std::shared_ptr<Recv> data);
+    void onDataReceived(std::shared_ptr<Receive> data);
     void shutdown();
-
-    size_t getQueueSize() const;
+    [[nodiscard]] size_t getQueueSize() const;
 
 private:
     void processData();
 
     const std::string key_;
-    static constexpr size_t MAX_QUEUE_SIZE = 1000;
-
+    const size_t maxQueueSize_;
+    std::queue<std::shared_ptr<Receive>> dataQueue_;
     mutable std::mutex queueMutex_;
-    std::queue<std::shared_ptr<Recv>> dataQueue_;
     std::condition_variable queueCV_;
-
     DataHandler dataHandler_;
     std::atomic<bool> running_{true};
-    std::atomic<bool> isProcessing_{false};
     std::thread workerThread_;
+    std::atomic<bool> processing_{false};
 };

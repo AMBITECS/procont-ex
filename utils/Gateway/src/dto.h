@@ -7,6 +7,7 @@
 #include <memory>
 #include <sstream>
 #include <iomanip>
+
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -15,7 +16,7 @@ using json = nlohmann::json;
 class DtoBase {
 public:
     virtual ~DtoBase() = default;
-    virtual std::string toJSON() const = 0;
+    [[nodiscard]] virtual std::string toJSON() const = 0;
 };
 
 // Инициализация соединения
@@ -29,7 +30,7 @@ struct Init : public DtoBase {
             : key(std::move(k)), urlWrite(std::move(uw)),
               urlScada(std::move(us)), urlModel(std::move(um)) {}
 
-    std::string toJSON() const override {
+    [[nodiscard]] std::string toJSON() const override {
         json j;
         j["key"] = key;
         j["urlWrite"] = urlWrite;
@@ -55,7 +56,7 @@ struct Exit : public DtoBase {
 
     explicit Exit(std::string k) : key(std::move(k)) {}
 
-    std::string toJSON() const override {
+    [[nodiscard]] std::string toJSON() const override {
         json j;
         j["key"] = key;
         return j.dump();
@@ -75,7 +76,7 @@ struct Subs : public DtoBase {
     Subs(std::string k, std::vector<std::string> ks)
             : key(std::move(k)), keys(std::move(ks)) {}
 
-    std::string toJSON() const override {
+    [[nodiscard]] std::string toJSON() const override {
         json j;
         j["key"] = key;
         j["keys"] = keys;
@@ -99,7 +100,7 @@ struct Send : public DtoBase {
     Send(std::string k, std::vector<std::pair<std::string, double>> v)
             : key(std::move(k)), values(std::move(v)) {}
 
-    std::string toJSON() const override {
+    [[nodiscard]] std::string toJSON() const override {
         json j;
         j["key"] = key;
 
@@ -134,14 +135,14 @@ struct Send : public DtoBase {
 };
 
 // Получение данных
-struct Recv : public DtoBase {
+struct Receive : public DtoBase {
     std::string key;
     std::vector<std::pair<std::string, double>> values;
 
-    Recv(std::string k, std::vector<std::pair<std::string, double>> v)
+    Receive(std::string k, std::vector<std::pair<std::string, double>> v)
             : key(std::move(k)), values(std::move(v)) {}
 
-    std::string toJSON() const override {
+    [[nodiscard]] std::string toJSON() const override {
         json j;
         j["key"] = key;
 
@@ -157,7 +158,7 @@ struct Recv : public DtoBase {
         return j.dump();
     }
 
-    static Recv fromJSON(const std::string& jsonStr) {
+    static Receive fromJSON(const std::string& jsonStr) {
         auto j = json::parse(jsonStr);
         std::vector<std::pair<std::string, double>> values;
 
@@ -168,7 +169,7 @@ struct Recv : public DtoBase {
             );
         }
 
-        return Recv{
+        return Receive{
                 j["key"].get<std::string>(),
                 std::move(values)
         };
@@ -176,15 +177,15 @@ struct Recv : public DtoBase {
 };
 
 // Ответ на запрос
-struct Resp : public DtoBase {
+struct Response : public DtoBase {
     std::string key;
     bool result;
     std::string message;
 
-    Resp(std::string k, bool res, std::string msg)
+    Response(std::string k, bool res, std::string msg)
             : key(std::move(k)), result(res), message(std::move(msg)) {}
 
-    std::string toJSON() const override {
+    [[nodiscard]] std::string toJSON() const override {
         json j;
         j["key"] = key;
         j["result"] = result;
@@ -192,9 +193,9 @@ struct Resp : public DtoBase {
         return j.dump();
     }
 
-    static Resp fromJSON(const std::string& jsonStr) {
+    static Response fromJSON(const std::string& jsonStr) {
         auto j = json::parse(jsonStr);
-        return Resp{
+        return Response{
                 j["key"].get<std::string>(),
                 j["result"].get<bool>(),
                 j["message"].get<std::string>()

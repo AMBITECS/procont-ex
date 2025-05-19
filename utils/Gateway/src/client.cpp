@@ -2,98 +2,71 @@
 // Copyright © 2016-2025 AMBITECS <info@ambi.biz>
 //-----------------------------------------------------------------------------
 #include "client.h"
-
-#include <chrono>
-#include <utility>
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
-Client::Client(std::string key)
-        : key_(std::move(key)),
-          workerThread_(&Client::processData, this) {
-    if (key_.empty()) {
+// Конструктор клиента
+Client::Client(const std::string& key, size_t maxQueueSize)
+        : key_(key),
+          maxQueueSize_(maxQueueSize) {
+    // Проверка валидности ключа
+    if (key.empty()) {
         throw std::invalid_argument("Client key cannot be empty");
     }
+
+    // Запускаем рабочий поток для обработки данных
+    workerThread_ = std::thread(&Client::processData, this);
 }
 
+// Деструктор клиента
 Client::~Client() {
-    shutdown();
+    shutdown(); // Гарантированное завершение работы
 }
 
+// Получение ключа клиента
+std::string Client::getKey() const {
+    return key_;
+}
+
+// Установка обработчика входящих данных
 void Client::setDataHandler(DataHandler handler) {
-    std::lock_guard<std::mutex> lock(queueMutex_);
     dataHandler_ = std::move(handler);
-    queueCV_.notify_one();
 }
 
-void Client::onDataReceived(std::shared_ptr<Recv> data) {
-    if (!data || data->key() != key_) {
+// Обработка полученных данных (вызывается извне)
+void Client::onDataReceived(std::shared_ptr<Receive> data) {
+    if (!data) {
+        std::cerr << "Warning: Received null data in client " << key_ << std::endl;
         return;
     }
 
     std::unique_lock<std::mutex> lock(queueMutex_);
-    if (dataQueue_.size() >= MAX_QUEUE_SIZE) {
-        std::cerr << "Client " << key_ << " queue overflow, message dropped\n";
+
+    // Проверяем переполнение очереди
+    if (dataQueue_.size() >= maxQueueSize_) {
+        std::cerr << "Warning: Queue overflow in client " << key_
+                  << ", discarding data" << std::endl;
         return;
     }
 
-    dataQueue_.push(std::move(data));
+    // Добавляем данные в очередь
+    dataQueue_.push(data);
     lock.unlock();
 
-    if (dataHandler_ && !isProcessing_.exchange(true)) {
-        queueCV_.notify_one();
-    }
+    // Уведомляем рабочий поток о новых данных
+    queueCV_.notify_one();
 }
 
-void Client::processData() {
-    while (running_) {
-        std::unique_lock<std::mutex> lock(queueMutex_);
-        queueCV_.wait(lock, [this]() {
-            return !running_ || (!dataQueue_.empty() && dataHandler_);
-        });
-
-        if (!running_) break;
-
-        try {
-            // Обрабатываем все сообщения в очереди
-            while (!dataQueue_.empty()) {
-                auto data = std::move(dataQueue_.front());
-                dataQueue_.pop();
-
-                lock.unlock();
-
-                try {
-                    if (dataHandler_) {
-                        dataHandler_(std::move(data));
-                    }
-                } catch (const std::exception& e) {
-                    std::cerr << "Client " << key_
-                              << " handler error: " << e.what() << "\n";
-                }
-
-                lock.lock();
-            }
-        } catch (...) {
-            isProcessing_ = false;
-            throw;
-        }
-
-        isProcessing_ = false;
-    }
-}
-
-size_t Client::getQueueSize() const {
-    std::lock_guard<std::mutex> lock(queueMutex_);
-    return dataQueue_.size();
-}
-
+// Завершение работы клиента
 void Client::shutdown() {
     if (!running_.exchange(false)) {
-        return;
+        return; // Уже завершён
     }
 
+    // Уведомляем рабочий поток
     queueCV_.notify_all();
 
+    // Дожидаемся завершения потока
     if (workerThread_.joinable()) {
         workerThread_.join();
     }
@@ -105,3 +78,47 @@ void Client::shutdown() {
     }
 }
 
+// Получение текущего размера очереди
+size_t Client::getQueueSize() const {
+    std::lock_guard<std::mutex> lock(queueMutex_);
+    return dataQueue_.size();
+}
+
+// Основной цикл обработки данных (работает в отдельном потоке)
+void Client::processData() {
+    while (running_) {
+        std::shared_ptr<Receive> data;
+
+        {
+            std::unique_lock<std::mutex> lock(queueMutex_);
+
+            // Ждём данных или команды завершения
+            queueCV_.wait(lock, [this]() {
+                return !dataQueue_.empty() || !running_;
+            });
+
+            // Проверяем завершение работы
+            if (!running_) {
+                break;
+            }
+
+            // Извлекаем данные из очереди
+            if (!dataQueue_.empty()) {
+                data = dataQueue_.front();
+                dataQueue_.pop();
+            }
+        }
+
+        // Обрабатываем данные, если они есть
+        if (data && dataHandler_) {
+            processing_ = true;
+            try {
+                dataHandler_(data);
+            } catch (const std::exception& e) {
+                std::cerr << "Error in client " << key_
+                          << " data handler: " << e.what() << std::endl;
+            }
+            processing_ = false;
+        }
+    }
+}

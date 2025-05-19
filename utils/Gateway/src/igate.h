@@ -2,6 +2,7 @@
 // Copyright © 2016-2025 AMBITECS <info@ambi.biz>
 //-----------------------------------------------------------------------------
 #pragma once
+
 #include <functional>
 #include <memory>
 

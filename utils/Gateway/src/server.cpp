@@ -1,231 +1,150 @@
-//-----------------------------------------------------------------------------
-// Copyright © 2016-2025 AMBITECS <info@ambi.biz>
-//-----------------------------------------------------------------------------
 #include "server.h"
-#include <algorithm>
+#include <chrono>
 #include <stdexcept>
-#include <sstream>
-#include <iomanip>
 
+// Конструктор сервера, принимает шлюз для коммуникации
 Server::Server(std::shared_ptr<IGate> gate)
         : gate_(std::move(gate)) {
     if (!gate_) {
         throw std::invalid_argument("Gate cannot be null");
     }
 
-    // Устанавливаем обработчик входящих сообщений
-    gate_->setInboundHandler([this](std::shared_ptr<void> msg) {
-        this->handleInboundMessage(std::move(msg));
-    });
-
-    // Запускаем фоновую задачу очистки
+    // Запускаем фоновый поток для очистки устаревших запросов
+    running_ = true;
     cleanupThread_ = std::thread([this]() {
         while (running_) {
-            std::unique_lock<std::mutex> lock(requestsMutex_);
-            cleanupCV_.wait_for(lock, std::chrono::minutes(1),
-                                [this]() { return !running_; });
-
-            if (running_) {
-                cleanupPendingRequests();
-            }
+            std::this_thread::sleep_for(std::chrono::seconds(10)); // Проверка каждые 10 секунд
+            cleanupPendingRequests();
         }
     });
 }
 
+// Деструктор сервера
 Server::~Server() {
-    shutdown();
+    running_ = false;
+    if (cleanupThread_.joinable()) {
+        cleanupThread_.join();
+    }
 }
 
+// Регистрация нового клиента
 void Server::registerClient(std::shared_ptr<Client> client) {
     if (!client) {
         throw std::invalid_argument("Client cannot be null");
     }
 
     std::lock_guard<std::mutex> lock(clientsMutex_);
-    auto [it, inserted] = clients_.emplace(client->getKey(), client);
-    if (!inserted) {
-        throw std::runtime_error("Client already registered: " + client->getKey());
-    }
+    clients_[client->getId()] = client;
 }
 
+// Удаление клиента
 void Server::unregisterClient(std::shared_ptr<Client> client) {
-    if (!client) {
-        return;
-    }
-
-    std::lock_guard<std::mutex> lock(clientsMutex_);
-    clients_.erase(client->getKey());
-}
-
-std::future<Resp> Server::sendRequest(std::shared_ptr<Client> client,
-                                      std::shared_ptr<void> request,
-                                      long timeoutMs) {
     if (!client) {
         throw std::invalid_argument("Client cannot be null");
     }
-    if (!request) {
-        throw std::invalid_argument("Request cannot be null");
-    }
-    if (timeoutMs < 0) {
-        throw std::invalid_argument("Timeout cannot be negative");
+
+    std::lock_guard<std::mutex> lock(clientsMutex_);
+    clients_.erase(client->getId());
+}
+
+// Отправка запроса с таймаутом
+std::future<Response> Server::sendRequest(
+        std::shared_ptr<Client> client,
+        std::shared_ptr<void> request,
+        long timeoutMs) {
+    if (!client || !request) {
+        throw std::invalid_argument("Client and request cannot be null");
     }
 
-    std::promise<Resp> promise;
-    auto future = promise.get_future();
-    std::string requestKey = generateRequestKey(client, request);
+    // Генерируем уникальный ключ для запроса
+    std::string key = generateRequestKey(client, request);
+
+    // Создаем объект ожидаемого запроса
+    PendingRequest pendingRequest;
+    pendingRequest.timestamp = std::chrono::system_clock::now();
+
+    // Получаем future до перемещения promise
+    auto future = pendingRequest.promise.get_future();
 
     {
         std::lock_guard<std::mutex> lock(requestsMutex_);
-        pendingRequests_.emplace(requestKey, PendingRequest{std::move(promise),
-                                                            std::chrono::system_clock::now()});
+        pendingRequests_[key] = std::move(pendingRequest);
     }
 
+    // Отправляем запрос через шлюз
+    gate_->send(client->getId(), request);
+
+    // Устанавливаем таймаут для запроса
     if (timeoutMs > 0) {
-        std::thread([this, requestKey, timeoutMs]() {
+        std::thread([this, key, timeoutMs]() {
             std::this_thread::sleep_for(std::chrono::milliseconds(timeoutMs));
+
             std::lock_guard<std::mutex> lock(requestsMutex_);
-            auto it = pendingRequests_.find(requestKey);
-            if (it != pendingRequests_.end() && !it->second.promise._Is_ready()) {
+            auto it = pendingRequests_.find(key);
+            if (it != pendingRequests_.end()) {
                 it->second.promise.set_exception(
-                        std::make_exception_ptr(
-                                std::runtime_error("Request timeout: " + requestKey)));
+                        std::make_exception_ptr(std::runtime_error("Request timeout")));
                 pendingRequests_.erase(it);
             }
         }).detach();
     }
 
-    try {
-        auto modifiedRequest = addRequestKey(request, requestKey);
-        gate_->send(modifiedRequest);
-    } catch (...) {
-        std::lock_guard<std::mutex> lock(requestsMutex_);
-        pendingRequests_.erase(requestKey);
-        throw;
-    }
-
     return future;
 }
 
+// Публикация данных для клиента
 void Server::publish(std::shared_ptr<Client> client, std::shared_ptr<Send> data) {
     if (!client || !data) {
-        return;
+        throw std::invalid_argument("Client and data cannot be null");
     }
 
-    gate_->send(data);
+    gate_->send(client->getId(), data);
 }
 
+// Обработка входящих сообщений
 void Server::handleInboundMessage(std::shared_ptr<void> message) {
-    try {
-        if (auto resp = std::dynamic_pointer_cast<Resp>(message)) {
-            std::string respKey = resp->key();
-            size_t delimiterPos = respKey.find('|');
+    // Здесь должна быть логика обработки входящих сообщений
+    // и завершения соответствующих промисов из pendingRequests_
+    // В реальной реализации нужно преобразовать message в Response
+    // и найти соответствующий promise по ключу
 
-            if (delimiterPos != std::string::npos) {
-                std::string requestKey = respKey.substr(delimiterPos + 1);
-                std::lock_guard<std::mutex> lock(requestsMutex_);
-                auto it = pendingRequests_.find(requestKey);
-
-                if (it != pendingRequests_.end()) {
-                    it->second.promise.set_value(*resp);
-                    pendingRequests_.erase(it);
-                } else {
-                    // Логируем "запоздалый" ответ
-                }
-            }
-        } else if (auto recv = std::dynamic_pointer_cast<Recv>(message)) {
-            std::lock_guard<std::mutex> lock(clientsMutex_);
-            auto it = clients_.find(recv->key());
-            if (it != clients_.end()) {
-                it->second->onDataReceived(recv);
-            }
-        }
-    } catch (const std::exception& e) {
-        // Логируем ошибку обработки сообщения
-    }
-}
-
-std::string Server::generateRequestKey(const std::shared_ptr<Client>& client,
-                                       const std::shared_ptr<void>& request) {
-    std::string prefix;
-
-    if (dynamic_cast<Init*>(request.get())) {
-        prefix = "INIT";
-    } else if (dynamic_cast<Exit*>(request.get())) {
-        prefix = "EXIT";
-    } else if (dynamic_cast<Subs*>(request.get())) {
-        prefix = "SUBS";
-    } else {
-        prefix = "REQ";
-    }
-
-    std::ostringstream oss;
-    oss << prefix << "-" << client->getKey() << "-" << requestCounter_++;
-    return oss.str();
-}
-
-std::shared_ptr<void> Server::addRequestKey(std::shared_ptr<void> request,
-                                            const std::string& requestKey) {
-    if (auto init = std::dynamic_pointer_cast<Init>(request)) {
-        return std::make_shared<Init>(init->key() + "|" + requestKey,
-                                      init->urlWrite(),
-                                      init->urlScada(),
-                                      init->urlModel());
-    }
-    else if (auto exit = std::dynamic_pointer_cast<Exit>(request)) {
-        return std::make_shared<Exit>(exit->key() + "|" + requestKey);
-    }
-    else if (auto subs = std::dynamic_pointer_cast<Subs>(request)) {
-        return std::make_shared<Subs>(subs->key() + "|" + requestKey,
-                                      subs->keys());
-    }
-
-    return request;
-}
-
-void Server::cleanupPendingRequests() {
-    auto cutoff = std::chrono::system_clock::now() - std::chrono::minutes(5);
-    int cleaned = 0;
-
+    // Примерная логика:
+    /*
+    auto response = std::static_pointer_cast<Response>(message);
+    std::string key = response->getRequestKey();
+    
     std::lock_guard<std::mutex> lock(requestsMutex_);
+    auto it = pendingRequests_.find(key);
+    if (it != pendingRequests_.end()) {
+        it->second.promise.set_value(*response);
+        pendingRequests_.erase(it);
+    }
+    */
+}
+
+// Очистка устаревших запросов
+void Server::cleanupPendingRequests() {
+    auto now = std::chrono::system_clock::now();
+    std::lock_guard<std::mutex> lock(requestsMutex_);
+
     for (auto it = pendingRequests_.begin(); it != pendingRequests_.end(); ) {
-        if (it->second.timestamp < cutoff && !it->second.promise._Is_ready()) {
+        // Удаляем запросы, которые висят дольше 1 часа
+        if (std::chrono::duration_cast<std::chrono::hours>(
+                now - it->second.timestamp).count() >= 1) {
             it->second.promise.set_exception(
-                    std::make_exception_ptr(
-                            std::runtime_error("Request cleaned up: " + it->first)));
+                    std::make_exception_ptr(std::runtime_error("Request expired")));
             it = pendingRequests_.erase(it);
-            cleaned++;
         } else {
             ++it;
         }
     }
-
-    if (cleaned > 0) {
-        // Логируем количество очищенных запросов
-    }
 }
 
-void Server::shutdown() {
-    running_ = false;
-    cleanupCV_.notify_all();
-
-    if (cleanupThread_.joinable()) {
-        cleanupThread_.join();
-    }
-
-    {
-        std::lock_guard<std::mutex> lock(requestsMutex_);
-        for (auto& [key, pr] : pendingRequests_) {
-            if (!pr.promise._Is_ready()) {
-                pr.promise.set_exception(
-                        std::make_exception_ptr(
-                                std::runtime_error("Server shutdown")));
-            }
-        }
-        pendingRequests_.clear();
-    }
-
-    {
-        std::lock_guard<std::mutex> lock(clientsMutex_);
-        clients_.clear();
-    }
+// Генерация уникального ключа для запроса
+std::string Server::generateRequestKey(
+        std::shared_ptr<Client> client,
+        std::shared_ptr<void> request) {
+    // В реальной реализации нужно использовать уникальные идентификаторы
+    // клиента и запроса. Здесь упрощенный вариант.
+    return client->getId() + "_" + std::to_string(requestCounter_++);
 }

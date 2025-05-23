@@ -4,6 +4,7 @@
 #include "iserver.h"
 #include "igate.h"
 #include "dto.h"
+#include "server_stat.h"
 #include <memory>
 #include <unordered_map>
 #include <future>
@@ -13,11 +14,26 @@
 #include <queue>
 #include <chrono>
 #include <functional>
+#include <vector>
 
 namespace sft::dtm::gateway {
 
+/**
+ * @class Server
+ * @brief Основной серверный класс для управления клиентами и маршрутизации сообщений
+ *
+ * Реализует паттерн Singleton и интерфейс IServer. Обеспечивает:
+ * - Регистрацию/удаление клиентов
+ * - Отправку запросов с таймаутами
+ * - Публикацию сообщений
+ * - Обработку входящих сообщений
+ */
     class Server : public IServer {
     public:
+        /**
+         * @brief Получение экземпляра сервера (Singleton)
+         * @return std::shared_ptr<Server> Общий указатель на экземпляр сервера
+         */
         static std::shared_ptr<Server> getInstance() {
             static std::weak_ptr<Server> weakInstance;
             static std::mutex mutex;
@@ -31,58 +47,85 @@ namespace sft::dtm::gateway {
             return instance;
         }
 
-    private:
-        Server() = default;
+        // Запрет копирования и присваивания
+        Server(const Server&) = delete;
+        Server& operator=(const Server&) = delete;
 
-    public:
-        // Конструктор/деструктор
+        /**
+         * @brief Конструктор сервера
+         * @param gate Шлюз для отправки/получения сообщений
+         */
         explicit Server(std::shared_ptr<IGate> gate);
+
+        /**
+         * @brief Деструктор сервера
+         */
         ~Server() override;
 
-        // Основные методы IServer
+        // ========== Реализация методов IServer ==========
+
         void registerClient(std::shared_ptr<Client> client) override;
         void unregisterClient(std::shared_ptr<Client> client) override;
 
         std::future<Resp> sendRequest(
                 std::shared_ptr<Client> client,
-                std::shared_ptr<void> request,
-                long timeoutMs);
+                std::shared_ptr<DtoBase> request,
+                long timeoutMs) override;
 
-        void publish(const std::shared_ptr<Client>& client, std::shared_ptr<Send> data);
+        void publish(std::shared_ptr<Client> client, std::shared_ptr<Send> data) override;
 
-        // Состояние сервера
+        std::vector<std::weak_ptr<Client>> getConnectedClients() const override;
+        ServerStats getStats() const override;
+        bool isClientConnected(std::shared_ptr<Client> client) const override;
+        std::string getVersion() const override;
+
+        /**
+         * @brief Проверка активности сервера
+         * @return true Сервер активен
+         * @return false Сервер остановлен
+         */
         bool isActive() const { return active_; }
 
+        // Приватный конструктор по умолчанию для Singleton
+        Server() = default;
+
     private:
-        // Внутренняя структура для ожидающих запросов
+
+        // Структура для хранения ожидающих запросов
         struct PendingRequest {
             std::promise<Resp> promise;
             std::chrono::system_clock::time_point timestamp;
             std::string originalKey;
         };
 
+        // ========== Внутренние методы ==========
         void handleResponse(const Resp& resp);
         void dispatchToClient(const Recv& recv);
-
-        // Вспомогательные методы
-        void handleInboundMessage(const std::shared_ptr<void>& message);
+        void handleInboundMessage(const std::shared_ptr<DtoBase>& message);
         void cleanupPendingRequests();
         void clearPendingRequests();
-        void scheduleRequestTimeout(const std::string& requestId, std::shared_ptr<PendingRequest> request, long timeoutMs);
+        void scheduleRequestTimeout(const std::string& requestId,
+                                    std::shared_ptr<PendingRequest> request,
+                                    long timeoutMs);
 
-        static std::string generateRequestKey(const std::shared_ptr<Client>& client, const std::shared_ptr<void>& request);
-        static void changeRequestKey(const std::shared_ptr<void>& request, const std::string& newKey);
-        static std::string getRequestKey(const std::shared_ptr<void>& request);
+        static std::string generateRequestKey(const std::shared_ptr<Client>& client,
+                                              const std::shared_ptr<DtoBase>& request);
+        static void changeRequestKey(const std::shared_ptr<DtoBase>& request,
+                                     const std::string& newKey);
+        static std::string getRequestKey(const std::shared_ptr<DtoBase>& request);
 
-        // Поля класса
-        std::shared_ptr<IGate> gate_;
-        std::atomic<bool> active_{false};
+        void checkServerActive() const;
+        void validateClientRegistration(const std::shared_ptr<Client>& client) const;
+
+        // ========== Поля класса ==========
+        std::shared_ptr<IGate> gate_;       // Шлюз для сообщений
+        std::atomic<bool> active_{false}; // Флаг активности сервера
 
         // Потокобезопасные контейнеры
         std::unordered_map<std::string, std::shared_ptr<Client>> clients_;
         std::unordered_map<std::string, std::shared_ptr<PendingRequest>> pendingRequests_;
-        std::mutex clientsMutex_;
-        std::mutex requestsMutex_;
+        mutable std::mutex clientsMutex_;
+        mutable std::mutex requestsMutex_;
 
         // Поток для очистки
         std::thread cleanupThread_;

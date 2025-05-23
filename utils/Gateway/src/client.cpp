@@ -11,12 +11,10 @@ using namespace std::chrono_literals;
 
 namespace sft::dtm::gateway {
 
-// Инициализация статического члена
-    Reg<Item> Client::itemRegistry_{};
-
-    Client::Client(const std::string& key, const std::string& accountName)
-            : key_(key),
-              server_(Server::getInstance()) {  // Исправлено использование Server
+    Client::Client(const std::string& key, const std::string& accountName):
+            key_(key),
+            server_(Server::getInstance())
+    {
         if (key.empty()) {
             throw std::invalid_argument("Client key cannot be empty");
         }
@@ -28,7 +26,7 @@ namespace sft::dtm::gateway {
     }
 
     void Client::connect() {
-        if (isConnected()) {
+        if (connected_) {
             throw std::runtime_error("Already connected");
         }
 
@@ -43,12 +41,13 @@ namespace sft::dtm::gateway {
     }
 
     void Client::disconnect() {
-        if (!isConnected() || disconnecting_) return;
+        if (!connected_ || disconnecting_) return;
 
         disconnecting_ = true;
         try {
             sendExitNotification();
             unsubscribeAll();
+            server_->unregisterClient(shared_from_this());
             connected_ = false;
         } catch (const std::exception& e) {
             std::cerr << "Graceful disconnect failed: " << e.what() << std::endl;
@@ -59,57 +58,67 @@ namespace sft::dtm::gateway {
 
     std::future<Resp> Client::init() {
         Init initMsg(key_, "urlWrite", "urlScada", "urlModel");
-        return std::async(std::launch::async, [this]() {
-            return Resp::success(this->key_);
-        });
+        return server_->sendRequest(shared_from_this(),
+                                    std::make_shared<Init>(initMsg),
+                                    REQUEST_DEFAULT_TIMEOUT_MS);
     }
 
     std::future<Resp> Client::exit() {
         Exit exitMsg(key_);
-        return std::async(std::launch::async, [this]() {
-            return Resp::success(this->key_);
-        });
+        return server_->sendRequest(shared_from_this(),
+                                    std::make_shared<Exit>(exitMsg),
+                                    REQUEST_DEFAULT_TIMEOUT_MS);
     }
 
     std::future<Resp> Client::subscribe(const std::vector<Item>& items) {
-        if (!isConnected()) {
+        if (!connected_) {
             throw std::runtime_error("Client is not connected");
         }
 
-        std::vector<std::string> addresses;  // Изменено на std::string
-        for (const auto& item : items) {
-            auto itemPtr = std::make_shared<Item>(item);
-            size_t address = itemRegistry_.reg(itemPtr);
-            addresses.push_back(std::to_string(address));  // Конвертация в строку
+        std::vector<std::string> itemKeys;
+        {
+            std::lock_guard<std::mutex> lock(subscriptionsMutex_);
+            for (const auto& item : items) {
+                subscriptions_[item.getKey()] = item;
+                itemKeys.push_back(item.getKey());
+            }
         }
 
-        Subs subs(key_, addresses);  // Теперь принимает vector<string>
+        Subs subs(key_, itemKeys);
         return server_->sendRequest(shared_from_this(),
                                     std::make_shared<Subs>(subs),
                                     REQUEST_DEFAULT_TIMEOUT_MS);
     }
 
-    std::future<Resp> Client::unsubscribe(const std::vector<size_t>& addresses) {
-        if (!isConnected()) {
+    std::future<Resp> Client::unsubscribe(const std::vector<std::string>& itemKeys) {
+        if (!connected_) {
             throw std::runtime_error("Client is not connected");
         }
 
-        std::vector<std::string> strAddresses;
-        for (auto addr : addresses) {
-            strAddresses.push_back(std::to_string(addr));
+        {
+            std::lock_guard<std::mutex> lock(subscriptionsMutex_);
+            for (const auto& key : itemKeys) {
+                subscriptions_.erase(key);
+            }
         }
 
-        Subs subs(key_, strAddresses);
+        Subs subs(key_, itemKeys);
         return server_->sendRequest(shared_from_this(),
                                     std::make_shared<Subs>(subs),
                                     REQUEST_DEFAULT_TIMEOUT_MS);
     }
 
     void Client::unsubscribeAll() {
-        auto addresses = itemRegistry_.getAllAddresses();
-        if (!addresses.empty()) {
-            std::vector<size_t> addrVec(addresses.begin(), addresses.end());
-            unsubscribe(addrVec).get();
+        std::vector<std::string> keys;
+        {
+            std::lock_guard<std::mutex> lock(subscriptionsMutex_);
+            for (const auto& [key, _] : subscriptions_) {
+                keys.push_back(key);
+            }
+        }
+
+        if (!keys.empty()) {
+            unsubscribe(keys).wait();
         }
     }
 
@@ -171,7 +180,8 @@ namespace sft::dtm::gateway {
     void Client::sendInitRequest() {
         auto future = init();
         // Замена then на обработку через async
-        std::async(std::launch::async, [this, future = std::move(future)]() {
+        (void)std::async(std::launch::async, [this, future = std::move(future)]() mutable
+        {
             try {
                 auto resp = future.get();
                 if (!resp.isSuccess()) {
@@ -228,17 +238,20 @@ namespace sft::dtm::gateway {
     }
 
     std::future<Resp> Client::restoreSubscriptions() {
-        auto addresses = itemRegistry_.getAllAddresses();
-        if (addresses.empty()) {
-            return std::async(std::launch::async, [this]() {
-                return Resp::success(this->key_);
-            });
-        }
-
         std::vector<Item> itemsToRestore;
-        for (auto addr : addresses) {
-            if (auto item = itemRegistry_.get(addr)) {
-                itemsToRestore.push_back(*item);
+
+        {
+            std::lock_guard<std::mutex> lock(subscriptionsMutex_);
+            if (subscriptions_.empty()) {
+                return std::async(std::launch::async, [this]() {
+                    return Resp::success(this->key_);
+                });
+            }
+
+            // Копируем все текущие подписки для восстановления
+            itemsToRestore.reserve(subscriptions_.size());
+            for (const auto& [_, item] : subscriptions_) {
+                itemsToRestore.push_back(item);
             }
         }
 

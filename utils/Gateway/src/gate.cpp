@@ -6,18 +6,18 @@
 
 #include <chrono>
 #include <stdexcept>
-#include <sstream>
 #include <iostream>
 
 using namespace std::chrono_literals;
 namespace sft::dtm::gateway {
 
-    Gate::Gate(const Props& props)
-            : props_(props),
-              context_(1),
-              admSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_REQ)),
-              subSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_SUB)),
-              pubSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_PUB)) {
+    Gate::Gate(const GateConfig::Props& props):
+        props_(props),
+        context_(1),
+        admSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_REQ)),
+        subSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_SUB)),
+        pubSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_PUB))
+    {
 
         // Configure sockets
         admSocket_->set(zmq::sockopt::rcvtimeo, props_.timeout);
@@ -33,18 +33,12 @@ namespace sft::dtm::gateway {
     }
 
     void Gate::send(std::shared_ptr<void> message) {
-        if (!message) {
-            throw std::invalid_argument("Message cannot be null");
-        }
-
+        if (!message) { throw std::invalid_argument("Gate: Message cannot be null"); }
         {
             std::unique_lock<std::mutex> lock(queueMutex_);
-            if (outboundQueue_.size() >= props_.maxQueueSize) {
-                throw std::runtime_error("Outbound queue is full");
-            }
+            if (outboundQueue_.size() >= props_.maxQueueSize) { throw std::runtime_error("Gate: Queue is full"); }
             outboundQueue_.push(message);
         }
-
         queueCV_.notify_one();
     }
 
@@ -81,10 +75,7 @@ namespace sft::dtm::gateway {
     }
 
     void Gate::disconnect() {
-        if (state_ == State::DISCONNECTED ||
-            state_ == State::DISCONNECTING) {
-            return;
-        }
+        if (state_ == State::DISCONNECTED || state_ == State::DISCONNECTING) { return; }
 
         changeState(State::DISCONNECTING);
         std::cout << "Disconnecting..." << std::endl;
@@ -100,13 +91,8 @@ namespace sft::dtm::gateway {
         changeState(State::DISCONNECTED);
     }
 
-    bool Gate::isRunning() const {
-        return state_ == State::CONNECTED;
-    }
-
-    Gate::State Gate::getState() const {
-        return state_.load();
-    }
+    bool Gate::isRunning() const { return state_ == State::CONNECTED; }
+    Gate::State Gate::getState() const { return state_.load(); }
 
     void Gate::addStateChangeListener(std::function<void(State, State)> listener) {
         std::lock_guard<std::mutex> lock(listenersMutex_);

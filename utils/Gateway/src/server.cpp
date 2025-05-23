@@ -4,10 +4,13 @@
 #include <stdexcept>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
 using namespace std::chrono_literals;
+
 namespace sft::dtm::gateway {
 
+// Конструктор с инициализацией шлюза
     Server::Server(std::shared_ptr<IGate> gate)
             : gate_(std::move(gate)) {
         if (!gate_) {
@@ -16,7 +19,7 @@ namespace sft::dtm::gateway {
 
         // Устанавливаем обработчик входящих сообщений
         gate_->setInboundHandler([this](std::shared_ptr<void> msg) {
-            handleInboundMessage(msg);
+            handleInboundMessage(std::static_pointer_cast<DtoBase>(msg));
         });
 
         // Запускаем фоновый поток для очистки устаревших запросов
@@ -29,6 +32,7 @@ namespace sft::dtm::gateway {
         });
     }
 
+// Деструктор с остановкой потока очистки
     Server::~Server() {
         active_ = false;
         if (cleanupThread_.joinable()) {
@@ -37,6 +41,7 @@ namespace sft::dtm::gateway {
         clearPendingRequests();
     }
 
+// Регистрация нового клиента
     void Server::registerClient(std::shared_ptr<Client> client) {
         if (!client) {
             throw std::invalid_argument("Client cannot be null");
@@ -49,6 +54,7 @@ namespace sft::dtm::gateway {
         clients_[client->getKey()] = client;
     }
 
+// Удаление клиента
     void Server::unregisterClient(std::shared_ptr<Client> client) {
         if (!client) {
             throw std::invalid_argument("Client cannot be null");
@@ -58,18 +64,22 @@ namespace sft::dtm::gateway {
         clients_.erase(client->getKey());
     }
 
+// Отправка запроса с таймаутом
     std::future<Resp> Server::sendRequest(
             std::shared_ptr<Client> client,
-            std::shared_ptr<void> request,
+            std::shared_ptr<DtoBase> request,
             long timeoutMs) {
-        if (!client || !request) {
-            throw std::invalid_argument("Client and request cannot be null");
+        checkServerActive();
+        validateClientRegistration(client);
+
+        if (!request) {
+            throw std::invalid_argument("Request cannot be null");
         }
         if (timeoutMs < 0) {
             throw std::invalid_argument("Timeout cannot be negative");
         }
 
-        // Генерируем уникальный ключ для запроса
+        // Генерируем уникальный ключ запроса
         std::string requestId = generateRequestKey(client, request);
         auto pendingRequest = std::make_shared<PendingRequest>();
         pendingRequest->timestamp = std::chrono::system_clock::now();
@@ -104,25 +114,66 @@ namespace sft::dtm::gateway {
         return future;
     }
 
-    void Server::publish(const std::shared_ptr<Client>& client, std::shared_ptr<Send> data) {
-        if (!client || !data) {
-            throw std::invalid_argument("Client and data cannot be null");
+// Публикация данных
+    void Server::publish(std::shared_ptr<Client> client, std::shared_ptr<Send> data) {
+        checkServerActive();
+        validateClientRegistration(client);
+
+        if (!data) {
+            throw std::invalid_argument("Data cannot be null");
         }
 
         // Для публикации не модифицируем ключ
         gate_->send(data);
     }
 
-    void Server::handleInboundMessage(const std::shared_ptr<void>& message) {
-        try {
-            // Приводим к базовому классу DtoBase
-            auto dto = std::static_pointer_cast<DtoBase>(message);
+// Получение списка подключенных клиентов (weak_ptr)
+    std::vector<std::weak_ptr<Client>> Server::getConnectedClients() const {
+        std::vector<std::weak_ptr<Client>> result;
+        std::lock_guard<std::mutex> lock(clientsMutex_);
+        result.reserve(clients_.size());
+        for (const auto& pair : clients_) {
+            result.emplace_back(pair.second);
+        }
+        return result;
+    }
 
-            // Теперь можно безопасно использовать dynamic_cast
-            if (auto resp = std::dynamic_pointer_cast<Resp>(dto)) {
+// Получение статистики сервера
+    ServerStats Server::getStats() const {
+        ServerStats stats;
+        stats.active = active_.load();
+        {
+            std::lock_guard<std::mutex> lock(clientsMutex_);
+            stats.clientsCount = clients_.size();
+        }
+        {
+            std::lock_guard<std::mutex> lock(requestsMutex_);
+            stats.pendingRequestsCount = pendingRequests_.size();
+        }
+        return stats;
+    }
+
+// Проверка подключения клиента
+    bool Server::isClientConnected(std::shared_ptr<Client> client) const {
+        if (!client) return false;
+        std::lock_guard<std::mutex> lock(clientsMutex_);
+        return clients_.find(client->getKey()) != clients_.end();
+    }
+
+// Получение версии сервера
+    std::string Server::getVersion() const {
+        return "1.0.0";
+    }
+
+// ========== Приватные методы ==========
+
+// Обработка входящего сообщения
+    void Server::handleInboundMessage(const std::shared_ptr<DtoBase>& message) {
+        try {
+            if (auto resp = std::dynamic_pointer_cast<Resp>(message)) {
                 handleResponse(*resp);
             }
-            else if (auto recv = std::dynamic_pointer_cast<Recv>(dto)) {
+            else if (auto recv = std::dynamic_pointer_cast<Recv>(message)) {
                 dispatchToClient(*recv);
             }
         }
@@ -131,23 +182,37 @@ namespace sft::dtm::gateway {
         }
     }
 
+// Обработка ответа
     void Server::handleResponse(const Resp& resp) {
         std::lock_guard<std::mutex> lock(requestsMutex_);
         auto it = pendingRequests_.find(resp._key());
         if (it != pendingRequests_.end()) {
-            it->second->promise.set_value(resp);
+            // Восстанавливаем оригинальный ключ в ответе
+            Resp modifiedResp = resp;
+            modifiedResp._key(it->second->originalKey);
+
+            it->second->promise.set_value(modifiedResp);
             pendingRequests_.erase(it);
         }
     }
 
+// Маршрутизация сообщения клиенту
     void Server::dispatchToClient(const Recv& recv) {
-        std::lock_guard<std::mutex> lock(clientsMutex_);
-        auto it = clients_.find(recv._key());
-        if (it != clients_.end()) {
-            it->second->onDataReceived(recv);
+        std::shared_ptr<Client> client;
+        {
+            std::lock_guard<std::mutex> lock(clientsMutex_);
+            auto it = clients_.find(recv._key());
+            if (it != clients_.end()) {
+                client = it->second;
+            }
+        }
+
+        if (client) {
+            client->onDataReceived(std::make_shared<Recv>(recv));
         }
     }
 
+// Очистка устаревших запросов
     void Server::cleanupPendingRequests() {
         auto now = std::chrono::system_clock::now();
         std::lock_guard<std::mutex> lock(requestsMutex_);
@@ -163,6 +228,7 @@ namespace sft::dtm::gateway {
         }
     }
 
+// Очистка всех ожидающих запросов
     void Server::clearPendingRequests() {
         std::lock_guard<std::mutex> lock(requestsMutex_);
         for (auto& [id, req] : pendingRequests_) {
@@ -172,11 +238,15 @@ namespace sft::dtm::gateway {
         pendingRequests_.clear();
     }
 
+// Установка таймаута для запроса
     void Server::scheduleRequestTimeout(
             const std::string& requestId,
             std::shared_ptr<PendingRequest> request,
-            long timeoutMs) {
-        std::thread([this, requestId, request, timeoutMs]() {
+            long timeoutMs
+    )
+    {
+        std::thread([this, requestId, request, timeoutMs]()
+        {
             std::this_thread::sleep_for(std::chrono::milliseconds(timeoutMs));
 
             std::lock_guard<std::mutex> lock(requestsMutex_);
@@ -188,28 +258,40 @@ namespace sft::dtm::gateway {
         }).detach();
     }
 
+// Генерация ключа запроса
     std::string Server::generateRequestKey(
             const std::shared_ptr<Client>& client,
-            const std::shared_ptr<void>& request)
-    {
-
-        return client->getKey() + "_" + std::to_string(
-                std::chrono::system_clock::now().time_since_epoch().count());
+            const std::shared_ptr<DtoBase>& request) {
+        return client->getKey() + "_" +
+               std::to_string(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
-    void Server::changeRequestKey(const std::shared_ptr<void>& request, const std::string& newKey) {
-        // 1. Приводим к базовому интерфейсу IKeyHolder
-        auto keyHolder = std::static_pointer_cast<IKeyHolder>(request);
-
-        // 2. Устанавливаем новый ключ
-        keyHolder->_key(newKey);
-    }
-
-    std::string Server::getRequestKey(const std::shared_ptr<void>& request) {
-        if (auto keyHolder = std::static_pointer_cast<IKeyHolder>(request)) {
-            return keyHolder->_key();
+// Изменение ключа в DTO
+    void Server::changeRequestKey(
+            const std::shared_ptr<DtoBase>& request,
+            const std::string& newKey) {
+        if (request) {
+            request->_key(newKey);
         }
-        return "";
+    }
+
+// Получение ключа из DTO
+    std::string Server::getRequestKey(const std::shared_ptr<DtoBase>& request) {
+        return request ? request->_key() : "";
+    }
+
+// Проверка активности сервера
+    void Server::checkServerActive() const {
+        if (!active_) {
+            throw std::runtime_error("Server is not active");
+        }
+    }
+
+// Проверка регистрации клиента
+    void Server::validateClientRegistration(const std::shared_ptr<Client>& client) const {
+        if (!isClientConnected(client)) {
+            throw std::runtime_error("Client is not registered");
+        }
     }
 
 } // namespace sft::dtm::gateway

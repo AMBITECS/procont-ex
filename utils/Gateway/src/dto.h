@@ -401,7 +401,7 @@ namespace sft::dtm::gateway {
         }
 
         static Info create(std::string key, std::string channel, bool status) {
-            return Info(std::move(key), Connection(std::move(channel), status);
+            return Info(std::move(key), Connection(std::move(channel), status));
         }
 
         static Info connected(std::string key, std::string channel) {

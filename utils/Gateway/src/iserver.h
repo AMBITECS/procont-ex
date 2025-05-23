@@ -4,6 +4,8 @@
 #pragma once
 
 #include "dto.h"
+#include "server_stat.h"
+
 #include <memory>
 #include <future>
 #include <vector>
@@ -64,28 +66,11 @@ namespace sft::dtm::gateway {
          */
         virtual std::vector<std::weak_ptr<Client>> getConnectedClients() const = 0;
 
-        /// Статистика сервера
-        struct Stats {
-            size_t activeClients;      ///< Количество активных клиентов
-            size_t pendingRequests;    ///< Количество ожидающих запросов
-            size_t messagesProcessed;  ///< Количество обработанных сообщений
-
-            /**
-             * @brief Форматирует статистику в строку
-             * @return std::string Форматированная строка статистики
-             */
-            std::string toString() const {
-                return "Clients: " + std::to_string(activeClients) +
-                       ", Pending: " + std::to_string(pendingRequests) +
-                       ", Processed: " + std::to_string(messagesProcessed);
-            }
-        };
-
         /**
          * @brief Получает текущую статистику сервера
          * @return Stats Структура с показателями
          */
-        virtual Stats getStats() const = 0;
+        virtual ServerStats getStats() const = 0;
 
         /**
          * @brief Проверяет подключение клиента

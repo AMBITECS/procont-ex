@@ -1,9 +1,7 @@
 #pragma once
 #include "dto.h"
 #include "iserver.h"
-#include "reg.h"
 #include "item.h"
-
 #include <memory>
 #include <future>
 #include <mutex>
@@ -11,9 +9,20 @@
 #include <condition_variable>
 #include <atomic>
 #include <thread>
+#include <unordered_map>
 
 namespace sft::dtm::gateway {
 
+/**
+ * @class Client
+ * @brief Клиент для взаимодействия с шлюзом DTM
+ *
+ * Обеспечивает:
+ * - Установку/разрыв соединения
+ * - Подписку на данные
+ * - Обработку входящих сообщений
+ * - Автоматическое восстановление соединения
+ */
     class Client : public std::enable_shared_from_this<Client> {
     public:
         using DataHandler = std::function<void(const Recv&)>;
@@ -24,13 +33,18 @@ namespace sft::dtm::gateway {
         static constexpr size_t DEFAULT_QUEUE_SIZE = 512;
         static constexpr int MAX_RECONNECT_ATTEMPTS = 3;
 
-        Client(const std::string& key, const std::string& accountName);
+        /**
+         * @brief Конструктор клиента
+         * @param key Уникальный идентификатор клиента
+         * @param accountName Имя учетной записи (необязательно)
+         */
+        Client(const std::string& key, const std::string& accountName = "");
         ~Client();
 
         // Управление соединением
         void connect();
         void disconnect();
-        bool isConnected() const;
+        //bool isConnected() const;
 
         // Основные методы
         std::string getKey() const;
@@ -39,7 +53,7 @@ namespace sft::dtm::gateway {
 
         // Подписки
         std::future<Resp> subscribe(const std::vector<Item>& items);
-        std::future<Resp> unsubscribe(const std::vector<size_t>& addresses);
+        std::future<Resp> unsubscribe(const std::vector<std::string>& itemKeys);
         void unsubscribeAll();
 
         // Статус
@@ -59,9 +73,6 @@ namespace sft::dtm::gateway {
         bool recoverConnection();
         std::future<Resp> restoreSubscriptions();
 
-        // Реестр элементов
-        static Reg<Item> itemRegistry_;
-
         // Состояние
         const std::string key_;
         std::shared_ptr<IServer> server_;
@@ -70,6 +81,10 @@ namespace sft::dtm::gateway {
         std::atomic<bool> reconnecting_{false};
         std::atomic<bool> running_{true};
         std::atomic<int> reconnectAttempts_{0};
+
+        // Подписки (заменили Reg на простой map)
+        std::unordered_map<std::string, Item> subscriptions_;
+        mutable std::mutex subscriptionsMutex_;
 
         // Очередь данных
         std::queue<std::shared_ptr<Recv>> dataQueue_;

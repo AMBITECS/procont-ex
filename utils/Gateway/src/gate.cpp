@@ -1,392 +1,367 @@
 //-----------------------------------------------------------------------------
 // Copyright © 2016-2025 AMBITECS <info@ambi.biz>
 //-----------------------------------------------------------------------------
-
 #include "gate.h"
 #include "dto.h"
-#include "../../libzmq/include/zmq.h"
-#include "../../cppzmq/zmq.hpp"
 
 #include <chrono>
 #include <stdexcept>
 #include <sstream>
-
-#include <cmath>
+#include <iostream>
 
 using namespace std::chrono_literals;
+namespace sft::dtm::gateway {
 
-// Конструктор с инициализацией ZMQ сокетов
-Gate::Gate(const Props& props)
-        : props_(props),
-          context_(1), // Инициализация контекста с 1 I/O thread
-          admSocket_(context_, ZMQ_REQ), // Сокет для административных запросов (REQ-REP)
-          subSocket_(context_, ZMQ_SUB), // Сокет для подписки (SUB)
-          pubSocket_(context_, ZMQ_PUB)  // Сокет для публикации (PUB)
-{
-    // Установка таймаутов для административного сокета
-    admSocket_.set(zmq::sockopt::rcvtimeo, props_.timeout);
-    admSocket_.set(zmq::sockopt::sndtimeo, props_.timeout);
-    log("Gate initialized with host: {}:{}", props_.host, props_.admPort);
-}
+    Gate::Gate(const Props& props)
+            : props_(props),
+              context_(1),
+              admSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_REQ)),
+              subSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_SUB)),
+              pubSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_PUB)) {
 
-// Деструктор с гарантированным освобождением ресурсов
-Gate::~Gate() {
-    disconnect();
-    log("Gate destroyed");
-}
+        // Configure sockets
+        admSocket_->set(zmq::sockopt::rcvtimeo, props_.timeout);
+        admSocket_->set(zmq::sockopt::sndtimeo, props_.timeout);
+        subSocket_->set(zmq::sockopt::rcvtimeo, props_.timeout);
 
-// Отправка сообщения в очередь на передачу
-void Gate::send(std::shared_ptr<void> message) {
-    if (!message) {
-        throw std::invalid_argument("Message cannot be null");
+        std::cout << "Gate initialized for " << props_.host << ":" << props_.admPort << std::endl;
     }
 
-    std::unique_lock<std::mutex> lock(queueMutex_);
-
-    // Проверка переполнения очереди
-    if (outboundQueue_.size() >= props_.maxQueueSize) {
-        log("Outbound queue overflow (max: {})", props_.maxQueueSize);
-        throw std::runtime_error("Outbound queue is full");
-    }
-
-    outboundQueue_.push(message);
-    lock.unlock();
-
-    queueCV_.notify_one(); // Уведомляем поток отправителя
-    log("Message queued for sending");
-}
-
-// Установка обработчика входящих сообщений
-void Gate::setInboundHandler(std::function<void(std::shared_ptr<void>)> handler) {
-    std::lock_guard<std::mutex> lock(listenersMutex_);
-    inboundHandler_ = handler;
-    log("Inbound handler {}", handler ? "set successfully" : "cleared");
-}
-
-// Подключение к серверу
-bool Gate::connect() {
-    if (state_ == State::CONNECTED) {
-        return true;
-    }
-
-    changeState(State::CONNECTING);
-    log("Attempting to connect...");
-
-    try {
-        // Подключение административного сокета
-        admSocket_.connect("tcp://" + props_.host + ":" +
-                           std::to_string(props_.admPort));
-
-        // Подключение сокета подписки
-        subSocket_.connect("tcp://" + props_.host + ":" +
-                           std::to_string(props_.subPort));
-        subSocket_.set(zmq::sockopt::subscribe, ""); // Подписка на все сообщения
-
-        // Привязка сокета публикации
-        pubSocket_.bind("tcp://*:" + std::to_string(props_.pubPort));
-
-        // Запуск рабочих потоков
-        running_ = true;
-        receiverThread_ = std::thread(&Gate::recvLoop, this);
-        senderThread_ = std::thread(&Gate::sendLoop, this);
-        heartbeatThread_ = std::thread(&Gate::startHeartbeat, this);
-
-        changeState(State::CONNECTED);
-        log("Successfully connected to gateway");
-        return true;
-    } catch (const zmq::error_t& e) {
-        log("Connection failed: {}", e.what());
+    Gate::~Gate() {
         disconnect();
-        changeState(State::FAILED);
-        return false;
-    }
-}
-
-// Отключение от сервера
-void Gate::disconnect() {
-    if (state_ == State::DISCONNECTED ||
-        state_ == State::DISCONNECTING) {
-        return;
+        std::cout << "Gate destroyed" << std::endl;
     }
 
-    changeState(State::DISCONNECTING);
-    log("Disconnecting...");
-
-    running_ = false; // Флаг для остановки потоков
-    queueCV_.notify_all(); // Разблокировать ожидающие потоки
-
-    // Остановка потоков с таймаутом
-    if (receiverThread_.joinable()) {
-        receiverThread_.join();
-    }
-    if (senderThread_.joinable()) {
-        senderThread_.join();
-    }
-    if (heartbeatThread_.joinable()) {
-        heartbeatThread_.join();
-    }
-
-    // Закрытие сокетов
-    try {
-        context_.close();
-    } catch (const zmq::error_t& e) {
-        log("Error closing context: {}", e.what());
-    }
-
-    // Очистка очереди
-    std::lock_guard<std::mutex> lock(queueMutex_);
-    while (!outboundQueue_.empty()) {
-        outboundQueue_.pop();
-    }
-
-    changeState(State::DISCONNECTED);
-    log("Disconnected successfully");
-}
-
-// Цикл приема сообщений
-void Gate::recvLoop() {
-    zmq::poller_t<> poller;
-    poller.add(admSocket_, ZMQ_POLLIN);
-    poller.add(subSocket_, ZMQ_POLLIN);
-
-    log("Receiver thread started");
-
-    while (running_) {
-        try {
-            auto events = poller.wait(100ms); // Неблокирующее ожидание
-
-            if (!running_) break;
-
-            for (auto& event : events) {
-                if (event.socket == admSocket_ &&
-                    event.events & ZMQ_POLLIN) {
-                    handleAdminMessage();
-                } else if (event.socket == subSocket_ &&
-                           event.events & ZMQ_POLLIN) {
-                    handleSubscription();
-                }
-            }
-        } catch (const zmq::error_t& e) {
-            if (e.num() != ETERM) { // Игнорировать ошибки при завершении
-                log("Receive error: {}", e.what());
-                handleConnectionError();
-            }
-        } catch (...) {
-            if (running_) {
-                log("Unexpected receive error");
-                handleConnectionError();
-            }
+    void Gate::send(std::shared_ptr<void> message) {
+        if (!message) {
+            throw std::invalid_argument("Message cannot be null");
         }
-    }
-    log("Receiver thread stopped");
-}
 
-// Обработка административных сообщений
-void Gate::handleAdminMessage() {
-    zmq::message_t msg;
-    if (admSocket_.recv(msg, zmq::recv_flags::none)) {
-        try {
-            auto resp = Response::fromJSON(
-                    std::string(static_cast<char*>(msg.data()), msg.size()));
-
-            std::lock_guard<std::mutex> lock(listenersMutex_);
-            if (inboundHandler_) {
-                inboundHandler_(std::make_shared<Response>(resp));
-            }
-        } catch (...) {
-            log("Failed to parse admin message");
-        }
-    }
-}
-
-// Обработка подписок
-void Gate::handleSubscription() {
-    zmq::message_t msg;
-    if (subSocket_.recv(msg, zmq::recv_flags::none)) {
-        try {
-            auto recv = Receive::fromJSON(
-                    std::string(static_cast<char*>(msg.data()), msg.size()));
-
-            std::lock_guard<std::mutex> lock(listenersMutex_);
-            if (inboundHandler_) {
-                inboundHandler_(std::make_shared<Receive>(recv));
-            }
-        } catch (...) {
-            log("Failed to parse subscription message");
-        }
-    }
-}
-
-// Цикл отправки сообщений
-void Gate::sendLoop() {
-    log("Sender thread started");
-
-    while (running_) {
-        std::shared_ptr<void> msg;
         {
             std::unique_lock<std::mutex> lock(queueMutex_);
-            queueCV_.wait_for(lock, 100ms,
-                              [this]() { return !outboundQueue_.empty() || !running_; });
-
-            if (!running_) break;
-
-            if (!outboundQueue_.empty()) {
-                msg = outboundQueue_.front();
-                outboundQueue_.pop();
+            if (outboundQueue_.size() >= props_.maxQueueSize) {
+                throw std::runtime_error("Outbound queue is full");
             }
+            outboundQueue_.push(message);
         }
 
-        if (msg) {
+        queueCV_.notify_one();
+    }
+
+    void Gate::setInboundHandler(std::function<void(std::shared_ptr<void>)> handler) {
+        std::lock_guard<std::mutex> lock(listenersMutex_);
+        inboundHandler_ = handler;
+    }
+
+    bool Gate::connect() {
+        if (state_ == State::CONNECTED) return true;
+
+        changeState(State::CONNECTING);
+        std::cout << "Connecting to gateway..." << std::endl;
+
+        try {
+            admSocket_->connect(getAddress(props_.host, props_.admPort));
+            subSocket_->connect(getAddress(props_.host, props_.subPort));
+            subSocket_->set(zmq::sockopt::subscribe, "");
+            pubSocket_->bind(getAddress("*", props_.pubPort));
+
+            running_ = true;
+            receiverThread_ = std::thread(&Gate::recvLoop, this);
+            senderThread_ = std::thread(&Gate::sendLoop, this);
+            heartbeatThread_ = std::thread(&Gate::heartbeatLoop, this);
+
+            changeState(State::CONNECTED);
+            return true;
+        } catch (const zmq::error_t& e) {
+            std::cerr << "Connection failed: " << e.what() << std::endl;
+            cleanupResources();
+            changeState(State::FAILED);
+            return false;
+        }
+    }
+
+    void Gate::disconnect() {
+        if (state_ == State::DISCONNECTED ||
+            state_ == State::DISCONNECTING) {
+            return;
+        }
+
+        changeState(State::DISCONNECTING);
+        std::cout << "Disconnecting..." << std::endl;
+
+        running_ = false;
+        queueCV_.notify_all();
+
+        if (receiverThread_.joinable()) receiverThread_.join();
+        if (senderThread_.joinable()) senderThread_.join();
+        if (heartbeatThread_.joinable()) heartbeatThread_.join();
+
+        cleanupResources();
+        changeState(State::DISCONNECTED);
+    }
+
+    bool Gate::isRunning() const {
+        return state_ == State::CONNECTED;
+    }
+
+    Gate::State Gate::getState() const {
+        return state_.load();
+    }
+
+    void Gate::addStateChangeListener(std::function<void(State, State)> listener) {
+        std::lock_guard<std::mutex> lock(listenersMutex_);
+        stateListeners_.push_back(listener);
+    }
+
+    // Private methods implementation
+    void Gate::recvLoop() {
+        // Prepare poll items
+        zmq::pollitem_t items[] = {
+                {*admSocket_, 0, ZMQ_POLLIN, 0},
+                {*subSocket_, 0, ZMQ_POLLIN, 0}
+        };
+
+        while (running_) {
             try {
-                sendToSocket(msg);
+                // Poll with 100-ms timeout
+                zmq::poll(items, 2, 100ms);
+
+                if (!running_) break;
+
+                // Check admin socket
+                if (items[0].revents & ZMQ_POLLIN) {
+                    handleAdminMessage();
+                }
+
+                // Check subscription socket
+                if (items[1].revents & ZMQ_POLLIN) {
+                    handleSubscription();
+                }
             } catch (const zmq::error_t& e) {
-                log("Send error: {}", e.what());
-                handleConnectionError();
+                if (e.num() != ETERM) { // Ignore termination errors
+                    std::cerr << "Recv error: " << e.what() << std::endl;
+                    notifyConnectionLost();
+                }
+                break;
             } catch (...) {
                 if (running_) {
-                    log("Unexpected send error");
-                    handleConnectionError();
+                    std::cerr << "Unexpected receive error" << std::endl;
+                    notifyConnectionLost();
+                }
+                break;
+            }
+        }
+    }
+
+    void Gate::sendLoop() {
+        while (running_) {
+            std::shared_ptr<void> message;
+
+            {
+                std::unique_lock<std::mutex> lock(queueMutex_);
+                queueCV_.wait_for(lock, 100ms, [this]() {
+                    return !outboundQueue_.empty() || !running_;
+                });
+
+                if (!running_) break;
+                if (outboundQueue_.empty()) continue;
+
+                message = outboundQueue_.front();
+                outboundQueue_.pop();
+            }
+
+            if (message) {
+                try {
+                    sendToSocket(message);
+                } catch (const zmq::error_t& e) {
+                    std::cerr << "Send error: " << e.what() << std::endl;
+                    notifyConnectionLost();
+                } catch (...) {
+                    if (running_) {
+                        std::cerr << "Unexpected send error" << std::endl;
+                        notifyConnectionLost();
+                    }
                 }
             }
         }
     }
-    log("Sender thread stopped");
-}
 
-// Отправка сообщения через соответствующий сокет
-void Gate::sendToSocket(std::shared_ptr<void> msg) {
-    std::string json;
-    if (auto init = std::dynamic_pointer_cast<Init>(msg)) {
-        json = init->toJSON();
-    } else if (auto exit = std::dynamic_pointer_cast<Exit>(msg)) {
-        json = exit->toJSON();
-    } else if (auto subs = std::dynamic_pointer_cast<Subs>(msg)) {
-        json = subs->toJSON();
-    } else if (auto send = std::dynamic_pointer_cast<Send>(msg)) {
-        json = send->toJSON();
-    } else {
-        throw std::invalid_argument("Unsupported message type");
+    void Gate::heartbeatLoop() {
+        while (running_) {
+            std::this_thread::sleep_for(
+                    std::chrono::milliseconds(props_.heartbeatInterval));
+
+            if (!running_) break;
+
+            if (!performHeartbeat()) {
+                std::cerr << "Heartbeat failed, attempting reconnect..." << std::endl;
+                attemptReconnect();
+            }
+        }
     }
 
-    zmq::message_t zmqMsg(json.begin(), json.end());
-    if (std::dynamic_pointer_cast<Send>(msg)) {
-        pubSocket_.send(zmqMsg, zmq::send_flags::none);
-    } else {
-        admSocket_.send(zmqMsg, zmq::send_flags::none);
-    }
-    log("Message sent successfully");
-}
+    bool Gate::performHeartbeat() {
+        try {
+            zmq::message_t ping("PING", 4);
+            if (!admSocket_->send(ping, zmq::send_flags::dontwait)) {
+                return false;
+            }
 
-// Проверка соединения (heartbeat)
-bool Gate::checkConnection() {
-    try {
-        zmq::message_t ping("PING", 4);
-        if (!admSocket_.send(ping, zmq::send_flags::dontwait)) {
+            zmq::message_t pong;
+            if (!admSocket_->recv(pong, zmq::recv_flags::dontwait)) {
+                return false;
+            }
+
+            return std::string_view(static_cast<char*>(pong.data()), pong.size()) == "PONG";
+        } catch (...) {
             return false;
         }
+    }
 
-        zmq::message_t pong;
-        if (!admSocket_.recv(pong, zmq::recv_flags::dontwait)) {
-            return false;
+    void Gate::attemptReconnect() {
+        if (state_ == State::DISCONNECTING ||
+            state_ == State::DISCONNECTED) {
+            return;
         }
 
-        return std::string_view(static_cast<char*>(pong.data()), pong.size()) == "PONG";
-    } catch (...) {
-        return false;
-    }
-}
+        changeState(State::FAILED);
 
-// Запуск проверки соединения
-void Gate::startHeartbeat() {
-    log("Heartbeat started with interval: {}ms", props_.heartbeatInterval);
+        for (int attempt = 1; attempt <= props_.maxRetries && running_; ++attempt) {
+            std::this_thread::sleep_for(
+                    std::chrono::milliseconds(props_.reconnectDelay));
 
-    while (running_) {
-        std::this_thread::sleep_for(
-                std::chrono::milliseconds(props_.heartbeatInterval));
-
-        if (!running_) break;
-
-        if (!checkConnection()) {
-            log("Heartbeat failed, attempting to reconnect...");
-            reconnect();
-        }
-    }
-    log("Heartbeat stopped");
-}
-
-// Переподключение при сбое
-void Gate::reconnect() {
-    if (state_ == State::DISCONNECTING ||
-        state_ == State::DISCONNECTED) {
-        return;
-    }
-
-    changeState(State::FAILED);
-    log("Starting reconnection attempts...");
-
-    for (int attempt = 1; attempt <= props_.maxRetries && running_; ++attempt) {
-        log("Reconnection attempt {}/{}", attempt, props_.maxRetries);
-
-        disconnect();
-        if (connect()) {
-            return; // Успешное переподключение
+            if (connect()) {
+                notifyConnectionRestored();
+                return;
+            }
         }
 
         if (running_) {
-            std::this_thread::sleep_for(
-                    std::chrono::seconds(attempt)); // Экспоненциальная задержка
+            disconnect();
         }
     }
 
-    if (running_) {
-        log("All reconnection attempts failed");
-        disconnect();
+    void Gate::changeState(State newState) {
+        State oldState = state_.exchange(newState);
+        if (oldState != newState) {
+            notifyStateChanged(oldState, newState);
+        }
     }
-}
 
-// Изменение состояния с уведомлением слушателей
-void Gate::changeState(State newState) {
-    State oldState = state_.exchange(newState);
+    void Gate::cleanupResources() {
+        std::lock_guard<std::mutex> lock(zmqMutex_);
 
-    if (oldState != newState) {
+        try {
+            if (admSocket_) admSocket_->close();
+            if (subSocket_) subSocket_->close();
+            if (pubSocket_) pubSocket_->close();
+        } catch (...) {
+            // Ignore errors during cleanup
+        }
+
+        admSocket_.reset();
+        subSocket_.reset();
+        pubSocket_.reset();
+
+        {
+            std::lock_guard<std::mutex> lock(queueMutex_);
+            std::queue<std::shared_ptr<void>> empty;
+            std::swap(outboundQueue_, empty);
+        }
+    }
+
+    void Gate::handleAdminMessage() {
+        zmq::message_t msg;
+        if (admSocket_->recv(msg)) {
+            try {
+                auto resp = Resp::fromJSON(
+                        std::string(static_cast<char*>(msg.data()), msg.size()));
+
+                std::lock_guard<std::mutex> lock(listenersMutex_);
+                if (inboundHandler_) {
+                    inboundHandler_(std::make_shared<Resp>(resp));
+                }
+            } catch (...) {
+                std::cerr << "Failed to parse admin message" << std::endl;
+            }
+        }
+    }
+
+    void Gate::handleSubscription() {
+        zmq::message_t msg;
+        if (subSocket_->recv(msg)) {
+            try {
+                auto recv = Recv::fromJSON(
+                        std::string(static_cast<char*>(msg.data()), msg.size()));
+
+                std::lock_guard<std::mutex> lock(listenersMutex_);
+                if (inboundHandler_) {
+                    inboundHandler_(std::make_shared<Recv>(recv));
+                }
+            } catch (...) {
+                std::cerr << "Failed to parse subscription message" << std::endl;
+            }
+        }
+    }
+
+    void Gate::sendToSocket(std::shared_ptr<void> msg) {
+        std::string json;
+
+        // Проверяем тип сообщения через dynamic_pointer_cast
+        if (auto init = std::static_pointer_cast<Init>(msg)) {
+            json = init->toJSON();
+        } else if (auto exit = std::static_pointer_cast<Exit>(msg)) {
+            json = exit->toJSON();
+        } else if (auto subs = std::static_pointer_cast<Subs>(msg)) {
+            json = subs->toJSON();
+        } else if (auto send = std::static_pointer_cast<Send>(msg)) {
+            json = send->toJSON();
+        } else {
+            throw std::invalid_argument("Unsupported message type");
+        }
+
+        zmq::message_t zmqMsg(json.begin(), json.end());
+        if (std::static_pointer_cast<Send>(msg)) {
+            pubSocket_->send(zmqMsg, zmq::send_flags::none);
+        } else {
+            admSocket_->send(zmqMsg, zmq::send_flags::none);
+        }
+    }
+
+    void Gate::notifyStateChanged(State oldState, State newState) {
         std::lock_guard<std::mutex> lock(listenersMutex_);
         for (auto& listener : stateListeners_) {
             try {
                 listener(oldState, newState);
             } catch (...) {
-                // Гарантированно не бросать исключения
+                // Ignore listener exceptions
             }
         }
-        log("State changed: {} -> {}", toString(oldState), toString(newState));
     }
-}
 
-// Обработка ошибок соединения
-void Gate::handleConnectionError() {
-    if (state_ == State::CONNECTED) {
-        reconnect();
+    void Gate::notifyConnectionLost() {
+        std::lock_guard<std::mutex> lock(listenersMutex_);
+        // Additional notification logic if needed
     }
-}
 
-// Вспомогательный метод для логирования состояний
-std::string Gate::toString(State state) {
-    switch (state) {
-        case State::DISCONNECTED: return "DISCONNECTED";
-        case State::CONNECTING: return "CONNECTING";
-        case State::CONNECTED: return "CONNECTED";
-        case State::DISCONNECTING: return "DISCONNECTING";
-        case State::FAILED: return "FAILED";
-        default: return "UNKNOWN";
+    void Gate::notifyConnectionRestored() {
+        std::lock_guard<std::mutex> lock(listenersMutex_);
+        // Additional notification logic if needed
     }
-}
 
-// Добавление слушателя изменений состояния
-void Gate::addStateChangeListener(std::function<void(State, State)> listener) {
-    std::lock_guard<std::mutex> lock(listenersMutex_);
-    stateListeners_.push_back(listener);
-}
+    std::string Gate::getAddress(const std::string& host, int port) const {
+        return "tcp://" + host + ":" + std::to_string(port);
+    }
 
-// Получение текущего состояния
-Gate::State Gate::getState() const {
-    return state_.load();
-}
+    std::string Gate::stateToString(State state) {
+        switch (state) {
+            case State::DISCONNECTED: return "DISCONNECTED";
+            case State::CONNECTING: return "CONNECTING";
+            case State::CONNECTED: return "CONNECTED";
+            case State::DISCONNECTING: return "DISCONNECTING";
+            case State::FAILED: return "FAILED";
+            default: return "UNKNOWN";
+        }
+    }
+
+} // namespace sft::dtm::gateway

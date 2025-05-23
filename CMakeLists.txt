@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.25)
 project( PROCONT-EX
          VERSION 1.0.1
          DESCRIPTION "Procont execution environment"
@@ -74,6 +74,7 @@ message("== PROJ_DIR:     ${PROJ_DIR}")
 message("== CMAKE_DIR:    ${CMAKE_DIR}")
 message("== PROJ_INS_DIR: ${PROJ_INS_DIR}")
 message("== PROJ_SUB_DIR: ${PROJ_SUB_DIR}")
+message("== CMAKE_BINARY_DIR: ${PROJ_SUB_DIR}")
 #message("== PROJ_ST_FILE: ${PROJ_ST_FILE}")
 #message("== PROJ_IEC2C:   ${PROJ_IEC2C}")
 #message("== PROJ_IEC_DIR: ${PROJ_IEC_DIR}")
@@ -137,59 +138,136 @@ add_custom_target( build_iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки
 #-------------------------------------------------------------------------------
-#include(${CMAKE_DIR}/find_tools.cmake)
+include(${CMAKE_DIR}/find_tools.cmake)
 #find_package(modbus     REQUIRED)
 #find_package(can_master REQUIRED)
 
 #-------------------------------------------------------------------------------
 # Подключаемые модули
 #-------------------------------------------------------------------------------
-# Включаем необходимые модули
+# Включаем необходимые вспомогательные модули
 include(FetchContent)
 include(ExternalProject)  # <- Критически важная строка
 
-## Настройка путей
-#set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)
-#
-## (1) Сборка OpenSSL
-#ExternalProject_Add(
-#        openssl
-#        SOURCE_DIR ${OPENSSL_ROOT_DIR}
-#        CONFIGURE_COMMAND ${OPENSSL_ROOT_DIR}/config --prefix=${PROJ_INS_DIR}/openssl
-#        BUILD_COMMAND make -j${CMAKE_BUILD_PARALLEL_LEVEL}
-#        INSTALL_COMMAND make install
+## (-1-) Сборка OpenSSL
+set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)
+set(OPENSSL_INSTALL_DIR ${PROJ_INS_DIR})
+message(STATUS "OpenSSL root directory: ${OPENSSL_ROOT_DIR}")
+message(STATUS "OpenSSL will be installed to: ${OPENSSL_INSTALL_DIR}")
+file(MAKE_DIRECTORY "${OPENSSL_INSTALL_DIR}")
+
+# Проверяем наличие исходников
+if(NOT EXISTS "${OPENSSL_ROOT_DIR}/Configure")
+    message(FATAL_ERROR "OpenSSL sources not found in ${OPENSSL_ROOT_DIR}")
+endif()
+
+ExternalProject_Add(
+        openssl_external
+        SOURCE_DIR ${OPENSSL_ROOT_DIR}
+        PREFIX "${CMAKE_BINARY_DIR}/openssl_build"
+        CONFIGURE_COMMAND ${OPENSSL_ROOT_DIR}/config
+        --prefix=/usr/local
+        --openssldir=/usr/local/ssl
+        shared
+        linux-x86_64
+        no-asm
+        BUILD_COMMAND make depend && make -j${CMAKE_BUILD_PARALLEL_LEVEL}
+        INSTALL_COMMAND
+        make install_sw DESTDIR=${CMAKE_BINARY_DIR}/temp_install &&
+        cp -r ${CMAKE_BINARY_DIR}/temp_install/usr/local/. ${OPENSSL_INSTALL_DIR}/ &&
+        #rsync -a ${CMAKE_BINARY_DIR}/temp_install/usr/local/ ${OPENSSL_INSTALL_DIR}/ &&
+        rm -rf ${CMAKE_BINARY_DIR}/temp_install
+        BUILD_IN_SOURCE TRUE
+)
+
+# Импортируем OpenSSL после сборки
+find_package(OpenSSL REQUIRED PATHS "${OPENSSL_INSTALL_DIR}" NO_DEFAULT_PATH)
+
+## Вручную задаем пути к OpenSSL
+#add_library(OpenSSL::SSL SHARED IMPORTED)
+#add_library(OpenSSL::Crypto SHARED IMPORTED)
+#set_target_properties(OpenSSL::SSL PROPERTIES
+#        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"  # .so для Linux, .dll для Windows
+#        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include/openssl"
 #)
-#
-## Создаем интерфейсные цели для удобного использования
-#add_library(openssl_interface INTERFACE)
-#target_include_directories(openssl_interface INTERFACE ${PROJ_INS_DIR}/openssl/include
+#set_target_properties(OpenSSL::Crypto PROPERTIES
+#        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so"
+#        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include/openssl"
 #)
 
-## (2) Сборка ZeroMQ
-#set(ZMQ_ROOT_DIR ${PROJ_SUB_DIR}/libzmq)
-#
-#ExternalProject_Add(
-#        libzmq
-#        SOURCE_DIR ${ZMQ_ROOT_DIR}
-#        DEPENDS openssl
-#        CMAKE_ARGS
-#        -DCMAKE_INSTALL_PREFIX=${PROJ_INS_DIR}/zmq
-#        -DWITH_TLS=ON
-#        -DZMQ_TLS_ENGINE=openssl
-#        -DOPENSSL_ROOT_DIR=${PROJ_INS_DIR}/openssl
+######################
+## (-2-) Сборка ZeroMQ
+set(ZMQ_ROOT_DIR ${PROJ_SUB_DIR}/libzmq)
+set(ZMQ_INSTALL_DIR ${PROJ_INS_DIR})
+
+# Проверка исходников
+if(NOT EXISTS "${ZMQ_ROOT_DIR}/CMakeLists.txt")
+    message(FATAL_ERROR "libzmq sources not found in ${ZMQ_ROOT_DIR}")
+endif()
+
+# Настройка параметров
+set(ZMQ_BUILD_TESTS OFF       CACHE BOOL    "Disable ZMQ tests")
+set(WITH_TLS        ON        CACHE BOOL    "Enable TLS support")
+set(ZMQ_TLS_ENGINE  "openssl" CACHE STRING  "Use OpenSSL for TLS")
+set(BUILD_SHARED    ON        CACHE BOOL    "Build shared library")
+set(BUILD_STATIC    OFF       CACHE BOOL    "Disable static library")
+set(ENABLE_DRAFTS   OFF       CACHE BOOL    "Disable draft APIs")
+set(WITH_PERF_TOOL  OFF       CACHE BOOL    "Disable perf tool")
+set(WITH_LIBSODIUM  OFF       CACHE BOOL    "Disable libsodium")
+
+# Указываем путь установки
+set(CMAKE_INSTALL_PREFIX ${ZMQ_INSTALL_DIR} CACHE PATH "Installation directory" FORCE)
+
+# Добавляем libzmq как подпроект
+add_subdirectory(${PROJ_SUB_DIR}/libzmq)
+
+## Корректная команда установки
+add_custom_target(install_libzmq
+        COMMAND ${CMAKE_COMMAND}
+        --install ${CMAKE_BINARY_DIR}/utils/libzmq
+        --prefix ${ZMQ_INSTALL_DIR}
+        --config $<CONFIG>
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        DEPENDS libzmq
+        COMMENT "Installing libzmq to ${ZMQ_INSTALL_DIR}"
+        VERBATIM
+)
+## -- Альтернативный вариант через make
+#add_custom_target(install_libzmq
+#        COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=
+#        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/utils/libzmq
+#        DEPENDS libzmq
+#        COMMENT "Installing libzmq using make"
 #)
-#
-#add_library(zmq_interface INTERFACE)
-#target_include_directories(zmq_interface INTERFACE ${PROJ_INS_DIR}/zmq/include)
 
-add_subdirectory(${PROJ_SUB_DIR}/libzmq)    # --- libzmq
+######################
+### (3) Настройка и установка cppzmq
+set(CPPZMQ_ROOT_DIR ${PROJ_SUB_DIR}/cppzmq)
+set(CPPZMQ_INSTALL_DIR ${PROJ_INS_DIR})
 
-# Отключаем тесты и примеры в cppzmq
-set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "Disable cppzmq tests")
-set(CPPZMQ_BUILD_EXAMPLES OFF CACHE BOOL "Disable cppzmq examples")
+set(CPPZMQ_BUILD_TESTS OFF)
+set(CPPZMQ_BUILD_EXAMPLES OFF)
 
-add_subdirectory(${PROJ_SUB_DIR}/cppzmq)    # --- cppzmq
+# Указываем путь установки
+set(CMAKE_INSTALL_PREFIX ${CPPZMQ_INSTALL_DIR} CACHE PATH "Installation directory" FORCE)
 
+# Добавляем cppzmq как подпроект
+add_subdirectory(${PROJ_SUB_DIR}/cppzmq)
+
+## Корректная команда установки
+add_custom_target(install_cppzmq
+        COMMAND ${CMAKE_COMMAND}
+        --install ${CMAKE_BINARY_DIR}/utils/cppzmq
+        --prefix ${CPPZMQ_INSTALL_DIR}
+        --config $<CONFIG>
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        DEPENDS libzmq
+        COMMENT "Installing libzmq to ${CPPZMQ_INSTALL_DIR}"
+        VERBATIM
+)
+
+######################
+### (4) ...
 add_subdirectory(${PROJ_SUB_DIR}/Gateway)   # --- gateway
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
@@ -215,19 +293,11 @@ build_target( ${proj} EXE
         :MASK ${PROJ_SRC_DIR}/*.cpp
         :MASK ${PROJ_IEC_DIR}/*.o
     LNKS
-        openssl_interface
-        zmq_interface
-        cppzmq
         libzmq
-
-        #${PROJ_INS_DIR}/openssl/lib/libssl.so
-        #${PROJ_INS_DIR}/openssl/lib/libcrypto.so
-        #${PROJ_INS_DIR}/zmq/lib64/libzmq.so
-
+        cppzmq
         pro-gateway
         modbus
         can_master
-        #nlohmann_json
         nlohmann_json::nlohmann_json
 )
 
@@ -239,7 +309,7 @@ endif()
 ### Dependencies ###
 #-------------------------------------------------------------------------------
 add_dependencies(${proj} build_iec)
-add_dependencies(${proj} libzmq)
+add_dependencies(${proj} install_libzmq)
 
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")
 

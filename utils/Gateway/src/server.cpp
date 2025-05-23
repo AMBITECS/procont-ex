@@ -1,150 +1,215 @@
 #include "server.h"
-#include <chrono>
+#include "ikeyholder.h"
+#include "dto.h"
 #include <stdexcept>
+#include <sstream>
+#include <iostream>
 
-// Конструктор сервера, принимает шлюз для коммуникации
-Server::Server(std::shared_ptr<IGate> gate)
-        : gate_(std::move(gate)) {
-    if (!gate_) {
-        throw std::invalid_argument("Gate cannot be null");
-    }
+using namespace std::chrono_literals;
+namespace sft::dtm::gateway {
 
-    // Запускаем фоновый поток для очистки устаревших запросов
-    running_ = true;
-    cleanupThread_ = std::thread([this]() {
-        while (running_) {
-            std::this_thread::sleep_for(std::chrono::seconds(10)); // Проверка каждые 10 секунд
-            cleanupPendingRequests();
+    Server::Server(std::shared_ptr<IGate> gate)
+            : gate_(std::move(gate)) {
+        if (!gate_) {
+            throw std::invalid_argument("Gate cannot be null");
         }
-    });
-}
 
-// Деструктор сервера
-Server::~Server() {
-    running_ = false;
-    if (cleanupThread_.joinable()) {
-        cleanupThread_.join();
-    }
-}
+        // Устанавливаем обработчик входящих сообщений
+        gate_->setInboundHandler([this](std::shared_ptr<void> msg) {
+            handleInboundMessage(msg);
+        });
 
-// Регистрация нового клиента
-void Server::registerClient(std::shared_ptr<Client> client) {
-    if (!client) {
-        throw std::invalid_argument("Client cannot be null");
-    }
-
-    std::lock_guard<std::mutex> lock(clientsMutex_);
-    clients_[client->getId()] = client;
-}
-
-// Удаление клиента
-void Server::unregisterClient(std::shared_ptr<Client> client) {
-    if (!client) {
-        throw std::invalid_argument("Client cannot be null");
+        // Запускаем фоновый поток для очистки устаревших запросов
+        active_ = true;
+        cleanupThread_ = std::thread([this]() {
+            while (active_) {
+                std::this_thread::sleep_for(CLEANUP_INTERVAL);
+                cleanupPendingRequests();
+            }
+        });
     }
 
-    std::lock_guard<std::mutex> lock(clientsMutex_);
-    clients_.erase(client->getId());
-}
-
-// Отправка запроса с таймаутом
-std::future<Response> Server::sendRequest(
-        std::shared_ptr<Client> client,
-        std::shared_ptr<void> request,
-        long timeoutMs) {
-    if (!client || !request) {
-        throw std::invalid_argument("Client and request cannot be null");
+    Server::~Server() {
+        active_ = false;
+        if (cleanupThread_.joinable()) {
+            cleanupThread_.join();
+        }
+        clearPendingRequests();
     }
 
-    // Генерируем уникальный ключ для запроса
-    std::string key = generateRequestKey(client, request);
+    void Server::registerClient(std::shared_ptr<Client> client) {
+        if (!client) {
+            throw std::invalid_argument("Client cannot be null");
+        }
 
-    // Создаем объект ожидаемого запроса
-    PendingRequest pendingRequest;
-    pendingRequest.timestamp = std::chrono::system_clock::now();
+        std::lock_guard<std::mutex> lock(clientsMutex_);
+        if (clients_.find(client->getKey()) != clients_.end()) {
+            throw std::runtime_error("Client already registered");
+        }
+        clients_[client->getKey()] = client;
+    }
 
-    // Получаем future до перемещения promise
-    auto future = pendingRequest.promise.get_future();
+    void Server::unregisterClient(std::shared_ptr<Client> client) {
+        if (!client) {
+            throw std::invalid_argument("Client cannot be null");
+        }
 
-    {
+        std::lock_guard<std::mutex> lock(clientsMutex_);
+        clients_.erase(client->getKey());
+    }
+
+    std::future<Resp> Server::sendRequest(
+            std::shared_ptr<Client> client,
+            std::shared_ptr<void> request,
+            long timeoutMs) {
+        if (!client || !request) {
+            throw std::invalid_argument("Client and request cannot be null");
+        }
+        if (timeoutMs < 0) {
+            throw std::invalid_argument("Timeout cannot be negative");
+        }
+
+        // Генерируем уникальный ключ для запроса
+        std::string requestId = generateRequestKey(client, request);
+        auto pendingRequest = std::make_shared<PendingRequest>();
+        pendingRequest->timestamp = std::chrono::system_clock::now();
+        pendingRequest->originalKey = getRequestKey(request);
+
+        // Получаем future до перемещения promise
+        auto future = pendingRequest->promise.get_future();
+
+        {
+            std::lock_guard<std::mutex> lock(requestsMutex_);
+            pendingRequests_[requestId] = pendingRequest;
+        }
+
+        try {
+            // Временно заменяем ключ на ID запроса
+            changeRequestKey(request, requestId);
+            gate_->send(request);
+        } catch (...) {
+            std::lock_guard<std::mutex> lock(requestsMutex_);
+            pendingRequests_.erase(requestId);
+            throw;
+        }
+
+        // Восстанавливаем оригинальный ключ
+        changeRequestKey(request, pendingRequest->originalKey);
+
+        // Устанавливаем таймаут для запроса
+        if (timeoutMs > 0) {
+            scheduleRequestTimeout(requestId, pendingRequest, timeoutMs);
+        }
+
+        return future;
+    }
+
+    void Server::publish(const std::shared_ptr<Client>& client, std::shared_ptr<Send> data) {
+        if (!client || !data) {
+            throw std::invalid_argument("Client and data cannot be null");
+        }
+
+        // Для публикации не модифицируем ключ
+        gate_->send(data);
+    }
+
+    void Server::handleInboundMessage(const std::shared_ptr<void>& message) {
+        try {
+            // Приводим к базовому классу DtoBase
+            auto dto = std::static_pointer_cast<DtoBase>(message);
+
+            // Теперь можно безопасно использовать dynamic_cast
+            if (auto resp = std::dynamic_pointer_cast<Resp>(dto)) {
+                handleResponse(*resp);
+            }
+            else if (auto recv = std::dynamic_pointer_cast<Recv>(dto)) {
+                dispatchToClient(*recv);
+            }
+        }
+        catch (const std::exception& e) {
+            std::cerr << "Error processing message: " << e.what() << std::endl;
+        }
+    }
+
+    void Server::handleResponse(const Resp& resp) {
         std::lock_guard<std::mutex> lock(requestsMutex_);
-        pendingRequests_[key] = std::move(pendingRequest);
+        auto it = pendingRequests_.find(resp._key());
+        if (it != pendingRequests_.end()) {
+            it->second->promise.set_value(resp);
+            pendingRequests_.erase(it);
+        }
     }
 
-    // Отправляем запрос через шлюз
-    gate_->send(client->getId(), request);
+    void Server::dispatchToClient(const Recv& recv) {
+        std::lock_guard<std::mutex> lock(clientsMutex_);
+        auto it = clients_.find(recv._key());
+        if (it != clients_.end()) {
+            it->second->onDataReceived(recv);
+        }
+    }
 
-    // Устанавливаем таймаут для запроса
-    if (timeoutMs > 0) {
-        std::thread([this, key, timeoutMs]() {
+    void Server::cleanupPendingRequests() {
+        auto now = std::chrono::system_clock::now();
+        std::lock_guard<std::mutex> lock(requestsMutex_);
+
+        for (auto it = pendingRequests_.begin(); it != pendingRequests_.end(); ) {
+            if (now - it->second->timestamp > CLEANUP_INTERVAL) {
+                it->second->promise.set_exception(
+                        std::make_exception_ptr(std::runtime_error("Request timed out")));
+                it = pendingRequests_.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    void Server::clearPendingRequests() {
+        std::lock_guard<std::mutex> lock(requestsMutex_);
+        for (auto& [id, req] : pendingRequests_) {
+            req->promise.set_exception(
+                    std::make_exception_ptr(std::runtime_error("Server shutdown")));
+        }
+        pendingRequests_.clear();
+    }
+
+    void Server::scheduleRequestTimeout(
+            const std::string& requestId,
+            std::shared_ptr<PendingRequest> request,
+            long timeoutMs) {
+        std::thread([this, requestId, request, timeoutMs]() {
             std::this_thread::sleep_for(std::chrono::milliseconds(timeoutMs));
 
             std::lock_guard<std::mutex> lock(requestsMutex_);
-            auto it = pendingRequests_.find(key);
-            if (it != pendingRequests_.end()) {
-                it->second.promise.set_exception(
+            if (pendingRequests_.count(requestId)) {
+                request->promise.set_exception(
                         std::make_exception_ptr(std::runtime_error("Request timeout")));
-                pendingRequests_.erase(it);
+                pendingRequests_.erase(requestId);
             }
         }).detach();
     }
 
-    return future;
-}
+    std::string Server::generateRequestKey(
+            const std::shared_ptr<Client>& client,
+            const std::shared_ptr<void>& request)
+    {
 
-// Публикация данных для клиента
-void Server::publish(std::shared_ptr<Client> client, std::shared_ptr<Send> data) {
-    if (!client || !data) {
-        throw std::invalid_argument("Client and data cannot be null");
+        return client->getKey() + "_" + std::to_string(
+                std::chrono::system_clock::now().time_since_epoch().count());
     }
 
-    gate_->send(client->getId(), data);
-}
+    void Server::changeRequestKey(const std::shared_ptr<void>& request, const std::string& newKey) {
+        // 1. Приводим к базовому интерфейсу IKeyHolder
+        auto keyHolder = std::static_pointer_cast<IKeyHolder>(request);
 
-// Обработка входящих сообщений
-void Server::handleInboundMessage(std::shared_ptr<void> message) {
-    // Здесь должна быть логика обработки входящих сообщений
-    // и завершения соответствующих промисов из pendingRequests_
-    // В реальной реализации нужно преобразовать message в Response
-    // и найти соответствующий promise по ключу
-
-    // Примерная логика:
-    /*
-    auto response = std::static_pointer_cast<Response>(message);
-    std::string key = response->getRequestKey();
-    
-    std::lock_guard<std::mutex> lock(requestsMutex_);
-    auto it = pendingRequests_.find(key);
-    if (it != pendingRequests_.end()) {
-        it->second.promise.set_value(*response);
-        pendingRequests_.erase(it);
+        // 2. Устанавливаем новый ключ
+        keyHolder->_key(newKey);
     }
-    */
-}
 
-// Очистка устаревших запросов
-void Server::cleanupPendingRequests() {
-    auto now = std::chrono::system_clock::now();
-    std::lock_guard<std::mutex> lock(requestsMutex_);
-
-    for (auto it = pendingRequests_.begin(); it != pendingRequests_.end(); ) {
-        // Удаляем запросы, которые висят дольше 1 часа
-        if (std::chrono::duration_cast<std::chrono::hours>(
-                now - it->second.timestamp).count() >= 1) {
-            it->second.promise.set_exception(
-                    std::make_exception_ptr(std::runtime_error("Request expired")));
-            it = pendingRequests_.erase(it);
-        } else {
-            ++it;
+    std::string Server::getRequestKey(const std::shared_ptr<void>& request) {
+        if (auto keyHolder = std::static_pointer_cast<IKeyHolder>(request)) {
+            return keyHolder->_key();
         }
+        return "";
     }
-}
 
-// Генерация уникального ключа для запроса
-std::string Server::generateRequestKey(
-        std::shared_ptr<Client> client,
-        std::shared_ptr<void> request) {
-    // В реальной реализации нужно использовать уникальные идентификаторы
-    // клиента и запроса. Здесь упрощенный вариант.
-    return client->getId() + "_" + std::to_string(requestCounter_++);
-}
+} // namespace sft::dtm::gateway

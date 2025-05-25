@@ -16,7 +16,7 @@ namespace sft::dtm::utils {
     template <typename T>
     class ConfigLoader {
     public:
-        ConfigLoader(const std::string& configPath) {
+        explicit ConfigLoader(const std::string& configPath) {
             loadFromFile(configPath);
         }
 
@@ -38,15 +38,13 @@ namespace sft::dtm::utils {
                 size_t delimiterPos = line.find('=');
                 if (delimiterPos == std::string::npos) continue;
 
-                std::string key = line.substr(0, delimiterPos);
+                std::string key   = line.substr(0, delimiterPos);
                 std::string value = line.substr(delimiterPos + 1);
 
                 trim(key);
                 trim(value);
 
-                if (!key.empty() && !value.empty()) {
-                    configMap[key] = value;
-                }
+                if (!key.empty() && !value.empty()) { configMap[key] = value; }
             }
 
             parseConfig(configMap);

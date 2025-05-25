@@ -31,33 +31,81 @@ namespace sft::dtm::gateway {
         [[nodiscard]] virtual bool isRunning() const = 0;
     };
 
-    class Gate final : public IGate
-    {
+/**
+ * @class Gate
+ * @brief ZMQ-based gateway implementation
+ *
+ * Handles communication with remote DTM server using ZeroMQ sockets.
+ * Manages connection state, automatic reconnection and message queues.
+ */
+    class Gate final : public IGate {
     public:
-//        struct Props {
-//            std::string host{"127.0.0.1"};
-//            int admPort             {5501};     // Порт администрирования
-//            int subPort             {5502};     // Порт подписки
-//            int pubPort             {5503};     // Порт публикации
-//
-//            int timeout             {500};
-//            int maxRetries          {3};
-//            int maxQueueSize        {128};
-//            int heartbeatInterval   {5000};
-//            int reconnectDelay      {3000};
-//        };
-
+        /// Connection state enumeration
         enum class State {
-            DISCONNECTED,
-            CONNECTING,
-            CONNECTED,
-            DISCONNECTING,
-            FAILED
+            DISCONNECTED,   ///< Not connected
+            CONNECTING,     ///< Connection in progress
+            CONNECTED,      ///< Successfully connected
+            DISCONNECTING,  ///< Disconnection in progress
+            FAILED          ///< Connection failed
         };
 
+        /**
+         * @brief Construct Gate with configuration
+         * @param config Gate configuration object
+         */
+        explicit Gate(const GateConfig& config);
+
+//        /**
+//         * @brief Construct Gate with direct properties
+//         * @param props Configuration properties
+//         */
+//        explicit Gate(const GateConfig::Props& props);
+
+        ~Gate() override;
+
+        // IGate interface implementation
+        void send(std::shared_ptr<void> message) override;
+        void setInboundHandler(std::function<void(std::shared_ptr<void>)> handler) override;
+        bool connect() override;
+        void disconnect() override;
+        [[nodiscard]] bool isRunning() const override;
+
+        /**
+         * @brief Get current connection state
+         * @return State Current state
+         */
+        [[nodiscard]] State getState() const;
+
+        /**
+         * @brief Add state change listener
+         * @param listener Callback function
+         */
+        void addStateChangeListener(std::function<void(State, State)> listener);
+
     private:
-        // Member variables
-        GateConfig::Props props_;
+        // Internal methods
+        void recvLoop();
+        void sendLoop();
+        void heartbeatLoop();
+        bool performHeartbeat();
+        void attemptReconnect();
+        void changeState(State newState);
+        void cleanupResources();
+        void handleAdminMessage();
+        void handleSubscription();
+        void sendToSocket(std::shared_ptr<void> msg);
+        void notifyStateChanged(State oldState, State newState);
+        void notifyConnectionLost();
+        void notifyConnectionRestored();
+
+        // Helper methods
+        [[nodiscard]] std::string getAddress(const std::string& host, int port) const;
+        static std::string stateToString(State state);
+
+        // Configuration
+        const GateProps props_;
+
+        // Connection state
         std::atomic<State> state_{State::DISCONNECTED};
         std::atomic<bool> running_{false};
 
@@ -74,56 +122,109 @@ namespace sft::dtm::gateway {
         std::condition_variable queueCV_;
 
         // Handlers and listeners
-        std::function<void(std::shared_ptr<void>)>      inboundHandler_;
-        std::vector<std::function<void(State, State)>>  stateListeners_;
+        std::function<void(std::shared_ptr<void>)> inboundHandler_;
+        std::vector<std::function<void(State, State)>> stateListeners_;
         std::mutex listenersMutex_;
 
         // Worker threads
         std::thread receiverThread_;
         std::thread senderThread_;
         std::thread heartbeatThread_;
-
-    public:
-        explicit Gate(const GateConfig& config): Gate(config.getProps()) {}
-        explicit Gate(const GateConfig::Props& props);
-        ~Gate() override;
-
-        // IGate interface implementation
-        void send(std::shared_ptr<void> message) override;
-        void setInboundHandler(std::function<void(std::shared_ptr<void>)> handler) override;
-        bool connect() override;
-        void disconnect() override;
-        [[nodiscard]] bool isRunning() const override;
-
-        // Additional functionality
-        [[nodiscard]] State getState() const;
-        void addStateChangeListener(std::function<void(State, State)> listener);
-
-    private:
-        // Internal methods
-        void recvLoop();
-        void sendLoop();
-
-        void heartbeatLoop();
-        bool performHeartbeat();
-
-        void attemptReconnect();
-
-        void changeState(State newState);
-        void cleanupResources();
-
-        void handleAdminMessage();
-        void handleSubscription();
-
-        void sendToSocket(std::shared_ptr<void> msg);
-
-        void notifyStateChanged(State oldState, State newState);
-        void notifyConnectionLost();
-        void notifyConnectionRestored();
-
-        // Helper methods
-        [[nodiscard]] std::string getAddress(const std::string& host, int port) const;
-        static std::string stateToString(State state);
     };
+
+//    class Gate final : public IGate
+//    {
+//    public:
+////        struct Props {
+////            std::string host{"127.0.0.1"};
+////            int admPort             {5501};     // Порт администрирования
+////            int subPort             {5502};     // Порт подписки
+////            int pubPort             {5503};     // Порт публикации
+////
+////            int timeout             {500};
+////            int maxRetries          {3};
+////            int maxQueueSize        {128};
+////            int heartbeatInterval   {5000};
+////            int reconnectDelay      {3000};
+////        };
+//
+//        enum class State {
+//            DISCONNECTED,
+//            CONNECTING,
+//            CONNECTED,
+//            DISCONNECTING,
+//            FAILED
+//        };
+//
+//    private:
+//        // Member variables
+//        GateConfig::Props props_;
+//        std::atomic<State> state_{State::DISCONNECTED};
+//        std::atomic<bool> running_{false};
+//
+//        // ZMQ resources
+//        zmq::context_t context_;
+//        std::unique_ptr<zmq::socket_t> admSocket_;
+//        std::unique_ptr<zmq::socket_t> subSocket_;
+//        std::unique_ptr<zmq::socket_t> pubSocket_;
+//        std::mutex zmqMutex_;
+//
+//        // Message queue
+//        std::queue<std::shared_ptr<void>> outboundQueue_;
+//        std::mutex queueMutex_;
+//        std::condition_variable queueCV_;
+//
+//        // Handlers and listeners
+//        std::function<void(std::shared_ptr<void>)>      inboundHandler_;
+//        std::vector<std::function<void(State, State)>>  stateListeners_;
+//        std::mutex listenersMutex_;
+//
+//        // Worker threads
+//        std::thread receiverThread_;
+//        std::thread senderThread_;
+//        std::thread heartbeatThread_;
+//
+//    public:
+//        explicit Gate(const GateConfig& config): Gate(config.getProps()) {}
+//        explicit Gate(const GateConfig::Props& props);
+//        ~Gate() override;
+//
+//        // IGate interface implementation
+//        void send(std::shared_ptr<void> message) override;
+//        void setInboundHandler(std::function<void(std::shared_ptr<void>)> handler) override;
+//        bool connect() override;
+//        void disconnect() override;
+//        [[nodiscard]] bool isRunning() const override;
+//
+//        // Additional functionality
+//        [[nodiscard]] State getState() const;
+//        void addStateChangeListener(std::function<void(State, State)> listener);
+//
+//    private:
+//        // Internal methods
+//        void recvLoop();
+//        void sendLoop();
+//
+//        void heartbeatLoop();
+//        bool performHeartbeat();
+//
+//        void attemptReconnect();
+//
+//        void changeState(State newState);
+//        void cleanupResources();
+//
+//        void handleAdminMessage();
+//        void handleSubscription();
+//
+//        void sendToSocket(std::shared_ptr<void> msg);
+//
+//        void notifyStateChanged(State oldState, State newState);
+//        void notifyConnectionLost();
+//        void notifyConnectionRestored();
+//
+//        // Helper methods
+//        [[nodiscard]] std::string getAddress(const std::string& host, int port) const;
+//        static std::string stateToString(State state);
+//    };
 
 } // namespace sft::dtm::gateway

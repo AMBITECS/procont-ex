@@ -58,11 +58,13 @@ option(BUILD_SHARED_LIBS "Build ${proj} as a shared library" ON)
 # ---------------------------------------------------
 build_target( ${proj} LIB SHARED
         INCS
-        ${ROOT_DIR}/lib
-        ${PROJ_SRC_DIR}
+            ${ROOT_DIR}/lib
+            ${PROJ_SRC_DIR}
+            ${PROJ_SRC_DIR}/cfg
 
         SRCS
-        :MASK ${PROJ_SRC_DIR}/*.cpp
+            :MASK ${PROJ_SRC_DIR}/*.cpp
+            :MASK ${PROJ_SRC_DIR}/cfg/*.cpp
 )
 
 if(CMAKE_COMPILER_IS_GNUCC)

@@ -11,20 +11,35 @@
 using namespace std::chrono_literals;
 namespace sft::dtm::gateway {
 
-    Gate::Gate(const GateConfig::Props& props):
-        props_(props),
-        context_(1),
-        admSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_REQ)),
-        subSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_SUB)),
-        pubSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_PUB))
+    Gate::Gate(const GateConfig& config) :
+            props_(config.getConfig()),  // Получаем Props из GateConfig
+            context_(1),
+            admSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_REQ)),
+            subSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_SUB)),
+            pubSocket_(std::make_unique<zmq::socket_t>(context_, ZMQ_PUB)),
+            running_(false),
+            state_(State::DISCONNECTED)
     {
-
-        // Configure sockets
+        // Настройка сокетов с параметрами из конфига
         admSocket_->set(zmq::sockopt::rcvtimeo, props_.timeout);
         admSocket_->set(zmq::sockopt::sndtimeo, props_.timeout);
         subSocket_->set(zmq::sockopt::rcvtimeo, props_.timeout);
 
-        std::cout << "Gate initialized for " << props_.host << ":" << props_.admPort << std::endl;
+        // Дополнительные настройки сокетов
+        pubSocket_->set(zmq::sockopt::sndhwm, props_.maxQueueSize);
+        subSocket_->set(zmq::sockopt::rcvhwm, props_.maxQueueSize);
+
+        // Логирование инициализации
+        std::cout << "Gate initialized with configuration:" << std::endl
+                  << "  Host: " << props_.host << std::endl
+                  << "  Admin port: " << props_.admPort << std::endl
+                  << "  Sub port: " << props_.subPort << std::endl
+                  << "  Pub port: " << props_.pubPort << std::endl
+                  << "  Timeout: " << props_.timeout << "ms" << std::endl
+                  << "  Max retries: " << props_.maxRetries << std::endl
+                  << "  Max queue size: " << props_.maxQueueSize << std::endl
+                  << "  Heartbeat interval: " << props_.heartbeatInterval << "ms" << std::endl
+                  << "  Reconnect delay: " << props_.reconnectDelay << "ms" << std::endl;
     }
 
     Gate::~Gate() {

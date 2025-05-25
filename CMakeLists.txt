@@ -284,10 +284,7 @@ build_target( ${proj} EXE
         ${PROJ_LIB_DIR}
         ${PROJ_SRC_DIR}
         ${PROJ_IEC_DIR}
-
-#        ${PROJ_SUB_DIR}/cppzmq
-#        ${PROJ_SUB_DIR}/json/include
-#        ${PROJ_SUB_DIR}/libzmq/include
+        #${PROJ_SRC_DIR}/cfg
     SRCS
         ${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp

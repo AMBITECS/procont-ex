@@ -7,21 +7,23 @@
 #ifndef PRO_GATEWAY_H
 #define PRO_GATEWAY_H
 
-#include "registry.h"
+//#include "registry.h"
 #include "variant.h"
 
-/*
+//#include "bitwise.h"
+#include "vector.h"
+#include "iec_types.h"
 
 #define BUFFER_MAXSIZE 65536;    // Standard PLC addressing space
-//#define BUFFER_SIZE 1024 // Current PLC registers size
+//#define BUFFER_SIZE    1024     // Current PLC registers size
 
-constexpr unsigned short BUFFER_SIZE = 1024;     // Current PLC registers size
+constexpr unsigned short BUFFER_SIZE  =  1024;     // Current PLC registers size
+
 
 // ----------------------------------------------------------------------------
 // PLC Register Types
 // ----------------------------------------------------------------------------
-// Специализации для стандартных типов
-//using VEC_BOOL  = BitwiseVector <IEC_BOOL*>;
+// Специализации для стандартных типов using VEC_BOOL  = BitwiseVector <IEC_BOOL*>;
 using VEC_BYTE  = ObservableVector <IEC_BYTE*>;
 using VEC_UINT  = ObservableVector <IEC_UINT*>;
 using VEC_UDINT = ObservableVector <IEC_UDINT*>;
@@ -68,41 +70,39 @@ using VEC_ULINT = ObservableVector <IEC_ULINT*>;
 //// Global registry access
 //Registry& reg();
 
-extern VEC_BYTE    IB;
-extern VEC_BYTE    QB;
-extern VEC_UINT    IW;
-extern VEC_UINT    QW;
-extern VEC_UDINT   ID;
-extern VEC_UDINT   QD;
-extern VEC_ULINT   IL;
-extern VEC_ULINT   QL;
-extern VEC_UINT    MW;
-extern VEC_UDINT   MD;
-extern VEC_ULINT   ML;
-
-*/
-
 //Booleans
 extern IEC_BOOL *IX [BUFFER_SIZE][8];
 extern IEC_BOOL *QX [BUFFER_SIZE][8];
 
+//extern VEC_BYTE    IB;
+//extern VEC_BYTE    QB;
+//extern VEC_UINT    IW;
+//extern VEC_UINT    QW;
+//extern VEC_UDINT   ID;
+//extern VEC_UDINT   QD;
+//extern VEC_ULINT   IL;
+//extern VEC_ULINT   QL;
 
-//////Bytes
-//extern IEC_BYTE *IB [BUFFER_SIZE];
-//extern IEC_BYTE *QB [BUFFER_SIZE];
-//
-////Analog I/O
-//extern IEC_UINT *IW [BUFFER_SIZE];
-//extern IEC_UINT *QW [BUFFER_SIZE];
-//
-////32bit I/O
-//extern IEC_UDINT *ID [BUFFER_SIZE];
-//extern IEC_UDINT *QD [BUFFER_SIZE];
-//
-////64bit I/O
-//extern IEC_ULINT *IL [BUFFER_SIZE];
-//extern IEC_ULINT *QL [BUFFER_SIZE];
-//
+extern VEC_UINT    MW;
+extern VEC_UDINT   MD;
+extern VEC_ULINT   ML;
+
+////Bytes
+extern IEC_BYTE *IB [BUFFER_SIZE];
+extern IEC_BYTE *QB [BUFFER_SIZE];
+
+//Analog I/O
+extern IEC_UINT *IW [BUFFER_SIZE];
+extern IEC_UINT *QW [BUFFER_SIZE];
+
+//32bit I/O
+extern IEC_UDINT *ID [BUFFER_SIZE];
+extern IEC_UDINT *QD [BUFFER_SIZE];
+
+//64bit I/O
+extern IEC_ULINT *IL [BUFFER_SIZE];
+extern IEC_ULINT *QL [BUFFER_SIZE];
+
 //Memory
 //extern IEC_UINT  *MW [BUFFER_SIZE];
 //extern IEC_UDINT *MD [BUFFER_SIZE];

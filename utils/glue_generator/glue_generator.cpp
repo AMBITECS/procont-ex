@@ -14,6 +14,32 @@ using namespace std;
 /// @param glueVars The output stream to write to.
 void generateHeader(ostream& glueVars)
 {
+/*
+//Booleans
+extern IEC_BOOL *IX[][8];
+extern IEC_BOOL *QX[][8];
+
+//Bytes
+extern IEC_BYTE *IB[];
+extern IEC_BYTE *QB[];
+
+//Analog I/O
+extern IEC_UINT *IW[];
+extern IEC_UINT *QW[];
+
+//32bit I/O
+extern IEC_UDINT *ID[];
+extern IEC_UDINT *QD[];
+
+//64bit I/O
+extern IEC_ULINT *IL[];
+extern IEC_ULINT *QL[];
+
+//Memory
+extern IEC_UINT *MW[];
+extern IEC_UDINT *MD[];
+extern IEC_ULINT *ML[];
+ */
 	glueVars << 	"\
 //-----------------------------------------------------------------------------\r\n\
 // Copyright 2018 Ambitecs\r\n\
@@ -24,31 +50,7 @@ void generateHeader(ostream& glueVars)
 //-----------------------------------------------------------------------------\r\n\
 \r\n\
 #include \"iec_std_lib.h\"\r\n\
-\r\n\
-//Booleans\r\n\
-extern IEC_BOOL *IX[][8];\r\n\
-extern IEC_BOOL *QX[][8];\r\n\
-\r\n\
-//Bytes\r\n\
-extern IEC_BYTE *IB[];\r\n\
-extern IEC_BYTE *QB[];\r\n\
-\r\n\
-//Analog I/O\r\n\
-extern IEC_UINT *IW[];\r\n\
-extern IEC_UINT *QW[];\r\n\
-\r\n\
-//32bit I/O\r\n\
-extern IEC_UDINT *ID[];\r\n\
-extern IEC_UDINT *QD[];\r\n\
-\r\n\
-//64bit I/O\r\n\
-extern IEC_ULINT *IL[];\r\n\
-extern IEC_ULINT *QL[];\r\n\
-\r\n\
-//Memory\r\n\
-extern IEC_UINT *MW[];\r\n\
-extern IEC_UDINT *MD[];\r\n\
-extern IEC_ULINT *ML[];\r\n\
+#include \"gateway.h\"\r\n\
 \r\n\
 \r\n\
 #define __LOCATED_VAR(type, name, ...) type __##name;\r\n\

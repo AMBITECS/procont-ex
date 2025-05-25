@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cctype>
 
+#define GATEWAY_EXPORTS
 #include "gateway.h"
 
 //// Singleton registry instance
@@ -12,46 +13,53 @@
 //    return plc_registry;
 //}
 
+//// ----------------------------------------------------------------------------
+//// PLC Register Types
+//// ----------------------------------------------------------------------------
+//// Специализации для стандартных типов using VEC_BOOL  = BitwiseVector <IEC_BOOL*>;
+//using VEC_BYTE  = ObservableVector <IEC_BYTE*>;
+//using VEC_UINT  = ObservableVector <IEC_UINT*>;
+//using VEC_UDINT = ObservableVector <IEC_UDINT*>;
+//using VEC_ULINT = ObservableVector <IEC_ULINT*>;
 
-//VEC_BOOL    IX(BUFFER_SIZE);     // Digital Inputs (%IX)
-//VEC_BOOL    QX(BUFFER_SIZE);     // Digital Outputs (%QX)
+//VEC_BOOL    IX = VEC_BOOL(BUFFER_SIZE);     // Digital Inputs (%IX)
+//VEC_BOOL    QX = VEC_BOOL(BUFFER_SIZE);     // Digital Outputs (%QX)
 
-/*
-VEC_BYTE    IB(BUFFER_SIZE);    // Byte Inputs (%IB)
-VEC_BYTE    QB(BUFFER_SIZE);    // Byte Outputs (%QB)
-VEC_UINT    IW(BUFFER_SIZE);    // Word Inputs (%IW)
-VEC_UINT    QW(BUFFER_SIZE);    // Word Outputs (%QW)
-VEC_UDINT   ID(BUFFER_SIZE);    // Double Word Inputs (%ID)
-VEC_UDINT   QD(BUFFER_SIZE);    // Double Word Outputs (%QD)
-VEC_ULINT   IL(BUFFER_SIZE);    // Long Word Inputs (%IL)
-VEC_ULINT   QL(BUFFER_SIZE);    // Long Word Outputs (%QL)
+//VEC_BYTE    IB(BUFFER_SIZE);    // Byte Inputs (%IB)
+//VEC_BYTE    QB(BUFFER_SIZE);    // Byte Outputs (%QB)
+//VEC_UINT    IW(BUFFER_SIZE);    // Word Inputs (%IW)
+//VEC_UINT    QW(BUFFER_SIZE);    // Word Outputs (%QW)
+//VEC_UDINT   ID(BUFFER_SIZE);    // Double Word Inputs (%ID)
+//VEC_UDINT   QD(BUFFER_SIZE);    // Double Word Outputs (%QD)
+//VEC_ULINT   IL(BUFFER_SIZE);    // Long Word Inputs (%IL)
+//VEC_ULINT   QL(BUFFER_SIZE);    // Long Word Outputs (%QL)
 
+//
 VEC_UINT    MW(BUFFER_SIZE);    // Memory Words (%MW)
 VEC_UDINT   MD(BUFFER_SIZE);    // Memory Double Words (%MD)
 VEC_ULINT   ML(BUFFER_SIZE);    // Local Data (%ML)
-*/
 
 //Booleans
 IEC_BOOL *IX [BUFFER_SIZE][8];
 IEC_BOOL *QX [BUFFER_SIZE][8];
 
-////Bytes
-//IEC_BYTE *IB [BUFFER_SIZE];
-//IEC_BYTE *QB [BUFFER_SIZE];
-//
-////Analog I/O
-//IEC_UINT *IW [BUFFER_SIZE];
-//IEC_UINT *QW [BUFFER_SIZE];
-//
-////32bit I/O
-//IEC_UDINT *ID [BUFFER_SIZE];
-//IEC_UDINT *QD [BUFFER_SIZE];
-//
-////64bit I/O
-//IEC_ULINT *IL [BUFFER_SIZE];
-//IEC_ULINT *QL [BUFFER_SIZE];
-//
-////Memory
+//Bytes
+IEC_BYTE *IB [BUFFER_SIZE];
+IEC_BYTE *QB [BUFFER_SIZE];
+
+//Analog I/O
+IEC_UINT *IW [BUFFER_SIZE];
+IEC_UINT *QW [BUFFER_SIZE];
+
+//32bit I/O
+IEC_UDINT *ID [BUFFER_SIZE];
+IEC_UDINT *QD [BUFFER_SIZE];
+
+//64bit I/O
+IEC_ULINT *IL [BUFFER_SIZE];
+IEC_ULINT *QL [BUFFER_SIZE];
+
+//Memory
 //IEC_UINT  *MW [BUFFER_SIZE];
 //IEC_UDINT *MD [BUFFER_SIZE];
 //IEC_ULINT *ML [BUFFER_SIZE];

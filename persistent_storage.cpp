@@ -57,7 +57,7 @@ void startPstorage()
 {
     // Wait for persistent.file was read
     while (!pstorage_read_complete) sleepms(100);
-    
+
     char log_msg[1000];
     sprintf(log_msg, "Starting Persistent Storage thread\n");
     log(log_msg);

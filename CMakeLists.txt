@@ -280,27 +280,39 @@ include(${CMAKE_DIR}/build_tools.cmake)
 
 build_target( ${proj} EXE
     OPTS -g -O0 -w -fPIC
+    PRPS CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
     INCS
         ${PROJ_LIB_DIR}
-        ${PROJ_SRC_DIR}
         ${PROJ_IEC_DIR}
+        ${PROJ_SRC_DIR}
 
     SRCS
         ${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp
         :MASK ${PROJ_IEC_DIR}/*.o
     LNKS
-        #libzmq
-        #cppzmq
+        libzmq
+        cppzmq
         pro-gateway
         modbus
         can_master
-        #nlohmann_json::nlohmann_json
+        nlohmann_json::nlohmann_json
 )
 
+#set_target_properties(${proj} PROPERTIES CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+
 if(CMAKE_COMPILER_IS_GNUCC)
-    target_compile_options(${proj} PRIVATE -D_GNU_SOURCE -Wall -Wextra)
+    target_compile_options(${proj} PRIVATE  -D_GNU_SOURCE -Wall -Wextra)
 endif()
+
+#target_compile_definitions(${proj} PRIVATE _GLIBCXX_DEBUG=1)
+
+## Включение AddressSanitizer для всех конфигураций
+#if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+#    message(STATUS "ADD: -fsanitize=address -O0 -g")
+#    add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
+#    add_link_options(-fsanitize=address)
+#endif()
 
 #-------------------------------------------------------------------------------
 ### Dependencies ###

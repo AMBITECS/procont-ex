@@ -17,6 +17,7 @@
 #include <iostream>
 #include "variant.h"
 
+//-----------------------------------------------------------------------------
 struct OnDataChange {
     using TimeStamp = std::chrono::system_clock::time_point;
 
@@ -27,17 +28,19 @@ struct OnDataChange {
     TimeStamp timestamp;
 
     OnDataChange(std::string k, uint64_t mask, VARIANT old_val, VARIANT new_val,
-                 TimeStamp time = std::chrono::system_clock::now())
-            : key(std::move(k)), bit_mask(mask),
-              old_value(std::move(old_val)),
-              new_value(std::move(new_val)),
-              timestamp(time) {}
+                 TimeStamp time = std::chrono::system_clock::now()):
+                 key(std::move(k)),
+                 bit_mask(mask),
+                 old_value(std::move(old_val)),
+                 new_value(std::move(new_val)),
+                 timestamp(time) {}
 
     [[nodiscard]] bool is_bit_change() const noexcept {
         return bit_mask != 0;
     }
 };
 
+//-----------------------------------------------------------------------------
 class DataServer {
 public:
     using Callback = std::function<void(const std::vector<OnDataChange>&)>;
@@ -47,15 +50,15 @@ public:
     using SubscriptionMap = std::map<Topic, std::set<std::string>>;
 
     struct ClientItem {
-        size_t index{};
+        size_t   index{};
         uint64_t mask{};
         VAR_TYPE type{};
-        VARIANT value{};
+        VARIANT  value{};
     };
     using ItemMap = std::map<std::string, ClientItem>;
 
     struct ClientData {
-        ItemMap items;
+        ItemMap  items;
         TopicMap topics;
         SubscriptionMap subscriptions;
     };

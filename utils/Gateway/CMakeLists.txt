@@ -56,7 +56,10 @@ option(BUILD_SHARED_LIBS "Build ${proj} as a shared library" ON)
 # ---------------------------------------------------
 ### TARGET: pro-gateway (shared lib)  ###
 # ---------------------------------------------------
-build_target( ${proj} LIB SHARED
+build_target( ${proj}
+            LIB
+            SHARED
+            #STATIC
         INCS
             ${ROOT_DIR}/lib
             ${PROJ_SRC_DIR}
@@ -64,7 +67,7 @@ build_target( ${proj} LIB SHARED
 
         SRCS
             :MASK ${PROJ_SRC_DIR}/*.cpp
-            :MASK ${PROJ_SRC_DIR}/cfg/*.cpp
+            :MASK ${PROJ_SRC_DIR}/gate/*.cpp
 )
 
 if(CMAKE_COMPILER_IS_GNUCC)
@@ -85,7 +88,15 @@ set(LIBPRO_GATEWAY_SOVERSION_SOVERSION ${PROJECT_SO_VERSION})
 set_target_properties(${proj} PROPERTIES
         VERSION   ${LIBPRO_GATEWAY_SOVERSION_VERSION}
         SOVERSION ${LIBPRO_GATEWAY_SOVERSION_SOVERSION}
+        CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"  # /MD
 )
+
+# Включение AddressSanitizer для всех конфигураций
+#if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+#    message(STATUS "ADD: -fsanitize=address -O0 -g")
+#    add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
+#    add_link_options(-fsanitize=address)
+#endif()
 
 # -----------------------------------------------------------------------------
 #### INSTALL ####

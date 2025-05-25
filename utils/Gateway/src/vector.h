@@ -4,6 +4,7 @@
 #ifndef PROCONT_EX_RANGE_OBSERVABLE_VECTOR_H
 #define PROCONT_EX_RANGE_OBSERVABLE_VECTOR_H
 
+#include <assert.h>
 #include <vector>
 #include <memory>
 #include <mutex>
@@ -17,9 +18,21 @@
 #include <utility>
 #include "processor.h"
 #include "variant.h"
+#include "iec_types.h"
+
+// Настройка экспорта для Windows
+#ifdef _WIN32
+#ifdef GATEWAY_EXPORTS  // Определяется при компиляции DLL
+        #define GATEWAY_API __declspec(dllexport)
+    #else
+        #define GATEWAY_API __declspec(dllimport)
+    #endif
+#else  // Linux/macOS
+#define GATEWAY_API __attribute__((visibility("default")))
+#endif
 
 template <typename T>
-class ObservableVector {
+class GATEWAY_API ObservableVector {
     static_assert(
             std::is_same_v<T, T_BOOL>   || std::is_same_v<T, T_BOOL*>   ||
             std::is_same_v<T, T_SINT8>  || std::is_same_v<T, T_SINT8*>  ||
@@ -40,6 +53,8 @@ class ObservableVector {
     using value_type = std::conditional_t<is_pointer, std::remove_pointer_t<T>, T>;
 
     std::vector<T> data_;
+    //std::vector<std::unique_ptr<T>> data_;
+
     mutable std::shared_mutex mutex_;
     std::shared_ptr<DataServer> data_server_;
     std::string key_prefix_ = "vec_";
@@ -100,6 +115,8 @@ public:
                 std::monostate> old_value_;
 
         pointer get_ptr() const noexcept {
+            vec_.check_invariants();
+
             std::shared_lock lock(vec_.mutex_);
             //static_assert(ObservableVector::is_pointer, "call get_ptr() with non-pointer template");
             return (index_ < vec_.data_.size()) ? vec_.data_[index_] : nullptr;
@@ -107,6 +124,8 @@ public:
 
     public:
         BasicProxy(VectorType& vec, size_type index) : vec_(vec), index_(index) {
+            vec_.check_invariants();
+
             if constexpr (!IsConst && ObservableVector::is_pointer) {
                 if (auto ptr = get_ptr()) {
                     old_value_.emplace(*ptr);
@@ -115,6 +134,8 @@ public:
         }
 
         ~BasicProxy() {
+            vec_.check_invariants();
+
             if constexpr (!IsConst) {
                 if constexpr (ObservableVector::is_pointer) {
                     if (old_value_) {
@@ -130,6 +151,7 @@ public:
 
         // Прозрачное преобразование к оригинальному типу T
         operator original_type() const { //NOLINT
+
             std::shared_lock lock(vec_.mutex_);
             if (index_ >= vec_.data_.size())  throw std::out_of_range("Index out of range");
             return vec_.data_[index_];
@@ -196,8 +218,8 @@ public:
     explicit ObservableVector(std::shared_ptr<DataServer> server) : data_server_(std::move(server)) {}
 
     explicit ObservableVector(size_type count) : data_(count) {
+        check_invariants();
         //std::cout << "Constructor, this=" << this << ", size=" << data_.size() << std::endl;
-        resize(count);
     }
 
     ObservableVector(size_type count, const T& value) : data_(count, value) {}
@@ -214,16 +236,17 @@ public:
         key_prefix_ = other.key_prefix_;
     }
 
-    ObservableVector(ObservableVector&& other) noexcept {
-        std::unique_lock lock(other.mutex_);
-        data_ = std::move(other.data_);
-        data_server_ = std::move(other.data_server_);
-        key_prefix_ = std::move(other.key_prefix_);
+//    ObservableVector(ObservableVector&& other) noexcept {
+//        std::unique_lock lock(other.mutex_);
+//        data_ = std::move(other.data_);
+//        data_server_ = std::move(other.data_server_);
+//        key_prefix_ = std::move(other.key_prefix_);
+//    }
+
+    ~ObservableVector() // = default;
+    {
+        std::cout << "Destructor, this=" << this << ", size=" << data_.size() << std::endl;
     }
-
-    ~ObservableVector() = default;
-        //std::cout << "Destructor, this=" << this << ", size=" << data_.size() << std::endl;
-
 
     // Операторы присваивания
     ObservableVector& operator=(const ObservableVector& other) {
@@ -240,57 +263,57 @@ public:
         return *this;
     }
 
-    ObservableVector& operator=(ObservableVector&& other) noexcept {
-        if (this != &other) {
-            std::unique_lock lock1(mutex_, std::defer_lock);
-            std::unique_lock lock2(other.mutex_, std::defer_lock);
-            std::lock(lock1, lock2);
-
-            data_ = std::move(other.data_);
-            data_server_ = std::move(other.data_server_);
-            key_prefix_ = std::move(other.key_prefix_);
-        }
-        return *this;
-    }
+//    ObservableVector& operator=(ObservableVector&& other) noexcept {
+//        if (this != &other) {
+//            std::unique_lock lock1(mutex_, std::defer_lock);
+//            std::unique_lock lock2(other.mutex_, std::defer_lock);
+//            std::lock(lock1, lock2);
+//
+//            data_ = std::move(other.data_);
+//            data_server_ = std::move(other.data_server_);
+//            key_prefix_ = std::move(other.key_prefix_);
+//        }
+//        return *this;
+//    }
 
     // Доступ к элементам
     Proxy operator[](size_type pos) {
-       return Proxy(*this, pos);  // Явно используем тип Proxy вместо BasicProxy
+        check_invariants();
+        if (pos >= size())
+            throw std::out_of_range("Index out of range");
+
+        return Proxy(*this, pos);  // Явно используем тип Proxy вместо BasicProxy
     }
 
     ConstProxy operator[](size_type pos) const {
+        check_invariants();
+        if (pos >= size())
+            throw std::out_of_range("Index out of range");
+
         return ConstProxy(*this, pos);  // Явно используем тип ConstProxy вместо BasicProxy
     }
 
     Proxy at(size_type pos) {
-        if (pos >= size()) throw std::out_of_range("Index out of range");
+        if (pos >= size())
+            throw std::out_of_range("Index out of range");
+
         return Proxy(*this, pos);  // Явно используем тип Proxy
     }
 
     ConstProxy at(size_type pos) const {
-        if (pos >= size()) throw std::out_of_range("Index out of range");
+        if (pos >= size())
+            throw std::out_of_range("Index out of range");
         return ConstProxy(*this, pos);  // Явно используем тип ConstProxy
     }
 
-//    T get_raw(size_type pos) const {
-//        std::shared_lock lock(mutex_);
-//        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
-//        return data_[pos];
-//    }
-//
-//    void set_raw(size_type pos, T value) {
-//        std::unique_lock lock(mutex_);
-//        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
-//
-//        value_type old_value = get_value_unsafe(pos);
-//        set_value_unsafe(pos, value);
-//        notify_change_unsafe(pos, old_value, get_value_unsafe(pos));
-//    }
-
     // Основные методы
     value_type get(size_type pos) const {
+        check_invariants();
+
         std::shared_lock lock(mutex_);
-        if (pos >= data_.size())  throw std::out_of_range("Index out of range");
+        if (pos >= data_.size())
+            throw std::out_of_range("Index out of range");
+
         if constexpr (is_pointer) {
             if (!data_[pos]) throw std::runtime_error("Null pointer dereference");
             return *data_[pos];
@@ -300,6 +323,8 @@ public:
     }
 
     void set(size_type pos, const value_type& value, uint64_t bit_mask = 0) {
+        check_invariants();
+
         std::unique_lock lock(mutex_);
         value_type old_value = get(pos);
         if (old_value == value) return;
@@ -359,23 +384,6 @@ public:
         data_.clear();
     }
 
-    // Работа с битовыми полями
-//    void set_bits(size_type pos, uint64_t mask, uint64_t bits) {
-//        static_assert(std::is_integral_v<value_type> && !is_pointer,
-//                      "Bit operations require non-pointer integral types");
-//
-//        std::unique_lock lock(mutex_);
-//        if (pos >= data_.size()) throw std::out_of_range("Index out of range");
-//
-//        value_type old_value = data_[pos];
-//        value_type new_value = (old_value & ~mask) | (bits & mask);
-//
-//        if (old_value != new_value) {
-//            data_[pos] = new_value;
-//            notify_change(pos, old_value, new_value, mask);
-//        }
-//    }
-
     // Привязка к DataServer
     void bindToDataServer(std::shared_ptr<DataServer> server, const std::string& prefix = "vec_") {
         std::unique_lock lock(mutex_);
@@ -388,8 +396,9 @@ public:
     ConstProxy front() const { if (empty())  throw std::out_of_range("Vector is empty"); return ConstProxy(*this, 0); }
     Proxy back() { if (empty())  throw std::out_of_range("Vector is empty"); return Proxy(*this, size() - 1); }
     ConstProxy back() const { if (empty())  throw std::out_of_range("Vector is empty"); return ConstProxy(*this, size() - 1); }
-    pointer data() noexcept { std::shared_lock lock(mutex_); return data_.empty() ? nullptr : data_.data(); }
-    const_pointer data() const noexcept { std::shared_lock lock(mutex_); return data_.empty() ? nullptr : data_.data(); }
+
+//    pointer data() noexcept { std::shared_lock lock(mutex_); return data_.empty() ? nullptr : data_.data(); }
+//    const_pointer data() const noexcept { std::shared_lock lock(mutex_); return data_.empty() ? nullptr : data_.data(); }
 
     bool      empty()    const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.empty();    }
     size_type size()     const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.size();     }
@@ -400,13 +409,6 @@ public:
     void shrink_to_fit() { std::unique_lock<std::shared_mutex> lock(mutex_); data_.shrink_to_fit(); }
 
 //    // Итераторы (базовые)
-//    auto begin() noexcept { return data_.begin(); }
-//    auto end() noexcept { return data_.end(); }
-//    auto begin() const noexcept { return data_.begin(); }
-//    auto end() const noexcept { return data_.end(); }
-//    auto cbegin() const noexcept { return data_.cbegin(); }
-//    auto cend() const noexcept { return data_.cend(); }
-
     iterator begin() noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.begin(); }
     const_iterator begin() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.begin(); }
     const_iterator cbegin() const noexcept { std::shared_lock<std::shared_mutex> lock(mutex_); return data_.cbegin(); }
@@ -431,6 +433,18 @@ private:
         }
     }
 
+    void check_invariants() const {
+        if(data_.size() != 1024) {
+            std::cerr << "Vector size corrupted! Expected: " << 1024 << ", actual: " << data_.size();
+            std::terminate();
+        }
+    }
 };
+
+
+// Объявления явного инстанцирования
+extern template class ObservableVector<IEC_UINT*>;
+extern template class ObservableVector<IEC_UDINT*>;
+extern template class ObservableVector<IEC_ULINT*>;
 
 #endif // PROCONT_EX_RANGE_OBSERVABLE_VECTOR_H

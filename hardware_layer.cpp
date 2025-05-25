@@ -139,16 +139,16 @@ void cb_work_func(
 //-----------------------------------------------------------------------------
 void initializeHardware()
 {
-    auto* _cia405 = new CIA405();
-
-    bool _res = _cia405->configuration();
-    if (_res) {
-        // регистрация callback-функции для обработки сетевых переменных
-        //_cia405->set_callback_work_func(cb_work_func);
-
-        // запуск основного потока CANopen
-        _cia405->start();
-    }
+//    auto* _cia405 = new CIA405();
+//
+//    bool _res = _cia405->configuration();
+//    if (_res) {
+//        // регистрация callback-функции для обработки сетевых переменных
+//        //_cia405->set_callback_work_func(cb_work_func);
+//
+//        // запуск основного потока CANopen
+//        _cia405->start();
+//    }
 
 
 }

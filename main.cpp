@@ -209,13 +209,6 @@ bool pinNotPresent(const int *ignored_vector, int vector_size, int pinNumber) {
 //=============================================================================
 int main(int argc,char **argv)
 {
-//    for (int i=0; i<MW.size(); i++) {
-//        MW[i]= nullptr;
-//    }
-
-//    ObservableVector<int> x(1024);  // Проверяем только создание и проверку
-//    return 0;
-
     char log_msg[1000];
     sprintf(log_msg, "PROCONT RUNTIME starting...\n");
     log(log_msg);

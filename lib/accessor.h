@@ -17,14 +17,14 @@
 // variable definition 
 #define __DEFINE_GLOBAL(type, domain, name)             __DEFINE_VAR(__IEC_T(type), domain, name);\
         type*    __GET_GLOBAL_##name(void)              {return &((*GLOBAL__##name).value);}\
-        void    __INIT_GLOBAL_##name(type value)        {(*GLOBAL__##name).value = value; (*GLOBAL__##name).flags = 0;}\
-        IEC_BYTE    __IS_GLOBAL_##name##_FORCED(void)   {return (*GLOBAL__##name).flags & __IEC_FORCE_FLAG;}
+        void     __INIT_GLOBAL_##name(type value)       {(*GLOBAL__##name).value = value; (*GLOBAL__##name).flags = 0;}\
+        IEC_BYTE __IS_GLOBAL_##name##_FORCED(void)      {return (*GLOBAL__##name).flags & __IEC_FORCE_FLAG;}
 
 #define __DEFINE_GLOBAL_LOCATED(type, resource, name)   __DEFINE_VAR(__IEC_P(type), resource, name);\
         type*    __GET_GLOBAL_##name(void)              {return (*GLOBAL__##name).value;}\
-        void    __INIT_GLOBAL_##name(type value)        {*((*GLOBAL__##name).value) = value; (*GLOBAL__##name).flags = 0;}\
-        void    __INIT_GLOBAL_PTR_##name(type* ptr)     {(*GLOBAL__##name).value = ptr;}\
-        IEC_BYTE    __IS_GLOBAL_##name##_FORCED(void)   {return (*GLOBAL__##name).flags & __IEC_FORCE_FLAG;}
+        void     __INIT_GLOBAL_##name(type value)       {*((*GLOBAL__##name).value) = value; (*GLOBAL__##name).flags = 0;}\
+        void     __INIT_GLOBAL_PTR_##name(type* ptr)    {(*GLOBAL__##name).value = ptr;}\
+        IEC_BYTE __IS_GLOBAL_##name##_FORCED(void)      {return (*GLOBAL__##name).flags & __IEC_FORCE_FLAG;}
 
 #define __DEFINE_GLOBAL_FB(type, domain, name)          __DEFINE_VAR(type, domain, name);\
         type*    __GET_GLOBAL_##name(void)              {return &(*GLOBAL__##name);}\
@@ -52,9 +52,9 @@
 #define __INIT_FLAGS(name, new_flags)                       __SET_FLAGS(name, new_flags)
 #define __INIT_RETAIN(name, add_flags)                      (__ADD_FLAGS(name, add_flags)?__IEC_RETAIN_FLAG:0);
 
-#define __INIT_VAR(name, new_pval, flags)                   name.value = new_pval;                __INIT_RETAIN(name, flags)
+#define __INIT_VAR(name, new_pval, flags)                   name.value = new_pval; __INIT_RETAIN(name, flags)
 #define __INIT_VAR_FB(name, new_pval)                       name = new_pval
-#define __INIT_VAL(name, new_val, flags)                    *name.value = new_val;                __INIT_RETAIN(name, flags)
+#define __INIT_VAL(name, new_val, flags)                    *name.value = new_val; __INIT_RETAIN(name, flags)
 #define __INIT_VAL_FB(name, new_val)                        *name = new_val
 
 #define __INIT_GLOBAL(type, name, new_val, flags)           __INIT_GLOBAL_##name((type)new_val);        __INIT_RETAIN((*GLOBAL__##name), flags);
@@ -89,17 +89,18 @@
 #define __GET_LOCATED_REF(name, ...)                        __GET_VAL_REF(name, __VA_ARGS__)
 #define __GET_LOCATED_DREF(name, ...)                       __GET_VAL_DREF(name, __VA_ARGS__)
 
-#define __GET_EXTERNAL(name, ...)                           __GET_LOCATED(name, __VA_ARGS__)
-#define __GET_EXTERNAL_BY_REF(name, ...)                    __GET_LOCATED_BY_REF(name, __VA_ARGS__)
-#define __GET_EXTERNAL_REF(name, ...)                       __GET_LOCATED_REF(name, __VA_ARGS__)
-#define __GET_EXTERNAL_DREF(name, ...)                      __GET_LOCATED_DREF(name, __VA_ARGS__)
+#define __GET_EXTERNAL(name, ...)                           __GET_VAL2(name, __VA_ARGS__)
+#define __GET_EXTERNAL_BY_REF(name, ...)                    __GET_VAL2_PTR(name, __VA_ARGS__)
+#define __GET_EXTERNAL_REF(name, ...)                       __GET_VAL_REF(name, __VA_ARGS__)
+#define __GET_EXTERNAL_DREF(name, ...)                      __GET_VAL_DREF(name, __VA_ARGS__)
 
 #define __GET_EXTERNAL_FB(name, ...)                        __GET_VAL_FB(name, __VA_ARGS__)
 #define __GET_EXTERNAL_FB_BY_REF(name, ...)                 (&__GET_VAL_FB(name, __VA_ARGS__))
 #define __GET_EXTERNAL_FB_REF(name, ...)                    (&__GET_VAL_FB(name, __VA_ARGS__))
 #define __GET_EXTERNAL_FB_DREF(name, ...)                   (*__GET_VAL_FB(name, __VA_ARGS__))
 
-// variable setting 
+// variable setting
+// ----------------
 #define __SET_VAR1(prefix, name, suffix, new_value)         (prefix name.value) suffix = new_value
 #define __SET_VAR1_FB(prefix, name, suffix, new_value)      (prefix name) suffix = new_value
 #define __SET_VAR2(prefix, name, suffix, new_value)         if (!(prefix name.flags & __IEC_FORCE_FLAG)) __SET_VAR1(prefix, name, suffix, new_value)
@@ -111,14 +112,15 @@
 /*OLD*///#define __SET_VAR(prefix, name, suffix, new_value) __SET_VAR2(prefix, name, suffix, new_value)
 #define __SET_VAR(prefix, name, suffix, new_value)          __SET_VAR1(prefix, name, suffix, new_value)
 #define __SET_VAR_FB(prefix, name, suffix, new_value)       __SET_VAR1_FB(prefix, name, suffix, new_value)
+
 #define __SET_VAL(prefix, name, suffix, new_value)          __SET_VAL1(prefix, name, suffix, new_value)
 #define __SET_VAL_FB(prefix, name, suffix, new_value)       __SET_VAL1_FB(prefix, name, suffix, new_value)
 
-#define __SET_LOCATED(prefix, name, suffix, new_value)      __SET_VAL2(prefix, name, suffix, new_value)
+#define __SET_LOCATED(prefix, name, suffi, new_value)      __SET_VAL2(prefix, name, suffix, new_value)
 
-#define __SET_EXTERNAL(prefix, name, suffix, new_value)     {extern IEC_BYTE __IS_GLOBAL_##name##_FORCED();\
-                                                                if (!(prefix name.flags & __IEC_FORCE_FLAG || __IS_GLOBAL_##name##_FORCED()))\
-                                                                (*(prefix name.value)) suffix = new_value;}
+#define __SET_EXTERNAL(prefix, name, suffix, new_value)    {extern IEC_BYTE __IS_GLOBAL_##name##_FORCED();\
+        if (!(prefix name.flags & __IEC_FORCE_FLAG || __IS_GLOBAL_##name##_FORCED()))\
+        (*(prefix name.value)) suffix = new_value;}
 
 #define __SET_EXTERNAL_FB(prefix, name, suffix, new_value)  __SET_VAL_FB(prefix, name, suffix, new_value)
 

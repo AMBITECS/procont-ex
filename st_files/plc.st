@@ -9056,6 +9056,7 @@ CONFIGURATION Config0
 
   RESOURCE Res0 ON PLC
     VAR_GLOBAL RETAIN
+      TEST_IX AT %IX5.2 : BOOL := true;
       MW0 AT %MW0 : UINT := 16#0000;
       MW1 AT %MW1 : UINT := 16#8000;
       MW2 AT %MW2 : UINT := 0;

@@ -1,30 +1,29 @@
 #ifndef REGISTER_ADDRESS_H
 #define REGISTER_ADDRESS_H
 
-#include <cstdint>
 #include <string>
-#include <regex>
+#include <cstdint>
 #include <stdexcept>
 
 class Address {
 public:
     // Категории регистров (4 бита)
     enum Category : uint8_t {
-        INPUT = 0,   // 'I' - входные регистры
-        OUTPUT = 1,  // 'Q' - выходные регистры
-        MEMORY = 2,  // 'M' - регистры памяти
-        SPECIAL = 3  // 'S' - специальные регистры
+        INPUT   = 0,        // 'I' - входные регистры
+        OUTPUT  = 1,        // 'Q' - выходные регистры
+        MEMORY  = 2,        // 'M' - регистры памяти
+        SPECIAL = 3         // 'S' - специальные регистры
     };
 
     // Типы данных (4 бита)
     enum DataType : uint8_t {
-        TYPE_BIT = 0,    // 'X' - бит
-        TYPE_BYTE = 1,    // 'B' - байт
-        TYPE_WORD = 2,    // 'W' - слово
-        TYPE_DWORD = 3,   // 'D' - двойное слово
-        TYPE_LWORD = 4,   // 'L' - длинное слово
-        TYPE_REAL = 5,    // 'R' - вещественное (float)
-        TYPE_LREAL = 6    // 'F' - длинное вещественное (double)
+        TYPE_BIT    = 0,    // 'X' - бит
+        TYPE_BYTE   = 1,    // 'B' - байт
+        TYPE_WORD   = 2,    // 'W' - слово
+        TYPE_DWORD  = 3,    // 'D' - двойное слово
+        TYPE_LWORD  = 4,    // 'L' - длинное слово
+        TYPE_REAL   = 5,    // 'R' - вещественное (float)
+        TYPE_LREAL  = 6     // 'F' - длинное вещественное (double)
     };
 
     // Битовые поля в 64-битном значении
@@ -42,7 +41,7 @@ public:
     constexpr Address(Category cat, DataType type, uint64_t offset, uint8_t bitpos = 0xFF)
             : packed_((static_cast<uint64_t>(cat)    << CATEGORY_SHIFT) |
                       (static_cast<uint64_t>(type)   << TYPE_SHIFT)     |
-                      (static_cast<uint64_t>(bitpos) << BITPOS_SHIFT) |
+                      (static_cast<uint64_t>(bitpos) << BITPOS_SHIFT)   |
                       (offset & OFFSET_MASK)) {}
 
     // Фабричные методы
@@ -51,8 +50,9 @@ public:
 
     // Преобразования
     [[nodiscard]] constexpr uint64_t value() const { return packed_; }
-    constexpr operator uint64_t() const { return packed_; } //NOLINT
-        [[nodiscard]] std::string toString() const;
+    constexpr operator uint64_t() const { return packed_; }
+
+    [[nodiscard]] std::string toString() const;
 
     // Методы доступа
     [[nodiscard]] constexpr Category category() const {
@@ -78,11 +78,6 @@ private:
     constexpr explicit Address(uint64_t packed) : packed_(packed) {}
 
     uint64_t packed_; // Все данные упакованы в 64 бита
-
-    // Вспомогательные структуры для парсинга
-    static const std::regex key_regex_;
-    static const char* const category_prefixes_;
-    static const char* const type_prefixes_;
 };
 
 #endif // REGISTER_ADDRESS_H

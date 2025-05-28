@@ -1,18 +1,48 @@
 #include "address.h"
 #include <stdexcept>
 #include <cctype>
+#include <sstream>
+#include <iomanip>
+#include <regex>
 
-// Определяем статические члены класса
-const std::regex Address::key_regex_(
-        R"(^%?([IQMS])([XBWDRLF]?)(?:(\d+)(?:\.(\d+))?)?$)",
-        std::regex_constants::icase);
+std::string Address::toString() const {
+    static const char* const category_prefixes = "IQMS";
+    static const char* const type_prefixes = "XBWDLRF";
 
-const char* const Address::category_prefixes_ = "IQMS";
-const char* const Address::type_prefixes_ = "XBWDRLF";
+    std::ostringstream oss;
+
+    // Категория (I/Q/M/S)
+    if (category() <= SPECIAL) {
+        oss << category_prefixes[category()];
+    } else {
+        oss << '?';
+    }
+
+    // Тип данных (X/B/W/D/L/R/F)
+    if (datatype() <= TYPE_LREAL) {
+        oss << type_prefixes[datatype()];
+    } else {
+        oss << '?';
+    }
+
+    // Смещение
+    oss << offset();
+
+    // Позиция бита (если есть)
+    if (isBitAccess()) {
+        oss << '.' << static_cast<int>(bitpos());
+    }
+
+    return oss.str();
+}
 
 Address Address::Of(const std::string& key) {
     std::smatch matches;
     std::string normalized_key = key;
+    const std::regex key_regex_(
+            R"(^%?([IQMS])([XBWDRLF]?)(?:(\d+)(?:\.(\d+))?)?$)",
+            std::regex_constants::icase);
+
 
     // Удаляем начальный '%' если присутствует
     if (!normalized_key.empty() && normalized_key[0] == '%') { normalized_key.erase(0, 1); }

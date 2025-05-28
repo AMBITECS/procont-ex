@@ -12,8 +12,8 @@
 #include "iec_types.h"
 #include "variant.h"
 #include "vector.h"
-//#include "address.h"
-//#include "registry.h"
+#include "address.h"
+#include "registry.h"
 
 #define BUFFER_MAXSIZE 65536;    // Standard PLC addressing space
 constexpr unsigned short BUFFER_SIZE  =  1024;     // Current PLC registers size

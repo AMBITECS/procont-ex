@@ -509,6 +509,7 @@ __ANY_NUM(__mul)
   /*     SUB    */
   /**************/
 #define __sub(TYPENAME) __arith_static(SUB_, TYPENAME, -)
+//#define IEC_SUB(TYPENAME) __arith_static(SUB_, TYPENAME, -)
 __ANY_NUM(__sub)
 
 

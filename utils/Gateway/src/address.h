@@ -6,18 +6,25 @@
 #include <regex>
 #include <stdexcept>
 
-class RegisterAddress {
+class Address {
 public:
     // Категории регистров (4 бита)
     enum Category : uint8_t {
-        INPUT = 0, OUTPUT = 1, MEMORY = 2, SPECIAL = 3, EXT1 = 4, EXT2 = 5, EXT3 = 6, EXT4 = 7,
-        EXT5 = 8, EXT6 = 9, EXT7 = 10, EXT8 = 11, EXT9 = 12, EXT10 = 13, EXT11 = 14, EXT12 = 15
+        INPUT = 0,   // 'I' - входные регистры
+        OUTPUT = 1,  // 'Q' - выходные регистры
+        MEMORY = 2,  // 'M' - регистры памяти
+        SPECIAL = 3  // 'S' - специальные регистры
     };
 
     // Типы данных (4 бита)
     enum DataType : uint8_t {
-        TYPE_BIT = 0, TYPE_BYTE = 1, TYPE_WORD = 2, TYPE_DWORD = 3, TYPE_LWORD = 4,
-        TYPE_REAL = 5, TYPE_LREAL = 6
+        TYPE_BIT = 0,    // 'X' - бит
+        TYPE_BYTE = 1,    // 'B' - байт
+        TYPE_WORD = 2,    // 'W' - слово
+        TYPE_DWORD = 3,   // 'D' - двойное слово
+        TYPE_LWORD = 4,   // 'L' - длинное слово
+        TYPE_REAL = 5,    // 'R' - вещественное (float)
+        TYPE_LREAL = 6    // 'F' - длинное вещественное (double)
     };
 
     // Битовые поля в 64-битном значении
@@ -31,51 +38,51 @@ public:
     static constexpr uint64_t OFFSET_MASK    = 0x0000FFFFFFFFFFFF;
 
     // Конструкторы
-    constexpr RegisterAddress() : packed_(0) {}
-
-    constexpr RegisterAddress(Category cat, DataType type, uint64_t offset, uint8_t bitpos = 0xFF)
-            : packed_((static_cast<uint64_t>(cat)  << CATEGORY_SHIFT) |
-                      (static_cast<uint64_t>(type) << TYPE_SHIFT)     |
+    constexpr Address() : packed_(0) {}
+    constexpr Address(Category cat, DataType type, uint64_t offset, uint8_t bitpos = 0xFF)
+            : packed_((static_cast<uint64_t>(cat)    << CATEGORY_SHIFT) |
+                      (static_cast<uint64_t>(type)   << TYPE_SHIFT)     |
                       (static_cast<uint64_t>(bitpos) << BITPOS_SHIFT) |
                       (offset & OFFSET_MASK)) {}
 
     // Фабричные методы
-    static RegisterAddress fromKey(const std::string& key);
-    static constexpr RegisterAddress fromLong(uint64_t val) {
-        return RegisterAddress(val);
-    }
+    static Address Of(const std::string& key);
+    static constexpr Address Of(uint64_t val) { return Address(val); }
 
     // Преобразования
-    constexpr uint64_t toLong() const { return packed_; }
-    std::string toKey() const;
+    [[nodiscard]] constexpr uint64_t value() const { return packed_; }
+    constexpr operator uint64_t() const { return packed_; } //NOLINT
+        [[nodiscard]] std::string toString() const;
 
     // Методы доступа
-    constexpr Category getCategory() const {
+    [[nodiscard]] constexpr Category category() const {
         return static_cast<Category>((packed_ & CATEGORY_MASK) >> CATEGORY_SHIFT);
     }
 
-    constexpr DataType getDataType() const {
+    [[nodiscard]] constexpr DataType datatype() const {
         return static_cast<DataType>((packed_ & TYPE_MASK) >> TYPE_SHIFT);
     }
 
-    constexpr uint64_t getOffset() const {
-        return packed_ & OFFSET_MASK;
+    [[nodiscard]] constexpr uint64_t offset() const { return packed_ & OFFSET_MASK; }
+
+    [[nodiscard]] constexpr uint8_t bitpos() const {
+        uint8_t pos = (packed_ & BITPOS_MASK) >> BITPOS_SHIFT;
+        return (datatype() == TYPE_BIT) ? pos : 0xFF;
     }
 
-    constexpr uint8_t getBitPosition() const {
-        uint8_t pos = (packed_ & BITPOS_MASK) >> BITPOS_SHIFT;
-        return (getDataType() == TYPE_BIT) ? pos : 0xFF;
+    [[nodiscard]] constexpr bool isBitAccess() const {
+        return datatype() == TYPE_BIT && ((packed_ & BITPOS_MASK) >> BITPOS_SHIFT) != 0xFF;
     }
 
 private:
-    constexpr explicit RegisterAddress(uint64_t packed) : packed_(packed) {}
+    constexpr explicit Address(uint64_t packed) : packed_(packed) {}
 
     uint64_t packed_; // Все данные упакованы в 64 бита
 
     // Вспомогательные структуры для парсинга
-    static const std::regex     key_regex_;
-    static const char* const    category_prefixes_;
-    static const char* const    type_prefixes_;
+    static const std::regex key_regex_;
+    static const char* const category_prefixes_;
+    static const char* const type_prefixes_;
 };
 
 #endif // REGISTER_ADDRESS_H

@@ -1,81 +1,81 @@
 #include "address.h"
 #include <stdexcept>
+#include <cctype>
 
-const std::regex RegisterAddress::key_regex_("([IQMSE]\\d*)([XBWDLT]\\d*)(\\d+)(?:\\.(\\d+))?");
-const char* const RegisterAddress::category_prefixes_ = "IQMSE";
-const char* const RegisterAddress::type_prefixes_ = "XBWDLT";
+// Определяем статические члены класса
+const std::regex Address::key_regex_(
+        R"(^%?([IQMS])([XBWDRLF]?)(?:(\d+)(?:\.(\d+))?)?$)",
+        std::regex_constants::icase);
 
-RegisterAddress RegisterAddress::fromKey(const std::string& key) {
-    std::smatch match;
-    if (!std::regex_match(key, match, key_regex_)) {
-        throw std::invalid_argument("Invalid register key format");
+const char* const Address::category_prefixes_ = "IQMS";
+const char* const Address::type_prefixes_ = "XBWDRLF";
+
+Address Address::Of(const std::string& key) {
+    std::smatch matches;
+    std::string normalized_key = key;
+
+    // Удаляем начальный '%' если присутствует
+    if (!normalized_key.empty() && normalized_key[0] == '%') { normalized_key.erase(0, 1); }
+
+    if (!std::regex_match(normalized_key, matches, key_regex_)) {
+        throw std::invalid_argument("Invalid register address format: " + key);
     }
 
-    // Парсинг категории
-    Category cat = INPUT;
-    char cat_prefix = match[1].str()[0];
-    switch(cat_prefix) {
-        case 'I': cat = INPUT; break;
-        case 'Q': cat = OUTPUT; break;
-        case 'M': cat = MEMORY; break;
-        case 'S': cat = SPECIAL; break;
-        case 'E': cat = static_cast<Category>(3 + std::stoi(match[1].str().substr(1)));
-        default: throw std::invalid_argument("Invalid category prefix");
+    // Разбираем категорию
+    char cat_char = static_cast<char>(toupper(static_cast<unsigned char>(matches[1].str()[0])));
+    Category cat;
+    switch (cat_char) {
+        case 'I': cat = Category::INPUT; break;
+        case 'Q': cat = Category::OUTPUT; break;
+        case 'M': cat = Category::MEMORY; break;
+        case 'S': cat = Category::SPECIAL; break;
+        default: throw std::invalid_argument("Unknown register category: " + matches[1].str());
     }
 
-    // Парсинг типа данных
-    DataType dtype = TYPE_BIT;
-    char type_prefix = match[2].str()[0];
-    switch(type_prefix) {
-        case 'X': dtype = TYPE_BIT; break;
-        case 'B': dtype = TYPE_BYTE; break;
-        case 'W': dtype = TYPE_WORD; break;
-        case 'D': dtype = TYPE_DWORD; break;
-        case 'L': dtype = TYPE_LWORD; break;
-        case 'T': dtype = static_cast<DataType>(4 + std::stoi(match[2].str().substr(1)));
-        default: throw std::invalid_argument("Invalid type prefix");
+    // Разбираем тип данных
+    DataType type = TYPE_BIT; // По умолчанию бит
+    if (matches[2].length() > 0) {
+        char type_char = static_cast<char>(toupper(static_cast<unsigned char>(matches[2].str()[0])));
+        switch (type_char) {
+            case 'X': type = TYPE_BIT; break;
+            case 'B': type = TYPE_BYTE; break;
+            case 'W': type = TYPE_WORD; break;
+            case 'D': type = TYPE_DWORD; break;
+            case 'L': type = TYPE_LWORD; break;
+            case 'R': type = TYPE_REAL; break;
+            case 'F': type = TYPE_LREAL; break;
+            default: throw std::invalid_argument("Unknown data type: " + matches[2].str());
+        }
     }
 
-    // Парсинг смещения и битовой позиции
-    uint64_t offset = std::stoull(match[3]);
-    uint8_t bitpos = 0xFF;
-
-    if (dtype == TYPE_BIT && match[4].matched) {
-        bitpos = std::stoul(match[4]);
-        if (bitpos > 63) throw std::out_of_range("Bit position must be 0-63");
+    // Разбираем смещение
+    uint64_t offset = 0;
+    if (matches[3].length() > 0) {
+        try {
+            offset = std::stoull(matches[3].str());
+        } catch (...) {
+            throw std::invalid_argument("Invalid offset value: " + matches[3].str());
+        }
     }
 
-    return RegisterAddress(cat, dtype, offset, bitpos);
-}
-
-std::string RegisterAddress::toKey() const {
-    std::ostringstream oss;
-
-    // Категория
-    uint8_t cat = getCategory();
-    if (cat <= SPECIAL) {
-        oss << category_prefixes_[cat];
-    } else {
-        oss << 'E' << (cat - 3);
+    // Разбираем позицию бита (если есть)
+    uint8_t bitpos = 0xFF; // Значение по умолчанию (нет бита)
+    if (matches[4].length() > 0) {
+        try {
+            int pos = std::stoi(matches[4].str());
+            if (pos < 0 || pos > 63) {
+                throw std::invalid_argument("Bit position out of range (0-63): " + matches[4].str());
+            }
+            bitpos = static_cast<uint8_t>(pos);
+        } catch (...) {
+            throw std::invalid_argument("Invalid bit position: " + matches[4].str());
+        }
     }
 
-    // Тип данных
-    uint8_t type = getDataType();
-    if (type <= TYPE_LWORD) {
-        oss << type_prefixes_[type];
-    } else {
-        oss << 'T' << (type - 4);
+    // Проверяем корректность комбинации типа и позиции бита
+    if (bitpos != 0xFF && type != TYPE_BIT) {
+        throw std::invalid_argument("Bit position can only be specified for bit type (X)");
     }
 
-    // Смещение
-    uint64_t type_size = (type == TYPE_BIT) ? 1 : (1 << (type - 1));
-    oss << (getOffset() / type_size);
-
-    // Битовая позиция
-    if (type == TYPE_BIT) {
-        uint8_t bp = getBitPosition();
-        if (bp != 0xFF) oss << '.' << static_cast<int>(bp);
-    }
-
-    return oss.str();
+    return Address{cat, type, offset, bitpos};
 }

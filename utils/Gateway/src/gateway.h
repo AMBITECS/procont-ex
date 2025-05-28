@@ -7,8 +7,6 @@
 #ifndef PRO_GATEWAY_H
 #define PRO_GATEWAY_H
 
-//#include "registry.h"
-//#include "bitwise.h"
 #include "iec_types.h"
 #include "variant.h"
 #include "vector.h"
@@ -49,10 +47,184 @@ extern IEC_UINT  *MW [BUFFER_SIZE];
 extern IEC_UDINT *MD [BUFFER_SIZE];
 extern IEC_ULINT *ML [BUFFER_SIZE];
 
-//// ----------------------------------------------------------------------------
-//// NEW Register Types
-//// ----------------------------------------------------------------------------
-//extern Registry _reg;
+// ----------------------------------------------------------------------------
+// NEW Register Types
+// ----------------------------------------------------------------------------
+extern Registry registry;
+/*
+class BindingManager {
+private:
+    Registry& _reg; // Ссылка на экземпляр Registry
+
+    struct Binding {
+        Address addr{};
+        void* iecVar{};
+        Binding(Address adr, void *dat): addr(adr), iecVar(dat) {}
+    };
+
+    std::vector<Binding> bindings_;
+
+public:
+    explicit BindingManager(Registry& reg) : _reg(reg) {}
+
+    static BindingManager& instance() {
+        static Registry defaultRegistry;
+        static BindingManager inst(defaultRegistry);
+        return inst;
+    }
+
+    void bind(const std::string& regNotation, void* iecVar) {
+        Address addr = Address::fromString(regNotation);
+        bindings_.emplace_back(addr, iecVar);
+    }
+
+    void updateToIec() {
+        for (auto& binding : bindings_) {
+            updateVariable(binding.addr, binding.iecVar, false);
+        }
+    }
+
+    void updateFromIec() {
+        for (auto& binding : bindings_) {
+            updateVariable(binding.addr, binding.iecVar, true);
+        }
+    }
+
+private:
+    template<Registry::Category CAT, typename T>
+    void handleType(const Address& addr, void* iecVar, bool toRegistry) {
+        if (toRegistry) {
+            _reg.get<T, CAT>(addr.offset()) = *static_cast<T*>(iecVar);
+        } else {
+            *static_cast<T*>(iecVar) = _reg.get<T, CAT>(addr.offset());
+        }
+    }
+
+    void updateVariable(const Address& addr, void* iecVar, bool toRegistry) {
+        using Cat = Registry::Category;
+
+        switch(addr.category()) {
+            case Address::INPUT:
+                processWithCategory<Cat::INPUT>(addr, iecVar, toRegistry);
+                break;
+            case Address::OUTPUT:
+                processWithCategory<Cat::OUTPUT>(addr, iecVar, toRegistry);
+                break;
+            case Address::MEMORY:
+                processWithCategory<Cat::MEMORY>(addr, iecVar, toRegistry);
+                break;
+            case Address::SPECIAL:
+                processWithCategory<Cat::SPECIAL>(addr, iecVar, toRegistry);
+                break;
+        }
+    }
+
+    template<Registry::Category CAT>
+    void processWithCategory(const Address& addr, void* iecVar, bool toRegistry) {
+        switch(addr.datatype()) {
+            case Address::TYPE_BIT:
+                if (toRegistry) {
+                    _reg.get<bool, CAT>(addr.offset())[addr.bitpos()] = *static_cast<bool*>(iecVar);
+                } else {
+                    *static_cast<bool*>(iecVar) = _reg.get<bool, CAT>(addr.offset())[addr.bitpos()];
+                }
+                break;
+            case Address::TYPE_BYTE:
+                handleType<CAT, uint8_t>(addr, iecVar, toRegistry);
+                break;
+            case Address::TYPE_WORD:
+                handleType<CAT, uint16_t>(addr, iecVar, toRegistry);
+                break;
+            case Address::TYPE_DWORD:
+                handleType<CAT, uint32_t>(addr, iecVar, toRegistry);
+                break;
+            case Address::TYPE_LWORD:
+                handleType<CAT, uint64_t>(addr, iecVar, toRegistry);
+                break;
+            case Address::TYPE_REAL:
+                handleType<CAT, float>(addr, iecVar, toRegistry);
+                break;
+            case Address::TYPE_LREAL:
+                handleType<CAT, double>(addr, iecVar, toRegistry);
+                break;
+        }
+    }
+};
+*/
+//=============================================
+//class BindingManager {
+//public:
+//    static BindingManager& instance() {
+//        static BindingManager inst;
+//        return inst;
+//    }
+//
+//    void bind(const string& regNotation, void* iecVar) {
+//        Address addr = Address::fromString(regNotation);
+//        bindings_.emplace_back(addr, iecVar);
+//    }
+//
+//    void updateToIec() {
+//        for (auto& binding : bindings_) {
+//            updateVariable(binding.addr, binding.iecVar, false);
+//        }
+//    }
+//
+//    void updateFromIec() {
+//        for (auto& binding : bindings_) {
+//            updateVariable(binding.addr, binding.iecVar, true);
+//        }
+//    }
+//
+//private:
+//    struct Binding {
+//        Address addr;
+//        void* iecVar;
+//    };
+//
+//    vector<Binding> bindings_;
+//
+//    void updateVariable(const Address& addr, void* iecVar, bool toRegistry) {
+//        switch(addr.datatype()) {
+//            case Address::TYPE_BIT:
+//                handleBit(addr, iecVar, toRegistry);
+//                break;
+//            case Address::TYPE_BYTE:
+//                handleType<uint8_t>(addr, iecVar, toRegistry);
+//                break;
+//            case Address::TYPE_WORD:
+//                handleType<uint16_t>(addr, iecVar, toRegistry);
+//                break;
+//            case Address::TYPE_DWORD:
+//                handleType<uint32_t>(addr, iecVar, toRegistry);
+//                break;
+//            case Address::TYPE_LWORD:
+//                handleType<uint64_t>(addr, iecVar, toRegistry);
+//                break;
+//            case Address::TYPE_REAL:
+//                handleType<float>(addr, iecVar, toRegistry);
+//                break;
+//            case Address::TYPE_LREAL:
+//                handleType<double>(addr, iecVar, toRegistry);
+//                break;
+//        }
+//    }
+//
+//    void handleBit(const Address& addr, void* iecVar, bool toRegistry) {
+//        bool value = global_registry.get<bool>(addr)[addr.bitpos()];
+//        *static_cast<bool*>(iecVar) = value;
+//    }
+//
+//    template<typename T>
+//    void handleType(const Address& addr, void* iecVar, bool toRegistry) {
+//        if (toRegistry) {
+//            global_registry.get<T>(addr) = *static_cast<T*>(iecVar);
+//        } else {
+//            *static_cast<T*>(iecVar) = global_registry.get<T>(addr);
+//        }
+//    }
+//};
+
 //
 //// Алиасы для удобства
 //using Category = Address::Category;

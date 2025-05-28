@@ -50,8 +50,9 @@ public:
 
     // Преобразования
     [[nodiscard]] constexpr uint64_t value() const { return packed_; }
-    constexpr operator uint64_t() const { return packed_; }
+    constexpr operator uint64_t() const { return packed_; } //NOLINT
 
+    [[nodiscard]] static Address fromString(const std::string& key) {return Address::Of(key);}
     [[nodiscard]] std::string toString() const;
 
     // Методы доступа
@@ -66,8 +67,7 @@ public:
     [[nodiscard]] constexpr uint64_t offset() const { return packed_ & OFFSET_MASK; }
 
     [[nodiscard]] constexpr uint8_t bitpos() const {
-        uint8_t pos = (packed_ & BITPOS_MASK) >> BITPOS_SHIFT;
-        return (datatype() == TYPE_BIT) ? pos : 0xFF;
+        return (datatype() == TYPE_BIT) ? (packed_ & BITPOS_MASK) >> BITPOS_SHIFT : 0xFF;
     }
 
     [[nodiscard]] constexpr bool isBitAccess() const {

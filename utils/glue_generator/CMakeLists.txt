@@ -20,7 +20,8 @@ if(OPLCGLUE_ALL)
 endif()
 
 # The main application that we always build
-add_executable(glue_generator glue_generator.cpp)
+#add_executable(glue_generator glue_generator.cpp)
+add_executable(glue_generator glue_generator_new.cpp)
 
 #if(OPLCGLUE_TEST)
 add_executable(glue_generator_test ./test/glue_generator_test.cpp)

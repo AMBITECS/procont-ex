@@ -7,7 +7,7 @@
 // we need to include it directly here. That's ok so long as the application is
 // no more than one CPP file.
 #define OPLCGLUE_OMIT_MAIN
-#include "../glue_generator.cpp"
+#include "../glue_generator_new.cpp"
 
 using namespace std;
 

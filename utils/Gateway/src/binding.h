@@ -10,13 +10,15 @@ class BindingManager {
 private:
     Registry& _reg; // Ссылка на экземпляр Registry
 
+    // Связь Binding - пара <addr-pvar>
     struct Binding {
-        Address addr{};
-        void* iecVar{};
-        Binding(Address adr, void *dat);
+        Address addr;   // Адрес ячейки
+        void*   pvar;   // Адрес связанной переменной
+        Binding(Address adr, void *dat): addr(adr), pvar(dat) {}
     };
 
-    std::vector<Binding> bindings_;
+    // вектор связей Binding
+    std::vector<Binding> binds;
 
     template<Registry::Category CAT, typename T>
     void handleType(const Address& addr, void* iecVar, bool toRegistry);

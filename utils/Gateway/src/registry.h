@@ -46,9 +46,9 @@ public:
     explicit Registry(size_t memory_size = 1024) {resize(memory_size);}
 
     void resize(size_t new_size) {
-        input_registers_.resize(new_size);
-        output_registers_.resize(new_size);
-        memory_registers_.resize(new_size);
+        input_registers_.resize  (new_size);
+        output_registers_.resize (new_size);
+        memory_registers_.resize (new_size);
         special_registers_.resize(new_size);
     }
 

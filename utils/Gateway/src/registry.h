@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <type_traits>
 #include <stdexcept>
+#include <cstring>
 
 template<typename T>
 struct RegisterTraits {
@@ -29,7 +30,7 @@ template<> struct RegisterTraits<uint64_t> { using storage_type = uint64_t; stat
 template<> struct RegisterTraits<double>   { using storage_type = double;   static constexpr size_t size = 8; };
 
 //-----------------------------------------------------------------------------
-// Registry
+// Registry (улучшенная версия)
 //-----------------------------------------------------------------------------
 class Registry {
 private:
@@ -43,17 +44,17 @@ public:
     using Category = Address::Category;
     using DataType = Address::DataType;
 
-    explicit Registry(size_t memory_size = 1024) {resize(memory_size);}
+    explicit Registry(size_t memory_size = 1024) { resize(memory_size); }
 
     void resize(size_t new_size) {
-        input_registers_.resize  (new_size);
-        output_registers_.resize (new_size);
-        memory_registers_.resize (new_size);
+        input_registers_.resize(new_size);
+        output_registers_.resize(new_size);
+        memory_registers_.resize(new_size);
         special_registers_.resize(new_size);
     }
 
     //-------------------------------------------------------------------------
-    // RegisterAccessor
+    // Улучшенный RegisterAccessor
     //-------------------------------------------------------------------------
     template<typename T, Category CAT>
     class Accessor {
@@ -63,8 +64,8 @@ public:
         std::vector<uint8_t> &getStorage() { return parent_.getStorage(CAT); }
         [[nodiscard]] const std::vector<uint8_t> &getStorage() const { return parent_.getStorage(CAT); }
 
-        void checkBounds() const {
-            if (offset_ + RegisterTraits<T>::size > getStorage().size()) {
+        void checkBounds(size_t additional = 0) const {
+            if (offset_ + additional + RegisterTraits<T>::size > getStorage().size()) {
                 throw std::out_of_range("Register access out of range");
             }
         }
@@ -76,26 +77,27 @@ public:
             }
         }
 
+        // Более безопасное приведение типов
         operator T() const { //NOLINT
             checkBounds();
-            const auto &storage = getStorage();
-            return *reinterpret_cast<const typename RegisterTraits<T>::storage_type *>(&storage[offset_]);
+            if constexpr (sizeof(T) == 1) {
+                return getStorage()[offset_];
+            } else {
+                T value;
+                std::memcpy(&value, &getStorage()[offset_], sizeof(T));
+                return value;
+            }
         }
 
+        // Улучшенная запись с защитой от aliasing
         Accessor &operator=(T value) {
             checkBounds();
-            auto &storage = getStorage();
-            *reinterpret_cast<typename RegisterTraits<T>::storage_type *>(&storage[offset_]) = value;
+            std::memcpy(&getStorage()[offset_], &value, sizeof(T));
             return *this;
         }
 
-        // Метод для создания нового RegisterAccessor с другим смещением
-        Accessor operator()(uint64_t offset) const {
-            return Accessor(parent_, offset);
-        }
-
         //---------------------------------------------------------------------
-        // BitReference
+        // Улучшенный BitReference
         //---------------------------------------------------------------------
         class BitReference {
             Accessor &accessor_;
@@ -103,25 +105,25 @@ public:
 
         public:
             BitReference(Accessor &accessor, uint8_t bit_pos)
-                    : accessor_(accessor), bit_pos_(bit_pos) {
+                : accessor_(accessor), bit_pos_(bit_pos) {
                 if (bit_pos_ >= sizeof(T) * 8) {
                     throw std::out_of_range("Bit position out of range");
                 }
             }
 
-            // Получаем значение
+            // Неявное приведение к bool
             operator bool() const { //NOLINT
                 return (static_cast<T>(accessor_) >> bit_pos_) & 0x1;
             }
 
-            // Устанавливаем значение
+            // Более безопасная установка бита
             BitReference &operator=(bool b) {
-                T value = accessor_;
+                T value = static_cast<T>(accessor_);
                 T mask = static_cast<T>(1) << bit_pos_;
                 accessor_ = b ? (value | mask) : (value & ~mask);
                 return *this;
             }
-        };  // BitReference
+        };
 
         BitReference operator[](uint8_t bit_pos) {
             static_assert(std::is_integral_v<T>, "Bit access only available for integral types");
@@ -129,54 +131,60 @@ public:
         }
 
         //---------------------------------------------------------------------
-        // IndexProxy - класс для поддержки синтаксиса [index]
+        // Улучшенный IndexProxy
         //---------------------------------------------------------------------
         class IndexProxy {
             Registry& parent_;
             uint64_t base_offset_;
         public:
-            IndexProxy(Registry& parent, uint64_t base_offset)
-                    : parent_(parent), base_offset_(base_offset) {}
+            IndexProxy(Registry& parent, uint64_t base_offset = 0)
+                : parent_(parent), base_offset_(base_offset) {}
 
+            // Добавлена проверка границ
             Accessor operator[](uint64_t index) {
                 uint64_t offset = base_offset_ + index * RegisterTraits<T>::size;
+                if (offset + RegisterTraits<T>::size > parent_.getStorage(CAT).size()) {
+                    throw std::out_of_range("Register index out of range");
+                }
                 return Accessor(parent_, offset);
             }
         };
-
-
     }; // Accessor
 
     template<typename T, Category CAT>
     Accessor<T, CAT> get(uint64_t offset) { return Accessor<T, CAT>(*this, offset); }
 
     // Псевдонимы типов
-    template<typename T> using IRegister = typename Accessor<T, Category::INPUT>::IndexProxy;
-    template<typename T> using QRegister = typename Accessor<T, Category::OUTPUT>::IndexProxy;
-    template<typename T> using MRegister = typename Accessor<T, Category::MEMORY>::IndexProxy;
-    template<typename T> using SRegister = typename Accessor<T, Category::SPECIAL>::IndexProxy;
+//    template<typename T> using IRegister = typename Accessor<T, Category::INPUT>::IndexProxy;
+//    template<typename T> using QRegister = typename Accessor<T, Category::OUTPUT>::IndexProxy;
+//    template<typename T> using MRegister = typename Accessor<T, Category::MEMORY>::IndexProxy;
+//    template<typename T> using SRegister = typename Accessor<T, Category::SPECIAL>::IndexProxy;
+    template<typename T> using IRegister = Accessor<T, Category::INPUT>;
+    template<typename T> using QRegister = Accessor<T, Category::OUTPUT>;
+    template<typename T> using MRegister = Accessor<T, Category::MEMORY>;
+    template<typename T> using SRegister = Accessor<T, Category::SPECIAL>;
 
-    using IX = IRegister<T_BOOL  >;
-    using IB = IRegister<T_UINT8 >;
-    using IW = IRegister<T_UINT16>;
-    using ID = IRegister<T_UINT32>;
-    using IL = IRegister<T_UINT64>;
+    using IX = IRegister<T_BOOL  >::IndexProxy;
+    using IB = IRegister<T_UINT8 >::IndexProxy;
+    using IW = IRegister<T_UINT16>::IndexProxy;
+    using ID = IRegister<T_UINT32>::IndexProxy;
+    using IL = IRegister<T_UINT64>::IndexProxy;
 
-    using QX = QRegister<T_BOOL  >;
-    using QB = QRegister<T_UINT8 >;
-    using QW = QRegister<T_UINT16>;
-    using QD = QRegister<T_UINT32>;
-    using QL = QRegister<T_UINT64>;
+    using QX = QRegister<T_BOOL  >::IndexProxy;
+    using QB = QRegister<T_UINT8 >::IndexProxy;
+    using QW = QRegister<T_UINT16>::IndexProxy;
+    using QD = QRegister<T_UINT32>::IndexProxy;
+    using QL = QRegister<T_UINT64>::IndexProxy;
 
-    using MX = MRegister<T_BOOL  >;
-    using MB = MRegister<T_UINT8 >;
-    using MW = MRegister<T_UINT16>;
-    using MD = MRegister<T_UINT32>;
-    using ML = MRegister<T_UINT64>;
+    using MX = MRegister<T_BOOL  >::IndexProxy;
+    using MB = MRegister<T_UINT8 >::IndexProxy;
+    using MW = MRegister<T_UINT16>::IndexProxy;
+    using MD = MRegister<T_UINT32>::IndexProxy;
+    using ML = MRegister<T_UINT64>::IndexProxy;
 
     //VARIANT getByAddress(const Address& addr);
 
-// Оператор [] для доступа по Address
+    // Оператор [] для доступа по Address
     VARIANT operator[](const Address& addr) {
         return getByAddress(addr);
     }

@@ -51,77 +51,19 @@ extern IEC_ULINT *ML [BUFFER_SIZE];
 // ----------------------------------------------------------------------------
 // NEW Register Types
 // ----------------------------------------------------------------------------
-extern Registry _reg;
+// Объявляем глобальные экземпляры прокси-объектов
+extern Registry::IX _IX;
+extern Registry::QX _QX;
+extern Registry::MX _MX;
 
-// Алиасы для удобства
-using Category = Address::Category;
-using DataType = Address::DataType;
+extern Registry::IB _IB;
+extern Registry::QB _QB;
+extern Registry::MB _MB;
 
-// Общий прокси-класс для регистров
-template<typename T, Category CAT>
-class RegisterProxy {
-public:
-    class BitReference {
-        uint64_t offset_;
-        uint8_t bit_;
-    public:
-        BitReference(uint64_t offset, uint8_t bit) : offset_(offset), bit_(bit) {}
-        operator bool() const { return _reg.template get<T, CAT>(offset_)[bit_];}
+extern Registry::IW _IW;
+extern Registry::QW _QW;
+extern Registry::MW _MW;
 
-        BitReference& operator=(bool value) {
-            _reg.template get<T, CAT>(offset_)[bit_] = value;
-            return *this;
-        }
-    };
-
-    RegisterProxy() = default;
-
-    typename Registry::template Accessor<T, CAT> operator[](uint64_t offset) {
-        return _reg.template get<T, CAT>(offset);
-    }
-
-    BitReference operator()(uint64_t offset, uint8_t bit) {
-        return BitReference(offset, bit);
-    }
-};
-
-// Специализации для конкретных типов регистров
-using _IX = RegisterProxy<bool, Category::INPUT>;
-using _QX = RegisterProxy<bool, Category::OUTPUT>;
-
-using _IB = RegisterProxy<uint8_t,  Category::INPUT>;
-using _QB = RegisterProxy<uint8_t,  Category::OUTPUT>;
-
-using _IW = RegisterProxy<uint16_t, Category::INPUT>;
-using _QW = RegisterProxy<uint16_t, Category::OUTPUT>;
-
-using _ID = RegisterProxy<uint32_t, Category::INPUT>;
-using _QD = RegisterProxy<uint32_t, Category::OUTPUT>;
-
-using _IL = RegisterProxy<uint64_t, Category::INPUT>;
-using _QL = RegisterProxy<uint64_t, Category::OUTPUT>;
-
-using _MX = RegisterProxy<bool,     Category::MEMORY>;
-using _MW = RegisterProxy<uint16_t, Category::MEMORY>;
-using _MD = RegisterProxy<uint32_t, Category::MEMORY>;
-using _ML = RegisterProxy<uint64_t, Category::MEMORY>;
-//...
-
-//// Глобальные экземпляры
-//inline _IX IX;
-//inline _QX QX;
-//inline _IB IB;
-//inline _QB QB;
-//inline _IW IW;
-//inline _QW QW;
-//inline _ID ID;
-//inline _QD QD;
-//inline _IL IL;
-//inline _QL QL;
-//inline _MX MX;
-//inline _MW MW;
-//inline _MD MD;
-//inline _ML ML;
 
 //// ----------------------------------------------------------------------------
 //// OLD Register Types

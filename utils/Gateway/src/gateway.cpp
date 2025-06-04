@@ -40,7 +40,23 @@ IEC_ULINT *ML [BUFFER_SIZE];
 // ----------------------------------------------------------------------------
 // NEW Register Types
 // ----------------------------------------------------------------------------
-Registry _reg;
+// Создаём глобальный экземпляр Registry
+namespace {
+    Registry registryInstance(BUFFER_SIZE); // Размер по умолчанию
+}
+
+// Инициализируем глобальные прокси-объекты
+Registry::IX _IX{registryInstance};
+Registry::QX _QX{registryInstance};
+Registry::MX _MX{registryInstance};
+
+Registry::IB _IB{registryInstance};
+Registry::QB _QB{registryInstance};
+Registry::MB _MB{registryInstance};
+
+Registry::IW _IW{registryInstance};
+Registry::QW _QW{registryInstance};
+Registry::MW _MW{registryInstance};
 
 //// ----------------------------------------------------------------------------
 //// OLD Register Types

@@ -417,9 +417,10 @@ void updateBuffersIn_MB() {
     {
         for (int i = 0; i < MAX_MB_IO; i++)
         {
-            if (IX[100 + (i / 8)][i % 8] != nullptr) {
-                *IX[100 + (i / 8)][i % 8] =  bool_input_buf[i];
-            }
+//            if (_IX[100 + (i / 8)][i % 8] != nullptr) {
+//                *_IX[100 + (i / 8)][i % 8] = bool_input_buf[i];
+//            }
+            IX[100 + (i / 8)][i % 8] = bool_input_buf[i];
 
             if (IW[100 + i] != nullptr) {
                 *IW[100 + i] =  int_input_buf[i];
@@ -439,9 +440,11 @@ void updateBuffersOut_MB() {
     {
         for (int i = 0; i < MAX_MB_IO; i++)
         {
-            if (QX[100 + (i / 8)][i % 8] != nullptr) {
-                bool_output_buf[i] = *QX[100 + (i / 8)][i % 8];
-            }
+//            if (_QX[100 + (i / 8)][i % 8] != nullptr) {
+//                bool_output_buf[i] = *_QX[100 + (i / 8)][i % 8];
+//            }
+
+            bool_output_buf[i] = QX[100 + (i / 8)][i % 8];
 
             if (QW[100 + i] != nullptr) {
                 int_output_buf[i] = *QW[100 + i];

@@ -13,8 +13,8 @@ pthread_mutex_t bufferLock; //mutex for the internal buffers
 // OLD ARRAYS
 // ----------------------------------------------------------------------------
 //Booleans
-IEC_BOOL *IX [BUFFER_SIZE][8];
-IEC_BOOL *QX [BUFFER_SIZE][8];
+//IEC_BOOL *_IX [BUFFER_SIZE][8];
+//IEC_BOOL *_QX [BUFFER_SIZE][8];
 
 //Bytes
 IEC_BYTE *IB [BUFFER_SIZE];
@@ -46,43 +46,27 @@ namespace {
 }
 
 // Инициализируем глобальные прокси-объекты
-Registry::IX _IX{registryInstance};
-Registry::QX _QX{registryInstance};
-Registry::MX _MX{registryInstance};
+Registry::IX IX{registryInstance};
+Registry::QX QX{registryInstance};
 
-Registry::IB _IB{registryInstance};
-Registry::QB _QB{registryInstance};
-Registry::MB _MB{registryInstance};
+Registry::IB __IB{registryInstance};
+Registry::QB __QB{registryInstance};
 
-Registry::IW _IW{registryInstance};
-Registry::QW _QW{registryInstance};
-Registry::MW _MW{registryInstance};
+Registry::IW __IW{registryInstance};
+Registry::QW __QW{registryInstance};
 
-//// ----------------------------------------------------------------------------
-//// OLD Register Types
-//// ----------------------------------------------------------------------------
-//// Явное инстанцирование для DLL
-//template class ObservableVector<IEC_BYTE*>;
-//template class ObservableVector<IEC_UINT*>;
-//template class ObservableVector<IEC_UDINT*>;
-//template class ObservableVector<IEC_ULINT*>;
-//
-////VEC_BOOL    IX = VEC_BOOL(BUFFER_SIZE);     // Digital Inputs (%IX)
-////VEC_BOOL    QX = VEC_BOOL(BUFFER_SIZE);     // Digital Outputs (%QX)
-//
-//VEC_BYTE    IB(BUFFER_SIZE);    // Byte Inputs (%IB)
-//VEC_BYTE    QB(BUFFER_SIZE);    // Byte Outputs (%QB)
-//VEC_UINT    IW(BUFFER_SIZE);    // Word Inputs (%IW)
-//VEC_UINT    QW(BUFFER_SIZE);    // Word Outputs (%QW)
-//VEC_UDINT   ID(BUFFER_SIZE);    // Double Word Inputs (%ID)
-//VEC_UDINT   QD(BUFFER_SIZE);    // Double Word Outputs (%QD)
-//VEC_ULINT   IL(BUFFER_SIZE);    // Long Word Inputs (%IL)
-//VEC_ULINT   QL(BUFFER_SIZE);    // Long Word Outputs (%QL)
-//
-////
-//VEC_UINT    MW(BUFFER_SIZE);    // Memory Words (%MW)
-//VEC_UDINT   MD(BUFFER_SIZE);    // Memory Double Words (%MD)
-//VEC_ULINT   ML(BUFFER_SIZE);    // Local Data (%ML)
+Registry::ID __ID{registryInstance};
+Registry::QD __QD{registryInstance};
+
+Registry::IL __IL{registryInstance};
+Registry::QL __QL{registryInstance};
+
+Registry::MX __MX{registryInstance};
+Registry::MB __MB{registryInstance};
+Registry::MW __MW{registryInstance};
+Registry::MD __MD{registryInstance};
+Registry::ML __ML{registryInstance};
+
 
 //-----------------------------------------------------------------------------
 //bool parseAddressIEC(char *pSrc, char *code1, char *code2, int *index1, int *index2) {

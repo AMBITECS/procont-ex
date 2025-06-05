@@ -24,8 +24,8 @@ extern pthread_mutex_t bufferLock;
 // ----------------------------------------------------------------------------
 
 //Booleans
-extern IEC_BOOL *IX [BUFFER_SIZE][8];
-extern IEC_BOOL *QX [BUFFER_SIZE][8];
+//extern IEC_BOOL *_IX [BUFFER_SIZE][8];
+//extern IEC_BOOL *_QX [BUFFER_SIZE][8];
 
 //Bytes
 extern IEC_BYTE *IB [BUFFER_SIZE];
@@ -52,45 +52,25 @@ extern IEC_ULINT *ML [BUFFER_SIZE];
 // NEW Register Types
 // ----------------------------------------------------------------------------
 // Объявляем глобальные экземпляры прокси-объектов
-extern Registry::IX _IX;
-extern Registry::QX _QX;
-extern Registry::MX _MX;
+extern Registry::IX IX;
+extern Registry::QX QX;
 
-extern Registry::IB _IB;
-extern Registry::QB _QB;
-extern Registry::MB _MB;
+extern Registry::IB __IB;
+extern Registry::QB __QB;
 
-extern Registry::IW _IW;
-extern Registry::QW _QW;
-extern Registry::MW _MW;
+extern Registry::IW __IW;
+extern Registry::QW __QW;
 
+extern Registry::ID __ID;
+extern Registry::QD __QD;
 
-//// ----------------------------------------------------------------------------
-//// OLD Register Types
-//// ----------------------------------------------------------------------------
-//// Специализации для стандартных типов using VEC_BOOL  = BitwiseVector <IEC_BOOL*>;
-//using VEC_BYTE  = ObservableVector <IEC_BYTE*>;
-//using VEC_UINT  = ObservableVector <IEC_UINT*>;
-//using VEC_UDINT = ObservableVector <IEC_UDINT*>;
-//using VEC_ULINT = ObservableVector <IEC_ULINT*>;
-//
-//extern VEC_BYTE    IB;
-//extern VEC_BYTE    QB;
-//extern VEC_UINT    IW;
-//extern VEC_UINT    QW;
-//extern VEC_UDINT   ID;
-//extern VEC_UDINT   QD;
-//extern VEC_ULINT   IL;
-//extern VEC_ULINT   QL;
-//
-//extern VEC_UINT    MW;
-//extern VEC_UDINT   MD;
-//extern VEC_ULINT   ML;
-//
-//// Объявления явного инстанцирования
-//extern template class ObservableVector<IEC_BYTE*>;
-//extern template class ObservableVector<IEC_UINT*>;
-//extern template class ObservableVector<IEC_UDINT*>;
-//extern template class ObservableVector<IEC_ULINT*>;
+extern Registry::IL __IL;
+extern Registry::QL __QL;
+
+extern Registry::MX __MX;
+extern Registry::MB __MB;
+extern Registry::MW __MW;
+extern Registry::MD __MD;
+extern Registry::ML __ML;
 
 #endif //PRO_GATEWAY_H

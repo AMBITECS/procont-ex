@@ -89,17 +89,15 @@ int word(unsigned char byte1, unsigned char byte2) {
 //-----------------------------------------------------------------------------
 void mapUnusedIO()
 {
-//    reg().IX[0] =
-
     pthread_mutex_lock(&bufferLock);
 
-    for(int i = 0; i < MAX_DISCRETE_INPUT; i++) {
-        if (IX[i / 8][i % 8] == nullptr) IX[i / 8][i % 8] = &mb_discrete_input[i];
-    }
-
-    for(int i = 0; i < MAX_COILS; i++) {
-        if (QX[i / 8][i % 8] == nullptr) QX[i / 8][i % 8] = &mb_coils[i];
-    }
+//    for(int i = 0; i < MAX_DISCRETE_INPUT; i++) {
+//        if (_IX[i / 8][i % 8] == nullptr) _IX[i / 8][i % 8] = &mb_discrete_input[i];
+//    }
+//
+//    for(int i = 0; i < MAX_COILS; i++) {
+//        if (_QX[i / 8][i % 8] == nullptr) _QX[i / 8][i % 8] = &mb_coils[i];
+//    }
 
     for (int i = 0; i < MAX_INP_REGS; i++) {
         if (IW[i] == nullptr) IW[i] = &mb_input_regs[i];
@@ -172,14 +170,15 @@ void ReadCoils(unsigned char *buffer, long bufferSize) {
             int position = Start + i * 8 + j;
             if (position < MAX_COILS)
             {
-                if (QX[position / 8][position % 8] != nullptr)
-                {
-                    bitWrite(buffer[9 + i], j, *QX[position / 8][position % 8]);
-                }
-                else
-                {
-                    bitWrite(buffer[9 + i], j, 0);
-                }
+//                if (_QX[position / 8][position % 8] != nullptr)
+//                {
+//                    bitWrite(buffer[9 + i], j, *_QX[position / 8][position % 8]);
+//                }
+//                else
+//                {
+//                    bitWrite(buffer[9 + i], j, 0);
+//                }
+                bitWrite(buffer[9 + i], j, QX[position / 8][position % 8]);
             }
             else //invalid address
             {
@@ -235,14 +234,15 @@ void ReadDiscreteInputs(unsigned char *buffer, long bufferSize)
             int position = Start + i * 8 + j;
             if (position < MAX_DISCRETE_INPUT)
             {
-                if (IX[position / 8][position % 8] != nullptr)
-                {
-                    bitWrite(buffer[9 + i], j, *IX[position / 8][position % 8]);
-                }
-                else
-                {
-                    bitWrite(buffer[9 + i], j, 0);
-                }
+//                if (_IX[position / 8][position % 8] != nullptr)
+//                {
+//                    bitWrite(buffer[9 + i], j, *_IX[position / 8][position % 8]);
+//                }
+//                else
+//                {
+//                    bitWrite(buffer[9 + i], j, 0);
+//                }
+                bitWrite(buffer[9 + i], j, IX[position / 8][position % 8]);
             }
             else //invalid address
             {
@@ -507,10 +507,10 @@ void WriteCoil(unsigned char *buffer, long bufferSize)
         }
 
         pthread_mutex_lock(&bufferLock);
-        if (QX[Start / 8][Start % 8] != nullptr )
-        {
-            (*QX)[Start / 8][Start % 8] = value;
-        }
+//        if (_QX[Start / 8][Start % 8] != nullptr ) {
+//            (*_QX)[Start / 8][Start % 8] = value;
+//        }
+        QX[Start / 8][Start % 8] = value;
         pthread_mutex_unlock(&bufferLock);
     }
 
@@ -563,8 +563,8 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
         }
         else
         {
-            // Overwrite one word of the 32 bit register:
-            // Calculate the bit offset of the word in the 32 bit register.
+            // Overwrite one word of the 32-bit register:
+            // Calculate the bit offset of the word in the 32-bit register.
             int bit_offset = (1 - ((position - MIN_32B_RANGE) % 2)) * 16;
             // Mask the word.
             *MD[(position - MIN_32B_RANGE) / 2] &= ~(((uint32_t) 0xffff) << bit_offset);
@@ -582,8 +582,8 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
         }
         else
         {
-            // Overwrite one word of the 64 bit register:
-            // Calculate the bit offset of the word in the 64 bit register.
+            // Overwrite one word of the 64-bit register:
+            // Calculate the bit offset of the word in the 64-bit register.
             int bit_offset = (3 - ((position - MIN_64B_RANGE) % 4)) * 16;
             // Mask the word.
             *ML[(position - MIN_64B_RANGE) / 4] &= ~(((uint64_t) 0xffff) << bit_offset);
@@ -673,7 +673,9 @@ void WriteMultipleCoils(unsigned char *buffer, long bufferSize)
             int position = Start + i * 8 + j;
             if (position < MAX_COILS)
             {
-                if (QX[position / 8][position % 8] != nullptr) *QX[position / 8][position % 8] = bitRead(buffer[13 + i], j);
+//                if (_QX[position / 8][position % 8] != nullptr)
+//                    *_QX[position / 8][position % 8] = bitRead(buffer[13 + i], j);
+                QX[position / 8][position % 8] = bitRead(buffer[13 + i], j);
             }
             else //invalid address
             {

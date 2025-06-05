@@ -18,8 +18,8 @@ std::string Address::toString() const {
         oss << '?';
     }
 
-    // Тип данных (X/B/W/D/L/R/F)
-    if (datatype() <= TYPE_LREAL) {
+    // Тип данных (X/B/W/D/L) // + (/R/F)
+    if (datatype() <= TYPE_LWORD) { // TYPE_LREAL
         oss << type_prefixes[datatype()];
     } else {
         oss << '?';
@@ -72,8 +72,8 @@ Address Address::Of(const std::string& key) {
             case 'W': type = TYPE_WORD; break;
             case 'D': type = TYPE_DWORD; break;
             case 'L': type = TYPE_LWORD; break;
-            case 'R': type = TYPE_REAL; break;
-            case 'F': type = TYPE_LREAL; break;
+//            case 'R': type = TYPE_REAL; break;
+//            case 'F': type = TYPE_LREAL; break;
             default: throw std::invalid_argument("Unknown data type: " + matches[2].str());
         }
     }

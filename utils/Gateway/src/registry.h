@@ -6,11 +6,13 @@
 
 #include "address.h"
 #include "variant.h"
-#include <vector>
 #include <cstdint>
 #include <type_traits>
 #include <stdexcept>
 #include <cstring>
+#include <vector>
+#include <unordered_map>
+#include <functional>
 
 template<typename T>
 struct RegisterTraits {
@@ -33,36 +35,92 @@ template<> struct RegisterTraits<double>   { using storage_type = double;   stat
 // Registry (улучшенная версия)
 //-----------------------------------------------------------------------------
 class Registry {
+public:
+    using Storage  = std::vector<uint8_t>;  // тип хранилища реестра
+    using Category = Address::Category;     // тип категории реестра
+    using DataType = Address::DataType;     // тип данных в реестре
+
 private:
     // Регистры контроллера по категориям IEC
-    std::vector<uint8_t> input_registers_;
-    std::vector<uint8_t> output_registers_;
-    std::vector<uint8_t> memory_registers_;
-    std::vector<uint8_t> special_registers_;
+    // (A - текущий слой, B - предыдущий слой)
+    struct RegStorage { Storage A; Storage B;};
+    using  CategoriesMap  = std::unordered_map<Category, RegStorage>;
+    using  SubscribersMap = std::unordered_map<Address, std::vector<std::function<void()>>>;
+
+    CategoriesMap  categories_;
+    SubscribersMap subscribers_;
+
+    // Внутренний метод для получения хранилища по категориям IEC
+    std::vector<uint8_t>& getStorage(Category cat) { return categories_[cat].A; }
+    const std::vector<uint8_t>& getStorage(Category cat) const { return categories_.at(cat).A; }
 
 public:
-    using Category = Address::Category;
-    using DataType = Address::DataType;
-
-    explicit Registry(size_t memory_size = 1024) { resize(memory_size); }
+    explicit Registry(size_t memory_size = 1024) {
+        // Инициализируем все категории по умолчанию
+        categories_[Category::INPUT]   = RegStorage{};
+        categories_[Category::OUTPUT]  = RegStorage{};
+        categories_[Category::MEMORY]  = RegStorage{};
+        categories_[Category::SPECIAL] = RegStorage{};
+        resize(memory_size);
+    }
 
     void resize(size_t new_size) {
-        input_registers_.resize(new_size);
-        output_registers_.resize(new_size);
-        memory_registers_.resize(new_size);
-        special_registers_.resize(new_size);
+        for (auto& [cat, reg] : categories_) {
+            reg.A.resize(new_size);
+            reg.B.resize(new_size);
+        }
+    }
+
+    bool isChanged(const Address& addr) const {
+        const auto& cat = categories_.at(addr.category());
+        const size_t offset = addr.offset();
+        size_t size = 0;
+
+        // Определяем размер через switch вместо шаблонного параметра
+        switch(addr.datatype()) {
+            case Address::TYPE_BIT:   size = addr.hasBit() ? 1 : RegisterTraits<bool>::size; break;
+            case Address::TYPE_BYTE:  size = RegisterTraits<uint8_t>::size; break;
+            case Address::TYPE_WORD:  size = RegisterTraits<uint16_t>::size; break;
+            case Address::TYPE_DWORD: size = RegisterTraits<uint32_t>::size; break;
+            case Address::TYPE_LWORD: size = RegisterTraits<uint64_t>::size; break;
+            case Address::TYPE_REAL:  size = RegisterTraits<float>::size; break;
+            case Address::TYPE_LREAL: size = RegisterTraits<double>::size; break;
+            default: throw std::invalid_argument("Unknown data type");
+        }
+
+        return memcmp(&cat.A[offset], &cat.B[offset], size) != 0;
+    }
+
+    void subscribe(const Address& addr, std::function<void()> callback) {
+        subscribers_[addr].push_back(callback);
+    }
+
+    void commitChanges() {
+        // Уведомление подписчиков
+        for (const auto& [addr, callbacks] : subscribers_) {
+            if (isChanged(addr)) {
+                for (const auto& cb : callbacks) {
+                    cb();
+                }
+            }
+        }
+
+        // Синхронизация слоёв
+        for (auto& [cat, reg] : categories_) { reg.B = reg.A; }
     }
 
     //-------------------------------------------------------------------------
-    // Улучшенный RegisterAccessor
+    // Accessor - шаблон доступа к типу T в категории CAT по смещению offset_
     //-------------------------------------------------------------------------
     template<typename T, Category CAT>
-    class Accessor {
+    class Accessor
+    {
+    private:
         Registry &parent_;
         uint64_t offset_;
 
-        std::vector<uint8_t> &getStorage() { return parent_.getStorage(CAT); }
-        [[nodiscard]] const std::vector<uint8_t> &getStorage() const { return parent_.getStorage(CAT); }
+        Storage &                       getStorage()        { return parent_.categories_[CAT].A; }
+        [[nodiscard]] const Storage &   getStorage() const  { return parent_.categories_[CAT].A; }
 
         void checkBounds(size_t additional = 0) const {
             if (offset_ + additional + RegisterTraits<T>::size > getStorage().size()) {
@@ -77,8 +135,8 @@ public:
             }
         }
 
-        // Более безопасное приведение типов
-        operator T() const { //NOLINT
+        // Безопасное приведение типов (извлечение значения)
+        operator T() const { //NOLINT - неявное преобразование типа
             checkBounds();
             if constexpr (sizeof(T) == 1) {
                 return getStorage()[offset_];
@@ -89,7 +147,7 @@ public:
             }
         }
 
-        // Улучшенная запись с защитой от aliasing
+        // Запись с защитой от aliasing (запись значения)
         Accessor &operator=(T value) {
             checkBounds();
             std::memcpy(&getStorage()[offset_], &value, sizeof(T));
@@ -97,26 +155,26 @@ public:
         }
 
         //---------------------------------------------------------------------
-        // Улучшенный BitReference
+        // BitReference - побитовый доступ через Accessor
         //---------------------------------------------------------------------
         class BitReference {
             Accessor &accessor_;
             uint8_t bit_pos_;
 
         public:
-            BitReference(Accessor &accessor, uint8_t bit_pos)
-                : accessor_(accessor), bit_pos_(bit_pos) {
+            BitReference(Accessor &accessor, uint8_t bit_pos): accessor_(accessor), bit_pos_(bit_pos)
+            {
                 if (bit_pos_ >= sizeof(T) * 8) {
                     throw std::out_of_range("Bit position out of range");
                 }
             }
 
-            // Неявное приведение к bool
-            operator bool() const { //NOLINT
-                return (static_cast<T>(accessor_) >> bit_pos_) & 0x1;
+            // Неявное приведение к bool (чтение бита)
+            operator bool() const { //NOLINT - неявное преобразование типа
+                return (static_cast<T>(accessor_) >> bit_pos_) & 0x01;
             }
 
-            // Более безопасная установка бита
+            // Безопасная запись бита (установка или сброс)
             BitReference &operator=(bool b) {
                 T value = static_cast<T>(accessor_);
                 T mask = static_cast<T>(1) << bit_pos_;
@@ -131,58 +189,72 @@ public:
         }
 
         //---------------------------------------------------------------------
-        // Улучшенный IndexProxy
+        // IndexProxy - выдача Accessor через operator[]
         //---------------------------------------------------------------------
         class IndexProxy {
             Registry& parent_;
             uint64_t base_offset_;
-        public:
-            IndexProxy(Registry& parent, uint64_t base_offset = 0)
-                : parent_(parent), base_offset_(base_offset) {}
 
-            // Добавлена проверка границ
+        public:
+            explicit IndexProxy(Registry& parent, uint64_t base_offset = 0)
+                    : parent_(parent), base_offset_(base_offset) {}
+
             Accessor operator[](uint64_t index) {
                 uint64_t offset = base_offset_ + index * RegisterTraits<T>::size;
-                if (offset + RegisterTraits<T>::size > parent_.getStorage(CAT).size()) {
+                const auto& storage = parent_.getStorage(CAT);
+                if (offset + RegisterTraits<T>::size > storage.size()) {
                     throw std::out_of_range("Register index out of range");
                 }
                 return Accessor(parent_, offset);
             }
         };
+
     }; // Accessor
 
     template<typename T, Category CAT>
     Accessor<T, CAT> get(uint64_t offset) { return Accessor<T, CAT>(*this, offset); }
 
-    // Псевдонимы типов
-//    template<typename T> using IRegister = typename Accessor<T, Category::INPUT>::IndexProxy;
-//    template<typename T> using QRegister = typename Accessor<T, Category::OUTPUT>::IndexProxy;
-//    template<typename T> using MRegister = typename Accessor<T, Category::MEMORY>::IndexProxy;
-//    template<typename T> using SRegister = typename Accessor<T, Category::SPECIAL>::IndexProxy;
+    // Базовые аксессоры по категориям
     template<typename T> using IRegister = Accessor<T, Category::INPUT>;
     template<typename T> using QRegister = Accessor<T, Category::OUTPUT>;
     template<typename T> using MRegister = Accessor<T, Category::MEMORY>;
     template<typename T> using SRegister = Accessor<T, Category::SPECIAL>;
 
-    using IX = IRegister<T_BOOL  >::IndexProxy;
-    using IB = IRegister<T_UINT8 >::IndexProxy;
+    // Proxy-типы для входных регистров (I)
+    using IX = IRegister<T_BOOL>::IndexProxy;
+    using IB = IRegister<T_UINT8>::IndexProxy;
     using IW = IRegister<T_UINT16>::IndexProxy;
     using ID = IRegister<T_UINT32>::IndexProxy;
     using IL = IRegister<T_UINT64>::IndexProxy;
+    using IR = IRegister<T_REAL32>::IndexProxy;   // для float
+    using IF = IRegister<T_REAL64>::IndexProxy;  // для double
 
-    using QX = QRegister<T_BOOL  >::IndexProxy;
-    using QB = QRegister<T_UINT8 >::IndexProxy;
+    // Proxy-типы для выходных регистров (Q)
+    using QX = QRegister<T_BOOL>::IndexProxy;
+    using QB = QRegister<T_UINT8>::IndexProxy;
     using QW = QRegister<T_UINT16>::IndexProxy;
     using QD = QRegister<T_UINT32>::IndexProxy;
     using QL = QRegister<T_UINT64>::IndexProxy;
+    using QR = QRegister<T_REAL32>::IndexProxy;
+    using QF = QRegister<T_REAL64>::IndexProxy;
 
-    using MX = MRegister<T_BOOL  >::IndexProxy;
-    using MB = MRegister<T_UINT8 >::IndexProxy;
+    // Proxy-типы для регистров памяти (M)
+    using MX = MRegister<T_BOOL>::IndexProxy;
+    using MB = MRegister<T_UINT8>::IndexProxy;
     using MW = MRegister<T_UINT16>::IndexProxy;
     using MD = MRegister<T_UINT32>::IndexProxy;
     using ML = MRegister<T_UINT64>::IndexProxy;
+    using MR = MRegister<T_REAL32>::IndexProxy;
+    using MF = MRegister<T_REAL64>::IndexProxy;
 
-    //VARIANT getByAddress(const Address& addr);
+    // Proxy-типы для специальных регистров (S)
+    using SX = SRegister<T_BOOL>::IndexProxy;
+    using SB = SRegister<T_UINT8>::IndexProxy;
+    using SW = SRegister<T_UINT16>::IndexProxy;
+    using SD = SRegister<T_UINT32>::IndexProxy;
+    using SL = SRegister<T_UINT64>::IndexProxy;
+    using SR = SRegister<T_REAL32>::IndexProxy;
+    using SF = SRegister<T_REAL64>::IndexProxy;
 
     // Оператор [] для доступа по Address
     VARIANT operator[](const Address& addr) {
@@ -195,9 +267,9 @@ public:
         const uint8_t bitpos = addr.bitpos();
         const DataType datatype = addr.datatype();
         switch(addr.category()) {
-            case Category::INPUT:   return access<Category::INPUT>(datatype, offset, bitpos);
-            case Category::OUTPUT:  return access<Category::OUTPUT>(datatype, offset, bitpos);
-            case Category::MEMORY:  return access<Category::MEMORY>(datatype, offset, bitpos);
+            case Category::INPUT:   return access<Category::INPUT> ( datatype, offset, bitpos);
+            case Category::OUTPUT:  return access<Category::OUTPUT>( datatype, offset, bitpos);
+            case Category::MEMORY:  return access<Category::MEMORY>( datatype, offset, bitpos);
             case Category::SPECIAL: return access<Category::SPECIAL>(datatype, offset, bitpos);
             default: throw std::invalid_argument("Invalid register category");
         }
@@ -212,26 +284,16 @@ private:
                 return (bitpos != 0xFF)
                 ? VARIANT(static_cast<bool>(get<bool, CAT>(offset)[bitpos]))
                 : VARIANT(static_cast<bool>(get<bool, CAT>(offset)));
-            case DataType::TYPE_BYTE : return VARIANT(static_cast<uint8_t>(get<uint8_t, CAT>(offset)));
-            case DataType::TYPE_WORD : return VARIANT(static_cast<uint16_t>(get<uint16_t, CAT>(offset)));
-            case DataType::TYPE_DWORD: return VARIANT(static_cast<uint32_t>(get<uint32_t, CAT>(offset)));
-            case DataType::TYPE_LWORD: return VARIANT(static_cast<uint64_t>(get<uint64_t, CAT>(offset)));
-            case DataType::TYPE_REAL : return VARIANT(static_cast<float>(get<float, CAT>(offset)));
-            case DataType::TYPE_LREAL: return VARIANT(static_cast<double>(get<double, CAT>(offset)));
+            case DataType::TYPE_BYTE:  return VARIANT(static_cast<uint8_t>  (get<uint8_t,  CAT>(offset)));
+            case DataType::TYPE_WORD:  return VARIANT(static_cast<uint16_t> (get<uint16_t, CAT>(offset)));
+            case DataType::TYPE_DWORD: return VARIANT(static_cast<uint32_t> (get<uint32_t, CAT>(offset)));
+            case DataType::TYPE_LWORD: return VARIANT(static_cast<uint64_t> (get<uint64_t, CAT>(offset)));
+            case DataType::TYPE_REAL:  return VARIANT(static_cast<float>    (get<float,    CAT>(offset)));
+            case DataType::TYPE_LREAL: return VARIANT(static_cast<double>   (get<double,   CAT>(offset)));
             default: throw std::invalid_argument("Invalid data type");
         }
     }
 
-private:
-    std::vector<uint8_t>& getStorage(Category cat) {
-        switch(cat) {
-            case Category::INPUT:   return input_registers_;
-            case Category::OUTPUT:  return output_registers_;
-            case Category::MEMORY:  return memory_registers_;
-            case Category::SPECIAL: return special_registers_;
-            default: throw std::invalid_argument("Invalid register category");
-        }
-    }
 };
 
 #endif // REGISTRY_H

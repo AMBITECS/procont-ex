@@ -4,8 +4,15 @@
 #include <string>
 #include <cstdint>
 #include <stdexcept>
+#include "variant.h"
 
 class Address {
+private:
+    constexpr explicit Address(uint64_t packed) : packed_(packed) {}
+
+    // Все данные упакованы в 64 бита
+    uint64_t packed_{};
+
 public:
     // Категории регистров (4 бита)
     enum Category : uint8_t {
@@ -22,8 +29,8 @@ public:
         TYPE_WORD   = 2,    // 'W' - слово
         TYPE_DWORD  = 3,    // 'D' - двойное слово
         TYPE_LWORD  = 4,    // 'L' - длинное слово
-        TYPE_REAL   = 5,    // 'R' - вещественное (float)
-        TYPE_LREAL  = 6     // 'F' - длинное вещественное (double)
+        TYPE_REAL   = 5,    // 'R' - вещественное 4б (float)
+        TYPE_LREAL  = 6     // 'F' - длинное вещественное 8б (double)
     };
 
     // Битовые поля в 64-битном значении
@@ -74,10 +81,41 @@ public:
         return datatype() == TYPE_BIT && ((packed_ & BITPOS_MASK) >> BITPOS_SHIFT) != 0xFF;
     }
 
-private:
-    constexpr explicit Address(uint64_t packed) : packed_(packed) {}
+    // или другое специальное значение, обозначающее "нет бита"
+    [[nodiscard]] bool hasBit() const {
+        return bitpos() != 0xFF;  /* BAD_BYTE */
+    }
 
-    uint64_t packed_; // Все данные упакованы в 64 бита
+    // И оператор сравнения
+    friend bool operator==(const Address& lhs, const Address& rhs) {
+        return lhs.packed_ == rhs.packed_;
+    }
+
+    template<DataType DT> struct DataTypeToNative;
 };
+
+// Определяем специализации
+template<> struct Address::DataTypeToNative<Address::TYPE_BIT>    { using type = bool;     };
+template<> struct Address::DataTypeToNative<Address::TYPE_BYTE>   { using type = uint8_t;  };
+template<> struct Address::DataTypeToNative<Address::TYPE_WORD>   { using type = uint16_t; };
+template<> struct Address::DataTypeToNative<Address::TYPE_DWORD>  { using type = uint32_t; };
+template<> struct Address::DataTypeToNative<Address::TYPE_LWORD>  { using type = uint64_t; };
+template<> struct Address::DataTypeToNative<Address::TYPE_REAL>   { using type = float;    };
+template<> struct Address::DataTypeToNative<Address::TYPE_LREAL>  { using type = double;   };
+
+// Получние hash-суммы (size_t)
+namespace std {
+    template<>
+    struct hash<Address> {
+        size_t operator()(const Address& addr) const {
+            // Простая хэш-функция, можно улучшить
+            return ((static_cast<size_t>(addr.category()) << 24) ^
+                    (static_cast<size_t>(addr.datatype()) << 16) ^
+                    (addr.offset() << 8) ^
+                    addr.bitpos());
+        }
+    };
+
+}
 
 #endif // REGISTER_ADDRESS_H

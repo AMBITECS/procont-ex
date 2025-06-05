@@ -51,8 +51,8 @@ void BindingManager::processWithCategory(const Address& addr, void* pvar, bool t
         case Address::TYPE_WORD:  handleType<CAT, uint16_t> (addr, pvar, toRegistry); break;
         case Address::TYPE_DWORD: handleType<CAT, uint32_t> (addr, pvar, toRegistry); break;
         case Address::TYPE_LWORD: handleType<CAT, uint64_t> (addr, pvar, toRegistry); break;
-        case Address::TYPE_REAL:  handleType<CAT, float   > (addr, pvar, toRegistry); break;
-        case Address::TYPE_LREAL: handleType<CAT, double  > (addr, pvar, toRegistry); break;
+//        case Address::TYPE_REAL:  handleType<CAT, float   > (addr, pvar, toRegistry); break;
+//        case Address::TYPE_LREAL: handleType<CAT, double  > (addr, pvar, toRegistry); break;
         default: throw std::invalid_argument("Unknown data type");
     }
 }
@@ -76,26 +76,26 @@ template void BindingManager::handleType< Registry::Category::INPUT,   uint8_t  
 template void BindingManager::handleType< Registry::Category::INPUT,   uint16_t > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::INPUT,   uint32_t > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::INPUT,   uint64_t > (const Address&, void*, bool);
-template void BindingManager::handleType< Registry::Category::INPUT,   float    > (const Address&, void*, bool);
-template void BindingManager::handleType< Registry::Category::INPUT,   double   > (const Address&, void*, bool);
+//template void BindingManager::handleType< Registry::Category::INPUT,   float    > (const Address&, void*, bool);
+//template void BindingManager::handleType< Registry::Category::INPUT,   double   > (const Address&, void*, bool);
 
 template void BindingManager::handleType< Registry::Category::OUTPUT,  uint8_t  > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::OUTPUT,  uint16_t > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::OUTPUT,  uint32_t > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::OUTPUT,  uint64_t > (const Address&, void*, bool);
-template void BindingManager::handleType< Registry::Category::OUTPUT,  float    > (const Address&, void*, bool);
-template void BindingManager::handleType< Registry::Category::OUTPUT,  double   > (const Address&, void*, bool);
+//template void BindingManager::handleType< Registry::Category::OUTPUT,  float    > (const Address&, void*, bool);
+//template void BindingManager::handleType< Registry::Category::OUTPUT,  double   > (const Address&, void*, bool);
 
 template void BindingManager::handleType< Registry::Category::MEMORY,  uint8_t  > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::MEMORY,  uint16_t > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::MEMORY,  uint32_t > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::MEMORY,  uint64_t > (const Address&, void*, bool);
-template void BindingManager::handleType< Registry::Category::MEMORY,  float    > (const Address&, void*, bool);
-template void BindingManager::handleType< Registry::Category::MEMORY,  double   > (const Address&, void*, bool);
+//template void BindingManager::handleType< Registry::Category::MEMORY,  float    > (const Address&, void*, bool);
+//template void BindingManager::handleType< Registry::Category::MEMORY,  double   > (const Address&, void*, bool);
 
 template void BindingManager::handleType< Registry::Category::SPECIAL, uint8_t  > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::SPECIAL, uint16_t > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::SPECIAL, uint32_t > (const Address&, void*, bool);
 template void BindingManager::handleType< Registry::Category::SPECIAL, uint64_t > (const Address&, void*, bool);
-template void BindingManager::handleType< Registry::Category::SPECIAL, float    > (const Address&, void*, bool);
-template void BindingManager::handleType< Registry::Category::SPECIAL, double   > (const Address&, void*, bool);
+//template void BindingManager::handleType< Registry::Category::SPECIAL, float    > (const Address&, void*, bool);
+//template void BindingManager::handleType< Registry::Category::SPECIAL, double   > (const Address&, void*, bool);

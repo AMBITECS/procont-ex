@@ -27,26 +27,26 @@ extern pthread_mutex_t bufferLock;
 //extern IEC_BOOL *_IX [BUFFER_SIZE][8];
 //extern IEC_BOOL *_QX [BUFFER_SIZE][8];
 
-//Bytes
-extern IEC_BYTE *IB [BUFFER_SIZE];
-extern IEC_BYTE *QB [BUFFER_SIZE];
-
-//Analog I/O
-extern IEC_UINT *IW [BUFFER_SIZE];
-extern IEC_UINT *QW [BUFFER_SIZE];
-
-//32bit I/O
-extern IEC_UDINT *ID [BUFFER_SIZE];
-extern IEC_UDINT *QD [BUFFER_SIZE];
-
-//64bit I/O
-extern IEC_ULINT *IL [BUFFER_SIZE];
-extern IEC_ULINT *QL [BUFFER_SIZE];
+////Bytes
+//extern IEC_BYTE *_IB [BUFFER_SIZE];
+//extern IEC_BYTE *_QB [BUFFER_SIZE];
+//
+////Analog I/O
+//extern IEC_UINT *_IW [BUFFER_SIZE];
+//extern IEC_UINT *_QW [BUFFER_SIZE];
+//
+////32bit I/O
+//extern IEC_UDINT *_ID [BUFFER_SIZE];
+//extern IEC_UDINT *_QD [BUFFER_SIZE];
+//
+////64bit I/O
+//extern IEC_ULINT *_IL [BUFFER_SIZE];
+//extern IEC_ULINT *_QL [BUFFER_SIZE];
 
 //Memory
-extern IEC_UINT  *MW [BUFFER_SIZE];
-extern IEC_UDINT *MD [BUFFER_SIZE];
-extern IEC_ULINT *ML [BUFFER_SIZE];
+extern IEC_UINT  *_MW [BUFFER_SIZE];
+extern IEC_UDINT *_MD [BUFFER_SIZE];
+extern IEC_ULINT *_ML [BUFFER_SIZE];
 
 // ----------------------------------------------------------------------------
 // NEW Register Types
@@ -55,20 +55,20 @@ extern IEC_ULINT *ML [BUFFER_SIZE];
 extern Registry::IX IX;
 extern Registry::QX QX;
 
-extern Registry::IB __IB;
-extern Registry::QB __QB;
+extern Registry::IB IB;
+extern Registry::QB QB;
 
-extern Registry::IW __IW;
-extern Registry::QW __QW;
+extern Registry::IW IW;
+extern Registry::QW QW;
 
-extern Registry::ID __ID;
-extern Registry::QD __QD;
+extern Registry::ID ID;
+extern Registry::QD QD;
 
-extern Registry::IL __IL;
-extern Registry::QL __QL;
+extern Registry::IL IL;
+extern Registry::QL QL;
 
-extern Registry::MX __MX;
-extern Registry::MB __MB;
+extern Registry::MX MX;
+extern Registry::MB MB;
 extern Registry::MW __MW;
 extern Registry::MD __MD;
 extern Registry::ML __ML;

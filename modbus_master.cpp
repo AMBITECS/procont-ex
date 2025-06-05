@@ -422,9 +422,10 @@ void updateBuffersIn_MB() {
 //            }
             IX[100 + (i / 8)][i % 8] = bool_input_buf[i];
 
-            if (IW[100 + i] != nullptr) {
-                *IW[100 + i] =  int_input_buf[i];
-            }
+//            if (_IW[100 + i] != nullptr) {
+//                *_IW[100 + i] =  int_input_buf[i];
+//            }
+            IW[100 + i] =  int_input_buf[i];
         }
     }
     pthread_mutex_unlock(&ioLock);
@@ -443,12 +444,12 @@ void updateBuffersOut_MB() {
 //            if (_QX[100 + (i / 8)][i % 8] != nullptr) {
 //                bool_output_buf[i] = *_QX[100 + (i / 8)][i % 8];
 //            }
-
             bool_output_buf[i] = QX[100 + (i / 8)][i % 8];
 
-            if (QW[100 + i] != nullptr) {
-                int_output_buf[i] = *QW[100 + i];
-            }
+//            if (_QW[100 + i] != nullptr) {
+//                int_output_buf[i] = *_QW[100 + i];
+//            }
+            int_output_buf[i] = QW[100 + i];
         }
     }
     pthread_mutex_unlock(&ioLock);

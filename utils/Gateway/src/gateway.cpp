@@ -12,30 +12,30 @@ pthread_mutex_t bufferLock; //mutex for the internal buffers
 // ----------------------------------------------------------------------------
 // OLD ARRAYS
 // ----------------------------------------------------------------------------
-//Booleans
+////Booleans
 //IEC_BOOL *_IX [BUFFER_SIZE][8];
 //IEC_BOOL *_QX [BUFFER_SIZE][8];
 
-//Bytes
-IEC_BYTE *IB [BUFFER_SIZE];
-IEC_BYTE *QB [BUFFER_SIZE];
-
-//Analog I/O
-IEC_UINT *IW [BUFFER_SIZE];
-IEC_UINT *QW [BUFFER_SIZE];
-
-//32bit I/O
-IEC_UDINT *ID [BUFFER_SIZE];
-IEC_UDINT *QD [BUFFER_SIZE];
-
-//64bit I/O
-IEC_ULINT *IL [BUFFER_SIZE];
-IEC_ULINT *QL [BUFFER_SIZE];
+////Bytes
+//IEC_BYTE *_IB [BUFFER_SIZE];
+//IEC_BYTE *_QB [BUFFER_SIZE];
+//
+////Analog I/O
+//IEC_UINT *_IW [BUFFER_SIZE];
+//IEC_UINT *_QW [BUFFER_SIZE];
+//
+////32bit I/O
+//IEC_UDINT *_ID [BUFFER_SIZE];
+//IEC_UDINT *_QD [BUFFER_SIZE];
+//
+////64bit I/O
+//IEC_ULINT *_IL [BUFFER_SIZE];
+//IEC_ULINT *_QL [BUFFER_SIZE];
 
 //Memory
-IEC_UINT  *MW [BUFFER_SIZE];
-IEC_UDINT *MD [BUFFER_SIZE];
-IEC_ULINT *ML [BUFFER_SIZE];
+IEC_UINT  *_MW [BUFFER_SIZE];
+IEC_UDINT *_MD [BUFFER_SIZE];
+IEC_ULINT *_ML [BUFFER_SIZE];
 
 // ----------------------------------------------------------------------------
 // NEW Register Types
@@ -49,20 +49,20 @@ namespace {
 Registry::IX IX{registryInstance};
 Registry::QX QX{registryInstance};
 
-Registry::IB __IB{registryInstance};
-Registry::QB __QB{registryInstance};
+Registry::IB IB{registryInstance};
+Registry::QB QB{registryInstance};
 
-Registry::IW __IW{registryInstance};
-Registry::QW __QW{registryInstance};
+Registry::IW IW{registryInstance};
+Registry::QW QW{registryInstance};
 
-Registry::ID __ID{registryInstance};
-Registry::QD __QD{registryInstance};
+Registry::ID ID{registryInstance};
+Registry::QD QD{registryInstance};
 
-Registry::IL __IL{registryInstance};
-Registry::QL __QL{registryInstance};
+Registry::IL IL{registryInstance};
+Registry::QL QL{registryInstance};
 
-Registry::MX __MX{registryInstance};
-Registry::MB __MB{registryInstance};
+Registry::MX MX{registryInstance};
+Registry::MB MB{registryInstance};
 Registry::MW __MW{registryInstance};
 Registry::MD __MD{registryInstance};
 Registry::ML __ML{registryInstance};

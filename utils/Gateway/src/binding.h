@@ -5,6 +5,12 @@
 #include "address.h"
 #include <vector>
 #include <string>
+#include <stdexcept>
+
+#include "registry.h"
+#include "address.h"
+#include <vector>
+#include <string>
 
 class BindingManager {
 private:

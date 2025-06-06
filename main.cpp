@@ -347,8 +347,14 @@ int main(int argc,char **argv)
             updateCustomIn();       // custom IN
             {
                 updateBuffersIn_MB();       // update input image table with data from slave devices
+
+                BindingManager::instance().updateToIec();
+
                 handleSpecialFunctions();    // current time & statistic
                 config_run__(__tick++); // execute plc program logic
+
+                BindingManager::instance().updateFromIec();
+
                 updateBuffersOut_MB();      // update slave devices with data from the output image table
             }
             updateCustomOut();      // custom OUT

@@ -425,7 +425,7 @@ void updateBuffersIn_MB() {
 //            if (_IW[100 + i] != nullptr) {
 //                *_IW[100 + i] =  int_input_buf[i];
 //            }
-            IW[100 + i] =  int_input_buf[i];
+            IW[100 + i] = int_input_buf[i];
         }
     }
     pthread_mutex_unlock(&ioLock);

@@ -314,84 +314,92 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
         //16-bit registers
         else if (position >= MIN_16B_RANGE && position <= MAX_16B_RANGE)
         {
-            if (_MW[position - MIN_16B_RANGE] != nullptr)
-            {
-                buffer[ 9 + i * 2] = highByte(*_MW[position - MIN_16B_RANGE]);
-                buffer[10 + i * 2] = lowByte(*_MW[position - MIN_16B_RANGE]);
-            }
-            else
-            {
-                buffer[ 9 + i * 2] = 0;
-                buffer[10 + i * 2] = 0;
-            }
+//            if (_MW[position - MIN_16B_RANGE] != nullptr)
+//            {
+//                buffer[ 9 + i * 2] = highByte(*_MW[position - MIN_16B_RANGE]);
+//                buffer[10 + i * 2] = lowByte(*_MW[position - MIN_16B_RANGE]);
+//            }
+//            else
+//            {
+//                buffer[ 9 + i * 2] = 0;
+//                buffer[10 + i * 2] = 0;
+//            }
+            buffer[ 9 + i * 2] = highByte(MW[position - MIN_16B_RANGE]);
+            buffer[10 + i * 2] = lowByte (MW[position - MIN_16B_RANGE]);
         }
 
         //32-bit registers
         else if (position >= MIN_32B_RANGE && position <= MAX_32B_RANGE)
         {
-            if (_MD[(position - MIN_32B_RANGE) / 2] != nullptr)
-            {
+//            if (_MD[(position - MIN_32B_RANGE) / 2] != nullptr)
+//            {
                 if ((position - MIN_32B_RANGE) % 2 == 0) //first word
                 {
-
-                    auto tempValue = (uint16_t)(*_MD[(position - MIN_32B_RANGE) / 2] >> 16);
+//                    auto tempValue = (uint16_t)(*_MD[(position - MIN_32B_RANGE) / 2] >> 16);
+                    auto tempValue = (uint16_t)(MD[(position - MIN_32B_RANGE) / 2] >> 16);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else //second word
                 {
-                    auto tempValue = (uint16_t)(*_MD[(position - MIN_32B_RANGE) / 2] & 0xffff);
+//                    auto tempValue = (uint16_t)(*_MD[(position - MIN_32B_RANGE) / 2] & 0xffff);
+                    auto tempValue = (uint16_t)(MD[(position - MIN_32B_RANGE) / 2] & 0xffff);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
-            }
-            else
-            {
-                buffer[ 9 + i * 2] = mb_holding_regs[position];
-                buffer[10 + i * 2] = mb_holding_regs[position];
-            }
+//            }
+//            else
+//            {
+//                buffer[ 9 + i * 2] = mb_holding_regs[position];
+//                buffer[10 + i * 2] = mb_holding_regs[position];
+//            }
         }
 
         //64-bit registers
         else if (position >= MIN_64B_RANGE && position <= MAX_64B_RANGE)
         {
-            if (_ML[(position - MIN_64B_RANGE) / 4] != nullptr)
-            {
+//            if (_ML[(position - MIN_64B_RANGE) / 4] != nullptr)
+//            {
                 if ((position - MIN_64B_RANGE) % 4 == 0) //first word
                 {
-                    auto tempValue = (uint16_t)(*_ML[(position - MIN_64B_RANGE) / 4] >> 48);
+//                    auto tempValue = (uint16_t)(*_ML[(position - MIN_64B_RANGE) / 4] >> 48);
+                    auto tempValue = (uint16_t)(ML[(position - MIN_64B_RANGE) / 4] >> 48);
+
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 1)//second word
                 {
-                    auto tempValue = (uint16_t)((*_ML[(position - MIN_64B_RANGE) / 4] >> 32) & 0xffff);
+//                    auto tempValue = (uint16_t)((*_ML[(position - MIN_64B_RANGE) / 4] >> 32) & 0xffff);
+                    auto tempValue = (uint16_t)((ML[(position - MIN_64B_RANGE) / 4] >> 32) & 0xffff);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 2)//third word
                 {
-                    auto tempValue = (uint16_t)((*_ML[(position - MIN_64B_RANGE) / 4] >> 16) & 0xffff);
+//                    auto tempValue = (uint16_t)((*_ML[(position - MIN_64B_RANGE) / 4] >> 16) & 0xffff);
+                    auto tempValue = (uint16_t)((ML[(position - MIN_64B_RANGE) / 4] >> 16) & 0xffff);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
                 else if ((position - MIN_64B_RANGE) % 4 == 3)//fourth word
                 {
-                    auto tempValue = (uint16_t)(*_ML[(position - MIN_64B_RANGE) / 4] & 0xffff);
+//                    auto tempValue = (uint16_t)(*_ML[(position - MIN_64B_RANGE) / 4] & 0xffff);
+                    auto tempValue = (uint16_t)(ML[(position - MIN_64B_RANGE) / 4] & 0xffff);
 
                     buffer[ 9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
-            }
-            else
-            {
-                buffer[ 9 + i * 2] = mb_holding_regs[position];
-                buffer[10 + i * 2] = mb_holding_regs[position];
-            }
+//            }
+//            else
+//            {
+//                buffer[ 9 + i * 2] = mb_holding_regs[position];
+//                buffer[10 + i * 2] = mb_holding_regs[position];
+//            }
         }
         //invalid address
         else
@@ -553,45 +561,50 @@ int writeToRegisterWithoutLocking(int position, uint16_t value)
     //16-bit registers
     else if (position >= MIN_16B_RANGE && position <= MAX_16B_RANGE)
     {
-        if (_MW[position - MIN_16B_RANGE] != nullptr) *_MW[position - MIN_16B_RANGE] = value;
+//        if (_MW[position - MIN_16B_RANGE] != nullptr) *_MW[position - MIN_16B_RANGE] = value;
+        MW[position - MIN_16B_RANGE] = value;
     }
 
     //32-bit registers
     else if (position >= MIN_32B_RANGE && position <= MAX_32B_RANGE)
     {
-        if (_MD[(position - MIN_32B_RANGE) / 2] == nullptr)
-        {
-            mb_holding_regs[position] = value;
-        }
-        else
-        {
+//        if (_MD[(position - MIN_32B_RANGE) / 2] == nullptr)  mb_holding_regs[position] = value;
+//        else
+//        {
             // Overwrite one word of the 32-bit register:
             // Calculate the bit offset of the word in the 32-bit register.
             int bit_offset = (1 - ((position - MIN_32B_RANGE) % 2)) * 16;
+
             // Mask the word.
-            *_MD[(position - MIN_32B_RANGE) / 2] &= ~(((uint32_t) 0xffff) << bit_offset);
+//            *_MD[(position - MIN_32B_RANGE) / 2] &= ~(((uint32_t) 0xffff) << bit_offset);
+            MD[(position - MIN_32B_RANGE) / 2] &= ~(((uint32_t) 0xffff) << bit_offset);
+
             // Overwrite the word.
-            *_MD[(position - MIN_32B_RANGE) / 2] |= ((uint32_t) value) << bit_offset;
-        }
+//            *_MD[(position - MIN_32B_RANGE) / 2] |= ((uint32_t) value) << bit_offset;
+            MD[(position - MIN_32B_RANGE) / 2] |= ((uint32_t) value) << bit_offset;
+
+//        }
     }
 
     //64-bit registers
     else if (position >= MIN_64B_RANGE && position <= MAX_64B_RANGE)
     {
-        if (_ML[(position - MIN_64B_RANGE) / 4] == nullptr)
-        {
-            mb_holding_regs[position] = value;
-        }
-        else
-        {
+//        if (_ML[(position - MIN_64B_RANGE) / 4] == nullptr) mb_holding_regs[position] = value;
+//        else
+//        {
             // Overwrite one word of the 64-bit register:
             // Calculate the bit offset of the word in the 64-bit register.
             int bit_offset = (3 - ((position - MIN_64B_RANGE) % 4)) * 16;
+
             // Mask the word.
-            *_ML[(position - MIN_64B_RANGE) / 4] &= ~(((uint64_t) 0xffff) << bit_offset);
+//            *_ML[(position - MIN_64B_RANGE) / 4] &= ~(((uint64_t) 0xffff) << bit_offset);
+            ML[(position - MIN_64B_RANGE) / 4] &= ~(((uint64_t) 0xffff) << bit_offset);
+
             // Overwrite the word.
-            *_ML[(position - MIN_64B_RANGE) / 4] |= ((uint64_t) value) << bit_offset;
-        }
+//            *_ML[(position - MIN_64B_RANGE) / 4] |= ((uint64_t) value) << bit_offset;
+            ML[(position - MIN_64B_RANGE) / 4] |= ((uint64_t) value) << bit_offset;
+
+//        }
     }
     else //invalid address
     {

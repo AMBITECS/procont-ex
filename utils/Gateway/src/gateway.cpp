@@ -32,10 +32,10 @@ pthread_mutex_t bufferLock; //mutex for the internal buffers
 //IEC_ULINT *_IL [BUFFER_SIZE];
 //IEC_ULINT *_QL [BUFFER_SIZE];
 
-//Memory
-IEC_UINT  *_MW [BUFFER_SIZE];
-IEC_UDINT *_MD [BUFFER_SIZE];
-IEC_ULINT *_ML [BUFFER_SIZE];
+////Memory
+//IEC_UINT  *_MW [BUFFER_SIZE];
+//IEC_UDINT *_MD [BUFFER_SIZE];
+//IEC_ULINT *_ML [BUFFER_SIZE];
 
 // ----------------------------------------------------------------------------
 // NEW Register Types
@@ -63,9 +63,9 @@ Registry::QL QL{registryInstance};
 
 Registry::MX MX{registryInstance};
 Registry::MB MB{registryInstance};
-Registry::MW __MW{registryInstance};
-Registry::MD __MD{registryInstance};
-Registry::ML __ML{registryInstance};
+Registry::MW MW{registryInstance};
+Registry::MD MD{registryInstance};
+Registry::ML ML{registryInstance};
 
 
 //-----------------------------------------------------------------------------

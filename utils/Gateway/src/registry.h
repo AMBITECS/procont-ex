@@ -154,6 +154,67 @@ public:
             return *this;
         }
 
+        Accessor& operator=(const Accessor& other) {
+            if (this != &other) {
+                parent_ = other.parent_;
+                offset_ = other.offset_;
+            }
+            return *this;
+        }
+
+        Accessor& operator&=(T value) {
+            checkBounds();
+            T current;
+            std::memcpy(&current, &getStorage()[offset_], sizeof(T));
+            current &= value;
+            std::memcpy(&getStorage()[offset_], &current, sizeof(T));
+            return *this;
+        }
+
+        Accessor& operator|=(T value) {
+            checkBounds();
+            T current;
+            std::memcpy(&current, &getStorage()[offset_], sizeof(T));
+            current |= value;
+            std::memcpy(&getStorage()[offset_], &current, sizeof(T));
+            return *this;
+        }
+
+        Accessor& operator^=(T value) {
+            checkBounds();
+            T current;
+            std::memcpy(&current, &getStorage()[offset_], sizeof(T));
+            current ^= value;
+            std::memcpy(&getStorage()[offset_], &current, sizeof(T));
+            return *this;
+        }
+
+        Accessor& operator+=(T value) {
+            checkBounds();
+            T current;
+            std::memcpy(&current, &getStorage()[offset_], sizeof(T));
+            current += value;
+            std::memcpy(&getStorage()[offset_], &current, sizeof(T));
+            return *this;
+        }
+
+        Accessor& operator-=(T value) {
+            checkBounds();
+            T current;
+            std::memcpy(&current, &getStorage()[offset_], sizeof(T));
+            current -= value;
+            std::memcpy(&getStorage()[offset_], &current, sizeof(T));
+            return *this;
+        }
+
+        Accessor& operator&=(const Accessor& other) {
+            return *this &= static_cast<T>(other);
+        }
+
+        Accessor& operator|=(const Accessor& other) {
+            return *this |= static_cast<T>(other);
+        }
+
         //---------------------------------------------------------------------
         // BitReference - побитовый доступ через Accessor
         //---------------------------------------------------------------------
@@ -181,6 +242,25 @@ public:
                 accessor_ = b ? (value | mask) : (value & ~mask);
                 return *this;
             }
+
+            BitReference& operator&=(bool b) {
+                bool current = static_cast<bool>(*this);
+                *this = current & b;
+                return *this;
+            }
+
+            BitReference& operator|=(bool b) {
+                bool current = static_cast<bool>(*this);
+                *this = current | b;
+                return *this;
+            }
+
+            BitReference& operator^=(bool b) {
+                bool current = static_cast<bool>(*this);
+                *this = current ^ b;
+                return *this;
+            }
+
         };
 
         BitReference operator[](uint8_t bit_pos) {
@@ -194,19 +274,74 @@ public:
         class IndexProxy {
             Registry& parent_;
             uint64_t base_offset_;
+            uint64_t count_; // Количество доступных элементов
 
         public:
             explicit IndexProxy(Registry& parent, uint64_t base_offset = 0)
-                    : parent_(parent), base_offset_(base_offset) {}
+                    : parent_(parent),
+                      base_offset_(base_offset),
+                      count_(calculateCount(parent, base_offset)) {}
+
+        private:
+            // Вычисляет максимальное количество элементов
+            uint64_t calculateCount(Registry& parent, uint64_t offset) {
+                const auto& storage = parent.getStorage(CAT);
+                if (storage.size() <= offset) return 0;
+                return (storage.size() - offset) / RegisterTraits<T>::size;
+            }
+
+        public:
+            // Итератор для range-based for
+            class Iterator {
+                Registry* parent_;
+                uint64_t base_offset_;
+                uint64_t index_;
+                uint64_t count_;
+
+                // Храним кэшированный Accessor как член класса
+                // (для конструкций типа for (auto & i : MW) checksum ^= i;)
+                Accessor current_accessor_;
+
+            public:
+                Iterator(Registry* parent, uint64_t offset, uint64_t index, uint64_t count):
+                    parent_(parent),
+                    base_offset_(offset),
+                    index_(index),
+                    count_(count)
+                    ,current_accessor_(*parent, offset + index * RegisterTraits<T>::size)
+                    {}
+
+                //Accessor operator*() {
+                //    return Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
+                //}
+
+                Accessor operator*() const {
+                    return Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
+                    //return (*parent_).get<T, CAT>(base_offset_ + index_ * RegisterTraits<T>::size);
+                }
+
+                Accessor& operator*() {
+                    // Обновляем позицию current_accessor_
+                    current_accessor_ = Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
+                    return current_accessor_;
+                }
+
+                Iterator& operator++() { ++index_; return *this; }
+                bool operator!=(const Iterator& other) const { return index_ != other.index_; }
+            };
+
+            Iterator begin() { return Iterator(&parent_, base_offset_, 0, count_); }
+            Iterator end()   { return Iterator(&parent_, base_offset_, count_, count_); }
 
             Accessor operator[](uint64_t index) {
-                uint64_t offset = base_offset_ + index * RegisterTraits<T>::size;
-                const auto& storage = parent_.getStorage(CAT);
-                if (offset + RegisterTraits<T>::size > storage.size()) {
+                if (index >= count_) {
                     throw std::out_of_range("Register index out of range");
                 }
+                uint64_t offset = base_offset_ + index * RegisterTraits<T>::size;
                 return Accessor(parent_, offset);
             }
+
+            uint64_t size() const { return count_; } // Добавляем метод size()
         };
 
     }; // Accessor
@@ -226,7 +361,7 @@ public:
     using IW = IRegister<T_UINT16>::IndexProxy;
     using ID = IRegister<T_UINT32>::IndexProxy;
     using IL = IRegister<T_UINT64>::IndexProxy;
-    using IR = IRegister<T_REAL32>::IndexProxy;   // для float
+    using IR = IRegister<T_REAL32>::IndexProxy;  // для float
     using IF = IRegister<T_REAL64>::IndexProxy;  // для double
 
     // Proxy-типы для выходных регистров (Q)

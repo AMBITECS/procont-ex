@@ -43,10 +43,10 @@ extern pthread_mutex_t bufferLock;
 //extern IEC_ULINT *_IL [BUFFER_SIZE];
 //extern IEC_ULINT *_QL [BUFFER_SIZE];
 
-//Memory
-extern IEC_UINT  *_MW [BUFFER_SIZE];
-extern IEC_UDINT *_MD [BUFFER_SIZE];
-extern IEC_ULINT *_ML [BUFFER_SIZE];
+////Memory
+//extern IEC_UINT  *_MW [BUFFER_SIZE];
+//extern IEC_UDINT *_MD [BUFFER_SIZE];
+//extern IEC_ULINT *_ML [BUFFER_SIZE];
 
 // ----------------------------------------------------------------------------
 // NEW Register Types
@@ -69,8 +69,8 @@ extern Registry::QL QL;
 
 extern Registry::MX MX;
 extern Registry::MB MB;
-extern Registry::MW __MW;
-extern Registry::MD __MD;
-extern Registry::ML __ML;
+extern Registry::MW MW;
+extern Registry::MD MD;
+extern Registry::ML ML;
 
 #endif //PRO_GATEWAY_H

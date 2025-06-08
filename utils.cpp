@@ -18,7 +18,7 @@ int64_t cycle_counter = 0;
 uint8_t rpi_modbus_rts_pin;             // If <> 0, expect hardware RTS to be used with this pin
 
 ////Special Functions
-IEC_ULINT *special_functions[BUFFER_SIZE];
+IEC_ULINT *special_functions[SPEC_FUNC_COUNT];
 
 TIME __CURRENT_TIME;
 

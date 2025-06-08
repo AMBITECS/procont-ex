@@ -13,12 +13,13 @@
 #include <ctime>
 
 #include "ladder.h"
-//#define BUFFER_SIZE 1024
 
 //Global Variables
 //__attribute__((unused))
-bool ethercat_configured = false;
-char ethercat_conf_file[BUFFER_SIZE];
+
+//#define BUFFER_SIZE 1024
+//bool ethercat_configured = false;
+//char ethercat_conf_file[BUFFER_SIZE];
 
 time_t start_time;
 time_t end_time;

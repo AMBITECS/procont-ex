@@ -13,8 +13,8 @@
 #include "registry.h"
 #include "binding.h"
 
-#define BUFFER_MAXSIZE 65536;    // Standard PLC addressing space
-constexpr unsigned short BUFFER_SIZE  =  1024;     // Current PLC registers size
+constexpr unsigned int   BUFFER_SIZE     = 1024;    // Размер категорий регистров
+constexpr unsigned short SPEC_FUNC_COUNT = 16;      // Special functions count
 
 //lock for the buffers
 extern pthread_mutex_t bufferLock;

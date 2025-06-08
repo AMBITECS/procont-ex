@@ -47,9 +47,9 @@ uint32_t calculate_combined_checksum()
 //    for (auto & i : _MD) if (i != nullptr) checksum ^= *i; // checksum for dint_memory
 //    for (auto & i : _ML) if (i != nullptr) checksum ^= (uint32_t)(*i ^ (*i >> 32)); // lint_memory
 
-    for (auto & i : MW) checksum ^= i; // checksum for int_memory
-    for (auto & i : MD) checksum ^= i; // checksum for dint_memory
-    for (auto & i : ML) checksum ^= (uint32_t)(i ^ (i >> 32)); // lint_memory
+    for (const auto & i : MW) checksum ^= i; // checksum for int_memory
+    for (const auto & i : MD) checksum ^= i; // checksum for dint_memory
+    for (const auto & i : ML) checksum ^= (uint32_t)(i ^ (i >> 32)); // lint_memory
 
     return checksum;
 }
@@ -86,7 +86,7 @@ void startPstorage()
             // Write the contents of int_memory
 //            for (auto &i: _MW) {
 //                uint16_t value = (i != nullptr) ? *i : 0;
-            for (auto &i: MW) {
+            for (const auto &i: MW) {
                 uint16_t value = i;
                 if (fwrite(&value, sizeof(uint16_t), 1, file) != 1) {
                     sprintf(log_msg, "Persistent Storage: Error writing int_memory to file\n");
@@ -97,7 +97,7 @@ void startPstorage()
             // Write the contents of dint_memory
 //            for (auto &i: _MD) {
 //                uint32_t value = (i != nullptr) ? *i : 0;
-            for (auto &i: MD) {
+            for (const auto &i: MD) {
                 uint32_t value = i;
                 if (fwrite(&value, sizeof(uint32_t), 1, file) != 1) {
                     sprintf(log_msg, "Persistent Storage: Error writing dint_memory to file\n");
@@ -108,7 +108,7 @@ void startPstorage()
             // Write the contents of lint_memory
 //            for (auto &i: _ML) {
 //                uint64_t value = (i != nullptr) ? *i : 0;
-            for (auto &i: ML) {
+            for (const auto &i: ML) {
                 uint64_t value = i;
                 if (fwrite(&value, sizeof(uint64_t), 1, file) != 1) {
                     sprintf(log_msg, "Persistent Storage: Error writing lint_memory to file\n");

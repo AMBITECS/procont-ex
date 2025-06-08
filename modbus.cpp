@@ -87,8 +87,7 @@ int word(unsigned char byte1, unsigned char byte2) {
 // This function sets the internal nullptr PLC EE buffers to point to valid
 // positions on the Modbus buffer
 //-----------------------------------------------------------------------------
-void mapUnusedIO()
-{
+//void mapUnusedIO() {
 //    pthread_mutex_lock(&bufferLock);
 
 //    for(int i = 0; i < MAX_DISCRETE_INPUT; i++) {
@@ -114,7 +113,7 @@ void mapUnusedIO()
 //    }
 
 //    pthread_mutex_unlock(&bufferLock);
-}
+//}
 
 //-----------------------------------------------------------------------------
 // Response to a Modbus Error

@@ -4,8 +4,6 @@
 #ifndef REGISTRY_H
 #define REGISTRY_H
 
-#include "address.h"
-#include "variant.h"
 #include <cstdint>
 #include <type_traits>
 #include <stdexcept>
@@ -14,22 +12,10 @@
 #include <unordered_map>
 #include <functional>
 
-template<typename T>
-struct RegisterTraits {
-    static_assert(sizeof(T) == 0, "Unsupported register type");
-};
+#include "address.h"
+#include "variant.h"
 
-template<> struct RegisterTraits<bool>     { using storage_type = uint8_t;  static constexpr size_t size = 1; };
-template<> struct RegisterTraits<int8_t>   { using storage_type = int8_t;   static constexpr size_t size = 1; };
-template<> struct RegisterTraits<uint8_t>  { using storage_type = uint8_t;  static constexpr size_t size = 1; };
-template<> struct RegisterTraits<int16_t>  { using storage_type = int16_t;  static constexpr size_t size = 2; };
-template<> struct RegisterTraits<uint16_t> { using storage_type = uint16_t; static constexpr size_t size = 2; };
-template<> struct RegisterTraits<int32_t>  { using storage_type = int32_t;  static constexpr size_t size = 4; };
-template<> struct RegisterTraits<uint32_t> { using storage_type = uint32_t; static constexpr size_t size = 4; };
-template<> struct RegisterTraits<float>    { using storage_type = float;    static constexpr size_t size = 4; };
-template<> struct RegisterTraits<int64_t>  { using storage_type = int64_t;  static constexpr size_t size = 8; };
-template<> struct RegisterTraits<uint64_t> { using storage_type = uint64_t; static constexpr size_t size = 8; };
-template<> struct RegisterTraits<double>   { using storage_type = double;   static constexpr size_t size = 8; };
+constexpr unsigned int   REGISTRY_SIZE    = 65536;   // Размер категорий регистров
 
 //-----------------------------------------------------------------------------
 // Registry (улучшенная версия)
@@ -40,22 +26,26 @@ public:
     using Category = Address::Category;     // тип категории реестра
     using DataType = Address::DataType;     // тип данных в реестре
 
+// Внутренний метод для получения хранилища по категориям IEC
+std::vector<uint8_t>& getStorage(Category cat) { return categories_[cat].A; }
+
 private:
     // Регистры контроллера по категориям IEC
-    // (A - текущий слой, B - предыдущий слой)
-    struct RegStorage { Storage A; Storage B;};
+    struct RegStorage {
+        Storage A;  // A - текущий слой
+        Storage B;  // B - предыдущий слой
+    };
+
     using  CategoriesMap  = std::unordered_map<Category, RegStorage>;
     using  SubscribersMap = std::unordered_map<Address, std::vector<std::function<void()>>>;
 
     CategoriesMap  categories_;
     SubscribersMap subscribers_;
 
-    // Внутренний метод для получения хранилища по категориям IEC
-    std::vector<uint8_t>& getStorage(Category cat) { return categories_[cat].A; }
     const std::vector<uint8_t>& getStorage(Category cat) const { return categories_.at(cat).A; }
 
 public:
-    explicit Registry(size_t memory_size = 1024) {
+    explicit Registry(size_t memory_size = REGISTRY_SIZE) {
         // Инициализируем все категории по умолчанию
         categories_[Category::INPUT]   = RegStorage{};
         categories_[Category::OUTPUT]  = RegStorage{};
@@ -91,7 +81,7 @@ public:
         return memcmp(&cat.A[offset], &cat.B[offset], size) != 0;
     }
 
-    void subscribe(const Address& addr, std::function<void()> callback) {
+    void subscribe(const Address& addr, const std::function<void()>& callback) {
         subscribers_[addr].push_back(callback);
     }
 
@@ -277,14 +267,28 @@ public:
             uint64_t count_; // Количество доступных элементов
 
         public:
-            explicit IndexProxy(Registry& parent, uint64_t base_offset = 0)
+            explicit IndexProxy(Registry& parent, uint64_t base_offset = 0, uint64_t count = 0)
                     : parent_(parent),
                       base_offset_(base_offset),
-                      count_(calculateCount(parent, base_offset)) {}
+                      count_(count == 0 ? calculateCount(parent, base_offset) : count)
+            {
+                // Дополнительная проверка, если count задан явно
+                if (count != 0) {
+                    const auto& storage = parent.getStorage(CAT);
+                    uint64_t required_size = base_offset_ + count * RegisterTraits<T>::size;
+                    if (required_size > storage.size()) {
+                        throw std::out_of_range(
+                                "Requested count " + std::to_string(count) +
+                                " exceeds available storage for type size " +
+                                std::to_string(RegisterTraits<T>::size)
+                        );
+                    }
+                }
+            }
 
         private:
             // Вычисляет максимальное количество элементов
-            uint64_t calculateCount(Registry& parent, uint64_t offset) {
+            uint64_t calculateCount(Registry& parent, uint64_t offset) const {
                 const auto& storage = parent.getStorage(CAT);
                 if (storage.size() <= offset) return 0;
                 return (storage.size() - offset) / RegisterTraits<T>::size;
@@ -300,7 +304,7 @@ public:
 
                 // Храним кэшированный Accessor как член класса
                 // (для конструкций типа for (auto & i : MW) checksum ^= i;)
-                Accessor current_accessor_;
+                //Accessor current_accessor_;
 
             public:
                 Iterator(Registry* parent, uint64_t offset, uint64_t index, uint64_t count):
@@ -308,7 +312,7 @@ public:
                     base_offset_(offset),
                     index_(index),
                     count_(count)
-                    ,current_accessor_(*parent, offset + index * RegisterTraits<T>::size)
+                    //,current_accessor_(*parent, offset + index * RegisterTraits<T>::size)
                     {}
 
                 //Accessor operator*() {
@@ -320,11 +324,11 @@ public:
                     //return (*parent_).get<T, CAT>(base_offset_ + index_ * RegisterTraits<T>::size);
                 }
 
-                Accessor& operator*() {
-                    // Обновляем позицию current_accessor_
-                    current_accessor_ = Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
-                    return current_accessor_;
-                }
+                //Accessor& operator*() {
+                //    // Обновляем позицию current_accessor_
+                //    current_accessor_ = Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
+                //    return current_accessor_;
+                //}
 
                 Iterator& operator++() { ++index_; return *this; }
                 bool operator!=(const Iterator& other) const { return index_ != other.index_; }

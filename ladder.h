@@ -37,7 +37,8 @@ void updateBuffersIn();
 void updateBuffersOut();
 
 //Special Functions
-extern IEC_ULINT *special_functions[BUFFER_SIZE];
+extern IEC_ULINT *special_functions[SPEC_FUNC_COUNT];
+
 
 //utils.cpp
 

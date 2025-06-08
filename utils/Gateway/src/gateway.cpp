@@ -42,7 +42,7 @@ pthread_mutex_t bufferLock; //mutex for the internal buffers
 // ----------------------------------------------------------------------------
 // Создаём глобальный экземпляр Registry
 namespace {
-    Registry registryInstance(BUFFER_SIZE); // Размер по умолчанию
+    Registry registryInstance(REGISTRY_SIZE);
 }
 
 // Инициализируем глобальные прокси-объекты
@@ -61,11 +61,12 @@ Registry::QD QD{registryInstance};
 Registry::IL IL{registryInstance};
 Registry::QL QL{registryInstance};
 
-Registry::MX MX{registryInstance};
-Registry::MB MB{registryInstance};
-Registry::MW MW{registryInstance};
-Registry::MD MD{registryInstance};
-Registry::ML ML{registryInstance};
+Registry::MX MX{registryInstance,   0,      2048 };
+Registry::MB MB{registryInstance,   0,      2048 };
+
+Registry::MW MW{registryInstance,   2048,   1024 };
+Registry::MD MD{registryInstance,   4096,   1024 };
+Registry::ML ML{registryInstance,   8192,   1024 };
 
 
 //-----------------------------------------------------------------------------

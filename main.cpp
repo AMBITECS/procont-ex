@@ -313,13 +313,18 @@ int main(int argc,char **argv)
     //          PERSISTENT STORAGE INITIALIZATION
     //======================================================
     // Установка незанятых участков регистров на регистры modbus
-    mapUnusedIO();
+    //mapUnusedIO();
 
     // Чтение хранимой памяти из файла
     readPersistentStorage();
 
     //pthread_t persistentThread;
     //pthread_create(&persistentThread, nullptr, persistentStorage, nullptr);
+
+    // Чтение начальных значений
+    BindingManager::instance().updateFromIec();
+    BindingManager::instance().updateToIec();
+
 
 #ifdef __linux__
     // Set our thread to real time priority
@@ -339,28 +344,30 @@ int main(int argc,char **argv)
     //                    MAIN LOOP
     //======================================================
     while (run_openplc) {           // run_openplc - флаг работы
-        //glueVars();                 // make sure for regidters (?)
+        //glueVars();                // make sure for regidters (?)
 
-        updateBuffersIn();			// read input image
+//        updateBuffersIn();			// read input image
+
         pthread_mutex_lock(&bufferLock);	//lock mutex
         {
-            updateCustomIn();       // custom IN
+//            updateCustomIn();       // custom IN
             {
-                updateBuffersIn_MB();       // update input image table with data from slave devices
+//                updateBuffersIn_MB();       // update input image table with data from slave devices
 
-                BindingManager::instance().updateToIec();
+//                BindingManager::instance().updateToIec();
 
                 handleSpecialFunctions();    // current time & statistic
                 config_run__(__tick++); // execute plc program logic
 
-                BindingManager::instance().updateFromIec();
+//                BindingManager::instance().updateFromIec();
 
-                updateBuffersOut_MB();      // update slave devices with data from the output image table
+//                updateBuffersOut_MB();      // update slave devices with data from the output image table
             }
-            updateCustomOut();      // custom OUT
+//            updateCustomOut();      // custom OUT
         }
         pthread_mutex_unlock(&bufferLock);	//unlock mutex
-        updateBuffersOut();			// write output image
+
+//        updateBuffersOut();			// write output image
 
         // Спим до следующего цикла ...
         updateTime();               //

@@ -6,6 +6,23 @@
 #include <stdexcept>
 #include "variant.h"
 
+template<typename T>
+struct RegisterTraits {
+    static_assert(sizeof(T) == 0, "Unsupported register type");
+};
+
+template<> struct RegisterTraits<bool>     { using storage_type = uint8_t;  static constexpr size_t size = 1; };
+template<> struct RegisterTraits<int8_t>   { using storage_type = int8_t;   static constexpr size_t size = 1; };
+template<> struct RegisterTraits<uint8_t>  { using storage_type = uint8_t;  static constexpr size_t size = 1; };
+template<> struct RegisterTraits<int16_t>  { using storage_type = int16_t;  static constexpr size_t size = 2; };
+template<> struct RegisterTraits<uint16_t> { using storage_type = uint16_t; static constexpr size_t size = 2; };
+template<> struct RegisterTraits<int32_t>  { using storage_type = int32_t;  static constexpr size_t size = 4; };
+template<> struct RegisterTraits<uint32_t> { using storage_type = uint32_t; static constexpr size_t size = 4; };
+template<> struct RegisterTraits<float>    { using storage_type = float;    static constexpr size_t size = 4; };
+template<> struct RegisterTraits<int64_t>  { using storage_type = int64_t;  static constexpr size_t size = 8; };
+template<> struct RegisterTraits<uint64_t> { using storage_type = uint64_t; static constexpr size_t size = 8; };
+template<> struct RegisterTraits<double>   { using storage_type = double;   static constexpr size_t size = 8; };
+
 class Address {
 private:
     constexpr explicit Address(uint64_t packed) : packed_(packed) {}
@@ -83,12 +100,44 @@ public:
 
     // или другое специальное значение, обозначающее "нет бита"
     [[nodiscard]] bool hasBit() const {
-        return bitpos() != 0xFF;  /* BAD_BYTE */
+        return bitpos() != 0xFF;  /* NO_BIT_POS */
     }
 
     // И оператор сравнения
     friend bool operator==(const Address& lhs, const Address& rhs) {
         return lhs.packed_ == rhs.packed_;
+    }
+
+    // Удаляем getRequiredAlignment и заменяем на:
+    template<typename T>
+    static constexpr size_t alignmentFor() {
+        return RegisterTraits<T>::size;
+    }
+
+    [[nodiscard]] bool isAlignedFor(DataType type) const {
+        switch(type) {
+            case TYPE_BIT:    return offset() % alignmentFor<bool>() == 0;
+            case TYPE_BYTE:   return offset() % alignmentFor<uint8_t>() == 0;
+            case TYPE_WORD:   return offset() % alignmentFor<uint16_t>() == 0;
+            case TYPE_DWORD:  return offset() % alignmentFor<uint32_t>() == 0;
+            case TYPE_LWORD:  return offset() % alignmentFor<uint64_t>() == 0;
+            case TYPE_REAL:   return offset() % alignmentFor<float>() == 0;
+            case TYPE_LREAL: return offset() % alignmentFor<double>() == 0;
+            default: return true;
+        }
+    }
+
+    [[nodiscard]] const char* getDataTypeName() const {
+        switch(datatype()) {
+            case TYPE_BIT:   return "BIT";
+            case TYPE_BYTE:  return "BYTE";
+            case TYPE_WORD:  return "WORD";
+            case TYPE_DWORD: return "DWORD";
+            case TYPE_LWORD: return "LWORD";
+            case TYPE_REAL:  return "REAL";
+            case TYPE_LREAL: return "LREAL";
+            default: return "UNKNOWN";
+        }
     }
 
     template<DataType DT> struct DataTypeToNative;

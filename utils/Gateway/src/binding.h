@@ -14,7 +14,7 @@ private:
 
     struct Binding {
         Address addr;
-        void* pvar;
+        void*   pvar;
         Binding(Address adr, void* dat) : addr(adr), pvar(dat) {}
     };
 
@@ -35,6 +35,7 @@ public:
     static BindingManager& instance();
 
     void bind(const std::string& regNotation, void* iecVar);
+
     void updateToIec();
     void updateFromIec();
 

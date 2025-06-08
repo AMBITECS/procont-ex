@@ -52,14 +52,14 @@ public:
                       (offset & OFFSET_MASK)) {}
 
     // Фабричные методы
-    static Address Of(const std::string& key);
+    static Address of(const std::string& key);
     static constexpr Address Of(uint64_t val) { return Address(val); }
 
     // Преобразования
     [[nodiscard]] constexpr uint64_t value() const { return packed_; }
     constexpr operator uint64_t() const { return packed_; } //NOLINT
 
-    [[nodiscard]] static Address fromString(const std::string& key) {return Address::Of(key);}
+    [[nodiscard]] static Address fromString(const std::string& key) {return Address::of(key);}
     [[nodiscard]] std::string toString() const;
 
     // Методы доступа

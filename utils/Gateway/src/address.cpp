@@ -36,7 +36,7 @@ std::string Address::toString() const {
     return oss.str();
 }
 
-Address Address::Of(const std::string& key) {
+Address Address::of(const std::string& key) {
     std::smatch matches;
     std::string normalized_key = key;
     const std::regex key_regex_(

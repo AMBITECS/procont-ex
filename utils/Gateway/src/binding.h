@@ -5,25 +5,19 @@
 #include "address.h"
 #include <vector>
 #include <string>
-#include <stdexcept>
-
-#include "registry.h"
-#include "address.h"
-#include <vector>
-#include <string>
+#include <memory>
 
 class BindingManager {
 private:
-    Registry& _reg; // Ссылка на экземпляр Registry
+    Registry& _reg;
+//    static std::unique_ptr<BindingManager> _instance;
 
-    // Связь Binding - пара <addr-pvar>
     struct Binding {
-        Address addr;   // Адрес ячейки
-        void*   pvar;   // Адрес связанной переменной
-        Binding(Address adr, void *dat): addr(adr), pvar(dat) {}
+        Address addr;
+        void* pvar;
+        Binding(Address adr, void* dat) : addr(adr), pvar(dat) {}
     };
 
-    // вектор связей Binding
     std::vector<Binding> binds;
 
     template<Registry::Category CAT, typename T>
@@ -34,13 +28,19 @@ private:
 
     void updateVariable(const Address& addr, void* iecVar, bool toRegistry);
 
-public:
     explicit BindingManager(Registry& reg);
+
+public:
+    //static void init(Registry& reg);
     static BindingManager& instance();
 
     void bind(const std::string& regNotation, void* iecVar);
     void updateToIec();
     void updateFromIec();
+
+    // Запрещаем копирование и присваивание
+    BindingManager(const BindingManager&) = delete;
+    BindingManager& operator=(const BindingManager&) = delete;
 };
 
 #endif // BINDING_MANAGER_H

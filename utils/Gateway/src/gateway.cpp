@@ -45,6 +45,8 @@ namespace {
     Registry registryInstance(REGISTRY_SIZE);
 }
 
+Registry& getGlobalRegistry() { return registryInstance; }
+
 // Инициализируем глобальные прокси-объекты
 Registry::IX IX{registryInstance};
 Registry::QX QX{registryInstance};

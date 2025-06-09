@@ -322,9 +322,10 @@ int main(int argc,char **argv)
     //pthread_create(&persistentThread, nullptr, persistentStorage, nullptr);
 
     // Чтение начальных значений
+    pthread_mutex_lock(&bufferLock);	//lock mutex
     BindingManager::instance().updateFromIec();
     BindingManager::instance().updateToIec();
-
+    pthread_mutex_unlock(&bufferLock);	//unlock mutex
 
 #ifdef __linux__
     // Set our thread to real time priority

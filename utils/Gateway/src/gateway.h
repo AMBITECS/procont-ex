@@ -51,6 +51,8 @@ extern pthread_mutex_t bufferLock;
 // ----------------------------------------------------------------------------
 // NEW Register Types
 // ----------------------------------------------------------------------------
+extern Registry& getGlobalRegistry();
+
 // Объявляем глобальные экземпляры прокси-объектов
 extern Registry::IX IX;
 extern Registry::QX QX;

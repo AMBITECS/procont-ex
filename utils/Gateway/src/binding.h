@@ -10,7 +10,7 @@
 class BindingManager {
 private:
     Registry& _reg;
-//    static std::unique_ptr<BindingManager> _instance;
+    static std::unique_ptr<BindingManager> _instance;
 
     struct Binding {
         Address addr;
@@ -31,7 +31,6 @@ private:
     explicit BindingManager(Registry& reg);
 
 public:
-    //static void init(Registry& reg);
     static BindingManager& instance();
 
     void bind(const std::string& regNotation, void* iecVar);

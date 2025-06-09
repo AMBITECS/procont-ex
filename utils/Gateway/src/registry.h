@@ -345,7 +345,7 @@ public:
                 return Accessor(parent_, offset);
             }
 
-            uint64_t size() const { return count_; } // Добавляем метод size()
+            [[nodiscard]] uint64_t size() const { return count_; } // Добавляем метод size()
         };
 
     }; // Accessor

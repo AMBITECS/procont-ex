@@ -1,30 +1,20 @@
-#include "binding.h"
+#include "gateway.h"
 #include <stdexcept>
 #include <iostream>
 #include <cassert>
 
-//std::unique_ptr<BindingManager> BindingManager::_instance;
-
+std::unique_ptr<BindingManager> BindingManager::_instance;
 BindingManager::BindingManager(Registry& reg) : _reg(reg) {}
 
 BindingManager& BindingManager::instance() {
-    static Registry defaultRegistry;
-    static BindingManager inst(defaultRegistry);
-    return inst;
+    //static Registry defaultRegistry;
+    if (!_instance) {
+        _instance = std::unique_ptr<BindingManager>(
+                new BindingManager(::getGlobalRegistry())
+                );
+    }
+    return *_instance;
 }
-
-//void BindingManager::init(Registry& reg) {
-//    if (!_instance) {
-//        _instance = std::unique_ptr<BindingManager>(new BindingManager(reg));
-//    }
-//}
-//
-//BindingManager& BindingManager::instance() {
-//    if (!_instance) {
-//        throw std::runtime_error("BindingManager not initialized");
-//    }
-//    return *_instance;
-//}
 
 template<Registry::Category CAT, typename T>
 void BindingManager::handleType(const Address& addr, void* iecVar, bool toRegistry) {
@@ -47,44 +37,55 @@ void BindingManager::handleType(const Address& addr, void* iecVar, bool toRegist
         );
     }
 
-    // Основная логика чтения/записи
     try {
-        auto accessor = _reg.get<T, CAT>(addr.offset());
-
+        unsigned short x=0, y=0;
         if (toRegistry) {
-            // Запись из переменной в регистр
-            accessor = *static_cast<T*>(iecVar);
-
-            //assert( *static_cast<T*>(iecVar) == static_cast<T>(accessor) );
+            {
+                // Запись из переменной в регистр
+                uint64_t offset = addr.offset();
+                Registry::Accessor acc = _reg.get<T, CAT>(offset);
+                x = acc, y = *static_cast<T *>(iecVar);
+                acc = y;
+                _reg.get<T, CAT>(addr.offset()) = *static_cast<T *>(iecVar);
+            }
+//            {
+//                uint64_t offset = addr.offset();
+//                Registry::Accessor acc = _reg.get<T, CAT>(offset);
+//                x = acc, y = *static_cast<T *>(iecVar);
+//
+//                T registry_value = _reg.get<T, CAT>(addr.offset());
+//                T& iec_value = *static_cast<T*>(iecVar);
+//                if (registry_value != iec_value) {
+//                    std::cerr << "WARNING: Overwriting IEC variable at " << addr.toString()
+//                              << "\n  Old value: " << iec_value
+//                              << "\n  New value: " << registry_value << "\n";
+//                    iec_value = registry_value;
+//                }
+//            }
 
         } else {
 
-            // TEST - Чтение из регистра в переменную
-            long a =  static_cast<Registry::Category::MEMORY>(accessor);
-            long b = *static_cast<T*>(iecVar);
-            if (a != b) {
-                int i = 1;
-            }
+            // Чтение из регистра в переменную
+            uint64_t offset = addr.offset();
+            Registry::Accessor acc = _reg.get<T, CAT>(offset);
+            x = acc, y = *static_cast<T*>(iecVar);
 
-            // ПРОВЕРКА: Только для updateToIec (чтение из регистров)
-            T registry_value = _reg.get<T, CAT>(addr.offset());
-            T iec_value      = *static_cast<T*>(iecVar);
-
+            T registry_value = acc;
+            T& iec_value = *static_cast<T*>(iecVar);
             if (registry_value != iec_value) {
                 std::cerr << "WARNING: Overwriting IEC variable at " << addr.toString()
                           << "\n  Old value: " << iec_value
                           << "\n  New value: " << registry_value << "\n";
+
+                *static_cast<T *>(iecVar) = _reg.get<T, CAT>(addr.offset());
             }
 
-            // Чтение из регистра в переменную
-            *static_cast<T*>(iecVar) = static_cast<T>(accessor);
+            x = acc, y = *static_cast<T*>(iecVar);
+
         }
     }
     catch (const std::exception& e) {
-        throw std::runtime_error(
-                "Failed to access register " + addr.toString() +
-                ": " + e.what()
-        );
+        throw std::runtime_error("Failed to access register " + addr.toString() + ": " + e.what());
     }
 }
 

@@ -206,9 +206,76 @@ bool pinNotPresent(const int *ignored_vector, int vector_size, int pinNumber) {
 //    //insert other special functions below
 //}
 
+void runBindingTest() {
+    // 1. Инициализация
+    uint16_t test_var = 0;
+    uint16_t reg_value = 0;
+
+    BindingManager::instance().bind("MW0", &test_var);  // MW0 - адрес для float в памяти
+
+    // 2. Проверка начального состояния
+    std::cout << "Initial state:\n";
+    std::cout << "  test_var = " << test_var << "\n";
+
+    // 3. Запись в переменную и перенос в регистры
+    test_var = 314; //3.14f;
+    std::cout << "\nAfter setting test_var = 3.14:\n";
+    std::cout << "  test_var = " << test_var << "\n";
+
+    //BindingManager::instance().updateFromIec();
+    BindingManager &binder = BindingManager::instance();
+    Address addr = Address::fromString("MW0");
+
+    binder.updateVariable(addr, &test_var, true);
+    std::cout << "After updateFromIec():\n";
+    std::cout << "  test_var = " << test_var << "\n";
+
+    // 4. Чтение через MW proxy (из Registry)
+    std::cout << "\nReading through binder:\n";
+    binder.updateVariable(addr, &reg_value, false);
+    std::cout << "  reg_value = " << reg_value << "\n";
+
+    // 5. Чтение через MW proxy (из Registry)
+    std::cout << "\nReading through MW proxy:\n";
+    reg_value = MW[0];  // MW - это прокси для доступа к памяти
+    std::cout << "  MW[0] = " << reg_value << "\n";
+
+    // 5. Изменение через MW proxy и перенос в переменную
+    MW[0] = 628;
+//    std::cout << "\nAfter setting MW[0] = 6.28:\n";
+//    std::cout << "  MW[0] = " << MW[0] << "\n";
+//
+//    BindingManager::instance().updateToIec();
+//    std::cout << "After updateToIec():\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    // 6. Проверка согласованности
+//    std::cout << "\nFinal check:\n";
+//    if (std::abs(test_var - MW[0]) < 0.0001f) {
+//        std::cout << "SUCCESS: Values are synchronized\n";
+//    } else {
+//        std::cout << "ERROR: Values are different!\n";
+//        std::cout << "  test_var = " << test_var << "\n";
+//        std::cout << "  MW[0]    = " << MW[0] << "\n";
+//    }
+}
+
+void testDataIntegrity() {
+    uint16_t test_val = 12345;
+    BindingManager::instance().bind("MW1024", &test_val);
+
+    test_val = 54321;
+    BindingManager::instance().updateFromIec();
+
+    assert(MW[0] == 54321);
+    std::cout << "Data integrity test passed!\n";
+}
+
 //=============================================================================
 int main(int argc,char **argv)
 {
+    testDataIntegrity();
+
     char log_msg[1000];
     sprintf(log_msg, "PROCONT RUNTIME starting...\n");
     log(log_msg);
@@ -322,10 +389,11 @@ int main(int argc,char **argv)
     //pthread_create(&persistentThread, nullptr, persistentStorage, nullptr);
 
     // Чтение начальных значений
-    pthread_mutex_lock(&bufferLock);	//lock mutex
+    runBindingTest();
+
     BindingManager::instance().updateFromIec();
     BindingManager::instance().updateToIec();
-    pthread_mutex_unlock(&bufferLock);	//unlock mutex
+
 
 #ifdef __linux__
     // Set our thread to real time priority

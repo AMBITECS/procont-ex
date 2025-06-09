@@ -263,8 +263,8 @@ public:
         //---------------------------------------------------------------------
         class IndexProxy {
             Registry& parent_;
-            uint64_t base_offset_;
-            uint64_t count_; // Количество доступных элементов
+            uint64_t base_offset_;  // Базовое смещение
+            uint64_t count_;        // Количество элементов
 
         public:
             explicit IndexProxy(Registry& parent, uint64_t base_offset = 0, uint64_t count = 0)

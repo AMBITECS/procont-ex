@@ -40,35 +40,33 @@ pthread_mutex_t bufferLock; //mutex for the internal buffers
 // ----------------------------------------------------------------------------
 // NEW Register Types
 // ----------------------------------------------------------------------------
-// Создаём глобальный экземпляр Registry
-namespace {
-    Registry registryInstance(REGISTRY_SIZE);
+Registry& getGlobalRegistry() {
+    static Registry instance(REGISTRY_SIZE);
+    return instance;
 }
 
-Registry& getGlobalRegistry() { return registryInstance; }
-
 // Инициализируем глобальные прокси-объекты
-Registry::IX IX{registryInstance};
-Registry::QX QX{registryInstance};
+Registry::IX IX{getGlobalRegistry()};
+Registry::QX QX{getGlobalRegistry()};
 
-Registry::IB IB{registryInstance};
-Registry::QB QB{registryInstance};
+Registry::IB IB{getGlobalRegistry()};
+Registry::QB QB{getGlobalRegistry()};
 
-Registry::IW IW{registryInstance};
-Registry::QW QW{registryInstance};
+Registry::IW IW{getGlobalRegistry()};
+Registry::QW QW{getGlobalRegistry()};
 
-Registry::ID ID{registryInstance};
-Registry::QD QD{registryInstance};
+Registry::ID ID{getGlobalRegistry()};
+Registry::QD QD{getGlobalRegistry()};
 
-Registry::IL IL{registryInstance};
-Registry::QL QL{registryInstance};
+Registry::IL IL{getGlobalRegistry()};
+Registry::QL QL{getGlobalRegistry()};
 
-Registry::MX MX{registryInstance,   0,      2048 };
-Registry::MB MB{registryInstance,   0,      2048 };
+Registry::MX MX{getGlobalRegistry(),   0,      2048 };
+Registry::MB MB{getGlobalRegistry(),   0,      2048 };
 
-Registry::MW MW{registryInstance,   2048,   1024 };
-Registry::MD MD{registryInstance,   4096,   1024 };
-Registry::ML ML{registryInstance,   8192,   1024 };
+Registry::MW MW{getGlobalRegistry(),   2048,   1024 };
+Registry::MD MD{getGlobalRegistry(),   4096,   1024 };
+Registry::ML ML{getGlobalRegistry(),   8192,   1024 };
 
 
 //-----------------------------------------------------------------------------

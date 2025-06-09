@@ -7,11 +7,10 @@ std::unique_ptr<BindingManager> BindingManager::_instance;
 BindingManager::BindingManager(Registry& reg) : _reg(reg) {}
 
 BindingManager& BindingManager::instance() {
-    //static Registry defaultRegistry;
     if (!_instance) {
         _instance = std::unique_ptr<BindingManager>(
                 new BindingManager(::getGlobalRegistry())
-                );
+        );
     }
     return *_instance;
 }
@@ -38,50 +37,23 @@ void BindingManager::handleType(const Address& addr, void* iecVar, bool toRegist
     }
 
     try {
-        unsigned short x=0, y=0;
+        auto accessor = _reg.get<T, CAT>(addr.offset()); // Получаем accessor
+
         if (toRegistry) {
-            {
-                // Запись из переменной в регистр
-                uint64_t offset = addr.offset();
-                Registry::Accessor acc = _reg.get<T, CAT>(offset);
-                x = acc, y = *static_cast<T *>(iecVar);
-                acc = y;
-                _reg.get<T, CAT>(addr.offset()) = *static_cast<T *>(iecVar);
-            }
-//            {
-//                uint64_t offset = addr.offset();
-//                Registry::Accessor acc = _reg.get<T, CAT>(offset);
-//                x = acc, y = *static_cast<T *>(iecVar);
-//
-//                T registry_value = _reg.get<T, CAT>(addr.offset());
-//                T& iec_value = *static_cast<T*>(iecVar);
-//                if (registry_value != iec_value) {
-//                    std::cerr << "WARNING: Overwriting IEC variable at " << addr.toString()
-//                              << "\n  Old value: " << iec_value
-//                              << "\n  New value: " << registry_value << "\n";
-//                    iec_value = registry_value;
-//                }
-//            }
-
+            // Запись из переменной в регистр
+            accessor = *static_cast<T*>(iecVar); // Используем operator= accessor'а
+            assert(accessor == *static_cast<T*>(iecVar));
         } else {
-
             // Чтение из регистра в переменную
-            uint64_t offset = addr.offset();
-            Registry::Accessor acc = _reg.get<T, CAT>(offset);
-            x = acc, y = *static_cast<T*>(iecVar);
-
-            T registry_value = acc;
+            T registry_value = static_cast<T>(accessor); // Явное преобразование
             T& iec_value = *static_cast<T*>(iecVar);
+
             if (registry_value != iec_value) {
-                std::cerr << "WARNING: Overwriting IEC variable at " << addr.toString()
-                          << "\n  Old value: " << iec_value
-                          << "\n  New value: " << registry_value << "\n";
-
-                *static_cast<T *>(iecVar) = _reg.get<T, CAT>(addr.offset());
+                std::cerr << "WARNING: Overwriting at " << addr.toString()
+                          << "\n  Old: " << iec_value
+                          << "\n  New: " << registry_value << "\n";
+                iec_value = registry_value;
             }
-
-            x = acc, y = *static_cast<T*>(iecVar);
-
         }
     }
     catch (const std::exception& e) {

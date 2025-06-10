@@ -1,4 +1,3 @@
-//#include "binder.h"
 #include "gateway.h"
 
 std::unique_ptr<Binder> Binder::_instance;
@@ -11,7 +10,7 @@ Binder& Binder::instance() {
 }
 
 void Binder::bind(const std::string& regNotation, void* iecVar) {
-    Address addr = Address::fromString(regNotation);
+    Address addr = Address::of(regNotation);
     binds.emplace_back(Binding{addr, iecVar});
 }
 
@@ -40,7 +39,7 @@ void Binder::updateVariable(const Address& addr, void* iecVar, bool toRegistry) 
 
 template<Registry::Category CAT>
 void Binder::processWithCategory(const Address& addr, void* iecVar, bool toRegistry) {
-    switch(addr.datatype()) {
+    switch(addr.type()) {
         case Address::TYPE_BIT:   handleType<CAT, bool>     (addr, iecVar, toRegistry); break;
         case Address::TYPE_BYTE:  handleType<CAT, uint8_t>  (addr, iecVar, toRegistry); break;
         case Address::TYPE_WORD:  handleType<CAT, uint16_t> (addr, iecVar, toRegistry); break;

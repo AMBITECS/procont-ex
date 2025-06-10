@@ -23,10 +23,10 @@ template<> struct RegisterTraits<double>   { using storage_type = double;   stat
 
 class Address {
 private:
-    constexpr explicit Address(uint64_t packed) : packed_(packed) {}
-
     // Все данные упакованы в 64 бита
-    uint64_t packed_{};
+    uint64_t value{};
+
+    constexpr explicit Address(uint64_t packed) : value(packed) {}
 
 public:
     // Категории регистров (4 бита)
@@ -59,43 +59,34 @@ public:
     static constexpr uint64_t OFFSET_MASK    = 0x0000FFFFFFFFFFFF;
 
     // Конструкторы
-    constexpr Address() : packed_(0) {}
+    constexpr Address() : value(0) {}
     constexpr Address(Category cat, DataType type, uint64_t offset, uint8_t bitpos = 0xFF)
-            : packed_((static_cast<uint64_t>(cat)    << CATEGORY_SHIFT) |
-                      (static_cast<uint64_t>(type)   << TYPE_SHIFT)     |
-                      (static_cast<uint64_t>(bitpos) << BITPOS_SHIFT)   |
-                      (offset & OFFSET_MASK)) {}
+            : value((static_cast<uint64_t>(cat)     << CATEGORY_SHIFT)  |
+                    (static_cast<uint64_t>(type)    << TYPE_SHIFT)      |
+                    (static_cast<uint64_t>(bitpos)  << BITPOS_SHIFT)    |
+                    (offset & OFFSET_MASK)) {}
 
     // Фабричные методы
     static Address of(const std::string& key);
     static constexpr Address Of(uint64_t val) { return Address(val); }
+    //static Address fromString(const std::string& key) {return Address::of(key);}
+    [[nodiscard]] std::string toString() const;
 
     // Преобразования
-    [[nodiscard]] constexpr uint64_t value() const { return packed_; }
-    constexpr operator uint64_t() const { return packed_; } //NOLINT
-
-    [[nodiscard]] static Address fromString(const std::string& key) {return Address::of(key);}
-    [[nodiscard]] std::string toString() const;
+    constexpr operator uint64_t() const { return value; } //NOLINT
+    [[nodiscard]] constexpr uint64_t get() const { return this->operator uint64_t(); }
 
     // Методы доступа
     [[nodiscard]] constexpr Category category() const {
-        return static_cast<Category>((packed_ & CATEGORY_MASK) >> CATEGORY_SHIFT);
+        return static_cast<Category>((value & CATEGORY_MASK) >> CATEGORY_SHIFT);
     }
 
-    [[nodiscard]] constexpr DataType datatype() const {
-        return static_cast<DataType>((packed_ & TYPE_MASK) >> TYPE_SHIFT);
-    }
+    [[nodiscard]] constexpr DataType type()   const { return static_cast<DataType>((value & TYPE_MASK) >> TYPE_SHIFT); }
+    [[nodiscard]] constexpr uint64_t offset() const { return value & OFFSET_MASK; }
+    [[nodiscard]] constexpr uint64_t index()  const { return value & OFFSET_MASK; }
+    [[nodiscard]] constexpr uint8_t  bitpos() const { return (type()==TYPE_BIT) ? (value & BITPOS_MASK) >> BITPOS_SHIFT : 0xFF; }
 
-    [[nodiscard]] constexpr uint64_t offset() const { return packed_ & OFFSET_MASK; }
-    [[nodiscard]] constexpr uint64_t index()  const { return packed_ & OFFSET_MASK; }
-
-    [[nodiscard]] constexpr uint8_t bitpos() const {
-        return (datatype() == TYPE_BIT) ? (packed_ & BITPOS_MASK) >> BITPOS_SHIFT : 0xFF;
-    }
-
-    [[nodiscard]] constexpr bool isBitAccess() const {
-        return datatype() == TYPE_BIT && ((packed_ & BITPOS_MASK) >> BITPOS_SHIFT) != 0xFF;
-    }
+    [[nodiscard]] constexpr bool isBit() const { return type() == TYPE_BIT && ((value & BITPOS_MASK) >> BITPOS_SHIFT) != 0xFF;}
 
     // или другое специальное значение, обозначающее "нет бита"
     [[nodiscard]] bool hasBit() const {
@@ -104,7 +95,7 @@ public:
 
     // И оператор сравнения
     friend bool operator==(const Address& lhs, const Address& rhs) {
-        return lhs.packed_ == rhs.packed_;
+        return lhs.value == rhs.value;
     }
 
     // Удаляем getRequiredAlignment и заменяем на:
@@ -127,7 +118,7 @@ public:
     }
 
     [[nodiscard]] const char* getDataTypeName() const {
-        switch(datatype()) {
+        switch(type()) {
             case TYPE_BIT:   return "BIT";
             case TYPE_BYTE:  return "BYTE";
             case TYPE_WORD:  return "WORD";
@@ -157,13 +148,11 @@ namespace std {
     struct hash<Address> {
         size_t operator()(const Address& addr) const {
             // Простая хэш-функция, можно улучшить
-            return ((static_cast<size_t>(addr.category()) << 24) ^
-                    (static_cast<size_t>(addr.datatype()) << 16) ^
-                    (addr.offset() << 8) ^
-                    addr.bitpos());
+            return (( static_cast<size_t>(addr.category()) << 24) ^
+                    (static_cast<size_t>(addr.type()) << 16) ^
+                    (addr.offset() <<  8) ^ addr.bitpos());
         }
     };
-
 }
 
 #endif // REGISTER_ADDRESS_H

@@ -224,7 +224,7 @@ void runBindingTest() {
 
     //BindingManager::instance().updateFromIec();
     Binder &binder = Binder::instance();
-    Address addr = Address::fromString("MW0");
+    Address addr = Address::of("MW0");
 
     binder.updateVariable(addr, &test_var, true);
     std::cout << "After updateFromIec():\n";

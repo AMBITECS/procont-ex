@@ -66,7 +66,7 @@ public:
         size_t size = 0;
 
         // Определяем размер через switch вместо шаблонного параметра
-        switch(addr.datatype()) {
+        switch(addr.type()) {
             case Address::TYPE_BIT:   size = addr.hasBit() ? 1 : RegisterTraits<bool>::size; break;
             case Address::TYPE_BYTE:  size = RegisterTraits<uint8_t>::size; break;
             case Address::TYPE_WORD:  size = RegisterTraits<uint16_t>::size; break;
@@ -407,7 +407,7 @@ public:
     VARIANT getByAddress(const Address& addr) {
         const uint64_t offset = addr.offset();
         const uint8_t bitpos = addr.bitpos();
-        const DataType datatype = addr.datatype();
+        const DataType datatype = addr.type();
         switch(addr.category()) {
             case Category::INPUT:   return access<Category::INPUT> ( datatype, offset, bitpos);
             case Category::OUTPUT:  return access<Category::OUTPUT>( datatype, offset, bitpos);

@@ -211,7 +211,7 @@ void runBindingTest() {
     uint16_t test_var = 0;
     uint16_t reg_value = 0;
 
-    BindingManager::instance().bind("MW0", &test_var);  // MW0 - адрес для float в памяти
+    Binder::instance().bind("MW0", &test_var);  // MW0 - адрес для float в памяти
 
     // 2. Проверка начального состояния
     std::cout << "Initial state:\n";
@@ -223,7 +223,7 @@ void runBindingTest() {
     std::cout << "  test_var = " << test_var << "\n";
 
     //BindingManager::instance().updateFromIec();
-    BindingManager &binder = BindingManager::instance();
+    Binder &binder = Binder::instance();
     Address addr = Address::fromString("MW0");
 
     binder.updateVariable(addr, &test_var, true);
@@ -262,10 +262,10 @@ void runBindingTest() {
 
 void testDataIntegrity() {
     uint16_t test_val = 12345;
-    BindingManager::instance().bind("MW1024", &test_val);
+    Binder::instance().bind("MW1024", &test_val);
 
     test_val = 54321;
-    BindingManager::instance().updateFromIec();
+    Binder::instance().updateFromIec();
 
     assert(MW[0] == 54321);
     std::cout << "Data integrity test passed!\n";
@@ -391,8 +391,8 @@ int main(int argc,char **argv)
     // Чтение начальных значений
     runBindingTest();
 
-    BindingManager::instance().updateFromIec();
-    BindingManager::instance().updateToIec();
+    Binder::instance().updateFromIec();
+    Binder::instance().updateToIec();
 
 
 #ifdef __linux__

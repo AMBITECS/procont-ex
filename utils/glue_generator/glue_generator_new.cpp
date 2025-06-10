@@ -21,7 +21,7 @@ void generateHeader(ostream& glueVars) {
     glueVars << "#define __LOCATED_VAR(type, name, ...) type* name = &__##name;\n";
     glueVars << "#include \"LOCATED_VARIABLES.h\"\n";
     glueVars << "#undef __LOCATED_VAR\n\n";
-    glueVars << "#define __BIND(reg, var) BindingManager::instance().bind(reg, (void*) var)\n\n";
+    glueVars << "#define __BIND(reg, var) Binder::instance().bind(reg, (void*) var)\n\n";
     glueVars << "void glueVars() {\n";
 }
 

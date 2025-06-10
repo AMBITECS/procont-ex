@@ -46,8 +46,8 @@ public:
         TYPE_WORD   = 2,    // 'W' - слово
         TYPE_DWORD  = 3,    // 'D' - двойное слово
         TYPE_LWORD  = 4,    // 'L' - длинное слово
-        TYPE_REAL   = 5,    // 'R' - вещественное 4б (float)
-        TYPE_LREAL  = 6     // 'F' - длинное вещественное 8б (double)
+        TYPE_REAL   = 5,    // 'F' - вещественное         4б (float)
+        TYPE_LREAL  = 6     // 'E' - длинное вещественное 8б (double)
     };
 
     // Битовые поля в 64-битном значении
@@ -89,6 +89,7 @@ public:
     }
 
     [[nodiscard]] constexpr uint64_t offset() const { return packed_ & OFFSET_MASK; }
+    [[nodiscard]] constexpr uint64_t index()  const { return packed_ & OFFSET_MASK; }
 
     [[nodiscard]] constexpr uint8_t bitpos() const {
         return (datatype() == TYPE_BIT) ? (packed_ & BITPOS_MASK) >> BITPOS_SHIFT : 0xFF;
@@ -122,7 +123,7 @@ public:
             case TYPE_DWORD:  return offset() % alignmentFor<uint32_t>() == 0;
             case TYPE_LWORD:  return offset() % alignmentFor<uint64_t>() == 0;
             case TYPE_REAL:   return offset() % alignmentFor<float>() == 0;
-            case TYPE_LREAL: return offset() % alignmentFor<double>() == 0;
+            case TYPE_LREAL:  return offset() % alignmentFor<double>() == 0;
             default: return true;
         }
     }

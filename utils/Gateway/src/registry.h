@@ -13,7 +13,6 @@
 #include <functional>
 
 #include "address.h"
-#include "variant.h"
 
 constexpr unsigned int   REGISTRY_SIZE    = 65536;   // Размер категорий регистров
 
@@ -119,6 +118,8 @@ public:
         }
 
     public:
+        using value_type = T;   // Тип данных
+
         Accessor(Registry &parent, uint64_t offset) : parent_(parent), offset_(offset) {
             if (offset_ % RegisterTraits<T>::size != 0) {
                 throw std::runtime_error("Unaligned register access");
@@ -267,6 +268,8 @@ public:
             uint64_t count_;        // Количество элементов
 
         public:
+            using value_type = T;   // Тип данных
+
             explicit IndexProxy(Registry& parent, uint64_t base_offset = 0, uint64_t count = 0)
                     : parent_(parent),
                       base_offset_(base_offset),
@@ -365,8 +368,8 @@ public:
     using IW = IRegister<T_UINT16>::IndexProxy;
     using ID = IRegister<T_UINT32>::IndexProxy;
     using IL = IRegister<T_UINT64>::IndexProxy;
-    using IR = IRegister<T_REAL32>::IndexProxy;  // для float
-    using IF = IRegister<T_REAL64>::IndexProxy;  // для double
+    using IF = IRegister<T_REAL32>::IndexProxy;  // для float  (F)
+    using IE = IRegister<T_REAL64>::IndexProxy;  // для double (E)
 
     // Proxy-типы для выходных регистров (Q)
     using QX = QRegister<T_BOOL>::IndexProxy;
@@ -374,8 +377,8 @@ public:
     using QW = QRegister<T_UINT16>::IndexProxy;
     using QD = QRegister<T_UINT32>::IndexProxy;
     using QL = QRegister<T_UINT64>::IndexProxy;
-    using QR = QRegister<T_REAL32>::IndexProxy;
-    using QF = QRegister<T_REAL64>::IndexProxy;
+    using QF = QRegister<T_REAL32>::IndexProxy;
+    using QE = QRegister<T_REAL64>::IndexProxy;
 
     // Proxy-типы для регистров памяти (M)
     using MX = MRegister<T_BOOL>::IndexProxy;
@@ -383,8 +386,8 @@ public:
     using MW = MRegister<T_UINT16>::IndexProxy;
     using MD = MRegister<T_UINT32>::IndexProxy;
     using ML = MRegister<T_UINT64>::IndexProxy;
-    using MR = MRegister<T_REAL32>::IndexProxy;
-    using MF = MRegister<T_REAL64>::IndexProxy;
+    using MF = MRegister<T_REAL32>::IndexProxy;
+    using ME = MRegister<T_REAL64>::IndexProxy;
 
     // Proxy-типы для специальных регистров (S)
     using SX = SRegister<T_BOOL>::IndexProxy;
@@ -392,8 +395,8 @@ public:
     using SW = SRegister<T_UINT16>::IndexProxy;
     using SD = SRegister<T_UINT32>::IndexProxy;
     using SL = SRegister<T_UINT64>::IndexProxy;
-    using SR = SRegister<T_REAL32>::IndexProxy;
-    using SF = SRegister<T_REAL64>::IndexProxy;
+    using SF = SRegister<T_REAL32>::IndexProxy;
+    using SE = SRegister<T_REAL64>::IndexProxy;
 
     // Оператор [] для доступа по Address
     VARIANT operator[](const Address& addr) {

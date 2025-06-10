@@ -57,6 +57,6 @@ extern Registry::QE QE;
 extern Registry::ME ME;
 extern Registry::SE SE;
 
-template<typename T> T& getGlobalProxy();
+//template<typename T> T& getGlobalProxy();
 
 #endif //PRO_GATEWAY_H

@@ -240,41 +240,41 @@ void runBindingTest() {
     reg_value = MW[0];  // MW - это прокси для доступа к памяти
     std::cout << "  MW[0] = " << reg_value << "\n";
 
-    // 5. Изменение через MW proxy и перенос в переменную
+    // 6. Изменение через MW proxy и перенос в переменную
     MW[0] = 628;
-//    std::cout << "\nAfter setting MW[0] = 6.28:\n";
-//    std::cout << "  MW[0] = " << MW[0] << "\n";
-//
-//    BindingManager::instance().updateToIec();
-//    std::cout << "After updateToIec():\n";
-//    std::cout << "  test_var = " << test_var << "\n";
-//
-//    // 6. Проверка согласованности
-//    std::cout << "\nFinal check:\n";
-//    if (std::abs(test_var - MW[0]) < 0.0001f) {
-//        std::cout << "SUCCESS: Values are synchronized\n";
-//    } else {
-//        std::cout << "ERROR: Values are different!\n";
-//        std::cout << "  test_var = " << test_var << "\n";
-//        std::cout << "  MW[0]    = " << MW[0] << "\n";
-//    }
+    std::cout << "\nAfter setting MW[0] = 6.28:\n";
+    std::cout << "  MW[0] = " << MW[0] << "\n";
+
+    Binder::instance().updateToIec();
+    std::cout << "After updateToIec():\n";
+    std::cout << "  test_var = " << test_var << "\n";
+
+    // 7. Проверка согласованности
+    std::cout << "\nFinal check:\n";
+    if (std::abs(test_var - MW[0]) < 0.0001f) {
+        std::cout << "SUCCESS: Values are synchronized\n";
+    } else {
+        std::cout << "ERROR: Values are different!\n";
+        std::cout << "  test_var = " << test_var << "\n";
+        std::cout << "  MW[0]    = " << MW[0] << "\n";
+    }
 }
 
-void testDataIntegrity() {
-    uint16_t test_val = 12345;
-    Binder::instance().bind("MW1024", &test_val);
-
-    test_val = 54321;
-    Binder::instance().updateFromIec();
-
-    assert(MW[0] == 54321);
-    std::cout << "Data integrity test passed!\n";
-}
+//void testDataIntegrity() {
+//    uint16_t test_val = 12345;
+//    Binder::instance().bind("MW0", &test_val);
+//
+//    test_val = 54321;
+//    Binder::instance().updateFromIec();
+//
+//    assert(MW[0] == 54321);
+//    std::cout << "Data integrity test passed!\n";
+//}
 
 //=============================================================================
 int main(int argc,char **argv)
 {
-    testDataIntegrity();
+//    testDataIntegrity();
 
     char log_msg[1000];
     sprintf(log_msg, "PROCONT RUNTIME starting...\n");

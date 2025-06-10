@@ -7,9 +7,7 @@
 #include "variant.h"
 
 template<typename T>
-struct RegisterTraits {
-    static_assert(sizeof(T) == 0, "Unsupported register type");
-};
+struct RegisterTraits { static_assert(sizeof(T) == 0, "Unsupported register type"); };
 
 template<> struct RegisterTraits<bool>     { using storage_type = uint8_t;  static constexpr size_t size = 1; };
 template<> struct RegisterTraits<int8_t>   { using storage_type = int8_t;   static constexpr size_t size = 1; };

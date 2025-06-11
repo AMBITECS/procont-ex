@@ -17,7 +17,7 @@ extern pthread_mutex_t bufferLock;
 Registry& getGlobalRegistry();
 
 // Доступ к proxy-объектам
-template<typename T, Registry::Category CAT>
+template<typename T, Registry::Category CATEGORY>
 auto& getProxy();
 
 // Получение сырого значения

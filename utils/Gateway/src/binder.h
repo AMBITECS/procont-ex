@@ -3,6 +3,7 @@
 #include "registry.h"
 #include <vector>
 #include <memory>
+#include "proxy.h"
 
 class Binder {
 private:
@@ -29,6 +30,7 @@ public:
     void bind(const std::string& regNotation, void* iecVar);
     void updateToIec();
     void updateFromIec();
+
     void updateVariable(const Address& addr, void* iecVar, bool toRegistry);
 
 private:
@@ -37,9 +39,9 @@ private:
     template<Registry::Category CAT>
     void processWithCategory(const Address &addr, void *iecVar, bool toRegistry);
 
-    template<Registry::Category CAT, typename T>
+    template<typename T, Registry::Category CAT>
     void handleType(const Address& addr, void* iecVar, bool toRegistry);
 
-    template<Registry::Category CAT, typename T>
+    template<typename T, Registry::Category CAT>
     auto& getProxy();
 };

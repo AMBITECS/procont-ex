@@ -1,5 +1,4 @@
 #include "binder.h"
-#include "proxy.h"
 
 std::unique_ptr<Binder> Binder::_instance;
 
@@ -41,20 +40,20 @@ void Binder::updateVariable(const Address& addr, void* iecVar, bool toRegistry) 
 template<Registry::Category CAT>
 void Binder::processWithCategory(const Address& addr, void* iecVar, bool toRegistry) {
     switch(addr.type()) {
-        case Address::TYPE_BIT:   handleType<CAT, bool>     (addr, iecVar, toRegistry); break;
-        case Address::TYPE_BYTE:  handleType<CAT, uint8_t>  (addr, iecVar, toRegistry); break;
-        case Address::TYPE_WORD:  handleType<CAT, uint16_t> (addr, iecVar, toRegistry); break;
-        case Address::TYPE_DWORD: handleType<CAT, uint32_t> (addr, iecVar, toRegistry); break;
-        case Address::TYPE_LWORD: handleType<CAT, uint64_t> (addr, iecVar, toRegistry); break;
-        case Address::TYPE_REAL:  handleType<CAT, float>    (addr, iecVar, toRegistry); break;
-        case Address::TYPE_LREAL: handleType<CAT, double>   (addr, iecVar, toRegistry); break;
+        case Address::TYPE_BIT:   handleType<bool    , CAT> (addr, iecVar, toRegistry); break;
+        case Address::TYPE_BYTE:  handleType<uint8_t , CAT> (addr, iecVar, toRegistry); break;
+        case Address::TYPE_WORD:  handleType<uint16_t, CAT> (addr, iecVar, toRegistry); break;
+        case Address::TYPE_DWORD: handleType<uint32_t, CAT> (addr, iecVar, toRegistry); break;
+        case Address::TYPE_LWORD: handleType<uint64_t, CAT> (addr, iecVar, toRegistry); break;
+        case Address::TYPE_REAL:  handleType<float   , CAT> (addr, iecVar, toRegistry); break;
+        case Address::TYPE_LREAL: handleType<double  , CAT> (addr, iecVar, toRegistry); break;
         default: throw std::runtime_error("Unknown data type");
     }
 }
 
-template<Registry::Category CAT, typename T>
+template<typename T, Registry::Category CAT>
 void Binder::handleType(const Address& addr, void* iecVar, bool toRegistry) {
-    auto& proxy = getProxy<CAT, T>();
+    auto& proxy = getProxy<T, CAT>();
     const size_t index = addr.index();
     if (toRegistry) {
         proxy[index] = *static_cast<T*>(iecVar);
@@ -63,7 +62,7 @@ void Binder::handleType(const Address& addr, void* iecVar, bool toRegistry) {
     }
 }
 
-template<Registry::Category CAT, typename T>
+template<typename T, Registry::Category CAT>
 auto& Binder::getProxy() {
     if constexpr (CAT == Registry::Category::INPUT) {
         if      constexpr (std::is_same_v<T, bool>)     return ::IX;

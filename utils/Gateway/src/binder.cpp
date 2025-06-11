@@ -1,4 +1,5 @@
-#include "gateway.h"
+#include "binder.h"
+#include "proxy.h"
 
 std::unique_ptr<Binder> Binder::_instance;
 

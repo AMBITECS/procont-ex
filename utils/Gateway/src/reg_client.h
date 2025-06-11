@@ -39,9 +39,9 @@ private:
     std::unordered_map<Address, uint64_t> subscriptions_; // addr -> key
     bool is_active_ = false;
 
-    // доступ к proxy-объектам
-    template<typename T, Registry::Category CATEGORY>
-    auto& getProxy();
+//    // доступ к proxy-объектам
+//    template<typename T, Registry::Category CATEGORY>
+//    auto& getProxy();
 
     // получение сырого значения
     template<Registry::Category CAT>

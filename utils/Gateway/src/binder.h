@@ -1,7 +1,6 @@
 #pragma once
 
 #include "registry.h"
-
 #include <vector>
 #include <memory>
 

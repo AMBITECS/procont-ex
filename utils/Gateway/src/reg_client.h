@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <functional>
 #include <memory>
-#include "address.h"
+#include "registry.h"
 
 // Для одписки на изменения Registry
 struct RegItem {
@@ -39,6 +39,18 @@ private:
     std::unordered_map<Address, uint64_t> subscriptions_; // addr -> key
     bool is_active_ = false;
 
+    // доступ к proxy-объектам
+    template<typename T, Registry::Category CATEGORY>
+    auto& getProxy();
+
+    // получение сырого значения
+    template<Registry::Category CAT>
+    uint64_t getValue(const Address& addr);
+
+    // проверка изменения значения по адресу
+    template<Registry::Category CAT>
+    bool checkChanged(const Address& addr);
+
 public:
     RegClient(Registry& registry, std::string name);
     ~RegClient() override;
@@ -61,12 +73,6 @@ public:
     }
 
     void update();
-
-//    void notify(const std::vector<ItemData>& changes) {
-//        if (data_handler_ && is_active_) {
-//            data_handler_(changes);
-//        }
-//    }
 };
 
 #endif // REG_CLIENT_H

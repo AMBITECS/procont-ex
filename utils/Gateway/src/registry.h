@@ -25,9 +25,6 @@ public:
     using Category = Address::Category;     // тип категории реестра
     using DataType = Address::DataType;     // тип данных в реестре
 
-    // Внутренний метод для получения хранилища по категориям IEC
-    Storage& getStorage(Category cat) { return categories_[cat].A; }
-
 private:
     // Регистры контроллера по категориям IEC
     struct RegStorage {
@@ -38,7 +35,12 @@ private:
     using  CategoriesMap  = std::unordered_map<Category, RegStorage>;
     CategoriesMap  categories_;
 
-    const Storage& getStorage(Category cat) const { return categories_.at(cat).A; }
+    //const Storage&    getStorage(Category cat) const { return categories_.at(cat).A; }
+
+public:
+    // Внутренний метод для получения хранилища по категориям IEC
+    Storage& getStorage(Category cat) { return categories_[cat].A; }
+    const RegStorage& getRegStorage(Category cat) const { return categories_.at(cat); }
 
 public:
     explicit Registry(size_t memory_size = REGISTRY_SIZE) {
@@ -57,27 +59,27 @@ public:
         }
     }
 
-    // Чтение сырых данных (для клиентов)
-    uint64_t getRawValue(const Address& addr) {
-        // Используем существующие Accessor'ы
-        switch(addr.category()) {
-            case Category::INPUT:   return getValueByType<Category::INPUT>(addr);
-            case Category::OUTPUT:  return getValueByType<Category::OUTPUT>(addr);
-            case Category::MEMORY:  return getValueByType<Category::MEMORY>(addr);
-            case Category::SPECIAL: return getValueByType<Category::SPECIAL>(addr);
-            default: throw std::invalid_argument("Invalid category");
-        }
-    }
-
-    bool isChanged(const Address& addr) const {
-        switch(addr.category()) {
-            case Category::INPUT:   return checkChanged<Category::INPUT>(addr);
-            case Category::OUTPUT:  return checkChanged<Category::OUTPUT>(addr);
-            case Category::MEMORY:  return checkChanged<Category::MEMORY>(addr);
-            case Category::SPECIAL: return checkChanged<Category::SPECIAL>(addr);
-            default: return false;
-        }
-    }
+//    // Чтение сырых данных (для клиентов)
+//    uint64_t getRawValue(const Address& addr) {
+//        // Используем существующие Accessor'ы
+//        switch(addr.category()) {
+//            case Category::INPUT:   return getValueByType<Category::INPUT>(addr);
+//            case Category::OUTPUT:  return getValueByType<Category::OUTPUT>(addr);
+//            case Category::MEMORY:  return getValueByType<Category::MEMORY>(addr);
+//            case Category::SPECIAL: return getValueByType<Category::SPECIAL>(addr);
+//            default: throw std::invalid_argument("Invalid category");
+//        }
+//    }
+//
+//    bool isChanged(const Address& addr) const {
+//        switch(addr.category()) {
+//            case Category::INPUT:   return checkChanged<Category::INPUT>(addr);
+//            case Category::OUTPUT:  return checkChanged<Category::OUTPUT>(addr);
+//            case Category::MEMORY:  return checkChanged<Category::MEMORY>(addr);
+//            case Category::SPECIAL: return checkChanged<Category::SPECIAL>(addr);
+//            default: return false;
+//        }
+//    }
 
     // Синхронизация слоёв (A -> B)
     void commit() {
@@ -287,6 +289,12 @@ public:
                 }
             }
 
+            [[nodiscard]] bool isChanged(size_t index) const {
+                const auto& storage = parent_.getRegStorage(CAT);
+                const size_t offset = base_offset_ + index * sizeof(T);
+                return memcmp( &storage.A[offset], &storage.B[offset], sizeof(T)) != 0;
+            }
+
         private:
             // Вычисляет максимальное количество элементов
             uint64_t calculateCount(Registry& parent, uint64_t offset) const {
@@ -399,56 +407,56 @@ public:
     using SE = SRegister<T_REAL64>::IndexProxy;
 
 private:
-    // Низкоуровневый шаблонный метод получения сырого значения (uint64)
-    template<Category CAT>
-    uint64_t getValueByType(const Address& addr) {
-        if (addr.isBit()) {
-            const auto& reg = categories_.at(CAT);
-            if (addr.offset() >= reg.A.size()) return 0;
-            const uint8_t mask = 1 << addr.bitpos();
-            return (reg.A[addr.offset()] & mask) ? 1 : 0;
-        } else {
-            switch(addr.type()) {
-                case Address::TYPE_BYTE:  return get<uint8_t, CAT>(addr.offset());
-                case Address::TYPE_WORD:  return get<uint16_t, CAT>(addr.offset());
-                case Address::TYPE_DWORD: return get<uint32_t, CAT>(addr.offset());
-                case Address::TYPE_LWORD: return get<uint64_t, CAT>(addr.offset());
-
-                // Для значений с плавающей точкой
-                // - возвращает сырое представление float/double как целое число
-                case Address::TYPE_REAL:
-                {
-                    float val = get<float, CAT>(addr.offset());
-                    uint32_t tmp;
-                    memcpy(&tmp, &val, sizeof(float));
-                    return tmp;
-                }
-                case Address::TYPE_LREAL:
-                {
-                    double val = get<double, CAT>(addr.offset());
-                    uint64_t tmp;
-                    memcpy(&tmp, &val, sizeof(double));
-                    return tmp;
-                }
-                default: throw std::invalid_argument("Unsupported data type");
-            }
-        }
-    }
-
-    template<Category CAT>
-    bool checkChanged(const Address& addr) const {
-        const auto& reg = categories_.at(CAT);
-        const size_t offset = addr.offset();
-        if (addr.isBit()) {
-            if (offset >= reg.A.size()) return false;
-            const uint8_t mask = 1 << addr.bitpos();
-            return (reg.A[offset] & mask) != (reg.B[offset] & mask);
-        } else {
-            const size_t size = addr.size();
-            if (offset + size > reg.A.size()) return false;
-            return memcmp(&reg.A[offset], &reg.B[offset], size) != 0;
-        }
-    }
+//    // Низкоуровневый шаблонный метод получения сырого значения (uint64)
+//    template<Category CAT>
+//    uint64_t getValueByType(const Address& addr) {
+//        if (addr.isBit()) {
+//            const auto& reg = categories_.at(CAT);
+//            if (addr.offset() >= reg.A.size()) return 0;
+//            const uint8_t mask = 1 << addr.bitpos();
+//            return (reg.A[addr.offset()] & mask) ? 1 : 0;
+//        } else {
+//            switch(addr.type()) {
+//                case Address::TYPE_BYTE:  return get<uint8_t,  CAT>(addr.offset());
+//                case Address::TYPE_WORD:  return get<uint16_t, CAT>(addr.offset());
+//                case Address::TYPE_DWORD: return get<uint32_t, CAT>(addr.offset());
+//                case Address::TYPE_LWORD: return get<uint64_t, CAT>(addr.offset());
+//
+//                // Для значений с плавающей точкой
+//                // - возвращает сырое представление float/double как целое число
+//                case Address::TYPE_REAL:
+//                {
+//                    float val = get<float, CAT>(addr.offset());
+//                    uint32_t tmp;
+//                    memcpy(&tmp, &val, sizeof(float));
+//                    return tmp;
+//                }
+//                case Address::TYPE_LREAL:
+//                {
+//                    double val = get<double, CAT>(addr.offset());
+//                    uint64_t tmp;
+//                    memcpy(&tmp, &val, sizeof(double));
+//                    return tmp;
+//                }
+//                default: throw std::invalid_argument("Unsupported data type");
+//            }
+//        }
+//    }
+//
+//    template<Category CAT>
+//    bool checkChanged(const Address& addr) const {
+//        const auto& reg = categories_.at(CAT);
+//        const size_t offset = addr.offset();
+//        if (addr.isBit()) {
+//            if (offset >= reg.A.size()) return false;
+//            const uint8_t mask = 1 << addr.bitpos();
+//            return (reg.A[offset] & mask) != (reg.B[offset] & mask);
+//        } else {
+//            const size_t size = addr.size();
+//            if (offset + size > reg.A.size()) return false;
+//            return memcmp(&reg.A[offset], &reg.B[offset], size) != 0;
+//        }
+//    }
 
 };
 

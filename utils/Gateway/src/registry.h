@@ -58,7 +58,7 @@ public:
     }
 
     // Чтение сырых данных (для клиентов)
-    uint64_t getRawValue(const Address& addr) const {
+    uint64_t getRawValue(const Address& addr) {
         // Используем существующие Accessor'ы
         switch(addr.category()) {
             case Category::INPUT:   return getValueByType<Category::INPUT>(addr);
@@ -71,16 +71,11 @@ public:
 
     bool isChanged(const Address& addr) const {
         switch(addr.category()) {
-            case Category::INPUT:
-                return checkChanged<Category::INPUT>(addr);
-            case Category::OUTPUT:
-                return checkChanged<Category::OUTPUT>(addr);
-            case Category::MEMORY:
-                return checkChanged<Category::MEMORY>(addr);
-            case Category::SPECIAL:
-                return checkChanged<Category::SPECIAL>(addr);
-            default:
-                return false;
+            case Category::INPUT:   return checkChanged<Category::INPUT>(addr);
+            case Category::OUTPUT:  return checkChanged<Category::OUTPUT>(addr);
+            case Category::MEMORY:  return checkChanged<Category::MEMORY>(addr);
+            case Category::SPECIAL: return checkChanged<Category::SPECIAL>(addr);
+            default: return false;
         }
     }
 
@@ -114,17 +109,27 @@ public:
         using value_type = T;   // Тип данных
 
         Accessor(Registry &parent, uint64_t offset) : parent_(parent), offset_(offset) {
-            if (offset_ % RegisterTraits<T>::size != 0) {
-                throw std::runtime_error("Unaligned register access");
+            // Для битовых типов не проверяем выравнивание
+            if constexpr (!std::is_same_v<T, bool>) {
+                if (offset_ % RegisterTraits<T>::size != 0) {
+                    throw std::runtime_error("Unaligned register access");
+                }
             }
         }
 
-        // Безопасное приведение типов (извлечение значения)
+        // Явное приведение типов (извлечение значения)
+        [[nodiscard]] T get() const { return static_cast<T>(*this); }
+
+        // Неявное приведение типов (извлечение значения)
         operator T() const { //NOLINT - неявное преобразование типа
             checkBounds();
             if constexpr (sizeof(T) == 1) {
                 return getStorage()[offset_];
             } else {
+                // (1) *reinterpret_cast<const T*>(&storage[offset_]);
+                // - небезопасно, нарушает strict aliasing rules
+                // (2) std::memcpy(&value, &getStorage()[offset_], sizeof(T));
+                // - решает вопросы с выравниванием, оптимизуруется компилятором
                 T value;
                 std::memcpy(&value, &getStorage()[offset_], sizeof(T));
                 return value;
@@ -346,7 +351,10 @@ public:
     }; // Accessor
 
     template<typename T, Category CAT>
-    Accessor<T, CAT> get(uint64_t offset) { return Accessor<T, CAT>(*this, offset); }
+    Accessor<T, CAT> get(uint64_t offset) {
+        //static_assert(std::is_arithmetic_v<T>, "Only arithmetic types are supported");
+        return Accessor<T, CAT>(*this, offset);
+    }
 
     // Базовые аксессоры по категориям
     template<typename T> using IRegister = Accessor<T, Category::INPUT>;
@@ -390,38 +398,39 @@ public:
     using SF = SRegister<T_REAL32>::IndexProxy;
     using SE = SRegister<T_REAL64>::IndexProxy;
 
-//    // Оператор [] для доступа по Address
-//    VARIANT operator[](const Address& addr) {
-//        return getByAddress(addr);
-//    }
-//
-//    // Метод getByAddress с поддержкой битового доступа
-//    VARIANT getByAddress(const Address& addr) {
-//        const uint64_t offset = addr.offset();
-//        const uint8_t bitpos = addr.bitpos();
-//        const DataType datatype = addr.type();
-//        switch(addr.category()) {
-//            case Category::INPUT:   return access<Category::INPUT> ( datatype, offset, bitpos);
-//            case Category::OUTPUT:  return access<Category::OUTPUT>( datatype, offset, bitpos);
-//            case Category::MEMORY:  return access<Category::MEMORY>( datatype, offset, bitpos);
-//            case Category::SPECIAL: return access<Category::SPECIAL>(datatype, offset, bitpos);
-//            default: throw std::invalid_argument("Invalid register category");
-//        }
-//    }
-
 private:
-// Вспомогательные шаблонные методы
+    // Низкоуровневый шаблонный метод получения сырого значения (uint64)
     template<Category CAT>
-    uint64_t getValueByType(const Address& addr) const {
+    uint64_t getValueByType(const Address& addr) {
         if (addr.isBit()) {
-            return get<bool, CAT>(addr.offset())[addr.bitpos()] ? 1 : 0;
+            const auto& reg = categories_.at(CAT);
+            if (addr.offset() >= reg.A.size()) return 0;
+            const uint8_t mask = 1 << addr.bitpos();
+            return (reg.A[addr.offset()] & mask) ? 1 : 0;
         } else {
             switch(addr.type()) {
                 case Address::TYPE_BYTE:  return get<uint8_t, CAT>(addr.offset());
                 case Address::TYPE_WORD:  return get<uint16_t, CAT>(addr.offset());
                 case Address::TYPE_DWORD: return get<uint32_t, CAT>(addr.offset());
                 case Address::TYPE_LWORD: return get<uint64_t, CAT>(addr.offset());
-                default: throw std::invalid_argument("Unsupported type");
+
+                // Для значений с плавающей точкой
+                // - возвращает сырое представление float/double как целое число
+                case Address::TYPE_REAL:
+                {
+                    float val = get<float, CAT>(addr.offset());
+                    uint32_t tmp;
+                    memcpy(&tmp, &val, sizeof(float));
+                    return tmp;
+                }
+                case Address::TYPE_LREAL:
+                {
+                    double val = get<double, CAT>(addr.offset());
+                    uint64_t tmp;
+                    memcpy(&tmp, &val, sizeof(double));
+                    return tmp;
+                }
+                default: throw std::invalid_argument("Unsupported data type");
             }
         }
     }
@@ -440,24 +449,6 @@ private:
             return memcmp(&reg.A[offset], &reg.B[offset], size) != 0;
         }
     }
-
-//    // Шаблонный метод для доступа к регистрам
-//    template<Category CAT>
-//    VARIANT access(DataType type, uint64_t offset, uint8_t bitpos) {
-//        switch(type) {
-//            case DataType::TYPE_BIT:
-//                return (bitpos != 0xFF)
-//                ? VARIANT(static_cast<bool>(get<bool, CAT>(offset)[bitpos]))
-//                : VARIANT(static_cast<bool>(get<bool, CAT>(offset)));
-//            case DataType::TYPE_BYTE:  return VARIANT(static_cast<uint8_t>  (get<uint8_t,  CAT>(offset)));
-//            case DataType::TYPE_WORD:  return VARIANT(static_cast<uint16_t> (get<uint16_t, CAT>(offset)));
-//            case DataType::TYPE_DWORD: return VARIANT(static_cast<uint32_t> (get<uint32_t, CAT>(offset)));
-//            case DataType::TYPE_LWORD: return VARIANT(static_cast<uint64_t> (get<uint64_t, CAT>(offset)));
-//            case DataType::TYPE_REAL:  return VARIANT(static_cast<float>    (get<float,    CAT>(offset)));
-//            case DataType::TYPE_LREAL: return VARIANT(static_cast<double>   (get<double,   CAT>(offset)));
-//            default: throw std::invalid_argument("Invalid data type");
-//        }
-//    }
 
 };
 

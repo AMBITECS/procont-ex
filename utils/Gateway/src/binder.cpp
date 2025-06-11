@@ -54,8 +54,7 @@ void Binder::processWithCategory(const Address& addr, void* iecVar, bool toRegis
 template<Registry::Category CAT, typename T>
 void Binder::handleType(const Address& addr, void* iecVar, bool toRegistry) {
     auto& proxy = getProxy<CAT, T>();
-    size_t index = addr.index();
-
+    const size_t index = addr.index();
     if (toRegistry) {
         proxy[index] = *static_cast<T*>(iecVar);
     } else {

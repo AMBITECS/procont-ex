@@ -206,59 +206,59 @@ bool pinNotPresent(const int *ignored_vector, int vector_size, int pinNumber) {
 //    //insert other special functions below
 //}
 
-void runBindingTest() {
-    // 1. Инициализация
-    uint16_t test_var = 0;
-    uint16_t reg_value = 0;
-
-    Binder::instance().bind("MW0", &test_var);  // MW0 - адрес для float в памяти
-
-    // 2. Проверка начального состояния
-    std::cout << "Initial state:\n";
-    std::cout << "  test_var = " << test_var << "\n";
-
-    // 3. Запись в переменную и перенос в регистры
-    test_var = 314; //3.14f;
-    std::cout << "\nAfter setting test_var = 3.14:\n";
-    std::cout << "  test_var = " << test_var << "\n";
-
-    //BindingManager::instance().updateFromIec();
-    Binder &binder = Binder::instance();
-    Address addr = Address::of("MW0");
-
-    binder.updateVariable(addr, &test_var, true);
-    std::cout << "After updateFromIec():\n";
-    std::cout << "  test_var = " << test_var << "\n";
-
-    // 4. Чтение через MW proxy (из Registry)
-    std::cout << "\nReading through binder:\n";
-    binder.updateVariable(addr, &reg_value, false);
-    std::cout << "  reg_value = " << reg_value << "\n";
-
-    // 5. Чтение через MW proxy (из Registry)
-    std::cout << "\nReading through MW proxy:\n";
-    reg_value = MW[0];  // MW - это прокси для доступа к памяти
-    std::cout << "  MW[0] = " << reg_value << "\n";
-
-    // 6. Изменение через MW proxy и перенос в переменную
-    MW[0] = 628;
-    std::cout << "\nAfter setting MW[0] = 6.28:\n";
-    std::cout << "  MW[0] = " << MW[0] << "\n";
-
-    Binder::instance().updateToIec();
-    std::cout << "After updateToIec():\n";
-    std::cout << "  test_var = " << test_var << "\n";
-
-    // 7. Проверка согласованности
-    std::cout << "\nFinal check:\n";
-    if (std::abs(test_var - MW[0]) < 0.0001f) {
-        std::cout << "SUCCESS: Values are synchronized\n";
-    } else {
-        std::cout << "ERROR: Values are different!\n";
-        std::cout << "  test_var = " << test_var << "\n";
-        std::cout << "  MW[0]    = " << MW[0] << "\n";
-    }
-}
+//void runBindingTest() {
+//    // 1. Инициализация
+//    uint16_t test_var = 0;
+//    uint16_t reg_value = 0;
+//
+//    Binder::instance().bind("MW0", &test_var);  // MW0 - адрес для float в памяти
+//
+//    // 2. Проверка начального состояния
+//    std::cout << "Initial state:\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    // 3. Запись в переменную и перенос в регистры
+//    test_var = 314; //3.14f;
+//    std::cout << "\nAfter setting test_var = 3.14:\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    //BindingManager::instance().updateFromIec();
+//    Binder &binder = Binder::instance();
+//    Address addr = Address::of("MW0");
+//
+//    binder.updateVariable(addr, &test_var, true);
+//    std::cout << "After updateFromIec():\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    // 4. Чтение через MW proxy (из Registry)
+//    std::cout << "\nReading through binder:\n";
+//    binder.updateVariable(addr, &reg_value, false);
+//    std::cout << "  reg_value = " << reg_value << "\n";
+//
+//    // 5. Чтение через MW proxy (из Registry)
+//    std::cout << "\nReading through MW proxy:\n";
+//    reg_value = MW[0];  // MW - это прокси для доступа к памяти
+//    std::cout << "  MW[0] = " << reg_value << "\n";
+//
+//    // 6. Изменение через MW proxy и перенос в переменную
+//    MW[0] = 628;
+//    std::cout << "\nAfter setting MW[0] = 6.28:\n";
+//    std::cout << "  MW[0] = " << MW[0] << "\n";
+//
+//    Binder::instance().updateToIec();
+//    std::cout << "After updateToIec():\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    // 7. Проверка согласованности
+//    std::cout << "\nFinal check:\n";
+//    if (std::abs(test_var - MW[0]) < 0.0001f) {
+//        std::cout << "SUCCESS: Values are synchronized\n";
+//    } else {
+//        std::cout << "ERROR: Values are different!\n";
+//        std::cout << "  test_var = " << test_var << "\n";
+//        std::cout << "  MW[0]    = " << MW[0] << "\n";
+//    }
+//}
 
 //void testDataIntegrity() {
 //    uint16_t test_val = 12345;
@@ -275,6 +275,7 @@ void runBindingTest() {
 int main(int argc,char **argv)
 {
 //    testDataIntegrity();
+//    runBindingTest();
 
     char log_msg[1000];
     sprintf(log_msg, "PROCONT RUNTIME starting...\n");
@@ -388,9 +389,7 @@ int main(int argc,char **argv)
     //pthread_t persistentThread;
     //pthread_create(&persistentThread, nullptr, persistentStorage, nullptr);
 
-    // Чтение начальных значений
-    runBindingTest();
-
+    // Чтение начальных значений из переменных в регистры
     Binder::instance().updateFromIec();
     Binder::instance().updateToIec();
 
@@ -412,31 +411,44 @@ int main(int argc,char **argv)
     //======================================================
     //                    MAIN LOOP
     //======================================================
+    //void controllerCycle() {
+    //    // 1. Обновляем входы/выходы
+    //    updateIO();
+    //
+    //    // 2. Выполняем логику
+    //    processLogic();
+    //
+    //    // 3. Проверяем изменения регистров
+    //    RegServer::instance().updateAll();
+    //
+    //    // 4. Фиксируем состояние
+    //    registry.commit();
+    //}
+    //======================================================
     while (run_openplc) {           // run_openplc - флаг работы
-        //glueVars();                // make sure for regidters (?)
 
-//        updateBuffersIn();			// read input image
+        updateBuffersIn();			// read input image
 
         pthread_mutex_lock(&bufferLock);	//lock mutex
         {
-//            updateCustomIn();       // custom IN
+            updateCustomIn();       // custom IN
             {
-//                updateBuffersIn_MB();       // update input image table with data from slave devices
+                updateBuffersIn_MB();       // update input image table with data from slave devices
 
-//                BindingManager::instance().updateToIec();
+                Binder::instance().updateToIec();
 
                 handleSpecialFunctions();    // current time & statistic
                 config_run__(__tick++); // execute plc program logic
 
-//                BindingManager::instance().updateFromIec();
+                Binder::instance().updateFromIec();
 
-//                updateBuffersOut_MB();      // update slave devices with data from the output image table
+                updateBuffersOut_MB();      // update slave devices with data from the output image table
             }
-//            updateCustomOut();      // custom OUT
+            updateCustomOut();      // custom OUT
         }
         pthread_mutex_unlock(&bufferLock);	//unlock mutex
 
-//        updateBuffersOut();			// write output image
+        updateBuffersOut();			// write output image
 
         // Спим до следующего цикла ...
         updateTime();               //

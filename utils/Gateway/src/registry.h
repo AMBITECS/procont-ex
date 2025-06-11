@@ -14,7 +14,7 @@
 
 #include "address.h"
 
-constexpr unsigned int   REGISTRY_SIZE    = 65536;   // Размер категорий регистров
+constexpr unsigned int   REGISTRY_SIZE = 65536;   // Размер категорий регистров
 
 //-----------------------------------------------------------------------------
 // Registry (улучшенная версия)
@@ -25,8 +25,8 @@ public:
     using Category = Address::Category;     // тип категории реестра
     using DataType = Address::DataType;     // тип данных в реестре
 
-// Внутренний метод для получения хранилища по категориям IEC
-std::vector<uint8_t>& getStorage(Category cat) { return categories_[cat].A; }
+    // Внутренний метод для получения хранилища по категориям IEC
+    Storage& getStorage(Category cat) { return categories_[cat].A; }
 
 private:
     // Регистры контроллера по категориям IEC
@@ -36,12 +36,9 @@ private:
     };
 
     using  CategoriesMap  = std::unordered_map<Category, RegStorage>;
-    using  SubscribersMap = std::unordered_map<Address, std::vector<std::function<void()>>>;
-
     CategoriesMap  categories_;
-    SubscribersMap subscribers_;
 
-    const std::vector<uint8_t>& getStorage(Category cat) const { return categories_.at(cat).A; }
+    const Storage& getStorage(Category cat) const { return categories_.at(cat).A; }
 
 public:
     explicit Registry(size_t memory_size = REGISTRY_SIZE) {
@@ -60,42 +57,38 @@ public:
         }
     }
 
+    // Чтение сырых данных (для клиентов)
+    uint64_t getRawValue(const Address& addr) const {
+        // Используем существующие Accessor'ы
+        switch(addr.category()) {
+            case Category::INPUT:   return getValueByType<Category::INPUT>(addr);
+            case Category::OUTPUT:  return getValueByType<Category::OUTPUT>(addr);
+            case Category::MEMORY:  return getValueByType<Category::MEMORY>(addr);
+            case Category::SPECIAL: return getValueByType<Category::SPECIAL>(addr);
+            default: throw std::invalid_argument("Invalid category");
+        }
+    }
+
     bool isChanged(const Address& addr) const {
-        const auto& cat = categories_.at(addr.category());
-        const size_t offset = addr.offset();
-        size_t size = 0;
-
-        // Определяем размер через switch вместо шаблонного параметра
-        switch(addr.type()) {
-            case Address::TYPE_BIT:   size = addr.hasBit() ? 1 : RegisterTraits<bool>::size; break;
-            case Address::TYPE_BYTE:  size = RegisterTraits<uint8_t>::size; break;
-            case Address::TYPE_WORD:  size = RegisterTraits<uint16_t>::size; break;
-            case Address::TYPE_DWORD: size = RegisterTraits<uint32_t>::size; break;
-            case Address::TYPE_LWORD: size = RegisterTraits<uint64_t>::size; break;
-            case Address::TYPE_REAL:  size = RegisterTraits<float>::size; break;
-            case Address::TYPE_LREAL: size = RegisterTraits<double>::size; break;
-            default: throw std::invalid_argument("Unknown data type");
+        switch(addr.category()) {
+            case Category::INPUT:
+                return checkChanged<Category::INPUT>(addr);
+            case Category::OUTPUT:
+                return checkChanged<Category::OUTPUT>(addr);
+            case Category::MEMORY:
+                return checkChanged<Category::MEMORY>(addr);
+            case Category::SPECIAL:
+                return checkChanged<Category::SPECIAL>(addr);
+            default:
+                return false;
         }
-
-        return memcmp(&cat.A[offset], &cat.B[offset], size) != 0;
     }
 
-    void subscribe(const Address& addr, const std::function<void()>& callback) {
-        subscribers_[addr].push_back(callback);
-    }
-
-    void commitChanges() {
-        // Уведомление подписчиков
-        for (const auto& [addr, callbacks] : subscribers_) {
-            if (isChanged(addr)) {
-                for (const auto& cb : callbacks) {
-                    cb();
-                }
-            }
+    // Синхронизация слоёв (A -> B)
+    void commit() {
+        for (auto& [cat, reg] : categories_) {
+            reg.B = reg.A;
         }
-
-        // Синхронизация слоёв
-        for (auto& [cat, reg] : categories_) { reg.B = reg.A; }
     }
 
     //-------------------------------------------------------------------------
@@ -264,8 +257,8 @@ public:
         //---------------------------------------------------------------------
         class IndexProxy {
             Registry& parent_;
-            uint64_t base_offset_;  // Базовое смещение
-            uint64_t count_;        // Количество элементов
+            uint64_t  base_offset_; // Базовое смещение
+            uint64_t  count_;       // Количество элементов
 
         public:
             using value_type = T;   // Тип данных
@@ -305,7 +298,7 @@ public:
                 uint64_t index_;
                 uint64_t count_;
 
-                // Храним кэшированный Accessor как член класса
+                // (1) Храним кэшированный Accessor как член класса
                 // (для конструкций типа for (auto & i : MW) checksum ^= i;)
                 //Accessor current_accessor_;
 
@@ -318,20 +311,19 @@ public:
                     //,current_accessor_(*parent, offset + index * RegisterTraits<T>::size)
                     {}
 
-                //Accessor operator*() {
+                // (2) Accessor operator*() {
                 //    return Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
                 //}
 
-                Accessor operator*() const {
-                    return Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
-                    //return (*parent_).get<T, CAT>(base_offset_ + index_ * RegisterTraits<T>::size);
-                }
-
-                //Accessor& operator*() {
+                // (3) Accessor& operator*() {
                 //    // Обновляем позицию current_accessor_
                 //    current_accessor_ = Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
                 //    return current_accessor_;
                 //}
+
+                Accessor operator*() const {
+                    return Accessor(*parent_, base_offset_ + index_ * RegisterTraits<T>::size);
+                }
 
                 Iterator& operator++() { ++index_; return *this; }
                 bool operator!=(const Iterator& other) const { return index_ != other.index_; }
@@ -363,8 +355,8 @@ public:
     template<typename T> using SRegister = Accessor<T, Category::SPECIAL>;
 
     // Proxy-типы для входных регистров (I)
-    using IX = IRegister<T_BOOL>::IndexProxy;
-    using IB = IRegister<T_UINT8>::IndexProxy;
+    using IX = IRegister<T_BOOL>  ::IndexProxy;
+    using IB = IRegister<T_UINT8> ::IndexProxy;
     using IW = IRegister<T_UINT16>::IndexProxy;
     using ID = IRegister<T_UINT32>::IndexProxy;
     using IL = IRegister<T_UINT64>::IndexProxy;
@@ -372,8 +364,8 @@ public:
     using IE = IRegister<T_REAL64>::IndexProxy;  // для double (E)
 
     // Proxy-типы для выходных регистров (Q)
-    using QX = QRegister<T_BOOL>::IndexProxy;
-    using QB = QRegister<T_UINT8>::IndexProxy;
+    using QX = QRegister<T_BOOL>  ::IndexProxy;
+    using QB = QRegister<T_UINT8> ::IndexProxy;
     using QW = QRegister<T_UINT16>::IndexProxy;
     using QD = QRegister<T_UINT32>::IndexProxy;
     using QL = QRegister<T_UINT64>::IndexProxy;
@@ -381,8 +373,8 @@ public:
     using QE = QRegister<T_REAL64>::IndexProxy;
 
     // Proxy-типы для регистров памяти (M)
-    using MX = MRegister<T_BOOL>::IndexProxy;
-    using MB = MRegister<T_UINT8>::IndexProxy;
+    using MX = MRegister<T_BOOL>  ::IndexProxy;
+    using MB = MRegister<T_UINT8> ::IndexProxy;
     using MW = MRegister<T_UINT16>::IndexProxy;
     using MD = MRegister<T_UINT32>::IndexProxy;
     using ML = MRegister<T_UINT64>::IndexProxy;
@@ -390,51 +382,82 @@ public:
     using ME = MRegister<T_REAL64>::IndexProxy;
 
     // Proxy-типы для специальных регистров (S)
-    using SX = SRegister<T_BOOL>::IndexProxy;
-    using SB = SRegister<T_UINT8>::IndexProxy;
+    using SX = SRegister<T_BOOL>  ::IndexProxy;
+    using SB = SRegister<T_UINT8> ::IndexProxy;
     using SW = SRegister<T_UINT16>::IndexProxy;
     using SD = SRegister<T_UINT32>::IndexProxy;
     using SL = SRegister<T_UINT64>::IndexProxy;
     using SF = SRegister<T_REAL32>::IndexProxy;
     using SE = SRegister<T_REAL64>::IndexProxy;
 
-    // Оператор [] для доступа по Address
-    VARIANT operator[](const Address& addr) {
-        return getByAddress(addr);
-    }
-
-    // Метод getByAddress с поддержкой битового доступа
-    VARIANT getByAddress(const Address& addr) {
-        const uint64_t offset = addr.offset();
-        const uint8_t bitpos = addr.bitpos();
-        const DataType datatype = addr.type();
-        switch(addr.category()) {
-            case Category::INPUT:   return access<Category::INPUT> ( datatype, offset, bitpos);
-            case Category::OUTPUT:  return access<Category::OUTPUT>( datatype, offset, bitpos);
-            case Category::MEMORY:  return access<Category::MEMORY>( datatype, offset, bitpos);
-            case Category::SPECIAL: return access<Category::SPECIAL>(datatype, offset, bitpos);
-            default: throw std::invalid_argument("Invalid register category");
-        }
-    }
+//    // Оператор [] для доступа по Address
+//    VARIANT operator[](const Address& addr) {
+//        return getByAddress(addr);
+//    }
+//
+//    // Метод getByAddress с поддержкой битового доступа
+//    VARIANT getByAddress(const Address& addr) {
+//        const uint64_t offset = addr.offset();
+//        const uint8_t bitpos = addr.bitpos();
+//        const DataType datatype = addr.type();
+//        switch(addr.category()) {
+//            case Category::INPUT:   return access<Category::INPUT> ( datatype, offset, bitpos);
+//            case Category::OUTPUT:  return access<Category::OUTPUT>( datatype, offset, bitpos);
+//            case Category::MEMORY:  return access<Category::MEMORY>( datatype, offset, bitpos);
+//            case Category::SPECIAL: return access<Category::SPECIAL>(datatype, offset, bitpos);
+//            default: throw std::invalid_argument("Invalid register category");
+//        }
+//    }
 
 private:
-    // Шаблонный метод для доступа к регистрам
+// Вспомогательные шаблонные методы
     template<Category CAT>
-    VARIANT access(DataType type, uint64_t offset, uint8_t bitpos) {
-        switch(type) {
-            case DataType::TYPE_BIT:
-                return (bitpos != 0xFF)
-                ? VARIANT(static_cast<bool>(get<bool, CAT>(offset)[bitpos]))
-                : VARIANT(static_cast<bool>(get<bool, CAT>(offset)));
-            case DataType::TYPE_BYTE:  return VARIANT(static_cast<uint8_t>  (get<uint8_t,  CAT>(offset)));
-            case DataType::TYPE_WORD:  return VARIANT(static_cast<uint16_t> (get<uint16_t, CAT>(offset)));
-            case DataType::TYPE_DWORD: return VARIANT(static_cast<uint32_t> (get<uint32_t, CAT>(offset)));
-            case DataType::TYPE_LWORD: return VARIANT(static_cast<uint64_t> (get<uint64_t, CAT>(offset)));
-            case DataType::TYPE_REAL:  return VARIANT(static_cast<float>    (get<float,    CAT>(offset)));
-            case DataType::TYPE_LREAL: return VARIANT(static_cast<double>   (get<double,   CAT>(offset)));
-            default: throw std::invalid_argument("Invalid data type");
+    uint64_t getValueByType(const Address& addr) const {
+        if (addr.isBit()) {
+            return get<bool, CAT>(addr.offset())[addr.bitpos()] ? 1 : 0;
+        } else {
+            switch(addr.type()) {
+                case Address::TYPE_BYTE:  return get<uint8_t, CAT>(addr.offset());
+                case Address::TYPE_WORD:  return get<uint16_t, CAT>(addr.offset());
+                case Address::TYPE_DWORD: return get<uint32_t, CAT>(addr.offset());
+                case Address::TYPE_LWORD: return get<uint64_t, CAT>(addr.offset());
+                default: throw std::invalid_argument("Unsupported type");
+            }
         }
     }
+
+    template<Category CAT>
+    bool checkChanged(const Address& addr) const {
+        const auto& reg = categories_.at(CAT);
+        const size_t offset = addr.offset();
+        if (addr.isBit()) {
+            if (offset >= reg.A.size()) return false;
+            const uint8_t mask = 1 << addr.bitpos();
+            return (reg.A[offset] & mask) != (reg.B[offset] & mask);
+        } else {
+            const size_t size = addr.size();
+            if (offset + size > reg.A.size()) return false;
+            return memcmp(&reg.A[offset], &reg.B[offset], size) != 0;
+        }
+    }
+
+//    // Шаблонный метод для доступа к регистрам
+//    template<Category CAT>
+//    VARIANT access(DataType type, uint64_t offset, uint8_t bitpos) {
+//        switch(type) {
+//            case DataType::TYPE_BIT:
+//                return (bitpos != 0xFF)
+//                ? VARIANT(static_cast<bool>(get<bool, CAT>(offset)[bitpos]))
+//                : VARIANT(static_cast<bool>(get<bool, CAT>(offset)));
+//            case DataType::TYPE_BYTE:  return VARIANT(static_cast<uint8_t>  (get<uint8_t,  CAT>(offset)));
+//            case DataType::TYPE_WORD:  return VARIANT(static_cast<uint16_t> (get<uint16_t, CAT>(offset)));
+//            case DataType::TYPE_DWORD: return VARIANT(static_cast<uint32_t> (get<uint32_t, CAT>(offset)));
+//            case DataType::TYPE_LWORD: return VARIANT(static_cast<uint64_t> (get<uint64_t, CAT>(offset)));
+//            case DataType::TYPE_REAL:  return VARIANT(static_cast<float>    (get<float,    CAT>(offset)));
+//            case DataType::TYPE_LREAL: return VARIANT(static_cast<double>   (get<double,   CAT>(offset)));
+//            default: throw std::invalid_argument("Invalid data type");
+//        }
+//    }
 
 };
 

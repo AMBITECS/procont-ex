@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 
 #include "iec_std_lib.h"
-#include "gateway.h"
+#include "global.h"
 
 #define __LOCATED_VAR(type, name, ...) type __##name;
 #include "LOCATED_VARIABLES.h"

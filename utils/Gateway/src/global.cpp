@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 #define GATEWAY_EXPORTS
 
-#include "gateway.h"
+#include "global.h"
 #include <cstdlib>
 #include <cctype>
 

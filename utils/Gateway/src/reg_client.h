@@ -29,55 +29,44 @@ class IRegClient {
 public:
     virtual ~IRegClient() = default;
 
+    // Для работы с одиночными значениями
+    virtual uint64_t read(const Address& addr) = 0;
+    virtual void write(const Address& addr, uint64_t value) = 0;
+
+    // Для работы с массивами
     virtual void read(std::vector<ItemData>& items) = 0;
     virtual void write(const std::vector<ItemData>& items) = 0;
+
+    // Для работы с подпиской
     virtual void subscribe(const std::vector<RegItem>& items) = 0;
-    virtual void setCallback(std::function<void(const std::vector<OnDataChange>&)> handler) = 0;
-};
+    virtual void setCallback(std::function<void(const std::vector<OnDataChange>&)> handler) = 0;};
 
 class RegClient : public IRegClient
 {
 private:
     std::string name_;
     std::function<void(const std::vector<OnDataChange>&)> data_handler_{};
-
     std::unordered_map<Address, uint64_t> subscriptions_; // addr -> key
-
-    // ------------------------------------------
-    // получение сырого значения
-    template<Registry::Category CAT>
-    uint64_t getValue(const Address& addr);
-
-    template<Registry::Category CAT>
-    void setValue(const Address& addr, uint64_t value);
-
-    // проверка изменения значения по адресу
-    template<Registry::Category CAT>
-    bool checkChanged(const Address& addr);
-
-//    template<typename T, Registry::Category CAT>
-//    auto& getProxy();
-
-//    template<Registry::Category CAT>
-//    void processWithCategory(const Address &addr, void *iecVar, bool toRegistry);
-
-//    template<typename T, Registry::Category CAT>
-//    void handleType(const Address& addr, void* iecVar, bool toRegistry);
-
-    // ------------------------------------------
-//    void updateVariable(const Address& addr, void* iecVar, bool toRegistry);
 
 public:
     explicit RegClient(std::string name);
     ~RegClient() override;
 
-    void setCallback(std::function<void(const std::vector<OnDataChange>&)> handler) override;
-    void subscribe(const std::vector<RegItem>& items) override;
+    const std::string& getName() const { return name_; }
+
+    // Одиночные операции
+    uint64_t read(const Address& addr) override;
+    void write(const Address& addr, uint64_t value) override;
+
+    // Массовые операции
     void read(std::vector<ItemData>& items) override;
     void write(const std::vector<ItemData>& items) override;
 
-    const std::string& getName() const { return name_; }
+    // Подписка
+    void subscribe(const std::vector<RegItem>& items) override;
+    void setCallback(std::function<void(const std::vector<OnDataChange>&)> handler) override;
 
+    // Обновлнение по изменениям
     void update();
 };
 

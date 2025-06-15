@@ -350,11 +350,11 @@ int main(int argc,char **argv)
     //======================================================
     //               MUTEX INITIALIZATION
     //======================================================
-    if (pthread_mutex_init(&bufferLock, nullptr) != 0)
-    {
-        printf("Mutex init failed\n");
-        exit(1);
-    }
+//    if (pthread_mutex_init(&bufferLock, nullptr) != 0)
+//    {
+//        printf("Mutex init failed\n");
+//        exit(1);
+//    }
 
     //======================================================
     //              HARDWARE INITIALIZATION
@@ -429,8 +429,8 @@ int main(int argc,char **argv)
 
         updateBuffersIn();			// read input image
 
-        pthread_mutex_lock(&bufferLock);	//lock mutex
         {
+            std::lock_guard<std::mutex> lock(bufferLock);
             updateCustomIn();       // custom IN
             {
                 updateBuffersIn_MB();       // update input image table with data from slave devices
@@ -446,7 +446,6 @@ int main(int argc,char **argv)
             }
             updateCustomOut();      // custom OUT
         }
-        pthread_mutex_unlock(&bufferLock);	//unlock mutex
 
         updateBuffersOut();			// write output image
 

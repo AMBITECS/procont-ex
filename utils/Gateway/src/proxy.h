@@ -8,30 +8,17 @@
 
 #include "registry.h"
 
-constexpr unsigned int   BUFFER_SIZE = 1024;    // Размер категорий регистров
+constexpr unsigned int BUFFER_SIZE = 1024;
 
-//lock for the buffers
-extern pthread_mutex_t bufferLock;
+// lock for the buffers
+extern std::mutex bufferLock;
 
-//// Интерфейс для работы с глобальным реестром
-//Registry& getGlobalRegistry();
+// Нешаблонные методы
+uint64_t getProxyValue (const Address& addr);
+void     setProxyValue (const Address& addr, uint64_t value);
+bool     isProxyChanged(const Address& addr);
 
-//// Доступ к proxy-объектам
-//template<typename T, Registry::Category CATEGORY>
-//auto& getProxy();
-
-// Получение сырого значения
-template<Registry::Category CAT>
-uint64_t getProxyValue(const Address& addr);
-
-template<Registry::Category CAT>
-void setProxyValue(const Address& addr, uint64_t value);
-
-// Проверка изменений
-template<Registry::Category CAT>
-bool isProxyChanged(const Address& addr);
-
-// Глобальные proxy-объекты
+// Глобальные proxy-объекты (остаются без изменений)
 extern Registry::IX IX;
 extern Registry::QX QX;
 extern Registry::MX MX;

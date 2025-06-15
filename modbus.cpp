@@ -158,14 +158,13 @@ void ReadCoils(unsigned char *buffer, long bufferSize) {
     buffer[5] = lowByte(ByteDataLength + 3); //Number of bytes after this one
     buffer[8] = ByteDataLength;     //Number of bytes of data
 
-    pthread_mutex_lock(&bufferLock);
-    for(int i = 0; i < ByteDataLength ; i++)
     {
-        for(int j = 0; j < 8; j++)
-        {
-            int position = Start + i * 8 + j;
-            if (position < MAX_COILS)
-            {
+        std::lock_guard<std::mutex> lock(bufferLock);
+
+        for (int i = 0; i < ByteDataLength; i++) {
+            for (int j = 0; j < 8; j++) {
+                int position = Start + i * 8 + j;
+                if (position < MAX_COILS) {
 //                if (_QX[position / 8][position % 8] != nullptr)
 //                {
 //                    bitWrite(buffer[9 + i], j, *_QX[position / 8][position % 8]);
@@ -174,15 +173,14 @@ void ReadCoils(unsigned char *buffer, long bufferSize) {
 //                {
 //                    bitWrite(buffer[9 + i], j, 0);
 //                }
-                bitWrite(buffer[9 + i], j, QX[position / 8][position % 8]);
-            }
-            else //invalid address
-            {
-                mb_error = ERR_ILLEGAL_DATA_ADDRESS;
+                    bitWrite(buffer[9 + i], j, QX[position / 8][position % 8]);
+                } else //invalid address
+                {
+                    mb_error = ERR_ILLEGAL_DATA_ADDRESS;
+                }
             }
         }
     }
-    pthread_mutex_unlock(&bufferLock);
 
     if (mb_error == ERR_NONE) MessageLength = ByteDataLength + 9;
     else {
@@ -222,14 +220,12 @@ void ReadDiscreteInputs(unsigned char *buffer, long bufferSize)
     buffer[5] = lowByte(ByteDataLength + 3); //Number of bytes after this one
     buffer[8] = ByteDataLength;     //Number of bytes of data
 
-    pthread_mutex_lock(&bufferLock);
-    for(int i = 0; i < ByteDataLength ; i++)
     {
-        for(int j = 0; j < 8; j++)
-        {
-            int position = Start + i * 8 + j;
-            if (position < MAX_DISCRETE_INPUT)
-            {
+        std::lock_guard<std::mutex> lock(bufferLock);
+        for (int i = 0; i < ByteDataLength; i++) {
+            for (int j = 0; j < 8; j++) {
+                int position = Start + i * 8 + j;
+                if (position < MAX_DISCRETE_INPUT) {
 //                if (_IX[position / 8][position % 8] != nullptr)
 //                {
 //                    bitWrite(buffer[9 + i], j, *_IX[position / 8][position % 8]);
@@ -238,15 +234,14 @@ void ReadDiscreteInputs(unsigned char *buffer, long bufferSize)
 //                {
 //                    bitWrite(buffer[9 + i], j, 0);
 //                }
-                bitWrite(buffer[9 + i], j, IX[position / 8][position % 8]);
-            }
-            else //invalid address
-            {
-                mb_error = ERR_ILLEGAL_DATA_ADDRESS;
+                    bitWrite(buffer[9 + i], j, IX[position / 8][position % 8]);
+                } else //invalid address
+                {
+                    mb_error = ERR_ILLEGAL_DATA_ADDRESS;
+                }
             }
         }
     }
-    pthread_mutex_unlock(&bufferLock);
 
     if (mb_error != ERR_NONE)
     {
@@ -289,12 +284,12 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
     buffer[5] = lowByte(ByteDataLength + 3); //Number of bytes after this one
     buffer[8] = ByteDataLength;     //Number of bytes of data
 
-    pthread_mutex_lock(&bufferLock);
-    for(int i = 0; i < WordDataLength; i++)
     {
-        int position = Start + i;
-        if (position <= MIN_16B_RANGE)
-        {
+        std::lock_guard<std::mutex> lock(bufferLock);
+
+        for (int i = 0; i < WordDataLength; i++) {
+            int position = Start + i;
+            if (position <= MIN_16B_RANGE) {
 //            if (_QW[position] != nullptr)
 //            {
 //                buffer[ 9 + i * 2] = highByte(*_QW[position]);
@@ -305,14 +300,13 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
 //                buffer[ 9 + i * 2] = 0;
 //                buffer[10 + i * 2] = 0;
 //            }
-            buffer[ 9 + i * 2] = highByte(QW[position]);
-            buffer[10 + i * 2] = lowByte (QW[position]);
-        }
+                buffer[9 + i * 2] = highByte(QW[position]);
+                buffer[10 + i * 2] = lowByte (QW[position]);
+            }
 
-        //accessing memory
-        //16-bit registers
-        else if (position >= MIN_16B_RANGE && position <= MAX_16B_RANGE)
-        {
+                //accessing memory
+                //16-bit registers
+            else if (position >= MIN_16B_RANGE && position <= MAX_16B_RANGE) {
 //            if (_MW[position - MIN_16B_RANGE] != nullptr)
 //            {
 //                buffer[ 9 + i * 2] = highByte(*_MW[position - MIN_16B_RANGE]);
@@ -323,29 +317,27 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
 //                buffer[ 9 + i * 2] = 0;
 //                buffer[10 + i * 2] = 0;
 //            }
-            buffer[ 9 + i * 2] = highByte(MW[position - MIN_16B_RANGE]);
-            buffer[10 + i * 2] = lowByte (MW[position - MIN_16B_RANGE]);
-        }
+                buffer[9 + i * 2] = highByte(MW[position - MIN_16B_RANGE]);
+                buffer[10 + i * 2] = lowByte (MW[position - MIN_16B_RANGE]);
+            }
 
-        //32-bit registers
-        else if (position >= MIN_32B_RANGE && position <= MAX_32B_RANGE)
-        {
+                //32-bit registers
+            else if (position >= MIN_32B_RANGE && position <= MAX_32B_RANGE) {
 //            if (_MD[(position - MIN_32B_RANGE) / 2] != nullptr)
 //            {
                 if ((position - MIN_32B_RANGE) % 2 == 0) //first word
                 {
 //                    auto tempValue = (uint16_t)(*_MD[(position - MIN_32B_RANGE) / 2] >> 16);
-                    auto tempValue = (uint16_t)(MD[(position - MIN_32B_RANGE) / 2] >> 16);
+                    auto tempValue = (uint16_t) (MD[(position - MIN_32B_RANGE) / 2] >> 16);
 
-                    buffer[ 9 + i * 2] = highByte(tempValue);
+                    buffer[9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
-                }
-                else //second word
+                } else //second word
                 {
 //                    auto tempValue = (uint16_t)(*_MD[(position - MIN_32B_RANGE) / 2] & 0xffff);
-                    auto tempValue = (uint16_t)(MD[(position - MIN_32B_RANGE) / 2] & 0xffff);
+                    auto tempValue = (uint16_t) (MD[(position - MIN_32B_RANGE) / 2] & 0xffff);
 
-                    buffer[ 9 + i * 2] = highByte(tempValue);
+                    buffer[9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
 //            }
@@ -354,43 +346,39 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
 //                buffer[ 9 + i * 2] = mb_holding_regs[position];
 //                buffer[10 + i * 2] = mb_holding_regs[position];
 //            }
-        }
+            }
 
-        //64-bit registers
-        else if (position >= MIN_64B_RANGE && position <= MAX_64B_RANGE)
-        {
+                //64-bit registers
+            else if (position >= MIN_64B_RANGE && position <= MAX_64B_RANGE) {
 //            if (_ML[(position - MIN_64B_RANGE) / 4] != nullptr)
 //            {
                 if ((position - MIN_64B_RANGE) % 4 == 0) //first word
                 {
 //                    auto tempValue = (uint16_t)(*_ML[(position - MIN_64B_RANGE) / 4] >> 48);
-                    auto tempValue = (uint16_t)(ML[(position - MIN_64B_RANGE) / 4] >> 48);
+                    auto tempValue = (uint16_t) (ML[(position - MIN_64B_RANGE) / 4] >> 48);
 
-                    buffer[ 9 + i * 2] = highByte(tempValue);
+                    buffer[9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
-                }
-                else if ((position - MIN_64B_RANGE) % 4 == 1)//second word
+                } else if ((position - MIN_64B_RANGE) % 4 == 1)//second word
                 {
 //                    auto tempValue = (uint16_t)((*_ML[(position - MIN_64B_RANGE) / 4] >> 32) & 0xffff);
-                    auto tempValue = (uint16_t)((ML[(position - MIN_64B_RANGE) / 4] >> 32) & 0xffff);
+                    auto tempValue = (uint16_t) ((ML[(position - MIN_64B_RANGE) / 4] >> 32) & 0xffff);
 
-                    buffer[ 9 + i * 2] = highByte(tempValue);
+                    buffer[9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
-                }
-                else if ((position - MIN_64B_RANGE) % 4 == 2)//third word
+                } else if ((position - MIN_64B_RANGE) % 4 == 2)//third word
                 {
 //                    auto tempValue = (uint16_t)((*_ML[(position - MIN_64B_RANGE) / 4] >> 16) & 0xffff);
-                    auto tempValue = (uint16_t)((ML[(position - MIN_64B_RANGE) / 4] >> 16) & 0xffff);
+                    auto tempValue = (uint16_t) ((ML[(position - MIN_64B_RANGE) / 4] >> 16) & 0xffff);
 
-                    buffer[ 9 + i * 2] = highByte(tempValue);
+                    buffer[9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
-                }
-                else if ((position - MIN_64B_RANGE) % 4 == 3)//fourth word
+                } else if ((position - MIN_64B_RANGE) % 4 == 3)//fourth word
                 {
 //                    auto tempValue = (uint16_t)(*_ML[(position - MIN_64B_RANGE) / 4] & 0xffff);
-                    auto tempValue = (uint16_t)(ML[(position - MIN_64B_RANGE) / 4] & 0xffff);
+                    auto tempValue = (uint16_t) (ML[(position - MIN_64B_RANGE) / 4] & 0xffff);
 
-                    buffer[ 9 + i * 2] = highByte(tempValue);
+                    buffer[9 + i * 2] = highByte(tempValue);
                     buffer[10 + i * 2] = lowByte(tempValue);
                 }
 //            }
@@ -399,14 +387,14 @@ void ReadHoldingRegisters(unsigned char *buffer, long bufferSize)
 //                buffer[ 9 + i * 2] = mb_holding_regs[position];
 //                buffer[10 + i * 2] = mb_holding_regs[position];
 //            }
+            }
+                //invalid address
+            else {
+                mb_error = ERR_ILLEGAL_DATA_ADDRESS;
+            }
         }
-        //invalid address
-        else
-        {
-            mb_error = ERR_ILLEGAL_DATA_ADDRESS;
-        }
+
     }
-    pthread_mutex_unlock(&bufferLock);
 
     if (mb_error != ERR_NONE)
     {
@@ -449,12 +437,12 @@ void ReadInputRegisters(unsigned char *buffer, long bufferSize)
     buffer[5] = lowByte(ByteDataLength + 3);    //Number of bytes after this one
     buffer[8] = ByteDataLength;                 //Number of bytes of data
 
-    pthread_mutex_lock(&bufferLock);
-    for (int i = 0; i < WordDataLength; i++)
     {
-        int position = Start + i;
-        if (position < MAX_INP_REGS)
-        {
+        std::lock_guard<std::mutex> lock(bufferLock);
+
+        for (int i = 0; i < WordDataLength; i++) {
+            int position = Start + i;
+            if (position < MAX_INP_REGS) {
 //            if (_IW[position] != nullptr)
 //            {
 //                buffer[ 9 + i * 2] = highByte(*_IW[position]);
@@ -465,15 +453,15 @@ void ReadInputRegisters(unsigned char *buffer, long bufferSize)
 //                buffer[ 9 + i * 2] = 0;
 //                buffer[10 + i * 2] = 0;
 //            }
-            buffer[ 9 + i * 2] = highByte(IW[position]);
-            buffer[10 + i * 2] = lowByte (IW[position]);
+                buffer[9 + i * 2] = highByte(IW[position]);
+                buffer[10 + i * 2] = lowByte (IW[position]);
+            } else //invalid address
+            {
+                mb_error = ERR_ILLEGAL_DATA_ADDRESS;
+            }
         }
-        else //invalid address
-        {
-            mb_error = ERR_ILLEGAL_DATA_ADDRESS;
-        }
+
     }
-    pthread_mutex_unlock(&bufferLock);
 
     if (mb_error != ERR_NONE)
     {
@@ -514,12 +502,13 @@ void WriteCoil(unsigned char *buffer, long bufferSize)
             value = 0;
         }
 
-        pthread_mutex_lock(&bufferLock);
+        {
+            std::lock_guard<std::mutex> lock(bufferLock);
 //        if (_QX[Start / 8][Start % 8] != nullptr ) {
 //            (*_QX)[Start / 8][Start % 8] = value;
 //        }
-        QX[Start / 8][Start % 8] = value;
-        pthread_mutex_unlock(&bufferLock);
+            QX[Start / 8][Start % 8] = value;
+        }
     }
 
     else //invalid address
@@ -630,11 +619,11 @@ void WriteRegister(unsigned char *buffer, long bufferSize)
 
     Start = word(buffer[8],buffer[9]);
 
-    pthread_mutex_lock(&bufferLock);
     {
+        std::lock_guard<std::mutex> lock(bufferLock);
+
         mb_error = writeToRegisterWithoutLocking(Start, word(buffer[10], buffer[11]));
     }
-    pthread_mutex_unlock(&bufferLock);
 
     if (mb_error != ERR_NONE)
     {
@@ -679,25 +668,24 @@ void WriteMultipleCoils(unsigned char *buffer, long bufferSize)
     buffer[4] = 0;
     buffer[5] = 6; //Number of bytes after this one.
 
-    pthread_mutex_lock(&bufferLock);
-    for(int i = 0; i < ByteDataLength ; i++)
     {
-        for(int j = 0; j < 8; j++)
-        {
-            int position = Start + i * 8 + j;
-            if (position < MAX_COILS)
-            {
+        std::lock_guard<std::mutex> lock(bufferLock);
+
+        for (int i = 0; i < ByteDataLength; i++) {
+            for (int j = 0; j < 8; j++) {
+                int position = Start + i * 8 + j;
+                if (position < MAX_COILS) {
 //                if (_QX[position / 8][position % 8] != nullptr)
 //                    *_QX[position / 8][position % 8] = bitRead(buffer[13 + i], j);
-                QX[position / 8][position % 8] = bitRead(buffer[13 + i], j);
-            }
-            else //invalid address
-            {
-                mb_error = ERR_ILLEGAL_DATA_ADDRESS;
+                    QX[position / 8][position % 8] = bitRead(buffer[13 + i], j);
+                } else //invalid address
+                {
+                    mb_error = ERR_ILLEGAL_DATA_ADDRESS;
+                }
             }
         }
+
     }
-    pthread_mutex_unlock(&bufferLock);
 
     if (mb_error != ERR_NONE)
     {
@@ -739,17 +727,16 @@ void WriteMultipleRegisters(unsigned char *buffer, long bufferSize)
     buffer[4] = 0;
     buffer[5] = 6; //Number of bytes after this one.
 
-    pthread_mutex_lock(&bufferLock);
-    for(int i = 0; i < WordDataLength; i++)
     {
-        int position = Start + i;
-        int error = writeToRegisterWithoutLocking(position, word(buffer[13 + i * 2], buffer[14 + i * 2]));
-        if (error != ERR_NONE)
-        {
-            mb_error = error;
+        std::lock_guard<std::mutex> lock(bufferLock);
+        for (int i = 0; i < WordDataLength; i++) {
+            int position = Start + i;
+            int error = writeToRegisterWithoutLocking(position, word(buffer[13 + i * 2], buffer[14 + i * 2]));
+            if (error != ERR_NONE) {
+                mb_error = error;
+            }
         }
     }
-    pthread_mutex_unlock(&bufferLock);
 
     if (mb_error != ERR_NONE)
     {

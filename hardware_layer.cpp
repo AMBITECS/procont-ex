@@ -15,7 +15,7 @@
 #include "CO_epoll_interface.h"
 #include "CO_storageLinux.h"
 
-#include "gateway.h"
+#include "global.h"
 
 //-----------------------------------------------------------------------------
 // User callback function for receive CANopen network variable
@@ -71,7 +71,8 @@ void cb_work_func(
     //-------------------------------------------------------------------------
     // Раскладка данных в буферы (Peter)
     //-------------------------------------------------------------------------
-    pthread_mutex_lock(&bufferLock);
+    {
+        std::lock_guard<std::mutex> lock(bufferLock);
 
 //    char dataScope=0, dataSize=0;
 //    int index1=0, index2=0;
@@ -129,7 +130,7 @@ void cb_work_func(
 //        }
 //    }
 
-    pthread_mutex_unlock(&bufferLock);
+    }
 }
 
 
@@ -168,7 +169,7 @@ void finalizeHardware()
 //-----------------------------------------------------------------------------
 void updateBuffersIn()
 {
-    pthread_mutex_lock(&bufferLock); //lock mutex
+    std::lock_guard<std::mutex> lock(bufferLock);
 
     /*********READING AND WRITING TO I/O**************
 
@@ -180,7 +181,6 @@ void updateBuffersIn()
 
     **************************************************/
 
-    pthread_mutex_unlock(&bufferLock); //unlock mutex
 }
 
 //-----------------------------------------------------------------------------
@@ -190,7 +190,7 @@ void updateBuffersIn()
 //-----------------------------------------------------------------------------
 void updateBuffersOut()
 {
-    pthread_mutex_lock(&bufferLock); //lock mutex
+    std::lock_guard<std::mutex> lock(bufferLock);
 
     /*********READING AND WRITING TO I/O**************
 
@@ -202,7 +202,6 @@ void updateBuffersOut()
 
     **************************************************/
 
-    pthread_mutex_unlock(&bufferLock); //unlock mutex
 }
 
 //-----------------------------------------------------------------------------

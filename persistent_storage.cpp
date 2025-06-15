@@ -141,27 +141,29 @@ void readPersistentStorage()
         pstorage_read_complete = true;
         return;
     }
-    
-    pthread_mutex_lock(&bufferLock); //lock mutex
 
-    // Read the contents into int_memory
-    for (size_t i = 0; i < BUFFER_SIZE; i++) {
-        uint16_t value;
-        // Read each value individually
-        if (fread(&value, sizeof(uint16_t), 1, file) != 1) {
-            if (feof(file)) break; // Stop on end of file
-            sprintf(log_msg, "Error reading int_memory from file");
-            log(log_msg);
+    {
+        std::lock_guard<std::mutex> lock(bufferLock);
 
-            pthread_mutex_unlock(&bufferLock); //unlock mutex
-            fclose(file);
-            pstorage_read_complete = true;
-            return;
-        }
-        
-        // Only assign if value is non-zero
-        if (value != 0) {
-            // Allocate memory if the pointer is nullptr
+        // Read the contents into int_memory
+        for (size_t i = 0; i < BUFFER_SIZE; i++) {
+            uint16_t value;
+            // Read each value individually
+            if (fread(&value, sizeof(uint16_t), 1, file) != 1) {
+                if (feof(file)) break; // Stop on end of file
+                sprintf(log_msg, "Error reading int_memory from file");
+                log(log_msg);
+
+                bufferLock.unlock(); //unlock mutex
+
+                fclose(file);
+                pstorage_read_complete = true;
+                return;
+            }
+
+            // Only assign if value is non-zero
+            if (value != 0) {
+                // Allocate memory if the pointer is nullptr
 //            if (_MW[i] == nullptr) {
 //                _MW[i] = static_cast<IEC_UINT *>(malloc(sizeof(uint16_t)));
 //                if (_MW[i] == nullptr) {
@@ -171,29 +173,29 @@ void readPersistentStorage()
 //                }
 //            }
 //            *_MW[i] = value; // Store the value
-            MW[i] = value; // Store the value
+                MW[i] = value; // Store the value
+            }
         }
-    }
 
-    // Read the contents into dint_memory
-    for (size_t i = 0; i < BUFFER_SIZE; i++) {
-        uint32_t value;
-        // Read each value individually
-        if (fread(&value, sizeof(uint32_t), 1, file) != 1) {
-            if (feof(file)) break; // Stop on end of file
-            sprintf(log_msg, "Error reading dint_memory from file");
-            log(log_msg);
+        // Read the contents into dint_memory
+        for (size_t i = 0; i < BUFFER_SIZE; i++) {
+            uint32_t value;
+            // Read each value individually
+            if (fread(&value, sizeof(uint32_t), 1, file) != 1) {
+                if (feof(file)) break; // Stop on end of file
+                sprintf(log_msg, "Error reading dint_memory from file");
+                log(log_msg);
 
-            pthread_mutex_unlock(&bufferLock); //unlock mutex
-            fclose(file);
+                bufferLock.unlock(); //unlock mutex
+                fclose(file);
 
-            pstorage_read_complete = true;
-            return;
-        }
-        
-        // Only assign if value is non-zero
-        if (value != 0) {
-            // Allocate memory if the pointer is nullptr
+                pstorage_read_complete = true;
+                return;
+            }
+
+            // Only assign if value is non-zero
+            if (value != 0) {
+                // Allocate memory if the pointer is nullptr
 //            if (_MD[i] == nullptr) {
 //                _MD[i] = static_cast<IEC_UDINT *>(malloc(sizeof(uint32_t)));
 //                if (_MD[i] == nullptr) {
@@ -203,29 +205,29 @@ void readPersistentStorage()
 //                }
 //            }
 //            *_MD[i] = value; // Store the value
-            MD[i] = value; // Store the value
+                MD[i] = value; // Store the value
+            }
         }
-    }
 
-    // Read the contents into lint_memory
-    for (size_t i = 0; i < BUFFER_SIZE; i++) {
-        uint64_t value;
-        // Read each value individually
-        if (fread(&value, sizeof(uint64_t), 1, file) != 1) {
-            if (feof(file)) break; // Stop on end of file
-            sprintf(log_msg, "Error reading lint_memory from file");
-            log(log_msg);
+        // Read the contents into lint_memory
+        for (size_t i = 0; i < BUFFER_SIZE; i++) {
+            uint64_t value;
+            // Read each value individually
+            if (fread(&value, sizeof(uint64_t), 1, file) != 1) {
+                if (feof(file)) break; // Stop on end of file
+                sprintf(log_msg, "Error reading lint_memory from file");
+                log(log_msg);
 
-            pthread_mutex_unlock(&bufferLock); //unlock mutex
-            fclose(file);
+                bufferLock.unlock(); //unlock mutex
+                fclose(file);
 
-            pstorage_read_complete = true;
-            return;
-        }
-        
-        // Only assign if value is non-zero
-        if (value != 0) {
-            // Allocate memory if the pointer is nullptr
+                pstorage_read_complete = true;
+                return;
+            }
+
+            // Only assign if value is non-zero
+            if (value != 0) {
+                // Allocate memory if the pointer is nullptr
 //            if (_ML[i] == nullptr) {
 //                _ML[i] = static_cast<IEC_ULINT *>(malloc(sizeof(uint64_t)));
 //                if (_ML[i] == nullptr) {
@@ -235,11 +237,11 @@ void readPersistentStorage()
 //                }
 //            }
 //            *_ML[i] = value; // Store the value
-            ML[i] = value; // Store the value
+                ML[i] = value; // Store the value
+            }
         }
-    }
 
-    pthread_mutex_unlock(&bufferLock); //unlock mutex
+    }
 
     fclose(file);
 

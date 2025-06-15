@@ -1,6 +1,4 @@
 #include "reg_server.h"
-#include "reg_client.h"
-#include "registry.h"
 
 RegServer& RegServer::instance() {
     static RegServer instance;

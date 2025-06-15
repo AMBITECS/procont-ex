@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <cstdint>
 
-#include "gateway.h"
+#include "global.h"
 
 #define MODBUS_PROTOCOL     0
 #define DNP3_PROTOCOL       1

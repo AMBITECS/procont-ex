@@ -6,23 +6,28 @@
 #include <string>
 #include "reg_client.h"
 
-class Registry; // Forward declaration
-
 class RegServer {
 private:
-    RegServer() = default;
+    friend RegClient;
+
+    // Карта именованных клиентов
     std::unordered_map<std::string, std::shared_ptr<RegClient>> clients_;
 
+    RegServer() = default;
+    void removeClient(const std::string& client_name);
+
 public:
+    // Применяется шаблон "singleton"
     static RegServer& instance();
 
+    // Конструктов копий и оператор присваивания недоступны для singleton
     RegServer(const RegServer&) = delete;
     RegServer& operator=(const RegServer&) = delete;
 
-    std::shared_ptr<IRegClient> createClient(const std::string& client_name, Registry& registry);
-    void removeClient(const std::string& client_name);
+    // Создание клиента
+    std::shared_ptr<IRegClient> createClient(const std::string& client_name);
 
-    // Для внутреннего использования Registry
+    // Обновление всех зарегистрированных клиентов
     void updateAll();
 };
 

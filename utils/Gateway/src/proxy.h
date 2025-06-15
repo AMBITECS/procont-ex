@@ -13,16 +13,19 @@ constexpr unsigned int   BUFFER_SIZE = 1024;    // Размер категори
 //lock for the buffers
 extern pthread_mutex_t bufferLock;
 
-// Интерфейс для работы с глобальным реестром
-Registry& getGlobalRegistry();
+//// Интерфейс для работы с глобальным реестром
+//Registry& getGlobalRegistry();
 
-// Доступ к proxy-объектам
-template<typename T, Registry::Category CATEGORY>
-auto& getProxy();
+//// Доступ к proxy-объектам
+//template<typename T, Registry::Category CATEGORY>
+//auto& getProxy();
 
 // Получение сырого значения
 template<Registry::Category CAT>
 uint64_t getProxyValue(const Address& addr);
+
+template<Registry::Category CAT>
+void setProxyValue(const Address& addr, uint64_t value);
 
 // Проверка изменений
 template<Registry::Category CAT>

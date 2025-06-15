@@ -8,12 +8,9 @@
 #define PRO_GATEWAY_H
 
 #include "iec_types.h"
-#include "proxy.h"
 #include "binder.h"
 
 // Special functions count
 constexpr unsigned short SPEC_FUNC_COUNT = 16;
-
-
 
 #endif //PRO_GATEWAY_H

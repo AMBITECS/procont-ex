@@ -23,7 +23,7 @@ class Registry {
 public:
     using Storage  = std::vector<uint8_t>;  // тип хранилища реестра
     using Category = Address::Category;     // тип категории реестра
-    using DataType = Address::DataType;     // тип данных в реестре
+    using DataType = Address::Type;     // тип данных в реестре
 
 private:
     // Регистры контроллера по категориям IEC

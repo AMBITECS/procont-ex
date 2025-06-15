@@ -8,6 +8,7 @@
 class Binder {
 private:
     static std::unique_ptr<Binder> _instance;
+
     struct Binding {
         Address addr;
         void* pvar{};

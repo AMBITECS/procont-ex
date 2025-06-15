@@ -4,21 +4,6 @@
 #include <sstream>
 #include <regex>
 
-std::string Address::toString() const {
-    static const char* const category_prefixes = "IQMS";
-    static const char* const type_prefixes = "XBWDLRF";
-    std::ostringstream oss;
-    // Категория (I/Q/M/S)
-    if (category() <= SPECIAL)  { oss << category_prefixes[category()]; } else { oss << '?'; }
-    // Тип данных (X/B/W/D/L/R/F)
-    if (type() <= TYPE_LREAL)   { oss << type_prefixes[type()]; } else { oss << '?'; }
-    // Выводим индекс (без преобразования)
-    oss << index();
-    // Позиция бита (если есть)
-    if (isBit()) { oss << '.' << static_cast<int>(bitpos()); }
-    return oss.str();
-}
-
 Address Address::of(const std::string& key) {
     std::smatch matches;
     std::string normalized_key = key;
@@ -47,7 +32,7 @@ Address Address::of(const std::string& key) {
     }
 
     // Разбираем тип данных
-    DataType type = TYPE_BIT;
+    Type type = TYPE_BIT;
     if (matches[2].length() > 0) {
         char type_char = static_cast<char>(toupper(static_cast<unsigned char>(matches[2].str()[0])));
         switch (type_char) {
@@ -92,4 +77,19 @@ Address Address::of(const std::string& key) {
     }
 
     return Address{cat, type, index, bitpos};
+}
+
+std::string Address::toString() const {
+    static const char* const category_prefixes = "IQMS";
+    static const char* const type_prefixes = "XBWDLRF";
+    std::ostringstream oss;
+    // Категория (I/Q/M/S)
+    if (category() <= SPECIAL)  { oss << category_prefixes[category()]; } else { oss << '?'; }
+    // Тип данных (X/B/W/D/L/R/F)
+    if (type() <= TYPE_LREAL)   { oss << type_prefixes[type()]; } else { oss << '?'; }
+    // Выводим индекс (без преобразования)
+    oss << index();
+    // Позиция бита (если есть)
+    if (isBit()) { oss << '.' << static_cast<int>(bitpos()); }
+    return oss.str();
 }

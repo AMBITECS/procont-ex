@@ -124,6 +124,32 @@ uint64_t getProxyValue(const Address& addr) {
 }
 
 template<Registry::Category CAT>
+void setProxyValue(const Address& addr, uint64_t value) {
+    switch(addr.type()) {
+        case Address::TYPE_BIT:   { getProxy<bool, CAT>()[addr.index()] = value != 0; break; }
+        case Address::TYPE_BYTE:  { getProxy<uint8_t, CAT>()[addr.index()] = static_cast<uint8_t>(value); break; }
+        case Address::TYPE_WORD:  { getProxy<uint16_t, CAT>()[addr.index()] = static_cast<uint16_t>(value); break; }
+        case Address::TYPE_DWORD: { getProxy<uint32_t, CAT>()[addr.index()] = static_cast<uint32_t>(value); break; }
+        case Address::TYPE_LWORD: { getProxy<uint64_t, CAT>()[addr.index()] = value; break; }
+        case Address::TYPE_REAL: {
+            float val;
+            auto tmp = static_cast<uint32_t>(value);
+            memcpy(&val, &tmp, sizeof(float));
+            getProxy<float, CAT>()[addr.index()] = val;
+            break;
+        }
+        case Address::TYPE_LREAL: {
+            double val;
+            memcpy(&val, &value, sizeof(double));
+            getProxy<double, CAT>()[addr.index()] = val;
+            break;
+        }
+        default:
+            throw std::runtime_error("Unknown data type");
+    }
+}
+
+template<Registry::Category CAT>
 bool isProxyChanged(const Address& addr) {
     switch(addr.type()) {
         case Address::TYPE_BIT:    return getProxy<bool,     CAT>().isChanged(addr.index());
@@ -170,12 +196,18 @@ template auto& getProxy<uint64_t, Registry::Category::SPECIAL>();
 template auto& getProxy<float,    Registry::Category::SPECIAL>();
 template auto& getProxy<double,   Registry::Category::SPECIAL>();
 
+template bool isProxyChanged<Registry::Category::INPUT>  (const Address& addr);
+template bool isProxyChanged<Registry::Category::OUTPUT> (const Address& addr);
+template bool isProxyChanged<Registry::Category::MEMORY> (const Address& addr);
+template bool isProxyChanged<Registry::Category::SPECIAL>(const Address& addr);
+
 template uint64_t getProxyValue<Registry::Category::INPUT>  (const Address& addr);
 template uint64_t getProxyValue<Registry::Category::OUTPUT> (const Address& addr);
 template uint64_t getProxyValue<Registry::Category::MEMORY> (const Address& addr);
 template uint64_t getProxyValue<Registry::Category::SPECIAL>(const Address& addr);
 
-template bool isProxyChanged<Registry::Category::INPUT>  (const Address& addr);
-template bool isProxyChanged<Registry::Category::OUTPUT> (const Address& addr);
-template bool isProxyChanged<Registry::Category::MEMORY> (const Address& addr);
-template bool isProxyChanged<Registry::Category::SPECIAL>(const Address& addr);
+// Явные инстанциации для всех категорий
+template void setProxyValue<Registry::Category::INPUT>(const Address&, uint64_t);
+template void setProxyValue<Registry::Category::OUTPUT>(const Address&, uint64_t);
+template void setProxyValue<Registry::Category::MEMORY>(const Address&, uint64_t);
+template void setProxyValue<Registry::Category::SPECIAL>(const Address&, uint64_t);

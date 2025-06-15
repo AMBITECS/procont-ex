@@ -9,17 +9,17 @@
 template<typename T>
 struct RegisterTraits { static_assert(sizeof(T) == 0, "Unsupported register type"); };
 
-template<> struct RegisterTraits<bool>     { /* using storage_type = uint8_t; */ static constexpr size_t size = 1; };
-template<> struct RegisterTraits<int8_t>   { /* using storage_type = int8_t;  */ static constexpr size_t size = 1; };
-template<> struct RegisterTraits<uint8_t>  { /* using storage_type = uint8_t; */ static constexpr size_t size = 1; };
-template<> struct RegisterTraits<int16_t>  { /* using storage_type = int16_t; */ static constexpr size_t size = 2; };
-template<> struct RegisterTraits<uint16_t> { /* using storage_type = uint16_t;*/ static constexpr size_t size = 2; };
-template<> struct RegisterTraits<int32_t>  { /* using storage_type = int32_t; */ static constexpr size_t size = 4; };
-template<> struct RegisterTraits<uint32_t> { /* using storage_type = uint32_t;*/ static constexpr size_t size = 4; };
-template<> struct RegisterTraits<float>    { /* using storage_type = float;   */ static constexpr size_t size = 4; };
-template<> struct RegisterTraits<int64_t>  { /* using storage_type = int64_t; */ static constexpr size_t size = 8; };
-template<> struct RegisterTraits<uint64_t> { /* using storage_type = uint64_t;*/ static constexpr size_t size = 8; };
-template<> struct RegisterTraits<double>   { /* using storage_type = double;  */ static constexpr size_t size = 8; };
+template<> struct RegisterTraits<bool>     { static constexpr size_t size = 1; };
+template<> struct RegisterTraits<int8_t>   { static constexpr size_t size = 1; };
+template<> struct RegisterTraits<uint8_t>  { static constexpr size_t size = 1; };
+template<> struct RegisterTraits<int16_t>  { static constexpr size_t size = 2; };
+template<> struct RegisterTraits<uint16_t> { static constexpr size_t size = 2; };
+template<> struct RegisterTraits<int32_t>  { static constexpr size_t size = 4; };
+template<> struct RegisterTraits<uint32_t> { static constexpr size_t size = 4; };
+template<> struct RegisterTraits<float>    { static constexpr size_t size = 4; };
+template<> struct RegisterTraits<int64_t>  { static constexpr size_t size = 8; };
+template<> struct RegisterTraits<uint64_t> { static constexpr size_t size = 8; };
+template<> struct RegisterTraits<double>   { static constexpr size_t size = 8; };
 
 class Address {
 private:
@@ -59,7 +59,7 @@ public:
     };
 
     // Типы данных (4 бита)
-    enum DataType : uint8_t {
+    enum Type : uint8_t {
         TYPE_BIT    = 0,    // 'X' - бит
         TYPE_BYTE   = 1,    // 'B' - байт
         TYPE_WORD   = 2,    // 'W' - слово
@@ -81,7 +81,7 @@ public:
 
     // Конструкторы
     constexpr Address() : value(0) {}
-    constexpr Address(Category cat, DataType type, uint64_t index, uint8_t bitpos = 0xFF)
+    constexpr Address(Category cat, Type type, uint64_t index, uint8_t bitpos = 0xFF)
             : value((static_cast<uint64_t>(cat)     << CATEGORY_SHIFT) |
                     (static_cast<uint64_t>(type)    << TYPE_SHIFT)     |
                     (static_cast<uint64_t>(bitpos)  << BITPOS_SHIFT)   |
@@ -95,6 +95,7 @@ public:
     // Фабричные методы
     static Address of(const std::string& key);
     static constexpr Address of(uint64_t val) { return Address(val); }
+
     [[nodiscard]] std::string toString() const;
 
     // Преобразования
@@ -106,45 +107,40 @@ public:
         return static_cast<Category>((value & CATEGORY_MASK) >> CATEGORY_SHIFT);
     }
 
-    [[nodiscard]] constexpr DataType type() const {
-        return static_cast<DataType>((value & TYPE_MASK) >> TYPE_SHIFT);
+    [[nodiscard]] constexpr Type type() const {
+        return static_cast<Type>((value & TYPE_MASK) >> TYPE_SHIFT);
     }
     [[nodiscard]] constexpr size_t   size()   const { return getSize();  }
     [[nodiscard]] constexpr uint64_t index()  const { return value & INDEX_MASK; }
-    [[nodiscard]] constexpr uint64_t offset() const { return calculateOffset();  }
     [[nodiscard]] constexpr uint8_t  bitpos() const {
         return (type() == TYPE_BIT) ? ((value & BITPOS_MASK) >> BITPOS_SHIFT) : 0xFF;
     }
+
+    [[nodiscard]] constexpr uint64_t offset() const { return calculateOffset();  }
 
     [[nodiscard]] constexpr bool isBit() const {
         return type() == TYPE_BIT && ((value & BITPOS_MASK) >> BITPOS_SHIFT) != 0xFF;
     }
 
-//    [[nodiscard]] constexpr bool hasBit() const {
-//        return bitpos() != 0xFF;
-//    }
+    friend bool operator==(const Address& lhs, const Address& rhs) { return lhs.value == rhs.value; }
 
-    friend bool operator==(const Address& lhs, const Address& rhs) {
-        return lhs.value == rhs.value;
+    template<typename T>
+    static constexpr size_t alignment() { return RegisterTraits<T>::size; }
+
+    [[nodiscard]] bool checkAlignment(Type type) const {
+        return (offset() % alignmentFor(type)) == 0;
     }
 
-//    template<typename T>
-//    static constexpr size_t alignmentFor() {
-//        return RegisterTraits<T>::size;
-//    }
-//    [[nodiscard]] bool isAlignedFor(DataType type) const {
-//        return (offset() % alignmentForType(type)) == 0;
-//    }
-//    [[nodiscard]] static constexpr size_t alignmentForType(DataType type) {
-//        switch(type) {
-//            case TYPE_WORD:   return 2;
-//            case TYPE_DWORD:
-//            case TYPE_REAL:   return 4;
-//            case TYPE_LWORD:
-//            case TYPE_LREAL:  return 8;
-//            default: return 1;
-//        }
-//    }
+    [[nodiscard]] static constexpr size_t alignmentFor(Type type) {
+        switch(type) {
+            case TYPE_WORD:   return 2;
+            case TYPE_DWORD:
+            case TYPE_REAL:   return 4;
+            case TYPE_LWORD:
+            case TYPE_LREAL:  return 8;
+            default: return 1;
+        }
+    }
 
     [[nodiscard]] const char* getDataTypeName() const {
         switch(type()) {

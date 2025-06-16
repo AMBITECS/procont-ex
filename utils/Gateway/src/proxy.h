@@ -13,11 +13,6 @@ constexpr unsigned int BUFFER_SIZE = 1024;
 // lock for the buffers
 extern std::mutex bufferLock;
 
-// Нешаблонные методы
-uint64_t getProxyValue (const Address& addr);
-void     setProxyValue (const Address& addr, uint64_t value);
-bool     isProxyChanged(const Address& addr);
-
 // Глобальные proxy-объекты (остаются без изменений)
 extern Registry::IX IX;
 extern Registry::QX QX;
@@ -54,5 +49,9 @@ extern Registry::QE QE;
 extern Registry::ME ME;
 extern Registry::SE SE;
 
+// Нешаблонные функции-обёртки
+uint64_t getProxyValue (const Address& addr);
+void     setProxyValue (const Address& addr, uint64_t value);
+bool     isProxyChanged(const Address& addr);
 
 #endif //REG_PROXY_H

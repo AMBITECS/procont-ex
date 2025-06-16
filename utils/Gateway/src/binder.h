@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "proxy.h"
+#include "reg_client.h"
 
 class Binder {
 private:
@@ -16,12 +17,7 @@ private:
     };
 
     std::vector<Binding> binds;
-
-    // Вспомогательная структура для ошибок
-    template<typename T>
-    struct TypeNotSupported {
-        static_assert(sizeof(T) == 0, "Type not supported for this category");
-    };
+    std::shared_ptr<IRegClient> _regClient;
 
 public:
     static Binder& instance();
@@ -33,17 +29,6 @@ public:
     void updateToIec();
     void updateFromIec();
 
-    void updateVariable(const Address& addr, void* iecVar, bool toRegistry);
-
 private:
-    Binder() = default;
-
-    template<Registry::Category CAT>
-    void processWithCategory(const Address &addr, void *iecVar, bool toRegistry);
-
-    template<typename T, Registry::Category CAT>
-    void handleType(const Address& addr, void* iecVar, bool toRegistry);
-
-    template<typename T, Registry::Category CAT>
-    auto& getProxy();
+    Binder();
 };

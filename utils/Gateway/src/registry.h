@@ -59,37 +59,37 @@ public:
         }
     }
 
-    // Чтение сырых данных (для клиентов)
-    bool isChanged(const Address& addr) const {
-        switch(addr.category()) {
-            case Category::INPUT:   return checkChanged<Category::INPUT>  (addr);
-            case Category::OUTPUT:  return checkChanged<Category::OUTPUT> (addr);
-            case Category::MEMORY:  return checkChanged<Category::MEMORY> (addr);
-            case Category::SPECIAL: return checkChanged<Category::SPECIAL>(addr);
-            default: return false;
-        }
-    }
-
-    uint64_t getRawValue(const Address& addr) {
-        // Используем существующие Accessor'ы
-        switch(addr.category()) {
-            case Category::INPUT:   return getValueByType<Category::INPUT>  (addr);
-            case Category::OUTPUT:  return getValueByType<Category::OUTPUT> (addr);
-            case Category::MEMORY:  return getValueByType<Category::MEMORY> (addr);
-            case Category::SPECIAL: return getValueByType<Category::SPECIAL>(addr);
-            default: throw std::invalid_argument("Invalid category");
-        }
-    }
-
-    void setRawValue(const Address& addr, uint64_t value) {
-        switch(addr.category()) {
-            case Category::INPUT:   setValueByType<Category::INPUT>  (addr, value); break;
-            case Category::OUTPUT:  setValueByType<Category::OUTPUT> (addr, value); break;
-            case Category::MEMORY:  setValueByType<Category::MEMORY> (addr, value); break;
-            case Category::SPECIAL: setValueByType<Category::SPECIAL>(addr, value); break;
-            default: throw std::invalid_argument("Invalid category");
-        }
-    }
+//    // Чтение сырых данных (для клиентов)
+//    bool isChanged(const Address& addr) const {
+//        switch(addr.category()) {
+//            case Category::INPUT:   return checkChanged<Category::INPUT>  (addr);
+//            case Category::OUTPUT:  return checkChanged<Category::OUTPUT> (addr);
+//            case Category::MEMORY:  return checkChanged<Category::MEMORY> (addr);
+//            case Category::SPECIAL: return checkChanged<Category::SPECIAL>(addr);
+//            default: return false;
+//        }
+//    }
+//
+//    uint64_t getRawValue(const Address& addr) {
+//        // Используем существующие Accessor'ы
+//        switch(addr.category()) {
+//            case Category::INPUT:   return getValueByType<Category::INPUT>  (addr);
+//            case Category::OUTPUT:  return getValueByType<Category::OUTPUT> (addr);
+//            case Category::MEMORY:  return getValueByType<Category::MEMORY> (addr);
+//            case Category::SPECIAL: return getValueByType<Category::SPECIAL>(addr);
+//            default: throw std::invalid_argument("Invalid category");
+//        }
+//    }
+//
+//    void setRawValue(const Address& addr, uint64_t value) {
+//        switch(addr.category()) {
+//            case Category::INPUT:   setValueByType<Category::INPUT>  (addr, value); break;
+//            case Category::OUTPUT:  setValueByType<Category::OUTPUT> (addr, value); break;
+//            case Category::MEMORY:  setValueByType<Category::MEMORY> (addr, value); break;
+//            case Category::SPECIAL: setValueByType<Category::SPECIAL>(addr, value); break;
+//            default: throw std::invalid_argument("Invalid category");
+//        }
+//    }
 
     // Синхронизация слоёв (A -> B)
     void commit() {
@@ -416,93 +416,93 @@ public:
     using SF = SRegister<T_REAL32>::IndexProxy;
     using SE = SRegister<T_REAL64>::IndexProxy;
 
-private:
-    // ------------------------------------------------------------------------
-    // Низкоуровневые шаблонные методы получения сырого значения (uint64)
-    // ------------------------------------------------------------------------
-    template<Category CAT>
-    bool checkChanged(const Address& addr) const {
-        const auto& reg = categories_.at(CAT);
-        const size_t offset = addr.offset();
-        if (addr.isBit()) {
-            if (offset >= reg.A.size()) return false;
-            const uint8_t mask = 1 << addr.bitpos();
-            return (reg.A[offset] & mask) != (reg.B[offset] & mask);
-        } else {
-            const size_t size = addr.size();
-            if (offset + size > reg.A.size()) return false;
-            return memcmp(&reg.A[offset], &reg.B[offset], size) != 0;
-        }
-    }
-
-    // ------------------------------------------------------------------------
-    template<Category CAT>
-    uint64_t getValueByType(const Address& addr) {
-        if (addr.isBit()) {
-            const auto& reg = categories_.at(CAT);
-            if (addr.offset() >= reg.A.size()) return 0;
-            const uint8_t mask = 1 << addr.bitpos();
-            return (reg.A[addr.offset()] & mask) ? 1 : 0;
-        } else {
-            switch(addr.type()) {
-                case Address::TYPE_BYTE:  return get<uint8_t,  CAT>(addr.offset());
-                case Address::TYPE_WORD:  return get<uint16_t, CAT>(addr.offset());
-                case Address::TYPE_DWORD: return get<uint32_t, CAT>(addr.offset());
-                case Address::TYPE_LWORD: return get<uint64_t, CAT>(addr.offset());
-
-                // Для значений с плавающей точкой
-                // - возвращает сырое представление float/double как целое число
-                case Address::TYPE_REAL:
-                {
-                    float val = get<float, CAT>(addr.offset());
-                    uint32_t tmp;
-                    memcpy(&tmp, &val, sizeof(float));
-                    return tmp;
-                }
-                case Address::TYPE_LREAL:
-                {
-                    double val = get<double, CAT>(addr.offset());
-                    uint64_t tmp;
-                    memcpy(&tmp, &val, sizeof(double));
-                    return tmp;
-                }
-                default: throw std::invalid_argument("Unsupported data type");
-            }
-        }
-    }
-
-    // ------------------------------------------------------------------------
-    template<Category CAT>
-    void setValueByType(const Address& addr, uint64_t value) {
-        if (addr.isBit()) {
-            auto& reg = categories_[CAT];
-            if (addr.offset() >= reg.A.size()) return;
-            uint8_t mask = 1 << addr.bitpos();
-            reg.A[addr.offset()] = (value != 0) ? (reg.A[addr.offset()] | mask)
-                                                : (reg.A[addr.offset()] & ~mask);
-        } else {
-            switch(addr.type()) {
-                case Address::TYPE_BYTE:  get<uint8_t,  CAT>(addr.offset()) = value; break;
-                case Address::TYPE_WORD:  get<uint16_t, CAT>(addr.offset()) = value; break;
-                case Address::TYPE_DWORD: get<uint32_t, CAT>(addr.offset()) = value; break;
-                case Address::TYPE_LWORD: get<uint64_t, CAT>(addr.offset()) = value; break;
-                case Address::TYPE_REAL: {
-                    float val;
-                    auto tmp = static_cast<uint32_t>(value);
-                    memcpy(&val, &tmp, sizeof(float));
-                    get<float, CAT>(addr.offset()) = val;
-                    break;
-                }
-                case Address::TYPE_LREAL: {
-                    double val;
-                    memcpy(&val, &value, sizeof(double));
-                    get<double, CAT>(addr.offset()) = val;
-                    break;
-                }
-                default: throw std::invalid_argument("Unsupported data type");
-            }
-        }
-    }
+//private:
+//    // ------------------------------------------------------------------------
+//    // Низкоуровневые шаблонные методы получения сырого значения (uint64)
+//    // ------------------------------------------------------------------------
+//    template<Category CAT>
+//    bool checkChanged(const Address& addr) const {
+//        const auto& reg = categories_.at(CAT);
+//        const size_t offset = addr.offset();
+//        if (addr.isBit()) {
+//            if (offset >= reg.A.size()) return false;
+//            const uint8_t mask = 1 << addr.bitpos();
+//            return (reg.A[offset] & mask) != (reg.B[offset] & mask);
+//        } else {
+//            const size_t size = addr.size();
+//            if (offset + size > reg.A.size()) return false;
+//            return memcmp(&reg.A[offset], &reg.B[offset], size) != 0;
+//        }
+//    }
+//
+//    // ------------------------------------------------------------------------
+//    template<Category CAT>
+//    uint64_t getValueByType(const Address& addr) {
+//        if (addr.isBit()) {
+//            const auto& reg = categories_.at(CAT);
+//            if (addr.offset() >= reg.A.size()) return 0;
+//            const uint8_t mask = 1 << addr.bitpos();
+//            return (reg.A[addr.offset()] & mask) ? 1 : 0;
+//        } else {
+//            switch(addr.type()) {
+//                case Address::TYPE_BYTE:  return get<uint8_t,  CAT>(addr.offset());
+//                case Address::TYPE_WORD:  return get<uint16_t, CAT>(addr.offset());
+//                case Address::TYPE_DWORD: return get<uint32_t, CAT>(addr.offset());
+//                case Address::TYPE_LWORD: return get<uint64_t, CAT>(addr.offset());
+//
+//                // Для значений с плавающей точкой
+//                // - возвращает сырое представление float/double как целое число
+//                case Address::TYPE_REAL:
+//                {
+//                    float val = get<float, CAT>(addr.offset());
+//                    uint32_t tmp;
+//                    memcpy(&tmp, &val, sizeof(float));
+//                    return tmp;
+//                }
+//                case Address::TYPE_LREAL:
+//                {
+//                    double val = get<double, CAT>(addr.offset());
+//                    uint64_t tmp;
+//                    memcpy(&tmp, &val, sizeof(double));
+//                    return tmp;
+//                }
+//                default: throw std::invalid_argument("Unsupported data type");
+//            }
+//        }
+//    }
+//
+//    // ------------------------------------------------------------------------
+//    template<Category CAT>
+//    void setValueByType(const Address& addr, uint64_t value) {
+//        if (addr.isBit()) {
+//            auto& reg = categories_[CAT];
+//            if (addr.offset() >= reg.A.size()) return;
+//            uint8_t mask = 1 << addr.bitpos();
+//            reg.A[addr.offset()] = (value != 0) ? (reg.A[addr.offset()] | mask)
+//                                                : (reg.A[addr.offset()] & ~mask);
+//        } else {
+//            switch(addr.type()) {
+//                case Address::TYPE_BYTE:  get<uint8_t,  CAT>(addr.offset()) = value; break;
+//                case Address::TYPE_WORD:  get<uint16_t, CAT>(addr.offset()) = value; break;
+//                case Address::TYPE_DWORD: get<uint32_t, CAT>(addr.offset()) = value; break;
+//                case Address::TYPE_LWORD: get<uint64_t, CAT>(addr.offset()) = value; break;
+//                case Address::TYPE_REAL: {
+//                    float val;
+//                    auto tmp = static_cast<uint32_t>(value);
+//                    memcpy(&val, &tmp, sizeof(float));
+//                    get<float, CAT>(addr.offset()) = val;
+//                    break;
+//                }
+//                case Address::TYPE_LREAL: {
+//                    double val;
+//                    memcpy(&val, &value, sizeof(double));
+//                    get<double, CAT>(addr.offset()) = val;
+//                    break;
+//                }
+//                default: throw std::invalid_argument("Unsupported data type");
+//            }
+//        }
+//    }
 
 };
 

@@ -66,7 +66,7 @@ public:
     void subscribe(const std::vector<RegItem>& items) override;
     void setCallback(std::function<void(const std::vector<OnDataChange>&)> handler) override;
 
-    // Обновлнение по изменениям
+    // Обновление по изменениям
     void update();
 };
 

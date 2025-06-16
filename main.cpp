@@ -260,21 +260,21 @@ bool pinNotPresent(const int *ignored_vector, int vector_size, int pinNumber) {
 //    }
 //}
 
-//void testDataIntegrity() {
-//    uint16_t test_val = 12345;
-//    Binder::instance().bind("MW0", &test_val);
-//
-//    test_val = 54321;
-//    Binder::instance().updateFromIec();
-//
-//    assert(MW[0] == 54321);
-//    std::cout << "Data integrity test passed!\n";
-//}
+void testDataIntegrity() {
+    uint16_t test_val = 12345;
+    Binder::instance().bind("MW0", &test_val);
+
+    test_val = 54321;
+    Binder::instance().updateFromIec();
+
+    assert(MW[0] == 54321);
+    std::cout << "Data integrity test passed!\n";
+}
 
 //=============================================================================
 int main(int argc,char **argv)
 {
-//    testDataIntegrity();
+    testDataIntegrity();
 //    runBindingTest();
 
     char log_msg[1000];

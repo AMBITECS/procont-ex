@@ -8,9 +8,13 @@
 #define PRO_GATEWAY_H
 
 #include "iec_types.h"
+#include "proxy.h"
 #include "binder.h"
 
 // Special functions count
 constexpr unsigned short SPEC_FUNC_COUNT = 16;
+
+// lock for the buffers
+extern std::mutex bufferLock;
 
 #endif //PRO_GATEWAY_H

@@ -6,8 +6,6 @@
 #include "proxy.h"
 #include <mutex>
 
-std::mutex bufferLock;
-
 Registry& getGlobalRegistry() {
     static Registry instance(REGISTRY_SIZE);
     return instance;

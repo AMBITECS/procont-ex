@@ -1,5 +1,5 @@
-#include "global.h"
 #include "reg_server.h"
+#include "proxy.h"
 
 RegClient::RegClient(std::string name): name_(std::move(name)) {}
 
@@ -34,6 +34,16 @@ void RegClient::subscribe(const std::vector<RegItem>& items) {
     for (const auto& item : items) {
         subscriptions_[item.addr] = item.key;
     }
+}
+
+void RegClient::unsubscribe(const std::vector<Address>& addresses) {
+    for (const auto& addr : addresses) {
+        subscriptions_.erase(addr);
+    }
+}
+
+void RegClient::unsubscribeAll() {
+    subscriptions_.clear();
 }
 
 // Обновлнение по изменениям

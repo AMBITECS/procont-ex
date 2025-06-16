@@ -262,7 +262,7 @@ bool pinNotPresent(const int *ignored_vector, int vector_size, int pinNumber) {
 
 void testDataIntegrity() {
     uint16_t test_val = 12345;
-    Binder::instance().bind("MW0", &test_val);
+    Binder::instance().bind("MW0", &test_val, PLC_UINT);
 
     test_val = 54321;
     Binder::instance().updateFromIec();

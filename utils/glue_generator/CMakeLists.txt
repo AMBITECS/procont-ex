@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-# CMake build for OpenPLC glue generator. The glue generator takes
+# CMake build for Procont glue generator. The glue generator takes
 # generated C code from the MATIEC compiler and then generates necessary
 # glue to bind the MATIEC code with the OpenPLC runtime.
-project(openplc_gluegenerator)
+project(procont_gluegenerator)
 
 option(WERROR "Set all warnings to errors" ON)
 
@@ -23,6 +23,6 @@ endif()
 #add_executable(glue_generator glue_generator.cpp)
 add_executable(glue_generator glue_generator_new.cpp)
 
-#if(OPLCGLUE_TEST)
-add_executable(glue_generator_test ./test/glue_generator_test.cpp)
-#endif()
+if(OPLCGLUE_TEST)
+	add_executable(glue_generator_test ./test/glue_generator_test.cpp)
+endif()

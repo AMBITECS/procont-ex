@@ -10,9 +10,6 @@
 
 constexpr unsigned int BUFFER_SIZE = 1024;
 
-// lock for the buffers
-extern std::mutex bufferLock;
-
 // Глобальные proxy-объекты (остаются без изменений)
 extern Registry::IX IX;
 extern Registry::QX QX;

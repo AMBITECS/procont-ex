@@ -1,13 +1,12 @@
 #ifndef REG_CLIENT_H
 #define REG_CLIENT_H
 
-#include <vector>
-#include <unordered_map>
-#include <functional>
-#include <memory>
-#include "registry.h"
+#include "address.h"
 
-// Для чтения/записи значения
+#include <vector>
+#include <functional>
+
+// Для группового чтения/записи значения
 struct ItemData {
     Address  addr{};    // Адрес в реестре
     uint64_t data{};    // Сырое значение
@@ -31,15 +30,18 @@ public:
 
     // Для работы с одиночными значениями
     virtual uint64_t read(const Address& addr) = 0;
-    virtual void write(const Address& addr, uint64_t value) = 0;
+    virtual void     write(const Address& addr, uint64_t value) = 0;
 
     // Для работы с массивами
-    virtual void read(std::vector<ItemData>& items) = 0;
-    virtual void write(const std::vector<ItemData>& items) = 0;
+    virtual void    read(std::vector<ItemData>& items) = 0;
+    virtual void    write(const std::vector<ItemData>& items) = 0;
 
     // Для работы с подпиской
-    virtual void subscribe(const std::vector<RegItem>& items) = 0;
-    virtual void setCallback(std::function<void(const std::vector<OnDataChange>&)> handler) = 0;};
+    virtual void    subscribe(const std::vector<RegItem>& items) = 0;
+    virtual void    unsubscribe(const std::vector<Address>& addresses) = 0;
+    virtual void    unsubscribeAll() = 0;
+    virtual void    setCallback(std::function<void(const std::vector<OnDataChange>&)> handler) = 0;
+};
 
 class RegClient : public IRegClient
 {
@@ -64,6 +66,8 @@ public:
 
     // Подписка
     void subscribe(const std::vector<RegItem>& items) override;
+    void unsubscribe(const std::vector<Address>& addresses) override;
+    void unsubscribeAll() override;
     void setCallback(std::function<void(const std::vector<OnDataChange>&)> handler) override;
 
     // Обновление по изменениям

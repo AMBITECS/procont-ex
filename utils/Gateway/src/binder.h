@@ -1,19 +1,18 @@
 #pragma once
 
-#include "registry.h"
+#include "reg_client.h"
+
 #include <vector>
 #include <memory>
-
-#include "proxy.h"
-#include "reg_client.h"
 
 class Binder {
 private:
     static std::unique_ptr<Binder> _instance;
 
     struct Binding {
-        Address addr;
+        Address addr{};
         void* pvar{};
+        VAR_TYPE type{};
     };
 
     std::vector<Binding> binds;
@@ -25,7 +24,7 @@ public:
     Binder(const Binder&) = delete;
     Binder& operator=(const Binder&) = delete;
 
-    void bind(const std::string& regNotation, void* iecVar);
+    void bind(const std::string& regNotation, void* iecVar, PLC_TYPE type);
     void updateToIec();
     void updateFromIec();
 

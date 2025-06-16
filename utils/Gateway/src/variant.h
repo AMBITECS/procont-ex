@@ -4,18 +4,18 @@
 #ifndef PROCONT_EX_VARIANT_H
 #define PROCONT_EX_VARIANT_H
 
-#include <cstdint>
 #include <string>
 #include <optional>
 #include <stdexcept>
-#include <type_traits>
-#include <memory>
 #include <cmath>
-#include <limits>
 #include <mutex>
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+//#include <cstdint>
+//#include <type_traits>
+//#include <memory>
+//#include <limits>
 
 //-----------------------------------------------------------------------------
 // Define types with exact width
@@ -32,6 +32,25 @@ using T_UINT64 = uint64_t;
 using T_REAL32 = float;
 using T_REAL64 = double;
 using T_STRING = std::string;
+
+//-----------------------------------------------------------------------------
+// IEC type codes
+//-----------------------------------------------------------------------------
+enum PLC_TYPE : uint8_t {
+    PLC_NULL    = 0x00,
+    PLC_BOOL    = 0x01,
+    PLC_SINT    = 0x02,
+    PLC_INT     = 0x03,
+    PLC_DINT    = 0x04,
+    PLC_LINT    = 0x15,
+    PLC_USINT   = 0x05,
+    PLC_UINT    = 0x06,
+    PLC_UDINT   = 0x07,
+    PLC_ULINT   = 0x1B,
+    PLC_REAL    = 0x08,
+    PLC_LREAL   = 0x12,
+    PLC_STRING  = 0x20
+};
 
 //-----------------------------------------------------------------------------
 // Variant type codes

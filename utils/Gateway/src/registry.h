@@ -4,15 +4,16 @@
 #ifndef REGISTRY_H
 #define REGISTRY_H
 
-#include <cstdint>
-#include <type_traits>
+#include "address.h"
+
 #include <stdexcept>
 #include <cstring>
 #include <vector>
 #include <unordered_map>
-#include <functional>
+//#include <cstdint>
+//#include <type_traits>
+//#include <functional>
 
-#include "address.h"
 
 constexpr unsigned int   REGISTRY_SIZE = 65536;   // Размер категорий регистров
 

@@ -2,10 +2,14 @@
 #include <fstream>
 #include <string>
 #include <cstring>
-#include <cstdlib>
+#include <stdexcept>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+#include <cctype>
 
-#define MAX_LINE_INPUT 1024
-#define MAX_LOCAL_BUFFER 100
+//#define MAX_LINE_INPUT 1024
+//#define MAX_LOCAL_BUFFER 100
 
 using namespace std;
 
@@ -14,14 +18,14 @@ void generateHeader(ostream& glueVars) {
     glueVars << "// Автоматически сгенерированный файл связывания переменных\n";
     glueVars << "//-----------------------------------------------------------------------------\n\n";
     glueVars << "#include \"iec_std_lib.h\"\n";
-    glueVars << "#include \"gateway.h\"\n\n";
+    glueVars << "#include \"global.h\"\n\n";
     glueVars << "#define __LOCATED_VAR(type, name, ...) type __##name;\n";
     glueVars << "#include \"LOCATED_VARIABLES.h\"\n";
     glueVars << "#undef __LOCATED_VAR\n\n";
     glueVars << "#define __LOCATED_VAR(type, name, ...) type* name = &__##name;\n";
     glueVars << "#include \"LOCATED_VARIABLES.h\"\n";
     glueVars << "#undef __LOCATED_VAR\n\n";
-    glueVars << "#define __BIND(reg, var) Binder::instance().bind(reg, (void*) var)\n\n";
+    glueVars << "#define __BIND(reg, var, type) Binder::instance().bind(reg, (void*) var, type)\n\n";
     glueVars << "void glueVars() {\n";
 }
 
@@ -29,99 +33,130 @@ void generateBottom(ostream& glueVars) {
     glueVars << "}\n";
 }
 
-void findPositions(char* varName, int* pos1, int* pos2) {
-    int i = 4, j = 0;
-    char tempBuffer[100];
+std::string extract_brackets_content(const std::string& input) {
+    size_t start = input.find('(');
+    size_t end = input.rfind(')');
 
-    while (varName[i] != '_' && varName[i] != '\0') {
-        tempBuffer[j] = varName[i];
-        i++; j++;
-        tempBuffer[j] = '\0';
-    }
-    *pos1 = atoi(tempBuffer);
-
-    if (varName[i] == '\0') {
-        *pos2 = 0;
-        return;
+    if (start == std::string::npos || end == std::string::npos || end <= start) {
+        throw std::invalid_argument("Invalid input format - no matching brackets found");
     }
 
-    j = 0; i++;
-    while (varName[i] != '\0') {
-        tempBuffer[j] = varName[i];
-        i++; j++;
-        tempBuffer[j] = '\0';
-    }
-    *pos2 = atoi(tempBuffer);
+    // +1 to skip '(', end-start-1 to exclude ')'
+    return input.substr(start + 1, end - start - 1);
 }
 
-string getRegisterNotation(char* varName) {
-    int pos1, pos2;
-    findPositions(varName, &pos1, &pos2);
+class PLCVariableParser {
+    std::vector<std::string> parts;
 
-    char category = varName[2];
-    char type = varName[3];
+    void parse_input(const std::string& input) {
+        // Очищаем предыдущие результаты
+        parts.clear();
 
-    string reg;
-    reg += category;
-    reg += type;
+        // Разбиваем строку на части по запятым
+        std::istringstream iss(input);
+        std::string part;
 
-    if (type == 'X') {
-        reg += to_string(pos1) + "." + to_string(pos2);
-    } else {
-        reg += to_string(pos1);
-    }
-
-    return reg;
-}
-
-void glueVar(ostream& glueVars, char* varName, char* varType) {
-    string reg = getRegisterNotation(varName);
-    string var = varName;
-
-    glueVars << "\t__BIND(\"" << reg << "\", " << var << ");\n";
-}
-
-int parseIecVars(istream& locatedVars, char* varName, char* varType) {
-    string line;
-    char buffer[MAX_LINE_INPUT];
-
-    if (getline(locatedVars, line)) {
-        int i = 0, j = 0;
-        strncpy(buffer, line.c_str(), MAX_LINE_INPUT);
-
-        for (i = 0; i < MAX_LINE_INPUT && buffer[i] != '('; i++);
-        i++;
-
-        j = 0;
-        while (i < MAX_LINE_INPUT && buffer[i] != ',') {
-            if (j < MAX_LOCAL_BUFFER) {
-                varType[j] = buffer[i];
-                i++; j++;
-                varType[j] = '\0';
-            }
+        while (std::getline(iss, part, ',')) {
+            // Удаляем пробелы и лишние подчеркивания
+            part.erase(0, part.find_first_not_of(" _\t"));
+            part.erase(part.find_last_not_of(" _\t") + 1);
+            parts.push_back(part);
         }
-        i++;
+    }
 
-        j = 0;
-        while (i < MAX_LINE_INPUT && buffer[i] != ',') {
-            if (j < MAX_LOCAL_BUFFER) {
-                varName[j] = buffer[i];
-                i++; j++;
-                varName[j] = '\0';
-            }
+    std::string get_plc_type() const {
+        if (parts.empty()) throw std::invalid_argument("Empty input string");
+        return parts[0];
+    }
+
+    std::string get_plc_var() const {
+        if (parts.size() < 2) throw std::invalid_argument("Input must contain at least 2 parameters");
+        return parts[1];
+    }
+
+    std::string get_plc_address() const {
+        static const char* const category_prefixes = "IQMS";
+        static const char* const type_prefixes = "XBWDLRF";
+
+        if (parts.size() < 4) {
+            throw std::invalid_argument("Invalid input format - not enough parameters");
         }
 
-        return 1;
+        // Проверяем что 2-й и 3-й параметры - один символ
+        if (parts[2].length() != 1 || parts[3].length() != 1) {
+            throw std::invalid_argument("Second and third parameters must be single characters");
+        }
+
+        // Проверяем допустимость символов
+        char category = parts[2][0];
+        char type = parts[3][0];
+
+        if (strchr(category_prefixes, category) == nullptr) {
+            throw std::invalid_argument(std::string("Invalid category prefix '") + category +
+                                        "' (allowed: I, Q, M, S)");
+        }
+
+        if (strchr(type_prefixes, type) == nullptr) {
+            throw std::invalid_argument(std::string("Invalid type prefix '") + type +
+                                        "' (allowed: X, B, W, D, L, R, F)");
+        }
+
+        // Проверяем наличие 4-го параметра (номера)
+        if (parts[4].empty()) {
+            throw std::invalid_argument("Register number cannot be empty");
+        }
+
+        // Проверяем что номер регистра состоит из цифр
+        if (!std::all_of(parts[4].begin(), parts[4].end(), ::isdigit)) {
+            throw std::invalid_argument("Register number must contain only digits");
+        }
+
+        // Собираем основную часть адреса
+        std::string result = parts[2] + parts[3] + parts[4];
+
+        // Обработка битового смещения
+        if (type == 'X') {
+            if (parts.size() > 5 && !parts[5].empty()) {
+                // Проверяем что бит - число в диапазоне 0..63
+                try {
+                    int bit_offset = std::stoi(parts[5]);
+                    if (bit_offset < 0 || bit_offset > 63) {
+                        throw std::invalid_argument("Bit offset must be in range 0..63");
+                    }
+                    result += "." + parts[5];
+                } catch (...) {
+                    throw std::invalid_argument("Bit offset must be a valid number");
+                }
+            } else {
+                result += ".0";
+            }
+        } else if (parts.size() > 5 && !parts[5].empty()) {
+            throw std::invalid_argument("Bit offset is only allowed for 'X' type addresses");
+        }
+
+        return result;
     }
-    return 0;
-}
+
+public:
+    std::string parse(const std::string& input) {
+        parse_input(input);
+
+        std::string addr = get_plc_address();
+        std::string var  = get_plc_var();
+        std::string type = get_plc_type();
+
+        return "\"" + addr + "\", __" + var + ", PLC_" + type;
+    }
+};
 
 void generateBody(istream& locatedVars, ostream& glueVars) {
-    char iecVar_name[MAX_LOCAL_BUFFER];
-    char iecVar_type[MAX_LOCAL_BUFFER];
-
-    while (parseIecVars(locatedVars, iecVar_name, iecVar_type)) {
-        glueVar(glueVars, iecVar_name, iecVar_type);
+    PLCVariableParser parser;
+    string line;
+    while (getline(locatedVars, line)) {
+        try {
+            string input = extract_brackets_content(line);
+            glueVars << "\t__BIND(" << parser.parse(input) << ");\n";
+        } catch(...) {}
     }
 }
 

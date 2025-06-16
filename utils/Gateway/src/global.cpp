@@ -7,5 +7,6 @@
 #include <cstdlib>
 #include <cctype>
 
+std::mutex bufferLock;
 
 //-----------------------------------------------------------------------------

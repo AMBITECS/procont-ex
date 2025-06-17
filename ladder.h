@@ -24,7 +24,7 @@ extern unsigned long long common_ticktime__;
 //----------------------------------------------------------------------
 //MatIEC Compiler
 void config_run__(unsigned long tick);
-void config_init__(void);
+void config_init__();
 
 //glueVars.cpp
 void glueVars();

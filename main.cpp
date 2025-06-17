@@ -427,7 +427,9 @@ int main(int argc,char **argv)
     //======================================================
     while (run_plc) {           // run_plc - флаг работы
 
-        updateBuffersIn();			// read input image
+        // 1. Фаза чтения входов
+        RegServer::instance().notifyDataRead();
+        //updateBuffersIn();        // read input image
 
         {
             std::lock_guard<std::mutex> lock(bufferLock);
@@ -437,6 +439,7 @@ int main(int argc,char **argv)
 
                 Binder::instance().updateToIec();
 
+                // 2. Фаза выполнения алгоритма
                 handleSpecialFunctions();    // current time & statistic
                 config_run__(__tick++); // execute plc program logic
 
@@ -447,7 +450,9 @@ int main(int argc,char **argv)
             updateCustomOut();      // custom OUT
         }
 
-        updateBuffersOut();			// write output image
+        // 3. Фаза записи выходов
+        //updateBuffersOut();       // write output image
+        RegServer::instance().notifyDataWrite();
 
         // Спим до следующего цикла ...
         updateTime();               //

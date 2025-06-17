@@ -10,12 +10,12 @@ private:
     static std::unique_ptr<Binder> _instance;
 
     struct Binding {
-        Address addr{};
-        void* pvar{};
+        Address  addr{};
+        void*    pvar{};
         VAR_TYPE type{};
     };
 
-    std::vector<Binding> binds;
+    std::vector<Binding>        binds;
     std::shared_ptr<IRegClient> _regClient;
 
 public:
@@ -24,7 +24,7 @@ public:
     Binder(const Binder&) = delete;
     Binder& operator=(const Binder&) = delete;
 
-    void bind(const std::string& regNotation, void* iecVar, PLC_TYPE type);
+    void bind(const std::string& regNotation, void* iecVar, VAR_TYPE type);
     void updateToIec();
     void updateFromIec();
 

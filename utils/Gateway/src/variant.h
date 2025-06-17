@@ -34,42 +34,44 @@ using T_REAL64 = double;
 using T_STRING = std::string;
 
 //-----------------------------------------------------------------------------
-// IEC type codes
-//-----------------------------------------------------------------------------
-enum PLC_TYPE : uint8_t {
-    PLC_NULL    = 0x00,
-    PLC_BOOL    = 0x01,
-    PLC_SINT    = 0x02,
-    PLC_INT     = 0x03,
-    PLC_DINT    = 0x04,
-    PLC_LINT    = 0x15,
-    PLC_USINT   = 0x05,
-    PLC_UINT    = 0x06,
-    PLC_UDINT   = 0x07,
-    PLC_ULINT   = 0x1B,
-    PLC_REAL    = 0x08,
-    PLC_LREAL   = 0x12,
-    PLC_STRING  = 0x20
-};
-
-//-----------------------------------------------------------------------------
 // Variant type codes
 //-----------------------------------------------------------------------------
 enum VAR_TYPE : uint8_t {
     VT_NULL    = 0x00,
     VT_BOOL    = 0x01,
+
     VT_SINT8   = 0x02,
     VT_SINT16  = 0x03,
     VT_SINT32  = 0x04,
     VT_SINT64  = 0x15,
+
     VT_UINT8   = 0x05,
     VT_UINT16  = 0x06,
     VT_UINT32  = 0x07,
     VT_UINT64  = 0x1B,
+
     VT_REAL32  = 0x08,
     VT_REAL64  = 0x12,
+
     VT_STRING  = 0x20
 };
+
+//-----------------------------------------------------------------------------
+// IEC type codes (aliases)
+//-----------------------------------------------------------------------------
+constexpr VAR_TYPE PLC_NULL  = VAR_TYPE::VT_NULL  ;
+constexpr VAR_TYPE PLC_BOOL  = VAR_TYPE::VT_BOOL  ;
+constexpr VAR_TYPE PLC_SINT  = VAR_TYPE::VT_SINT8 ;
+constexpr VAR_TYPE PLC_INT   = VAR_TYPE::VT_SINT16;
+constexpr VAR_TYPE PLC_DINT  = VAR_TYPE::VT_SINT32;
+constexpr VAR_TYPE PLC_LINT  = VAR_TYPE::VT_SINT64;
+constexpr VAR_TYPE PLC_USINT = VAR_TYPE::VT_UINT8 ;
+constexpr VAR_TYPE PLC_UINT  = VAR_TYPE::VT_UINT16;
+constexpr VAR_TYPE PLC_UDINT = VAR_TYPE::VT_UINT32;
+constexpr VAR_TYPE PLC_ULINT = VAR_TYPE::VT_UINT64;
+constexpr VAR_TYPE PLC_REAL  = VAR_TYPE::VT_REAL32;
+constexpr VAR_TYPE PLC_LREAL = VAR_TYPE::VT_REAL64;
+constexpr VAR_TYPE PLC_STRING= VAR_TYPE::VT_STRING;
 
 //-----------------------------------------------------------------------------
 // Thread-safe string wrapper
@@ -117,48 +119,45 @@ union VAR_VALUE {
     T_SINT8    _sint8;
     T_SINT16   _sint16;
     T_SINT32   _sint32;
-    T_SINT64   _sint64;
+
+    alignas(8)
+    T_SINT64   _sint64;  // Явное выравнивание
     T_UINT8    _uint8;
     T_UINT16   _uint16;
     T_UINT32   _uint32;
-    T_UINT64   _uint64;
+
+    alignas(8)
+    T_UINT64   _uint64;  // Явное выравнивание
     T_REAL32   _real32;
-    T_REAL64   _real64;
-    TS_STRING* _string;
+
+    alignas(8)
+    T_REAL64   _real64;  // Явное выравнивание
+    alignas(alignof(void*))
+
+    TS_STRING* _string;  // Для указателя
 
     VAR_VALUE() noexcept : _uint64(0) {}
     ~VAR_VALUE() noexcept = default;
 
-    VAR_VALUE(const VAR_VALUE& src) noexcept { _uint64 = src._uint64; }
-
-    explicit VAR_VALUE(T_BOOL v)   noexcept : _bool(v) {}
-    explicit VAR_VALUE(T_SINT8 v)  noexcept : _sint8(v) {}
+    explicit VAR_VALUE(T_BOOL   v) noexcept : _bool  (v) {}
+    explicit VAR_VALUE(T_SINT8  v) noexcept : _sint8 (v) {}
     explicit VAR_VALUE(T_SINT16 v) noexcept : _sint16(v) {}
     explicit VAR_VALUE(T_SINT32 v) noexcept : _sint32(v) {}
     explicit VAR_VALUE(T_SINT64 v) noexcept : _sint64(v) {}
-    explicit VAR_VALUE(T_UINT8 v)  noexcept : _uint8(v) {}
+    explicit VAR_VALUE(T_UINT8  v) noexcept : _uint8 (v) {}
     explicit VAR_VALUE(T_UINT16 v) noexcept : _uint16(v) {}
     explicit VAR_VALUE(T_UINT32 v) noexcept : _uint32(v) {}
     explicit VAR_VALUE(T_UINT64 v) noexcept : _uint64(v) {}
     explicit VAR_VALUE(T_REAL32 v) noexcept : _real32(v) {}
     explicit VAR_VALUE(T_REAL64 v) noexcept : _real64(v) {}
+
     explicit VAR_VALUE(const T_STRING& v) : _string(new TS_STRING(v)) {}
     explicit VAR_VALUE(T_STRING&& v) : _string(new TS_STRING(std::move(v))) {}
 
-    VAR_VALUE& operator=(const VAR_VALUE& val) noexcept {
-        if (this != &val) {
-            _uint64 = val._uint64;
-        }
-        return *this;
-    }
+    VAR_VALUE(const VAR_VALUE& src) noexcept { _uint64 = src._uint64; }
 
-    VAR_VALUE& operator=(VAR_VALUE&& val) noexcept {
-        if (this != &val) {
-            _uint64 = val._uint64;
-            val._uint64 = 0;
-        }
-        return *this;
-    }
+    VAR_VALUE& operator=(const VAR_VALUE& val) noexcept { if (this != &val) { _uint64 = val._uint64; } return *this; }
+    VAR_VALUE& operator=(VAR_VALUE&& val) noexcept { if (this != &val) { _uint64 = val._uint64; val._uint64 = 0; } return *this; }
 };
 
 //-----------------------------------------------------------------------------
@@ -202,21 +201,11 @@ public:
     //-----------------------------------------------------------------------------
     // Constructors & Destructor
     //-----------------------------------------------------------------------------
-    VARIANT() noexcept : type_(VT_NULL), value_() {
-        value_._uint64 = 0;
-    }
+    VARIANT() noexcept : type_(VT_NULL), value_() { value_._uint64 = 0; }
+    ~VARIANT() { cleanup(); }
 
-    ~VARIANT() {
-        cleanup();
-    }
-
-    VARIANT(const VARIANT& other) : type_(VT_NULL) {
-        copy_from(other);
-    }
-
-    VARIANT(VARIANT&& other) noexcept : type_(VT_NULL) {
-        move_from(std::move(other));
-    }
+    VARIANT(const VARIANT& other) : type_(VT_NULL) { copy_from(other); }
+    VARIANT(VARIANT&& other) noexcept : type_(VT_NULL) { move_from(std::move(other)); }
 
     explicit VARIANT(VAR_TYPE type) noexcept : type_(type), value_() {
         value_._uint64 = 0;
@@ -266,142 +255,37 @@ public:
     //-----------------------------------------------------------------------------
     // Assignment operators
     //-----------------------------------------------------------------------------
-    VARIANT& operator=(const VARIANT& other) {
-        if (this != &other) {
-            cleanup();
-            copy_from(other);
-        }
-        return *this;
-    }
+    VARIANT& operator=(T_BOOL v)   noexcept { cleanup(); type_ = VT_BOOL  ; value_._bool   = v; return *this; }
+    VARIANT& operator=(T_SINT8 v)  noexcept { cleanup(); type_ = VT_SINT8 ; value_._sint8  = v; return *this; }
+    VARIANT& operator=(T_SINT16 v) noexcept { cleanup(); type_ = VT_SINT16; value_._sint16 = v; return *this; }
+    VARIANT& operator=(T_SINT32 v) noexcept { cleanup(); type_ = VT_SINT32; value_._sint32 = v; return *this; }
+    VARIANT& operator=(T_SINT64 v) noexcept { cleanup(); type_ = VT_SINT64; value_._sint64 = v; return *this; }
+    VARIANT& operator=(T_UINT8 v)  noexcept { cleanup(); type_ = VT_UINT8 ; value_._uint8  = v; return *this; }
+    VARIANT& operator=(T_UINT16 v) noexcept { cleanup(); type_ = VT_UINT16; value_._uint16 = v; return *this; }
+    VARIANT& operator=(T_UINT32 v) noexcept { cleanup(); type_ = VT_UINT32; value_._uint32 = v; return *this; }
+    VARIANT& operator=(T_UINT64 v) noexcept { cleanup(); type_ = VT_UINT64; value_._uint64 = v; return *this; }
+    VARIANT& operator=(T_REAL32 v) noexcept { cleanup(); type_ = VT_REAL32; value_._real32 = v; return *this; }
+    VARIANT& operator=(T_REAL64 v) noexcept { cleanup(); type_ = VT_REAL64; value_._real64 = v; return *this; }
 
-    VARIANT& operator=(VARIANT&& other) noexcept {
-        if (this != &other) {
-            cleanup();
-            move_from(std::move(other));
-        }
-        return *this;
-    }
+    VARIANT& operator=(const VARIANT& other) { if (this != &other) { cleanup(); copy_from(other); } return *this; }
+    VARIANT& operator=(VARIANT&& other) noexcept { if (this != &other) { cleanup(); move_from(std::move(other)); } return *this; }
 
-    VARIANT& operator=(T_BOOL v) noexcept {
-        cleanup();
-        type_ = VT_BOOL;
-        value_._bool = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_SINT8 v) noexcept {
-        cleanup();
-        type_ = VT_SINT8;
-        value_._sint8 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_SINT16 v) noexcept {
-        cleanup();
-        type_ = VT_SINT16;
-        value_._sint16 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_SINT32 v) noexcept {
-        cleanup();
-        type_ = VT_SINT32;
-        value_._sint32 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_SINT64 v) noexcept {
-        cleanup();
-        type_ = VT_SINT64;
-        value_._sint64 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_UINT8 v) noexcept {
-        cleanup();
-        type_ = VT_UINT8;
-        value_._uint8 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_UINT16 v) noexcept {
-        cleanup();
-        type_ = VT_UINT16;
-        value_._uint16 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_UINT32 v) noexcept {
-        cleanup();
-        type_ = VT_UINT32;
-        value_._uint32 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_UINT64 v) noexcept {
-        cleanup();
-        type_ = VT_UINT64;
-        value_._uint64 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_REAL32 v) noexcept {
-        cleanup();
-        type_ = VT_REAL32;
-        value_._real32 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(T_REAL64 v) noexcept {
-        cleanup();
-        type_ = VT_REAL64;
-        value_._real64 = v;
-        return *this;
-    }
-
-    VARIANT& operator=(const T_STRING& v) {
-        cleanup();
-        type_ = VT_STRING;
-        value_._string = new TS_STRING(v);
-        return *this;
-    }
-
-    VARIANT& operator=(const char* v) {
-        cleanup();
-        type_ = VT_STRING;
-        value_._string = new TS_STRING(v);
-        return *this;
-    }
-
-    VARIANT& operator=(std::nullptr_t) noexcept {
-        cleanup();
-        type_ = VT_NULL;
-        value_._uint64 = 0;
-        return *this;
-    }
+    VARIANT& operator=(const T_STRING& v) { cleanup(); type_ = VT_STRING; value_._string = new TS_STRING(v); return *this; }
+    VARIANT& operator=(const char* v) { cleanup(); type_ = VT_STRING; value_._string = new TS_STRING(v); return *this; }
+    VARIANT& operator=(std::nullptr_t) noexcept { cleanup(); type_ = VT_NULL; value_._uint64 = 0; return *this; }
 
     //-----------------------------------------------------------------------------
     // Type information
     //-----------------------------------------------------------------------------
-    [[nodiscard]] VAR_TYPE type() const noexcept { return type_; }
-    [[nodiscard]] bool isNull() const noexcept { return type_ == VT_NULL; }
-    [[nodiscard]] bool isBool() const noexcept { return type_ == VT_BOOL; }
-    [[nodiscard]] bool isInteger() const noexcept {
-        return (type_ >= VT_SINT8 && type_ <= VT_UINT64) || type_ == VT_BOOL;
-    }
-    [[nodiscard]] bool isSigned() const noexcept {
-        return type_ >= VT_SINT8 && type_ <= VT_SINT64;
-    }
-    [[nodiscard]] bool isUnsigned() const noexcept {
-        return type_ >= VT_UINT8 && type_ <= VT_UINT64;
-    }
-    [[nodiscard]] bool isReal() const noexcept {
-        return type_ == VT_REAL32 || type_ == VT_REAL64;
-    }
-    [[nodiscard]] bool isString() const noexcept { return type_ == VT_STRING; }
-    [[nodiscard]] bool isNumeric() const noexcept {
-        return isInteger() || isReal();
-    }
+    [[nodiscard]] VAR_TYPE type()   const noexcept { return type_; }
+    [[nodiscard]] bool isNull()     const noexcept { return type_ == VT_NULL; }
+    [[nodiscard]] bool isBool()     const noexcept { return type_ == VT_BOOL; }
+    [[nodiscard]] bool isInteger()  const noexcept { return (type_ >= VT_SINT8 && type_ <= VT_UINT64) || type_ == VT_BOOL; }
+    [[nodiscard]] bool isSigned()   const noexcept { return type_ >= VT_SINT8 && type_ <= VT_SINT64; }
+    [[nodiscard]] bool isUnsigned() const noexcept { return type_ >= VT_UINT8 && type_ <= VT_UINT64; }
+    [[nodiscard]] bool isReal()     const noexcept { return type_ == VT_REAL32 || type_ == VT_REAL64; }
+    [[nodiscard]] bool isString()   const noexcept { return type_ == VT_STRING; }
+    [[nodiscard]] bool isNumeric()  const noexcept { return isInteger() || isReal(); }
 
     //-----------------------------------------------------------------------------
     // Safe value getters
@@ -417,43 +301,32 @@ public:
 
     template<typename T>
     [[nodiscard]] T get() const {
-        if constexpr (std::is_same_v<T, bool>) {
-            return getBOOL();
-        } else if constexpr (std::is_same_v<T, T_SINT8>) {
-            return getSINT8();
-        } else if constexpr (std::is_same_v<T, T_SINT16>) {
-            return getSINT16();
-        } else if constexpr (std::is_same_v<T, T_SINT32>) {
-            return getSINT32();
-        } else if constexpr (std::is_same_v<T, T_SINT64>) {
-            return getSINT64();
-        } else if constexpr (std::is_same_v<T, T_UINT8>) {
-            return getUINT8();
-        } else if constexpr (std::is_same_v<T, T_UINT16>) {
-            return getUINT16();
-        } else if constexpr (std::is_same_v<T, T_UINT32>) {
-            return getUINT32();
-        } else if constexpr (std::is_same_v<T, T_UINT64>) {
-            return getUINT64();
-        } else if constexpr (std::is_same_v<T, T_REAL32>) {
-            return getREAL32();
-        } else if constexpr (std::is_same_v<T, T_REAL64>) {
-            return getREAL64();
-        } else if constexpr (std::is_same_v<T, T_STRING>) {
-            return getSTRING();
-        } else {
+        if      constexpr (std::is_same_v<T, bool>)     { return getBOOL();   }
+        else if constexpr (std::is_same_v<T, T_SINT8>)  { return getSINT8();  }
+        else if constexpr (std::is_same_v<T, T_SINT16>) { return getSINT16(); }
+        else if constexpr (std::is_same_v<T, T_SINT32>) { return getSINT32(); }
+        else if constexpr (std::is_same_v<T, T_SINT64>) { return getSINT64(); }
+        else if constexpr (std::is_same_v<T, T_UINT8>)  { return getUINT8();  }
+        else if constexpr (std::is_same_v<T, T_UINT16>) { return getUINT16(); }
+        else if constexpr (std::is_same_v<T, T_UINT32>) { return getUINT32(); }
+        else if constexpr (std::is_same_v<T, T_UINT64>) { return getUINT64(); }
+        else if constexpr (std::is_same_v<T, T_REAL32>) { return getREAL32(); }
+        else if constexpr (std::is_same_v<T, T_REAL64>) { return getREAL64(); }
+        else if constexpr (std::is_same_v<T, T_STRING>) { return getSTRING(); }
+        else {
             static_assert(sizeof(T) == 0, "Unsupported type for VARIANT::get()");
         }
     }
 
+    // Приведение к каждому типу в отдельности
     [[nodiscard]] T_BOOL getBOOL() const {
         switch (type_) {
             case VT_BOOL:   return value_._bool;
-            case VT_SINT8:  return value_._sint8 != 0;
+            case VT_SINT8:  return value_._sint8  != 0;
             case VT_SINT16: return value_._sint16 != 0;
             case VT_SINT32: return value_._sint32 != 0;
             case VT_SINT64: return value_._sint64 != 0;
-            case VT_UINT8:  return value_._uint8 != 0;
+            case VT_UINT8:  return value_._uint8  != 0;
             case VT_UINT16: return value_._uint16 != 0;
             case VT_UINT32: return value_._uint32 != 0;
             case VT_UINT64: return value_._uint64 != 0;
@@ -465,7 +338,7 @@ public:
                        value_._string->str != "false" && value_._string->str != "FALSE";
             }
             case VT_NULL:
-            default:        return false;
+            default: return false;
         }
     }
 
@@ -1042,7 +915,7 @@ public:
         if (type_ == VT_STRING) {
             throw std::runtime_error("Cannot interpret string as this type");
         }
-        return {TargetType, &value_};
+        return VARIANT{TargetType, &value_};
     }
 
     [[nodiscard]] VARIANT asBOOL()   const { return asType<VT_BOOL>  (); }
@@ -1098,10 +971,7 @@ public:
     static bool compareDoubles(double a, double b) noexcept {
         if (std::isnan(a)) return false;
         if (std::isnan(b)) return true;
-
-        if (std::abs(a - b) <= std::numeric_limits<double>::min())
-            return true;
-
+        if (std::abs(a - b) <= std::numeric_limits<double>::min()) return true;
         return std::abs(a - b) <= std::numeric_limits<double>::epsilon() *
                                   std::max(std::abs(a), std::abs(b));
     }
@@ -1121,12 +991,12 @@ public:
 
         switch (type_) {
             case VT_NULL:   return true;
-            case VT_BOOL:   return value_._bool == other.value_._bool;
-            case VT_SINT8:  return value_._sint8 == other.value_._sint8;
+            case VT_BOOL:   return value_._bool   == other.value_._bool;
+            case VT_SINT8:  return value_._sint8  == other.value_._sint8;
             case VT_SINT16: return value_._sint16 == other.value_._sint16;
             case VT_SINT32: return value_._sint32 == other.value_._sint32;
             case VT_SINT64: return value_._sint64 == other.value_._sint64;
-            case VT_UINT8:  return value_._uint8 == other.value_._uint8;
+            case VT_UINT8:  return value_._uint8  == other.value_._uint8;
             case VT_UINT16: return value_._uint16 == other.value_._uint16;
             case VT_UINT32: return value_._uint32 == other.value_._uint32;
             case VT_UINT64: return value_._uint64 == other.value_._uint64;
@@ -1170,12 +1040,12 @@ public:
         }
 
         switch (type_) {
-            case VT_BOOL:   return value_._bool < other.value_._bool;
-            case VT_SINT8:  return value_._sint8 < other.value_._sint8;
+            case VT_BOOL:   return value_._bool   < other.value_._bool;
+            case VT_SINT8:  return value_._sint8  < other.value_._sint8;
             case VT_SINT16: return value_._sint16 < other.value_._sint16;
             case VT_SINT32: return value_._sint32 < other.value_._sint32;
             case VT_SINT64: return value_._sint64 < other.value_._sint64;
-            case VT_UINT8:  return value_._uint8 < other.value_._uint8;
+            case VT_UINT8:  return value_._uint8  < other.value_._uint8;
             case VT_UINT16: return value_._uint16 < other.value_._uint16;
             case VT_UINT32: return value_._uint32 < other.value_._uint32;
             case VT_UINT64: return value_._uint64 < other.value_._uint64;
@@ -1190,26 +1060,16 @@ public:
         return false;
     }
 
-    bool operator<=(const VARIANT& other) const {
-        return !(other < *this);
-    }
-
-    bool operator>(const VARIANT& other) const {
-        return other < *this;
-    }
-
-    bool operator>=(const VARIANT& other) const {
-        return !(*this < other);
-    }
+    bool operator<=(const VARIANT& other) const { return !(other < *this); }
+    bool operator>(const VARIANT& other)  const { return (other < *this);  }
+    bool operator>=(const VARIANT& other) const { return !(*this < other); }
 
     //-----------------------------------------------------------------------------
     // Utility functions
     //-----------------------------------------------------------------------------
-    [[nodiscard]] T_STRING toString() const {
-        return getSTRING();
-    }
+    [[nodiscard]] T_STRING toString() const { return getSTRING(); }
 
-    [[nodiscard]] static VARIANT fromString(const T_STRING& str, VAR_TYPE type = VT_STRING) {
+    [[nodiscard]] static VARIANT of(const T_STRING& str, VAR_TYPE type = VT_STRING) {
         if (type == VT_STRING) {
             return VARIANT(str);
         }
@@ -1244,7 +1104,7 @@ public:
 
     [[nodiscard]] static const char* typeToStr(VAR_TYPE type) noexcept {
         switch (type) {
-            case VT_NULL:    return "NULL";
+            case VT_NULL:   return "NULL";
             case VT_BOOL:   return "BOOL";
             case VT_SINT8:  return "SINT8";
             case VT_SINT16: return "SINT16";

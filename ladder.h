@@ -57,7 +57,7 @@ extern unsigned char log_buffer[1000000];
 extern size_t log_index;
 
 //main.cpp
-extern bool run_openplc;
+extern bool run_plc;
 
 extern bool run_modbus;
 extern bool run_dnp3;

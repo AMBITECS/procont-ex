@@ -109,7 +109,7 @@ namespace sft::dtm::gateway {
                     t.scadatag = tag["scadatag"].get<std::string>();
                     t.modeltag = tag["modeltag"].get<std::string>();
                     t.type = static_cast<VAR_TYPE>(tag["type"].get<int>());
-                    t.value = VARIANT::fromString(tag["value"].get<std::string>(), t.type);
+                    t.value = VARIANT::of(tag["value"].get<std::string>(), t.type);
                     init.tags.push_back(t);
                 }
             }
@@ -221,7 +221,7 @@ namespace sft::dtm::gateway {
             for (const auto& item : j["onchangevalues"]) {
                 Tag t;
                 t.key = item["key"].get<std::string>();
-                t.value = VARIANT::fromString(item["value"].get<std::string>());
+                t.value = VARIANT::of(item["value"].get<std::string>());
                 t.prior = item["prior"].get<bool>();
                 values.push_back(t);
             }
@@ -283,14 +283,25 @@ namespace sft::dtm::gateway {
             std::vector<Tag> data;
 
             for (const auto& item : j["onchangevalues"]) {
+
+//                std::tm tm = {};
+//                std::istringstream ss(item["timestamp"].get<std::string>());
+//                ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+
                 std::tm tm = {};
-                std::istringstream ss(item["timestamp"].get<std::string>());
-                ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+                std::string timestamp_str = item["timestamp"].get<std::string>();
+
+                // Альтернативный способ парсинга времени без std::get_time
+                const char* fmt = "%Y-%m-%d %H:%M:%S";
+                if (strptime(timestamp_str.c_str(), fmt, &tm) == nullptr) {
+                    throw std::runtime_error("Failed to parse timestamp: " + timestamp_str);
+                }
+
                 auto time_point = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
                 data.emplace_back(
                         item["key"].get<std::string>(),
-                        VARIANT::fromString(item["value"].get<std::string>()),
+                        VARIANT::of(item["value"].get<std::string>()),
                         QualityUtils::fromInt(item["quality"].get<int>()),
                         time_point
                 );

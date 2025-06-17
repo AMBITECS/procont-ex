@@ -187,7 +187,7 @@ int waitForClient_interactive(int socket_fd) {
     int client_fd;
     struct sockaddr_in client_addr{};
     socklen_t client_len = sizeof(client_addr);
-    while (run_openplc) {
+    while (run_plc) {
         client_fd = accept(socket_fd, (struct sockaddr *)&client_addr, &client_len); //non-blocking call
         if (client_fd > 0) {
             SetSocketBlockingEnabled(client_fd, true);
@@ -505,7 +505,7 @@ void processCommand(/*unsigned*/ char *buffer, int client_fd)
             //    log(log_msg);
             //}
 
-            run_openplc = false;
+            run_plc = false;
         }
         processing_command = false;
     }
@@ -550,7 +550,7 @@ void *handleConnections_interactive(void *arguments)
     int client_fd = *(int *)arguments;
     printf("Interactive Server: Thread created for client ID: %d\n", client_fd);
 
-    while(run_openplc) {
+    while(run_plc) {
         unsigned char buffer[1024];
         long messageSize = listenToClient_interactive(client_fd, buffer);
 
@@ -591,7 +591,7 @@ void startInteractiveServer(int port)
     socket_fd = createSocket_interactive(port);
     if (socket_fd == -1) exit(1);
 
-    while (run_openplc) {
+    while (run_plc) {
 
         // (1) waitForClient - block until a client connects
         client_fd = waitForClient_interactive(socket_fd);

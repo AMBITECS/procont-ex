@@ -459,7 +459,7 @@ void updateBuffersOut_MB() {
 // Thread to poll each slave device
 //-----------------------------------------------------------------------------
 void *querySlaveDevices(void *arg) {
-    while (run_openplc)
+    while (run_plc)
     {
         char log_msg[1000];
 

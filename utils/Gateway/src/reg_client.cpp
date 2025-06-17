@@ -46,7 +46,7 @@ void RegClient::unsubscribeAll() {
     subscriptions_.clear();
 }
 
-// Обновлнение по изменениям
+// Обновление по изменениям
 void RegClient::update() {
     if (!data_handler_) return;
 

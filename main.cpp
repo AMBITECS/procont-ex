@@ -34,7 +34,7 @@ using namespace std;
 //Variable to control OpenPLC Runtime execution
 IEC_BOOL __DEBUG;
 unsigned long __tick = 0;   // tick counter
-bool run_openplc = true;    //uint8_t run_openplc = 1;
+bool run_plc = true;    //uint8_t run_openplc = 1;
 
 //pthread_mutex_t bufferLock; //mutex for the internal buffers
 
@@ -274,8 +274,8 @@ void testDataIntegrity() {
 //=============================================================================
 int main(int argc,char **argv)
 {
-    testDataIntegrity();
-//    runBindingTest();
+//  testDataIntegrity();
+//  runBindingTest();
 
     char log_msg[1000];
     sprintf(log_msg, "PROCONT RUNTIME starting...\n");
@@ -425,7 +425,7 @@ int main(int argc,char **argv)
     //    registry.commit();
     //}
     //======================================================
-    while (run_openplc) {           // run_openplc - флаг работы
+    while (run_plc) {           // run_plc - флаг работы
 
         updateBuffersIn();			// read input image
 

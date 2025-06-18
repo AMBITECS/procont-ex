@@ -206,59 +206,59 @@ bool pinNotPresent(const int *ignored_vector, int vector_size, int pinNumber) {
 //    //insert other special functions below
 //}
 
-void runBindingTest() {
-    // 1. Инициализация
-    uint16_t test_var = 0;
-    uint16_t reg_value = 0;
-
-    Binder::instance().bind("MW0", &test_var, PLC_UINT);  // MW0 - адрес для float в памяти
-
-    // 2. Проверка начального состояния
-    std::cout << "Initial state:\n";
-    std::cout << "  test_var = " << test_var << "\n";
-
-    // 3. Запись в переменную и перенос в регистры
-    test_var = 314; //3.14f;
-    std::cout << "\nAfter setting test_var = 3.14:\n";
-    std::cout << "  test_var = " << test_var << "\n";
-
-    //BindingManager::instance().updateFromIec();
-    Binder &binder = Binder::instance();
-    Address addr = Address::of("MW0");
-
-    RegServer::instance().setProxyValue(addr, test_var);
-    std::cout << "After updateFromIec():\n";
-    std::cout << "  test_var = " << test_var << "\n";
-
-    // 4. Чтение через MW proxy (из Registry)
-    std::cout << "\nReading through binder:\n";
-    reg_value = RegServer::instance().getProxyValue(addr);
-    std::cout << "  reg_value = " << reg_value << "\n";
-
-    // 5. Чтение через MW proxy (из Registry)
-    std::cout << "\nReading through MW proxy:\n";
-    reg_value = MW[0];  // MW - это прокси для доступа к памяти
-    std::cout << "  MW[0] = " << reg_value << "\n";
-
-    // 6. Изменение через MW proxy и перенос в переменную
-    MW[0] = 628;
-    std::cout << "\nAfter setting MW[0] = 6.28:\n";
-    std::cout << "  MW[0] = " << MW[0] << "\n";
-
-    Binder::instance().updateToIec();
-    std::cout << "After updateToIec():\n";
-    std::cout << "  test_var = " << test_var << "\n";
-
-    // 7. Проверка согласованности
-    std::cout << "\nFinal check:\n";
-    if (std::abs(test_var - MW[0]) < 0.0001f) {
-        std::cout << "SUCCESS: Values are synchronized\n";
-    } else {
-        std::cout << "ERROR: Values are different!\n";
-        std::cout << "  test_var = " << test_var << "\n";
-        std::cout << "  MW[0]    = " << MW[0] << "\n";
-    }
-}
+//void runBindingTest() {
+//    // 1. Инициализация
+//    uint16_t test_var = 0;
+//    uint16_t reg_value = 0;
+//
+//    Binder::instance().bind("MW0", &test_var, PLC_UINT);  // MW0 - адрес для float в памяти
+//
+//    // 2. Проверка начального состояния
+//    std::cout << "Initial state:\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    // 3. Запись в переменную и перенос в регистры
+//    test_var = 314; //3.14f;
+//    std::cout << "\nAfter setting test_var = 3.14:\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    //BindingManager::instance().updateFromIec();
+//    Binder &binder = Binder::instance();
+//    Address addr = Address::of("MW0");
+//
+//    RegServer::instance().setProxyValue(addr, test_var);
+//    std::cout << "After updateFromIec():\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    // 4. Чтение через MW proxy (из Registry)
+//    std::cout << "\nReading through binder:\n";
+//    reg_value = RegServer::instance().getProxyValue(addr);
+//    std::cout << "  reg_value = " << reg_value << "\n";
+//
+//    // 5. Чтение через MW proxy (из Registry)
+//    std::cout << "\nReading through MW proxy:\n";
+//    reg_value = MW[0];  // MW - это прокси для доступа к памяти
+//    std::cout << "  MW[0] = " << reg_value << "\n";
+//
+//    // 6. Изменение через MW proxy и перенос в переменную
+//    MW[0] = 628;
+//    std::cout << "\nAfter setting MW[0] = 6.28:\n";
+//    std::cout << "  MW[0] = " << MW[0] << "\n";
+//
+//    Binder::instance().updateToIec();
+//    std::cout << "After updateToIec():\n";
+//    std::cout << "  test_var = " << test_var << "\n";
+//
+//    // 7. Проверка согласованности
+//    std::cout << "\nFinal check:\n";
+//    if (std::abs(test_var - MW[0]) < 0.0001f) {
+//        std::cout << "SUCCESS: Values are synchronized\n";
+//    } else {
+//        std::cout << "ERROR: Values are different!\n";
+//        std::cout << "  test_var = " << test_var << "\n";
+//        std::cout << "  MW[0]    = " << MW[0] << "\n";
+//    }
+//}
 
 void testDataIntegrity() {
     uint16_t test_val = 12345;
@@ -267,15 +267,84 @@ void testDataIntegrity() {
     test_val = 54321;
     Binder::instance().updateFromIec();
 
+    uint16_t reg_val = MW[0];
+
     assert(MW[0] == 54321);
     std::cout << "Data integrity test passed!\n";
 }
 
+//void testDataIntegrity() {
+//    // Тестируем все поддерживаемые типы
+//    std::cout << "Running Data Integrity Tests...\n";
+//
+//    // Тест 1: UINT16 (WORD)
+//    {
+//        uint16_t test_val = 0xABCD;
+//        Binder::instance().bind("MW0", &test_val, PLC_UINT);
+//        test_val = 0x1234;
+//        Binder::instance().updateFromIec();
+//        assert(MW[0] == 0x1234 && "UINT16 write failed");
+//
+//        MW[0] = 0x5678;
+//        Binder::instance().updateToIec();
+//        assert(test_val == 0x5678 && "UINT16 read failed");
+//        std::cout << "UINT16 test passed\n";
+//    }
+//
+//    // Тест 2: UINT32 (DWORD)
+//    {
+//        uint32_t test_val = 0xDEADBEEF;
+//        Binder::instance().bind("MD0", &test_val, PLC_UDINT);
+//        test_val = 0xCAFEBABE;
+//        Binder::instance().updateFromIec();
+//        assert(MD[0] == 0xCAFEBABE && "UINT32 write failed");
+//
+//        MD[0] = 0xBAADF00D;
+//        Binder::instance().updateToIec();
+//        assert(test_val == 0xBAADF00D && "UINT32 read failed");
+//        std::cout << "UINT32 test passed\n";
+//    }
+//
+//    // Тест 3: REAL32
+//    {
+//        float test_val = 3.14159f;
+//        Binder::instance().bind("MF0", &test_val, PLC_REAL);
+//        test_val = 2.71828f;
+//        Binder::instance().updateFromIec();
+//
+//        // Получаем значение из регистра через клиент
+//        uint32_t float_val = MF[0];
+//        float read_val;
+//        memcpy(&read_val, &float_val, sizeof(float));
+//        assert(abs(read_val - 2.71828f) < 0.0001f && "REAL32 write failed");
+//
+//        MF[0] = 0x40490FDB; // 3.14159f in hex
+//        Binder::instance().updateToIec();
+//        assert(abs(test_val - 3.14159f) < 0.0001f && "REAL32 read failed");
+//        std::cout << "REAL32 test passed\n";
+//    }
+//
+//    // Тест 4: BOOL (бит)
+//    {
+//        bool test_val = true;
+//        Binder::instance().bind("MX0.0", &test_val, PLC_BOOL);
+//        test_val = false;
+//        Binder::instance().updateFromIec();
+//        assert((MX[0] & 0x01) == 0 && "BOOL write failed");
+//
+//        MX[0] |= 0x01;
+//        Binder::instance().updateToIec();
+//        assert(test_val == true && "BOOL read failed");
+//        std::cout << "BOOL test passed\n";
+//    }
+//
+//    std::cout << "All Data Integrity Tests passed!\n";
+//}
+
 //=============================================================================
 int main(int argc,char **argv)
 {
-  //testDataIntegrity();
-
+  testDataIntegrity();
   //runBindingTest();
 
     char log_msg[1000];
@@ -426,6 +495,8 @@ int main(int argc,char **argv)
     //    registry.commit();
     //}
     //======================================================
+    RegServer::instance().notifyInit();
+
     while (run_plc) {           // run_plc - флаг работы
 
         // 1. Фаза чтения входов
@@ -444,8 +515,6 @@ int main(int argc,char **argv)
                 handleSpecialFunctions();    // current time & statistic
                 config_run__(__tick++); // execute plc program logic
 
-                long l = MW[303];
-
                 Binder::instance().updateFromIec();
 
                 updateBuffersOut_MB();      // update slave devices with data from the output image table
@@ -457,10 +526,15 @@ int main(int argc,char **argv)
         //updateBuffersOut();       // write output image
         RegServer::instance().notifyDataWrite();
 
+        // 4. Фиксация изменений
+        RegServer::instance().commit();
+
         // Спим до следующего цикла ...
         updateTime();               //
         sleep_until(&timer_start, common_ticktime__);
     }
+
+    RegServer::instance().notifyExit();
 
     //======================================================
     //             SHUTTING DOWN PROCONT RUNTIME

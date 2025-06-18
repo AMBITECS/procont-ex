@@ -1,6 +1,7 @@
 #include "driver_loader.h"
 #include "driver_factory.h"
 #include "driver_manager.h"
+#include "client_factory.h"
 
 #include <iostream>
 #include <cstdio>
@@ -495,10 +496,26 @@ int main(int argc,char **argv)
     //}
     //======================================================
 
-// Загрузка и инициализация драйверов
-    DriverManager::instance().initialize_all();
+    // 1. Загружаем конфиг из JSON-файла
+    DriverLoader::instance().load_config("drivers_config.json");
+
+    // 2. Загружаем .so/.dll файлы (автоматически регистрируют драйверы в DriverFactory)
+    DriverLoader::instance().load_configured_drivers();
+
+    // 3. Инстанциация сервера
+    RegServer& server = RegServer::instance();
+
+    // 4. Инициализация фабрики
+    auto client_factory = std::make_shared<ClientFactoryImpl>(server);
+
+    // 5. Создание драйверов через фабрику и инициализация их
+    DriverManager::instance().initialize(client_factory);
+
+    // 6. Уведомление драйвера об инициализации
     RegServer::instance().notifyInit();
 
+    // 7.ОСНОВНОЙ ЦИКЛ PLC
+    // --------------------------------------------------------
     while (run_plc) {           // run_plc - флаг работы
 
         // 1. Фаза чтения входов
@@ -541,16 +558,19 @@ int main(int argc,char **argv)
         sleep_until(&timer_start, common_ticktime__);
     }
 
-    //======================================================
-    // Завершение работы
-    //======================================================
-
-    // Уведомляем клиентов
+    // --------------------------------------------------------
+    // 8. Уведомляем клиентов о завершении
     RegServer::instance().notifyExit();
 
-    // Выгружаем драйверы
-    DriverManager::instance().shutdown_all();
+    // 9. Выгружаем драйверы
+    DriverManager::instance().shutdown();
 
+    // 10. Выгружаем драйверы
+    DriverLoader::instance().unload_all();
+
+    //=========================================================
+    // Завершение работы
+    //=========================================================
     // Ожидание завершения потока сервера (и дочерних)
     pthread_join(interactive_thread, nullptr);
     printf("Disabling outputs\n");

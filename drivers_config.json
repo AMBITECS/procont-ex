@@ -1,0 +1,17 @@
+{
+  "drivers_directory": "./lib/",
+  "drivers": [
+    {
+      "name": "canopen_master",
+      "library": "driver_canopen.so",
+      "config": {
+        "bus_speed": 500000,
+        "node_ids": [1, 2, 3],
+        "eds_files": {
+          "1": "/etc/canopen/node1.eds",
+          "2": "/etc/canopen/node2.eds"
+        }
+      }
+    }
+  ]
+}

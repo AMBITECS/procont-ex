@@ -273,6 +273,13 @@ add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
 add_subdirectory(${PROJ_SUB_DIR}/json)      # --- JSON
 
+# Копирование конфига в директорию сборки
+configure_file(
+        ${PROJ_DIR}/drivers_config.json
+        ${CMAKE_CURRENT_BINARY_DIR}/drivers_config.json
+        COPYONLY
+)
+
 #-------------------------------------------------------------------------------
 # 4) Главный исполняемый модуль ${proj} = 'procont-ex'
 #-------------------------------------------------------------------------------
@@ -322,4 +329,6 @@ add_dependencies(${proj} install_libzmq)
 
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")
 
+# Для установки в систему drivers_config.json
+install(FILES ${PROJ_DIR}/drivers_config.json DESTINATION ${PROJ_INS_DIR})
 #------------------------------------------------------------------------------

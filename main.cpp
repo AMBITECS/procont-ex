@@ -1,22 +1,21 @@
+#include "driver_loader.h"
+#include "driver_factory.h"
+#include "driver_manager.h"
+
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include <cstdarg>
 #include <unistd.h>
-#include <cstring>
 #include <cassert>
 #include <ctime>
+#include <cstdarg>
 
 #include <sched.h>
 #include <syslog.h>
 #include <net/if.h>
 #include <pthread.h>
 
-#include "OD.h"
-#include "CIA405.h"
-#include "CO_error.h"
-#include "CO_epoll_interface.h"
-#include "CO_storageLinux.h"
+//#include "CO_error.h"
 
 #include <sys/mman.h>
 #include <arpa/inet.h>
@@ -495,26 +494,33 @@ int main(int argc,char **argv)
     //    registry.commit();
     //}
     //======================================================
+
+// Загрузка и инициализация драйверов
+    DriverManager::instance().initialize_all();
     RegServer::instance().notifyInit();
 
     while (run_plc) {           // run_plc - флаг работы
 
         // 1. Фаза чтения входов
         RegServer::instance().notifyDataRead();
+
         //updateBuffersIn();        // read input image
 
+        // 2. Фаза выолнения алгоритма
         {
             std::lock_guard<std::mutex> lock(bufferLock);
             updateCustomIn();       // custom IN
             {
                 updateBuffersIn_MB();       // update input image table with data from slave devices
 
+                // 2.1 Загрузка PVs
                 Binder::instance().updateToIec();
 
-                // 2. Фаза выполнения алгоритма
+                // 2.2 Фаза выполнения алгоритма
                 handleSpecialFunctions();    // current time & statistic
                 config_run__(__tick++); // execute plc program logic
 
+                // 2.3 Выгрузка PVs
                 Binder::instance().updateFromIec();
 
                 updateBuffersOut_MB();      // update slave devices with data from the output image table
@@ -522,23 +528,29 @@ int main(int argc,char **argv)
             updateCustomOut();      // custom OUT
         }
 
-        // 3. Фаза записи выходов
         //updateBuffersOut();       // write output image
+
+        // 3. Фаза записи выходов
         RegServer::instance().notifyDataWrite();
 
         // 4. Фиксация изменений
         RegServer::instance().commit();
 
-        // Спим до следующего цикла ...
+        // 5. Спим до следующего цикла ...
         updateTime();               //
         sleep_until(&timer_start, common_ticktime__);
     }
 
+    //======================================================
+    // Завершение работы
+    //======================================================
+
+    // Уведомляем клиентов
     RegServer::instance().notifyExit();
 
-    //======================================================
-    //             SHUTTING DOWN PROCONT RUNTIME
-    //======================================================
+    // Выгружаем драйверы
+    DriverManager::instance().shutdown_all();
+
     // Ожидание завершения потока сервера (и дочерних)
     pthread_join(interactive_thread, nullptr);
     printf("Disabling outputs\n");

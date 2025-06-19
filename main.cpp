@@ -41,38 +41,38 @@ bool run_plc = true;    //uint8_t run_openplc = 1;
 // ---------------------------------------------------
 // Функция пока нужна, можно сделать ее просто пустой
 // ---------------------------------------------------
-/* Message logging function */
-void log_printf(int priority, const char* format, ...) {
-    va_list ap;
-    va_start(ap, format);
-    vsyslog(priority, format, ap);
-    va_end(ap);
-
-    // #if (CO_CONFIG_GTW) & CO_CONFIG_GTW_ASCII_LOG
-    //     if(CO != NULL)
-    //     {
-    char buf[200];
-    time_t timer;
-    struct tm* tm_info;
-    size_t len;
-
-    timer = time(nullptr);
-    tm_info = localtime(&timer);
-    len = strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S: ", tm_info);
-
-    va_start(ap, format);
-    vsnprintf(buf + len, sizeof(buf) - len - 2, format, ap);
-    va_end(ap);
-
-//  strcat(buf, (char *)"\n");
-//  qDebug() << buf;
-
-    cout << buf << endl;
-
-    //         CO->gtwa->_co_gtwa_engien->CO_GTWA_log_print(CO->gtwa, buf);
-    //     }
-    // #endif
-}
+///* Message logging function */
+//void log_printf(int priority, const char* format, ...) {
+//    va_list ap;
+//    va_start(ap, format);
+//    vsyslog(priority, format, ap);
+//    va_end(ap);
+//
+//    // #if (CO_CONFIG_GTW) & CO_CONFIG_GTW_ASCII_LOG
+//    //     if(CO != NULL)
+//    //     {
+//    char buf[200];
+//    time_t timer;
+//    struct tm* tm_info;
+//    size_t len;
+//
+//    timer = time(nullptr);
+//    tm_info = localtime(&timer);
+//    len = strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S: ", tm_info);
+//
+//    va_start(ap, format);
+//    vsnprintf(buf + len, sizeof(buf) - len - 2, format, ap);
+//    va_end(ap);
+//
+////  strcat(buf, (char *)"\n");
+////  qDebug() << buf;
+//
+//    cout << buf << endl;
+//
+//    //         CO->gtwa->_co_gtwa_engien->CO_GTWA_log_print(CO->gtwa, buf);
+//    //     }
+//    // #endif
+//}
 
 //-----------------------------------------------------------------------------
 // Helper function - Makes the running thread sleep for the ammount of time

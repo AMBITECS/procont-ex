@@ -1,9 +1,9 @@
 {
-  "drivers_directory": "./lib/",
+  "drivers_directory": "./lib64/can_master",
   "drivers": [
     {
-      "name": "canopen_master",
-      "library": "driver_canopen.so",
+      "name": "can_master",
+      "library": "libcan_master.so",
       "config": {
         "bus_speed": 500000,
         "node_ids": [1, 2, 3],

@@ -16,3 +16,6 @@
 [submodule "utils/Gateway"]
 	path = utils/Gateway
 	url = https://github.com/AMBITECS/pro-gateway.git
+[submodule "utils/matiec"]
+	path = utils/matiec
+	url = https://github.com/AMBITECS/beremiz-matiec.git

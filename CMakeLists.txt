@@ -270,8 +270,9 @@ add_custom_target(install_cppzmq
 ### (4) ...
 add_subdirectory(${PROJ_SUB_DIR}/Gateway)   # --- gateway
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus
-add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
 add_subdirectory(${PROJ_SUB_DIR}/json)      # --- JSON
+add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
+add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)  # --- EtherCAT
 
 # Копирование конфига в директорию сборки
 configure_file(

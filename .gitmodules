@@ -22,3 +22,6 @@
 [submodule "utils/EtherCAT"]
 	path = utils/EtherCAT
 	url = git@github.com:AMBITECS/EtherCAT.git
+[submodule "utils/openssl"]
+	path = utils/openssl
+	url = https://github.com/openssl/openssl

@@ -19,3 +19,6 @@
 [submodule "utils/matiec"]
 	path = utils/matiec
 	url = git@github.com:AMBITECS/beremiz-matiec.git
+[submodule "utils/EtherCAT"]
+	path = utils/EtherCAT
+	url = git@github.com:AMBITECS/EtherCAT.git

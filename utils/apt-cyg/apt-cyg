@@ -2540,14 +2540,14 @@ function apt-cyg-install ()
     # pick the latest version, which comes first
     local install="$(awk '/^install: / { print $2; exit }' "release/$pkg/desc")"
     
-    if [ -z "$install" ]; then
+    if [ -z ".install" ]; then
       verbose 0 "Could not find \"install\" in package description: obsolete package?"
       exit 1
     fi
     
-    local file="$(basename "$install")"
+    local file="$(basename ".install")"
     cd "release/$pkg"
-    wget -Nc $mirror/$install
+    wget -Nc $mirror/.install
     
     # check the SHA512 hash
     local digest="$(awk '/^install: / { print $4; exit }' "desc")"

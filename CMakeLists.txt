@@ -4,6 +4,7 @@ project( PROCONT-EX
          DESCRIPTION "Procont execution environment"
          LANGUAGES CXX
 )
+
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} BEGIN")
 
 string( TOLOWER ${PROJECT_NAME}  proj )      # proj = project name in lowercase
@@ -59,7 +60,7 @@ set( PROJ_IEC_DIR   ${PROJ_DIR}/iec       ) # PROJ iec2c directory
 set( PROJ_LIB_DIR   ${PROJ_DIR}/lib       ) # PROJ includes directory
 set( PROJ_SUB_DIR   ${PROJ_DIR}/utils     ) # PROJ submodule directory
 set( PROJ_CMP_DIR   ${PROJ_DIR}/matiec    ) # IEC to C compiler directory
-set( PROJ_INS_DIR   ${PROJ_DIR}/$install  ) # local install directory
+set( PROJ_INS_DIR   ${PROJ_DIR}/.install  ) # local install directory
 set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c ) # IEC to C compiler
 set( PROJ_ST_FILE   ${ST_FILE}            ) # SOURCE ST_FILE
 
@@ -80,6 +81,10 @@ message("== CMAKE_BINARY_DIR: ${PROJ_SUB_DIR}")
 #message("== PROJ_IEC_DIR: ${PROJ_IEC_DIR}")
 #message("== PROJ_ST_FILE: ${PROJ_ST_FILE}\n")
 
+file(MAKE_DIRECTORY ${PROJ_IEC_DIR})
+
+add_subdirectory(${PROJ_SUB_DIR}/glue_generator)
+
 #-------------------------------------------------------------------------------
 # 1) Компиляция ST- файла в *.c *.h
 #-------------------------------------------------------------------------------
@@ -99,12 +104,12 @@ add_custom_command(
 )
 
 #-------------------------------------------------------------------------------
-# 2) Склеивание PVs перед компиляцией и сборкой
+# 2) Склеивание PVs перед компиляцией и сборкой (нужен glue_generator)
 #-------------------------------------------------------------------------------
 add_custom_command(
         COMMENT "(2) - Glue generator: LOCATED_VARIABLES.h -> glueVars.cpp"
         OUTPUT  ${PROJ_IEC_DIR}/glueVars.cpp
-        DEPENDS ${PROJ_IEC_DIR}/LOCATED_VARIABLES.h
+        DEPENDS glue_generator ${PROJ_IEC_DIR}/LOCATED_VARIABLES.h
 
         WORKING_DIRECTORY ${PROJ_IEC_DIR}
 
@@ -139,8 +144,7 @@ add_custom_target( build_iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
 # Используемые стандартные библиотеки
 #-------------------------------------------------------------------------------
 include(${CMAKE_DIR}/find_tools.cmake)
-#find_package(modbus     REQUIRED)
-#find_package(can_master REQUIRED)
+include(${CMAKE_DIR}/build_tools.cmake)
 
 #-------------------------------------------------------------------------------
 # Подключаемые модули
@@ -149,69 +153,106 @@ include(${CMAKE_DIR}/find_tools.cmake)
 include(FetchContent)
 include(ExternalProject)  # <- Критически важная строка
 
-## (-1-) Сборка OpenSSL
+# -----------------------------------------------------------------------------
+# (-1-) Сборка OpenSSL
+# -----------------------------------------------------------------------------
+# 1. Сначала определяем параметры сборки
 set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)   # openssl source dir
 set(OPENSSL_INSTALL_DIR ${PROJ_INS_DIR})        # openssl install dir
-message(STATUS "OpenSSL root directory: ${OPENSSL_ROOT_DIR}")
-message(STATUS "OpenSSL will be installed to: ${OPENSSL_INSTALL_DIR}")
+set(MAKE_DIRECTORY "${OPENSSL_INSTALL_DIR}")
 
-file(MAKE_DIRECTORY "${OPENSSL_INSTALL_DIR}")
-
-# Проверяем наличие исходников
+# 2. Проверяем наличие исходников
 if(NOT EXISTS "${OPENSSL_ROOT_DIR}/Configure")
     message(FATAL_ERROR "OpenSSL sources not found in ${OPENSSL_ROOT_DIR}")
 endif()
+
+# 3. Сборка OpenSSL
+# Определение архитектуры
+set(BUILD_TARGET "linux-x86_64")  # linux-aarch64
+set(CROSS_PREFIX "")
+
+# Создаем список команд для CONFIGURE_COMMAND
+set(OPENSSL_CONFIGURE_COMMAND ${OPENSSL_ROOT_DIR}/Configure
+        --prefix=${OPENSSL_INSTALL_DIR}
+        --openssldir=${OPENSSL_INSTALL_DIR}/ssl
+        ${BUILD_TARGET}
+        no-asm
+        shared
+        -fPIC
+)
 
 ExternalProject_Add(
         openssl_external
         SOURCE_DIR ${OPENSSL_ROOT_DIR}
         PREFIX "${CMAKE_BINARY_DIR}/openssl_build"
-        CONFIGURE_COMMAND ${OPENSSL_ROOT_DIR}/config
-        --prefix=${OPENSSL_INSTALL_DIR} #/usr/local
-        --openssldir=${OPENSSL_INSTALL_DIR}/ssl   #/usr/local/ssl
-        shared
-        linux-x86_64
-        no-asm
+        CONFIGURE_COMMAND ${OPENSSL_CONFIGURE_COMMAND}
         BUILD_COMMAND make depend && make -j${CMAKE_BUILD_PARALLEL_LEVEL}
-
-        #INSTALL_COMMAND make install_sw INSTALL_PREFIX=${OPENSSL_INSTALL_DIR}
-        INSTALL_COMMAND
-        make install_sw DESTDIR=${CMAKE_BINARY_DIR}/temp_install &&
-
-        cp -r ${CMAKE_BINARY_DIR}/temp_install/usr/local/. ${OPENSSL_INSTALL_DIR}/ &&
-        #rsync -a ${CMAKE_BINARY_DIR}/temp_install/usr/local/ ${OPENSSL_INSTALL_DIR}/ &&
-
-        rm -rf ${CMAKE_BINARY_DIR}/temp_install
-
+        INSTALL_COMMAND make install_sw
         BUILD_IN_SOURCE TRUE # Сборка в исходниках
+
+        # Условное добавление переменных окружения
+        $<$<STREQUAL:${BUILD_TARGET},linux-aarch64>:
+        ENV
+        PATH "/usr/xcc/aarch64-unknown-linux-gnu/bin:$ENV{PATH}"
+        CC aarch64-unknown-linux-gnu-gcc
+        AR aarch64-unknown-linux-gnu-ar
+        RANLIB aarch64-unknown-linux-gnu-ranlib
+        >
+
+        BUILD_BYPRODUCTS
+            "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"
+            "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so"
 )
 
-# Импортируем OpenSSL после сборки
-#find_package(OpenSSL REQUIRED PATHS "${OPENSSL_INSTALL_DIR}" NO_DEFAULT_PATH)
-# Вручную указываем пути к OPENSSL
-set(OPENSSL_INCLUDE_DIR "${OPENSSL_INSTALL_DIR}/include")
-set(OPENSSL_LIBRARIES "${OPENSSL_INSTALL_DIR}/lib64/libssl.so" "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so")
+# 4. Создаем промежуточные импортированные цели
+add_library(OpenSSL::Crypto SHARED IMPORTED GLOBAL)
+add_library(OpenSSL::SSL    SHARED IMPORTED GLOBAL)
 
+# 5. Устанавливаем зависимости
+add_dependencies(OpenSSL::Crypto openssl_external)
+add_dependencies(OpenSSL::SSL    openssl_external)
+
+#ExternalProject_Get_Property(openssl_external BINARY_DIR)
+#message(STATUS "OpenSSL is building in: ${BINARY_DIR}")
+
+# 6. Откладываем установку свойств до момента сборки
+# Для Crypto
+set_target_properties(OpenSSL::Crypto PROPERTIES
+        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so"
+        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include"
+)
+
+# Для SSL
+set_target_properties(OpenSSL::SSL PROPERTIES
+        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"
+        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include"
+        INTERFACE_LINK_LIBRARIES OpenSSL::Crypto
+)
+
+# 7. Создаем псевдо-цель для удобства
+add_custom_target(openssl_all DEPENDS OpenSSL::SSL OpenSSL::Crypto)
+
+## 8. Создаем интерфейсную библиотеку для OpenSSL (если нужно)
+#add_library(openssl_interface INTERFACE)
+#target_link_libraries(openssl_interface INTERFACE OpenSSL::SSL OpenSSL::Crypto)
+
+
+#Поиск OpenSSL только после гарантии его существования
+#set(OPENSSL_ROOT_DIR "${OPENSSL_INSTALL_DIR}")
+#set(OPENSSL_INCLUDE_DIR "${OPENSSL_INSTALL_DIR}/include")
+#set(OPENSSL_LIBRARIES "${OPENSSL_INSTALL_DIR}/lib64/libssl.so" "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so")
+##find_package(OpenSSL REQUIRED PATHS "${OPENSSL_INSTALL_DIR}" NO_DEFAULT_PATH)
+#find_package(OpenSSL REQUIRED)
+#if(NOT OpenSSL_FOUND)
+#    message(FATAL_ERROR "OpenSSL not found!")
+#endif()
+
+# 9. Включаем директории OpenSSL
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-## зкивязка к цели
-#target_link_libraries(my_target PRIVATE ${OPENSSL_LIBRARIES})
-
-## Вручную задаем пути к OpenSSL
-#add_library(OpenSSL::SSL SHARED IMPORTED)
-#add_library(OpenSSL::Crypto SHARED IMPORTED)
-
-#set_target_properties(OpenSSL::SSL PROPERTIES
-#        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"  # .so для Linux, .dll для Windows
-#        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include/openssl"
-#)
-#set_target_properties(OpenSSL::Crypto PROPERTIES
-#        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so"
-#        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include/openssl"
-#)
-
-######################
+# -----------------------------------------------------------------------------
 ## (-2-) Сборка ZeroMQ
+# -----------------------------------------------------------------------------
 set(ZMQ_ROOT_DIR ${PROJ_SUB_DIR}/libzmq)
 set(ZMQ_INSTALL_DIR ${PROJ_INS_DIR})
 
@@ -233,8 +274,13 @@ set(WITH_LIBSODIUM  OFF       CACHE BOOL    "Disable libsodium")
 # Указываем путь установки
 set(CMAKE_INSTALL_PREFIX ${ZMQ_INSTALL_DIR} CACHE PATH "Installation directory" FORCE)
 
-# Добавляем libzmq как подпроект
-add_subdirectory(${PROJ_SUB_DIR}/libzmq)
+# Добавляем libzmq как подпроект с явными зависимостями
+add_subdirectory(${PROJ_SUB_DIR}/libzmq) #EXCLUDE_FROM_ALL
+
+# Устанавливаем зависимости
+if(TARGET libzmq AND TARGET openssl_all)
+    add_dependencies(libzmq openssl_all)
+endif()
 
 ## Корректная команда установки
 add_custom_target(install_libzmq
@@ -243,20 +289,17 @@ add_custom_target(install_libzmq
         --prefix ${ZMQ_INSTALL_DIR}
         --config $<CONFIG>
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        DEPENDS libzmq
+        DEPENDS libzmq #openssl_all
         COMMENT "Installing libzmq to ${ZMQ_INSTALL_DIR}"
         VERBATIM
 )
-## -- Альтернативный вариант через make
-#add_custom_target(install_libzmq
-#        COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=
-#        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/utils/libzmq
-#        DEPENDS libzmq
-#        COMMENT "Installing libzmq using make"
-#)
 
-######################
+# Добавляем путь в цели
+include_directories(${ZMQ_ROOT_DIR}/include)
+
+# -----------------------------------------------------------------------------
 ### (3) Настройка и установка cppzmq
+# -----------------------------------------------------------------------------
 set(CPPZMQ_ROOT_DIR ${PROJ_SUB_DIR}/cppzmq)
 set(CPPZMQ_INSTALL_DIR ${PROJ_INS_DIR})
 
@@ -269,6 +312,11 @@ set(CMAKE_INSTALL_PREFIX ${CPPZMQ_INSTALL_DIR} CACHE PATH "Installation director
 # Добавляем cppzmq как подпроект
 add_subdirectory(${PROJ_SUB_DIR}/cppzmq)
 
+# Устанавливаем зависимости
+if(TARGET cppzmq AND TARGET libzmq)
+    add_dependencies(cppzmq libzmq)
+endif()
+
 ## Корректная команда установки
 add_custom_target(install_cppzmq
         COMMAND ${CMAKE_COMMAND}
@@ -276,10 +324,13 @@ add_custom_target(install_cppzmq
         --prefix ${CPPZMQ_INSTALL_DIR}
         --config $<CONFIG>
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        DEPENDS libzmq
-        COMMENT "Installing libzmq to ${CPPZMQ_INSTALL_DIR}"
+        DEPENDS cppzmq
+        COMMENT "Installing cppzmq to ${CPPZMQ_INSTALL_DIR}"
         VERBATIM
 )
+
+# Добавляем путь в цели
+include_directories(${CPPZMQ_ROOT_DIR})
 
 ######################
 ### (4) ...
@@ -288,6 +339,7 @@ add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus
 add_subdirectory(${PROJ_SUB_DIR}/json)      # --- JSON
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
 add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)  # --- EtherCAT
+
 
 # Копирование конфига в директорию сборки
 configure_file(
@@ -299,7 +351,11 @@ configure_file(
 #-------------------------------------------------------------------------------
 # 4) Главный исполняемый модуль ${proj} = 'procont-ex'
 #-------------------------------------------------------------------------------
-include(${CMAKE_DIR}/build_tools.cmake)
+if(CMAKE_COMPILER_IS_GNUCC)
+    target_compile_options(${proj} PRIVATE  -D_GNU_SOURCE -Wall -Wextra)
+endif()
+#set_target_properties(${proj} PROPERTIES CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+#target_compile_definitions(${proj} PRIVATE _GLIBCXX_DEBUG=1)
 
 build_target( ${proj} EXE
     OPTS -g -O0 -w -fPIC
@@ -313,7 +369,9 @@ build_target( ${proj} EXE
         ${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp
         :MASK ${PROJ_IEC_DIR}/*.o
+
     LNKS
+        nlohmann_json
         libzmq
         cppzmq
         pro-gateway
@@ -322,13 +380,10 @@ build_target( ${proj} EXE
         nlohmann_json::nlohmann_json
 )
 
-#set_target_properties(${proj} PROPERTIES CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-
-if(CMAKE_COMPILER_IS_GNUCC)
-    target_compile_options(${proj} PRIVATE  -D_GNU_SOURCE -Wall -Wextra)
-endif()
-
-#target_compile_definitions(${proj} PRIVATE _GLIBCXX_DEBUG=1)
+#-------------------------------------------------------------------------------
+### Dependencies ###
+#-------------------------------------------------------------------------------
+add_dependencies(${proj} build_iec)
 
 ## Включение AddressSanitizer для всех конфигураций
 #if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -336,12 +391,6 @@ endif()
 #    add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
 #    add_link_options(-fsanitize=address)
 #endif()
-
-#-------------------------------------------------------------------------------
-### Dependencies ###
-#-------------------------------------------------------------------------------
-add_dependencies(${proj} build_iec)
-add_dependencies(${proj} install_libzmq)
 
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")
 

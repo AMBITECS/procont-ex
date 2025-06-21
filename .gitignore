@@ -84,7 +84,8 @@ CMakeLists.txt.user*
 
 /*dockcross-*/
 /iec/
-/$install/
+/.install/
+/.install/
 
 /utils/CANopen/
 /utils/libmodbus/

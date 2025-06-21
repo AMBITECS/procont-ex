@@ -150,10 +150,11 @@ include(FetchContent)
 include(ExternalProject)  # <- Критически важная строка
 
 ## (-1-) Сборка OpenSSL
-set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)
-set(OPENSSL_INSTALL_DIR ${PROJ_INS_DIR})
+set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)   # openssl source dir
+set(OPENSSL_INSTALL_DIR ${PROJ_INS_DIR})        # openssl install dir
 message(STATUS "OpenSSL root directory: ${OPENSSL_ROOT_DIR}")
 message(STATUS "OpenSSL will be installed to: ${OPENSSL_INSTALL_DIR}")
+
 file(MAKE_DIRECTORY "${OPENSSL_INSTALL_DIR}")
 
 # Проверяем наличие исходников
@@ -166,26 +167,40 @@ ExternalProject_Add(
         SOURCE_DIR ${OPENSSL_ROOT_DIR}
         PREFIX "${CMAKE_BINARY_DIR}/openssl_build"
         CONFIGURE_COMMAND ${OPENSSL_ROOT_DIR}/config
-        --prefix=/usr/local
-        --openssldir=/usr/local/ssl
+        --prefix=${OPENSSL_INSTALL_DIR} #/usr/local
+        --openssldir=${OPENSSL_INSTALL_DIR}/ssl   #/usr/local/ssl
         shared
         linux-x86_64
         no-asm
         BUILD_COMMAND make depend && make -j${CMAKE_BUILD_PARALLEL_LEVEL}
+
+        #INSTALL_COMMAND make install_sw INSTALL_PREFIX=${OPENSSL_INSTALL_DIR}
         INSTALL_COMMAND
         make install_sw DESTDIR=${CMAKE_BINARY_DIR}/temp_install &&
+
         cp -r ${CMAKE_BINARY_DIR}/temp_install/usr/local/. ${OPENSSL_INSTALL_DIR}/ &&
         #rsync -a ${CMAKE_BINARY_DIR}/temp_install/usr/local/ ${OPENSSL_INSTALL_DIR}/ &&
+
         rm -rf ${CMAKE_BINARY_DIR}/temp_install
-        BUILD_IN_SOURCE TRUE
+
+        BUILD_IN_SOURCE TRUE # Сборка в исходниках
 )
 
 # Импортируем OpenSSL после сборки
-find_package(OpenSSL REQUIRED PATHS "${OPENSSL_INSTALL_DIR}" NO_DEFAULT_PATH)
+#find_package(OpenSSL REQUIRED PATHS "${OPENSSL_INSTALL_DIR}" NO_DEFAULT_PATH)
+# Вручную указываем пути к OPENSSL
+set(OPENSSL_INCLUDE_DIR "${OPENSSL_INSTALL_DIR}/include")
+set(OPENSSL_LIBRARIES "${OPENSSL_INSTALL_DIR}/lib64/libssl.so" "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so")
+
+include_directories(${OPENSSL_INCLUDE_DIR})
+
+## зкивязка к цели
+#target_link_libraries(my_target PRIVATE ${OPENSSL_LIBRARIES})
 
 ## Вручную задаем пути к OpenSSL
 #add_library(OpenSSL::SSL SHARED IMPORTED)
 #add_library(OpenSSL::Crypto SHARED IMPORTED)
+
 #set_target_properties(OpenSSL::SSL PROPERTIES
 #        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"  # .so для Linux, .dll для Windows
 #        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include/openssl"

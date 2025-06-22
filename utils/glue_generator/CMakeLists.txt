@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.25)
 project(procont_gluegenerator)
 
 option(WERROR "Set all warnings to errors" ON)

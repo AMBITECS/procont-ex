@@ -253,16 +253,15 @@ if(BUILD_OPENSSL_FROM_SOURCE)
     # 7. Создаем псевдо-цель для удобства
     add_custom_target(openssl_all DEPENDS OpenSSL::SSL OpenSSL::Crypto)
 else()
-    # Используем системный OpenSSL
-    find_package(OpenSSL REQUIRED)
-
-    if(NOT OpenSSL_FOUND)
-        message(FATAL_ERROR "System OpenSSL not found, consider enabling BUILD_OPENSSL_FROM_SOURCE")
-    endif()
+#    # Используем системный OpenSSL
+#    find_package(OpenSSL REQUIRED)
+#    if(NOT OpenSSL_FOUND)
+#        message(FATAL_ERROR "System OpenSSL not found, consider enabling BUILD_OPENSSL_FROM_SOURCE")
+#    endif()
+#    message(STATUS "Using system OpenSSL: ${OPENSSL_VERSION}")
 
     add_custom_target(openssl_all)  # Пустая цель для совместимости
 
-    message(STATUS "Using system OpenSSL: ${OPENSSL_VERSION}")
 endif()
 
 # 8. Создаем интерфейсную библиотеку для OpenSSL (если нужно)
@@ -286,7 +285,7 @@ endif()
 # Настройка параметров
 set(ZMQ_BUILD_OPTIONS
         -DZMQ_BUILD_TESTS=OFF                       # Disable ZMQ tests
-        -WITH_TLS=${BUILD_OPENSSL_FROM_SOURCE}      # TLS только с системным OpenSSL
+        -WITH_TLS=${BUILD_OPENSSL_FROM_SOURCE}      # TLS только с OpenSSL
         -DZMQ_TLS_ENGINE=openssl                    # Use OpenSSL for TLS
         -DBUILD_SHARED=ON                           # Build shared library
         -DBUILD_STATIC=OFF                          # Disable static library

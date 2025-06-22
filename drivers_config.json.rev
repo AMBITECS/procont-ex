@@ -1,0 +1,29 @@
+{
+  "drivers_directory": "/home/master/Ambi/Work/Projects/procont-ex/.install/lib64/",
+  "drivers": [
+    {
+      "name": "can_master",
+      "library": "libcan_master.so",
+      "config": {
+        "bus_speed": 500000,
+        "node_ids": [1, 2, 3],
+        "eds_files": {
+          "1": "/etc/canopen/node1.eds",
+          "2": "/etc/canopen/node2.eds"
+        }
+      }
+    },
+    {
+      "name": "ec_master",
+      "library": "libec_master.so",
+      "config": {
+        "prop-1": 500000,
+        "prop-2": [1, 2, 3],
+        "prop-3": {
+          "1": "/etc/ethercat/node1.eds",
+          "2": "/etc/ethercat/node2.eds"
+        }
+      }
+    }
+  ]
+}

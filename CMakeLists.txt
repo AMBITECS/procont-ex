@@ -5,6 +5,9 @@ project( PROCONT-EX
          LANGUAGES CXX
 )
 
+# Опция для выбора способа получения OpenSSL
+option(BUILD_OPENSSL_FROM_SOURCE "Build OpenSSL from source instead of using system package" OFF)
+
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} BEGIN")
 
 string( TOLOWER ${PROJECT_NAME}  proj )      # proj = project name in lowercase
@@ -161,91 +164,99 @@ set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)   # openssl source dir
 set(OPENSSL_INSTALL_DIR ${PROJ_INS_DIR})        # openssl install dir
 set(MAKE_DIRECTORY "${OPENSSL_INSTALL_DIR}")
 
-# 2. Проверяем наличие исходников
-if(NOT EXISTS "${OPENSSL_ROOT_DIR}/Configure")
-    message(FATAL_ERROR "OpenSSL sources not found in ${OPENSSL_ROOT_DIR}")
+if(BUILD_OPENSSL_FROM_SOURCE)
+    # 2. Проверяем наличие исходников
+    if(NOT EXISTS "${OPENSSL_ROOT_DIR}/Configure")
+        message(FATAL_ERROR "OpenSSL sources not found in ${OPENSSL_ROOT_DIR}")
+    endif()
+
+    # 3. Сборка OpenSSL
+    # Определение архитектуры
+    set(BUILD_TARGET "linux-generic64")  # linux-aarch64 linux-x86_64
+    set(CROSS_PREFIX "")
+
+    # Создаем список команд для CONFIGURE_COMMAND
+    set(OPENSSL_CONFIGURE_COMMAND ${OPENSSL_ROOT_DIR}/Configure
+            --prefix=${OPENSSL_INSTALL_DIR}
+            --openssldir=${OPENSSL_INSTALL_DIR}/ssl
+            --cross-compile-prefix=${CROSS_PREFIX}
+            ${BUILD_TARGET}
+            -fPIC               # ← Для статической линковки в shared-библиотеки
+            #-static             # ← Полностью статическая сборка
+            no-shared           # ← Статическая сборка
+            no-module           # ← Отключаем динамические модули
+            #enable-fips         # ← Если нужен FIPS
+            #enable-legacy       # ← Включаем legacy-провайдер
+            no-legacy           # ← Полностью отключаем legacy-провайдер
+            no-autoload-config  # ← Отключаем авто-подгрузку конфигурации
+    )
+
+    ExternalProject_Add(
+            openssl_external
+            SOURCE_DIR ${OPENSSL_ROOT_DIR}
+            PREFIX "${CMAKE_BINARY_DIR}/openssl_build"
+            CONFIGURE_COMMAND ${OPENSSL_CONFIGURE_COMMAND}
+            BUILD_COMMAND make clean && make depend && make -j${CMAKE_BUILD_PARALLEL_LEVEL}
+            INSTALL_COMMAND make install_sw
+            BUILD_IN_SOURCE TRUE # Сборка в исходниках
+
+            # Условное добавление переменных окружения
+            #$<$<STREQUAL:${BUILD_TARGET},linux-aarch64>:
+            ENV
+            PATH "/usr/xcc/aarch64-unknown-linux-gnu/bin:$ENV{PATH}"
+            CC aarch64-unknown-linux-gnu-gcc
+            AR aarch64-unknown-linux-gnu-ar
+            RANLIB aarch64-unknown-linux-gnu-ranlib
+            #>
+
+            BUILD_BYPRODUCTS
+                "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"
+                "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so"
+    )
+
+    # 4. Создаем промежуточные импортированные цели
+    add_library(OpenSSL::Crypto SHARED IMPORTED GLOBAL)
+    add_library(OpenSSL::SSL    SHARED IMPORTED GLOBAL)
+
+    # 5. Устанавливаем зависимости
+    add_dependencies(OpenSSL::Crypto openssl_external)
+    add_dependencies(OpenSSL::SSL    openssl_external)
+
+    #ExternalProject_Get_Property(openssl_external BINARY_DIR)
+    #message(STATUS "OpenSSL is building in: ${BINARY_DIR}")
+
+    # 6. Откладываем установку свойств до момента сборки
+    # Для Crypto
+    set_target_properties(OpenSSL::Crypto PROPERTIES
+            IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so"
+            INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include"
+    )
+
+    # Для SSL
+    set_target_properties(OpenSSL::SSL PROPERTIES
+            IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"
+            INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include"
+            INTERFACE_LINK_LIBRARIES OpenSSL::Crypto
+    )
+
+    # 7. Создаем псевдо-цель для удобства
+    add_custom_target(openssl_all DEPENDS OpenSSL::SSL OpenSSL::Crypto)
+else()
+    # Используем системный OpenSSL
+    find_package(OpenSSL REQUIRED)
+
+    if(NOT OpenSSL_FOUND)
+        message(FATAL_ERROR "System OpenSSL not found, consider enabling BUILD_OPENSSL_FROM_SOURCE")
+    endif()
+
+    add_custom_target(openssl_all)  # Пустая цель для совместимости
+
+    message(STATUS "Using system OpenSSL: ${OPENSSL_VERSION}")
 endif()
 
-# 3. Сборка OpenSSL
-# Определение архитектуры
-set(BUILD_TARGET "linux-x86_64")  # linux-aarch64
-set(CROSS_PREFIX "")
-
-# Создаем список команд для CONFIGURE_COMMAND
-set(OPENSSL_CONFIGURE_COMMAND ${OPENSSL_ROOT_DIR}/Configure
-        --prefix=${OPENSSL_INSTALL_DIR}
-        --openssldir=${OPENSSL_INSTALL_DIR}/ssl
-        ${BUILD_TARGET}
-        no-asm
-        shared
-        -fPIC
-)
-
-ExternalProject_Add(
-        openssl_external
-        SOURCE_DIR ${OPENSSL_ROOT_DIR}
-        PREFIX "${CMAKE_BINARY_DIR}/openssl_build"
-        CONFIGURE_COMMAND ${OPENSSL_CONFIGURE_COMMAND}
-        BUILD_COMMAND make depend && make -j${CMAKE_BUILD_PARALLEL_LEVEL}
-        INSTALL_COMMAND make install_sw
-        BUILD_IN_SOURCE TRUE # Сборка в исходниках
-
-        # Условное добавление переменных окружения
-        $<$<STREQUAL:${BUILD_TARGET},linux-aarch64>:
-        ENV
-        PATH "/usr/xcc/aarch64-unknown-linux-gnu/bin:$ENV{PATH}"
-        CC aarch64-unknown-linux-gnu-gcc
-        AR aarch64-unknown-linux-gnu-ar
-        RANLIB aarch64-unknown-linux-gnu-ranlib
-        >
-
-        BUILD_BYPRODUCTS
-            "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"
-            "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so"
-)
-
-# 4. Создаем промежуточные импортированные цели
-add_library(OpenSSL::Crypto SHARED IMPORTED GLOBAL)
-add_library(OpenSSL::SSL    SHARED IMPORTED GLOBAL)
-
-# 5. Устанавливаем зависимости
-add_dependencies(OpenSSL::Crypto openssl_external)
-add_dependencies(OpenSSL::SSL    openssl_external)
-
-#ExternalProject_Get_Property(openssl_external BINARY_DIR)
-#message(STATUS "OpenSSL is building in: ${BINARY_DIR}")
-
-# 6. Откладываем установку свойств до момента сборки
-# Для Crypto
-set_target_properties(OpenSSL::Crypto PROPERTIES
-        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so"
-        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include"
-)
-
-# Для SSL
-set_target_properties(OpenSSL::SSL PROPERTIES
-        IMPORTED_LOCATION "${OPENSSL_INSTALL_DIR}/lib64/libssl.so"
-        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INSTALL_DIR}/include"
-        INTERFACE_LINK_LIBRARIES OpenSSL::Crypto
-)
-
-# 7. Создаем псевдо-цель для удобства
-add_custom_target(openssl_all DEPENDS OpenSSL::SSL OpenSSL::Crypto)
-
-## 8. Создаем интерфейсную библиотеку для OpenSSL (если нужно)
+# 8. Создаем интерфейсную библиотеку для OpenSSL (если нужно)
 #add_library(openssl_interface INTERFACE)
 #target_link_libraries(openssl_interface INTERFACE OpenSSL::SSL OpenSSL::Crypto)
-
-
-#Поиск OpenSSL только после гарантии его существования
-#set(OPENSSL_ROOT_DIR "${OPENSSL_INSTALL_DIR}")
-#set(OPENSSL_INCLUDE_DIR "${OPENSSL_INSTALL_DIR}/include")
-#set(OPENSSL_LIBRARIES "${OPENSSL_INSTALL_DIR}/lib64/libssl.so" "${OPENSSL_INSTALL_DIR}/lib64/libcrypto.so")
-##find_package(OpenSSL REQUIRED PATHS "${OPENSSL_INSTALL_DIR}" NO_DEFAULT_PATH)
-#find_package(OpenSSL REQUIRED)
-#if(NOT OpenSSL_FOUND)
-#    message(FATAL_ERROR "OpenSSL not found!")
-#endif()
 
 # 9. Включаем директории OpenSSL
 include_directories(${OPENSSL_INCLUDE_DIR})
@@ -262,14 +273,33 @@ if(NOT EXISTS "${ZMQ_ROOT_DIR}/CMakeLists.txt")
 endif()
 
 # Настройка параметров
-set(ZMQ_BUILD_TESTS OFF       CACHE BOOL    "Disable ZMQ tests")
-set(WITH_TLS        ON        CACHE BOOL    "Enable TLS support")
-set(ZMQ_TLS_ENGINE  "openssl" CACHE STRING  "Use OpenSSL for TLS")
-set(BUILD_SHARED    ON        CACHE BOOL    "Build shared library")
-set(BUILD_STATIC    OFF       CACHE BOOL    "Disable static library")
-set(ENABLE_DRAFTS   OFF       CACHE BOOL    "Disable draft APIs")
-set(WITH_PERF_TOOL  OFF       CACHE BOOL    "Disable perf tool")
-set(WITH_LIBSODIUM  OFF       CACHE BOOL    "Disable libsodium")
+#set(ZMQ_BUILD_TESTS OFF       CACHE BOOL    "Disable ZMQ tests")
+#set(WITH_TLS        ON        CACHE BOOL    "Enable TLS support")
+#set(ZMQ_TLS_ENGINE  "openssl" CACHE STRING  "Use OpenSSL for TLS")
+#set(BUILD_SHARED    ON        CACHE BOOL    "Build shared library")
+#set(BUILD_STATIC    OFF       CACHE BOOL    "Disable static library")
+#set(ENABLE_DRAFTS   OFF       CACHE BOOL    "Disable draft APIs")
+#set(WITH_PERF_TOOL  OFF       CACHE BOOL    "Disable perf tool")
+#set(WITH_LIBSODIUM  OFF       CACHE BOOL    "Disable libsodium")
+
+set(ZMQ_BUILD_OPTIONS
+        -DZMQ_BUILD_TESTS=OFF
+        -DWITH_TLS=${BUILD_OPENSSL_FROM_SOURCE} ? OFF : ON  # TLS только с системным OpenSSL
+        -DZMQ_TLS_ENGINE=openssl
+        -DBUILD_SHARED=ON
+        -DBUILD_STATIC=OFF
+        -DENABLE_DRAFTS=OFF
+        -DWITH_PERF_TOOL=OFF
+        -DWITH_LIBSODIUM=OFF
+        -DCMAKE_INSTALL_PREFIX=${ZMQ_INSTALL_DIR}
+)
+
+if(BUILD_OPENSSL_FROM_SOURCE)
+    list(APPEND ZMQ_BUILD_OPTIONS
+            -DOPENSSL_ROOT_DIR=${OPENSSL_INSTALL_DIR}
+            -DOPENSSL_USE_STATIC_LIBS=ON
+    )
+endif()
 
 # Указываем путь установки
 set(CMAKE_INSTALL_PREFIX ${ZMQ_INSTALL_DIR} CACHE PATH "Installation directory" FORCE)
@@ -334,9 +364,9 @@ include_directories(${CPPZMQ_ROOT_DIR})
 
 ######################
 ### (4) ...
+add_subdirectory(${PROJ_SUB_DIR}/json)      # --- JSON
 add_subdirectory(${PROJ_SUB_DIR}/Gateway)   # --- gateway
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus
-add_subdirectory(${PROJ_SUB_DIR}/json)      # --- JSON
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
 add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)  # --- EtherCAT
 

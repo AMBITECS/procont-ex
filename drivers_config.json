@@ -1,9 +1,9 @@
 {
-  "drivers_directory": "/home/master/Ambi/Work/Projects/procont-ex/.install/lib64/",
   "drivers": [
     {
       "name": "can_master",
       "library": "libcan_master.so",
+      "library_path": "/home/master/Ambi/Work/Projects/procont-ex/.install/lib64/",
       "config": {
         "bus_speed": 500000,
         "node_ids": [1, 2, 3],
@@ -16,6 +16,7 @@
     {
       "name": "ec_master",
       "library": "libec_master.so",
+      "library_path": "/usr/local/lib/ethercat/",
       "config": {
         "prop-1": 500000,
         "prop-2": [1, 2, 3],

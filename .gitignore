@@ -107,3 +107,5 @@ utils/Gateway/tmp/
 nstall/
 /utils/openssl/
 /tmp.txt
+
+utils/tmp/

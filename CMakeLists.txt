@@ -86,7 +86,18 @@ message("== CMAKE_BINARY_DIR: ${PROJ_SUB_DIR}")
 
 file(MAKE_DIRECTORY ${PROJ_IEC_DIR})
 
+#-------------------------------------------------------------------------------
+# 0) glue_generator
+#-------------------------------------------------------------------------------
 add_subdirectory(${PROJ_SUB_DIR}/glue_generator)
+
+# Получаем путь к бинарнику (автоматически учитывает конфигурацию)
+set(GLUE_GENERATOR_EXE $<TARGET_FILE:glue_generator>)
+message(STATUS "Glue generator path: ${GLUE_GENERATOR_EXE}")
+
+#add_executable(glue_generator glue_generator_new.cpp)
+#set(GLUE_GENERATOR_EXE $<TARGET_FILE:glue_generator>)
+#message(STATUS "Glue generator path: ${GLUE_GENERATOR_EXE}")
 
 #-------------------------------------------------------------------------------
 # 1) Компиляция ST- файла в *.c *.h
@@ -117,7 +128,7 @@ add_custom_command(
         WORKING_DIRECTORY ${PROJ_IEC_DIR}
 
         COMMAND
-        ${PROJ_SUB_DIR}/glue_generator/bin/glue_generator > ${PROJ_IEC_DIR}/glue_generator.out
+        ${GLUE_GENERATOR_EXE} > ${PROJ_IEC_DIR}/glue_generator.out
 )
 
 #-------------------------------------------------------------------------------
@@ -273,24 +284,15 @@ if(NOT EXISTS "${ZMQ_ROOT_DIR}/CMakeLists.txt")
 endif()
 
 # Настройка параметров
-#set(ZMQ_BUILD_TESTS OFF       CACHE BOOL    "Disable ZMQ tests")
-#set(WITH_TLS        ON        CACHE BOOL    "Enable TLS support")
-#set(ZMQ_TLS_ENGINE  "openssl" CACHE STRING  "Use OpenSSL for TLS")
-#set(BUILD_SHARED    ON        CACHE BOOL    "Build shared library")
-#set(BUILD_STATIC    OFF       CACHE BOOL    "Disable static library")
-#set(ENABLE_DRAFTS   OFF       CACHE BOOL    "Disable draft APIs")
-#set(WITH_PERF_TOOL  OFF       CACHE BOOL    "Disable perf tool")
-#set(WITH_LIBSODIUM  OFF       CACHE BOOL    "Disable libsodium")
-
 set(ZMQ_BUILD_OPTIONS
-        -DZMQ_BUILD_TESTS=OFF
-        -DWITH_TLS=${BUILD_OPENSSL_FROM_SOURCE} ? OFF : ON  # TLS только с системным OpenSSL
-        -DZMQ_TLS_ENGINE=openssl
-        -DBUILD_SHARED=ON
-        -DBUILD_STATIC=OFF
-        -DENABLE_DRAFTS=OFF
-        -DWITH_PERF_TOOL=OFF
-        -DWITH_LIBSODIUM=OFF
+        -DZMQ_BUILD_TESTS=OFF                       # Disable ZMQ tests
+        -WITH_TLS=${BUILD_OPENSSL_FROM_SOURCE}      # TLS только с системным OpenSSL
+        -DZMQ_TLS_ENGINE=openssl                    # Use OpenSSL for TLS
+        -DBUILD_SHARED=ON                           # Build shared library
+        -DBUILD_STATIC=OFF                          # Disable static library
+        -DENABLE_DRAFTS=OFF                         # Disable draft APIs
+        -DWITH_PERF_TOOL=OFF                        # Disable perf tool
+        -DWITH_LIBSODIUM=OFF                        # Disable libsodium
         -DCMAKE_INSTALL_PREFIX=${ZMQ_INSTALL_DIR}
 )
 

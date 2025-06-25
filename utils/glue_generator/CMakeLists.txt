@@ -7,8 +7,16 @@ set(CMAKE_CXX_STANDARD 11)
 # Основной исполняемый файл
 add_executable(glue_generator glue_generator_new.cpp)
 
-# Установка не требуется, но можно добавить экспорт цели
-install(TARGETS glue_generator EXPORT glue_generatorTargets)
+# Установка, экспорт цели
+set(INSTALL_DIR "/custom/install/path")  # Ваш кастомный путь
+
+install(TARGETS glue_generator
+        EXPORT glue_generatorTargets
+        RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin
+#        LIBRARY DESTINATION ${INSTALL_DIR}/lib
+#        ARCHIVE DESTINATION ${INSTALL_DIR}/lib
+#        PUBLIC_HEADER DESTINATION ${INSTALL_DIR}/include
+)
 
 #cmake_minimum_required(VERSION 3.0.0)
 #

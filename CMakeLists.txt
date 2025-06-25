@@ -86,16 +86,11 @@ message("== CMAKE_BINARY_DIR: ${PROJ_SUB_DIR}")
 
 file(MAKE_DIRECTORY ${PROJ_IEC_DIR})
 
-#-------------------------------------------------------------------------------
-# 0) glue_generator
-#-------------------------------------------------------------------------------
-add_subdirectory(${PROJ_SUB_DIR}/glue_generator)
-
-# Получаем путь к бинарнику (автоматически учитывает конфигурацию)
-set(GLUE_GENERATOR_EXE $<TARGET_FILE:glue_generator>)
-message(STATUS "Glue generator path: ${GLUE_GENERATOR_EXE}")
-
-#add_executable(glue_generator glue_generator_new.cpp)
+##-------------------------------------------------------------------------------
+## 0) glue_generator
+##-------------------------------------------------------------------------------
+#add_subdirectory(${PROJ_SUB_DIR}/glue_generator)
+## Получаем путь к бинарнику (автоматически учитывает конфигурацию)
 #set(GLUE_GENERATOR_EXE $<TARGET_FILE:glue_generator>)
 #message(STATUS "Glue generator path: ${GLUE_GENERATOR_EXE}")
 
@@ -128,7 +123,8 @@ add_custom_command(
         WORKING_DIRECTORY ${PROJ_IEC_DIR}
 
         COMMAND
-        ${GLUE_GENERATOR_EXE} > ${PROJ_IEC_DIR}/glue_generator.out
+        #${GLUE_GENERATOR_EXE} > ${PROJ_IEC_DIR}/glue_generator.out
+        ${PROJ_SUB_DIR}/glue_generator/bin/glue_generator > ${PROJ_IEC_DIR}/glue_generator.out
 )
 
 #-------------------------------------------------------------------------------

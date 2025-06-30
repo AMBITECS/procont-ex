@@ -2,6 +2,7 @@
 #include "driver_factory.h"
 #include "driver_manager.h"
 #include "client_factory.h"
+#include "zmq/zmq_server.h"
 
 #include <iostream>
 #include <cstdio>
@@ -37,6 +38,35 @@ unsigned long __tick = 0;   // tick counter
 bool run_plc = true;    //uint8_t run_openplc = 1;
 
 //pthread_mutex_t bufferLock; //mutex for the internal buffers
+
+// ---------------------------------------------------
+// ZmqServerCallback
+// ---------------------------------------------------
+class ZmqServerCallback : public IClientCallback {
+    ZmqServer& server_;
+public:
+    explicit ZmqServerCallback(ZmqServer& server) : server_(server) {}
+
+    void onInit() override { std::cout << "ZmqServer callback initialized\n"; }
+    void onExit() override { std::cout << "ZmqServer callback shutting down\n"; }
+    void updateInputs() override {} // Не используется для ZMQ сервера
+    void updateOutputs(const std::vector<OnDataChange>& changes) override {
+        std::vector<Tag> tags;
+        tags.reserve(changes.size());
+
+        for (const auto& change : changes) {
+            Tag tag;
+            tag.key = "%" + std::to_string(change.key);       // Формируем ключ тега
+            tag.value = VARIANT(change.data);                 // Упаковываем значение
+            tag.quality = Quality::GOOD;                      // Устанавливаем качество
+            tag.timestamp = std::chrono::system_clock::now(); // Текущее время
+
+            tags.push_back(std::move(tag));
+        }
+
+        server_.pushTagUpdates(tags);
+    }
+};
 
 // ---------------------------------------------------
 // Функция пока нужна, можно сделать ее просто пустой
@@ -260,19 +290,6 @@ bool pinNotPresent(const int *ignored_vector, int vector_size, int pinNumber) {
 //    }
 //}
 
-void testDataIntegrity() {
-    uint16_t test_val = 12345;
-    Binder::instance().bind("MW0", &test_val, PLC_UINT);
-
-    test_val = 54321;
-    Binder::instance().updateFromIec();
-
-    uint16_t reg_val = MW[0];
-
-    assert(MW[0] == 54321);
-    std::cout << "Data integrity test passed!\n";
-}
-
 //void testDataIntegrity() {
 //    // Тестируем все поддерживаемые типы
 //    std::cout << "Running Data Integrity Tests...\n";
@@ -340,6 +357,19 @@ void testDataIntegrity() {
 //
 //    std::cout << "All Data Integrity Tests passed!\n";
 //}
+
+void testDataIntegrity() {
+    uint16_t test_val = 12345;
+    Binder::instance().bind("MW0", &test_val, PLC_UINT);
+
+    test_val = 54321;
+    Binder::instance().updateFromIec();
+
+    uint16_t reg_val = MW[0];
+
+    assert(MW[0] == 54321);
+    std::cout << "Data integrity test passed!\n";
+}
 
 //=============================================================================
 int main(int argc,char **argv)
@@ -479,23 +509,6 @@ int main(int argc,char **argv)
     clock_gettime(CLOCK_MONOTONIC, &timer_start);
 
     //======================================================
-    //                    MAIN LOOP
-    //======================================================
-    //void controllerCycle() {
-    //    // 1. Обновляем входы/выходы
-    //    updateIO();
-    //
-    //    // 2. Выполняем логику
-    //    processLogic();
-    //
-    //    // 3. Проверяем изменения регистров
-    //    RegServer::instance().updateAll();
-    //
-    //    // 4. Фиксируем состояние
-    //    registry.commit();
-    //}
-    //======================================================
-
     // 1. Загружаем конфиг из JSON-файла
     DriverLoader::instance().load_config("drivers_config.json");
 
@@ -508,14 +521,27 @@ int main(int argc,char **argv)
     // 4. Инициализация фабрики
     auto client_factory = std::make_shared<ClientFactoryImpl>(server);
 
-    // 5. Создание драйверов через фабрику и инициализация их
+    // 5 Создание драйверов через фабрику и инициализация их
     DriverManager::instance().initialize(client_factory);
 
-    // 6. Уведомление драйвера об инициализации
+    //=== ZMQ ===================================================
+    // 5.1 Создаем и запускаем ZMQ сервер
+    ZmqServer& zmq_server = ZmqServer::instance("zmq_config.json");
+    zmq_server.start();
+
+    // 5.2. Создаем callback обработчик
+    auto zmq_callback = std::make_unique<ZmqServerCallback>(zmq_server);
+
+    // 5.3. Регистрируем ZMQ сервер как клиента реестра
+    auto zmq_reg_client = RegServer::instance().createClient( "zmq_server", zmq_callback.get() );
+
+    //======================================================
+    // 6. Уведомление клиентов (драйверов) об инициализации
     RegServer::instance().notifyInit();
 
+    //======================================================
     // 7.ОСНОВНОЙ ЦИКЛ PLC
-    // --------------------------------------------------------
+    //======================================================
     while (run_plc) {           // run_plc - флаг работы
 
         // 1. Фаза чтения входов
@@ -562,7 +588,11 @@ int main(int argc,char **argv)
     // 8. Уведомляем клиентов о завершении
     RegServer::instance().notifyExit();
 
-    // 9. Выгружаем драйверы
+    // 9.1 Отписываемся и завершаем работу ZMQ
+    zmq_reg_client->unsubscribeAll();
+    zmq_server.stop();
+
+    // 9.2 Выгружаем драйверы
     DriverManager::instance().shutdown();
 
     // 10. Выгружаем драйверы

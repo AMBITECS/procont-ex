@@ -16,7 +16,7 @@
     {
       "name": "ec_master",
       "library": "libec_master.so",
-      "library_path": "/usr/local/lib/ethercat/",
+      "library_path": "/home/master/Ambi/Work/Projects/procont-ex/.install/lib64/",
       "config": {
         "prop-1": 500000,
         "prop-2": [1, 2, 3],

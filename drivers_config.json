@@ -12,19 +12,6 @@
           "2": "/etc/canopen/node2.eds"
         }
       }
-    },
-    {
-      "name": "ec_master",
-      "library": "libec_master.so",
-      "library_path": "/home/master/Ambi/Work/Projects/procont-ex/.install/lib64/",
-      "config": {
-        "prop-1": 500000,
-        "prop-2": [1, 2, 3],
-        "prop-3": {
-          "1": "/etc/ethercat/node1.eds",
-          "2": "/etc/ethercat/node2.eds"
-        }
-      }
     }
   ]
 }

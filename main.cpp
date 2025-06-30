@@ -40,35 +40,6 @@ bool run_plc = true;    //uint8_t run_openplc = 1;
 //pthread_mutex_t bufferLock; //mutex for the internal buffers
 
 // ---------------------------------------------------
-// ZmqServerCallback
-// ---------------------------------------------------
-class ZmqServerCallback : public IClientCallback {
-    ZmqServer& server_;
-public:
-    explicit ZmqServerCallback(ZmqServer& server) : server_(server) {}
-
-    void onInit() override { std::cout << "ZmqServer callback initialized\n"; }
-    void onExit() override { std::cout << "ZmqServer callback shutting down\n"; }
-    void updateInputs() override {} // Не используется для ZMQ сервера
-    void updateOutputs(const std::vector<OnDataChange>& changes) override {
-        std::vector<Tag> tags;
-        tags.reserve(changes.size());
-
-        for (const auto& change : changes) {
-            Tag tag;
-            tag.key = "%" + std::to_string(change.key);       // Формируем ключ тега
-            tag.value = VARIANT(change.data);                 // Упаковываем значение
-            tag.quality = Quality::GOOD;                      // Устанавливаем качество
-            tag.timestamp = std::chrono::system_clock::now(); // Текущее время
-
-            tags.push_back(std::move(tag));
-        }
-
-        server_.pushTagUpdates(tags);
-    }
-};
-
-// ---------------------------------------------------
 // Функция пока нужна, можно сделать ее просто пустой
 // ---------------------------------------------------
 ///* Message logging function */
@@ -508,7 +479,7 @@ int main(int argc,char **argv)
     struct timespec timer_start{};
     clock_gettime(CLOCK_MONOTONIC, &timer_start);
 
-    //======================================================
+    //=== Drivers ================================================
     // 1. Загружаем конфиг из JSON-файла
     DriverLoader::instance().load_config("drivers_config.json");
 
@@ -526,14 +497,14 @@ int main(int argc,char **argv)
 
     //=== ZMQ ===================================================
     // 5.1 Создаем и запускаем ZMQ сервер
-    ZmqServer& zmq_server = ZmqServer::instance("zmq_config.json");
+    ZmqServer& zmq_server = ZmqServer::instance("zmq.properties");
     zmq_server.start();
 
-    // 5.2. Создаем callback обработчик
-    auto zmq_callback = std::make_unique<ZmqServerCallback>(zmq_server);
-
-    // 5.3. Регистрируем ZMQ сервер как клиента реестра
-    auto zmq_reg_client = RegServer::instance().createClient( "zmq_server", zmq_callback.get() );
+    // 5.2. Регистрируем ZMQ сервер как клиента реестра
+    auto zmq_reg_client = RegServer::instance().createClient(
+            "zmq_server",
+            &zmq_server     // Сам сервер является callback-ом
+    );
 
     //======================================================
     // 6. Уведомление клиентов (драйверов) об инициализации
@@ -589,8 +560,8 @@ int main(int argc,char **argv)
     RegServer::instance().notifyExit();
 
     // 9.1 Отписываемся и завершаем работу ZMQ
-    zmq_reg_client->unsubscribeAll();
-    zmq_server.stop();
+    //zmq_reg_client->unsubscribeAll();
+    zmq_server.stop(); // Автоматически вызовет unsubscribeAll
 
     // 9.2 Выгружаем драйверы
     DriverManager::instance().shutdown();

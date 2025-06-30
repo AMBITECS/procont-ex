@@ -368,12 +368,9 @@ add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
 add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)  # --- EtherCAT
 
 
-# Копирование конфига в директорию сборки
-configure_file(
-        ${PROJ_DIR}/drivers_config.json
-        ${CMAKE_CURRENT_BINARY_DIR}/drivers_config.json
-        COPYONLY
-)
+# Копирование конфигов в директорию сборки
+configure_file( ${PROJ_DIR}/drivers_config.json ${CMAKE_CURRENT_BINARY_DIR}/drivers_config.json COPYONLY )
+configure_file( ${PROJ_DIR}/zmq.properties ${CMAKE_CURRENT_BINARY_DIR}/zmq.properties COPYONLY )
 
 #-------------------------------------------------------------------------------
 # 4) Главный исполняемый модуль ${proj} = 'procont-ex'
@@ -423,4 +420,7 @@ MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")
 
 # Для установки в систему drivers_config.json
 install(FILES ${PROJ_DIR}/drivers_config.json DESTINATION ${PROJ_INS_DIR})
+
+# Для установки в систему zmq.properties
+install(FILES ${PROJ_DIR}/zmq.properties DESTINATION ${PROJ_INS_DIR})
 #------------------------------------------------------------------------------

@@ -102,11 +102,10 @@ add_custom_command(
         OUTPUT
         ${PROJ_IEC_DIR}/iec-sources
         ${PROJ_IEC_DIR}/LOCATED_VARIABLES.h
-
         DEPENDS ${PROJ_ST_FILE}
-
         WORKING_DIRECTORY ${PROJ_CMP_DIR}
-        COMMAND rm -rf *.c
+        #COMMAND rm -rf *.c
+        COMMAND rm -rf ${PROJ_IEC_DIR}/*.c ${PROJ_IEC_DIR}/*.h
         COMMAND "${PROJ_IEC2C}" -f -l -p -r -R -a "${PROJ_ST_FILE}"
         COMMAND mv -f VARIABLES.csv *.h *.c ${PROJ_IEC_DIR}
         COMMAND cd ${PROJ_IEC_DIR} && ls *.c > ${PROJ_IEC_DIR}/iec-sources
@@ -119,36 +118,52 @@ add_custom_command(
         COMMENT "(2) - Glue generator: LOCATED_VARIABLES.h -> glueVars.cpp"
         OUTPUT  ${PROJ_IEC_DIR}/glueVars.cpp
         DEPENDS glue_generator ${PROJ_IEC_DIR}/LOCATED_VARIABLES.h
-
         WORKING_DIRECTORY ${PROJ_IEC_DIR}
-
         COMMAND
-        #${GLUE_GENERATOR_EXE} > ${PROJ_IEC_DIR}/glue_generator.out
         ${PROJ_SUB_DIR}/glue_generator/bin/glue_generator > ${PROJ_IEC_DIR}/glue_generator.out
 )
 
 #-------------------------------------------------------------------------------
-# 3) Компиляция C- файлов, полученных компиляцией iec2c
+# 3) Компиляция C- файлов. Создаем библиотеку iec_shared
 #-------------------------------------------------------------------------------
-add_custom_command(
-        COMMENT "(3) - Compiling 'C' to obj-files ..."
-        OUTPUT  ${PROJ_IEC_DIR}/obj-sources
+# 1. Создаем фиктивную цель для всех генераций
+add_custom_target(build_iec
         DEPENDS
-        ${PROJ_IEC_DIR}/iec-sources
-        ${PROJ_IEC_DIR}/glueVars.cpp
-
-        WORKING_DIRECTORY ${PROJ_IEC_DIR}
-        COMMAND ${CMAKE_COMMAND}
-        -D PROJ_IEC_DIR=${PROJ_IEC_DIR}
-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-        -D PROJ_LIB_DIR=${PROJ_LIB_DIR}
-        -P ${CMAKE_DIR}/build_iec.cmake
-
-        COMMAND ls ${PROJ_IEC_DIR}/*.o > ${PROJ_IEC_DIR}/obj-sources
+            ${PROJ_IEC_DIR}/glueVars.cpp
+            ${PROJ_IEC_DIR}/iec-sources
+        COMMENT "Building IEC components"
 )
 
-#-------------------------------------------------------------------------------
-add_custom_target( build_iec ALL DEPENDS ${PROJ_IEC_DIR}/obj-sources )
+# 2. Получаем список всех сгенерированных C-файлов (без POUS.c)
+file(GLOB IEC_SOURCE_FILES "${PROJ_IEC_DIR}/*.c")
+list(REMOVE_ITEM IEC_SOURCE_FILES "${PROJ_IEC_DIR}/POUS.c")
+
+# Указываем, что .c файлы должны компилироваться как C++
+set_source_files_properties(${IEC_SOURCE_FILES} PROPERTIES LANGUAGE CXX)
+
+# 3. Создаем shared library напрямую из C-файлов
+add_library(iec_shared SHARED
+        ${IEC_SOURCE_FILES}             # Все C-файлы из IEC-компилятора
+        ${PROJ_IEC_DIR}/glueVars.cpp    # Склеенные переменные
+        ${PROJ_LIB_DIR}/iec_wrapper.cpp # Обёртка IEC модуля (для динамической загрузки)
+)
+
+# 4. Настраиваем include-директории
+target_include_directories(iec_shared
+        PUBLIC
+            ${PROJ_IEC_DIR}             # IEC-заголовки
+            ${PROJ_LIB_DIR}             # iec_std_lib.h
+            ${PROJ_SUB_DIR}/Gateway/src # global.h и driver_factory из Gateway
+)
+
+# 5. Указываем выходной каталог
+set_target_properties(iec_shared PROPERTIES
+        POSITION_INDEPENDENT_CODE ON  # Обязательно для shared lib (-fPIC)
+        LIBRARY_OUTPUT_DIRECTORY ${PROJ_INS_DIR}/lib
+)
+
+# 6. Устанавливаем зависимости (библиотека зависит от генерации кода)
+add_dependencies(iec_shared build_iec)
 
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки
@@ -392,7 +407,7 @@ build_target( ${proj} EXE
     SRCS
         ${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp
-        :MASK ${PROJ_IEC_DIR}/*.o
+        #:MASK ${PROJ_IEC_DIR}/*.o      #*** вместо сборки из *.o
 
     LNKS
         nlohmann_json
@@ -402,6 +417,7 @@ build_target( ${proj} EXE
         modbus
         can_master
         nlohmann_json::nlohmann_json
+        iec_shared                      #*** Линкуемся с shared lib вместо объектных файлов
 )
 
 #-------------------------------------------------------------------------------

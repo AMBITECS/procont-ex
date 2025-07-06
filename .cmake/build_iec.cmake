@@ -12,7 +12,8 @@ message("== IEC COMPILE FILES: ${IEC_FILES}")
 
 execute_process(
     WORKING_DIRECTORY ${PROJ_IEC_DIR}
-    COMMAND ${CMAKE_CXX_COMPILER} -I ${PROJ_LIB_DIR} -c ${IEC_FILES} -w
+    #Position-independent code -fPIC - обязательное условие для shared lib
+    COMMAND ${CMAKE_CXX_COMPILER} -I ${PROJ_LIB_DIR} -c ${IEC_FILES} -w -fPIC #*** fPIC
 )
 
 #------------------------------------------------------------------------------

@@ -495,6 +495,9 @@ int main(int argc,char **argv)
     // 5 Создание драйверов через фабрику и инициализация их
     DriverManager::instance().initialize(client_factory);
 
+    // Создаем IEC модуль
+    DriverManager::instance().initialize_iec();
+
     //=== ZMQ ===================================================
     // 5.1 Создаем и запускаем ZMQ сервер
     ZmqServer& zmq_server = ZmqServer::instance("zmq.properties");
@@ -532,7 +535,10 @@ int main(int argc,char **argv)
 
                 // 2.2 Фаза выполнения алгоритма
                 handleSpecialFunctions();    // current time & statistic
-                config_run__(__tick++); // execute plc program logic
+
+                //config_run__(__tick++); // execute plc program logic
+                // Вместо config_run__(__tick++);
+                DriverManager::instance().run_iec_cycle();
 
                 // 2.3 Выгрузка PVs
                 Binder::instance().updateFromIec();

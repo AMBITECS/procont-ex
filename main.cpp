@@ -28,6 +28,7 @@
 #include "iec_types.h"
 #include "ladder.h"
 #include "custom_layer.h"
+#include "sys_reloader.h"
 
 #include <vector>
 using namespace std;
@@ -480,23 +481,28 @@ int main(int argc,char **argv)
     clock_gettime(CLOCK_MONOTONIC, &timer_start);
 
     //=== Drivers ================================================
-    // 1. Загружаем конфиг из JSON-файла
-    DriverLoader::instance().load_config("drivers_config.json");
+    // Первоначальная инициализация
+    if (!SystemReloader::instance().full_reload("drivers_config.json")) {
+        return 1;
+    }
 
-    // 2. Загружаем .so/.dll файлы (автоматически регистрируют драйверы в DriverFactory)
-    DriverLoader::instance().load_configured_drivers();
-
-    // 3. Инстанциация сервера
-    RegServer& server = RegServer::instance();
-
-    // 4. Инициализация фабрики
-    auto client_factory = std::make_shared<ClientFactoryImpl>(server);
-
-    // 5 Создание драйверов через фабрику и инициализация их
-    DriverManager::instance().initialize(client_factory);
-
-    // Создаем IEC модуль
-    DriverManager::instance().initialize_iec();
+//    // 1. Загружаем конфиг из JSON-файла
+//    DriverLoader::instance().load_config("drivers_config.json");
+//
+//    // 2. Загружаем .so/.dll файлы (автоматически регистрируют драйверы в DriverFactory)
+//    DriverLoader::instance().load_configured_drivers();
+//
+//    // 3. Инстанциация сервера
+//    RegServer& server = RegServer::instance();
+//
+//    // 4. Инициализация фабрики
+//    auto client_factory = std::make_shared<ClientFactoryImpl>(server);
+//
+//    // 5.1 Создание драйверов через фабрику и инициализация их
+//    DriverManager::instance().initialize(client_factory);
+//
+//    // 5.2 Создаем и инициализируем IEC модуль
+//    DriverManager::instance().initialize_iec();
 
     //=== ZMQ ===================================================
     // 5.1 Создаем и запускаем ZMQ сервер
@@ -525,6 +531,8 @@ int main(int argc,char **argv)
 
         // 2. Фаза выолнения алгоритма
         {
+            auto& dm = DriverManager::instance();
+
             std::lock_guard<std::mutex> lock(bufferLock);
             updateCustomIn();       // custom IN
             {
@@ -536,9 +544,14 @@ int main(int argc,char **argv)
                 // 2.2 Фаза выполнения алгоритма
                 handleSpecialFunctions();    // current time & statistic
 
-                //config_run__(__tick++); // execute plc program logic
+                //config_run__(__tick++);    // execute plc program logic
+
                 // Вместо config_run__(__tick++);
-                DriverManager::instance().run_iec_cycle();
+                {
+                    // Безопасный доступ к модулю
+                    //std::lock_guard<std::mutex> lock(dm.get_iec_mutex());
+                    dm.run_iec_cycle();
+                }
 
                 // 2.3 Выгрузка PVs
                 Binder::instance().updateFromIec();

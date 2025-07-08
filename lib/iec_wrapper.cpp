@@ -2,6 +2,7 @@
 // Copyright © 2016-2025 AMBITECS <info@ambi.biz>
 //-----------------------------------------------------------------------------
 #include "driver_factory.h"
+#include <iostream>
 
 // объявление фуш=нкций IEC модуля
 void config_init__(void);
@@ -9,21 +10,50 @@ void config_run__(unsigned long tick);
 
 class IecWrapper : public IIecModule {
 public:
-    void initialize() override {
-        config_init__();
-        //glueVars();
+    bool initialize(const json& config) override {
+        try {
+            if (running_) shutdown();
+
+            // Парсинг конфигурации
+            cycle_time_ = config.value("cycle_time", 50);
+            debug_ = config.value("debug", false);
+
+            // Инициализация IEC
+            config_init__();
+            //glueVars();
+
+            running_ = true;
+            return true;
+        } catch (...) {
+            running_ = false;
+            return false;
+        }
     }
 
     void run_cycle() override {
-        config_run__(tick_++);
+        if (running_) {
+            config_run__(tick_++);
+        }
     }
 
+    bool is_running() const override { return running_; }
+    std::string status() const override {
+        return running_ ? "RUNNING" : "STOPPED";
+    }
+
+
     void shutdown() override {
-        // При необходимости
+        if (running_) {
+            // Корректное завершение работы
+            running_ = false;
+        }
     }
 
 private:
-    unsigned long tick_ = 0;
+    bool            debug_{};
+    bool            running_{};
+    int             cycle_time_{50};
+    unsigned long   tick_ = {};
 };
 
 // Регистрация модуля

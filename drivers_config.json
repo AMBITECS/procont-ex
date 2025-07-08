@@ -1,4 +1,12 @@
 {
+  "iec": {
+    "library_path": "",
+    "config": {
+      "cycle_time": 100,
+      "debug": true
+    }
+  },
+
   "drivers": [
     {
       "name": "can_master",

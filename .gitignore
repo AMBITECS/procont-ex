@@ -85,7 +85,6 @@ CMakeLists.txt.user*
 /*dockcross-*/
 /iec/
 /.install/
-/.install/
 
 /utils/CANopen/
 /utils/libmodbus/
@@ -110,3 +109,6 @@ nstall/
 
 utils/tmp/
 /lib/tmp/
+
+/plc/
+

@@ -4,8 +4,8 @@
 #include "driver_factory.h"
 #include <iostream>
 
-// объявление фуш=нкций IEC модуля
-void config_init__(void);
+// объявление функций IEC модуля
+void config_init__();
 void config_run__(unsigned long tick);
 
 class IecWrapper : public IIecModule {
@@ -36,15 +36,12 @@ public:
         }
     }
 
-    bool is_running() const override { return running_; }
-    std::string status() const override {
-        return running_ ? "RUNNING" : "STOPPED";
-    }
-
+    [[nodiscard]] bool is_running() const override { return running_; }
+    [[nodiscard]] std::string status() const override {return running_ ? "RUNNING" : "STOPPED";}
 
     void shutdown() override {
         if (running_) {
-            // Корректное завершение работы
+            // Корректное завершение работы ...
             running_ = false;
         }
     }

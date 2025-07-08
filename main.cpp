@@ -522,56 +522,61 @@ int main(int argc,char **argv)
     //======================================================
     // 7.ОСНОВНОЙ ЦИКЛ PLC
     //======================================================
-    while (run_plc) {           // run_plc - флаг работы
+    while (run_plc) { // run_plc - флаг работы
+        try {
+            // Рабочая логика...
+            // 1. Фаза чтения входов
+            RegServer::instance().notifyDataRead();
 
-        // 1. Фаза чтения входов
-        RegServer::instance().notifyDataRead();
+            //updateBuffersIn();        // read input image
 
-        //updateBuffersIn();        // read input image
-
-        // 2. Фаза выолнения алгоритма
-        {
-            auto& dm = DriverManager::instance();
-
-            std::lock_guard<std::mutex> lock(bufferLock);
-            updateCustomIn();       // custom IN
+            // 2. Фаза выолнения алгоритма
             {
-                updateBuffersIn_MB();       // update input image table with data from slave devices
+                auto &dm = DriverManager::instance();
 
-                // 2.1 Загрузка PVs
-                Binder::instance().updateToIec();
-
-                // 2.2 Фаза выполнения алгоритма
-                handleSpecialFunctions();    // current time & statistic
-
-                //config_run__(__tick++);    // execute plc program logic
-
-                // Вместо config_run__(__tick++);
+                std::lock_guard<std::mutex> lock(bufferLock);
+                updateCustomIn();       // custom IN
                 {
-                    // Безопасный доступ к модулю
-                    //std::lock_guard<std::mutex> lock(dm.get_iec_mutex());
-                    dm.run_iec_cycle();
+                    updateBuffersIn_MB();       // update input image table with data from slave devices
+
+                    // 2.1 Загрузка PVs
+                    Binder::instance().updateToIec();
+
+                    // 2.2 Фаза выполнения алгоритма
+                    handleSpecialFunctions();    // current time & statistic
+
+                    //config_run__(__tick++);    // execute plc program logic
+
+                    // Вместо config_run__(__tick++);
+                    {
+                        // Безопасный доступ к модулю
+                        //std::lock_guard<std::mutex> lock(dm.get_iec_mutex());
+                        dm.run_iec_cycle();
+                    }
+
+                    // 2.3 Выгрузка PVs
+                    Binder::instance().updateFromIec();
+
+                    updateBuffersOut_MB();      // update slave devices with data from the output image table
                 }
-
-                // 2.3 Выгрузка PVs
-                Binder::instance().updateFromIec();
-
-                updateBuffersOut_MB();      // update slave devices with data from the output image table
+                updateCustomOut();      // custom OUT
             }
-            updateCustomOut();      // custom OUT
+
+            //updateBuffersOut();       // write output image
+
+            // 3. Фаза записи выходов
+            RegServer::instance().notifyDataWrite();
+
+            // 4. Фиксация изменений
+            RegServer::instance().commit();
+
+            // 5. Спим до следующего цикла ...
+            updateTime();               //
+            sleep_until(&timer_start, common_ticktime__);
+
+        } catch (...) {
+            SystemReloader::instance().emergency_restore();
         }
-
-        //updateBuffersOut();       // write output image
-
-        // 3. Фаза записи выходов
-        RegServer::instance().notifyDataWrite();
-
-        // 4. Фиксация изменений
-        RegServer::instance().commit();
-
-        // 5. Спим до следующего цикла ...
-        updateTime();               //
-        sleep_until(&timer_start, common_ticktime__);
     }
 
     // --------------------------------------------------------

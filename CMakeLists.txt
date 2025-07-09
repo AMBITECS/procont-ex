@@ -270,7 +270,7 @@ add_subdirectory(${PROJ_DIR}/plc)
 
 # Добавляем другие подпроекты
 add_subdirectory(${PROJ_SUB_DIR}/json)      # --- JSON
-add_subdirectory(${PROJ_SUB_DIR}/Gateway)   # --- gateway
+#add_subdirectory(${PROJ_SUB_DIR}/Gateway)   # --- gateway
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
 add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)  # --- EtherCAT
@@ -294,18 +294,22 @@ build_target( ${proj} EXE
     PRPS CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
     INCS
         ${PROJ_SRC_DIR}/main
+        ${PROJ_SRC_DIR}/service
+        ${PROJ_SRC_DIR}/service/zmq
         ${PROJ_SRC_DIR}/plc/lib
-        ${PROJ_SUB_DIR}/utils/Gateway/src
+        #${PROJ_SUB_DIR}/utils/Gateway/src
 
     SRCS
         :MASK ${PROJ_SRC_DIR}/main/*.cpp
+        :MASK ${PROJ_SRC_DIR}/service/*.cpp
+        :MASK ${PROJ_SRC_DIR}/service/zmq/*.cpp
 
     LNKS
         plc_main
         nlohmann_json
         libzmq
         cppzmq
-        pro-gateway
+        #pro-gateway
         modbus
         can_master
 )

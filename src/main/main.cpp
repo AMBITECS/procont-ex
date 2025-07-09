@@ -28,7 +28,9 @@
 #include "iec_types.h"
 #include "ladder.h"
 #include "custom_layer.h"
+
 #include "sys_reloader.h"
+#include "zmq_server.h"
 
 #include <vector>
 using namespace std;

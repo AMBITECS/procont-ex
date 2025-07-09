@@ -1,16 +1,17 @@
 {
   "iec": {
+    "name": "PLC program",
+    "library_name": "plc_main",
     "library_path": "",
     "config": {
       "cycle_time": 100,
       "debug": true
     }
   },
-
   "drivers": [
     {
       "name": "can_master",
-      "library": "libcan_master.so",
+      "library_name": "libcan_master.so",
       "library_path": "/home/master/Ambi/Work/Projects/procont-ex/.install/lib64/",
       "config": {
         "bus_speed": 500000,

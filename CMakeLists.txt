@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project( PROCONT-EX
-         VERSION 1.0.1
-         DESCRIPTION "Procont execution environment"
-         LANGUAGES CXX
-)
+project( PROCONT-EX VERSION 1.0.1 DESCRIPTION "Procont execution environment" LANGUAGES CXX )
 
 # Опция для выбора способа получения OpenSSL
 option(BUILD_OPENSSL_FROM_SOURCE "Build OpenSSL from source instead of using system package" OFF)
@@ -24,22 +20,22 @@ if(NOT DEFINED CMAKE_PREFIX_PATH)
     MESSAGE(STATUS "SET CMAKE_PREFIX_PATH to ${CMAKE_PREFIX_PATH}")
 endif()
 
-# === SET ST_FILE param ===
-if(NOT DEFINED ST_FILE)
-    MESSAGE(STATUS "SET ST_FILE to DEFAULT \"./st_files/plc.st\"")
-    set(ST_FILE ${PROJ_DIR}/st_files/plc.st) # DEFAULT ST source file
-else()
-    if((NOT EXISTS "${ST_FILE}") OR (IS_DIRECTORY "${ST_FILE}"))
-        #MESSAGE(STATUS "(1) ST_FILE = ${ST_FILE}")
-        if(NOT ("${ST_FILE}" STREQUAL ""))
-            set (ST_FILE ${PROJ_DIR}/st_files/${ST_FILE})
-        endif()
-        #MESSAGE(STATUS "(2) ST_FILE = ${ST_FILE}")
-        if((NOT EXISTS "${ST_FILE}") OR (IS_DIRECTORY "${ST_FILE}"))
-            MESSAGE(FATAL_ERROR "- ${ST_FILE} is not a file")
-        endif()
-    endif()
-endif()
+## === SET ST_FILE param ===
+#if(NOT DEFINED ST_FILE)
+#    MESSAGE(STATUS "SET ST_FILE to DEFAULT \"./st_files/plc.st\"")
+#    set(ST_FILE ${PROJ_DIR}/st_files/plc.st) # DEFAULT ST source file
+#else()
+#    if((NOT EXISTS "${ST_FILE}") OR (IS_DIRECTORY "${ST_FILE}"))
+#        #MESSAGE(STATUS "(1) ST_FILE = ${ST_FILE}")
+#        if(NOT ("${ST_FILE}" STREQUAL ""))
+#            set (ST_FILE ${PROJ_DIR}/st_files/${ST_FILE})
+#        endif()
+#        #MESSAGE(STATUS "(2) ST_FILE = ${ST_FILE}")
+#        if((NOT EXISTS "${ST_FILE}") OR (IS_DIRECTORY "${ST_FILE}"))
+#            MESSAGE(FATAL_ERROR "- ${ST_FILE} is not a file")
+#        endif()
+#    endif()
+#endif()
 
 # === rem this lines for cross-compiling ===
 # set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local")
@@ -59,13 +55,14 @@ message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
 #-------------------------------------------------------------------------------
 # PROJ Project specific PVs
 set( PROJ_SRC_DIR   ${PROJ_DIR}           ) # PROJ sources directory
-set( PROJ_IEC_DIR   ${PROJ_DIR}/iec       ) # PROJ iec2c directory
-set( PROJ_LIB_DIR   ${PROJ_DIR}/lib       ) # PROJ includes directory
+#set( PROJ_IEC_DIR   ${PROJ_DIR}/iec       ) # PROJ iec2c directory
+#set( PROJ_LIB_DIR   ${PROJ_DIR}/lib       ) # PROJ includes directory
+set( PROJ_INC_DIR   ${PROJ_DIR}/include   ) # PROJ include directory
 set( PROJ_SUB_DIR   ${PROJ_DIR}/utils     ) # PROJ submodule directory
-set( PROJ_CMP_DIR   ${PROJ_DIR}/matiec    ) # IEC to C compiler directory
+#set( PROJ_CMP_DIR   ${PROJ_DIR}/matiec    ) # IEC to C compiler directory
 set( PROJ_INS_DIR   ${PROJ_DIR}/.install  ) # local install directory
-set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c ) # IEC to C compiler
-set( PROJ_ST_FILE   ${ST_FILE}            ) # SOURCE ST_FILE
+#set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c ) # IEC to C compiler
+#set( PROJ_ST_FILE   ${ST_FILE}            ) # SOURCE ST_FILE
 
 set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} )
 set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
@@ -74,96 +71,11 @@ include_directories (${PROJ_INS_DIR}/include)
 link_directories    (${PROJ_INS_DIR}/lib)
 link_directories    (${PROJ_INS_DIR}/lib64)
 
-message("== PROJ_DIR:     ${PROJ_DIR}")
-message("== CMAKE_DIR:    ${CMAKE_DIR}")
-message("== PROJ_INS_DIR: ${PROJ_INS_DIR}")
-message("== PROJ_SUB_DIR: ${PROJ_SUB_DIR}")
+message("== PROJ_DIR:         ${PROJ_DIR}")
+message("== CMAKE_DIR:        ${CMAKE_DIR}")
+message("== PROJ_INS_DIR:     ${PROJ_INS_DIR}")
+message("== PROJ_SUB_DIR:     ${PROJ_SUB_DIR}")
 message("== CMAKE_BINARY_DIR: ${PROJ_SUB_DIR}")
-#message("== PROJ_ST_FILE: ${PROJ_ST_FILE}")
-#message("== PROJ_IEC2C:   ${PROJ_IEC2C}")
-#message("== PROJ_IEC_DIR: ${PROJ_IEC_DIR}")
-#message("== PROJ_ST_FILE: ${PROJ_ST_FILE}\n")
-
-file(MAKE_DIRECTORY ${PROJ_IEC_DIR})
-
-##-------------------------------------------------------------------------------
-## 0) glue_generator
-##-------------------------------------------------------------------------------
-#add_subdirectory(${PROJ_SUB_DIR}/glue_generator)
-## Получаем путь к бинарнику (автоматически учитывает конфигурацию)
-#set(GLUE_GENERATOR_EXE $<TARGET_FILE:glue_generator>)
-#message(STATUS "Glue generator path: ${GLUE_GENERATOR_EXE}")
-
-#-------------------------------------------------------------------------------
-# 1) Компиляция ST- файла в *.c *.h
-#-------------------------------------------------------------------------------
-add_custom_command(
-        COMMENT "(1) - Compiling the ST file into 'C' ..."
-        OUTPUT
-        ${PROJ_IEC_DIR}/iec-sources
-        ${PROJ_IEC_DIR}/LOCATED_VARIABLES.h
-        DEPENDS ${PROJ_ST_FILE}
-        WORKING_DIRECTORY ${PROJ_CMP_DIR}
-        #COMMAND rm -rf *.c
-        COMMAND rm -rf ${PROJ_IEC_DIR}/*.c ${PROJ_IEC_DIR}/*.h
-        COMMAND "${PROJ_IEC2C}" -f -l -p -r -R -a "${PROJ_ST_FILE}"
-        COMMAND mv -f VARIABLES.csv *.h *.c ${PROJ_IEC_DIR}
-        COMMAND cd ${PROJ_IEC_DIR} && ls *.c > ${PROJ_IEC_DIR}/iec-sources
-)
-
-#-------------------------------------------------------------------------------
-# 2) Склеивание PVs перед компиляцией и сборкой (нужен glue_generator)
-#-------------------------------------------------------------------------------
-add_custom_command(
-        COMMENT "(2) - Glue generator: LOCATED_VARIABLES.h -> glueVars.cpp"
-        OUTPUT  ${PROJ_IEC_DIR}/glueVars.cpp
-        DEPENDS glue_generator ${PROJ_IEC_DIR}/LOCATED_VARIABLES.h
-        WORKING_DIRECTORY ${PROJ_IEC_DIR}
-        COMMAND
-        ${PROJ_SUB_DIR}/glue_generator/bin/glue_generator > ${PROJ_IEC_DIR}/glue_generator.out
-)
-
-#-------------------------------------------------------------------------------
-# 3) Компиляция C- файлов. Создаем библиотеку iec_shared
-#-------------------------------------------------------------------------------
-# 1. Создаем фиктивную цель для всех генераций
-add_custom_target(build_iec
-        DEPENDS
-            ${PROJ_IEC_DIR}/glueVars.cpp
-            ${PROJ_IEC_DIR}/iec-sources
-        COMMENT "Building IEC components"
-)
-
-# 2. Получаем список всех сгенерированных C-файлов (без POUS.c)
-file(GLOB IEC_SOURCE_FILES "${PROJ_IEC_DIR}/*.c")
-list(REMOVE_ITEM IEC_SOURCE_FILES "${PROJ_IEC_DIR}/POUS.c")
-
-# Указываем, что .c файлы должны компилироваться как C++
-set_source_files_properties(${IEC_SOURCE_FILES} PROPERTIES LANGUAGE CXX)
-
-# 3. Создаем shared library напрямую из C-файлов
-add_library(iec_shared SHARED
-        ${IEC_SOURCE_FILES}             # Все C-файлы из IEC-компилятора
-        ${PROJ_IEC_DIR}/glueVars.cpp    # Склеенные переменные
-        ${PROJ_LIB_DIR}/iec_wrapper.cpp # Обёртка IEC модуля (для динамической загрузки)
-)
-
-# 4. Настраиваем include-директории
-target_include_directories(iec_shared
-        PUBLIC
-            ${PROJ_IEC_DIR}             # IEC-заголовки
-            ${PROJ_LIB_DIR}             # iec_std_lib.h
-            ${PROJ_SUB_DIR}/Gateway/src # global.h и driver_factory из Gateway
-)
-
-# 5. Указываем выходной каталог
-set_target_properties(iec_shared PROPERTIES
-        POSITION_INDEPENDENT_CODE ON  # Обязательно для shared lib (-fPIC)
-        LIBRARY_OUTPUT_DIRECTORY ${PROJ_INS_DIR}/lib
-)
-
-# 6. Устанавливаем зависимости (библиотека зависит от генерации кода)
-add_dependencies(iec_shared build_iec)
 
 #-------------------------------------------------------------------------------
 # Используемые стандартные библиотеки
@@ -375,7 +287,10 @@ add_custom_target(install_cppzmq
 include_directories(${CPPZMQ_ROOT_DIR})
 
 ######################
-### (4) ...
+# Добавляем подпроект PLC
+add_subdirectory(${PROJ_DIR}/plc)
+
+# Добавляем другие подпроекты
 add_subdirectory(${PROJ_SUB_DIR}/json)      # --- JSON
 add_subdirectory(${PROJ_SUB_DIR}/Gateway)   # --- gateway
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus
@@ -400,30 +315,33 @@ build_target( ${proj} EXE
     OPTS -g -O0 -w -fPIC
     PRPS CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
     INCS
-        ${PROJ_LIB_DIR}
-        ${PROJ_IEC_DIR}
+        #${PROJ_LIB_DIR}
+        #${PROJ_IEC_DIR}
         ${PROJ_SRC_DIR}
+        ${PROJ_SRC_DIR}/plc/lib
+        ${PROJ_SUB_DIR}/utils/Gateway/src
 
     SRCS
-        ${PROJ_IEC_DIR}/glueVars.cpp
+        #${PROJ_IEC_DIR}/glueVars.cpp
         :MASK ${PROJ_SRC_DIR}/*.cpp
         #:MASK ${PROJ_IEC_DIR}/*.o      #*** вместо сборки из *.o
 
     LNKS
+        plc_main
         nlohmann_json
         libzmq
         cppzmq
         pro-gateway
         modbus
         can_master
-        nlohmann_json::nlohmann_json
-        iec_shared                      #*** Линкуемся с shared lib вместо объектных файлов
+        #nlohmann_json::nlohmann_json
+        #iec_shared                      #*** Линкуемся с shared lib вместо объектных файлов
 )
 
 #-------------------------------------------------------------------------------
 ### Dependencies ###
 #-------------------------------------------------------------------------------
-add_dependencies(${proj} build_iec)
+#add_dependencies(${proj} build_iec)
 
 ## Включение AddressSanitizer для всех конфигураций
 #if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -432,11 +350,10 @@ add_dependencies(${proj} build_iec)
 #    add_link_options(-fsanitize=address)
 #endif()
 
+# Для установки в систему drivers_config.json и zmq.properties
+install(FILES ${PROJ_DIR}/drivers_config.json DESTINATION ${PROJ_INS_DIR})
+install(FILES ${PROJ_DIR}/zmq.properties DESTINATION ${PROJ_INS_DIR})
+
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")
 
-# Для установки в систему drivers_config.json
-install(FILES ${PROJ_DIR}/drivers_config.json DESTINATION ${PROJ_INS_DIR})
-
-# Для установки в систему zmq.properties
-install(FILES ${PROJ_DIR}/zmq.properties DESTINATION ${PROJ_INS_DIR})
 #------------------------------------------------------------------------------

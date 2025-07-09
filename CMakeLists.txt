@@ -20,23 +20,6 @@ if(NOT DEFINED CMAKE_PREFIX_PATH)
     MESSAGE(STATUS "SET CMAKE_PREFIX_PATH to ${CMAKE_PREFIX_PATH}")
 endif()
 
-## === SET ST_FILE param ===
-#if(NOT DEFINED ST_FILE)
-#    MESSAGE(STATUS "SET ST_FILE to DEFAULT \"./st_files/plc.st\"")
-#    set(ST_FILE ${PROJ_DIR}/st_files/plc.st) # DEFAULT ST source file
-#else()
-#    if((NOT EXISTS "${ST_FILE}") OR (IS_DIRECTORY "${ST_FILE}"))
-#        #MESSAGE(STATUS "(1) ST_FILE = ${ST_FILE}")
-#        if(NOT ("${ST_FILE}" STREQUAL ""))
-#            set (ST_FILE ${PROJ_DIR}/st_files/${ST_FILE})
-#        endif()
-#        #MESSAGE(STATUS "(2) ST_FILE = ${ST_FILE}")
-#        if((NOT EXISTS "${ST_FILE}") OR (IS_DIRECTORY "${ST_FILE}"))
-#            MESSAGE(FATAL_ERROR "- ${ST_FILE} is not a file")
-#        endif()
-#    endif()
-#endif()
-
 # === rem this lines for cross-compiling ===
 # set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local")
 
@@ -54,15 +37,10 @@ message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
 
 #-------------------------------------------------------------------------------
 # PROJ Project specific PVs
-set( PROJ_SRC_DIR   ${PROJ_DIR}           ) # PROJ sources directory
-#set( PROJ_IEC_DIR   ${PROJ_DIR}/iec       ) # PROJ iec2c directory
-#set( PROJ_LIB_DIR   ${PROJ_DIR}/lib       ) # PROJ includes directory
+set( PROJ_SRC_DIR   ${PROJ_DIR}/src       ) # PROJ sources directory
 set( PROJ_INC_DIR   ${PROJ_DIR}/include   ) # PROJ include directory
 set( PROJ_SUB_DIR   ${PROJ_DIR}/utils     ) # PROJ submodule directory
-#set( PROJ_CMP_DIR   ${PROJ_DIR}/matiec    ) # IEC to C compiler directory
 set( PROJ_INS_DIR   ${PROJ_DIR}/.install  ) # local install directory
-#set( PROJ_IEC2C     ${PROJ_CMP_DIR}/iec2c ) # IEC to C compiler
-#set( PROJ_ST_FILE   ${ST_FILE}            ) # SOURCE ST_FILE
 
 set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} )
 set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
@@ -315,16 +293,12 @@ build_target( ${proj} EXE
     OPTS -g -O0 -w -fPIC
     PRPS CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
     INCS
-        #${PROJ_LIB_DIR}
-        #${PROJ_IEC_DIR}
-        ${PROJ_SRC_DIR}
+        ${PROJ_SRC_DIR}/main
         ${PROJ_SRC_DIR}/plc/lib
         ${PROJ_SUB_DIR}/utils/Gateway/src
 
     SRCS
-        #${PROJ_IEC_DIR}/glueVars.cpp
-        :MASK ${PROJ_SRC_DIR}/*.cpp
-        #:MASK ${PROJ_IEC_DIR}/*.o      #*** вместо сборки из *.o
+        :MASK ${PROJ_SRC_DIR}/main/*.cpp
 
     LNKS
         plc_main
@@ -334,8 +308,6 @@ build_target( ${proj} EXE
         pro-gateway
         modbus
         can_master
-        #nlohmann_json::nlohmann_json
-        #iec_shared                      #*** Линкуемся с shared lib вместо объектных файлов
 )
 
 #-------------------------------------------------------------------------------

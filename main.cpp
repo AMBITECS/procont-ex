@@ -39,6 +39,7 @@ unsigned long __tick = 0;   // tick counter
 bool run_plc = true;    //uint8_t run_openplc = 1;
 
 //pthread_mutex_t bufferLock; //mutex for the internal buffers
+std::mutex bufferLock;
 
 // ---------------------------------------------------
 // Функция пока нужна, можно сделать ее просто пустой

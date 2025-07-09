@@ -3,8 +3,10 @@
 //-----------------------------------------------------------------------------
 #include <pthread.h>
 #include <cstdint>
+#include <mutex>
 
-#include "global.h"
+//#include "iec_types.h"
+#include "pro_common.h"
 
 #define MODBUS_PROTOCOL     0
 #define DNP3_PROTOCOL       1
@@ -16,8 +18,14 @@
 
 //IEC_TIMESPEC __CURRENT_TIME;
 
+// Special functions count
+constexpr unsigned short SPEC_FUNC_COUNT = 16;
+
 //Common task timer
 extern unsigned long long common_ticktime__;
+
+// lock for the buffers
+extern std::mutex bufferLock;
 
 //----------------------------------------------------------------------
 //FUNCTION PROTOTYPES
@@ -38,9 +46,6 @@ void updateBuffersOut();
 
 //Special Functions
 extern IEC_ULINT *special_functions[SPEC_FUNC_COUNT];
-
-
-//utils.cpp
 
 void sleep_until(struct timespec *ts, unsigned long long delay);
 void sleepms(int milliseconds);

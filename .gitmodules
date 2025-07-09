@@ -13,9 +13,6 @@
 [submodule "utils/libzmq"]
 	path = utils/libzmq
 	url = https://github.com/zeromq/libzmq.git
-[submodule "utils/Gateway"]
-	path = utils/Gateway
-	url = git@github.com:AMBITECS/pro-gateway.git
 [submodule "utils/matiec"]
 	path = utils/matiec
 	url = git@github.com:AMBITECS/beremiz-matiec.git

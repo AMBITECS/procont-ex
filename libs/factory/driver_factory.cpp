@@ -17,8 +17,6 @@ std::unique_ptr<IProModule> IECFactory::create_iec() {
     return iec_creator_();
 }
 
-
-
 //-----------------------------------------------------------------------------
 DriverFactory &DriverFactory::instance() {
     static DriverFactory instance;

@@ -37,10 +37,11 @@ message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
 
 #-------------------------------------------------------------------------------
 # PROJ Project specific PVs
-set( PROJ_SRC_DIR   ${PROJ_DIR}/src       ) # PROJ sources directory
-set( PROJ_INC_DIR   ${PROJ_DIR}/include   ) # PROJ include directory
-set( PROJ_SUB_DIR   ${PROJ_DIR}/utils     ) # PROJ submodule directory
-set( PROJ_INS_DIR   ${PROJ_DIR}/.install  ) # local install directory
+set( PROJ_SRC_DIR   ${PROJ_DIR}/src       ) # PROJ sources
+set( PROJ_INC_DIR   ${PROJ_DIR}/include   ) # PROJ includes
+set( PROJ_LIB_DIR   ${PROJ_DIR}/libs      ) # PROJ libraries
+set( PROJ_SUB_DIR   ${PROJ_DIR}/utils     ) # PROJ submodule
+set( PROJ_INS_DIR   ${PROJ_DIR}/.install  ) # local install
 
 set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} )
 set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
@@ -269,12 +270,12 @@ include_directories(${CPPZMQ_ROOT_DIR})
 add_subdirectory(${PROJ_DIR}/plc)
 
 # Добавляем другие подпроекты
-add_subdirectory(${PROJ_SUB_DIR}/json)      # --- JSON
-#add_subdirectory(${PROJ_SUB_DIR}/Gateway)   # --- gateway
-add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus
-add_subdirectory(${PROJ_SUB_DIR}/CANopen)   # --- CANopen
-add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)  # --- EtherCAT
+add_subdirectory(${PROJ_SUB_DIR}/json)              # --- JSON
+add_subdirectory(${PROJ_LIB_DIR}/factory)           # --- driver factory
 
+add_subdirectory(${PROJ_SUB_DIR}/libmodbus)         # --- modbus
+add_subdirectory(${PROJ_SUB_DIR}/CANopen)           # --- CANopen
+add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)          # --- EtherCAT
 
 # Копирование конфигов в директорию сборки
 configure_file( ${PROJ_DIR}/drivers_config.json ${CMAKE_CURRENT_BINARY_DIR}/drivers_config.json COPYONLY )
@@ -293,11 +294,10 @@ build_target( ${proj} EXE
     OPTS -g -O0 -w -fPIC
     PRPS CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
     INCS
+        ${PROJ_INC_DIR}
         ${PROJ_SRC_DIR}/main
         ${PROJ_SRC_DIR}/service
         ${PROJ_SRC_DIR}/service/zmq
-        ${PROJ_SRC_DIR}/plc/lib
-        #${PROJ_SUB_DIR}/utils/Gateway/src
 
     SRCS
         :MASK ${PROJ_SRC_DIR}/main/*.cpp
@@ -309,7 +309,7 @@ build_target( ${proj} EXE
         nlohmann_json
         libzmq
         cppzmq
-        #pro-gateway
+        driver_factory
         modbus
         can_master
 )
@@ -317,16 +317,10 @@ build_target( ${proj} EXE
 #-------------------------------------------------------------------------------
 ### Dependencies ###
 #-------------------------------------------------------------------------------
-#add_dependencies(${proj} build_iec)
 
-## Включение AddressSanitizer для всех конфигураций
-#if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-#    message(STATUS "ADD: -fsanitize=address -O0 -g")
-#    add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
-#    add_link_options(-fsanitize=address)
-#endif()
-
+#-------------------------------------------------------------------------------
 # Для установки в систему drivers_config.json и zmq.properties
+#-------------------------------------------------------------------------------
 install(FILES ${PROJ_DIR}/drivers_config.json DESTINATION ${PROJ_INS_DIR})
 install(FILES ${PROJ_DIR}/zmq.properties DESTINATION ${PROJ_INS_DIR})
 

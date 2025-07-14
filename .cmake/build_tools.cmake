@@ -100,7 +100,7 @@ function(build_target TAG_NAME)
     endif()
 
     if(TAG_LNKS)
-        target_link_libraries(${TAG_NAME} ${TAG_LNKS})
+        target_link_libraries(${TAG_NAME} PRIVATE ${TAG_LNKS})
     endif()
 
 endfunction()

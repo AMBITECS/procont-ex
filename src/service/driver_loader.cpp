@@ -94,8 +94,7 @@ void DriverLoader::register_module_driver(void* handle) {
             = (void(*)(DriverFactory*))dlsym(handle, "register_driver");
 #endif
     if (register_func) {
-        DriverFactory& factory = DriverFactory::instance();
-        register_func(& factory);
+        register_func(& DriverFactory::instance());
         loaded_libraries_.push_back(handle);
     } else {
 #ifdef _WIN32
@@ -105,27 +104,6 @@ void DriverLoader::register_module_driver(void* handle) {
 #endif
     }
 }
-
-//void DriverLoader::register_module_driver(void* handle) {
-//    auto register_func = reinterpret_cast<void(*)(DriverFactory*)>(
-//#ifdef _WIN32
-//            GetProcAddress(static_cast<HMODULE>(handle), "register_driver")
-//#else
-//            dlsym(handle, "register_driver")
-//#endif
-//    );
-//
-//    if (register_func) {
-//        register_func(&DriverFactory::instance());
-//        loaded_libraries_.push_back(handle);
-//    } else {
-//#ifdef _WIN32
-//        FreeLibrary(static_cast<HMODULE>(handle));
-//#else
-//        dlclose(handle);
-//#endif
-//    }
-//}
 
 void DriverLoader::register_module_iec(void* handle) {
 #ifdef _WIN32

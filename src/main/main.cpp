@@ -1,7 +1,7 @@
 #include "driver_loader.h"
 #include "driver_manager.h"
 #include "client_factory.h"
-#include "zmq/zmq_server.h"
+#include "zmq_server.h"
 
 #include <iostream>
 #include <cstdio>
@@ -24,15 +24,28 @@
 #include "custom_layer.h"
 
 #include "sys_reloader.h"
+
+#include <csignal>
+#include <vector>
+
 #include "zmq_server.h"
 
-#include <vector>
+#ifdef HAVE_SYSTEMD
+#include <systemd/sd-daemon.h>
+#else
+// Заглушки для функционала systemd
+static inline int sd_notify(int unset_environment, const char *state) { return 0; }
+static inline int sd_notifyf(int unset_environment, const char *format, ...) { return 0; }
+#endif
+
 using namespace std;
 
 //Variable to control OpenPLC Runtime execution
 IEC_BOOL __DEBUG;
 unsigned long __tick = 0;   // tick counter
-bool run_plc = true;    //uint8_t run_openplc = 1;
+
+volatile bool run_plc = true;
+//volatile std::sig_atomic_t run_plc = true;
 
 std::mutex bufferLock;
 
@@ -47,6 +60,11 @@ void testDataIntegrity() {
 
     assert(MW[0] == 54321);
     std::cout << "Data integrity test passed!\n";
+}
+
+//-----------------------------------------------------------------------------
+void sig_handler(int) {
+    run_plc = false;
 }
 
 //=============================================================================
@@ -64,6 +82,10 @@ int main(int argc,char **argv)
     // Установка времени
     tzset();
     time(&start_time);
+
+    // Для системной службы:
+    //std::signal(SIGTERM, sig_handler);    // Для systemctl stop
+    // sd_notify(0, "READY=1");             // Уведомляем systemd о готовности
 
     //------------------------------------------------------
     // Start interactive server

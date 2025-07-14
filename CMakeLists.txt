@@ -303,9 +303,10 @@ build_target( ${proj} EXE
 
     INCS
         ${PROJ_INC_DIR}
+        ${PROJ_INC_DIR}/sd
+        ${PROJ_INC_DIR}/zmq
         ${PROJ_SRC_DIR}/main
-        ${PROJ_SRC_DIR}/service
-        ${PROJ_SRC_DIR}/service/zmq
+        #${PROJ_SRC_DIR}/service/zmq
 
     SRCS
         :MASK ${PROJ_SRC_DIR}/main/*.cpp
@@ -325,37 +326,27 @@ build_target( ${proj} EXE
 #--------------------------------------------------------------
 ### Dependencies ###
 #--------------------------------------------------------------
+#--------------------------------------------------------------
+#- link to systemd library
+#--------------------------------------------------------------
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SYSTEMD libsystemd)
+
+if(SYSTEMD_FOUND)
+    message(STATUS "Systemd development files found")
+    target_compile_definitions(${proj} PRIVATE HAVE_SYSTEMD=1)
+    target_include_directories(${proj} PRIVATE ${SYSTEMD_INCLUDE_DIRS})
+    target_link_libraries(${proj} PRIVATE ${SYSTEMD_LIBRARIES})
+else()
+    message(WARNING "Systemd development files not found - sd_notify will be disabled")
+    #target_compile_definitions(${proj} PRIVATE NO_SYSTEMD=1)
+endif()
 
 ##--------------------------------------------------------------
 ## Systemd service installation
 ##--------------------------------------------------------------
-#if(UNIX AND NOT APPLE)
-#    # Configure service file
-#    configure_file(
-#            ${CMAKE_DIR}/${PROJECT_NAME}.service.in
-#            ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.service
-#            @ONLY
-#    )
-#
-#    # Install service file
-#    install(FILES
-#            ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.service
-#            DESTINATION /lib/systemd/system
-#    )
-#
-#    # Install startup script if needed
-#    install(PROGRAMS
-#            ${CMAKE_DIR}/${PROJECT_NAME}-startup.sh
-#            DESTINATION /usr/local/bin
-#            PERMISSIONS
-#            OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-#    )
-#
-#    message(STATUS "Systemd service file will be installed")
-#endif()
-
 if(UNIX AND NOT APPLE)
-    # Configure service file
+    # Configure service file (from template)
     configure_file(
             ${CMAKE_DIR}/${PROJECT_NAME}.service.in
             ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.service
@@ -385,7 +376,8 @@ if(UNIX AND NOT APPLE)
     # Генерация скрипта для установки сервиса
     file(GENERATE
             OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/install_service.sh"
-            CONTENT "#!/bin/bash
+            CONTENT
+"#!/bin/bash
 sudo cp \"${SYSTEMD_LOCAL_DIR}/${PROJECT_NAME}.service\" /lib/systemd/system/
 sudo systemctl daemon-reload
 echo \"Service installed. Run manually:\"
@@ -393,6 +385,7 @@ echo \"  sudo systemctl enable ${PROJECT_NAME}.service\"
 echo \"  sudo systemctl start ${PROJECT_NAME}.service\""
     )
 
+    # Устанавливаем скрипт в /bin
     install(PROGRAMS
             "${CMAKE_CURRENT_BINARY_DIR}/install_service.sh"
             DESTINATION "${PROJ_INS_DIR}/bin"
@@ -400,6 +393,7 @@ echo \"  sudo systemctl start ${PROJECT_NAME}.service\""
 
     message(STATUS "Systemd service will be installed locally to: ${SYSTEMD_LOCAL_DIR}")
     message(STATUS "Use ${PROJ_INS_DIR}/bin/install_service.sh for system installation")
+
 endif()
 
 #--------------------------------------------------------------
@@ -410,10 +404,6 @@ install(TARGETS ${proj}
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
 )
-
-# Создаем поддиректории в .install каталоги для service
-#file(MAKE_DIRECTORY ${PROJ_INS_DIR}/etc)
-#file(MAKE_DIRECTORY ${PROJ_INS_DIR}/logs)
 
 # Указываем (создаём) директории для make install
 #install(DIRECTORY

@@ -10,6 +10,4 @@
 #include "iec_types.h"
 #include "binder.h"
 
-//#include "reg_server.h"
-
 #endif //PRO_GATEWAY_H

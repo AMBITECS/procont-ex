@@ -6,7 +6,11 @@
 ### Basic configuration
 # -----------------------
 APP_NAME="PROCONT-EX"
-INSTALL_DIR="$HOME/procont-ex/.install"   # Путь относительно домашней директории
+# Путь относительно домашней директории
+#INSTALL_DIR="$HOME/procont-ex/.install"   
+INSTALL_DIR="$(dirname "$(dirname "$(realpath "$0")")"
+#INSTALL_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)  # Автоматическое определение
+
 APP_PATH="${INSTALL_DIR}/bin/${APP_NAME}" # Новый путь к бинарнику
 CONFIG_DIR="${INSTALL_DIR}/etc"           # Конфиги теперь в .install/etc
 LOG_DIR="${INSTALL_DIR}/logs"             # Логи в .install/logs
@@ -38,7 +42,7 @@ fi
 ### Start application
 # -----------------------
 exec ${APP_PATH} \
-    --config ${CONFIG_DIR}/drivers_config.json \
+    --config ${CONFIG_DIR}/modules_config.json \
     --properties ${CONFIG_DIR}/zmq.properties \
     >> ${LOG_DIR}/output.log 2>&1
 

@@ -14,36 +14,18 @@ set( PROJECT_SO_VERSION          "1"  )
 set( CMAKE_CXX_STANDARD          17   )
 set( CMAKE_CXX_STANDARD_REQUIRED True )
 
-set( PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project directory
-set( CMAKE_DIR ${PROJ_DIR}/.cmake          ) # PROJ cmake files directory
-
 # === SET CMAKE_PREFIX_PATH ===
-if(NOT DEFINED CMAKE_PREFIX_PATH)
-    set(CMAKE_PREFIX_PATH   "/home/master/Qt/6.7.1/gcc_64/")
-    MESSAGE(STATUS "SET CMAKE_PREFIX_PATH to ${CMAKE_PREFIX_PATH}")
-endif()
-
-# === rem this lines for cross-compiling ===
-# set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local")
-
-# Set the installation path to the prefix path so that "find_package" looks into it
-#file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX})
-#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_INSTALL_PREFIX})
-
-#--------------------------------------------------------------
-# ==== CMake symbols ===
-#--------------------------------------------------------------
-message(STATUS "C++   COMPILER  : ${CMAKE_CXX_COMPILER}!")
-message(STATUS "CMake GENERATOR : ${CMAKE_GENERATOR}")
-message(STATUS "CMake BUILD_TYPE: ${CMAKE_BUILD_TYPE}\n")
-
-message(STATUS "CMake prefix  path: \"${CMAKE_PREFIX_PATH}\"")
-message(STATUS "CMake project path: \"${CMAKE_SOURCE_DIR}\"")
-message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
+#if(NOT DEFINED CMAKE_PREFIX_PATH)
+#    set(CMAKE_PREFIX_PATH   "/home/master/Qt/6.7.1/gcc_64/")
+#    MESSAGE(STATUS "SET CMAKE_PREFIX_PATH to ${CMAKE_PREFIX_PATH}")
+#endif()
 
 #--------------------------------------------------------------
 # PROJ Project specific PVs
 #--------------------------------------------------------------
+set( PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project directory
+set( CMAKE_DIR ${PROJ_DIR}/.cmake          ) # PROJ cmake files directory
+
 set( PROJ_SRC_DIR   ${PROJ_DIR}/src       ) # PROJ sources
 set( PROJ_INC_DIR   ${PROJ_DIR}/include   ) # PROJ includes
 set( PROJ_LIB_DIR   ${PROJ_DIR}/libs      ) # PROJ libraries
@@ -56,6 +38,17 @@ set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} CACHE PATH "Installation directory" FO
 include_directories (${PROJ_INS_DIR}/include)
 link_directories    (${PROJ_INS_DIR}/lib)
 link_directories    (${PROJ_INS_DIR}/lib64)
+
+#--------------------------------------------------------------
+# ==== CMake symbols ===
+#--------------------------------------------------------------
+message(STATUS "C++   COMPILER  : ${CMAKE_CXX_COMPILER}!")
+message(STATUS "CMake GENERATOR : ${CMAKE_GENERATOR}")
+message(STATUS "CMake BUILD_TYPE: ${CMAKE_BUILD_TYPE}\n")
+
+message(STATUS "CMake prefix  path: \"${CMAKE_PREFIX_PATH}\"")
+message(STATUS "CMake project path: \"${CMAKE_SOURCE_DIR}\"")
+message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
 
 message("== PROJ_DIR:         ${PROJ_DIR}")
 message("== CMAKE_DIR:        ${CMAKE_DIR}")
@@ -184,7 +177,7 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 ## (-2-) Сборка ZeroMQ
 #--------------------------------------------------------------
 set(ZMQ_ROOT_DIR ${PROJ_SUB_DIR}/libzmq)
-set(ZMQ_INSTALL_DIR ${PROJ_INS_DIR})
+set(ZMQ_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
 
 # Проверка исходников
 if(NOT EXISTS "${ZMQ_ROOT_DIR}/CMakeLists.txt")
@@ -215,7 +208,8 @@ endif()
 #set(CMAKE_INSTALL_PREFIX ${ZMQ_INSTALL_DIR} CACHE PATH "Installation directory" FORCE)
 
 # Добавляем libzmq как подпроект с явными зависимостями
-add_subdirectory(${PROJ_SUB_DIR}/libzmq) #EXCLUDE_FROM_ALL
+set(ZMQ_BUILD_TESTS OFF CACHE BOOL "Disable ZMQ tests" FORCE)
+add_subdirectory(${ZMQ_ROOT_DIR})
 
 # Устанавливаем зависимости
 if(TARGET libzmq AND TARGET openssl_all)
@@ -241,16 +235,18 @@ include_directories(${ZMQ_ROOT_DIR}/include)
 ### (3) Настройка и установка cppzmq
 #--------------------------------------------------------------
 set(CPPZMQ_ROOT_DIR ${PROJ_SUB_DIR}/cppzmq)
-set(CPPZMQ_INSTALL_DIR ${PROJ_INS_DIR})
+set(CPPZMQ_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
 
 set(CPPZMQ_BUILD_TESTS OFF)
 set(CPPZMQ_BUILD_EXAMPLES OFF)
 
 # Указываем путь установки
-set(CMAKE_INSTALL_PREFIX ${CPPZMQ_INSTALL_DIR} CACHE PATH "Installation directory" FORCE)
+#set(CMAKE_INSTALL_PREFIX ${CPPZMQ_INSTALL_DIR} CACHE PATH "Installation directory" FORCE)
 
 # Добавляем cppzmq как подпроект
-add_subdirectory(${PROJ_SUB_DIR}/cppzmq)
+set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "Disable CppZMQ tests" FORCE)
+set(CPPZMQ_BUILD_EXAMPLES OFF CACHE BOOL "Disable CppZMQ examples" FORCE)
+add_subdirectory(${CPPZMQ_ROOT_DIR})
 
 # Устанавливаем зависимости
 if(TARGET cppzmq AND TARGET libzmq)
@@ -273,16 +269,17 @@ add_custom_target(install_cppzmq
 include_directories(${CPPZMQ_ROOT_DIR})
 
 ######################
-add_subdirectory(${PROJ_DIR}/plc)                   # Добавляем подпроект PLC
 add_subdirectory(${PROJ_SUB_DIR}/json)              # --- JSON
 add_subdirectory(${PROJ_LIB_DIR}/factory)           # --- driver factory
 
+# библиотеки драйверов
+add_subdirectory(${PROJ_DIR}/plc)                   # --- PLC program
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus)         # --- modbus
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)           # --- CANopen
 add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)          # --- EtherCAT
 
 # Копирование конфигов в директорию сборки
-configure_file( ${PROJ_DIR}/drivers_config.json ${CMAKE_CURRENT_BINARY_DIR}/drivers_config.json COPYONLY )
+configure_file( ${PROJ_DIR}/modules_config.json ${CMAKE_CURRENT_BINARY_DIR}/modules_config.json COPYONLY )
 configure_file( ${PROJ_DIR}/zmq.properties ${CMAKE_CURRENT_BINARY_DIR}/zmq.properties COPYONLY )
 
 #--------------------------------------------------------------
@@ -306,7 +303,8 @@ build_target( ${proj} EXE
         ${PROJ_INC_DIR}/sd
         ${PROJ_INC_DIR}/zmq
         ${PROJ_SRC_DIR}/main
-        #${PROJ_SRC_DIR}/service/zmq
+        ${PROJ_SUB_DIR}/json/include
+        ${PROJ_SRC_DIR}/service/zmq
 
     SRCS
         :MASK ${PROJ_SRC_DIR}/main/*.cpp
@@ -332,7 +330,7 @@ build_target( ${proj} EXE
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SYSTEMD libsystemd)
 
-if(SYSTEMD_FOUND)
+if(SYSTEMD_FOUND AND LINUX)
     message(STATUS "Systemd development files found")
     target_compile_definitions(${proj} PRIVATE HAVE_SYSTEMD=1)
     target_include_directories(${proj} PRIVATE ${SYSTEMD_INCLUDE_DIRS})
@@ -342,20 +340,55 @@ else()
     #target_compile_definitions(${proj} PRIVATE NO_SYSTEMD=1)
 endif()
 
+#--------------------------------------------------------------
+# Установка компонентов
+#--------------------------------------------------------------
+install(TARGETS ${proj}
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+)
+
+# Создаем каталог для service файлов внутри .install
+set(SYSTEMD_LOCAL_DIR "${PROJ_INS_DIR}/systemd")
+file(MAKE_DIRECTORY "${SYSTEMD_LOCAL_DIR}")
+
+install(DIRECTORY
+        DESTINATION "${PROJ_INS_DIR}/etc"
+        FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+)
+install(FILES ${PROJ_DIR}/modules_config.json DESTINATION "${PROJ_INS_DIR}/etc")
+install(FILES ${PROJ_DIR}/zmq.properties DESTINATION "${PROJ_INS_DIR}/etc")
+
+# Добавить сообщение для логирования
+message(STATUS "Service configs will be in: ${PROJ_INS_DIR}/etc")
+
 ##--------------------------------------------------------------
 ## Systemd service installation
 ##--------------------------------------------------------------
 if(UNIX AND NOT APPLE)
-    # Configure service file (from template)
+    # 1. Генерация файла окружения
     configure_file(
-            ${CMAKE_DIR}/${PROJECT_NAME}.service.in
-            ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.service
+            ${PROJ_DIR}/procont-environment.in
+            ${CMAKE_BINARY_DIR}/procont-environment
             @ONLY
     )
 
-    # Создаем каталог для service файлов внутри .install
-    set(SYSTEMD_LOCAL_DIR "${PROJ_INS_DIR}/systemd")
-    file(MAKE_DIRECTORY "${SYSTEMD_LOCAL_DIR}")
+    # Установка
+    install(FILES
+            ${CMAKE_BINARY_DIR}/procont-environment
+            DESTINATION "${PROJ_INS_DIR}/etc"
+            PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ
+    )
+
+    # 2. Configure service file (from template)
+    # Определяем пользователя сервиса
+    set(SERVICE_USER "master")  # Или другое значение
+    configure_file(
+            ${PROJ_DIR}/${PROJECT_NAME}.service.in
+            ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.service
+            @ONLY
+    )
 
     # Install service file локально
     install(FILES
@@ -363,9 +396,9 @@ if(UNIX AND NOT APPLE)
             DESTINATION "${SYSTEMD_LOCAL_DIR}"
     )
 
-    # Install startup script локально
+    # 3. Install startup script локально
     install(PROGRAMS
-            ${CMAKE_DIR}/${PROJECT_NAME}-startup.sh
+            ${PROJ_DIR}/${PROJECT_NAME}-startup.sh
             DESTINATION "${PROJ_INS_DIR}/bin"
             PERMISSIONS
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -373,7 +406,7 @@ if(UNIX AND NOT APPLE)
             WORLD_READ WORLD_EXECUTE
     )
 
-    # Генерация скрипта для установки сервиса
+    # 4. Генерация скрипта для установки сервиса
     file(GENERATE
             OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/install_service.sh"
             CONTENT
@@ -395,34 +428,6 @@ echo \"  sudo systemctl start ${PROJECT_NAME}.service\""
     message(STATUS "Use ${PROJ_INS_DIR}/bin/install_service.sh for system installation")
 
 endif()
-
-#--------------------------------------------------------------
-# Установка компонентов
-#--------------------------------------------------------------
-install(TARGETS ${proj}
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-)
-
-# Указываем (создаём) директории для make install
-#install(DIRECTORY
-#        DESTINATION ${PROJ_INS_DIR}/etc
-#        DESTINATION ${PROJ_INS_DIR}/logs
-#)
-install(DIRECTORY DESTINATION "${SYSTEMD_LOCAL_DIR}/etc")
-install(DIRECTORY DESTINATION "${SYSTEMD_LOCAL_DIR}/logs")
-
-# Для установки в систему конфигов (в /.install - старый вариант для console app)
-install(FILES ${PROJ_DIR}/drivers_config.json DESTINATION ${PROJ_INS_DIR})
-install(FILES ${PROJ_DIR}/zmq.properties DESTINATION ${PROJ_INS_DIR})
-
-# Устанавливаем конфиги (в .install/etc вместо /.install - вариант для service)
-install(FILES ${PROJ_DIR}/drivers_config.json DESTINATION "${SYSTEMD_LOCAL_DIR}/etc")
-install(FILES ${PROJ_DIR}/zmq.properties DESTINATION "${SYSTEMD_LOCAL_DIR}/etc")
-
-# Добавить сообщение для логирования
-message(STATUS "Service configs will be in: ${SYSTEMD_LOCAL_DIR}/etc")
 
 #--------------------------------------------------------------
 ### post-install скрипт для автоматического включения службы:

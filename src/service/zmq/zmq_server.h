@@ -45,7 +45,6 @@ public:
                                const std::string& message) = 0;
 };
 
-//-----------------------------------------------------------------------------
 class ZmqServer : public IClientCallback
 {
 public:
@@ -87,6 +86,7 @@ public:
     // Получение состояния сервера
     ServerState getState() const { return state_; }
     const cfg::ZmqServerConfig& getConfig() const { return config_;}
+
 
 private:
     // Приватный конструктор (только для внутреннего использования)

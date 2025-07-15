@@ -13,8 +13,8 @@ DriverManager& DriverManager::instance() {
 }
 
 void DriverManager::initialize(const std::shared_ptr<IClientFactory>& client_factory) {
-    const auto& drivers_config = DriverLoader::instance().get_drivers_config();
-    for (const auto& driver_cfg : drivers_config) {
+    const auto& modules_config = DriverLoader::instance().get_drivers_config();
+    for (const auto& driver_cfg : modules_config) {
         try {
             // Создание драйвера
             auto driver = DriverFactory::instance().create( driver_cfg.name, client_factory );

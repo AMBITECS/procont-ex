@@ -20,7 +20,9 @@
 #include <functional>
 #include <utility>
 
-class DRIVER_API DriverFactory {
+class
+DRIVER_API
+DriverFactory {
 private:
     // Creators для драйверов
     using DriverCreator = std::function<std::unique_ptr<IProModule>(std::shared_ptr<IClientFactory>)>;
@@ -48,7 +50,7 @@ public:
     create( const std::string& name,std::shared_ptr<IClientFactory> factory );
 };
 
-//// Скрипт регистрации драйвера (через IDriverRegistrar)
+////// Скрипт регистрации драйвера (через IDriverRegistrar)
 //#define DRIVER_REGISTER(driver_name, DriverClass) \
 //extern "C" void register_driver(DriverFactory* factory) { \
 //    using FactoryPtr = std::shared_ptr<IClientFactory>; \

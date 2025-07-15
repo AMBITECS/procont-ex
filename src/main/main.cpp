@@ -153,7 +153,7 @@ int main(int argc,char **argv)
 
     //=== Drivers ================================================
     // Первоначальная инициализация
-    if (!SystemReloader::instance().full_reload("drivers_config.json")) {
+    if (!SystemReloader::instance().full_reload("modules_config.json")) {
         return 1;
     }
 

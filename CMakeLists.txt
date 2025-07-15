@@ -14,6 +14,18 @@ set( PROJECT_SO_VERSION          "1"  )
 set( CMAKE_CXX_STANDARD          17   )
 set( CMAKE_CXX_STANDARD_REQUIRED True )
 
+#--------------------------------------------------------------
+# Определение платформы и архитектуры
+#--------------------------------------------------------------
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64")
+    set(LIB_ARCH "linux-arm64")
+elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+    set(LIB_ARCH "linux-x86_64")
+elseif(WIN32)
+    set(LIB_ARCH "win64")
+endif()
+message(STATUS "Target platform: ${LIB_ARCH}")
+
 # === SET CMAKE_PREFIX_PATH ===
 #if(NOT DEFINED CMAKE_PREFIX_PATH)
 #    set(CMAKE_PREFIX_PATH   "/home/master/Qt/6.7.1/gcc_64/")
@@ -23,21 +35,47 @@ set( CMAKE_CXX_STANDARD_REQUIRED True )
 #--------------------------------------------------------------
 # PROJ Project specific PVs
 #--------------------------------------------------------------
-set( PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project directory
-set( CMAKE_DIR ${PROJ_DIR}/.cmake          ) # PROJ cmake files directory
+set( PROJ_DIR     ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project
+set( CMAKE_DIR    ${PROJ_DIR}/.cmake          ) # PROJ cmake
+set( PROJ_INS_DIR ${PROJ_DIR}/.install        ) # PROJ install (local)
+set( PROJ_SRC_DIR ${PROJ_DIR}/src             ) # PROJ sources
+set( PROJ_INC_DIR ${PROJ_DIR}/include         ) # PROJ includes
+set( PROJ_LIB_DIR ${PROJ_DIR}/libs            ) # PROJ libraries
+set( PROJ_SUB_DIR ${PROJ_DIR}/utils           ) # PROJ submodule
 
-set( PROJ_SRC_DIR   ${PROJ_DIR}/src       ) # PROJ sources
-set( PROJ_INC_DIR   ${PROJ_DIR}/include   ) # PROJ includes
-set( PROJ_LIB_DIR   ${PROJ_DIR}/libs      ) # PROJ libraries
-set( PROJ_SUB_DIR   ${PROJ_DIR}/utils     ) # PROJ submodule
-set( PROJ_INS_DIR   ${PROJ_DIR}/.install  ) # local install
 
 set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
 set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} CACHE PATH "Installation directory" FORCE )
 
 include_directories (${PROJ_INS_DIR}/include)
-link_directories    (${PROJ_INS_DIR}/lib)
-link_directories    (${PROJ_INS_DIR}/lib64)
+
+#link_directories(
+#        ${PROJ_INS_DIR}/lib
+#        ${PROJ_INS_DIR}/lib64
+#        ${PROJ_DIR}/libs/factory
+#        ${PROJ_DIR}/libs/program
+#)
+
+#--------------------------------------------------------------
+# Настройка путей к библиотекам
+#--------------------------------------------------------------
+set(PLC_MAIN_LIB_DIR "${PROJ_DIR}/libs/${LIB_ARCH}/program")
+link_directories(
+        ${PROJ_INS_DIR}/lib
+        ${PROJ_INS_DIR}/lib64
+        ${PROJ_DIR}/libs/factory
+        ${PLC_MAIN_LIB_DIR}  # Новый платформозависимый путь
+)
+
+if(UNIX AND NOT APPLE)
+    # Для Linux используем $ORIGIN
+    # \$ORIGIN/../lib означает:
+    # "ищи библиотеки в папке ../libs относительно расположения исполняемого файла"
+    set(CMAKE_INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../lib:\$ORIGIN/../libs/program")
+    # Прописывает RPATH в исполняемый файл: readelf -d исполняемый_файл | grep RPATH
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    message(STATUS "RPATH settings: ${CMAKE_INSTALL_RPATH}")
+endif()
 
 #--------------------------------------------------------------
 # ==== CMake symbols ===
@@ -273,7 +311,8 @@ add_subdirectory(${PROJ_SUB_DIR}/json)              # --- JSON
 add_subdirectory(${PROJ_LIB_DIR}/factory)           # --- driver factory
 
 # библиотеки драйверов
-add_subdirectory(${PROJ_DIR}/plc)                   # --- PLC program
+#add_subdirectory(${PROJ_OUT_DIR}/procont-plc)       # --- PLC program
+
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus)         # --- modbus
 add_subdirectory(${PROJ_SUB_DIR}/CANopen)           # --- CANopen
 add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)          # --- EtherCAT
@@ -288,6 +327,7 @@ configure_file( ${PROJ_DIR}/zmq.properties ${CMAKE_CURRENT_BINARY_DIR}/zmq.prope
 if(CMAKE_COMPILER_IS_GNUCC)
     target_compile_options(${proj} PRIVATE  -D_GNU_SOURCE -Wall -Wextra)
 endif()
+
 #set_target_properties(${proj} PROPERTIES CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
 #target_compile_definitions(${proj} PRIVATE _GLIBCXX_DEBUG=1)
 
@@ -324,8 +364,37 @@ build_target( ${proj} EXE
 #--------------------------------------------------------------
 ### Dependencies ###
 #--------------------------------------------------------------
+# Устанавливаем связь с библиотекой plc_main
 #--------------------------------------------------------------
-#- link to systemd library
+#find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_DIR}/libs/program NO_DEFAULT_PATH)
+#if(NOT PLC_MAIN_LIB)
+#    message(FATAL_ERROR "plc_main library not found! Rebuild procont-plc subproject")
+#else()
+#    message(STATUS "Found plc_main at: ${PLC_MAIN_LIB}")
+#    target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
+#endif()
+#message(STATUS "Library search paths: ${CMAKE_LIBRARY_PATH}")
+
+# Поиск платформозависимой версии библиотеки
+find_library(PLC_MAIN_LIB plc_main
+        PATHS ${PLC_MAIN_LIB_DIR}
+        NO_DEFAULT_PATH
+)
+
+if(NOT PLC_MAIN_LIB)
+    message(FATAL_ERROR "plc_main library not found for ${LIB_ARCH} at ${PLC_MAIN_LIB_DIR}")
+else()
+    message(STATUS "Found plc_main at: ${PLC_MAIN_LIB}")
+
+    # Для динамической загрузки добавляем путь к библиотеке в RPATH
+    set_target_properties(${proj} PROPERTIES
+            INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../lib:\$ORIGIN/../libs/${LIB_ARCH}/program"
+    )
+    target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
+endif()
+
+
+# Устанавливаем связь с библиотекой systemd
 #--------------------------------------------------------------
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SYSTEMD libsystemd)

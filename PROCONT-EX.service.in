@@ -1,15 +1,17 @@
 [Unit]
-Description=Procont Execution Environment (Local)
+Description=PROCONT-EX Control Service
 After=network.target
 Requires=network.target
 
 [Service]
 Type=simple
+TimeoutStartSec=30  # Уменьшаем таймаут ожидания (60s->30s)
+
 User=@SERVICE_USER@
 EnvironmentFile=@CMAKE_INSTALL_PREFIX@/etc/procont-environment
 
 ExecStart=@CMAKE_INSTALL_PREFIX@/bin/PROCONT-EX-startup.sh
-WorkingDirectory=@CMAKE_INSTALL_PREFIX@
+WorkingDirectory=@CMAKE_INSTALL_PREFIX@/bin
 
 Environment="CONFIG_DIR=@CMAKE_INSTALL_PREFIX@/etc"
 Environment="LOG_DIR=@CMAKE_INSTALL_PREFIX@/logs"

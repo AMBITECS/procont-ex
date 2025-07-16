@@ -83,18 +83,17 @@ endif()
 message(STATUS "Target platform: ${LIB_ARCH}")
 
 ##--------------------------------------------------------------
-## Настройка RPATH (только для Linux)
+## Глобальная настройка RPATH (только для Linux)
 ##--------------------------------------------------------------
 if(LINUX)
     # 1. Базовый относительный RPATH (через $ORIGIN)
     set(CMAKE_INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
-    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
     # 2. Включаем использование RPATH при сборке
     set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
     #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-    # 3. Отключаем новые dtags (для совместимости)
+    # 3. Отключаем новые dtags (приоритет RPATH над LD_LIBRARY_PATH)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
     #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--disable-new-dtags")
 
@@ -442,7 +441,7 @@ build_target(${proj} EXE
 # Настройка RPATH только для относительных путей
 #--------------------------------------------------------------
 set_target_properties(${proj} PROPERTIES
-        INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}"
+        INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:\$ORIGIN/../modules"
         BUILD_WITH_INSTALL_RPATH TRUE
 )
 
@@ -562,7 +561,7 @@ if(UNIX AND NOT APPLE)
             OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/install_service.sh"
             CONTENT
             "#!/bin/bash
-sudo cp \"${SYSTEMD_LOCAL_DIR}/${PROJECT_NAME}.service\" /lib/systemd/system/
+sudo cp \"${SYSTEMD_LOCAL_DIR}/${PROJECT_NAME}.service\" /etc/systemd/system/
 sudo systemctl daemon-reload
 echo \"Service installed. Run manually:\"
 echo \"  sudo systemctl enable ${PROJECT_NAME}.service\"

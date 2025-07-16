@@ -4,9 +4,6 @@
 [submodule "utils/libzmq"]
 	path = utils/libzmq
 	url = https://github.com/zeromq/libzmq.git
-[submodule "utils/matiec"]
-	path = utils/matiec
-	url = git@github.com:AMBITECS/beremiz-matiec.git
 [submodule "utils/openssl"]
 	path = utils/openssl
 	url = https://github.com/openssl/openssl

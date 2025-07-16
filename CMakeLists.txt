@@ -17,7 +17,8 @@ endif()
 #--------------------------------------------------------------
 set( PROJ_DIR     ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project
 set( CMAKE_DIR    ${PROJ_DIR}/.cmake          ) # PROJ cmake
-set( PROJ_INS_DIR ${PROJ_DIR}/.install        ) # PROJ install (local)
+set( PROJ_INS_DIR ${PROJ_DIR}/.deploy         ) # PROJ install (local)
+set( PROJ_ETC_DIR ${PROJ_DIR}/etc             ) # PROJ configs
 set( PROJ_SRC_DIR ${PROJ_DIR}/src             ) # PROJ sources
 set( PROJ_INC_DIR ${PROJ_DIR}/include         ) # PROJ includes
 set( PROJ_SUB_DIR ${PROJ_DIR}/utils           ) # PROJ submodule
@@ -49,6 +50,27 @@ link_directories    ( ${PROJ_LIB_DIR} )
 #--------------------------------------------------------------
 set(PLC_MAIN_LIB_DIR    ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(DRIVER_FACTORY_DIR  ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
+
+#--------------------------------------------------------------
+# Определение платформы и архитектуры
+#--------------------------------------------------------------
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "armv7")
+    set(LIB_ARCH "linux-armhf")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64") # "aarch64|arm64"
+    set(LIB_ARCH "linux-arm64")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    set(LIB_ARCH "linux-aarch64")
+elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+    set(LIB_ARCH "linux-x86_64")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i[3-6]86")
+    set(LIB_ARCH "linux-x86")
+elseif(WIN32)
+    set(LIB_ARCH "win64")
+else()
+    set(LIB_ARCH "unknown-linux")
+endif()
+
+message(STATUS "Target platform: ${LIB_ARCH}")
 
 ##--------------------------------------------------------------
 ## Настройка RPATH (только для Linux)
@@ -84,25 +106,6 @@ endif()
 #    set(CMAKE_RANLIB $ENV{RANLIB})
 #    set(CMAKE_STRIP $ENV{STRIP})
 #endif()
-
-##--------------------------------------------------------------
-## Определение платформы и архитектуры
-##--------------------------------------------------------------
-#if(CMAKE_SYSTEM_PROCESSOR MATCHES "armv7")
-#    set(LIB_ARCH "linux-armhf")
-#elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64")
-#    set(LIB_ARCH "linux-arm64")
-#elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-#    set(LIB_ARCH "linux-x86_64")
-#elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i[3-6]86")
-#    set(LIB_ARCH "linux-x86")
-#elseif(WIN32)
-#    set(LIB_ARCH "win64")
-#else()
-#    set(LIB_ARCH "unknown-linux")
-#endif()
-#
-#message(STATUS "Target platform: ${LIB_ARCH}")
 
 ##--------------------------------------------------------------
 ## === НОВОЕ: Оптимизация для Docker-сборки
@@ -151,33 +154,29 @@ include(ExternalProject)
 option(BUILD_OPENSSL_FROM_SOURCE "Build OpenSSL from source instead of using system package" OFF)
 
 # 1. Настройка путей установки
-set(OPENSSL_ROOT_DIR ${PROJ_SUB_DIR}/openssl)
+set(OPENSSL_ROOT_DIR    ${PROJ_SUB_DIR}/openssl)
 set(OPENSSL_INSTALL_DIR ${PROJ_INS_DIR})
-set(OPENSSL_LIB_DIR ${CMAKE_INSTALL_LIBDIR})  # Используем единый каталог lib
-set(MAKE_DIRECTORY "${OPENSSL_INSTALL_DIR}")
+set(OPENSSL_LIB_DIR     ${CMAKE_INSTALL_LIBDIR})  # Используем единый каталог lib
+set(MAKE_DIRECTORY      ${OPENSSL_INSTALL_DIR})
 
 #--------------------------------------------------------------
 # === НОВОЕ: Улучшенные опции сборки OpenSSL ===
 #--------------------------------------------------------------
 # 2. Опции сборки OpenSSL
 set(OPENSSL_OPTIONS
-        #-static             # ← Полностью статическая сборка
-        #enable-fips         # ← Если нужен FIPS
-        #enable-legacy       # ← Включаем legacy-провайдер
         no-shared           # Статическая сборка (.a)
         no-module           # Отключение динамических модулей
         no-legacy           # Отключение устаревших алгоритмов
         no-autoload-config  # Отключение авто-подгрузки конфигурации
         -fPIC               # Позиционно-независимый код
+        #-static             # ← Полностью статическая сборка
+        #enable-fips         # ← Если нужен FIPS
+        #enable-legacy       # ← Включаем legacy-провайдер
 )
 message(STATUS "OpenSSL options: ${OPENSSL_OPTIONS}")
 
 # 3. Определение целевой платформы
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-    set(OPENSSL_TARGET "linux-aarch64")
-elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-    set(OPENSSL_TARGET "linux-x86_64")
-endif()
+set(OPENSSL_TARGET ${LIB_ARCH})
 
 if(BUILD_OPENSSL_FROM_SOURCE)
     # 4. Проверка исходного кода
@@ -194,7 +193,7 @@ if(BUILD_OPENSSL_FROM_SOURCE)
                 ${OPENSSL_ROOT_DIR}/Configure
                 ${OPENSSL_TARGET}
                 --prefix=${OPENSSL_INSTALL_DIR}
-                --libdir=${OPENSSL_LIB_DIR}       # Явное указание каталога
+                --libdir=${OPENSSL_LIB_DIR}       # Явное указание каталога (lib)
                 --openssldir=${OPENSSL_INSTALL_DIR}/ssl
                 ${OPENSSL_OPTIONS}
             BUILD_COMMAND     $(MAKE) -j${CMAKE_BUILD_PARALLEL_LEVEL}
@@ -229,7 +228,7 @@ if(BUILD_OPENSSL_FROM_SOURCE)
     # 9. Создаем псевдо-цель для удобства
     add_custom_target(openssl_all DEPENDS OpenSSL::SSL OpenSSL::Crypto)
 else()
-    # Вариант с системным OpenSSL
+    # Вариант с системным OpenSSL (если он нужен)
     #    find_package(OpenSSL REQUIRED)
     #    if(NOT OpenSSL_FOUND)
     #        message(FATAL_ERROR "System OpenSSL not found, consider enabling BUILD_OPENSSL_FROM_SOURCE")
@@ -258,8 +257,8 @@ endif()
 #--------------------------------------------------------------
 # (-2-) Сборка ZeroMQ (с унификацией путей библиотек)
 #--------------------------------------------------------------
-set(ZMQ_ROOT_DIR ${PROJ_SUB_DIR}/libzmq)
-set(ZMQ_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
+set(ZMQ_ROOT_DIR    ${PROJ_SUB_DIR}/libzmq)
+set(ZMQ_INSTALL_DIR ${PROJ_INS_DIR})
 
 # Проверка наличия исходников
 if(NOT EXISTS "${ZMQ_ROOT_DIR}/CMakeLists.txt")
@@ -268,17 +267,17 @@ endif()
 
 # Настройки сборки с явным указанием каталога библиотек
 set(ZMQ_BUILD_OPTIONS
-        -DZMQ_BUILD_TESTS=OFF                       # Отключение тестов
-        -DWITH_TLS=${BUILD_OPENSSL_FROM_SOURCE}      # TLS только с OpenSSL
-        -DZMQ_TLS_ENGINE=openssl                    # Использовать OpenSSL для TLS
-        -DBUILD_SHARED=ON                           # Сборка shared-библиотеки
-        -DBUILD_STATIC=OFF                          # Отключение статической сборки
-        -DENABLE_DRAFTS=OFF                         # Отключение draft API
-        -DWITH_PERF_TOOL=OFF                        # Отключение perf-инструментов
-        -DWITH_LIBSODIUM=OFF                        # Отключение libsodium
-        -DCMAKE_INSTALL_PREFIX=${ZMQ_INSTALL_DIR}   # Каталог установки
-        -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR} # Единый каталог для библиотек
-        -DWITH_LIBDIR_SUFFIX=OFF                    # Запрет автоматических суффиксов
+        -DZMQ_BUILD_TESTS=OFF                           # Отключение тестов
+        -DWITH_TLS=${BUILD_OPENSSL_FROM_SOURCE}         # TLS только с OpenSSL
+        -DZMQ_TLS_ENGINE=openssl                        # Использовать OpenSSL для TLS
+        -DBUILD_SHARED=ON                               # Сборка shared-библиотеки
+        -DBUILD_STATIC=OFF                              # Отключение статической сборки
+        -DENABLE_DRAFTS=OFF                             # Отключение draft API
+        -DWITH_PERF_TOOL=OFF                            # Отключение perf-инструментов
+        -DWITH_LIBSODIUM=OFF                            # Отключение libsodium
+        -DCMAKE_INSTALL_PREFIX=${ZMQ_INSTALL_DIR}       # Каталог установки
+        -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}  # Единый каталог для библиотек
+        -DWITH_LIBDIR_SUFFIX=OFF                        # Запрет автоматических суффиксов
 )
 message(STATUS "ZeroMQ build options: ${ZMQ_BUILD_OPTIONS}")
 
@@ -329,8 +328,8 @@ include_directories(${ZMQ_ROOT_DIR}/include)
 #--------------------------------------------------------------
 # (3) Настройка и установка cppzmq (с унификацией путей библиотек)
 #--------------------------------------------------------------
-set(CPPZMQ_ROOT_DIR ${PROJ_SUB_DIR}/cppzmq)
-set(CPPZMQ_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
+set(CPPZMQ_ROOT_DIR    ${PROJ_SUB_DIR}/cppzmq)
+set(CPPZMQ_INSTALL_DIR ${PROJ_INS_DIR})
 
 # Проверка наличия исходников
 if(NOT EXISTS "${CPPZMQ_ROOT_DIR}/CMakeLists.txt")
@@ -341,13 +340,13 @@ endif()
 #set(CPPZMQ_BUILD_TESTS OFF)     # Отключение тестов
 #set(CPPZMQ_BUILD_EXAMPLES OFF)  # Отключение примеров
 set(CPPZMQ_BUILD_OPTIONS
-        -DCPPZMQ_BUILD_TESTS=OFF              # Отключение тестов
-        -DCPPZMQ_BUILD_EXAMPLES=OFF           # Отключение примеров
+        -DCPPZMQ_BUILD_TESTS=OFF    # Отключение тестов
+        -DCPPZMQ_BUILD_EXAMPLES=OFF # Отключение примеров
         -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}  # Единый каталог библиотек
 )
 
 # Добавление подпроекта с кастомными настройками
-set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "Disable CppZMQ tests" FORCE)
+set(CPPZMQ_BUILD_TESTS    OFF CACHE BOOL "Disable CppZMQ tests"    FORCE)
 set(CPPZMQ_BUILD_EXAMPLES OFF CACHE BOOL "Disable CppZMQ examples" FORCE)
 
 add_subdirectory(${CPPZMQ_ROOT_DIR})
@@ -380,30 +379,85 @@ add_custom_target(install_cppzmq
 include_directories(${CPPZMQ_ROOT_DIR})
 
 #--------------------------------------------------------------
+# 4. Driver Factory Library
+#--------------------------------------------------------------
+add_library(driver_factory SHARED ${PROJ_SRC_DIR}/service/driver_factory.cpp)
+
+# Настройка свойств библиотеки
+set_target_properties(driver_factory PROPERTIES
+        VERSION 1.0.1
+        SOVERSION 1
+        OUTPUT_NAME "driver_factory"
+        BUILD_WITH_INSTALL_RPATH TRUE
+        INSTALL_RPATH "\$ORIGIN"
+        LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+        ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+)
+
+# Настройки компиляции
+target_compile_features     (driver_factory PUBLIC cxx_std_17)
+target_include_directories  (driver_factory PUBLIC ${PROJ_INC_DIR} )
+
+# Экспорт символов
+target_compile_definitions(driver_factory PRIVATE
+        $<$<NOT:$<BOOL:${WIN32}>>:DRIVER_API_VISIBILITY>
+)
+
+# Установка библиотеки
+install(TARGETS driver_factory
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+# Платформо-специфичные настройки
+if(UNIX AND NOT APPLE)
+    target_compile_options  (driver_factory PRIVATE -fPIC -Wall -Wextra)
+    target_link_options     (driver_factory PRIVATE -Wl,--no-undefined -Wl,--as-needed )
+endif()
+
+#--------------------------------------------------------------
 # Основные подпроекты (с унификацией путей библиотек)
 #--------------------------------------------------------------
 # Для каждого подпроекта добавляем передачу CMAKE_INSTALL_LIBDIR
-add_subdirectory(${PROJ_SUB_DIR}/json)              # --- JSON (header-only)
-add_subdirectory(${PROJ_SRC_DIR}/factory)           # --- driver factory
+#add_subdirectory(${PROJ_SUB_DIR}/json)              # --- JSON (header-only)
+#add_subdirectory(${PROJ_SRC_DIR}/factory)           # --- driver factory
 
 # библиотеки драйверов
-add_subdirectory(${PROJ_SUB_DIR}/libmodbus)         # --- modbus
-add_subdirectory(${PROJ_SUB_DIR}/CANopen)           # --- CANopen
-add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)          # --- EtherCAT
-
 # Убедитесь, что в каждом подпроекте есть:
 # install(TARGETS ... LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
+# автоподгружаемые модули (плагины)
+add_subdirectory(${PROJ_SUB_DIR}/libmodbus)         # --- modbus (пока в разработке)
+#add_subdirectory(${PROJ_SUB_DIR}/CANopen)           # --- CANopen
+#add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)          # --- EtherCAT
+
 # Копирование конфигов в директорию сборки
-configure_file(${PROJ_DIR}/modules_config.json ${CMAKE_CURRENT_BINARY_DIR}/modules_config.json COPYONLY)
-configure_file(${PROJ_DIR}/zmq.properties ${CMAKE_CURRENT_BINARY_DIR}/zmq.properties COPYONLY)
+configure_file(${PROJ_DIR}/modules_config.json ${PROJ_ETC_DIR}/modules_config.json  COPYONLY)
+configure_file(${PROJ_DIR}/zmq.properties      ${PROJ_ETC_DIR}/zmq.properties       COPYONLY)
+
+# =============================================================
+# Главный исполняемый модуль (обновленные настройки)
+# =============================================================
+#--------------------------------------------------------------
+# Проверка наличия необходимых компонентов
+#--------------------------------------------------------------
+# driver_factory
+find_library(DRIVER_FACTORY_LIB driver_factory PATHS ${PROJ_LIB_DIR} NO_DEFAULT_PATH REQUIRED)
+
+# json
+# 1. Проверяем наличие заголовков JSON в .deploy/include
+find_path(JSON_INCLUDE_DIR NAMES nlohmann/json.hpp PATHS ${PROJ_INC_DIR} NO_DEFAULT_PATH REQUIRED)
+
+# 2. Создаем интерфейсную цель для JSON (header-only)
+add_library(nlohmann_json INTERFACE)
+target_include_directories(nlohmann_json INTERFACE ${JSON_INCLUDE_DIR})
+
+# 3. Для совместимости с кодом, ожидающим подпроект json
+add_library(json ALIAS nlohmann_json)
 
 #--------------------------------------------------------------
-# 4) Главный исполняемый модуль (обновленные настройки)
+# Сборка исполняемого модуля
 #--------------------------------------------------------------
-# Проверка наличия driver_factory
-find_library(DRIVER_FACTORY_LIB driver_factory PATHS ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR} NO_DEFAULT_PATH REQUIRED)
-
 build_target(${proj} EXE
         OPTS
             -g -O0 -w -fPIC
@@ -421,33 +475,30 @@ build_target(${proj} EXE
             :MASK ${PROJ_SRC_DIR}/service/*.cpp
             :MASK ${PROJ_SRC_DIR}/service/zmq/*.cpp
         LNKS
-            nlohmann_json
+            json
+            driver_factory
             libzmq
             cppzmq
-            driver_factory
             modbus
 
+            #nlohmann_json
             #plc_main
             #can_master
+            #ec_master
 )
 
 #--------------------------------------------------------------
-# Поиск и линковка с plc_main
-#--------------------------------------------------------------
-find_library(PLC_MAIN_LIB plc_main
-        PATHS ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR}
-        NO_DEFAULT_PATH
-        REQUIRED
-)
-
-message(STATUS "Found plc_main at: ${PLC_MAIN_LIB}")
-
 # Настройка RPATH только для относительных путей
+#--------------------------------------------------------------
 set_target_properties(${proj} PROPERTIES
         INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}"
         BUILD_WITH_INSTALL_RPATH TRUE
 )
 
+#--------------------------------------------------------------
+# Поиск и линковка с plc_main
+#--------------------------------------------------------------
+find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_LIB_DIR} NO_DEFAULT_PATH REQUIRED )
 target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
 
 ##--------------------------------------------------------------

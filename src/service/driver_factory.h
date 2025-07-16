@@ -50,26 +50,16 @@ public:
     create( const std::string& name,std::shared_ptr<IClientFactory> factory );
 };
 
-////// Скрипт регистрации драйвера (через IDriverRegistrar)
-//#define DRIVER_REGISTER(driver_name, DriverClass) \
-//extern "C" void register_driver(DriverFactory* factory) { \
-//    using FactoryPtr = std::shared_ptr<IClientFactory>; \
-//    factory->register_driver(driver_name, [](IClientFactory* raw_factory) { \
-//        FactoryPtr shared_factory(raw_factory, [](auto*){}); \
-//        return std::make_unique<DriverClass>(shared_factory); \
-//    }); \
-//}
-
 // Упрощенный C-интерфейс для регистрации
 extern "C" DRIVER_API void register_driver(const char* name);
 
+//// Скрипт регистрации драйвера
 #define DRIVER_REGISTER(driver_name, DriverClass) \
 extern "C" DRIVER_API void register_driver(const char* name) { \
     auto& factory = DriverFactory::instance(); \
     factory.register_driver(name, [](IClientFactory* f) { \
         auto sf = std::shared_ptr<IClientFactory>(f, [](auto*){}); \
         return std::make_unique<DriverClass>(sf); \
-    }); \
-}
+    });}
 
 #endif // DRIVER_FACTORY_H

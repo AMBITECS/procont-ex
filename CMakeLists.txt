@@ -17,11 +17,13 @@ endif()
 #--------------------------------------------------------------
 set( PROJ_DIR     ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project
 set( CMAKE_DIR    ${PROJ_DIR}/.cmake          ) # PROJ cmake
-set( PROJ_INS_DIR ${PROJ_DIR}/.deploy         ) # PROJ install (local)
-set( PROJ_ETC_DIR ${PROJ_DIR}/etc             ) # PROJ configs
+set( PROJ_DEP     ${PROJ_DIR}/.deploy         ) # PROJ deploy
+set( PROJ_ETC_DIR ${PROJ_DEP}/etc             ) # PROJ configs
+set( PROJ_INC_DIR ${PROJ_DEP}/include         ) # PROJ includes
+
 set( PROJ_SRC_DIR ${PROJ_DIR}/src             ) # PROJ sources
-set( PROJ_INC_DIR ${PROJ_DIR}/include         ) # PROJ includes
 set( PROJ_SUB_DIR ${PROJ_DIR}/utils           ) # PROJ submodule
+
 
 #--------------------------------------------------------------
 # Настройка путей к библиотекам и модулям
@@ -30,26 +32,26 @@ set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find)
 
 # Унификация единых каталогов для инсталляции (вместо lib|lib64 -> lib)
 set( CMAKE_INSTALL_LIBDIR "lib" CACHE STRING "Library installation directory" FORCE )
-set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} CACHE PATH "Installation directory" FORCE )
+set( CMAKE_INSTALL_PREFIX ${PROJ_DEP} CACHE PATH "Installation directory" FORCE )
 
 # Устанавливаем единый каталог для инсталляции
-set( PROJ_LIB_DIR ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR} ) # PROJ libraries
+set( PROJ_LIB_DIR ${PROJ_DEP}/${CMAKE_INSTALL_LIBDIR} ) # PROJ libraries
 if(NOT EXISTS "${PROJ_LIB_DIR}")
     file(MAKE_DIRECTORY "${PROJ_LIB_DIR}")
 endif()
 
 # Устанавливаем единые каталоги для сборки модулей
-set(LIBRARY_OUTPUT_PATH     ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(EXECUTABLE_OUTPUT_PATH  ${PROJ_INS_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH     ${PROJ_DEP}/${CMAKE_INSTALL_LIBDIR})
+set(EXECUTABLE_OUTPUT_PATH  ${PROJ_DEP}/bin)
 
-include_directories ( ${PROJ_INS_DIR}/include )
+include_directories ( ${PROJ_DEP}/include )
 link_directories    ( ${PROJ_LIB_DIR} )
 
 #--------------------------------------------------------------
 # Пути к основным библиотекам (синонимы) - CANopen, modbus и т.п.
 #--------------------------------------------------------------
-set(PLC_MAIN_LIB_DIR    ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(DRIVER_FACTORY_DIR  ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(PLC_MAIN_LIB_DIR    ${PROJ_DEP}/${CMAKE_INSTALL_LIBDIR})
+set(DRIVER_FACTORY_DIR  ${PROJ_DEP}/${CMAKE_INSTALL_LIBDIR})
 
 #--------------------------------------------------------------
 # Определение платформы и архитектуры
@@ -131,7 +133,7 @@ message(STATUS "CMake install path: \"${CMAKE_INSTALL_PREFIX}\"\n")
 
 message("== PROJ_DIR:         ${PROJ_DIR}")
 message("== CMAKE_DIR:        ${CMAKE_DIR}")
-message("== PROJ_INS_DIR:     ${PROJ_INS_DIR}")
+message("== PROJ_DEP:     ${PROJ_DEP}")
 message("== PROJ_SUB_DIR:     ${PROJ_SUB_DIR}")
 message("== CMAKE_BINARY_DIR: ${PROJ_SUB_DIR}")
 
@@ -155,7 +157,7 @@ option(BUILD_OPENSSL_FROM_SOURCE "Build OpenSSL from source instead of using sys
 
 # 1. Настройка путей установки
 set(OPENSSL_ROOT_DIR    ${PROJ_SUB_DIR}/openssl)
-set(OPENSSL_INSTALL_DIR ${PROJ_INS_DIR})
+set(OPENSSL_INSTALL_DIR ${PROJ_DEP})
 set(OPENSSL_LIB_DIR     ${CMAKE_INSTALL_LIBDIR})  # Используем единый каталог lib
 set(MAKE_DIRECTORY      ${OPENSSL_INSTALL_DIR})
 
@@ -169,9 +171,6 @@ set(OPENSSL_OPTIONS
         no-legacy           # Отключение устаревших алгоритмов
         no-autoload-config  # Отключение авто-подгрузки конфигурации
         -fPIC               # Позиционно-независимый код
-        #-static             # ← Полностью статическая сборка
-        #enable-fips         # ← Если нужен FIPS
-        #enable-legacy       # ← Включаем legacy-провайдер
 )
 message(STATUS "OpenSSL options: ${OPENSSL_OPTIONS}")
 
@@ -258,7 +257,7 @@ endif()
 # (-2-) Сборка ZeroMQ (с унификацией путей библиотек)
 #--------------------------------------------------------------
 set(ZMQ_ROOT_DIR    ${PROJ_SUB_DIR}/libzmq)
-set(ZMQ_INSTALL_DIR ${PROJ_INS_DIR})
+set(ZMQ_INSTALL_DIR ${PROJ_DEP})
 
 # Проверка наличия исходников
 if(NOT EXISTS "${ZMQ_ROOT_DIR}/CMakeLists.txt")
@@ -298,7 +297,7 @@ if(NOT TARGET libzmq)
     message(FATAL_ERROR "libzmq target not created!")
 endif()
 
-# Настройка выходного каталога для библиотек
+# Настройка выходного каталога для библиотек (при сборке)
 set_target_properties(libzmq PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}
@@ -326,60 +325,7 @@ add_custom_target(install_libzmq
 include_directories(${ZMQ_ROOT_DIR}/include)
 
 #--------------------------------------------------------------
-# (3) Настройка и установка cppzmq (с унификацией путей библиотек)
-#--------------------------------------------------------------
-set(CPPZMQ_ROOT_DIR    ${PROJ_SUB_DIR}/cppzmq)
-set(CPPZMQ_INSTALL_DIR ${PROJ_INS_DIR})
-
-# Проверка наличия исходников
-if(NOT EXISTS "${CPPZMQ_ROOT_DIR}/CMakeLists.txt")
-    message(FATAL_ERROR "cppzmq sources not found in ${CPPZMQ_ROOT_DIR}")
-endif()
-
-# Настройки сборки
-#set(CPPZMQ_BUILD_TESTS OFF)     # Отключение тестов
-#set(CPPZMQ_BUILD_EXAMPLES OFF)  # Отключение примеров
-set(CPPZMQ_BUILD_OPTIONS
-        -DCPPZMQ_BUILD_TESTS=OFF    # Отключение тестов
-        -DCPPZMQ_BUILD_EXAMPLES=OFF # Отключение примеров
-        -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}  # Единый каталог библиотек
-)
-
-# Добавление подпроекта с кастомными настройками
-set(CPPZMQ_BUILD_TESTS    OFF CACHE BOOL "Disable CppZMQ tests"    FORCE)
-set(CPPZMQ_BUILD_EXAMPLES OFF CACHE BOOL "Disable CppZMQ examples" FORCE)
-
-add_subdirectory(${CPPZMQ_ROOT_DIR})
-
-# Проверка создания target
-if(NOT TARGET cppzmq)
-    message(FATAL_ERROR "cppzmq target not created!")
-endif()
-
-# Установка зависимостей
-if(TARGET cppzmq AND TARGET libzmq)
-    add_dependencies(cppzmq libzmq)
-    # Для header-only может не требоваться, но оставляем для совместимости
-endif()
-
-# Кастомная команда установки
-add_custom_target(install_cppzmq
-        COMMAND ${CMAKE_COMMAND}
-        --install ${CMAKE_BINARY_DIR}/utils/cppzmq
-        --prefix ${CPPZMQ_INSTALL_DIR}
-        --libdir ${CMAKE_INSTALL_LIBDIR}  # Явное указание каталога
-        --config $<CONFIG>
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        DEPENDS cppzmq
-        COMMENT "Installing cppzmq to ${CPPZMQ_INSTALL_DIR}/${CMAKE_INSTALL_LIBDIR}"
-        VERBATIM
-)
-
-# Добавление путей для заголовочных файлов
-include_directories(${CPPZMQ_ROOT_DIR})
-
-#--------------------------------------------------------------
-# 4. Driver Factory Library
+# 3. Driver Factory Library
 #--------------------------------------------------------------
 add_library(driver_factory SHARED ${PROJ_SRC_DIR}/service/driver_factory.cpp)
 
@@ -418,73 +364,73 @@ endif()
 #--------------------------------------------------------------
 # Основные подпроекты (с унификацией путей библиотек)
 #--------------------------------------------------------------
-# Для каждого подпроекта добавляем передачу CMAKE_INSTALL_LIBDIR
-#add_subdirectory(${PROJ_SUB_DIR}/json)              # --- JSON (header-only)
-#add_subdirectory(${PROJ_SRC_DIR}/factory)           # --- driver factory
-
-# библиотеки драйверов
-# Убедитесь, что в каждом подпроекте есть:
-# install(TARGETS ... LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
-# автоподгружаемые модули (плагины)
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus)         # --- modbus (пока в разработке)
-#add_subdirectory(${PROJ_SUB_DIR}/CANopen)           # --- CANopen
-#add_subdirectory(${PROJ_SUB_DIR}/EtherCAT)          # --- EtherCAT
 
 # Копирование конфигов в директорию сборки
 configure_file(${PROJ_DIR}/modules_config.json ${PROJ_ETC_DIR}/modules_config.json  COPYONLY)
 configure_file(${PROJ_DIR}/zmq.properties      ${PROJ_ETC_DIR}/zmq.properties       COPYONLY)
 
 # =============================================================
-# Главный исполняемый модуль (обновленные настройки)
+# Проверка наличия необходимых компонентов (внешние источники)
 # =============================================================
 #--------------------------------------------------------------
-# Проверка наличия необходимых компонентов
+# 1. driver_factory
 #--------------------------------------------------------------
-# driver_factory
 find_library(DRIVER_FACTORY_LIB driver_factory PATHS ${PROJ_LIB_DIR} NO_DEFAULT_PATH REQUIRED)
 
-# json
-# 1. Проверяем наличие заголовков JSON в .deploy/include
-find_path(JSON_INCLUDE_DIR NAMES nlohmann/json.hpp PATHS ${PROJ_INC_DIR} NO_DEFAULT_PATH REQUIRED)
-
-# 2. Создаем интерфейсную цель для JSON (header-only)
+#--------------------------------------------------------------
+# 2. json
+#--------------------------------------------------------------
+# Проверяем наличие заголовков JSON в .deploy/include
+find_path(JSON_INCLUDE_DIR NAMES nlohmann/json.hpp PATHS ${PROJ_DEP}/include NO_DEFAULT_PATH REQUIRED)
+# Создаем интерфейсную цель для JSON (header-only)
 add_library(nlohmann_json INTERFACE)
 target_include_directories(nlohmann_json INTERFACE ${JSON_INCLUDE_DIR})
-
-# 3. Для совместимости с кодом, ожидающим подпроект json
+# Для совместимости с кодом, ожидающим подпроект json
 add_library(json ALIAS nlohmann_json)
 
 #--------------------------------------------------------------
-# Сборка исполняемого модуля
+# 3. cppzmq
 #--------------------------------------------------------------
+# Проверяем наличие заголовков cppzmq
+find_path(CPPZMQ_INCLUDE_DIR NAMES cppzmq/zmq.hpp PATHS ${PROJ_DEP}/include NO_DEFAULT_PATH REQUIRED)
+# Создаем интерфейсную цель (header-only)
+add_library(cppzmq INTERFACE)
+target_include_directories(cppzmq INTERFACE ${CPPZMQ_INCLUDE_DIR})
+# Для совместимости со старым кодом
+add_library(cppzmq::cppzmq ALIAS cppzmq)
+
+# =============================================================
+# Главный исполняемый модуль
+# =============================================================
 build_target(${proj} EXE
         OPTS
             -g -O0 -w -fPIC
         PRPS
             CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
         INCS
+            # deploy
             ${PROJ_INC_DIR}
-            ${PROJ_INC_DIR}/sd
-            ${PROJ_INC_DIR}/zmq
             ${PROJ_INC_DIR}/iec
+            ${PROJ_INC_DIR}/modbus
+            ${PROJ_INC_DIR}/systemd
+
+            # source
             ${PROJ_SRC_DIR}/main
+            ${PROJ_SRC_DIR}/service
             ${PROJ_SRC_DIR}/service/zmq
+
         SRCS
             :MASK ${PROJ_SRC_DIR}/main/*.cpp
             :MASK ${PROJ_SRC_DIR}/service/*.cpp
             :MASK ${PROJ_SRC_DIR}/service/zmq/*.cpp
+
         LNKS
-            json
             driver_factory
             libzmq
-            cppzmq
-            modbus
-
-            #nlohmann_json
-            #plc_main
-            #can_master
-            #ec_master
+            #json
+            #cppzmq
+            modbus  # нужна, пока не обернули плагином
 )
 
 #--------------------------------------------------------------
@@ -498,28 +444,27 @@ set_target_properties(${proj} PROPERTIES
 #--------------------------------------------------------------
 # Поиск и линковка с plc_main
 #--------------------------------------------------------------
-find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_LIB_DIR} NO_DEFAULT_PATH REQUIRED )
+    find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_LIB_DIR} NO_DEFAULT_PATH REQUIRED )
 target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
 
 ##--------------------------------------------------------------
 ## Флаги безопасности (обновленные)
 ##--------------------------------------------------------------
-#if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-#    target_compile_options(${proj} PRIVATE
-#            -D_GNU_SOURCE
-#            -Wall -Wextra -Wpedantic
-#            -fstack-protector-strong
-#            -Wl,-z,now
-#            -fstack-clash-protection
-#            -fcf-protection=full
-#            -D_FORTIFY_SOURCE=2
-#    )
-#    target_link_options(${proj} PRIVATE
-#            -Wl,--as-needed
-#            -Wl,--no-undefined
-#            -Wl,-z,relro,-z,now
-#    )
-#endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${proj} PRIVATE
+            -D_GNU_SOURCE
+            -D_FORTIFY_SOURCE=2
+            -Wall -Wextra -Wpedantic
+            -Wl,-z,now
+            -fstack-protector-strong
+            -fstack-clash-protection
+    )
+    target_link_options(${proj} PRIVATE
+            -Wl,--as-needed
+            -Wl,--no-undefined
+            -Wl,-z,relro,-z,now
+    )
+endif()
 
 #--------------------------------------------------------------
 # Systemd integration - Устанавливаем связь с библиотекой systemd
@@ -548,19 +493,19 @@ install(TARGETS ${proj}
 
 # Установка конфигов
 install(DIRECTORY
-        DESTINATION "${PROJ_INS_DIR}/etc"
+        DESTINATION "${PROJ_DEP}/etc"
         FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
 )
 
 install(FILES
         ${PROJ_DIR}/modules_config.json
         ${PROJ_DIR}/zmq.properties
-        DESTINATION "${PROJ_INS_DIR}/etc"
+        DESTINATION "${PROJ_DEP}/etc"
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
 )
 
 # Сообщение для логирования
-message(STATUS "Service configs will be in: ${PROJ_INS_DIR}/etc")
+message(STATUS "Service configs will be in: ${PROJ_DEP}/etc")
 
 #--------------------------------------------------------------
 # Systemd service installation
@@ -576,7 +521,7 @@ if(UNIX AND NOT APPLE)
     # Установка
     install(FILES
             ${CMAKE_BINARY_DIR}/procont-environment
-            DESTINATION "${PROJ_INS_DIR}/etc"
+            DESTINATION "${PROJ_DEP}/etc"
             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ
     )
 
@@ -589,7 +534,7 @@ if(UNIX AND NOT APPLE)
     )
 
     # Установка сервиса (локально)
-    set(SYSTEMD_LOCAL_DIR "${PROJ_INS_DIR}/systemd")
+    set(SYSTEMD_LOCAL_DIR "${PROJ_DEP}/systemd")
     file(MAKE_DIRECTORY "${SYSTEMD_LOCAL_DIR}")
     install(FILES
             ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.service
@@ -600,7 +545,7 @@ if(UNIX AND NOT APPLE)
     # 3. Install startup script локально
     install(PROGRAMS
             ${PROJ_DIR}/${PROJECT_NAME}-startup.sh
-            DESTINATION "${PROJ_INS_DIR}/bin"
+            DESTINATION "${PROJ_DEP}/bin"
             PERMISSIONS
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
             GROUP_READ GROUP_EXECUTE
@@ -622,25 +567,25 @@ echo \"  sudo systemctl start ${PROJECT_NAME}.service\""
     # Устанавливаем скрипт в /bin
     install(PROGRAMS
             "${CMAKE_CURRENT_BINARY_DIR}/install_service.sh"
-            DESTINATION "${PROJ_INS_DIR}/bin"
+            DESTINATION "${PROJ_DEP}/bin"
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
     )
 
     message(STATUS "Systemd service will be installed locally to: ${SYSTEMD_LOCAL_DIR}")
-    message(STATUS "Use ${PROJ_INS_DIR}/bin/install_service.sh for system installation")
+    message(STATUS "Use ${PROJ_DEP}/bin/install_service.sh for system installation")
 endif()
 
-##--------------------------------------------------------------
-## Target для отладки (с дополнительной информацией)
-##--------------------------------------------------------------
-#add_custom_target(debug_env
-#        COMMAND ${CMAKE_COMMAND} -E echo "=== Build Environment ==="
-#        COMMAND ${CMAKE_COMMAND} -E echo "Compiler: ${CMAKE_CXX_COMPILER}"
-#        COMMAND ${CMAKE_COMMAND} -E echo "Target arch: ${LIB_ARCH}"
-#        COMMAND ${CMAKE_COMMAND} -E echo "Library dir: ${CMAKE_INSTALL_LIBDIR}"
-#        COMMAND ${CMAKE_COMMAND} -E echo "OpenSSL path: ${OPENSSL_INSTALL_DIR}/${CMAKE_INSTALL_LIBDIR}"
-#        COMMAND ${CMAKE_COMMAND} -E echo "Install prefix: ${CMAKE_INSTALL_PREFIX}"
-#        VERBATIM
-#)
+#--------------------------------------------------------------
+# Target для отладки (с дополнительной информацией)
+#--------------------------------------------------------------
+add_custom_target(debug_env
+        COMMAND ${CMAKE_COMMAND} -E echo "=== Build Environment ==="
+        COMMAND ${CMAKE_COMMAND} -E echo "Compiler: ${CMAKE_CXX_COMPILER}"
+        COMMAND ${CMAKE_COMMAND} -E echo "Target arch: ${LIB_ARCH}"
+        COMMAND ${CMAKE_COMMAND} -E echo "Library dir: ${CMAKE_INSTALL_LIBDIR}"
+        COMMAND ${CMAKE_COMMAND} -E echo "OpenSSL path: ${OPENSSL_INSTALL_DIR}/${CMAKE_INSTALL_LIBDIR}"
+        COMMAND ${CMAKE_COMMAND} -E echo "Install prefix: ${CMAKE_INSTALL_PREFIX}"
+        VERBATIM
+)
 
 MESSAGE("------------------- PROJECT: ${PROJECT_NAME} END")

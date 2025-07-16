@@ -9,8 +9,8 @@
 #include "zmq_config.h"
 #include "pro_driver.h"
 
-#include <zmq.hpp>
-#include <zmq_addon.hpp>
+#include <cppzmq/zmq.hpp>
+#include <cppzmq/zmq_addon.hpp>
 #include <memory>
 #include <mutex>
 #include <thread>

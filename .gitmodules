@@ -1,6 +1,3 @@
-[submodule "utils/CANopen"]
-	path = utils/CANopen
-	url = git@github.com:AMBITECS/CANopen.git
 [submodule "utils/libmodbus"]
 	path = utils/libmodbus
 	url = git@github.com:AMBITECS/libmodbus.git
@@ -16,9 +13,6 @@
 [submodule "utils/matiec"]
 	path = utils/matiec
 	url = git@github.com:AMBITECS/beremiz-matiec.git
-[submodule "utils/EtherCAT"]
-	path = utils/EtherCAT
-	url = git@github.com:AMBITECS/EtherCAT.git
 [submodule "utils/openssl"]
 	path = utils/openssl
 	url = https://github.com/openssl/openssl

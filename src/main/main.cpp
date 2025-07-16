@@ -153,13 +153,13 @@ int main(int argc,char **argv)
 
     //=== Drivers ================================================
     // Первоначальная инициализация
-    if (!SystemReloader::instance().full_reload("modules_config.json")) {
+    if (!SystemReloader::instance().full_reload("../etc/modules_config.json")) {
         return 1;
     }
 
     //=== ZMQ ===================================================
     // 5.1 Создаем и запускаем ZMQ сервер
-    ZmqServer& zmq_server = ZmqServer::instance("zmq.properties");
+    ZmqServer& zmq_server = ZmqServer::instance("../etc/zmq.properties");
     zmq_server.start();
 
     // 5.2. Регистрируем ZMQ сервер как клиента реестра

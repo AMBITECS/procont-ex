@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
-
-# Унификация каталога для библиотек
-set(CMAKE_INSTALL_LIBDIR "lib" CACHE STRING "Library installation directory" FORCE)
-
 project(PROCONT-EX VERSION 1.0.1 DESCRIPTION "Procont execution environment" LANGUAGES CXX)
+
 string( TOLOWER ${PROJECT_NAME}  proj )      # proj = project name in lowercase
 set( PROJECT_SO_VERSION          "1"  )
 set( CMAKE_CXX_STANDARD          17   )
@@ -15,8 +12,46 @@ if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif()
 
+#--------------------------------------------------------------
+# Настройка путей проекта
+#--------------------------------------------------------------
+set( PROJ_DIR     ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project
+set( CMAKE_DIR    ${PROJ_DIR}/.cmake          ) # PROJ cmake
+set( PROJ_INS_DIR ${PROJ_DIR}/.install        ) # PROJ install (local)
+set( PROJ_SRC_DIR ${PROJ_DIR}/src             ) # PROJ sources
+set( PROJ_INC_DIR ${PROJ_DIR}/include         ) # PROJ includes
+set( PROJ_SUB_DIR ${PROJ_DIR}/utils           ) # PROJ submodule
+
+#--------------------------------------------------------------
+# Настройка путей к библиотекам и модулям
+#--------------------------------------------------------------
+set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find)
+
+# Унификация единых каталогов для инсталляции (вместо lib|lib64 -> lib)
+set( CMAKE_INSTALL_LIBDIR "lib" CACHE STRING "Library installation directory" FORCE )
+set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} CACHE PATH "Installation directory" FORCE )
+
+# Устанавливаем единый каталог для инсталляции
+set( PROJ_LIB_DIR ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR} ) # PROJ libraries
+if(NOT EXISTS "${PROJ_LIB_DIR}")
+    file(MAKE_DIRECTORY "${PROJ_LIB_DIR}")
+endif()
+
+# Устанавливаем единые каталоги для сборки модулей
+set(LIBRARY_OUTPUT_PATH     ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(EXECUTABLE_OUTPUT_PATH  ${PROJ_INS_DIR}/bin)
+
+include_directories ( ${PROJ_INS_DIR}/include )
+link_directories    ( ${PROJ_LIB_DIR} )
+
+#--------------------------------------------------------------
+# Пути к основным библиотекам (синонимы) - CANopen, modbus и т.п.
+#--------------------------------------------------------------
+set(PLC_MAIN_LIB_DIR    ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(DRIVER_FACTORY_DIR  ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
+
 ##--------------------------------------------------------------
-## Настройка RPATH только для Linux
+## Настройка RPATH (только для Linux)
 ##--------------------------------------------------------------
 if(LINUX)
     # 1. Базовый относительный RPATH (через $ORIGIN)
@@ -29,7 +64,7 @@ if(LINUX)
 
     # 3. Отключаем новые dtags (для совместимости)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
-    # set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--disable-new-dtags")
+    #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--disable-new-dtags")
 
     message(STATUS "RPATH настроен на: ${CMAKE_INSTALL_RPATH}")
 endif()
@@ -79,42 +114,6 @@ endif()
 #    set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 #    set(CMAKE_BUILD_PARALLEL_LEVEL "$ENV{NPROC}")
 #endif()
-
-#--------------------------------------------------------------
-# Настройка путей проекта
-#--------------------------------------------------------------
-set( PROJ_DIR     ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project
-set( CMAKE_DIR    ${PROJ_DIR}/.cmake          ) # PROJ cmake
-set( PROJ_INS_DIR ${PROJ_DIR}/.install        ) # PROJ install (local)
-set( PROJ_SRC_DIR ${PROJ_DIR}/src             ) # PROJ sources
-set( PROJ_INC_DIR ${PROJ_DIR}/include         ) # PROJ includes
-set( PROJ_SUB_DIR ${PROJ_DIR}/utils           ) # PROJ submodule
-
-set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find )
-set( CMAKE_INSTALL_PREFIX ${PROJ_INS_DIR} CACHE PATH "Installation directory" FORCE )
-
-include_directories (${PROJ_INS_DIR}/include)
-
-#--------------------------------------------------------------
-# Настройка путей к библиотекам (единая папка lib)
-#--------------------------------------------------------------
-set(LIBRARY_OUTPUT_PATH ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
-link_directories(${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
-
-# Для совместимости с существующим кодом
-set(PLC_MAIN_LIB_DIR ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(DRIVER_FACTORY_DIR ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
-
-#--------------------------------------------------------------
-# Настройка путей к библиотекам (единая папка lib)
-#--------------------------------------------------------------
-# Устанавливаем единый каталог для всех библиотек
-set(LIBRARY_OUTPUT_PATH ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
-link_directories( ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR} )
-
-# Путь к основным библиотекам (CANopen, modbus и т.п.)
-set(PLC_MAIN_LIB_DIR    ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(DRIVER_FACTORY_DIR  ${PROJ_INS_DIR}/${CMAKE_INSTALL_LIBDIR})
 
 #--------------------------------------------------------------
 # ==== CMake symbols ===

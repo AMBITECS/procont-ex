@@ -12,7 +12,7 @@
     {
       "name": "can_master",
       "library_name": "libcan_master.so",
-      "library_path": "/home/master/Ambi/Work/Projects/procont-ex/.install/lib64/",
+      "library_path": "../lib/",
       "config": {
         "bus_speed": 500000,
         "node_ids": [1, 2, 3],
@@ -26,7 +26,7 @@
     {
       "name": "ec_master",
       "library_name": "libec_master.so",
-      "library_path": "/home/master/Ambi/Work/Projects/procont-ex/.install/lib64/",
+      "library_path": "../lib/",
       "config": {
         "bus_speed": 500000,
         "node_ids": [1, 2, 3],

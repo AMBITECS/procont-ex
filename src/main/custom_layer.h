@@ -39,7 +39,7 @@ void initCustomLayer() {
     assert(rc==0);
 
     printf("-- Internal client connected to %d!\n", INTERACTIVE_PORT);
-    sleep(3);
+    sleepms(1000);
 
     //------------------------------------------------------
     // Start Modbus server manually
@@ -53,7 +53,7 @@ void initCustomLayer() {
     }
     assert(rc!=-1);
     printf("-- Modbus server (Slave) RUNNING on port %d!\n", portModbus);
-    sleep(3);
+    sleepms(1000);
 
     //------------------------------------------------------
     // Start CAN Master server manually
@@ -66,7 +66,7 @@ void initCustomLayer() {
     }
     assert(rc!=-1);
     printf("-- CAN Master server RUNNING on '%s'!\n", "can0");
-    sleep(3);
+    sleepms(1000);
 
 }
 

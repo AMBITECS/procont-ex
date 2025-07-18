@@ -6,7 +6,7 @@
 #include <mutex>
 
 //#include "iec_types.h"
-#include "pro_common.h"
+#include "api_core.h"
 
 #define MODBUS_PROTOCOL     0
 #define DNP3_PROTOCOL       1

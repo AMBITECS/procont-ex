@@ -1,8 +1,3 @@
-#include "driver_loader.h"
-#include "driver_manager.h"
-#include "client_factory.h"
-#include "zmq_server.h"
-
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -28,6 +23,10 @@
 #include <csignal>
 #include <vector>
 
+#include "driver_loader.h"
+#include "driver_manager.h"
+#include "reg_client_factory.h"
+#include "reg_binder.h"
 #include "zmq_server.h"
 
 #ifdef HAVE_SYSTEMD

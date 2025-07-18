@@ -16,9 +16,11 @@ endif()
 # Настройка путей проекта
 #--------------------------------------------------------------
 set( PROJ_DIR     ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project
-set( CMAKE_DIR    ${PROJ_DIR}/.cmake          ) # PROJ cmake
-set( PROJ_SRC_DIR ${PROJ_DIR}/src             ) # PROJ sources
-set( PROJ_SUB_DIR ${PROJ_DIR}/utils           ) # PROJ submodules
+
+set( CMAKE_DIR    ${PROJ_DIR}/.cmake  ) # PROJ cmake
+set( PROJ_INC_DIR ${PROJ_DIR}/include ) # PROJ headers
+set( PROJ_SRC_DIR ${PROJ_DIR}/src     ) # PROJ sources
+set( PROJ_SUB_DIR ${PROJ_DIR}/utils   ) # PROJ submodules
 
 set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find)
 
@@ -38,9 +40,9 @@ set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find)
 # Настройка путей к библиотекам и модулям (в deploy)
 #--------------------------------------------------------------
 set( PROJ_DEP     ${PROJ_DIR}/.deploy ) # PROJ deploy
-set( PROJ_ETC_DIR ${PROJ_DEP}/etc     ) # PROJ configs
-set( PROJ_INC_DIR ${PROJ_DEP}/include ) # PROJ includes
-set( PROJ_MOD_DIR ${PROJ_DEP}/modules ) # PROJ modules
+set( PROJ_DEP_ETC ${PROJ_DEP}/etc     ) # PROJ configs
+set( PROJ_DEP_INC ${PROJ_DEP}/include ) # PROJ includes
+set( PROJ_DEP_MOD ${PROJ_DEP}/modules ) # PROJ modules
 
 #--------------------------------------------------------------
 # Унификация единых каталогов для инсталляции (вместо lib|lib64 -> lib)
@@ -351,7 +353,7 @@ find_library(DRIVER_CORE_LIB
 # 2. json (header-only)
 #--------------------------------------------------------------
 # Проверяем наличие заголовков JSON в .deploy/include
-find_path(JSON_INCLUDE_DIR NAMES nlohmann/json.hpp PATHS ${PROJ_DEP}/include NO_DEFAULT_PATH REQUIRED)
+find_path(JSON_INCLUDE_DIR NAMES nlohmann/json.hpp PATHS ${PROJ_INC_DIR} NO_DEFAULT_PATH REQUIRED)
 # Создаем интерфейсную цель для JSON (header-only)
 add_library(nlohmann_json INTERFACE)
 target_include_directories(nlohmann_json INTERFACE ${JSON_INCLUDE_DIR})
@@ -362,7 +364,7 @@ add_library(json ALIAS nlohmann_json)
 # 3. cppzmq (header-only)
 #--------------------------------------------------------------
 # Проверяем наличие заголовков cppzmq
-find_path(CPPZMQ_INCLUDE_DIR NAMES cppzmq/zmq.hpp PATHS ${PROJ_DEP}/include NO_DEFAULT_PATH REQUIRED)
+find_path(CPPZMQ_INCLUDE_DIR NAMES cppzmq/zmq.hpp PATHS ${PROJ_INC_DIR} NO_DEFAULT_PATH REQUIRED)
 # Создаем интерфейсную цель (header-only)
 add_library(cppzmq INTERFACE)
 target_include_directories(cppzmq INTERFACE ${CPPZMQ_INCLUDE_DIR})
@@ -372,37 +374,37 @@ add_library(cppzmq::cppzmq ALIAS cppzmq)
 #--------------------------------------------------------------
 # 4. Копирование конфигов в директорию сборки (.deploy/etc)
 #--------------------------------------------------------------
-configure_file(${PROJ_DIR}/modules_config.json ${PROJ_ETC_DIR}/modules_config.json  COPYONLY)
-configure_file(${PROJ_DIR}/zmq.properties      ${PROJ_ETC_DIR}/zmq.properties       COPYONLY)
+configure_file(${PROJ_DIR}/modules_config.json ${PROJ_DEP_ETC}/modules_config.json  COPYONLY)
+configure_file(${PROJ_DIR}/zmq.properties      ${PROJ_DEP_ETC}/zmq.properties       COPYONLY)
 
 # =============================================================
 # (C) Core Service Library
 # =============================================================
 build_target(core LIB
         OPTS
-        -g -O0 -w -fPIC
-
+            -g -O0 -w -fPIC
         DEFS
-        $<$<NOT:$<BOOL:${WIN32}>>:DRIVER_API_VISIBILITY>
+            $<$<NOT:$<BOOL:${WIN32}>>:DRIVER_API_VISIBILITY>
 
         PRPS
-        VERSION 1.0.1
-        SOVERSION 1
-        OUTPUT_NAME "core"
-        BUILD_WITH_INSTALL_RPATH TRUE
-        INSTALL_RPATH "\$ORIGIN"
-        LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
-        ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
-        CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
+            VERSION 1.0.1
+            SOVERSION 1
+            OUTPUT_NAME "core"
+            BUILD_WITH_INSTALL_RPATH TRUE
+            INSTALL_RPATH "\$ORIGIN"
+            LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+            ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+            CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
 
         INCS
-            ${PROJ_SRC_DIR}/core
+            ${PROJ_INC_DIR}/iec
+            ${PROJ_INC_DIR}/core
 
         SRCS
             :MASK ${PROJ_SRC_DIR}/core/*.cpp
 
         LNKS
-        # no links
+            json
 )
 
 # Установка библиотеки
@@ -423,19 +425,19 @@ endif()
 build_target(${proj} EXE
         OPTS
             -g -O0 -w -fPIC
+
         PRPS
             CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
+
         INCS
-            # in deploy dir
             ${PROJ_INC_DIR}
             ${PROJ_INC_DIR}/iec
+            ${PROJ_INC_DIR}/core
             ${PROJ_INC_DIR}/modbus
             ${PROJ_INC_DIR}/systemd
 
-            # in sources dir
-            ${PROJ_SRC_DIR}/main
-            ${PROJ_SRC_DIR}/core
             ${PROJ_SRC_DIR}/zmq
+            #${PROJ_SRC_DIR}/main
 
         SRCS
             :MASK ${PROJ_SRC_DIR}/main/*.cpp
@@ -444,6 +446,7 @@ build_target(${proj} EXE
         LNKS
             core    # собственная базовая библиотека
             libzmq  # ZMQ
+            cppzmq  # ZMQ wraper
             modbus  # нужна, пока не станет плагином
 )
 
@@ -458,7 +461,7 @@ set_target_properties(${proj} PROPERTIES
 #--------------------------------------------------------------
 # Поиск и линковка модуля plc_main (стыкуется пока жёстко)
 #--------------------------------------------------------------
-find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_MOD_DIR} NO_DEFAULT_PATH REQUIRED )
+find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_DEP_MOD} NO_DEFAULT_PATH REQUIRED )
 target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
 
 ##--------------------------------------------------------------

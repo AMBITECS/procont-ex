@@ -2,7 +2,7 @@
 // Copyright © 2016-2025 AMBITECS <info@ambi.biz>
 //-----------------------------------------------------------------------------
 #include "driver_manager.h"
-#include "iec_factory.h"
+#include "mod_factory.h"
 #include "driver_factory.h"
 #include "driver_loader.h"
 #include <iostream>
@@ -12,13 +12,16 @@ DriverManager& DriverManager::instance() {
     return instance;
 }
 
-void DriverManager::initialize(const std::shared_ptr<IClientFactory>& client_factory) {
+void DriverManager::initialize(const std::shared_ptr<IClientFactory>& client_factory)
+{
     const auto& modules_config = DriverLoader::instance().get_drivers_config();
     for (const auto& driver_cfg : modules_config) {
         try {
             // Создание драйвера
-            auto driver
-                = DriverFactory::instance().create( driver_cfg.name.data(), client_factory.get() );
+            auto driver = DriverFactory::instance().create(
+                    driver_cfg.name.data(),
+                    client_factory.get()
+            );
 
             // Инициализация драйвера
             driver->initialize(driver_cfg.config);

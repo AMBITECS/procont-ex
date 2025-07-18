@@ -39,22 +39,23 @@ public:
 
     // Базовые операции
     virtual uint64_t read(const Address& addr) = 0;
-    virtual void write(const Address& addr, uint64_t value) = 0;
+    virtual void     write(const Address& addr, uint64_t value) = 0;
 
     // Пакетные операции
-    virtual void read(std::vector<ItemData>& items) = 0;
-    virtual void write(const std::vector<ItemData>& items) = 0;
+    virtual void    read(std::vector<ItemData>& items) = 0;
+    virtual void    write(const std::vector<ItemData>& items) = 0;
 
     // Подписка на изменения
-    virtual void subscribe(const std::vector<RegItem>& items) = 0;
-    virtual void unsubscribe(const std::vector<Address>& addresses) = 0;
-    virtual void unsubscribeAll() = 0;
+    virtual void    subscribe(const std::vector<RegItem>& items) = 0;
+    virtual void    unsubscribe(const std::vector<Address>& addresses) = 0;
+    virtual void    unsubscribeAll() = 0;
 };
 
 // Интерфейс обратного вызова
 class IClientCallback {
 public:
     virtual ~IClientCallback() = default;
+
     virtual void onInit() = 0;
     virtual void onExit() = 0;
     virtual void updateInputs() = 0;

@@ -93,3 +93,4 @@ std::string Address::toString() const {
     if (isBit()) { oss << '.' << static_cast<int>(bitpos()); }
     return oss.str();
 }
+

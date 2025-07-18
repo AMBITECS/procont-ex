@@ -16,7 +16,7 @@ private:
 
 public:
     // Singleton access
-    static IECFactory& instance();
+    static IECFactory& instance() { static IECFactory instance; return instance; }
 
     // Запрещаем копирование
     IECFactory(const IECFactory&) = delete;

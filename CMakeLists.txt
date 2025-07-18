@@ -29,7 +29,7 @@ set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find)
 #├── bin/            # procont-ex, скрипты
 #├── etc/            # Конфиги
 #├── include/        # Заголовки (json, cppzmq)
-#├── lib/            # libzmq, openssl, driver_factory
+#├── lib/            # libzmq, openssl, core
 #├── logs/           # Протоколы работы
 #├── modules/        # modbus.so, canopen.so (плагины)
 #└── systemd/        # Файлы сервиса
@@ -330,47 +330,7 @@ add_custom_target(install_libzmq
 include_directories(${ZMQ_ROOT_DIR}/include)
 
 #--------------------------------------------------------------
-# 3. Driver Factory Library
-#--------------------------------------------------------------
-add_library(driver_factory SHARED
-        ${PROJ_SRC_DIR}/factory/driver_factory.cpp
-        ${PROJ_SRC_DIR}/factory/address.cpp
-)
-
-# Настройка свойств библиотеки
-set_target_properties(driver_factory PROPERTIES
-        VERSION 1.0.1
-        SOVERSION 1
-        OUTPUT_NAME "driver_factory"
-        BUILD_WITH_INSTALL_RPATH TRUE
-        INSTALL_RPATH "\$ORIGIN"
-        LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
-        ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
-)
-
-# Настройки компиляции
-target_compile_features     (driver_factory PUBLIC cxx_std_17)
-target_include_directories  (driver_factory PUBLIC ${PROJ_SRC_DIR}/service)
-
-# Экспорт символов
-target_compile_definitions(driver_factory PRIVATE
-        $<$<NOT:$<BOOL:${WIN32}>>:DRIVER_API_VISIBILITY>
-)
-
-# Установка библиотеки
-install(TARGETS driver_factory
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-# Платформо-специфичные настройки
-if(UNIX AND NOT APPLE)
-    target_compile_options  (driver_factory PRIVATE -fPIC -Wall -Wextra)
-    target_link_options     (driver_factory PRIVATE -Wl,--no-undefined -Wl,--as-needed )
-endif()
-
-#--------------------------------------------------------------
-# 4. Собственные подпроекты
+# 3. Собственные подпроекты ()
 #--------------------------------------------------------------
 add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus (плагин пока в разработке)
 
@@ -378,9 +338,14 @@ add_subdirectory(${PROJ_SUB_DIR}/libmodbus) # --- modbus (плагин пока 
 # (B) # Подключение необходимых компонентов (без сборки)
 # =============================================================
 #--------------------------------------------------------------
-# 1. driver_factory - для загрузки плагинов
+# 1. core - анти-манглинг для реализации плагинов
 #--------------------------------------------------------------
-find_library(DRIVER_FACTORY_LIB driver_factory PATHS ${PROJ_LIB_DIR} NO_DEFAULT_PATH REQUIRED)
+find_library(DRIVER_CORE_LIB
+        core
+        PATHS ${PROJ_LIB_DIR}
+        NO_DEFAULT_PATH
+        REQUIRED
+)
 
 #--------------------------------------------------------------
 # 2. json (header-only)
@@ -411,7 +376,49 @@ configure_file(${PROJ_DIR}/modules_config.json ${PROJ_ETC_DIR}/modules_config.js
 configure_file(${PROJ_DIR}/zmq.properties      ${PROJ_ETC_DIR}/zmq.properties       COPYONLY)
 
 # =============================================================
-# (С) Главный исполняемый модуль
+# (C) Core Service Library
+# =============================================================
+build_target(core LIB
+        OPTS
+        -g -O0 -w -fPIC
+
+        DEFS
+        $<$<NOT:$<BOOL:${WIN32}>>:DRIVER_API_VISIBILITY>
+
+        PRPS
+        VERSION 1.0.1
+        SOVERSION 1
+        OUTPUT_NAME "core"
+        BUILD_WITH_INSTALL_RPATH TRUE
+        INSTALL_RPATH "\$ORIGIN"
+        LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+        ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+        CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
+
+        INCS
+            ${PROJ_SRC_DIR}/core
+
+        SRCS
+            :MASK ${PROJ_SRC_DIR}/core/*.cpp
+
+        LNKS
+        # no links
+)
+
+# Установка библиотеки
+install(TARGETS core
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+# Платформо-специфичные настройки
+if(UNIX AND NOT APPLE)
+    target_compile_options  (core PRIVATE -fPIC -Wall -Wextra)
+    target_link_options     (core PRIVATE -Wl,--no-undefined -Wl,--as-needed )
+endif()
+
+# =============================================================
+# (D) Главный исполняемый модуль
 # =============================================================
 build_target(${proj} EXE
         OPTS
@@ -419,26 +426,25 @@ build_target(${proj} EXE
         PRPS
             CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
         INCS
-            # in deploy
+            # in deploy dir
             ${PROJ_INC_DIR}
             ${PROJ_INC_DIR}/iec
             ${PROJ_INC_DIR}/modbus
             ${PROJ_INC_DIR}/systemd
 
-            # in sources
+            # in sources dir
             ${PROJ_SRC_DIR}/main
-            ${PROJ_SRC_DIR}/service
-            ${PROJ_SRC_DIR}/service/zmq
+            ${PROJ_SRC_DIR}/core
+            ${PROJ_SRC_DIR}/zmq
 
         SRCS
             :MASK ${PROJ_SRC_DIR}/main/*.cpp
-            :MASK ${PROJ_SRC_DIR}/service/*.cpp
-            :MASK ${PROJ_SRC_DIR}/service/zmq/*.cpp
+            :MASK ${PROJ_SRC_DIR}/zmq/*.cpp
 
         LNKS
-            driver_factory
-            libzmq
-            modbus  # нужна, пока не обернули плагином
+            core    # собственная базовая библиотека
+            libzmq  # ZMQ
+            modbus  # нужна, пока не станет плагином
 )
 
 #--------------------------------------------------------------

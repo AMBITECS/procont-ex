@@ -4,24 +4,25 @@
 #include "pro_module.h"
 #include "pro_driver.h"
 
-#ifdef _WIN32
-#ifdef DRIVER_API_EXPORTS
-        #define DRIVER_API __declspec(dllexport)
-    #else
-        #define DRIVER_API __declspec(dllimport)
-    #endif
-#else
-#define DRIVER_API __attribute__((visibility("default")))
-#endif
-
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <functional>
 #include <utility>
 
+//#ifdef _WIN32
+//#ifdef DRIVER_API_EXPORTS
+//        #define DRIVER_API __declspec(dllexport)
+//    #else
+//        #define DRIVER_API __declspec(dllimport)
+//    #endif
+//#else
+//    #define DRIVER_API __attribute__((visibility("default")))
+//#endif
+//
+
 class
-DRIVER_API
+//DRIVER_API
 DriverFactory {
 private:
     // Creators для драйверов
@@ -39,27 +40,45 @@ public:
     DriverFactory(const DriverFactory&) = delete;
     DriverFactory& operator=(const DriverFactory&) = delete;
 
-    // Регистрация драйвера (из IDriverRegistrar)
+//    // Регистрация драйвера
+//    void register_driver(
+//            const std::string& name,
+//            std::function<std::unique_ptr<IProModule>(IClientFactory*)> creator
+//    );
+
     void register_driver(
-            const std::string& name,
+            const char* name,  // Заменяем std::string& на const char*
             std::function<std::unique_ptr<IProModule>(IClientFactory*)> creator
     );
 
     // Создание экземпляра драйвера
     std::unique_ptr<IProModule>
-    create( const std::string& name,std::shared_ptr<IClientFactory> factory );
+        create( const std::string& name,std::shared_ptr<IClientFactory> factory );
 };
-
-// Упрощенный C-интерфейс для регистрации
-extern "C" DRIVER_API void register_driver(const char* name);
 
 //// Скрипт регистрации драйвера
 #define DRIVER_REGISTER(driver_name, DriverClass) \
-extern "C" DRIVER_API void register_driver(const char* name) { \
-    auto& factory = DriverFactory::instance(); \
-    factory.register_driver(name, [](IClientFactory* f) { \
-        auto sf = std::shared_ptr<IClientFactory>(f, [](auto*){}); \
-        return std::make_unique<DriverClass>(sf); \
-    });}
+extern "C" void register_driver(DriverFactory* factory) { \
+    using FactoryPtr = std::shared_ptr<IClientFactory>; \
+    factory->register_driver(driver_name, [](IClientFactory* raw_factory) \
+    { \
+        FactoryPtr shared_factory(raw_factory, [](auto*){}); \
+        return std::make_unique<DriverClass>(shared_factory); \
+    }); \
+}
+
+//// Явное объявление (можно удалить, если используется только макрос)
+//extern "C" DRIVER_API void register_driver(const char* name);
+//
+//// Упрощенный C-интерфейс для регистрации
+//#define DRIVER_REGISTER(driver_name, DriverClass) \
+//extern "C" DRIVER_API void register_driver(const char* name) { \
+//    auto& factory = DriverFactory::instance(); \
+//    factory.register_driver(name, [](IClientFactory* raw_factory) { \
+//        auto shared_factory = std::shared_ptr<IClientFactory>(raw_factory, [](auto*){}); \
+//        return std::make_unique<DriverClass>(shared_factory); \
+//    }); \
+//}
+
 
 #endif // DRIVER_FACTORY_H

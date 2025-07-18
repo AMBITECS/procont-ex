@@ -23,10 +23,22 @@ DriverFactory &DriverFactory::instance() {
     return instance;
 }
 
+//void DriverFactory::register_driver(
+//        const std::string& name,
+//        std::function<std::unique_ptr<IProModule>(IClientFactory*)> creator
+//) {
+//    creators_[name] = [creator](const std::shared_ptr<IClientFactory>& shared_factory) {
+//        return creator(shared_factory.get());
+//    };
+//}
+
 void DriverFactory::register_driver(
-        const std::string& name,
+        const char* name,
         std::function<std::unique_ptr<IProModule>(IClientFactory*)> creator
 ) {
+    if (!name) {
+        throw std::invalid_argument("Driver name cannot be null");
+    }
     creators_[name] = [creator](const std::shared_ptr<IClientFactory>& shared_factory) {
         return creator(shared_factory.get());
     };

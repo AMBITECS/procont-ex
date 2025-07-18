@@ -30,6 +30,7 @@ set( CMAKE_MODULE_PATH ${CMAKE_DIR} ${CMAKE_DIR}/find)
 #├── etc/            # Конфиги
 #├── include/        # Заголовки (json, cppzmq)
 #├── lib/            # libzmq, openssl, driver_factory
+#├── logs/           # Протоколы работы
 #├── modules/        # modbus.so, canopen.so (плагины)
 #└── systemd/        # Файлы сервиса
 
@@ -331,7 +332,10 @@ include_directories(${ZMQ_ROOT_DIR}/include)
 #--------------------------------------------------------------
 # 3. Driver Factory Library
 #--------------------------------------------------------------
-add_library(driver_factory SHARED ${PROJ_SRC_DIR}/service/driver_factory.cpp)
+add_library(driver_factory SHARED
+        ${PROJ_SRC_DIR}/factory/driver_factory.cpp
+        ${PROJ_SRC_DIR}/factory/address.cpp
+)
 
 # Настройка свойств библиотеки
 set_target_properties(driver_factory PROPERTIES
@@ -346,7 +350,7 @@ set_target_properties(driver_factory PROPERTIES
 
 # Настройки компиляции
 target_compile_features     (driver_factory PUBLIC cxx_std_17)
-target_include_directories  (driver_factory PUBLIC ${PROJ_INC_DIR} )
+target_include_directories  (driver_factory PUBLIC ${PROJ_SRC_DIR}/service)
 
 # Экспорт символов
 target_compile_definitions(driver_factory PRIVATE
@@ -454,21 +458,25 @@ target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
 ##--------------------------------------------------------------
 ## Флаги безопасности
 ##--------------------------------------------------------------
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")   # (LINUX)
-    target_compile_options(${proj} PRIVATE
-            -D_GNU_SOURCE
-            -D_FORTIFY_SOURCE=2
-            -Wall -Wextra -Wpedantic
-            -Wl,-z,now
-            -fstack-protector-strong
-            -fstack-clash-protection
-    )
-    target_link_options(${proj} PRIVATE
-            -Wl,--as-needed
-            -Wl,--no-undefined
-            -Wl,-z,relro,-z,now
-    )
-endif()
+#    target_compile_options(${proj} PRIVATE
+#        -fsanitize=address и -Werror
+#    )
+
+#if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")   # (LINUX)
+#    target_compile_options(${proj} PRIVATE
+#            -D_GNU_SOURCE
+#            -D_FORTIFY_SOURCE=2
+#            -Wall -Wextra -Wpedantic
+#            -Wl,-z,now
+#            -fstack-protector-strong
+#            -fstack-clash-protection
+#    )
+#    target_link_options(${proj} PRIVATE
+#            -Wl,--as-needed
+#            -Wl,--no-undefined
+#            -Wl,-z,relro,-z,now
+#    )
+#endif()
 
 #--------------------------------------------------------------
 # Установка компонентов

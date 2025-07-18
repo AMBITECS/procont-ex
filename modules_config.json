@@ -21,21 +21,6 @@
           "2": "/etc/canopen/node2.eds"
         }
       }
-    },
-
-    {
-      "name": "ec_master",
-      "library_name": "libec_master.so",
-      "library_path": "",
-      "config": {
-        "bus_speed": 500000,
-        "node_ids": [1, 2, 3],
-        "eds_files": {
-          "1": "/etc/canopen/node1.eds",
-          "2": "/etc/canopen/node2.eds"
-        }
-      }
     }
   ]
-
 }

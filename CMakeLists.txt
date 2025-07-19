@@ -440,6 +440,7 @@ build_target(${proj} EXE
             #${PROJ_SRC_DIR}/main
 
         SRCS
+            #:MASK ${PROJ_SRC_DIR}/core/*.cpp
             :MASK ${PROJ_SRC_DIR}/main/*.cpp
             :MASK ${PROJ_SRC_DIR}/zmq/*.cpp
 

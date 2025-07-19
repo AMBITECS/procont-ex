@@ -1,7 +1,13 @@
-#ifndef REGISTER_ADDRESS_H
-#define REGISTER_ADDRESS_H
+//-----------------------------------------------------------------------------
+// Copyright © 2016-2025 AMBITECS <info@ambi.biz>
+//-----------------------------------------------------------------------------
+#pragma once
 
 #include "variant.h"
+#include <stdexcept>
+#include <cctype>
+#include <sstream>
+#include <regex>
 
 template<typename T>
 struct RegisterTraits { static_assert(sizeof(T) == 0, "Unsupported register type"); };
@@ -90,10 +96,7 @@ public:
     }
 
     // Фабричные методы
-    static Address of(const std::string& key);
     static constexpr Address of(uint64_t val) { return Address(val); }
-
-    [[nodiscard]] std::string toString() const;
 
     // Преобразования
     constexpr operator uint64_t() const { return value; } //NOLINT
@@ -152,7 +155,11 @@ public:
         }
     }
 
-//    template<DataType DT> struct DataTypeToNative;
+    static Address of(const std::string& key);
+
+    [[nodiscard]] std::string toString() const;
+
+    //    template<DataType DT> struct DataTypeToNative;
 };
 
 //// Определяем специализации
@@ -175,5 +182,3 @@ namespace std {
         }
     };
 }
-
-#endif // REGISTER_ADDRESS_H

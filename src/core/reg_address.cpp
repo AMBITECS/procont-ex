@@ -1,11 +1,9 @@
+//-----------------------------------------------------------------------------
+// Copyright © 2016-2025 AMBITECS <info@ambi.biz>
+//-----------------------------------------------------------------------------
 #include "reg_address.h"
 
-#include <stdexcept>
-#include <cctype>
-#include <sstream>
-#include <regex>
-
-Address Address::of(const std::string& key) {
+Address Address::of(const std::string &key) {
     std::smatch matches;
     std::string normalized_key = key;
     const std::regex key_regex_(
@@ -13,10 +11,7 @@ Address Address::of(const std::string& key) {
             std::regex_constants::icase);
 
     // Удаляем начальный '%' если присутствует
-    if (!normalized_key.empty() && normalized_key[0] == '%') {
-        normalized_key.erase(0, 1);
-    }
-
+    if (!normalized_key.empty() && normalized_key[0] == '%')  normalized_key.erase(0, 1);
     if (!std::regex_match(normalized_key, matches, key_regex_)) {
         throw std::invalid_argument("Invalid register address format: " + key);
     }
@@ -51,11 +46,8 @@ Address Address::of(const std::string& key) {
     // Разбираем индекс (сохраняем как есть)
     uint64_t index = 0;
     if (matches[3].length() > 0) {
-        try {
-            index = std::stoull(matches[3].str());
-        } catch (...) {
-            throw std::invalid_argument("Invalid index value: " + matches[3].str());
-        }
+        try { index = std::stoull(matches[3].str()); }
+        catch (...) { throw std::invalid_argument("Invalid index value: " + matches[3].str()); }
     }
 
     // Разбираем позицию бита (если есть)
@@ -67,16 +59,13 @@ Address Address::of(const std::string& key) {
                 throw std::invalid_argument("Bit position out of range (0-63): " + matches[4].str());
             }
             bitpos = static_cast<uint8_t>(pos);
-        } catch (...) {
-            throw std::invalid_argument("Invalid bit position: " + matches[4].str());
-        }
+        } catch (...) { throw std::invalid_argument("Invalid bit position: " + matches[4].str()); }
     }
 
     // Проверяем корректность комбинации типа и позиции бита
     if (bitpos != 0xFF && type != TYPE_BIT) {
         throw std::invalid_argument("Bit position can only be specified for bit type (X)");
     }
-
     return Address{cat, type, index, bitpos};
 }
 

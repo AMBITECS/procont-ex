@@ -180,7 +180,7 @@ int main(int argc,char **argv)
 
             //updateBuffersIn();        // read input image
 
-            // 2. Фаза выолнения алгоритма
+            // 2. Фаза выполнения алгоритма
             {
                 auto &dm = DriverManager::instance();
 

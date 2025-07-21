@@ -128,11 +128,12 @@ struct Response : public IDto
     static constexpr int INTERNAL_ERROR = 500;
     static constexpr int REQUEST_HANDLE_ERROR = 502;
 
-    std::string key;
-    std::string request;
+    std::string key{};
+    std::string request{};
     int         result = SUCCESS;
-    std::string message;
+    std::string message{};
 
+    Response() = default;
     Response(std::string key_, std::string req, int res, std::string m) :
             key(std::move(key_)),
             request(std::move(req)),

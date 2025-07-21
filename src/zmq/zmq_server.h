@@ -175,6 +175,10 @@ private:
     // Базовый каталог для сохранения программ
     std::filesystem::path programs_dir_{"programs"};
 
+    // Обработчики состояния
+    void handleExecutionStart(const Request& request);
+    void handleExecutionStop(const Request& request);
+
     // Обработчики файловых операций
     void handleProgStart(const ProgStart& prog_start);
     void handleFileStart(const FileStart& file_start);

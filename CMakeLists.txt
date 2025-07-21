@@ -437,7 +437,7 @@ build_target(${proj} EXE
             ${PROJ_INC_DIR}/systemd
 
             ${PROJ_SRC_DIR}/zmq
-            #${PROJ_SRC_DIR}/main
+            ${PROJ_SRC_DIR}/main
 
         SRCS
             #:MASK ${PROJ_SRC_DIR}/core/*.cpp

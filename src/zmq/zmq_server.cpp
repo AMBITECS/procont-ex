@@ -4,6 +4,7 @@
 #include "zmq_server.h"
 #include "reg_server.h"
 #include "crc_utils.h"
+#include "plc_control.h"
 
 #include <iostream>
 #include <algorithm>
@@ -355,6 +356,7 @@ void ZmqServer::processAdminMessage(const std::string& message) {
     try {
         json_msg = json::parse(message);
         std::string client_id = json_msg["key"].get<std::string>();
+        auto& plc_control = PlcControl::instance();
 
         if (json_msg.contains("request")) {
             std::string request_type = json_msg["request"].get<std::string>();
@@ -423,6 +425,27 @@ void ZmqServer::processAdminMessage(const std::string& message) {
                 ));
             }
 
+            else if (request_type == "execution_start") {
+                auto request = ProgEnd::fromJSON(message);
+                handleExecutionStart(request);
+            }
+
+            else if (request_type == "execution_stop") {
+                auto request = ProgEnd::fromJSON(message);
+                handleExecutionStop(request);
+            }
+
+            else if (request_type == "execution_status") {
+                auto& plc_control = PlcControl::instance();
+                std::string state = plc_control.toString();
+                sendResponse(client_id, std::make_shared<Response>(
+                        Response::success( client_id, "execution_status", state)
+                ));
+                if (config_.debugMode) {
+                    std::cout << "Status request from " << client_id << ". Current state: " << state << std::endl;
+                }
+            }
+
             else if (request_type == "heartbeat") {
                 std::lock_guard<std::mutex> lock(clients_mutex_);
                 if (clients_.count(client_id)) {
@@ -471,6 +494,35 @@ void ZmqServer::processAdminMessage(const std::string& message) {
             std::cerr << "Double error while handling unknown exception\n";
         }
     }
+}
+
+// ----------------------------------------------------------------------------
+// --- PLC state Management
+// ----------------------------------------------------------------------------
+void ZmqServer::handleExecutionStart(const Request& request) {
+    auto& plc_control = PlcControl::instance();
+    Response response;
+    if (plc_control.start()) {
+        response = Response::success(request.key, "execution_start",
+                                     "PLC starting. Current state: " + plc_control.toString());
+    } else {
+        response = Response::error(request.key, "execution_start",
+                                   "Invalid state transition. Current state: " + plc_control.toString());
+    }
+    sendResponse(request.key, std::make_shared<Response>(response));
+}
+
+void ZmqServer::handleExecutionStop(const Request& request) {
+    auto& plc_control = PlcControl::instance();
+    Response response;
+    if (plc_control.stop()) {
+        response = Response::success(request.key, "execution_stop",
+                                     "PLC stopping. Current state: " + plc_control.toString());
+    } else {
+        response = Response::error(request.key, "execution_stop",
+                                   "Invalid state transition. Current state: " + plc_control.toString());
+    }
+    sendResponse(request.key, std::make_shared<Response>(response));
 }
 
 // ----------------------------------------------------------------------------
@@ -1075,7 +1127,8 @@ void ZmqServer::sendResponse(const std::string& client_id, const std::shared_ptr
         }
 
         if (config_.debugMode) {
-            std::cout << "Sent response to " << client_id << " [" << msg.size() << " bytes]\n";
+            //std::cout << "Sent response to " << client_id << " [" << msg.size() << " bytes]\n";
+            std::cout << ".";
         }
 
     } catch (const zmq::error_t& e) {

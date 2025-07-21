@@ -32,6 +32,7 @@ bool SystemReloader::full_reload(const std::string& config_path) {
         if (actual_path.empty()) { throw std::runtime_error("No config path specified"); }
         std::ifstream config_file(actual_path);
         config_file >> new_config;
+
         if (!validate_config(new_config)) { throw std::runtime_error("Config validation failed"); }
 
         // 2. Выполнение перезагрузки модулей (!)

@@ -12,20 +12,46 @@
 
 using namespace std::chrono;
 
+// Получаем путь к директории, где находится исполняемый файл
+std::filesystem::path get_deploy_root_path() {
+    // Путь к текущему исполняемому файлу
+    std::filesystem::path exe_path = std::filesystem::canonical("/proc/self/exe").parent_path(); // Linux
+    // Или для Windows: GetModuleFileName(NULL, ...)
+
+    // Поднимаемся на уровень выше (из bin в .deploy)
+    return exe_path.parent_path(); // Переход из .deploy/bin в .deploy
+}
+
 ZmqServer &ZmqServer::instance(const std::string &configPath) {
     static ZmqServer instance(configPath); // Потокобезопасно с C++11
     return instance;
 }
 
 ZmqServer::ZmqServer(const std::string& configPath)
-        : config_(cfg::ConfigLoader<cfg::ZmqServerConfig>(configPath).getConfig()) {
+        : config_(cfg::ConfigLoader<cfg::ZmqServerConfig>(configPath).getConfig())
+        {
     config_.validate();
+
+    // Получаем корень .deploy
+    std::filesystem::path deploy_root = get_deploy_root_path();
+
+    // Собираем полный путь к programs_dir
+    programs_dir_ = deploy_root / config_.programsDir;
+    programs_dir_ = std::filesystem::absolute(programs_dir_);
+
+    // Создаем директорию, если ее нет
+    std::filesystem::create_directories(programs_dir_);
+
+    if (config_.debugMode) {
+        std::cout << "Programs directory: " << programs_dir_ << std::endl;
+    }
 }
 
-ZmqServer::ZmqServer(const cfg::ZmqServerConfig& config)
-        : config_(config) {
-    config_.validate();
-}
+//ZmqServer::ZmqServer(const cfg::ZmqServerConfig& config)
+//        : config_(config) {
+//    config_.validate();
+//
+//}
 
 ZmqServer::~ZmqServer() {
     try {
@@ -820,6 +846,9 @@ void ZmqServer::handleProgStart(const ProgStart &prog_start) {
             save_path
             //, std::chrono::steady_clock::now()
     };
+
+    auto it = active_transfers_.find(prog_start.key);
+    auto& transfer = it->second;
 
     if (config_.debugMode) {
         std::cout << "Starting program transfer: " << prog_start.prog_name

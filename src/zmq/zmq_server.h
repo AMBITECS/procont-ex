@@ -22,6 +22,7 @@
 #include <chrono>
 #include <nlohmann/json.hpp>
 
+namespace fs = std::filesystem;
 using json = nlohmann::json;
 
 class ZmqServerException : public std::runtime_error {
@@ -91,7 +92,7 @@ public:
 private:
     // Приватный конструктор (только для внутреннего использования)
     explicit ZmqServer(const std::string& configPath);
-    explicit ZmqServer(const cfg::ZmqServerConfig& config);
+    //explicit ZmqServer(const cfg::ZmqServerConfig& config);
     ~ZmqServer() override;
 
     // Приватные методы для работы с соединениями
@@ -156,23 +157,23 @@ private:
 
     // Добавляем структуру для хранения состояния передачи файлов
     struct FileTransfer {
-        std::string             client_id;
-        std::string             prog_name;
-        uint64_t                prog_hash;
-        std::string             file_name;
-        uint64_t                file_size;
-        uint64_t                bytes_received;
+        std::string             client_id;      // Ключ (ID) клиента
+        std::string             prog_name;      // Имя программы (не файла)
+        uint64_t                prog_hash;      // crc32 (orig)
+        std::string             file_name;      // Имя файла
+        uint64_t                file_size;      // Размер файла
+        uint64_t                bytes_received; // Количество принятых байтов
         uint32_t                file_crc;       // Для накопления CRC32 файла
-        std::ofstream           file_stream;
-        std::filesystem::path   save_path;
+        std::filesystem::path   save_path;      // Путь расположения файла
         //std::chrono::steady_clock::time_point last_update; // Для таймаутов
+        std::ofstream           file_stream{};  // выходной поток для записи
     };
 
     std::mutex transfer_mutex_;
     std::unordered_map<std::string, FileTransfer> active_transfers_;
 
     // Базовый каталог для сохранения программ
-    std::filesystem::path programs_dir_{"modules"};
+    std::filesystem::path programs_dir_{"programs"};
 
     // Обработчики файловых операций
     void handleProgStart(const ProgStart& prog_start);

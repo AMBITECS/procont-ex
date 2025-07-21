@@ -3,6 +3,8 @@
 //-----------------------------------------------------------------------------
 #include "zmq_server.h"
 #include "reg_server.h"
+#include "crc_utils.h"
+
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
@@ -804,15 +806,19 @@ void ZmqServer::handleProgStart(const ProgStart &prog_start) {
     std::lock_guard<std::mutex> lock(transfer_mutex_);
 
     // Создаем каталог для программы
-    auto prog_dir = programs_dir_ / prog_start.prog_name;
-    std::filesystem::create_directories(prog_dir);
+    auto save_path = programs_dir_ / prog_start.prog_name;
+    std::filesystem::create_directories(save_path);
 
     // Инициализируем передачу
     active_transfers_[prog_start.key] = {
             prog_start.key,
             prog_start.prog_name,
             prog_start.prog_hash,
-            "", 0, 0, {}, prog_dir
+            "", 0, // file_name и file_size будет установлен в file_start
+            0,          // bytes_received
+            0xFFFFFFFF, // Инициализация CRC
+            save_path
+            //, std::chrono::steady_clock::now()
     };
 
     if (config_.debugMode) {
@@ -833,7 +839,7 @@ void ZmqServer::handleFileStart(const FileStart& file_start) {
     transfer.file_name = file_start.file_name;
     transfer.file_size = file_start.file_size;
     transfer.bytes_received = 0;
-    transfer.file_crc = 0xFFFFFFFF; // Инициализируем CRC32
+    transfer.file_crc = 0xFFFFFFFF; // Инициализация CRC32
 
     auto file_path = transfer.save_path / file_start.file_name;
     transfer.file_stream.open(file_path, std::ios::binary);
@@ -843,10 +849,35 @@ void ZmqServer::handleFileStart(const FileStart& file_start) {
 
     if (config_.debugMode) {
         std::cout << "Starting file transfer: " << file_start.file_name
-                  << " (" << file_start.file_size << " bytes)" << std::endl;
+                  << " (" << file_start.file_size << " bytes)\n";
     }
 }
 
+//void ZmqServer::handleFileStart(const FileStart& file_start) {
+//    std::lock_guard<std::mutex> lock(transfer_mutex_);
+//    auto it = active_transfers_.find(file_start.key);
+//    if (it == active_transfers_.end()) {
+//        throw ZmqServerException("No active program transfer for client");
+//    }
+//
+//    auto& transfer = it->second;
+//    transfer.file_name = file_start.file_name;
+//    transfer.file_size = file_start.file_size;
+//    transfer.bytes_received = 0;
+//    transfer.file_crc = 0xFFFFFFFF; // Инициализируем CRC32
+//
+//    auto file_path = transfer.save_path / file_start.file_name;
+//    transfer.file_stream.open(file_path, std::ios::binary);
+//    if (!transfer.file_stream) {
+//        throw ZmqServerException("Failed to open file for writing: " + file_path.string());
+//    }
+//
+//    if (config_.debugMode) {
+//        std::cout << "Starting file transfer: " << file_start.file_name
+//                  << " (" << file_start.file_size << " bytes)" << std::endl;
+//    }
+//}
+//
 // ----------------------------------------------------------------------------
 void ZmqServer::handleFileChunk(const FileChunk& file_chunk) {
     std::lock_guard<std::mutex> lock(transfer_mutex_);
@@ -860,23 +891,62 @@ void ZmqServer::handleFileChunk(const FileChunk& file_chunk) {
         throw ZmqServerException("File not open for writing");
     }
 
-    // Обновляем контрольную сумму
-    transfer.file_crc = utils::calculate_crc32(
-            file_chunk.chunk_data.data(),
-            file_chunk.chunk_size,
+    // Декодируем Base64
+    std::string decoded_data = base64_decode(file_chunk.chunk_data);
+
+    // Проверяем размер после декодирования
+    if (decoded_data.size() != file_chunk.chunk_size) {
+        throw ZmqServerException("Chunk size mismatch after decoding");
+    }
+
+    // Записываем декодированные данные
+    transfer.file_stream.write(decoded_data.data(), decoded_data.size());
+    transfer.bytes_received += decoded_data.size();
+
+    // Обновляем CRC
+    transfer.file_crc = calculate_crc32(
+            decoded_data.data(),
+            decoded_data.size(),
             transfer.file_crc
     );
 
-    // Записываем данные в файл
-    transfer.file_stream.write(file_chunk.chunk_data.data(), file_chunk.chunk_size);
-    transfer.bytes_received += file_chunk.chunk_size;
-
     if (config_.debugMode) {
-        std::cout << "Received chunk: " << file_chunk.chunk_size << " bytes for "
-                  << transfer.file_name << " (" << transfer.bytes_received
-                  << "/" << transfer.file_size << ")" << std::endl;
+        float progress = (transfer.bytes_received * 100.0f) / transfer.file_size;
+        std::cout << "Received chunk: " << file_chunk.chunk_size << " bytes (decoded: "
+                  << decoded_data.size() << " bytes) for " << transfer.file_name
+                  << " (" << std::fixed << std::setprecision(1) << progress << "%)\n";
     }
 }
+
+//void ZmqServer::handleFileChunk(const FileChunk& file_chunk) {
+//    std::lock_guard<std::mutex> lock(transfer_mutex_);
+//    auto it = active_transfers_.find(file_chunk.key);
+//    if (it == active_transfers_.end()) {
+//        throw ZmqServerException("No active file transfer for client");
+//    }
+//
+//    auto& transfer = it->second;
+//    if (!transfer.file_stream.is_open()) {
+//        throw ZmqServerException("File not open for writing");
+//    }
+//
+//    // Обновляем контрольную сумму
+//    transfer.file_crc = utils::calculate_crc32(
+//            file_chunk.chunk_data.data(),
+//            file_chunk.chunk_size,
+//            transfer.file_crc
+//    );
+//
+//    // Записываем данные в файл
+//    transfer.file_stream.write(file_chunk.chunk_data.data(), file_chunk.chunk_size);
+//    transfer.bytes_received += file_chunk.chunk_size;
+//
+//    if (config_.debugMode) {
+//        std::cout << "Received chunk: " << file_chunk.chunk_size << " bytes for "
+//                  << transfer.file_name << " (" << transfer.bytes_received
+//                  << "/" << transfer.file_size << ")" << std::endl;
+//    }
+//}
 
 // ----------------------------------------------------------------------------
 void ZmqServer::handleFileEnd(const FileEnd& file_end) {
@@ -897,10 +967,11 @@ void ZmqServer::handleFileEnd(const FileEnd& file_end) {
     // Проверяем размер полученного файла
     auto file_path = transfer.save_path / transfer.file_name;
     uint64_t actual_size = std::filesystem::file_size(file_path);
+
     if (actual_size != transfer.file_size) {
         std::filesystem::remove(file_path);
         throw ZmqServerException("File size mismatch: expected " +
-                                 std::to_string(transfer.file_size) + ", got " + std::to_string(actual_size));
+            std::to_string(transfer.file_size) + ", got " + std::to_string(actual_size));
     }
 
     if (config_.debugMode) {

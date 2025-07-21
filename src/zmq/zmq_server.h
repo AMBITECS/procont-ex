@@ -165,6 +165,7 @@ private:
         uint32_t                file_crc;       // Для накопления CRC32 файла
         std::ofstream           file_stream;
         std::filesystem::path   save_path;
+        //std::chrono::steady_clock::time_point last_update; // Для таймаутов
     };
 
     std::mutex transfer_mutex_;

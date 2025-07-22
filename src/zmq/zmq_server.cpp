@@ -358,115 +358,10 @@ void ZmqServer::processAdminMessage(const std::string& message) {
         std::string client_id = json_msg["key"].get<std::string>();
         auto& plc_control = PlcControl::instance();
 
-        // Отладочная печать входящего сообщения
-        if (config_.debugMode) {
-            std::cout << "\n[DEBUG] Received request from " << client_id << ":\n"
-                      << json_msg.dump(2) << "\n";
-        }
-
         if (json_msg.contains("request")) {
             std::string request_type = json_msg["request"].get<std::string>();
 
-            // Дополнительная отладочная информация для каждого типа запроса
-            if (config_.debugMode) {
-                std::cout << "[DEBUG] Processing request type: " << request_type
-                          << " from client: " << client_id << "\n";
-            }
-
-            if (request_type == "connect") {
-                auto connect = Request::fromJSON(message);
-                Response response = handleConnectRequest(connect);
-                sendResponse(client_id, std::make_shared<Response>(response));
-
-            }
-            else if (request_type == "disconnect") {
-                disconnectClient(client_id);
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success(client_id, "disconnect", "Disconnected successfully")
-                ));
-
-            }
-            else if (request_type == "subscribe_values") {
-                auto subscribe = Subscribe::fromJSON(message);
-                processSubscribe(subscribe);
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success(client_id, "subscribe_values", "Subscription successful")
-                ));
-
-            }
-            else if (request_type == "unsubscribe_values") {
-                auto unsubscribe = Unsubscribe::fromJSON(message);
-                processUnsubscribe(unsubscribe);
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success(client_id, "unsubscribe_values", "Unsubscribed successfully")
-                ));
-            }
-            else if (request_type == "prog_start") {
-                auto prog_start = ProgStart::fromJSON(message);
-                handleProgStart(prog_start);
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success(client_id, "prog_start", "Program transfer started")
-                ));
-            }
-            else if (request_type == "file_start") {
-                auto file_start = FileStart::fromJSON(message);
-                handleFileStart(file_start);
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success(client_id, "file_start", "File transfer started")
-                ));
-            }
-            else if (request_type == "file_chunk") {
-                auto file_chunk = FileChunk::fromJSON(message);
-                handleFileChunk(file_chunk);
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success(client_id, "file_chunk", "Chunk received")
-                ));
-            }
-            else if (request_type == "file_end") {
-                auto file_end = FileEnd::fromJSON(message);
-                handleFileEnd(file_end);
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success(client_id, "file_end", "File transfer completed")
-                ));
-            }
-            else if (request_type == "prog_end") {
-                auto prog_end = ProgEnd::fromJSON(message);
-                handleProgEnd(prog_end);
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success(client_id, "prog_end", "Program transfer completed")
-                ));
-            }
-
-            else if (request_type == "execution_start") {
-                auto request = ProgEnd::fromJSON(message);
-                handleExecutionStart(request);
-            }
-
-            else if (request_type == "execution_stop") {
-                auto request = ProgEnd::fromJSON(message);
-                handleExecutionStop(request);
-            }
-
-            else if (request_type == "execution_status") {
-                auto& plc_control = PlcControl::instance();
-                std::string state = plc_control.toString();
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::success( client_id, "execution_status", state)
-                ));
-                if (config_.debugMode) {
-                    std::cout << "Status request from " << client_id << ". Current state: " << state << std::endl;
-                }
-            }
-
-            else if (request_type == "execution_pause") {
-                handleExecutionPause(ProgEnd::fromJSON(message));
-            }
-
-            else if (request_type == "execution_resume") {
-                handleExecutionResume(ProgEnd::fromJSON(message));
-            }
-
-            else if (request_type == "heartbeat") {
+            if (request_type == "heartbeat") {
                 std::lock_guard<std::mutex> lock(clients_mutex_);
                 if (clients_.count(client_id)) {
                     clients_[client_id]->updateLastActivity();
@@ -477,11 +372,96 @@ void ZmqServer::processAdminMessage(const std::string& message) {
                 ));
 
             } else {
-                sendResponse(client_id, std::make_shared<Response>(
-                        Response::error(client_id, request_type, "Unknown request type")
-                ));
-            }
+
+                // Отладочная печать входящего сообщения
+                if (config_.debugMode) {
+                    std::cout << " -------------------------------------------\n"
+                    << "[D] Processing request: \"" << request_type
+                    << "\" from client: " << client_id << " ->\n" << json_msg.dump(2) << "\n";
+                }
+
+                if (request_type == "connect") {
+                    auto connect = Request::fromJSON(message);
+                    Response response = handleConnectRequest(connect);
+                    sendResponse(client_id, std::make_shared<Response>(response));
+
+                } else if (request_type == "disconnect") {
+                    disconnectClient(client_id);
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "disconnect", "Disconnected successfully")
+                    ));
+
+                } else if (request_type == "subscribe_values") {
+                    auto subscribe = Subscribe::fromJSON(message);
+                    processSubscribe(subscribe);
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "subscribe_values", "Subscription successful")
+                    ));
+
+                } else if (request_type == "unsubscribe_values") {
+                    auto unsubscribe = Unsubscribe::fromJSON(message);
+                    processUnsubscribe(unsubscribe);
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "unsubscribe_values", "Unsubscribed successfully")
+                    ));
+                } else if (request_type == "prog_start") {
+                    auto prog_start = ProgStart::fromJSON(message);
+                    handleProgStart(prog_start);
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "prog_start", "Program transfer started")
+                    ));
+                } else if (request_type == "file_start") {
+                    auto file_start = FileStart::fromJSON(message);
+                    handleFileStart(file_start);
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "file_start", "File transfer started")
+                    ));
+                } else if (request_type == "file_chunk") {
+                    auto file_chunk = FileChunk::fromJSON(message);
+                    handleFileChunk(file_chunk);
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "file_chunk", "Chunk received")
+                    ));
+                } else if (request_type == "file_end") {
+                    auto file_end = FileEnd::fromJSON(message);
+                    handleFileEnd(file_end);
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "file_end", "File transfer completed")
+                    ));
+                } else if (request_type == "prog_end") {
+                    auto prog_end = ProgEnd::fromJSON(message);
+                    handleProgEnd(prog_end);
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "prog_end", "Program transfer completed")
+                    ));
+                } else if (request_type == "execution_start") {
+                    auto request = ProgEnd::fromJSON(message);
+                    handleExecutionStart(request);
+                } else if (request_type == "execution_stop") {
+                    auto request = ProgEnd::fromJSON(message);
+                    handleExecutionStop(request);
+                } else if (request_type == "execution_status") {
+                    auto &plc_control = PlcControl::instance();
+                    std::string state = plc_control.toString();
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::success(client_id, "execution_status", state)
+                    ));
+                    if (config_.debugMode) {
+                        std::cout << "Status request from " << client_id << ". Current state: " << state << std::endl;
+                    }
+                } else if (request_type == "execution_pause") {
+                    handleExecutionPause(ProgEnd::fromJSON(message));
+                } else if (request_type == "execution_resume") {
+                    handleExecutionResume(ProgEnd::fromJSON(message));
+                } else {
+                    sendResponse(client_id, std::make_shared<Response>(
+                            Response::error(client_id, request_type, "Unknown request type")
+                    ));
+                }
+
+            } // !heartbeat
         } else {
+            // not request field
             sendResponse(client_id, std::make_shared<Response>(
                     Response::error(client_id, "", "Missing 'request' field")
             ));
@@ -582,37 +562,66 @@ Response ZmqServer::handleConnectRequest(const Request& request) {
         return Response::error(request.key, request.request, "Empty client key");
     }
 
-    std::unique_lock<std::mutex> clients_lock(clients_mutex_);
-
     // 2. Проверка максимального количества клиентов
-    if (clients_.size() >= config_.maxClients) {
-        if (config_.debugMode) {
-            std::cerr << "Connect error: Max clients reached (" << config_.maxClients
-                      << ") from client " << request.key << std::endl;
+    {
+        std::unique_lock<std::mutex> clients_lock(clients_mutex_);
+
+        if (clients_.size() >= config_.maxClients) {
+            if (config_.debugMode) {
+                std::cerr << "Connect error: Max clients reached (" << config_.maxClients
+                          << ") from client " << request.key << std::endl;
+            }
+            return Response::error(request.key, request.request, "Maximum clients reached");
         }
-        return Response::error(request.key, request.request, "Maximum clients reached");
     }
+//    // 3. Проверка существующего подключения
+//    auto it = clients_.find(request.key);
+//    if (it != clients_.end()) {
+//        // Клиент уже подключен - просто обновляем активность
+//        it->second->updateLastActivity();
+//
+//        if (config_.debugMode) {
+//            std::cout << "Client reconnected: " << request.key << std::endl;
+//        }
+//        return Response::success(request.key, request.request, "Client already connected");
+//    }
 
     // 3. Проверка существующего подключения
-    auto it = clients_.find(request.key);
-    if (it != clients_.end()) {
-        // Клиент уже подключен - просто обновляем активность
-        it->second->updateLastActivity();
+    {
+        std::unique_lock<std::mutex> clients_lock(clients_mutex_);
+        auto it = clients_.find(request.key);
+        if (it != clients_.end()) {
+            clients_lock.unlock();
+            // Клиент с таким ID уже подключен - отключаем предыдущий экземпляр
+            if (config_.debugMode) {
+                std::cout << "[DEBUG] Disconnecting previous instance of client: "
+                          << request.key << std::endl;
+            }
 
-        if (config_.debugMode) {
-            std::cout << "Client reconnected: " << request.key << std::endl;
+            // Отправляем сообщение о принудительном отключении предыдущему клиенту
+            //sendResponse(request.key, std::make_shared<Response>(
+            //        Response::error(request.key, "disconnect", "New connection with same ID detected")
+            //));
+
+            // Удаляем предыдущего клиента
+            disconnectClient(request.key);
+            if (config_.debugMode) {
+                std::cout << "[DEBUG] Previous client disconnected: " << request.key << std::endl;
+            }
         }
-        return Response::success(request.key, request.request, "Client already connected");
     }
 
+    std::unique_lock<std::mutex> clients_lock(clients_mutex_);
     try {
         // 4. Создаем и регистрируем нового клиента
-        auto new_client = std::make_shared<ZmqClient>(request.key);
-        new_client->updateLastActivity();
 
-        // 5. Добавляем клиента в коллекцию
-        clients_[request.key] = new_client;
-        clients_lock.unlock();
+            auto new_client = std::make_shared<ZmqClient>(request.key);
+            new_client->updateLastActivity();
+
+            // 5. Добавляем клиента в коллекцию
+            clients_[request.key] = new_client;
+
+            clients_lock.unlock();
 
         if (config_.debugMode) {
             std::cout << "New client connected: " << request.key << std::endl;

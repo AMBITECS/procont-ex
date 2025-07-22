@@ -15,7 +15,7 @@ endif()
 #--------------------------------------------------------------
 # Настройка путей проекта
 #--------------------------------------------------------------
-set( PROJ_DIR     ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ project
+set( PROJ_DIR     ${CMAKE_CURRENT_SOURCE_DIR} ) # PROJ directory
 
 set( CMAKE_DIR    ${PROJ_DIR}/.cmake  ) # PROJ cmake
 set( PROJ_INC_DIR ${PROJ_DIR}/include ) # PROJ headers

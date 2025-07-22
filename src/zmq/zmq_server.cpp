@@ -358,8 +358,20 @@ void ZmqServer::processAdminMessage(const std::string& message) {
         std::string client_id = json_msg["key"].get<std::string>();
         auto& plc_control = PlcControl::instance();
 
+        // Отладочная печать входящего сообщения
+        if (config_.debugMode) {
+            std::cout << "\n[DEBUG] Received request from " << client_id << ":\n"
+                      << json_msg.dump(2) << "\n";
+        }
+
         if (json_msg.contains("request")) {
             std::string request_type = json_msg["request"].get<std::string>();
+
+            // Дополнительная отладочная информация для каждого типа запроса
+            if (config_.debugMode) {
+                std::cout << "[DEBUG] Processing request type: " << request_type
+                          << " from client: " << client_id << "\n";
+            }
 
             if (request_type == "connect") {
                 auto connect = Request::fromJSON(message);

@@ -10,11 +10,12 @@
 #include <chrono>
 
 enum class PlcState {
-    STOPPED,    // Программа остановлена, модули выгружены
-    STARTING,   // Идет загрузка модулей и инициализация
-    RUNNING,    // Программа выполняется
-    STOPPING,   // Идет выгрузка модулей
-    ERROR       // Ошибка в работе
+    STOPPED,    // Программа остановлена
+    STARTING,   // Идет запуск
+    RUNNING,    // Нормальное выполнение
+    PAUSED,     // Пауза (выполнение приостановлено)
+    STOPPING,   // Идет остановка
+    ERROR       // Ошибка
 };
 
 class PlcControl {
@@ -45,6 +46,26 @@ public:
         std::lock_guard<std::mutex> lock(state_mutex_);
         if (state_ == PlcState::RUNNING || state_ == PlcState::STARTING) {
             state_ = PlcState::STOPPING;
+            state_cv_.notify_all();
+            return true;
+        }
+        return false;
+    }
+
+    bool pause() {
+        std::lock_guard<std::mutex> lock(state_mutex_);
+        if (state_ == PlcState::RUNNING) {
+            state_ = PlcState::PAUSED;
+            state_cv_.notify_all();
+            return true;
+        }
+        return false;
+    }
+
+    bool resume() {
+        std::lock_guard<std::mutex> lock(state_mutex_);
+        if (state_ == PlcState::PAUSED) {
+            state_ = PlcState::RUNNING;
             state_cv_.notify_all();
             return true;
         }

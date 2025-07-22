@@ -33,7 +33,7 @@ namespace cfg {
         bool debugMode{true};                   // Режим отладочной печати
 
         // Параметры передачи файлов
-        std::string programsDir{"programs"};       // Базовый каталог для сохранения программ
+        std::string programsDir{"modules"};        // Базовый каталог для сохранения модулей
         uint64_t maxFileSize{100 * 1024 * 1024};   // Максимальный размер файла (100 MB)
         uint64_t maxChunkSize{64 * 1024};          // Максимальный размер блока (64 KB)
 

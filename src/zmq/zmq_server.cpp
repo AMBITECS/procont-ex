@@ -446,6 +446,14 @@ void ZmqServer::processAdminMessage(const std::string& message) {
                 }
             }
 
+            else if (request_type == "execution_pause") {
+                handleExecutionPause(ProgEnd::fromJSON(message));
+            }
+
+            else if (request_type == "execution_resume") {
+                handleExecutionResume(ProgEnd::fromJSON(message));
+            }
+
             else if (request_type == "heartbeat") {
                 std::lock_guard<std::mutex> lock(clients_mutex_);
                 if (clients_.count(client_id)) {
@@ -521,6 +529,31 @@ void ZmqServer::handleExecutionStop(const Request& request) {
     } else {
         response = Response::error(request.key, "execution_stop",
                                    "Invalid state transition. Current state: " + plc_control.toString());
+    }
+    sendResponse(request.key, std::make_shared<Response>(response));
+}
+
+void ZmqServer::handleExecutionPause(const Request& request) {
+    auto& plc_control = PlcControl::instance();
+    Response response;
+    if (plc_control.pause()) {
+        response = Response::success(request.key, "execution_pause", "PLC paused. Current state: PAUSED");
+    } else {
+        response = Response::error( request.key, "execution_pause",
+                                    "Cannot pause PLC. Current state: " + plc_control.toString());
+    }
+    sendResponse(request.key, std::make_shared<Response>(response));
+}
+
+void ZmqServer::handleExecutionResume(const Request& request) {
+    auto& plc_control = PlcControl::instance();
+    Response response;
+
+    if (plc_control.resume()) {
+        response = Response::success(request.key, "execution_resume", "PLC resumed. Current state: RUNNING");
+    } else {
+        response = Response::error( request.key, "execution_resume",
+                                    "Cannot resume PLC. Current state: " + plc_control.toString());
     }
     sendResponse(request.key, std::make_shared<Response>(response));
 }
@@ -934,31 +967,6 @@ void ZmqServer::handleFileStart(const FileStart& file_start) {
     }
 }
 
-//void ZmqServer::handleFileStart(const FileStart& file_start) {
-//    std::lock_guard<std::mutex> lock(transfer_mutex_);
-//    auto it = active_transfers_.find(file_start.key);
-//    if (it == active_transfers_.end()) {
-//        throw ZmqServerException("No active program transfer for client");
-//    }
-//
-//    auto& transfer = it->second;
-//    transfer.file_name = file_start.file_name;
-//    transfer.file_size = file_start.file_size;
-//    transfer.bytes_received = 0;
-//    transfer.file_crc = 0xFFFFFFFF; // Инициализируем CRC32
-//
-//    auto file_path = transfer.save_path / file_start.file_name;
-//    transfer.file_stream.open(file_path, std::ios::binary);
-//    if (!transfer.file_stream) {
-//        throw ZmqServerException("Failed to open file for writing: " + file_path.string());
-//    }
-//
-//    if (config_.debugMode) {
-//        std::cout << "Starting file transfer: " << file_start.file_name
-//                  << " (" << file_start.file_size << " bytes)" << std::endl;
-//    }
-//}
-//
 // ----------------------------------------------------------------------------
 void ZmqServer::handleFileChunk(const FileChunk& file_chunk) {
     std::lock_guard<std::mutex> lock(transfer_mutex_);
@@ -998,36 +1006,6 @@ void ZmqServer::handleFileChunk(const FileChunk& file_chunk) {
                   << " (" << std::fixed << std::setprecision(1) << progress << "%)\n";
     }
 }
-
-//void ZmqServer::handleFileChunk(const FileChunk& file_chunk) {
-//    std::lock_guard<std::mutex> lock(transfer_mutex_);
-//    auto it = active_transfers_.find(file_chunk.key);
-//    if (it == active_transfers_.end()) {
-//        throw ZmqServerException("No active file transfer for client");
-//    }
-//
-//    auto& transfer = it->second;
-//    if (!transfer.file_stream.is_open()) {
-//        throw ZmqServerException("File not open for writing");
-//    }
-//
-//    // Обновляем контрольную сумму
-//    transfer.file_crc = utils::calculate_crc32(
-//            file_chunk.chunk_data.data(),
-//            file_chunk.chunk_size,
-//            transfer.file_crc
-//    );
-//
-//    // Записываем данные в файл
-//    transfer.file_stream.write(file_chunk.chunk_data.data(), file_chunk.chunk_size);
-//    transfer.bytes_received += file_chunk.chunk_size;
-//
-//    if (config_.debugMode) {
-//        std::cout << "Received chunk: " << file_chunk.chunk_size << " bytes for "
-//                  << transfer.file_name << " (" << transfer.bytes_received
-//                  << "/" << transfer.file_size << ")" << std::endl;
-//    }
-//}
 
 // ----------------------------------------------------------------------------
 void ZmqServer::handleFileEnd(const FileEnd& file_end) {

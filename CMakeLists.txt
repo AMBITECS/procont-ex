@@ -460,7 +460,7 @@ set_target_properties(${proj} PROPERTIES
 )
 
 #--------------------------------------------------------------
-# Поиск и линковка модуля plc_main (стыкуется пока жёстко)
+# Поиск и линковка модуля plc_main (СТЫКУЕТСЯ ПОКА ЖЁСТКО!!!)
 #--------------------------------------------------------------
 find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_DEP_MOD} NO_DEFAULT_PATH REQUIRED )
 target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})

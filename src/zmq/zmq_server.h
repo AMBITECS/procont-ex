@@ -173,11 +173,13 @@ private:
     std::unordered_map<std::string, FileTransfer> active_transfers_;
 
     // Базовый каталог для сохранения программ
-    std::filesystem::path programs_dir_{"programs"};
+    std::filesystem::path programs_dir_{"modules"};
 
     // Обработчики состояния
     void handleExecutionStart(const Request& request);
     void handleExecutionStop(const Request& request);
+    void handleExecutionPause(const Request& request);
+    void handleExecutionResume(const Request& request);
 
     // Обработчики файловых операций
     void handleProgStart(const ProgStart& prog_start);

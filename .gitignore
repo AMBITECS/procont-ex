@@ -81,11 +81,12 @@ CMakeLists.txt.user*
 /Platform.cmake
 
 /*dockcross-*/
-/utils/CANopen/
 /utils/libmodbus/
-
-/utils/CANopen/.idea/
 /utils/libmodbus/.idea/
+/utils/libzmq/
+/utils/openssl/
+/utils/tmp/
+
 
 /.install/
 /plc/.install/
@@ -94,8 +95,6 @@ CMakeLists.txt.user*
 /__tmp/
 /src/__tmp/
 /lib/tmp/
-/utils/tmp/
-/utils/openssl/
 
 *.prev
 вектор с очередью и подпиской.txt
@@ -103,3 +102,4 @@ deepseek_cpp_20250430_480872.cpp.code
 /tmp.txt
 
 
+/build/

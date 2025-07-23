@@ -102,11 +102,12 @@ int main(int argc, char** argv) {
     while (true) {
         switch (plc_control.state()) {
             case PlcState::STOPPED:
-                SystemReloader::instance().full_unload();
+                //SystemReloader::instance().full_unload();
+
                 // Ожидание команды старта
-                while (plc_control.state()!=PlcState::STARTING) {
+                //while (plc_control.state()!=PlcState::STARTING) {
                     std::this_thread::sleep_for(100ms);
-                }
+                //}
                 break;
 
             case PlcState::PAUSED:
@@ -116,30 +117,30 @@ int main(int argc, char** argv) {
 
             case PlcState::STARTING: {
                 try {
-                    //// 5. Копирование файлов programs -> modules
-                    const std::string programs_dir = "../programs";
-                    const std::string modules_dir = "../modules";
-
-                    // Проверяем существование директории programs_dir
-                    if (std::filesystem::exists(programs_dir) && std::filesystem::is_directory(programs_dir)) {
-                        // Создаем директорию modules, если ее нет
-                        if (!std::filesystem::exists(modules_dir)) {
-                            std::filesystem::create_directory(modules_dir);
-                            log("Created modules directory");
-                        }
-
-                        // Копируем все файлы из programs в modules
-                        for (const auto& entry : std::filesystem::directory_iterator(programs_dir)) {
-                            if (entry.is_regular_file()) {
-                                const auto dest_path = modules_dir + "/" + entry.path().filename().string();
-                                std::filesystem::copy_file(entry.path(), dest_path, std::filesystem::copy_options::overwrite_existing);
-
-                                char log_msg[256];
-                                sprintf(log_msg, "Copied file: %s to %s", entry.path().c_str(), dest_path.c_str());
-                                log(log_msg);
-                            }
-                        }
-                    }
+//                    //// 5. Копирование файлов programs -> modules
+//                    const std::string programs_dir = "../programs";
+//                    const std::string modules_dir = "../modules";
+//
+//                    // Проверяем существование директории programs_dir
+//                    if (std::filesystem::exists(programs_dir) && std::filesystem::is_directory(programs_dir)) {
+//                        // Создаем директорию modules, если ее нет
+//                        if (!std::filesystem::exists(modules_dir)) {
+//                            std::filesystem::create_directory(modules_dir);
+//                            log("Created modules directory");
+//                        }
+//
+//                        // Копируем все файлы из programs в modules
+//                        for (const auto& entry : std::filesystem::directory_iterator(programs_dir)) {
+//                            if (entry.is_regular_file()) {
+//                                const auto dest_path = modules_dir + "/" + entry.path().filename().string();
+//                                std::filesystem::copy_file(entry.path(), dest_path, std::filesystem::copy_options::overwrite_existing);
+//
+//                                char log_msg[256];
+//                                sprintf(log_msg, "Copied file: %s to %s", entry.path().c_str(), dest_path.c_str());
+//                                log(log_msg);
+//                            }
+//                        }
+//                    }
                     // --------------------------------------------------------
 
                     // 6. Загрузка конфигурации и модулей через SystemReloader

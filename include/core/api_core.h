@@ -9,4 +9,4 @@
 //extern unsigned long long common_ticktime__; /*ns*/
 
 // Объявляем слабую ссылку на переменную
-extern "C" __attribute__((weak)) unsigned long long common_ticktime__;
+//extern "C" __attribute__((weak)) unsigned long long common_ticktime__;

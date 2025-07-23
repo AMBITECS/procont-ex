@@ -29,6 +29,7 @@
 #include "reg_binder.h"
 #include "zmq_server.h"
 #include "plc_control.h"
+#include "api_core.h"
 
 #ifdef HAVE_SYSTEMD
 #include <systemd/sd-daemon.h>
@@ -101,8 +102,11 @@ int main(int argc, char** argv) {
     while (true) {
         switch (plc_control.state()) {
             case PlcState::STOPPED:
+                SystemReloader::instance().full_unload();
                 // Ожидание команды старта
-                std::this_thread::sleep_for(100ms);
+                while (plc_control.state()!=PlcState::STARTING) {
+                    std::this_thread::sleep_for(100ms);
+                }
                 break;
 
             case PlcState::PAUSED:
@@ -112,21 +116,47 @@ int main(int argc, char** argv) {
 
             case PlcState::STARTING: {
                 try {
-                    // 5. Загрузка конфигурации и модулей через SystemReloader
+                    //// 5. Копирование файлов programs -> modules
+                    const std::string programs_dir = "../programs";
+                    const std::string modules_dir = "../modules";
+
+                    // Проверяем существование директории programs_dir
+                    if (std::filesystem::exists(programs_dir) && std::filesystem::is_directory(programs_dir)) {
+                        // Создаем директорию modules, если ее нет
+                        if (!std::filesystem::exists(modules_dir)) {
+                            std::filesystem::create_directory(modules_dir);
+                            log("Created modules directory");
+                        }
+
+                        // Копируем все файлы из programs в modules
+                        for (const auto& entry : std::filesystem::directory_iterator(programs_dir)) {
+                            if (entry.is_regular_file()) {
+                                const auto dest_path = modules_dir + "/" + entry.path().filename().string();
+                                std::filesystem::copy_file(entry.path(), dest_path, std::filesystem::copy_options::overwrite_existing);
+
+                                char log_msg[256];
+                                sprintf(log_msg, "Copied file: %s to %s", entry.path().c_str(), dest_path.c_str());
+                                log(log_msg);
+                            }
+                        }
+                    }
+                    // --------------------------------------------------------
+
+                    // 6. Загрузка конфигурации и модулей через SystemReloader
                     if (!SystemReloader::instance().full_reload("../etc/modules_config.json")) {
                         throw std::runtime_error("System reload failed");
                     }
 
-                    // 6. Чтение начальных значений из переменных в регистры
+                    // 7. Чтение начальных значений из переменных в регистры
                     Binder::instance().updateFromIec();
                     Binder::instance().updateToIec();
 
-                    // 6. Инициализация оборудования (после загрузки драйверов)
+                    // 8. Инициализация оборудования (после загрузки драйверов)
                     initializeHardware();
                     initializeMB();
                     initCustomLayer();
 
-                    // 7. Инициализация ZMQ сервера (выше)
+                    // Инициализация ZMQ сервера (выше)
 
                     // 9. Инициализация таймера
                     clock_gettime(CLOCK_MONOTONIC, &timer_start);
@@ -174,8 +204,10 @@ int main(int argc, char** argv) {
                     }
 
                     // Спим до следующего цикла ...
-                    updateTime();
-                    sleep_until(&timer_start, common_ticktime__);
+                    if (&common_ticktime__ != nullptr) {
+                        updateTime();
+                        sleep_until(&timer_start, common_ticktime__);
+                    }
 
                 } catch (...) {
                     plc_control.setState(PlcState::ERROR);

@@ -111,10 +111,16 @@ void SystemReloader::update_last_working_config() {
 //-----------------------------------------------------------------------------
 // Приватные методы
 //-----------------------------------------------------------------------------
-void SystemReloader::perform_reload(const json& config) {
-    // 1. Остановка системы
+void SystemReloader::perform_unload() {
     DriverManager::instance().shutdown();
     DriverLoader::instance().unload_all();
+}
+
+void SystemReloader::perform_reload(const json& config) {
+    // 1. Остановка системы
+    perform_unload();
+//    DriverManager::instance().shutdown();
+//    DriverLoader::instance().unload_all();
 
     // 2. Загрузка новой конфигурации
     DriverLoader::instance().load_config_from_json(config);

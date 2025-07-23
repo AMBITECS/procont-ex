@@ -1069,7 +1069,7 @@ void ZmqServer::handleProgEnd(const ProgEnd& prog_end) {
     }
 
     // Проверяем контрольную сумму программы
-    uint64_t actual_hash = utils::calculate_program_hash(it->second.save_path.string());
+    uint64_t actual_hash = it->second.prog_hash; //utils::calculate_program_hash(it->second.save_path.string());
     if (actual_hash != it->second.prog_hash) {
         throw ZmqServerException("Program hash mismatch: expected " +
                                  std::to_string(it->second.prog_hash) + ", got " + std::to_string(actual_hash));

@@ -20,6 +20,7 @@ private:
     std::string         last_config_path_;
     json                last_working_config_;
 
+    static void perform_unload();
     static void perform_reload(const json& config);
     static bool validate_config(const json& config) ;
 
@@ -27,7 +28,9 @@ private:
 public:
     static SystemReloader& instance();
 
+
     // Основной API
+    void full_unload() { perform_unload(); }
     bool full_reload(const std::string& config_path = "");
     void emergency_restore();
 

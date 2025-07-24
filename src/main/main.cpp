@@ -218,14 +218,22 @@ int main(int argc, char** argv) {
 
             case PlcState::STOPPING:
                 try {
-                    // 12. Завершающие операции
+                    // Завершающие программы
+                    std::cout << "=====  Завершение программы  =====\n";
+
+                    std::cout << "= 1 = Уведомляю driver's об оключении\n";
                     reg_server.notifyExit();
 
+                    std::cout << "= 2 = Вызываю driver's shutdown\n";
                     DriverManager::instance().shutdown();
+
+                    std::cout << "= 3 = Выгружаю driver libraries\n";
                     DriverLoader::instance().unload_all();
 
                     disableOutputs();
                     finalizeHardware();
+
+                    std::cout << "=====  Завершение завершено!  =====\n";
 
                     plc_control.setState(PlcState::STOPPED);
                 } catch (...) {

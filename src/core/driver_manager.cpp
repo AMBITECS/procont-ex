@@ -49,15 +49,23 @@ void DriverManager::initialize_iec() {
 
 void DriverManager::shutdown() {
     // Остановка IEC модуля
+    std::cout << "=====  Завершение работы компонентов:  =====\n";
     stop_iec();
 
     // Остановка драйверов в обратном порядке
     for (auto it = drivers_.rbegin(); it != drivers_.rend(); ++it) {
         try {
+            std::cout << "=====  Остановка драйвера: " << it->get()->name() << "->shutdown()  =====\n";
             (*it)->shutdown();
         } catch (const std::exception& e) {
             std::cerr << "Driver shutdown error: " << e.what() << std::endl;
         }
+    }
+
+    // Очистка коллекции драйверов
+    for (auto& driver : drivers_) {
+        std::cout << "===== Очистка указателя: " << driver->name() << "->shutdown()  =====\n";
+        driver = nullptr;
     }
     drivers_.clear();
 }
@@ -74,6 +82,7 @@ void DriverManager::start_iec() {
 void DriverManager::stop_iec() {
     std::lock_guard<std::mutex> lock(iec_mutex_);
     if (iec_module_ && iec_running_) {
+        std::cout << "=====  Остановка модуля: " << iec_module_->name() << "->shutdown()  =====\n";
         iec_module_->shutdown();
         iec_running_ = false;
     }

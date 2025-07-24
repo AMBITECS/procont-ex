@@ -64,6 +64,7 @@ void DriverLoader::load_configured_drivers() {
     std::lock_guard<std::mutex> lock(lib_mutex_);
 
     // (1) Загрузка IEC модуля
+    std::cout << "=== Загрузка IEC модуля ...\n";
     {
         auto &cfg = iec_config_;
         std::string iec_lib_path = cfg.library_path + lib_prefix + cfg.library_name + std::string(lib_extension);
@@ -76,13 +77,14 @@ void DriverLoader::load_configured_drivers() {
             }
         }
     }
-    std::cout << "=== !!!!!!!!!!!!!!!!\n";
 
     // (2) Загрузка драйверов
+    std::cout << "=== Загрузка драйверов ... \n";
     for (const auto& cfg : drivers_config_) {
         std::string lib_path = cfg.library_path + cfg.library_name;
         void* handle = load_single_library(lib_path);
         if (handle) {
+            std::cout << "=== Регистрация драйвера: " << cfg.library_name << " \n";
             register_module_driver(handle);
         }
     }
@@ -160,26 +162,31 @@ void DriverLoader::register_module_iec(void* handle) {
 void DriverLoader::unload_all() {
     std::lock_guard<std::mutex> lock(lib_mutex_);
 
-    // 1. Вызов очистки в обратном порядке
+// Вызов очистки в обратном порядке
 //    for (auto it = loaded_libraries_.rbegin(); it != loaded_libraries_.rend(); ++it) {
 //        //call_unload_function(*it);
 //    }
 
-    // 2. Очищаем фабрики
+    // !. Очищаем фабрики модулей
+    std::cout << "=====  Очищаем фабрики модулей =====\n";
     DriverFactory::instance().unload_drivers();
     IECFactory::instance().unload_iec();
 
-    // 3 Выгружаем в обратном порядке
+    // 2 Выгружаем библиотеки в обратном порядке
+    std::cout << "=====  Выгружаем библиотеки =====\n";
     for (auto it = loaded_libraries_.rbegin(); it != loaded_libraries_.rend(); ++it) {
 #ifdef _WIN32
         FreeLibrary(static_cast<HMODULE>(*it));
 #else
         dlclose(*it);
 #endif
+        *it = nullptr;
     }
+
     loaded_libraries_.clear();
 
-    // Выгружаем IEC модуль отдельно
+    // 3. Выгружаем IEC модуль отдельно
+    std::cout << "=====  Выгружаем Выгружаем IEC модуль =====\n";
     if (iec_handle_) {
 #ifdef _WIN32
         FreeLibrary(static_cast<HMODULE>(iec_handle_));

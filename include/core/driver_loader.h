@@ -52,7 +52,7 @@ private:
     static void* load_single_library(const std::string& path);
     void update_loaded_libraries(void* old_handle, void* new_handle);
 
-    void register_module_iec(void* handle);
+    static void register_module_iec(void* handle);
     void register_module_driver(void* handle);
 
     std::vector<ModuleConfig> drivers_config_;

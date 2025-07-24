@@ -55,18 +55,18 @@ void initCustomLayer() {
     printf("-- Modbus server (Slave) RUNNING on port %d!\n", portModbus);
     sleepms(1000);
 
-    //------------------------------------------------------
-    // Start CAN Master server manually
-    //------------------------------------------------------
-    printf("CAN Master starting...\n");
-    // Send command to start modbus
-    sprintf(strCmd, "start_can_master(%s)", "can0");
-    while ((rc=send(socket_fd, strCmd, strlen(strCmd) + 1, 0))==-1) {
-        if (count++ < 10) sleepms(500); else {count=0; break;}
-    }
-    assert(rc!=-1);
-    printf("-- CAN Master server RUNNING on '%s'!\n", "can0");
-    sleepms(1000);
+    ////------------------------------------------------------
+    //// Start CAN Master server manually
+    ////------------------------------------------------------
+    //printf("CAN Master starting...\n");
+    //// Send command to start modbus
+    //sprintf(strCmd, "start_can_master(%s)", "can0");
+    //while ((rc=send(socket_fd, strCmd, strlen(strCmd) + 1, 0))==-1) {
+    //    if (count++ < 10) sleepms(500); else {count=0; break;}
+    //}
+    //assert(rc!=-1);
+    //printf("-- CAN Master server RUNNING on '%s'!\n", "can0");
+    //sleepms(1000);
 
 }
 

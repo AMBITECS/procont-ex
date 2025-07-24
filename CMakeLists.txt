@@ -153,6 +153,11 @@ include(${CMAKE_DIR}/build_tools.cmake)
 include(FetchContent)
 include(ExternalProject)
 
+# Добавьте эти строки перед определением целей
+set(CMAKE_BUILD_TYPE Debug)
+add_compile_options(-fdebug-prefix-map=${CMAKE_SOURCE_DIR}=/project)
+add_compile_options(-ffile-prefix-map=${CMAKE_SOURCE_DIR}=/project)
+
 # =============================================================
 # (A) Сборка ВНЕШНИХ библиотек
 # =============================================================
@@ -178,6 +183,7 @@ set(OPENSSL_OPTIONS
         no-legacy           # Отключение устаревших алгоритмов
         no-autoload-config  # Отключение авто-подгрузки конфигурации
         -fPIC               # Позиционно-независимый код
+        -mabi=lp64
 )
 message(STATUS "OpenSSL options: ${OPENSSL_OPTIONS}")
 
@@ -424,7 +430,11 @@ endif()
 # =============================================================
 build_target(${proj} EXE
         OPTS
-            -g -O0 -w -fPIC
+            -g -O0 -w
+            -march=armv8-a           # ARMv8-A архитектура
+            -fPIC                    # Позиционно-независимый код
+            -mabi=lp64               # 64-bit ABI (не ilp32!)
+            -fno-strict-aliasing     # Избегаем агрессивных оптимизаций
 
         PRPS
             CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"
@@ -451,6 +461,14 @@ build_target(${proj} EXE
             modbus  # нужна, пока не станет плагином
 )
 
+target_link_options(${proj}  PRIVATE "LINKER:--export-dynamic")
+
+#--------------------------------------------------------------
+# Поиск и линковка модуля plc_main (КОСТЫЛЬ!!!)
+#--------------------------------------------------------------
+#find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_DEP_MOD} NO_DEFAULT_PATH REQUIRED )
+#target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
+
 #--------------------------------------------------------------
 # Настройка RPATH только для относительных путей
 #--------------------------------------------------------------
@@ -458,12 +476,6 @@ set_target_properties(${proj} PROPERTIES
         INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:\$ORIGIN/../modules"
         BUILD_WITH_INSTALL_RPATH TRUE
 )
-
-#--------------------------------------------------------------
-# Поиск и линковка модуля plc_main (СТЫКУЕТСЯ ПОКА ЖЁСТКО!!!)
-#--------------------------------------------------------------
-find_library(PLC_MAIN_LIB plc_main PATHS ${PROJ_DEP_MOD} NO_DEFAULT_PATH REQUIRED )
-target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
 
 ##--------------------------------------------------------------
 ## Флаги безопасности

@@ -7,7 +7,6 @@
 #include <stdexcept>
 #include <cctype>
 #include <sstream>
-#include <regex>
 
 template<typename T>
 struct RegisterTraits { static_assert(sizeof(T) == 0, "Unsupported register type"); };

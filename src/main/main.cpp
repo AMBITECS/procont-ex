@@ -29,7 +29,7 @@
 #include "reg_binder.h"
 #include "zmq_server.h"
 #include "plc_control.h"
-#include "api_core.h"
+#include "iec_types_all.h"
 
 #ifdef HAVE_SYSTEMD
 #include <systemd/sd-daemon.h>
@@ -142,6 +142,7 @@ int main(int argc, char** argv) {
 //                        }
 //                    }
                     // --------------------------------------------------------
+                    std::cout << "=== 1\n";
 
                     // 6. Загрузка конфигурации и модулей через SystemReloader
                     if (!SystemReloader::instance().full_reload("../etc/modules_config.json")) {

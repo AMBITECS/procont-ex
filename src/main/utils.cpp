@@ -7,8 +7,9 @@
 #include <ctime>
 #include <sys/mman.h>
 
+#include "iec_types_all.h"
 #include "ladder.h"
-#include "iec_std_lib.h"
+//#include "iec_std_lib.h"
 
 pthread_mutex_t logLock;                //mutex for the internal log
 unsigned char log_buffer[1000*1000];    // A very large buffer to store all logs
@@ -20,7 +21,11 @@ uint8_t rpi_modbus_rts_pin;             // If <> 0, expect hardware RTS to be us
 //Special Functions
 IEC_ULINT *special_functions[SPEC_FUNC_COUNT];
 
-TIME __CURRENT_TIME;
+// Объявляем переменную как глобальную с экспортом
+extern "C" {
+    __attribute__((used, visibility("default")))
+    TIME __CURRENT_TIME{};  // Инициализация
+}
 
 void updateTime()
 {

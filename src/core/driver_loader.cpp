@@ -68,12 +68,15 @@ void DriverLoader::load_configured_drivers() {
         auto &cfg = iec_config_;
         std::string iec_lib_path = cfg.library_path + lib_prefix + cfg.library_name + std::string(lib_extension);
         if (!iec_lib_path.empty()) {
+
             iec_handle_ = load_single_library(iec_lib_path);
+
             if (iec_handle_) {
                 register_module_iec(iec_handle_);
             }
         }
     }
+    std::cout << "=== !!!!!!!!!!!!!!!!\n";
 
     // (2) Загрузка драйверов
     for (const auto& cfg : drivers_config_) {
@@ -83,6 +86,7 @@ void DriverLoader::load_configured_drivers() {
             register_module_driver(handle);
         }
     }
+
 }
 
 void DriverLoader::register_module_driver(void* handle) {
@@ -106,21 +110,66 @@ void DriverLoader::register_module_driver(void* handle) {
 }
 
 void DriverLoader::register_module_iec(void* handle) {
+    // Унифицированное имя символа
+    const char* symbol_name = "register_module_iec";
+
+    // Получаем указатель на функцию
+    auto register_func = reinterpret_cast<void(*)(IECFactory*)>(
 #ifdef _WIN32
-    auto register_iec = (void(__cdecl *)(IECFactory*))GetProcAddress(
-        static_cast<HMODULE>(handle), "register_iec_module");
+            GetProcAddress(static_cast<HMODULE>(handle), symbol_name)
 #else
-    auto register_func = (void(*)(IECFactory*))dlsym(handle, "register_module_iec");
+            dlsym(handle, symbol_name)
 #endif
-    if (register_func) {
-        register_func(& IECFactory::instance());
+    );
+
+    if (!register_func) {
+        std::cerr << "Failed to find symbol: " << symbol_name << std::endl;
+        return;
     }
+
+    // Вызываем функцию
+    std::cout << "=== 3\n";
+    IECFactory* factory = &IECFactory::instance();
+    if (!factory) {
+        std::cerr << "ERROR: IECFactory::instance() returned nullptr!" << std::endl;
+        return;
+    }
+    std::cout << "Factory pointer: " << factory << std::endl;  // Убедитесь, что не 0x0
+    register_func(factory);
+
+    std::cout << "=== 4 ===\n";
 }
+
+//void DriverLoader::register_module_iec(void* handle)
+//{
+//#ifdef _WIN32
+//    auto register_func = (void(__cdecl *)(IECFactory*))GetProcAddress(
+//        static_cast<HMODULE>(handle), "register_module_iec");
+//#else
+//    auto register_func = (void(*)(IECFactory*))dlsym(handle, "register_module_iec");
+//
+//
+//#endif
+//    if (register_func) {
+//
+//        register_func(& IECFactory::instance());
+//
+//    }
+//}
 
 void DriverLoader::unload_all() {
     std::lock_guard<std::mutex> lock(lib_mutex_);
 
-    // Выгружаем в обратном порядке
+    // 1. Вызов очистки в обратном порядке
+//    for (auto it = loaded_libraries_.rbegin(); it != loaded_libraries_.rend(); ++it) {
+//        //call_unload_function(*it);
+//    }
+
+    // 2. Очищаем фабрики
+    DriverFactory::instance().unload_drivers();
+    IECFactory::instance().unload_iec();
+
+    // 3 Выгружаем в обратном порядке
     for (auto it = loaded_libraries_.rbegin(); it != loaded_libraries_.rend(); ++it) {
 #ifdef _WIN32
         FreeLibrary(static_cast<HMODULE>(*it));
@@ -141,49 +190,49 @@ void DriverLoader::unload_all() {
     }
 }
 
-void DriverLoader::force_unload_all() {
-    std::lock_guard<std::mutex> lock(lib_mutex_);
+//void DriverLoader::force_unload_all() {
+//    std::lock_guard<std::mutex> lock(lib_mutex_);
+//
+//    // Агрессивная выгрузка без обработки ошибок
+//    for (auto lib : loaded_libraries_) {
+//        try {
+//#ifdef _WIN32
+//            FreeLibrary(static_cast<HMODULE>(lib));
+//#else
+//            dlclose(lib);
+//#endif
+//        } catch (...) {}
+//    }
+//    loaded_libraries_.clear();
+//
+//    if (iec_handle_) {
+//        try {
+//#ifdef _WIN32
+//            FreeLibrary(static_cast<HMODULE>(iec_handle_));
+//#else
+//            dlclose(iec_handle_);
+//#endif
+//        } catch (...) {}
+//        iec_handle_ = nullptr;
+//    }
+//}
 
-    // Агрессивная выгрузка без обработки ошибок
-    for (auto lib : loaded_libraries_) {
-        try {
-#ifdef _WIN32
-            FreeLibrary(static_cast<HMODULE>(lib));
-#else
-            dlclose(lib);
-#endif
-        } catch (...) {}
-    }
-    loaded_libraries_.clear();
-
-    if (iec_handle_) {
-        try {
-#ifdef _WIN32
-            FreeLibrary(static_cast<HMODULE>(iec_handle_));
-#else
-            dlclose(iec_handle_);
-#endif
-        } catch (...) {}
-        iec_handle_ = nullptr;
-    }
-}
-
-bool DriverLoader::reload_iec_library(const std::string& new_lib_path) {
-    std::lock_guard<std::mutex> lock(lib_mutex_);
-    void* old_handle = iec_handle_;
-
-    std::string path = new_lib_path.empty() ? iec_config_.library_path : new_lib_path;
-    iec_handle_ = load_single_library(path);
-
-    if (!iec_handle_) {
-        iec_handle_ = old_handle;
-        return false;
-    }
-
-    register_module_iec(iec_handle_);
-    update_loaded_libraries(old_handle, iec_handle_);
-    return true;
-}
+//bool DriverLoader::reload_iec_library(const std::string& new_lib_path) {
+//    std::lock_guard<std::mutex> lock(lib_mutex_);
+//    void* old_handle = iec_handle_;
+//
+//    std::string path = new_lib_path.empty() ? iec_config_.library_path : new_lib_path;
+//    iec_handle_ = load_single_library(path);
+//
+//    if (!iec_handle_) {
+//        iec_handle_ = old_handle;
+//        return false;
+//    }
+//
+//    register_module_iec(iec_handle_);
+//    update_loaded_libraries(old_handle, iec_handle_);
+//    return true;
+//}
 
 void* DriverLoader::load_single_library(const std::string& path) {
 #ifdef _WIN32

@@ -122,6 +122,7 @@ void SystemReloader::perform_reload(const json& config) {
 //    DriverManager::instance().shutdown();
 //    DriverLoader::instance().unload_all();
 
+    std::cout << "=== 2\n";
     // 2. Загрузка новой конфигурации
     DriverLoader::instance().load_config_from_json(config);
     DriverLoader::instance().load_configured_drivers();
@@ -130,6 +131,7 @@ void SystemReloader::perform_reload(const json& config) {
     auto client_factory = std::make_shared<ClientFactoryImpl>(RegServer::instance());
     DriverManager::instance().initialize_iec();             // Инициализация iec
     DriverManager::instance().initialize(client_factory);   // Инициализация драйверов
+
 }
 
 bool SystemReloader::validate_config(const json& config) {

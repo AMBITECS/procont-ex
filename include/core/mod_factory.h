@@ -5,6 +5,7 @@
 
 #include "api_module.h"
 
+#pragma pack(push, 8)
 class IECFactory {
 private:
     using IecCreator    = std::function<std::unique_ptr<IProModule>()>;
@@ -24,9 +25,15 @@ public:
 
     // Регистрация и создание IEC модуля
     void register_iec( std::function<std::unique_ptr<IProModule>()> creator );
+
+    void unload_iec() {
+        iec_creator_ = nullptr;  // Явно освобождаем лямбду
+    }
+
     std::unique_ptr<IProModule> create_iec();
 
 };
+#pragma pack(pop)
 
 // Скрипт регистрации IEC модуля
 #define IEC_REGISTER(ModuleClass) \

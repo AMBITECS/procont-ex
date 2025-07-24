@@ -1,6 +1,7 @@
 //-----------------------------------------------------------------------------
 // Copyright © 2016-2025 AMBITECS <info@ambi.biz>
 //-----------------------------------------------------------------------------
+#include <regex>
 #include "reg_address.h"
 
 Address Address::of(const std::string &key) {

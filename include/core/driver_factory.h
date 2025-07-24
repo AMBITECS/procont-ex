@@ -23,6 +23,7 @@
 #include <functional>
 #include <utility>
 
+#pragma pack(push, 8)
 class PROCONT_API DriverFactory {
 private:
     // Creators для драйверов
@@ -45,6 +46,13 @@ public:
         if (name) creators_[name] = std::move(creator);
     }
 
+    void unload_drivers() {
+        for (auto& [name, creator] : creators_) {
+            creator = nullptr;
+        }
+        creators_.clear();
+    }
+
     // Создание экземпляра драйвера
     std::unique_ptr<IProModule> create(const char* name, IClientFactory* factory) {
         auto it = creators_.find(name);
@@ -54,6 +62,7 @@ public:
         return it->second(factory);
     }
 };
+#pragma pack(pop)
 
 // Скрипт регистрации драйвера
 #define DRIVER_REGISTER(driver_name, DriverClass) \
@@ -64,14 +73,4 @@ extern "C" void register_driver(DriverFactory* factory) { \
         }); \
 }
 
-/*
-// Макрос регистрации драйвера
-#define DRIVER_REGISTER(driver_name, DriverClass) \
-extern "C" DRIVER_API void register_driver() { \
-    DriverFactory::instance().register_driver(driver_name, \
-        [](IClientFactory* factory) { \
-            return std::make_unique<DriverClass>(factory); \
-        }); \
-}
-*/
 #endif // DRIVER_FACTORY_H

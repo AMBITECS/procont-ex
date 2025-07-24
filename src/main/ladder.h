@@ -5,8 +5,8 @@
 #include <cstdint>
 #include <mutex>
 
-//#include "iec_types.h"
-#include "api_core.h"
+#include "iec_types.h"
+#include "reg_binder.h"
 
 #define MODBUS_PROTOCOL     0
 #define DNP3_PROTOCOL       1
@@ -22,7 +22,11 @@
 constexpr unsigned short SPEC_FUNC_COUNT = 16;
 
 //Common task timer
-extern unsigned long long common_ticktime__;
+//extern unsigned long long common_ticktime__;
+// Объявляем слабую ссылку на переменную
+extern "C" {
+    __attribute__((weak)) unsigned long long common_ticktime__;
+}
 
 // lock for the buffers
 extern std::mutex bufferLock;

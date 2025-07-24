@@ -1,12 +1,15 @@
 //-----------------------------------------------------------------------------
 // Copyright 2025 Ambitecs
 //-----------------------------------------------------------------------------
+// (!) ЭТОТ ФАЙЛ - ИНЪЕКЦИЯ В IEC-ПРОГРАММУ (в procont-ex не включать)
 #pragma once
 
-#include "iec_types.h"
+#include "iec_types_all.h"
 #include "reg_binder.h"
 
-//extern unsigned long long common_ticktime__; /*ns*/
+// Объявляем ссылку на переменную
+extern "C" {
+    //__attribute__((visibility("default")))
+    extern TIME __CURRENT_TIME;
 
-// Объявляем слабую ссылку на переменную
-//extern "C" __attribute__((weak)) unsigned long long common_ticktime__;
+}

@@ -20,9 +20,9 @@ SystemReloader::SystemReloader() {
 }
 
 bool SystemReloader::full_reload(const std::string& config_path) {
-    if (reloading_) return false;
     bool bResult = false;
     std::lock_guard<std::mutex> lock(reload_mutex_);
+    if (reloading_) return false;
     reloading_.store(true);
 
     try {
@@ -32,7 +32,6 @@ bool SystemReloader::full_reload(const std::string& config_path) {
         if (actual_path.empty()) { throw std::runtime_error("No config path specified"); }
         std::ifstream config_file(actual_path);
         config_file >> new_config;
-
         if (!validate_config(new_config)) { throw std::runtime_error("Config validation failed"); }
 
         // 2. Выполнение перезагрузки модулей (!)
@@ -47,9 +46,7 @@ bool SystemReloader::full_reload(const std::string& config_path) {
         save_config_to_file();
         bResult = true;
     }
-    catch (const std::exception& e) {
-        std::cerr << "Reload failed: " << e.what() << std::endl;
-    }
+    catch (const std::exception& e) { std::cerr << "Reload failed: " << e.what() << std::endl; }
     reloading_.store(false);
     return bResult;
 }
@@ -111,16 +108,16 @@ void SystemReloader::update_last_working_config() {
 //-----------------------------------------------------------------------------
 // Приватные методы
 //-----------------------------------------------------------------------------
-void SystemReloader::perform_unload() {
-    DriverManager::instance().shutdown();
-    DriverLoader::instance().unload_all();
-}
+//void SystemReloader::perform_unload() {
+//    DriverManager::instance().shutdown();
+//    DriverLoader::instance().unload_all();
+//}
 
 void SystemReloader::perform_reload(const json& config) {
     // 1. Остановка системы
-    perform_unload();
-//    DriverManager::instance().shutdown();
-//    DriverLoader::instance().unload_all();
+    //perform_unload();
+    DriverManager::instance().shutdown();
+    DriverLoader::instance().unload_all();
 
     std::cout << "=== 2\n";
     // 2. Загрузка новой конфигурации

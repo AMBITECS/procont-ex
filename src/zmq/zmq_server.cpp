@@ -81,10 +81,7 @@ void ZmqServer::start() {
 }
 
 void ZmqServer::stop() {
-    if (state_ == ServerState::STOPPED || state_ == ServerState::STOPPING) {
-        return;
-    }
-
+    if (state_ == ServerState::STOPPED || state_ == ServerState::STOPPING) return;
     changeState(ServerState::STOPPING);
     stop_tag_processing_ = true;
     tag_queue_cv_.notify_all();
@@ -132,7 +129,6 @@ void ZmqServer::cleanupSockets() {
     } catch (...) {} // Игнорируем ошибки при закрытии
     adm_socket_.reset();
     pub_socket_.reset();
-//    sub_socket_.reset();
     context_.reset();
 }
 
@@ -314,7 +310,7 @@ void ZmqServer::heartbeatWorker() {
 }
 
 // ----------------------------------------------------------------------------
-// Поток (5) - Обработка обновлений тегов
+// Поток (4) - Обработка обновлений тегов
 // ----------------------------------------------------------------------------
 void ZmqServer::tagProcessingWorker() {
     while (!stop_tag_processing_) {
@@ -362,6 +358,7 @@ void ZmqServer::processAdminMessage(const std::string& message) {
             std::string request_type = json_msg["request"].get<std::string>();
 
             if (request_type == "heartbeat") {
+                // Обработка heartbeat
                 std::lock_guard<std::mutex> lock(clients_mutex_);
                 if (clients_.count(client_id)) {
                     clients_[client_id]->updateLastActivity();
@@ -404,42 +401,50 @@ void ZmqServer::processAdminMessage(const std::string& message) {
                     sendResponse(client_id, std::make_shared<Response>(
                             Response::success(client_id, "unsubscribe_values", "Unsubscribed successfully")
                     ));
+
                 } else if (request_type == "prog_start") {
                     auto prog_start = ProgStart::fromJSON(message);
                     handleProgStart(prog_start);
                     sendResponse(client_id, std::make_shared<Response>(
                             Response::success(client_id, "prog_start", "Program transfer started")
                     ));
+
                 } else if (request_type == "file_start") {
                     auto file_start = FileStart::fromJSON(message);
                     handleFileStart(file_start);
                     sendResponse(client_id, std::make_shared<Response>(
                             Response::success(client_id, "file_start", "File transfer started")
                     ));
+
                 } else if (request_type == "file_chunk") {
                     auto file_chunk = FileChunk::fromJSON(message);
                     handleFileChunk(file_chunk);
                     sendResponse(client_id, std::make_shared<Response>(
                             Response::success(client_id, "file_chunk", "Chunk received")
                     ));
+
                 } else if (request_type == "file_end") {
                     auto file_end = FileEnd::fromJSON(message);
                     handleFileEnd(file_end);
                     sendResponse(client_id, std::make_shared<Response>(
                             Response::success(client_id, "file_end", "File transfer completed")
                     ));
+
                 } else if (request_type == "prog_end") {
                     auto prog_end = ProgEnd::fromJSON(message);
                     handleProgEnd(prog_end);
                     sendResponse(client_id, std::make_shared<Response>(
                             Response::success(client_id, "prog_end", "Program transfer completed")
                     ));
+
                 } else if (request_type == "execution_start") {
                     auto request = ProgEnd::fromJSON(message);
                     handleExecutionStart(request);
+
                 } else if (request_type == "execution_stop") {
                     auto request = ProgEnd::fromJSON(message);
                     handleExecutionStop(request);
+
                 } else if (request_type == "execution_status") {
                     auto &plc_control = PlcControl::instance();
                     std::string state = plc_control.toString();
@@ -449,14 +454,18 @@ void ZmqServer::processAdminMessage(const std::string& message) {
                     if (config_.debugMode) {
                         std::cout << "Status request from " << client_id << ". Current state: " << state << std::endl;
                     }
+
                 } else if (request_type == "execution_pause") {
                     handleExecutionPause(ProgEnd::fromJSON(message));
+
                 } else if (request_type == "execution_resume") {
                     handleExecutionResume(ProgEnd::fromJSON(message));
+
                 } else {
                     sendResponse(client_id, std::make_shared<Response>(
                             Response::error(client_id, request_type, "Unknown request type")
                     ));
+
                 }
 
             } // !heartbeat
@@ -574,17 +583,6 @@ Response ZmqServer::handleConnectRequest(const Request& request) {
             return Response::error(request.key, request.request, "Maximum clients reached");
         }
     }
-//    // 3. Проверка существующего подключения
-//    auto it = clients_.find(request.key);
-//    if (it != clients_.end()) {
-//        // Клиент уже подключен - просто обновляем активность
-//        it->second->updateLastActivity();
-//
-//        if (config_.debugMode) {
-//            std::cout << "Client reconnected: " << request.key << std::endl;
-//        }
-//        return Response::success(request.key, request.request, "Client already connected");
-//    }
 
     // 3. Проверка существующего подключения
     {
@@ -614,14 +612,13 @@ Response ZmqServer::handleConnectRequest(const Request& request) {
     std::unique_lock<std::mutex> clients_lock(clients_mutex_);
     try {
         // 4. Создаем и регистрируем нового клиента
+        auto new_client = std::make_shared<ZmqClient>(request.key);
+        new_client->updateLastActivity();
 
-            auto new_client = std::make_shared<ZmqClient>(request.key);
-            new_client->updateLastActivity();
+        // 5. Добавляем клиента в коллекцию
+        clients_[request.key] = new_client;
 
-            // 5. Добавляем клиента в коллекцию
-            clients_[request.key] = new_client;
-
-            clients_lock.unlock();
+        clients_lock.unlock();
 
         if (config_.debugMode) {
             std::cout << "New client connected: " << request.key << std::endl;
@@ -655,6 +652,7 @@ Response ZmqServer::handleConnectRequest(const Request& request) {
 
 void ZmqServer::disconnectClient(const std::string& key) {
     std::unique_lock<std::mutex> clients_lock(clients_mutex_);
+
     auto client_it = clients_.find(key);
     if (client_it == clients_.end()) {
         return;
@@ -763,7 +761,8 @@ void ZmqServer::updateOutputs(const std::vector<OnDataChange>& changes) {
     for (const auto& change : changes) {
         try {
             // Преобразуем ключ обратно в итератор
-            auto entry_pair = reinterpret_cast< const std::pair<const std::string, std::vector<std::string>>* >(change.key);
+            auto entry_pair
+                = reinterpret_cast< const std::pair<const std::string, std::vector<std::string>>* >(change.key);
 
             // Проверка того, что итератор валиден
             if (entry_pair) {
@@ -1010,7 +1009,7 @@ void ZmqServer::handleFileChunk(const FileChunk& file_chunk) {
     }
 
     // Записываем декодированные данные
-    transfer.file_stream.write(decoded_data.data(), decoded_data.size());
+    transfer.file_stream.write(decoded_data.data(), (long)decoded_data.size());
     transfer.bytes_received += decoded_data.size();
 
     // Обновляем CRC
@@ -1021,7 +1020,7 @@ void ZmqServer::handleFileChunk(const FileChunk& file_chunk) {
     );
 
     if (config_.debugMode) {
-        float progress = (transfer.bytes_received * 100.0f) / transfer.file_size;
+        float progress = (float(transfer.bytes_received) * 100.0f) / float(transfer.file_size);
         std::cout << "Received chunk: " << file_chunk.chunk_size << " bytes (decoded: "
                   << decoded_data.size() << " bytes) for " << transfer.file_name
                   << " (" << std::fixed << std::setprecision(1) << progress << "%)\n";

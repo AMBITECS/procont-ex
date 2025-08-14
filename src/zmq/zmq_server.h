@@ -113,11 +113,10 @@ private:
     void stopWorkerThreads();
 
     // Рабочие потоки
-    void admWorker();
-    void pubWorker();
-
-    void heartbeatWorker();
-    void tagProcessingWorker();
+    void admWorker();               // 1 - прием команд
+    void pubWorker();               // 2 - публикация сообщений
+    void heartbeatWorker();         // 3 - проверка активности клиентов
+    void tagProcessingWorker();     // 4 - обработка изменений тегов
 
     // Обработчик административных сообщений
     void processAdminMessage(const std::string& message);

@@ -1,0 +1,11 @@
+
+
+docker run -d \
+    --name dockcross-debug \
+    -v $(pwd):/work \
+    -w /work \
+    -p 2222:22 \
+    -p 1234:1234 \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    --privileged \
+    my-dockcross-debug

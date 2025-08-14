@@ -431,10 +431,10 @@ endif()
 build_target(${proj} EXE
         OPTS
             -g -O0 -w
-            -march=armv8-a           # ARMv8-A архитектура
             -fPIC                    # Позиционно-независимый код
-            -mabi=lp64               # 64-bit ABI (не ilp32!)
             -fno-strict-aliasing     # Избегаем агрессивных оптимизаций
+#            -march=armv8-a           # ARMv8-A архитектура
+#            -mabi=lp64               # 64-bit ABI (не ilp32!)
 
         PRPS
             CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL"

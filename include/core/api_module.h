@@ -7,7 +7,7 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
-// Интерфейс жизненного Procont-модуля
+// Интерфейс жизненного цикла Procont-модуля
 class IProModule {
 public:
     virtual ~IProModule() = default;

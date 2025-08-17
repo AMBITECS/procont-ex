@@ -36,20 +36,40 @@ void DriverManager::initialize(const std::shared_ptr<IClientFactory>& client_fac
 void DriverManager::initialize_iec() {
     std::lock_guard<std::mutex> lock(iec_mutex_);
 
-    // Создание модуля
-    if (!iec_module_) { iec_module_ = IECFactory::instance().create_iec(); }
+    std::cout << "--- initialize IEC - BEGIN\n";
 
-    // Инициализация модуля
     if (iec_module_) {
-        json config = DriverLoader::instance().get_iec_config().config;
-        iec_module_->initialize(config);
-        iec_running_ = true;
+        std::cerr << "Warning: IEC module already exists!" << std::endl;
+        return;
     }
+    iec_module_ = IECFactory::instance().create_iec();
+
+    json config = DriverLoader::instance().get_iec_config().config;
+    iec_module_->initialize(config);  // <-- Здесь падение
+    iec_running_ = true;
+
+    std::cout << "--- initialize IEC - END\n";
 }
+
+
+//void DriverManager::initialize_iec() {
+//    std::lock_guard<std::mutex> lock(iec_mutex_);
+//
+//    // Создание модуля
+//    if (!iec_module_) { iec_module_ = IECFactory::instance().create_iec(); }
+//
+//    // Инициализация модуля
+//    if (iec_module_) {
+//        json config = DriverLoader::instance().get_iec_config().config;
+//        iec_module_->initialize(config);
+//        iec_running_ = true;
+//    }
+//}
 
 void DriverManager::shutdown() {
     // Остановка IEC модуля
     std::cout << "=====  Завершение работы компонентов:  =====\n";
+
     stop_iec();
 
     // Остановка драйверов в обратном порядке
@@ -67,7 +87,7 @@ void DriverManager::shutdown() {
         std::cout << "===== Очистка указателя: " << driver->name() << "->shutdown()  =====\n";
         driver = nullptr;
     }
-    drivers_.clear();
+    drivers_.clear();       // unique_ptr автоматически reset-ятся здесь
 }
 
 // IEC управление
@@ -85,17 +105,18 @@ void DriverManager::stop_iec() {
         std::cout << "=====  Остановка модуля: " << iec_module_->name() << "->shutdown()  =====\n";
         iec_module_->shutdown();
         iec_running_ = false;
+        iec_module_ = nullptr;
     }
 }
 
-void DriverManager::restart_iec() {
-    std::lock_guard<std::mutex> lock(iec_mutex_);
-    if (iec_module_) {
-        iec_module_->shutdown();
-        iec_module_->initialize( DriverLoader::instance().get_iec_config().config );
-        iec_running_ = true;
-    }
-}
+//void DriverManager::restart_iec() {
+//    std::lock_guard<std::mutex> lock(iec_mutex_);
+//    if (iec_module_) {
+//        iec_module_->shutdown();
+//        iec_module_->initialize( DriverLoader::instance().get_iec_config().config );
+//        iec_running_ = true;
+//    }
+//}
 
 void DriverManager::run_iec_cycle() {
     std::lock_guard<std::mutex> lock(iec_mutex_);

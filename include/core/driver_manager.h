@@ -23,7 +23,7 @@ public:
     // Управление IEC модулем
     void start_iec();
     void stop_iec();
-    void restart_iec();
+    //void restart_iec();
     void run_iec_cycle();
 
     // Состояние
@@ -41,8 +41,8 @@ private:
     DriverManager() = default;
     ~DriverManager() = default;
 
-    std::vector<std::unique_ptr<IProModule>> drivers_;
-    std::unique_ptr<IProModule> iec_module_;
+    std::vector<std::unique_ptr<IProModule>> drivers_{};
+    std::unique_ptr<IProModule> iec_module_ = nullptr;
     mutable std::mutex iec_mutex_;
     std::atomic<bool> iec_running_{false};
 };

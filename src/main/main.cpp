@@ -14,6 +14,9 @@
 #include <syslog.h>
 #include <net/if.h>
 
+#include <execinfo.h>
+#include <signal.h>
+
 #include "iec_types.h"
 #include "ladder.h"
 #include "custom_layer.h"
@@ -68,8 +71,18 @@ void sig_handler(int) {
     run_plc = false;
 }
 
+void segfault_handler(int sig) {
+    void* array[20];
+    size_t size = backtrace(array, 20);
+    fprintf(stderr, "Segmentation fault! Backtrace:\n");
+    backtrace_symbols_fd(array, size, STDERR_FILENO);
+    exit(1);
+}
+
 //=============================================================================
 int main(int argc, char** argv) {
+    signal(SIGSEGV, segfault_handler);
+
     // 1. Базовая инициализация системы
     testDataIntegrity();
     auto& reg_server = RegServer::instance();
@@ -142,21 +155,27 @@ int main(int argc, char** argv) {
 //                        }
 //                    }
                     // --------------------------------------------------------
-                    std::cout << "=== 1\n";
+                    std::cout << "=== STARTING ...\n";
 
                     // 6. Загрузка конфигурации и модулей через SystemReloader
                     if (!SystemReloader::instance().full_reload("../etc/modules_config.json")) {
                         throw std::runtime_error("System reload failed");
                     }
 
+                    std::cout << "--- 1\n";
+
                     // 7. Чтение начальных значений из переменных в регистры
                     Binder::instance().updateFromIec();
                     Binder::instance().updateToIec();
+
+                    std::cout << "--- 2\n";
 
                     // 8. Инициализация оборудования (после загрузки драйверов)
                     initializeHardware();
                     initializeMB();
                     initCustomLayer();
+
+                    std::cout << "--- 3\n";
 
                     // Инициализация ZMQ сервера (выше)
 
@@ -167,6 +186,9 @@ int main(int argc, char** argv) {
                     reg_server.notifyInit();
 
                     plc_control.setState(PlcState::RUNNING);
+
+                    std::cout << "... STARTING - Ok!-> RUNNING\n";
+
                 } catch (const std::exception& e) {
                     std::cerr << "Startup error: " << e.what() << std::endl;
                     plc_control.setState(PlcState::ERROR);

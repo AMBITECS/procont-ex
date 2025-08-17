@@ -5,6 +5,7 @@
 #include "reg_client_factory.h"
 #include "driver_factory.h"
 #include <iostream>
+#include <thread>
 
 SystemReloader& SystemReloader::instance() {
     static SystemReloader instance;
@@ -20,6 +21,7 @@ SystemReloader::SystemReloader() {
 }
 
 bool SystemReloader::full_reload(const std::string& config_path) {
+    std::cout << "--- full_reload - BEGIN\n";
     bool bResult = false;
     std::lock_guard<std::mutex> lock(reload_mutex_);
     if (reloading_) return false;
@@ -48,6 +50,7 @@ bool SystemReloader::full_reload(const std::string& config_path) {
     }
     catch (const std::exception& e) { std::cerr << "Reload failed: " << e.what() << std::endl; }
     reloading_.store(false);
+    std::cout << "--- full_reload - END\n";
     return bResult;
 }
 
@@ -116,19 +119,32 @@ void SystemReloader::update_last_working_config() {
 void SystemReloader::perform_reload(const json& config) {
     // 1. Остановка системы
     //perform_unload();
+    std::cout << "--- perform_unload - BEGIN\n";
+
     DriverManager::instance().shutdown();
     DriverLoader::instance().unload_all();
 
-    std::cout << "=== 2\n";
+    std::cout << "--- perform_unload - END\n";
+
+    // 2. Задержка для гарантии выгрузки
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    std::cout << "--- load config - BEGIN\n";
+
     // 2. Загрузка новой конфигурации
     DriverLoader::instance().load_config_from_json(config);
     DriverLoader::instance().load_configured_drivers();
+
+    std::cout << "--- load config - END\n";
+
+    std::cout << "--- initialize - BEGIN\n";
 
     // 3. Инициализация
     auto client_factory = std::make_shared<ClientFactoryImpl>(RegServer::instance());
     DriverManager::instance().initialize_iec();             // Инициализация iec
     DriverManager::instance().initialize(client_factory);   // Инициализация драйверов
 
+    std::cout << "--- initialize - END\n";
 }
 
 bool SystemReloader::validate_config(const json& config) {

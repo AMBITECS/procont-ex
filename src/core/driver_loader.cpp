@@ -5,6 +5,7 @@
 
 #include "mod_factory.h"
 #include "driver_factory.h"
+#include "driver_manager.h"
 
 #include <fstream>
 #include <iostream>
@@ -15,6 +16,8 @@ constexpr const char* lib_prefix = "";
 constexpr const char* lib_extension = ".dll";
 #else
 #include <dlfcn.h>
+#include <thread>
+
 constexpr const char* lib_prefix = "lib";
 constexpr const char* lib_extension = ".so";
 #endif
@@ -84,8 +87,9 @@ void DriverLoader::load_configured_drivers() {
         std::string lib_path = cfg.library_path + cfg.library_name;
         void* handle = load_single_library(lib_path);
         if (handle) {
-            std::cout << "=== Регистрация драйвера: " << cfg.library_name << " \n";
+            std::cout << "=== Регистрация драйвера: " << cfg.library_name << " ... \n";
             register_module_driver(handle);
+            std::cout << "... Регистрация драйвера: " << cfg.library_name << " - Ok!\n";
         }
     }
 
@@ -159,20 +163,19 @@ void DriverLoader::register_module_iec(void* handle) {
 //    }
 //}
 
+//------------------------------------------
 void DriverLoader::unload_all() {
     std::lock_guard<std::mutex> lock(lib_mutex_);
 
-// Вызов очистки в обратном порядке
-//    for (auto it = loaded_libraries_.rbegin(); it != loaded_libraries_.rend(); ++it) {
-//        //call_unload_function(*it);
-//    }
+//    // 0. Остановить все драйверы
+//    DriverManager::instance().shutdown();
 
-    // !. Очищаем фабрики модулей
+    // 1. Очищаем фабрики модулей
     std::cout << "=====  Очищаем фабрики модулей =====\n";
     DriverFactory::instance().unload_drivers();
     IECFactory::instance().unload_iec();
 
-    // 2 Выгружаем библиотеки в обратном порядке
+    // 2. Выгружаем библиотеки в обратном порядке
     std::cout << "=====  Выгружаем библиотеки =====\n";
     for (auto it = loaded_libraries_.rbegin(); it != loaded_libraries_.rend(); ++it) {
 #ifdef _WIN32
@@ -186,7 +189,7 @@ void DriverLoader::unload_all() {
     loaded_libraries_.clear();
 
     // 3. Выгружаем IEC модуль отдельно
-    std::cout << "=====  Выгружаем Выгружаем IEC модуль =====\n";
+    std::cout << "=====  Выгружаем IEC модуль =====\n";
     if (iec_handle_) {
 #ifdef _WIN32
         FreeLibrary(static_cast<HMODULE>(iec_handle_));
@@ -195,8 +198,12 @@ void DriverLoader::unload_all() {
 #endif
         iec_handle_ = nullptr;
     }
+
+//    // 6. Задержка после выгрузки
+//    //std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
+//------------------------------------------
 //void DriverLoader::force_unload_all() {
 //    std::lock_guard<std::mutex> lock(lib_mutex_);
 //

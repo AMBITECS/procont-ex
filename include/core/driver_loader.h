@@ -19,9 +19,9 @@ public:
     void load_config_from_json(const nlohmann::json& config);
     void load_configured_drivers();
     void unload_all();
-    void force_unload_all();
 
-    bool reload_iec_library(const std::string& new_lib_path = "");
+//    void force_unload_all();
+//    bool reload_iec_library(const std::string& new_lib_path = "");
 
     // Доступ к конфигурации
     nlohmann::json get_config() const;

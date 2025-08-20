@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
     // 3.1 Инициализация ZMQ сервера
     ZmqServer& zmq_server = ZmqServer::instance("../etc/zmq.properties");
     zmq_server.start();
-    auto zmq_reg_client = reg_server.createClient("zmq_server", &zmq_server);
+    //auto zmq_reg_client = reg_server.createClient("zmq_server", &zmq_server);
 
     // 4. Инициализация состояний
     auto& plc_control = PlcControl::instance();

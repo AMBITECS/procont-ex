@@ -470,10 +470,11 @@ target_link_options(${proj}  PRIVATE "LINKER:--export-dynamic")
 #target_link_libraries(${proj} PRIVATE ${PLC_MAIN_LIB})
 
 #--------------------------------------------------------------
-# Настройка RPATH только для относительных путей
+# Настройка RPATH (локально) только для относительных путей ${proj}
 #--------------------------------------------------------------
+set(MY_CROSS_RPATH "/usr/lib/gcc/aarch64-linux-gnu/14:/usr/lib/aarch64-linux-gnu/sys-root/usr/lib")
 set_target_properties(${proj} PROPERTIES
-        INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:\$ORIGIN/../modules"
+        INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:\$ORIGIN/../modules:${MY_CROSS_RPATH}"
         BUILD_WITH_INSTALL_RPATH TRUE
 )
 

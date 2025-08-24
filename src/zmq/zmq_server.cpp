@@ -244,58 +244,73 @@ void ZmqServer::heartbeatWorker() {
     while (state_ == ServerState::RUNNING) {
         try {
             auto now = steady_clock::now();
+            std::vector<std::string> clients_to_remove;
+            std::unordered_map<std::string, std::vector<Address>> unsubscriptions;
 
-            // Проверка неактивных клиентов
+            // Фаза 1: Сбор данных для удаления (под блокировкой)
             {
                 auto timeout = milliseconds(config_.clientTimeout);
-
                 std::lock_guard<std::mutex> clients_lock(clients_mutex_);
                 std::lock_guard<std::mutex> subs_lock(subscriptions_mutex_);
 
-                for (auto it = clients_.begin(); it != clients_.end();) {
-                    if ((now - it->second->getLastActivity()) > timeout) {
-                        const std::string &client_id = it->first;
+                for (const auto& [client_id, client] : clients_) {
+                    if ((now - client->getLastActivity()) > timeout) {
+                        clients_to_remove.push_back(client_id);
 
-                        // 1. Получаем все подписки клиента
-                        auto client_subs = it->second->getSubscriptions();
-
-                        // 2. Формируем полный список тегов для отписки
-                        std::unordered_set<std::string> all_tags;
+                        // Собираем теги для отписки
+                        auto client_subs = client->getSubscriptions();
                         for (const auto &sub: client_subs) {
-                            all_tags.insert(sub.keys.begin(), sub.keys.end());
-                        }
-
-                        // 3. Удаляем клиента из tagSubscriptions_
-                        std::vector<Address> addrs_to_unsub;
-                        for (const auto &tag: all_tags) {
-                            auto entry_it = tagSubscriptions_.find(tag);
-                            if (entry_it != tagSubscriptions_.end()) {
-                                auto &clients = entry_it->second;
-                                clients.erase(std::remove(clients.begin(), clients.end(), client_id),
-                                              clients.end());
-
-                                if (clients.empty()) {
-                                    addrs_to_unsub.emplace_back(Address::of(tag));
-                                    tagSubscriptions_.erase(entry_it);
-                                }
+                            for (const auto &tag: sub.keys) {
+                                unsubscriptions[client_id].emplace_back(Address::of(tag));
                             }
                         }
+                    }
+                }
+            }
 
-                        // 4. Отписываемся от RegServer
-                        if (!addrs_to_unsub.empty() && reg_client_) {
-                            reg_client_->unsubscribe(addrs_to_unsub);
+            // Фаза 2: Отписка от RegServer (без блокировок)
+            if (!unsubscriptions.empty() && reg_client_) {
+                std::vector<Address> all_addrs_to_unsub;
+                for (const auto& [client_id, addrs] : unsubscriptions) {
+                    all_addrs_to_unsub.insert(all_addrs_to_unsub.end(), addrs.begin(), addrs.end());
+                }
+
+                if (!all_addrs_to_unsub.empty()) {
+                    reg_client_->unsubscribe(all_addrs_to_unsub);
+                }
+            }
+
+            // Фаза 3: Фактическое удаление клиентов (снова под блокировкой)
+            if (!clients_to_remove.empty()) {
+                std::lock_guard<std::mutex> clients_lock(clients_mutex_);
+                std::lock_guard<std::mutex> subs_lock(subscriptions_mutex_);
+
+                for (const auto& client_id : clients_to_remove) {
+                    // Удаляем из clients_
+                    clients_.erase(client_id);
+
+                    // Очищаем подписки клиента из tagSubscriptions_
+                    for (auto& [tag, client_ids] : tagSubscriptions_) {
+                        client_ids.erase(
+                                std::remove(client_ids.begin(), client_ids.end(), client_id),
+                                client_ids.end()
+                        );
+                    }
+
+                    // Удаляем пустые записи подписок
+                    auto sub_it = tagSubscriptions_.begin();
+                    while (sub_it != tagSubscriptions_.end()) {
+                        if (sub_it->second.empty()) {
+                            sub_it = tagSubscriptions_.erase(sub_it);
+                        } else {
+                            ++sub_it;
                         }
-
-                        // 5. Удаляем клиента
-                        it = clients_.erase(it);
-                    } else {
-                        ++it;
                     }
                 }
             }
 
             // Точная пауза до следующего цикла
-            auto elapsed = steady_clock::now() - now; //start_time;
+            auto elapsed = steady_clock::now() - now;
             auto remaining = milliseconds(config_.heartbeatInterval) - elapsed;
             if (remaining.count() > 0) {
                 std::this_thread::sleep_for(remaining);
@@ -308,6 +323,75 @@ void ZmqServer::heartbeatWorker() {
         }
     }
 }
+
+//void ZmqServer::heartbeatWorker() {
+//    while (state_ == ServerState::RUNNING) {
+//        try {
+//            auto now = steady_clock::now();
+//
+//            // Проверка неактивных клиентов
+//            {
+//                auto timeout = milliseconds(config_.clientTimeout);
+//
+//                std::lock_guard<std::mutex> clients_lock(clients_mutex_);
+//                std::lock_guard<std::mutex> subs_lock(subscriptions_mutex_);
+//
+//                for (auto it = clients_.begin(); it != clients_.end();) {
+//                    if ((now - it->second->getLastActivity()) > timeout) {
+//                        const std::string &client_id = it->first;
+//
+//                        // 1. Получаем все подписки клиента
+//                        auto client_subs = it->second->getSubscriptions();
+//
+//                        // 2. Формируем полный список тегов для отписки
+//                        std::unordered_set<std::string> all_tags;
+//                        for (const auto &sub: client_subs) {
+//                            all_tags.insert(sub.keys.begin(), sub.keys.end());
+//                        }
+//
+//                        // 3. Удаляем клиента из tagSubscriptions_
+//                        std::vector<Address> addrs_to_unsub;
+//                        for (const auto &tag: all_tags) {
+//                            auto entry_it = tagSubscriptions_.find(tag);
+//                            if (entry_it != tagSubscriptions_.end()) {
+//                                auto &clients = entry_it->second;
+//                                clients.erase(std::remove(clients.begin(), clients.end(), client_id),
+//                                              clients.end());
+//
+//                                if (clients.empty()) {
+//                                    addrs_to_unsub.emplace_back(Address::of(tag));
+//                                    tagSubscriptions_.erase(entry_it);
+//                                }
+//                            }
+//                        }
+//
+//                        // 4. Отписываемся от RegServer
+//                        if (!addrs_to_unsub.empty() && reg_client_) {
+//                            reg_client_->unsubscribe(addrs_to_unsub);
+//                        }
+//
+//                        // 5. Удаляем клиента
+//                        it = clients_.erase(it);
+//                    } else {
+//                        ++it;
+//                    }
+//                }
+//            }
+//
+//            // Точная пауза до следующего цикла
+//            auto elapsed = steady_clock::now() - now; //start_time;
+//            auto remaining = milliseconds(config_.heartbeatInterval) - elapsed;
+//            if (remaining.count() > 0) {
+//                std::this_thread::sleep_for(remaining);
+//            }
+//
+//        } catch (...) {
+//            if (state_ == ServerState::RUNNING) {
+//                std::cerr << "Error in heartbeat worker" << std::endl;
+//            }
+//        }
+//    }
+//}
 
 // ----------------------------------------------------------------------------
 // Поток (4) - Обработка обновлений тегов
@@ -764,8 +848,8 @@ void ZmqServer::updateOutputs(const std::vector<OnDataChange>& changes) {
             auto entry_pair
                 = reinterpret_cast< const std::pair<const std::string, std::vector<std::string>>* >(change.key);
 
-            // Проверка того, что итератор валиден
-            if (entry_pair) {
+            // Проверяем, что указатель указывает на существующий элемент
+            if (entry_pair && tagSubscriptions_.count(entry_pair->first) > 0) {
                 const auto& tag_key = entry_pair->first;
 
                 Tag tag;

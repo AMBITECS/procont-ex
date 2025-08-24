@@ -41,7 +41,7 @@ private:
 
     Registry::IL il_{registry_};
     Registry::QL ql_{registry_};
-    Registry::ML ml_{registry_, 8192, 1024};
+    Registry::ML ml_{registry_, 8192, 1032};
     Registry::SL sl_{registry_};
 
     Registry::IF if_{registry_};

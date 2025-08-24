@@ -25,7 +25,8 @@ constexpr unsigned short SPEC_FUNC_COUNT = 16;
 //extern unsigned long long common_ticktime__;
 // Объявляем слабую ссылку на переменную
 extern "C" {
-    __attribute__((weak)) unsigned long long common_ticktime__;
+    //__attribute__((weak)) unsigned long long common_ticktime__;
+    __attribute__((weak)) unsigned long long common_ticktime__ = 500 * 1000000; // 500ms (в наносекундах)
 }
 
 // lock for the buffers

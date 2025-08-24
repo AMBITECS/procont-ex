@@ -229,8 +229,14 @@ int main(int argc, char** argv) {
 
                     // Спим до следующего цикла ...
                     if (&common_ticktime__ != nullptr) {
-                        updateTime();
-                        sleep_until(&timer_start, common_ticktime__);
+                        if (common_ticktime__ > 0) { // Проверяем положительное значение
+                            updateTime();
+                            sleep_until(&timer_start, common_ticktime__);
+                        } else {
+                            // *** Временное решение
+                            // Fallback: спим 100ms, если common_ticktime__ не установлен
+                            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                        }
                     }
 
                 } catch (...) {

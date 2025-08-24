@@ -5,7 +5,9 @@
 #include <cstring>
 #include <pthread.h>
 #include <ctime>
+#include <chrono>
 #include <sys/mman.h>
+#include <thread>
 
 #include "iec_types_all.h"
 #include "ladder.h"
@@ -70,10 +72,11 @@ void sleep_until(struct timespec *ts, unsigned long long delay)
  * @param milliseconds The amount of time to sleep in milliseconds
  */
 void sleepms(int milliseconds) {
-    struct timespec ts{};
-    ts.tv_sec = milliseconds / 1000;
-    ts.tv_nsec = (milliseconds % 1000) * 1000000;
-    nanosleep(&ts, nullptr);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+//    struct timespec ts{};
+//    ts.tv_sec = milliseconds / 1000;
+//    ts.tv_nsec = (milliseconds % 1000) * 1000000;
+//    nanosleep(&ts, nullptr);
 }
 
 /**
@@ -173,6 +176,7 @@ void disableOutputs() {
  * @note The function assumes that the `special_functions` array is properly initialized
  *       and that indices 0, 1, and 3 are valid.
  */
+using namespace std::chrono;
 void handleSpecialFunctions() {
     time_t rawtime;
     struct tm *current_time;
@@ -195,6 +199,9 @@ void handleSpecialFunctions() {
 
     // Insert other special functions below
     //// todo ---
+    auto now = steady_clock::now();
+    long long now_us = duration_cast<microseconds>(now.time_since_epoch()).count();
+    ML[1027] = now_us;
 }
 
 /**
